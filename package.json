@@ -1,0 +1,17 @@
+{
+  "name": "aglio",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "web",
+    "api"
+  ],
+  "scripts": {
+    "dev": "turbo run dev"
+  },
+  "repository": "https://github.com/a-type/aglio",
+  "author": "Grant Forrest <gaforres@gmail.com>",
+  "devDependencies": {
+    "turbo": "^1.3.1"
+  }
+}
