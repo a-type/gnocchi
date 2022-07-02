@@ -9,6 +9,14 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@radix-ui/colors": "^0.1.8",
+		"@radix-ui/react-accordion": "^0.1.6",
+		"@radix-ui/react-checkbox": "^0.1.5",
+		"@radix-ui/react-collapsible": "^0.1.6",
+		"@radix-ui/react-icons": "^1.1.1",
+		"@radix-ui/react-popover": "^0.1.6",
+		"@radix-ui/react-toast": "^0.1.1",
+		"@stitches/react": "^1.2.8",
 		"@syncedstore/core": "^0.3.9",
 		"@syncedstore/react": "^0.3.9",
 		"convert-units": "^2.3.4",
