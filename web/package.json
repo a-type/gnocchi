@@ -21,6 +21,7 @@
 		"@syncedstore/react": "^0.3.9",
 		"convert-units": "^2.3.4",
 		"cuid": "^2.1.8",
+		"formik": "^2.2.9",
 		"next": "12.2.0",
 		"parse-fraction": "^1.2.1",
 		"pluralize": "^8.0.0",

@@ -1,4 +1,5 @@
 import { GroceryListAdd } from 'components/groceries/GroceryListAdd';
+import { PageContent, PageRoot } from 'components/layouts';
 import dynamic from 'next/dynamic';
 
 const DynamicGroceryList = dynamic(
@@ -10,10 +11,12 @@ const DynamicGroceryList = dynamic(
 
 export default function GroceriesPage() {
 	return (
-		<div>
-			<h1>Groceries</h1>
-			<DynamicGroceryList />
-			<GroceryListAdd />
-		</div>
+		<PageRoot>
+			<PageContent fullHeight flex={1}>
+				<h1>Groceries</h1>
+				<DynamicGroceryList />
+				<GroceryListAdd />
+			</PageContent>
+		</PageRoot>
 	);
 }

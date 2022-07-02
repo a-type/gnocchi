@@ -1,7 +1,9 @@
+import { Button, Form, Input, Box, TextField } from 'components/primitives';
 import cuid from 'cuid';
 import { forwardRef } from 'react';
-import { parseIngredient } from '../../lib/conversion/parseIngredient';
-import { groceriesStore } from '../../lib/stores/groceries';
+import { parseIngredient } from 'lib/conversion/parseIngredient';
+import { groceriesStore } from 'lib/stores/groceries';
+import { Formik } from 'formik';
 
 export interface GroceryListAddProps {
 	className?: string;
@@ -10,20 +12,12 @@ export interface GroceryListAddProps {
 export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 	function GroceryListAdd({ ...rest }, ref) {
 		return (
-			<form
-				ref={ref}
-				{...rest}
-				onSubmit={(ev) => {
-					ev.preventDefault();
-					const text = (
-						(ev.target as HTMLFormElement).elements.namedItem(
-							'text',
-						) as HTMLInputElement
-					).value;
-
+			<Formik
+				initialValues={{ text: '' }}
+				onSubmit={({ text }, { resetForm }) => {
 					const parsed = parseIngredient(text);
 					// find an item that matches the name
-					const match = groceriesStore.items.find(
+					const match = groceriesStore.categories.none.find(
 						(item) => item.name === parsed.food,
 					);
 					if (match) {
@@ -34,7 +28,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 						});
 					} else {
 						// create a new item
-						groceriesStore.items.push({
+						groceriesStore.categories.none.push({
 							id: cuid(),
 							createdAt: Date.now(),
 							category: 'none',
@@ -45,11 +39,16 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 							mergedEntries: [{ text }],
 						});
 					}
+					resetForm();
 				}}
 			>
-				<input type="text" name="text" />
-				<button type="submit">Add</button>
-			</form>
+				<Form ref={ref} css={{ w: '$full' }} {...rest}>
+					<Box w="full" direction="row" gap={2}>
+						<TextField name="text" required css={{ flex: 1 }} />
+						<Button type="submit">Add</Button>
+					</Box>
+				</Form>
+			</Formik>
 		);
 	},
 );

@@ -21,15 +21,16 @@ export type GroceryInputData = {
 };
 
 const doc = new Y.Doc();
+// persist to local indexdb
+const indexDbProvider = new IndexeddbPersistence('groceries', doc as any);
 
 export const groceriesStore = proxy({
-	items: new Array<GroceryItemData>(),
+	categories: {
+		none: new Array<GroceryItemData>(),
+	} as Record<string, GroceryItemData[]>,
 });
 
 bindProxyAndYMap(groceriesStore, doc.getMap('root'));
-
-// persist to local indexdb
-const indexDbProvider = new IndexeddbPersistence('groceries', doc as any);
 
 if (typeof window !== 'undefined') {
 	(window as any).groceriesStore = groceriesStore;
