@@ -9,11 +9,23 @@
 		"lint": "next lint"
 	},
 	"dependencies": {
+		"@syncedstore/core": "^0.3.9",
+		"@syncedstore/react": "^0.3.9",
+		"convert-units": "^2.3.4",
+		"cuid": "^2.1.8",
 		"next": "12.2.0",
+		"parse-fraction": "^1.2.1",
+		"pluralize": "^8.0.0",
 		"react": "18.2.0",
-		"react-dom": "18.2.0"
+		"react-dom": "18.2.0",
+		"valtio": "^1.6.1",
+		"valtio-yjs": "^0.3.1",
+		"y-indexeddb": "^9.0.8",
+		"yjs": "^13.5.39"
 	},
 	"devDependencies": {
+		"@types/convert-units": "^2.3.5",
+		"@types/pluralize": "^0.0.29",
 		"@types/react": "^18.0.14",
 		"@types/react-dom": "^18.0.5",
 		"eslint": "8.18.0",
