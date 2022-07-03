@@ -202,6 +202,7 @@ export const Button = styled('button', {
 	fontFamily: '$sans',
 	border: 'none',
 	borderRadius: '$md',
+	cursor: 'pointer',
 
 	'&:focus': {
 		outline: 'none',
@@ -215,11 +216,19 @@ export const Button = styled('button', {
 		color: {
 			primary: {
 				color: '$black',
-				backgroundColor: '$lemon',
+				backgroundColor: '$lemonDark',
 			},
 			default: {
 				color: '$black',
-				backgroundColor: '$gray20',
+				backgroundColor: '$gray30',
+
+				'&:hover': {
+					backgroundColor: '$gray40',
+				},
+
+				'&:focus': {
+					backgroundColor: '$gray40',
+				},
 			},
 		},
 	},
@@ -228,3 +237,9 @@ export const Button = styled('button', {
 		color: 'default',
 	},
 });
+
+export const H1 = styled('h1', {});
+export const H2 = styled('h2', {});
+export const H3 = styled('h3', {});
+export const H4 = styled('h4', {});
+export const H5 = styled('h5', {});

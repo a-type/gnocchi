@@ -1,4 +1,11 @@
-import { Button, Form, Input, Box, TextField } from 'components/primitives';
+import {
+	Button,
+	Form,
+	Input,
+	Box,
+	TextField,
+	SubmitButton,
+} from 'components/primitives';
 import cuid from 'cuid';
 import { forwardRef } from 'react';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
@@ -45,7 +52,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 				<Form ref={ref} css={{ w: '$full' }} {...rest}>
 					<Box w="full" direction="row" gap={2}>
 						<TextField name="text" required css={{ flex: 1 }} />
-						<Button type="submit">Add</Button>
+						<SubmitButton>Add</SubmitButton>
 					</Box>
 				</Form>
 			</Formik>

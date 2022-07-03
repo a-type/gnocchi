@@ -45,9 +45,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 						}
 					}}
 				>
-					<CheckboxIndicator>
-						<CheckIcon />
-					</CheckboxIndicator>
+					<CheckboxIndicator />
 				</Checkbox>
 				<span>{displayString}</span>
 			</Box>

@@ -2,7 +2,7 @@ import { forwardRef } from 'react';
 import { useSnapshot } from 'valtio';
 import { groceriesStore, GroceryItemData } from 'lib/stores/groceries';
 import { GroceryListItem } from './GroceryListItem';
-import { Box } from 'components/primitives';
+import { Box, H2 } from 'components/primitives';
 
 export interface GroceryListProps {
 	className?: string;
@@ -36,7 +36,7 @@ function GroceryListCategory({
 	console.log('rendering', categoryName, category);
 	return (
 		<Box className="groceryCategory" p={2} gap={3} {...rest}>
-			<h2>{categoryName}</h2>
+			<H2 css={{ textTransform: 'capitalize' }}>{categoryName}</H2>
 			{state.map((item, index) => (
 				<GroceryListItem key={item.id} item={category[index]} />
 			))}

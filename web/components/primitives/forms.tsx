@@ -73,5 +73,5 @@ export function TextAreaField({
 }
 
 export function SubmitButton(props: ComponentProps<typeof Button>) {
-	return <Button type="submit" {...props} />;
+	return <Button color="primary" type="submit" {...props} />;
 }
