@@ -7,7 +7,7 @@ import { Checkbox, CheckboxIndicator } from 'components/primitives/Checkbox';
 import { useDraggable } from '@dnd-kit/core';
 import { keyframes, styled, theme } from 'stitches.config';
 import { groceriesState } from './state';
-import { DRAG_ACTIVATION_DELAY } from './GroceryList';
+import { DRAG_ACTIVATION_DELAY } from './constants';
 
 export interface GroceryListItemProps {
 	className?: string;

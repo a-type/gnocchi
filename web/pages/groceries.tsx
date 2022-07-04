@@ -21,3 +21,9 @@ export default function GroceriesPage() {
 		</PageRoot>
 	);
 }
+
+export const getStaticProps = async () => {
+	return {
+		props: {},
+	};
+};

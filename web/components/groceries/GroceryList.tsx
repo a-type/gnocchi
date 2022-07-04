@@ -19,8 +19,8 @@ import { GroceryListCategory } from './GroceryListCategory';
 import { GroceryListItem } from './GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
+import { DRAG_ACTIVATION_DELAY } from './constants';
 
-export const DRAG_ACTIVATION_DELAY = 1000;
 const DRAG_ACTIVATION_TOLERANCE = 5;
 
 export interface GroceryListProps {
