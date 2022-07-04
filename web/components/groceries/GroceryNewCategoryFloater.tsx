@@ -157,6 +157,7 @@ const FloatingZone = styled('div', {
 				opacity: 1,
 				width: '95vw',
 				transition: '0.2s ease all',
+				top: '$2',
 			},
 		},
 	},
