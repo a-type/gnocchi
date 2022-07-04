@@ -1,4 +1,5 @@
 import { proxy } from 'valtio';
+import { derive, proxyWithComputed } from 'valtio/utils';
 import { bindProxyAndYMap } from 'valtio-yjs';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import * as Y from 'yjs';
@@ -25,9 +26,18 @@ const doc = new Y.Doc();
 const indexDbProvider = new IndexeddbPersistence('groceries', doc as any);
 
 export const groceriesStore = proxy({
-	categories: {
-		none: new Array<GroceryItemData>(),
-	} as Record<string, GroceryItemData[]>,
+	items: [] as GroceryItemData[],
+});
+
+export const groceriesCategories = derive({
+	categories: (get) => {
+		const categories = new Set<string>();
+		const items = get(groceriesStore).items;
+		for (const item of items || []) {
+			categories.add(item.category);
+		}
+		return Array.from(categories);
+	},
 });
 
 bindProxyAndYMap(groceriesStore, doc.getMap('root'));

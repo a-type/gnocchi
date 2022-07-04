@@ -38,6 +38,7 @@ export function TextField({
 	css?: ComponentProps<typeof FieldGroup>['css'];
 	placeholder?: string;
 	autoComplete?: InputHTMLAttributes<HTMLInputElement>['autoComplete'];
+	autoFocus?: InputHTMLAttributes<HTMLInputElement>['autoFocus'];
 }) {
 	const [props] = useField(name);
 	return (

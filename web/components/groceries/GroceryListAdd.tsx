@@ -24,7 +24,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 				onSubmit={({ text }, { resetForm }) => {
 					const parsed = parseIngredient(text);
 					// find an item that matches the name
-					const match = groceriesStore.categories.none.find(
+					const match = groceriesStore.items.find(
 						(item) => item.name === parsed.food,
 					);
 					if (match) {
@@ -35,7 +35,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 						});
 					} else {
 						// create a new item
-						groceriesStore.categories.none.push({
+						groceriesStore.items.push({
 							id: cuid(),
 							createdAt: Date.now(),
 							category: 'none',

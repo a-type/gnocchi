@@ -1,10 +1,12 @@
-import { forwardRef } from 'react';
+import { forwardRef, ReactNode } from 'react';
 import { useSnapshot } from 'valtio';
 import { GroceryItemData } from 'lib/stores/groceries';
 import pluralize from 'pluralize';
 import { Box } from 'components/primitives';
 import { Checkbox, CheckboxIndicator } from 'components/primitives/Checkbox';
-import { CheckIcon } from '@radix-ui/react-icons';
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+import { styled } from 'stitches.config';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -32,7 +34,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				  }${pluralizedName}`;
 
 		return (
-			<Box direction="row" gap={2}>
+			<ItemContainer {...rest} ref={ref}>
 				<Checkbox
 					checked={
 						isPurchased ? true : isPartiallyPurchased ? 'indeterminate' : false
@@ -48,7 +50,41 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					<CheckboxIndicator />
 				</Checkbox>
 				<span>{displayString}</span>
-			</Box>
+			</ItemContainer>
 		);
 	},
 );
+
+const ItemContainer = styled('div', {
+	display: 'flex',
+	flexDirection: 'row',
+	gap: '$2',
+	backgroundColor: '$white',
+	borderRadius: '$md',
+	padding: '$3',
+});
+
+export function GroceryListItemDraggable({
+	item,
+	...rest
+}: {
+	item: GroceryItemData;
+	children: ReactNode;
+}) {
+	const { attributes, listeners, setNodeRef, transform } = useDraggable({
+		id: item.id,
+		data: item,
+	});
+
+	return (
+		<Box
+			{...attributes}
+			{...listeners}
+			ref={setNodeRef}
+			style={{
+				transform: CSS.Translate.toString(transform),
+			}}
+			{...rest}
+		/>
+	);
+}
