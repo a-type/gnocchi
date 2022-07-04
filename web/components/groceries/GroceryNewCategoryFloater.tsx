@@ -119,13 +119,13 @@ export const GroceryNewCategoryFloater = forwardRef<
 
 const FloatingZone = styled('div', {
 	position: 'fixed',
-	top: '-$6',
+	top: '-$3',
 	left: '50%',
 	transform: 'translateX(-50%)',
 	backgroundColor: '$lemon',
 	boxShadow: '$lg',
 	borderRadius: '$xl',
-	p: '$4',
+	p: '$3',
 	justifyContent: 'center',
 	display: 'flex',
 	flexDirection: 'row',

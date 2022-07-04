@@ -132,6 +132,7 @@ const ItemContainer = styled('div', {
 				transform: 'scale(1.1)',
 				cursor: 'grabbing',
 				touchAction: 'none',
+				border: '1px solid $colors$gray50',
 			},
 			false: {
 				transform: 'scale(1)',

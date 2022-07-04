@@ -70,14 +70,14 @@ export const DeleteItemFloater = forwardRef<
 
 const FloatingZone = styled('div', {
 	position: 'fixed',
-	bottom: '-$6',
+	bottom: '-$3',
 	left: '50%',
 	transform: 'translateX(-50%)',
 	backgroundColor: '$tomato',
 	color: '$white',
 	boxShadow: '$lg',
 	borderRadius: '$xl',
-	p: '$4',
+	p: '$3',
 	justifyContent: 'center',
 	display: 'flex',
 	flexDirection: 'row',
