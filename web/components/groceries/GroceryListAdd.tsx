@@ -7,7 +7,7 @@ import {
 	SubmitButton,
 } from 'components/primitives';
 import cuid from 'cuid';
-import { forwardRef } from 'react';
+import { forwardRef, TouchEvent, useRef, useCallback, useEffect } from 'react';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
 import { groceriesStore } from 'lib/stores/groceries';
 import { Formik } from 'formik';
@@ -18,6 +18,23 @@ export interface GroceryListAddProps {
 
 export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 	function GroceryListAdd({ ...rest }, ref) {
+		const inputRef = useRef<HTMLInputElement>(null);
+
+		// prevent immediate input focus on touch so the keyboard has
+		// time to appear
+		const handleInputTouch = useCallback((ev: TouchEvent<any>) => {
+			ev.preventDefault();
+			setTimeout(() => {
+				inputRef.current?.focus();
+			}, 300);
+		}, []);
+
+		useEffect(() => {
+			const input = inputRef.current;
+			if (!input) return;
+			input.addEventListener('touchstart', handleInputTouch, true);
+		}, [handleInputTouch]);
+
 		return (
 			<Formik
 				initialValues={{ text: '' }}
@@ -47,11 +64,19 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 						});
 					}
 					resetForm();
+
+					// focus the input
+					inputRef.current?.focus();
 				}}
 			>
 				<Form ref={ref} css={{ width: '$full', p: '$2' }} {...rest}>
 					<Box w="full" direction="row" gap={2}>
-						<TextField name="text" required css={{ flex: 1 }} />
+						<TextField
+							inputRef={inputRef}
+							name="text"
+							required
+							css={{ flex: 1 }}
+						/>
 						<SubmitButton>Add</SubmitButton>
 					</Box>
 				</Form>
