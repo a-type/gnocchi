@@ -6,7 +6,7 @@ const global = globalCss({
 		margin: 0,
 		padding: 0,
 		fontFamily: '$sans',
-		fontSize: '16px',
+		fontSize: '18px',
 		height: '100%',
 	},
 
