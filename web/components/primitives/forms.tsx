@@ -1,6 +1,6 @@
-import { styled } from '@stitches/react';
+import { styled } from 'stitches.config';
 import { useField } from 'formik';
-import { ComponentProps, InputHTMLAttributes } from 'react';
+import { ComponentProps, InputHTMLAttributes, useEffect, useRef } from 'react';
 import { Button, Input } from './primitives';
 import { Form as FormikForm } from 'formik';
 
@@ -11,11 +11,14 @@ export const FieldGroup = styled('div', {
 	gap: '$1',
 });
 
-export function FieldLabel({ className, ...rest }: ComponentProps<'label'>) {
-	return (
-		<label className={`${className} inline-flex flex-col gap-1`} {...rest} />
-	);
-}
+export const FieldLabel = styled('label', {
+	display: 'inline-flex',
+	flexDirection: 'column',
+	gap: '$1',
+	fontSize: '$sm',
+	fontWeight: 'bold',
+	color: '$darkBlend',
+});
 
 export const Form = styled(FormikForm, {
 	display: 'flex',
@@ -28,6 +31,8 @@ export function TextField({
 	label,
 	css,
 	className,
+	autoFocusDelay,
+	autoFocus,
 	...rest
 }: {
 	name: string;
@@ -39,12 +44,24 @@ export function TextField({
 	placeholder?: string;
 	autoComplete?: InputHTMLAttributes<HTMLInputElement>['autoComplete'];
 	autoFocus?: InputHTMLAttributes<HTMLInputElement>['autoFocus'];
+	autoFocusDelay?: number;
 }) {
 	const [props] = useField(name);
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (autoFocusDelay) {
+			console.log('focusing input');
+			setTimeout(() => {
+				if (inputRef.current) inputRef.current.focus();
+			}, autoFocusDelay);
+		}
+	}, [autoFocusDelay]);
+
 	return (
 		<FieldGroup className={className} css={css}>
-			{label && <FieldLabel>{label}</FieldLabel>}
-			<Input {...props} {...rest} />
+			{label && <FieldLabel css={{ mb: '$1' }}>{label}</FieldLabel>}
+			<Input {...props} {...rest} autoFocus={autoFocus} ref={inputRef} />
 		</FieldGroup>
 	);
 }

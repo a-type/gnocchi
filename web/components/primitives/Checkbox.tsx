@@ -7,12 +7,13 @@ export const Checkbox = styled(CheckboxPrimitive.Root, {
 	width: 24,
 	height: 24,
 	backgroundColor: '$white',
-	border: '2px solid $lemonDark',
+	border: '2px solid $black',
 	position: 'relative',
 	borderRadius: '$sm',
 
 	'&[data-state="checked"]': {
 		backgroundColor: '$lemon',
+		borderColor: '$lemon',
 	},
 });
 

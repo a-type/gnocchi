@@ -6,6 +6,7 @@ const DynamicGroceryList = dynamic(
 	() => import('components/groceries/GroceryList'),
 	{
 		ssr: false,
+		loading: () => <div style={{ flex: 1 }} />,
 	},
 );
 

@@ -184,6 +184,7 @@ export const Input = styled('input', {
 	border: 'none',
 	borderRadius: '$md',
 	backgroundColor: '$gray20',
+	userSelect: 'auto',
 
 	'&:focus': {
 		outline: 'none',
@@ -203,6 +204,7 @@ export const Button = styled('button', {
 	border: 'none',
 	borderRadius: '$md',
 	cursor: 'pointer',
+	fontWeight: 'bold',
 
 	'&:focus': {
 		outline: 'none',
@@ -230,6 +232,14 @@ export const Button = styled('button', {
 					backgroundColor: '$gray40',
 				},
 			},
+			ghost: {
+				color: '$darkBlend',
+				backgroundColor: 'transparent',
+
+				'&:hover': {
+					backgroundColor: '$lightBlend',
+				},
+			},
 		},
 	},
 
@@ -238,8 +248,30 @@ export const Button = styled('button', {
 	},
 });
 
-export const H1 = styled('h1', {});
-export const H2 = styled('h2', {});
-export const H3 = styled('h3', {});
-export const H4 = styled('h4', {});
-export const H5 = styled('h5', {});
+const headingCommonStyles = {
+	mt: 0,
+};
+export const H1 = styled('h1', {
+	...headingCommonStyles,
+});
+export const H2 = styled('h2', {
+	...headingCommonStyles,
+
+	variants: {
+		size: {
+			micro: {
+				fontSize: '$sm',
+				textTransform: 'uppercase',
+			},
+		},
+	},
+});
+export const H3 = styled('h3', {
+	...headingCommonStyles,
+});
+export const H4 = styled('h4', {
+	...headingCommonStyles,
+});
+export const H5 = styled('h5', {
+	...headingCommonStyles,
+});

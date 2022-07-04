@@ -88,6 +88,9 @@ export const { getCssText, styled, css, keyframes, globalCss, theme } =
 				// focus outlines
 				focus: '0 0 0 3px #f7d352',
 			},
+			transitions: {
+				springy: 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+			},
 		},
 		media: {
 			sm: '(min-width: 640px)',

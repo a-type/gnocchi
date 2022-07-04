@@ -1,25 +1,27 @@
-import { forwardRef, useState } from 'react';
-import { useSnapshot, ref as valtioRef } from 'valtio';
-import {
-	groceriesCategories,
-	groceriesStore,
-	GroceryItemData,
-} from 'lib/stores/groceries';
-import { GroceryListItem, GroceryListItemDraggable } from './GroceryListItem';
-import { Box, H2 } from 'components/primitives';
 import {
 	DndContext,
 	DragEndEvent,
-	useDroppable,
-	useDndContext,
-	useDndMonitor,
-	DragStartEvent,
 	DragOverlay,
+	DragStartEvent,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
 } from '@dnd-kit/core';
-import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { Box } from 'components/primitives';
+import { groceriesStore, GroceryItemData } from 'lib/stores/groceries';
+import { forwardRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { ref as valtioRef, useSnapshot } from 'valtio';
 import { GroceryDnDDrop } from './dndTypes';
+import { GroceryListCategory } from './GroceryListCategory';
+import { GroceryListItem } from './GroceryListItem';
+import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
+
+export const DRAG_ACTIVATION_DELAY = 1000;
+const DRAG_ACTIVATION_TOLERANCE = 5;
 
 export interface GroceryListProps {
 	className?: string;
@@ -27,7 +29,7 @@ export interface GroceryListProps {
 
 export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 	function GroceryList({ ...rest }, ref) {
-		const state = useSnapshot(groceriesCategories);
+		const state = useSnapshot(groceriesStore);
 
 		const [draggingItem, setDraggingItem] = useState<GroceryItemData | null>(
 			null,
@@ -42,7 +44,6 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
 				if (item.category !== dropZone.value) {
-					console.debug('moving item', item.id, 'to', dropZone.value);
 					item.category = dropZone.value;
 				}
 			} else if (dropZone.type === 'new') {
@@ -51,17 +52,25 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 			setDraggingItem(null);
 		};
 
+		const sensors = useGroceryDndSensors();
+
 		return (
-			<DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+			<DndContext
+				onDragStart={handleDragStart}
+				onDragEnd={handleDragEnd}
+				modifiers={[restrictToVerticalAxis]}
+				sensors={sensors}
+			>
 				<Box
 					id="groceryList"
 					w="full"
 					flex={1}
 					p={2}
-					gap={3}
-					css={{
-						overflow: 'hidden',
-					}}
+					css={
+						{
+							// overflow: 'hidden',
+						}
+					}
 					ref={ref}
 					{...rest}
 				>
@@ -74,7 +83,9 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				<GroceryNewCategoryFloater />
 				{createPortal(
 					<DragOverlay>
-						{draggingItem && <GroceryListItem item={draggingItem} />}
+						{draggingItem && (
+							<GroceryListItem isDragActive item={draggingItem} />
+						)}
 					</DragOverlay>,
 					document.body,
 				)}
@@ -85,55 +96,13 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 
 export default GroceryList;
 
-function GroceryListCategory({
-	categoryName,
-	...rest
-}: {
-	categoryName: string;
-}) {
-	const items = useSnapshot(groceriesStore.items);
-	const { isOver, setNodeRef } = useDroppable({
-		id: categoryName,
-		data: {
-			type: 'category',
-			value: categoryName,
+function useGroceryDndSensors() {
+	const pointerSensor = useSensor(PointerSensor, {
+		activationConstraint: {
+			delay: DRAG_ACTIVATION_DELAY,
+			tolerance: DRAG_ACTIVATION_TOLERANCE,
 		},
 	});
-	const [addRoom, setAddRoom] = useState(false);
-	useDndMonitor({
-		onDragStart() {
-			setAddRoom(true);
-		},
-		onDragEnd() {
-			setAddRoom(false);
-		},
-	});
-
-	return (
-		<Box
-			ref={setNodeRef}
-			className="groceryCategory"
-			p={2}
-			gap={1}
-			css={{
-				borderRadius: '$md',
-				pb: addRoom ? '100px' : '$2',
-				backgroundColor: isOver ? '$gray20' : 'transparent',
-			}}
-			{...rest}
-		>
-			<H2 css={{ textTransform: 'capitalize' }}>{categoryName}</H2>
-			{items.map((item, index) => {
-				if (item.category !== categoryName) return null;
-				return (
-					<GroceryListItemDraggable
-						key={item.id}
-						item={groceriesStore.items[index]}
-					>
-						<GroceryListItem item={groceriesStore.items[index]} />
-					</GroceryListItemDraggable>
-				);
-			})}
-		</Box>
-	);
+	const keyboardSensor = useSensor(KeyboardSensor);
+	return useSensors(pointerSensor, keyboardSensor);
 }
