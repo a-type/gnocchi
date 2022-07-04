@@ -5,4 +5,7 @@ export type GroceryDnDDrop =
 	  }
 	| {
 			type: 'new';
+	  }
+	| {
+			type: 'delete';
 	  };

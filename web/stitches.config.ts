@@ -9,6 +9,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				white: '#ffffff',
 				light: '#fefefe',
 				tomato: '#fd7e4d',
+				tomatoDark: '#c85832',
 				leek: '#e0f8bb',
 				garlic: '#f7f0e1',
 				onion: '#f6d7f2',

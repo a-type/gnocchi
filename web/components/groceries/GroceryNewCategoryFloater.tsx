@@ -119,7 +119,7 @@ export const GroceryNewCategoryFloater = forwardRef<
 
 const FloatingZone = styled('div', {
 	position: 'fixed',
-	top: '$8',
+	top: '-$6',
 	left: '50%',
 	transform: 'translateX(-50%)',
 	backgroundColor: '$lemon',
@@ -142,7 +142,8 @@ const FloatingZone = styled('div', {
 			visible: {
 				opacity: 1,
 				pointerEvents: 'initial',
-				width: '300px',
+				minWidth: '280px',
+				width: '30vw',
 				transition: '0.2s ease all',
 			},
 			over: {
@@ -150,6 +151,7 @@ const FloatingZone = styled('div', {
 				width: '95vw',
 				p: '$5',
 				transition: '0.2s ease all',
+				top: '$2',
 			},
 			entering: {
 				opacity: 1,

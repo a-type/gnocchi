@@ -20,6 +20,7 @@ import { GroceryDnDDrop } from './dndTypes';
 import { GroceryListCategory } from './GroceryListCategory';
 import { GroceryListItem } from './GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
+import { DeleteItemFloater } from './DeleteItemFloater';
 import { groceriesState } from './state';
 import { DRAG_ACTIVATION_DELAY } from './constants';
 
@@ -50,6 +51,9 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				}
 			} else if (dropZone.type === 'new') {
 				groceriesState.newCategoryPendingItem = valtioRef(item);
+			} else if (dropZone.type === 'delete') {
+				const index = groceriesStore.items.findIndex((i) => i.id === item.id);
+				groceriesStore.items.splice(index, 1);
 			}
 			setDraggingItem(null);
 		};
@@ -68,11 +72,10 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 					w="full"
 					flex={1}
 					p={2}
-					css={
-						{
-							// overflow: 'hidden',
-						}
-					}
+					css={{
+						overflowY: 'auto',
+						overflowX: 'hidden',
+					}}
 					ref={ref}
 					{...rest}
 				>
@@ -83,6 +86,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 					})}
 				</Box>
 				<GroceryNewCategoryFloater />
+				<DeleteItemFloater />
 				{createPortal(
 					<DragOverlay>
 						{draggingItem && (
