@@ -7,6 +7,8 @@ import {
 	PointerSensor,
 	useSensor,
 	useSensors,
+	MouseSensor,
+	TouchSensor,
 } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { Box } from 'components/primitives';
@@ -97,12 +99,18 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 export default GroceryList;
 
 function useGroceryDndSensors() {
-	const pointerSensor = useSensor(PointerSensor, {
+	const mouseSensor = useSensor(MouseSensor, {
+		activationConstraint: {
+			delay: DRAG_ACTIVATION_DELAY,
+			tolerance: DRAG_ACTIVATION_TOLERANCE,
+		},
+	});
+	const touchSensor = useSensor(TouchSensor, {
 		activationConstraint: {
 			delay: DRAG_ACTIVATION_DELAY,
 			tolerance: DRAG_ACTIVATION_TOLERANCE,
 		},
 	});
 	const keyboardSensor = useSensor(KeyboardSensor);
-	return useSensors(pointerSensor, keyboardSensor);
+	return useSensors(mouseSensor, touchSensor, keyboardSensor);
 }

@@ -102,7 +102,6 @@ const ItemContainer = styled('div', {
 	borderRadius: '$md',
 	padding: '$3',
 	position: 'relative',
-	touchAction: 'none',
 	animation: 'none',
 	transform: 'scale(1)',
 	userSelect: 'none',
@@ -132,6 +131,7 @@ const ItemContainer = styled('div', {
 				boxShadow: '$xl',
 				transform: 'scale(1.1)',
 				cursor: 'grabbing',
+				touchAction: 'none',
 			},
 			false: {
 				transform: 'scale(1)',
