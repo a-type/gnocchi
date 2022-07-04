@@ -7,7 +7,7 @@ import {
 	SubmitButton,
 } from 'components/primitives';
 import cuid from 'cuid';
-import { forwardRef, TouchEvent, useRef, useCallback, useEffect } from 'react';
+import { forwardRef, useRef, useCallback, useEffect } from 'react';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
 import { groceriesStore } from 'lib/stores/groceries';
 import { Formik } from 'formik';
@@ -22,7 +22,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 
 		// prevent immediate input focus on touch so the keyboard has
 		// time to appear
-		const handleInputTouch = useCallback((ev: TouchEvent<any>) => {
+		const handleInputTouch = useCallback((ev: TouchEvent) => {
 			ev.preventDefault();
 			setTimeout(() => {
 				inputRef.current?.focus();
