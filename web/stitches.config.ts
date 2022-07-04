@@ -1,6 +1,6 @@
 import { createStitches, PropertyValue } from '@stitches/react';
 
-export const { getCssText, styled, css, keyframes, globalCss, theme } =
+export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 	createStitches({
 		prefix: 'ag',
 		theme: {
