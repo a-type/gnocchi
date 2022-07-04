@@ -92,12 +92,9 @@ export function PageNowPlayingBar({
 					maxWidth: '$content',
 					overflow: 'hidden',
 					position: 'relative',
-					backgroundColor: '$lemonDark',
+					backgroundColor: '$white',
 					borderRadius: '$md',
-					boxShadow: '$md',
-					borderColor: '$lemonDarker',
-					borderWidth: '$thin',
-					borderStyle: 'solid',
+					boxShadow: '$lg',
 				}}
 			>
 				{children}

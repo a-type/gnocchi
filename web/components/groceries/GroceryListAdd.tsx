@@ -49,7 +49,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 					resetForm();
 				}}
 			>
-				<Form ref={ref} css={{ w: '$full' }} {...rest}>
+				<Form ref={ref} css={{ width: '$full', p: '$2' }} {...rest}>
 					<Box w="full" direction="row" gap={2}>
 						<TextField name="text" required css={{ flex: 1 }} />
 						<SubmitButton>Add</SubmitButton>
