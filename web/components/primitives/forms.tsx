@@ -1,6 +1,12 @@
 import { styled } from 'stitches.config';
 import { useField } from 'formik';
-import { ComponentProps, InputHTMLAttributes, useEffect, useRef } from 'react';
+import {
+	ComponentProps,
+	InputHTMLAttributes,
+	useEffect,
+	useRef,
+	Ref,
+} from 'react';
 import { Button, Input } from './primitives';
 import { Form as FormikForm } from 'formik';
 import useMergedRef from '@react-hook/merged-ref';
@@ -47,7 +53,7 @@ export function TextField({
 	autoComplete?: InputHTMLAttributes<HTMLInputElement>['autoComplete'];
 	autoFocus?: InputHTMLAttributes<HTMLInputElement>['autoFocus'];
 	autoFocusDelay?: number;
-	inputRef?: InputHTMLAttributes<HTMLInputElement>['ref'];
+	inputRef?: Ref<HTMLInputElement>;
 }) {
 	const [props] = useField(name);
 	const innerInputRef = useRef<HTMLInputElement>(null);
