@@ -1,13 +1,13 @@
-import { commentsParser } from "./commentsParser";
-import { depluralize } from "./depluralize";
+import { commentsParser } from './commentsParser';
+import { depluralize } from './depluralize';
 import {
-  greedyMatchNumber,
-  greedyMatchOf,
-  greedyMatchUnit,
-  reverseGreedyMatchComment,
-} from "./greedyMatchers";
-import { numberParser } from "./numberParser";
-import { unitParser } from "./unitParser";
+	greedyMatchNumber,
+	greedyMatchOf,
+	greedyMatchUnit,
+	reverseGreedyMatchComment,
+} from './greedyMatchers';
+import { numberParser } from './numberParser';
+import { unitParser } from './unitParser';
 
 const DEFAULT_UNIT = null;
 const DEFAULT_QUANTITY = 1;
@@ -29,22 +29,22 @@ const DEFAULT_FOOD = null;
  * II: Parse remainder for comments and preparations
  */
 export function parseIngredient(source: string) {
-  const numberResult = greedyMatchNumber(source);
-  const unitResult = greedyMatchUnit(numberResult.remaining);
-  const ofResult = greedyMatchOf(unitResult.remaining);
-  const commentResult = reverseGreedyMatchComment(ofResult.remaining);
+	const numberResult = greedyMatchNumber(source);
+	const unitResult = greedyMatchUnit(numberResult.remaining);
+	const ofResult = greedyMatchOf(unitResult.remaining);
+	const commentResult = reverseGreedyMatchComment(ofResult.remaining);
 
-  return {
-    original: source,
-    quantity: numberResult.matched
-      ? numberParser(numberResult.matched.trim())
-      : DEFAULT_QUANTITY,
-    unit: unitResult.matched
-      ? depluralize(unitParser(unitResult.matched.trim()))
-      : DEFAULT_UNIT,
-    food: depluralize(commentResult.remaining.trim()),
-    comments: commentResult.matched
-      ? commentsParser(commentResult.matched.trim())
-      : [],
-  };
+	return {
+		original: source,
+		quantity: numberResult.matched
+			? numberParser(numberResult.matched.trim())
+			: DEFAULT_QUANTITY,
+		unit: unitResult.matched
+			? depluralize(unitParser(unitResult.matched.trim())).toLowerCase()
+			: DEFAULT_UNIT,
+		food: depluralize(commentResult.remaining.trim()).toLowerCase(),
+		comments: commentResult.matched
+			? commentsParser(commentResult.matched.trim())
+			: [],
+	};
 }

@@ -27,8 +27,8 @@ const groceryListDoc = new Y.Doc();
 
 function enforceConsistency() {
 	for (const item of groceriesStore.items) {
-		if (item.category === NONE_CATEGORY) {
-			item.category = '';
+		if (!item.category) {
+			item.category = NONE_CATEGORY;
 		}
 
 		if (groceriesStore.categories.indexOf(item.category) === -1) {
@@ -59,4 +59,28 @@ if (typeof window !== 'undefined') {
 	bindProxyAndYMap(groceriesStore, groceryListDoc.getMap('root'));
 
 	(window as any).groceriesStore = groceriesStore;
+}
+
+const categoryLookupDoc = new Y.Doc();
+
+if (typeof window !== 'undefined') {
+	const indexDbProvider = new IndexeddbPersistence(
+		'categoryLookup',
+		categoryLookupDoc as any,
+	);
+}
+
+export const categoryLookupStore = proxy({
+	table: {} as { [key: string]: string },
+});
+
+if (typeof window !== 'undefined') {
+	bindProxyAndYMap(categoryLookupStore, categoryLookupDoc.getMap('root'));
+
+	(window as any).categoryLookup = categoryLookupStore;
+}
+
+export function setItemCategory(item: GroceryItemData, category: string) {
+	item.category = category;
+	categoryLookupStore.table[item.name] = category;
 }

@@ -12,7 +12,11 @@ import {
 } from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { Box } from 'components/primitives';
-import { groceriesStore, GroceryItemData } from 'lib/stores/groceries';
+import {
+	groceriesStore,
+	GroceryItemData,
+	setItemCategory,
+} from 'lib/stores/groceries';
 import { forwardRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef, useSnapshot } from 'valtio';
@@ -47,7 +51,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
 				if (item.category !== dropZone.value) {
-					item.category = dropZone.value;
+					setItemCategory(item, dropZone.value);
 				}
 			} else if (dropZone.type === 'new') {
 				groceriesState.newCategoryPendingItem = valtioRef(item);

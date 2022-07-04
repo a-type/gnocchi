@@ -9,7 +9,11 @@ import {
 import cuid from 'cuid';
 import { forwardRef, useRef, useCallback, useEffect } from 'react';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
-import { groceriesStore } from 'lib/stores/groceries';
+import {
+	categoryLookupStore,
+	groceriesStore,
+	NONE_CATEGORY,
+} from 'lib/stores/groceries';
 import { Formik } from 'formik';
 
 export interface GroceryListAddProps {
@@ -51,11 +55,16 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 							text,
 						});
 					} else {
+						// lookup the category
+						const category =
+							categoryLookupStore.table[parsed.food] || NONE_CATEGORY;
+						console.log('lookup category', category);
+
 						// create a new item
 						groceriesStore.items.push({
 							id: cuid(),
 							createdAt: Date.now(),
-							category: 'none',
+							category,
 							name: parsed.food,
 							unit: parsed.unit,
 							totalQuantity: parsed.quantity,

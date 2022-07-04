@@ -14,7 +14,7 @@ import { groceriesState, newCategoryFlipData } from './state';
 import useMergedRef from '@react-hook/merged-ref';
 import { CardStackPlusIcon } from '@radix-ui/react-icons';
 import { useSnapshot } from 'valtio';
-import { groceriesStore } from 'lib/stores/groceries';
+import { groceriesStore, setItemCategory } from 'lib/stores/groceries';
 
 export interface GroceryNewCategoryFloaterProps {
 	className?: string;
@@ -60,7 +60,7 @@ export const GroceryNewCategoryFloater = forwardRef<
 	const handleNewCreate = useCallback((name: string) => {
 		setState('hidden');
 		if (groceriesState.newCategoryPendingItem) {
-			groceriesState.newCategoryPendingItem.category = name;
+			setItemCategory(groceriesState.newCategoryPendingItem, name);
 			groceriesState.newCategoryPendingItem = null;
 		}
 		const zoneBox = zoneRef.current.getBoundingClientRect();
