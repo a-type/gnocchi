@@ -192,7 +192,7 @@ function AnimatedBorder({
 			<StyledBox
 				width="100%"
 				height="100%"
-				rx={theme.radii.lg.value}
+				rx={theme.radii.md.value}
 				strokeWidth="3"
 				strokeLinecap="round"
 				strokeLinejoin="round"
@@ -211,7 +211,7 @@ const StyledSvg = styled('svg', {
 	height: '100%',
 	pointerEvents: 'none',
 	zIndex: 1,
-	borderRadius: '$lg',
+	borderRadius: '$md',
 	overflow: 'hidden',
 });
 

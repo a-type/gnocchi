@@ -68,7 +68,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 			<DndContext
 				onDragStart={handleDragStart}
 				onDragEnd={handleDragEnd}
-				modifiers={[restrictToVerticalAxis]}
+				// modifiers={[restrictToVerticalAxis]}
 				sensors={sensors}
 			>
 				<Box
@@ -76,10 +76,12 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 					w="full"
 					flex={1}
 					p={2}
-					css={{
-						overflowY: 'auto',
-						overflowX: 'hidden',
-					}}
+					css={
+						{
+							// overflowY: 'auto',
+							// overflowX: 'hidden',
+						}
+					}
 					ref={ref}
 					{...rest}
 				>
