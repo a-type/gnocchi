@@ -78,7 +78,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 					inputRef.current?.focus();
 				}}
 			>
-				<Form ref={ref} css={{ width: '$full', p: '$2' }} {...rest}>
+				<Form ref={ref} css={{ width: '$full' }} {...rest}>
 					<Box w="full" direction="row" gap={2}>
 						<TextField
 							inputRef={inputRef}

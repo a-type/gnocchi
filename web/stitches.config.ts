@@ -27,8 +27,9 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				gray80: '#686161',
 				gray90: '#4a4242',
 				gray0: '#2b2121',
+				grayBlend: 'rgba(10, 0, 0, 0.05)',
 				darkBlend: 'rgba(30, 0, 0, 0.5)',
-				lightBlend: 'rgba(255, 220, 225, 0.5)',
+				lightBlend: 'rgba(255, 250, 250, 0.5)',
 			},
 			fonts: {
 				sans: '"Open Sans", sans-serif',

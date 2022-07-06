@@ -237,7 +237,7 @@ export const Button = styled('button', {
 				backgroundColor: 'transparent',
 
 				'&:hover': {
-					backgroundColor: '$lightBlend',
+					backgroundColor: '$grayBlend',
 				},
 			},
 		},

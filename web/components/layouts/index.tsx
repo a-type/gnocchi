@@ -70,8 +70,11 @@ export const PageNavBar = styled('div', {
 export function PageNowPlayingBar({
 	children,
 	css,
+	innerCss,
 	...rest
-}: ComponentPropsWithoutRef<typeof Box>) {
+}: ComponentPropsWithoutRef<typeof Box> & {
+	innerCss: ComponentPropsWithoutRef<typeof Box>['css'];
+}) {
 	return (
 		<Box
 			css={{
@@ -94,7 +97,8 @@ export function PageNowPlayingBar({
 					position: 'relative',
 					backgroundColor: '$white',
 					borderRadius: '$md',
-					boxShadow: '$lg',
+					boxShadow: '$xl',
+					...innerCss,
 				}}
 			>
 				{children}
