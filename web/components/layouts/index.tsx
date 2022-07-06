@@ -73,7 +73,7 @@ export function PageNowPlayingBar({
 	innerCss,
 	...rest
 }: ComponentPropsWithoutRef<typeof Box> & {
-	innerCss: ComponentPropsWithoutRef<typeof Box>['css'];
+	innerCss?: ComponentPropsWithoutRef<typeof Box>['css'];
 }) {
 	return (
 		<Box
