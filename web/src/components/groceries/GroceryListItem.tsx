@@ -18,6 +18,10 @@ export interface GroceryListItemProps {
 	isDragActive?: boolean;
 }
 
+function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
+	e.stopPropagation();
+}
+
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, ...rest }, ref) {
 		const sectionStateSnap = useSnapshot(groceriesState);
@@ -74,6 +78,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							updatePurchasedQuantity(item.totalQuantity);
 						}
 					}}
+					// prevent click/tap from reaching draggable container -
+					// don't disrupt a check action
+					onMouseDown={stopPropagation}
+					onMouseUp={stopPropagation}
+					onPointerDown={stopPropagation}
+					onPointerUp={stopPropagation}
 				>
 					<CheckboxIndicator />
 				</Checkbox>
