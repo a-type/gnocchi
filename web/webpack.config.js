@@ -1,4 +1,5 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ResolveTypeScriptPlugin from 'resolve-typescript-plugin';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -65,7 +66,12 @@ const config = {
 			'stitches.config': path.resolve(__dirname, 'src/stitches.config'),
 		},
 	},
-	plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
+	plugins: [
+		new HtmlWebpackPlugin({ template: './src/index.html' }),
+		new CopyWebpackPlugin({
+			patterns: [{ from: path.resolve(__dirname, 'public'), to: '.' }],
+		}),
+	],
 	module: {
 		rules: [
 			{
