@@ -1,78 +1,24 @@
+import { unwraps, useQuery } from '@aphro/react';
+import { UpdateType } from '@aphro/runtime-ts';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import useMergedRef from '@react-hook/merged-ref';
-import { H2 } from '../primitives';
-import React, { forwardRef, useState, useEffect } from 'react';
+import React, { forwardRef, useState } from 'react';
+import { keyframes, styled } from 'stitches.config';
 import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
-import { styled, theme } from 'stitches.config';
 import { useSnapshot } from 'valtio';
+import { H2 } from '../primitives';
 import { GroceryListItem, GroceryListItemDraggable } from './GroceryListItem';
-import { groceriesState, newCategoryFlipData } from './state';
-import { unwrap, unwraps, useQuery } from '@aphro/react';
-import { UpdateType } from '@aphro/runtime-ts';
+import { groceriesState } from './state';
 
 export function GroceryListCategory(props: { category: GroceryCategory }) {
 	const stateSnap = useSnapshot(groceriesState);
 	const isJustCreated = stateSnap.justCreatedCategoryId === props.category.id;
-	const [measuring, setMeasuring] = useState(isJustCreated);
-	useEffect(() => {
-		if (isJustCreated) {
-			setMeasuring(true);
-		}
-	}, [isJustCreated]);
-
-	const measureAndFlip = (element: HTMLDivElement | null) => {
-		if (!element) return;
-		setMeasuring(false);
-		const target = newCategoryFlipData.current;
-		if (!target) {
-			console.log('no flip data');
-			// bad state
-			groceriesState.justCreatedCategoryId = null;
-			return;
-		}
-
-		const box = element.getBoundingClientRect();
-		// apply inverse
-		const transform = `translate(${target.left - box.left}px, ${
-			target.top - box.top
-		}px)`;
-		const transitionLength = 200;
-		console.log('transform', transform);
-		element.style.transition = 'none';
-		element.style.transform = transform;
-		element.style.width = `${target.width}px`;
-		element.style.height = `${target.height}px`;
-		element.style.overflow = 'hidden';
-		element.style.zIndex = '999';
-		element.style.backgroundColor = theme.colors.lemon.value;
-		requestAnimationFrame(() => {
-			element.style.transition = `all ${transitionLength}ms ease-in-out`;
-			element.style.transform = 'translate(0px, 0px)';
-			element.style.width = `${box.width}px`;
-			element.style.height = `${box.height}px`;
-			element.style.removeProperty('background-color');
-			element.style.removeProperty('overflow');
-			element.style.removeProperty('z-index');
-			setTimeout(() => {
-				element.style.removeProperty('transition');
-				element.style.removeProperty('width');
-				element.style.removeProperty('height');
-				element.style.removeProperty('transform');
-			}, transitionLength);
-		});
-
-		groceriesState.justCreatedCategoryId = null;
-		newCategoryFlipData.current = null;
-	};
-
-	return (
-		<CategoryContent {...props} ref={measuring ? measureAndFlip : undefined} />
-	);
+	return <CategoryContent {...props} animateIn={isJustCreated} />;
 }
 
 const CategoryContent = forwardRef<
 	HTMLDivElement,
-	{ category: GroceryCategory }
+	{ category: GroceryCategory; animateIn?: boolean }
 >(function CategoryContent({ category, ...rest }, ref) {
 	const [items] = unwraps(
 		useQuery(UpdateType.ANY, () => category.queryItems(), []),
@@ -124,6 +70,17 @@ const CategoryContent = forwardRef<
 	);
 });
 
+const popIn = keyframes({
+	'0%': {
+		opacity: 0,
+		transform: 'translateY(20px)',
+	},
+	'100%': {
+		opacity: 1,
+		transform: 'translateY(0px)',
+	},
+});
+
 const CategoryContainer = styled('div', {
 	display: 'flex',
 	flexDirection: 'column',
@@ -163,6 +120,11 @@ const CategoryContainer = styled('div', {
 				// p: '$2',
 			},
 		},
+		animateIn: {
+			true: {
+				animation: `${popIn} 0.2s $transitions$springy`,
+			},
+		},
 	},
 
 	compoundVariants: [
@@ -179,7 +141,7 @@ const CategoryContainer = styled('div', {
 			isItemDragging: true,
 			draggedOver: false,
 			css: {
-				transform: 'scale(0.99)',
+				transform: 'scale(0.95)',
 			},
 		},
 	],

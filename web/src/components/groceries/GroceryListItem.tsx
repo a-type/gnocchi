@@ -97,22 +97,15 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 const liftUp = keyframes({
 	'0%': {
 		boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
-		transform: 'scale(1)',
 	},
 	'10%': {
 		boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
-		transform: 'scale(1)',
 	},
 	'50%': {
 		boxShadow: '$md',
-		transform: 'scale(1)',
-	},
-	'80%': {
-		transform: 'scale(1)',
 	},
 	'100%': {
 		boxShadow: '$xl',
-		transform: 'scale(1.1)',
 	},
 });
 
@@ -128,6 +121,7 @@ const ItemContainer = styled('div', {
 	animation: 'none',
 	transform: 'scale(1)',
 	userSelect: 'none',
+	cursor: 'grab',
 
 	transition: 'transform 0.2s $springy',
 
@@ -142,7 +136,6 @@ const ItemContainer = styled('div', {
 		pickingUp: {
 			true: {
 				animation: `${MOBILE_DRAG_ACTIVATION_DELAY}ms $transitions$springy ${liftUp}`,
-				// animationName: `${liftUp}`,
 				zIndex: 1,
 			},
 			false: {
@@ -152,7 +145,6 @@ const ItemContainer = styled('div', {
 		dragging: {
 			true: {
 				boxShadow: '$xl',
-				transform: 'scale(1.1)',
 				cursor: 'grabbing',
 				touchAction: 'none',
 				border: '1px solid $colors$gray50',

@@ -1,31 +1,31 @@
-import React, {
-	forwardRef,
-	useState,
-	useRef,
-	useEffect,
-	useCallback,
-} from 'react';
-import { styled } from 'stitches.config';
-import { useDroppable, useDndMonitor } from '@dnd-kit/core';
-import { GroceryDnDDrop } from './dndTypes';
-import { Formik } from 'formik';
+import { unwraps, useQuery } from '@aphro/react';
+import { P, UpdateType } from '@aphro/runtime-ts';
+import { useDndMonitor, useDroppable } from '@dnd-kit/core';
+import { CardStackPlusIcon } from '@radix-ui/react-icons';
+import useMergedRef from '@react-hook/merged-ref';
 import {
 	Box,
+	Button,
 	Form,
 	SubmitButton,
 	TextField,
-	Button,
 } from 'components/primitives';
-import { groceriesState, newCategoryFlipData } from './state';
-import useMergedRef from '@react-hook/merged-ref';
-import { CardStackPlusIcon } from '@radix-ui/react-icons';
-import { commit, UpdateType } from '@aphro/runtime-ts';
-import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
-import GroceryCategoryMutations from 'stores/groceries/.generated/GroceryCategoryMutations';
-import { useGroceryListCtx } from 'contexts/GroceryListContext';
-import { unwraps, useQuery } from '@aphro/react';
+import { useGroceryList, useGroceryListCtx } from 'contexts/GroceryListContext';
+import { Formik } from 'formik';
+import React, {
+	forwardRef,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
+import { styled } from 'stitches.config';
 import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
+import GroceryCategoryMutations from 'stores/groceries/.generated/GroceryCategoryMutations';
+import GroceryItem from 'stores/groceries/.generated/GroceryItem';
 import { setItemCategory } from 'stores/groceries/mutations';
+import { GroceryDnDDrop } from './dndTypes';
+import { groceriesState } from './state';
 
 export interface GroceryNewCategoryFloaterProps {
 	className?: string;
@@ -38,15 +38,10 @@ export const GroceryNewCategoryFloater = forwardRef<
 	const [state, setState] = useState<
 		'hidden' | 'visible' | 'over' | 'entering'
 	>('hidden');
+	// const state = 'entering';
 	const ctx = useGroceryListCtx();
-	const [categories] = unwraps(
-		useQuery(
-			UpdateType.CREATE_OR_DELETE,
-			() => GroceryCategory.queryAll(ctx),
-			[],
-		),
-	);
-	const { isOver, setNodeRef } = useDroppable({
+
+	const { setNodeRef } = useDroppable({
 		id: '@@new',
 		data: {
 			type: 'new',
@@ -78,24 +73,15 @@ export const GroceryNewCategoryFloater = forwardRef<
 
 	const handleNewCreate = useCallback(
 		async (category: GroceryCategory) => {
-			setState('hidden');
-
 			if (groceriesState.newCategoryPendingItem) {
 				const item = groceriesState.newCategoryPendingItem;
 				await setItemCategory(ctx, item, category.id);
 				groceriesState.newCategoryPendingItem = null;
 			}
 
-			if (zoneRef.current) {
-				const zoneBox = zoneRef.current.getBoundingClientRect();
-				newCategoryFlipData.current = {
-					left: zoneBox.left,
-					top: zoneBox.top,
-					width: zoneBox.width,
-					height: zoneBox.height,
-				};
-			}
 			groceriesState.justCreatedCategoryId = category.id;
+
+			setState('hidden');
 		},
 		[ctx],
 	);
@@ -164,7 +150,9 @@ const FloatingZone = styled('div', {
 			hidden: {
 				opacity: 0,
 				pointerEvents: 'none',
-				transition: 'none',
+				minWidth: '280px',
+				width: '30vw',
+				transition: '0.2s ease all',
 			},
 			visible: {
 				opacity: 1,
@@ -195,20 +183,23 @@ function NewCategoryForm({
 }: {
 	onDone: (category: GroceryCategory) => void;
 }) {
+	// warning: truly awful querying below!
+
 	const ctx = useGroceryListCtx();
-	// const emptyCategories = unwraps(useQuery(
-	// 	UpdateType.ANY,
-	// 	() => GroceryCategory.queryAll(categories[0].ctx).where(
-	// 		t => t.queryItems().count() === 0
-	// 	),
-	// 	[]
-	// ))
+	const list = useGroceryList();
 
-	// const unusedCategories = categories.filter((category) => {
-	// 	return !snap.items.some((item) => item.category === category);
-	// });
+	const [allCategories, allItems] = unwraps(
+		useQuery(UpdateType.ANY, () => GroceryCategory.queryAll(ctx), []),
+		useQuery(
+			UpdateType.ANY,
+			() => GroceryItem.queryAll(ctx).whereListId(P.equals(list.id)),
+			[],
+		),
+	);
 
-	const unusedCategories: GroceryCategory[] = [];
+	const unusedCategories = allCategories.filter((category) => {
+		return !allItems.some((item) => item.categoryId === category.id);
+	});
 
 	return (
 		<Box direction="column" gap={2} align="stretch" w="full">
