@@ -5,7 +5,7 @@
 			"headers": [
 				{
 					"key": "Cross-Origin-Opener-Policy",
-					"value": "Same-Origin"
+					"value": "same-origin"
 				},
 				{
 					"key": "Cross-Origin-Embedder-Policy",
