@@ -48,7 +48,7 @@ const config = {
 		},
 	},
 	entry: './src/main.tsx',
-	mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+	mode: process.env.CI ? 'production' : 'development',
 	resolve: {
 		plugins: [new ResolveTypeScriptPlugin()],
 		extensions: ['.dev.js', '.js', '.json', '.wasm', '.ts', '.tsx'],
