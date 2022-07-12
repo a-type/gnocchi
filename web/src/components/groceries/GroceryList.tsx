@@ -19,7 +19,10 @@ import { GroceryListItem } from './GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { DeleteItemFloater } from './DeleteItemFloater';
 import { groceriesState } from './state';
-import { DRAG_ACTIVATION_DELAY } from './constants';
+import {
+	DESKTOP_DRAG_ACTIVATION_DELAY,
+	MOBILE_DRAG_ACTIVATION_DELAY,
+} from './constants';
 import { useGroceryListCtx } from 'contexts/GroceryListContext';
 import GroceryItem from 'stores/groceries/.generated/GroceryItem';
 import { commit, UpdateType } from '@aphro/runtime-ts';
@@ -78,20 +81,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				// modifiers={[restrictToVerticalAxis]}
 				sensors={sensors}
 			>
-				<Box
-					id="groceryList"
-					w="full"
-					flex={1}
-					p={2}
-					css={
-						{
-							// overflowY: 'auto',
-							// overflowX: 'hidden',
-						}
-					}
-					ref={ref}
-					{...rest}
-				>
+				<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...rest}>
 					{categories.map((category) => {
 						return (
 							<GroceryListCategory key={category.id} category={category} />
@@ -135,13 +125,17 @@ function useGroceryDndSensors() {
 	const mobile = isMobile();
 	const mouseSensor = useSensor(MouseSensor, {
 		activationConstraint: {
-			delay: mobile ? DRAG_ACTIVATION_DELAY : 0,
+			delay: mobile
+				? MOBILE_DRAG_ACTIVATION_DELAY
+				: DESKTOP_DRAG_ACTIVATION_DELAY,
 			tolerance: DRAG_ACTIVATION_TOLERANCE,
 		},
 	});
 	const touchSensor = useSensor(TouchSensor, {
 		activationConstraint: {
-			delay: mobile ? DRAG_ACTIVATION_DELAY : 0,
+			delay: mobile
+				? MOBILE_DRAG_ACTIVATION_DELAY
+				: DESKTOP_DRAG_ACTIVATION_DELAY,
 			tolerance: DRAG_ACTIVATION_TOLERANCE,
 		},
 	});

@@ -4,7 +4,7 @@ import { Checkbox, CheckboxIndicator } from '../primitives/Checkbox';
 import { useDraggable } from '@dnd-kit/core';
 import { keyframes, styled, theme } from 'stitches.config';
 import { groceriesState } from './state';
-import { DRAG_ACTIVATION_DELAY } from './constants';
+import { MOBILE_DRAG_ACTIVATION_DELAY } from './constants';
 import GroceryItem from 'stores/groceries/.generated/GroceryItem';
 import { unwrap, unwraps, useQuery } from '@aphro/react';
 import { commit, UpdateType } from '@aphro/runtime-ts';
@@ -131,7 +131,7 @@ const ItemContainer = styled('div', {
 		},
 		pickingUp: {
 			true: {
-				animation: `${DRAG_ACTIVATION_DELAY}ms $transitions$springy ${liftUp}`,
+				animation: `${MOBILE_DRAG_ACTIVATION_DELAY}ms $transitions$springy ${liftUp}`,
 				// animationName: `${liftUp}`,
 				zIndex: 1,
 			},
@@ -230,7 +230,9 @@ const StyledSvg = styled('svg', {
 
 const StyledBox = styled('rect', {
 	transition: `stroke-dashoffset ${
-		DRAG_ACTIVATION_DELAY - 100
-	}ms ease-out, stroke-dasharray ${DRAG_ACTIVATION_DELAY - 100}ms ease-out`,
+		MOBILE_DRAG_ACTIVATION_DELAY - 100
+	}ms ease-out, stroke-dasharray ${
+		MOBILE_DRAG_ACTIVATION_DELAY - 100
+	}ms ease-out`,
 	stroke: '$gray50',
 });
