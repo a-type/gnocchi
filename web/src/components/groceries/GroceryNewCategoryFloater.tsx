@@ -25,6 +25,7 @@ import GroceryCategoryMutations from 'stores/groceries/.generated/GroceryCategor
 import { useGroceryListCtx } from 'contexts/GroceryListContext';
 import { unwraps, useQuery } from '@aphro/react';
 import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
+import { setItemCategory } from 'stores/groceries/mutations';
 
 export interface GroceryNewCategoryFloaterProps {
 	className?: string;
@@ -75,30 +76,29 @@ export const GroceryNewCategoryFloater = forwardRef<
 
 	const zoneRef = useRef<HTMLDivElement>(null);
 
-	const handleNewCreate = useCallback((category: GroceryCategory) => {
-		setState('hidden');
+	const handleNewCreate = useCallback(
+		async (category: GroceryCategory) => {
+			setState('hidden');
 
-		if (groceriesState.newCategoryPendingItem) {
-			const item = groceriesState.newCategoryPendingItem;
-			commit(item.ctx, [
-				GroceryItemMutations.setCategory(item, {
-					categoryId: category.id,
-				}).toChangeset(),
-			]);
-			groceriesState.newCategoryPendingItem = null;
-		}
+			if (groceriesState.newCategoryPendingItem) {
+				const item = groceriesState.newCategoryPendingItem;
+				await setItemCategory(ctx, item, category.id);
+				groceriesState.newCategoryPendingItem = null;
+			}
 
-		if (zoneRef.current) {
-			const zoneBox = zoneRef.current.getBoundingClientRect();
-			newCategoryFlipData.current = {
-				left: zoneBox.left,
-				top: zoneBox.top,
-				width: zoneBox.width,
-				height: zoneBox.height,
-			};
-		}
-		groceriesState.justCreatedCategoryId = category.id;
-	}, []);
+			if (zoneRef.current) {
+				const zoneBox = zoneRef.current.getBoundingClientRect();
+				newCategoryFlipData.current = {
+					left: zoneBox.left,
+					top: zoneBox.top,
+					width: zoneBox.width,
+					height: zoneBox.height,
+				};
+			}
+			groceriesState.justCreatedCategoryId = category.id;
+		},
+		[ctx],
+	);
 
 	const cancelNewCreate = useCallback(() => {
 		setState('hidden');

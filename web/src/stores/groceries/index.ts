@@ -7,7 +7,15 @@ import GroceryListTable from './.generated/GroceryList.sqlite.sql';
 import GroceryItemTable from './.generated/GroceryItem.sqlite.sql';
 import GroceryInputTable from './.generated/GroceryInput.sqlite.sql';
 import GroceryCategoryTable from './.generated/GroceryCategory.sqlite.sql';
+import GroceryFoodCategoryLookupTable from './.generated/GroceryFoodCategoryLookup.sqlite.sql';
 import GroceryCategoryMutations from './.generated/GroceryCategoryMutations';
+import { EMPTY_CATEGORY_NAME } from './constants';
+import GroceryItem from './.generated/GroceryItem';
+import GroceryInput from './.generated/GroceryInput';
+import GroceryItemMutations from './.generated/GroceryItemMutations';
+import GroceryInputMutations from './.generated/GroceryInputMutations';
+import GroceryFoodCategoryLookup from './.generated/GroceryFoodCategoryLookup';
+import GroceryFoodCategoryLookupMutations from './.generated/GroceryFoodCategoryLookupMutations';
 
 export type GroceryInputData = {
 	text: string;
@@ -36,6 +44,7 @@ async function bootstrap(ctx: Context) {
 		db.query(sql.__dangerous__rawValue(GroceryItemTable)),
 		db.query(sql.__dangerous__rawValue(GroceryInputTable)),
 		db.query(sql.__dangerous__rawValue(GroceryCategoryTable)),
+		db.query(sql.__dangerous__rawValue(GroceryFoodCategoryLookupTable)),
 	]);
 
 	let list = await GroceryList.queryAll(ctx).genOnlyValue();
@@ -50,9 +59,15 @@ async function bootstrap(ctx: Context) {
 	if (!categories.length) {
 		// TODO: default categories
 		GroceryCategoryMutations.create(ctx, {
-			name: 'None',
+			name: EMPTY_CATEGORY_NAME,
 		}).save();
 	}
+
+	// log some debug stuff
+	console.log(
+		'Categories',
+		categories.map((c) => c.name),
+	);
 
 	return { list, ctx };
 }
@@ -61,5 +76,20 @@ export async function start() {
 	const resolver = await createResolver();
 	const ctx = context(anonymous(), resolver);
 	const data = await bootstrap(ctx);
+
+	// expose some tools
+	(window as any).ctx = ctx;
+	(window as any).GroceryCategory = GroceryCategory;
+	(window as any).GroceryList = GroceryList;
+	(window as any).GroceryListMutations = GroceryListMutations;
+	(window as any).GroceryItem = GroceryItem;
+	(window as any).GroceryItemMutations = GroceryItemMutations;
+	(window as any).GroceryInput = GroceryInput;
+	(window as any).GroceryInputMutations = GroceryInputMutations;
+	(window as any).GroceryCategoryMutations = GroceryCategoryMutations;
+	(window as any).GroceryFoodCategoryLookup = GroceryFoodCategoryLookup;
+	(window as any).GroceryFoodCategoryLookupMutations =
+		GroceryFoodCategoryLookupMutations;
+
 	return data;
 }

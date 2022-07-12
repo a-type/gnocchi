@@ -11,6 +11,20 @@ GroceryCategory as Node {
   }
 }
 
+GroceryFoodCategoryLookup as Node {
+  id: ID<GroceryFoodCategoryLookup>
+  categoryId: ID<GroceryCategory>
+} & Mutations {
+  create as Create {
+    id
+    categoryId
+  }
+
+  setCategory as Update {
+    categoryId
+  }
+}
+
 GroceryInput as Node {
   id: ID<GroceryInput>
   itemId: ID<GroceryItem>

@@ -29,6 +29,7 @@ import { commit, UpdateType } from '@aphro/runtime-ts';
 import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
 import { unwraps, useQuery } from '@aphro/react';
 import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
+import { setItemCategory } from 'stores/groceries/mutations';
 
 const DRAG_ACTIVATION_TOLERANCE = 5;
 
@@ -51,18 +52,14 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 		const handleDragStart = ({ active }: DragStartEvent) => {
 			setDraggingItem(active.data.current as GroceryItem);
 		};
-		const handleDragEnd = ({ over, active }: DragEndEvent) => {
+		const handleDragEnd = async ({ over, active }: DragEndEvent) => {
 			if (!over) return;
 
 			const item = active.data.current as GroceryItem;
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
 				if (item.categoryId !== dropZone.value) {
-					commit(item.ctx, [
-						GroceryItemMutations.setCategory(item, {
-							categoryId: dropZone.value,
-						}).toChangeset(),
-					]);
+					await setItemCategory(ctx, item, dropZone.value);
 				}
 			} else if (dropZone.type === 'new') {
 				groceriesState.newCategoryPendingItem = valtioRef(item);
