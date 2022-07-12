@@ -1,0 +1,30 @@
+{
+	"headers": [
+		{
+			"source": "/sql-wasm.wasm",
+			"headers": [
+				{
+					"key": "Cross-Origin-Opener-Policy",
+					"value": "Same-Origin"
+				},
+				{
+					"key": "Cross-Origin-Embedder-Policy",
+					"value": "require-corp"
+				}
+			]
+		},
+		{
+			"source": "/(.*)/worker.(.*).js",
+			"headers": [
+				{
+					"key": "Cross-Origin-Opener-Policy",
+					"value": "Same-Origin"
+				},
+				{
+					"key": "Cross-Origin-Embedder-Policy",
+					"value": "require-corp"
+				}
+			]
+		}
+	]
+}
