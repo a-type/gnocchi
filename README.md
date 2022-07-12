@@ -24,7 +24,7 @@ Here are some planned features for the first iteration of the app:
 - [x] Remove items from the list
 - [x] Merge items with the same detected food
 - [x] Categorize items
-- [ ] Remember which foods belong in which categories
+- [x] Remember which foods belong in which categories
 - [ ] Default categories based on common grocery sections
 - [ ] Sync to your devices (subscribers)
 - [ ] Collaborate with a group on one list (subscribers)
