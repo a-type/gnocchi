@@ -47,7 +47,7 @@ globalCss({
 		height: '100%',
 	},
 
-	'#__next': {
+	'#root': {
 		display: 'flex',
 		flexDirection: 'column',
 		minHeight: '100%',

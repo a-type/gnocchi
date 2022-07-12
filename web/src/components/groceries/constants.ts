@@ -1,1 +1,1 @@
-export const DRAG_ACTIVATION_DELAY = 1000;
+export const DRAG_ACTIVATION_DELAY = 700;

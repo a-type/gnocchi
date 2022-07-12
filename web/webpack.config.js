@@ -36,7 +36,7 @@ function resolveTsconfigPathsToAlias({
 const config = {
 	devServer: {
 		static: {
-			directory: path.resolve(__dirname),
+			directory: path.resolve(__dirname, 'public'),
 			publicPath: '/',
 		},
 		allowedHosts: 'all',
