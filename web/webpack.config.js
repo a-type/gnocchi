@@ -3,6 +3,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ResolveTypeScriptPlugin from 'resolve-typescript-plugin';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import webpack from 'webpack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -70,6 +71,11 @@ const config = {
 		new HtmlWebpackPlugin({ template: './src/index.html' }),
 		new CopyWebpackPlugin({
 			patterns: [{ from: path.resolve(__dirname, 'public'), to: '.' }],
+		}),
+		new webpack.ProvidePlugin({
+			'process.env': JSON.stringify({
+				NODE_ENV: process.env.NODE_ENV,
+			}),
 		}),
 	],
 	module: {
