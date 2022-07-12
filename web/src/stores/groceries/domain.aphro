@@ -1,0 +1,72 @@
+engine: sqlite
+
+GroceryCategory as Node {
+  id: ID<GroceryCategory>
+  name: string
+} & OutboundEdges {
+  items: Edge<GroceryItem.categoryId>
+} & Mutations {
+  create as Create {
+    name
+  }
+}
+
+GroceryInput as Node {
+  id: ID<GroceryInput>
+  itemId: ID<GroceryItem>
+  text: string
+} & Mutations {
+  create as Create {
+    itemId
+    text
+  }
+}
+
+GroceryItem as Node {
+  id: ID<GroceryItem>
+  listId: ID<GroceryList>
+  categoryId: ID<GroceryCategory>
+
+  createdAt: Timestamp
+  totalQuantity: float32
+  purchasedQuantity: float32
+  unit: string
+  name: string
+} & OutboundEdges {
+  inputs: Edge<GroceryInput.itemId>
+} & Mutations {
+  create as Create {
+    listId
+    categoryId
+    createdAt
+    totalQuantity
+    purchasedQuantity
+    unit
+    name
+  }
+
+  setPurchasedQuantity as Update {
+    purchasedQuantity
+  }
+
+  setCategory as Update {
+    categoryId
+  }
+
+  setTotalQuantity as Update {
+    totalQuantity
+  }
+
+  delete as Delete {}
+}
+
+GroceryList as Node {
+  id: ID<GroceryList>
+  name: string
+} & OutboundEdges {
+  items: Edge<GroceryItem.listId>
+} & Mutations {
+  create as Create {
+    name
+  }
+}

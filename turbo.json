@@ -12,6 +12,10 @@
 		},
 		"dev": {
 			"cache": false
+		},
+		"gen": {
+			"cache": false,
+			"outputs": ["**/.generated/*.ts"]
 		}
 	}
 }
