@@ -36,20 +36,7 @@ function resolveTsconfigPathsToAlias({
 }
 
 const config = {
-	devServer: {
-		static: {
-			directory: path.resolve(__dirname, 'public'),
-			publicPath: '/',
-		},
-		allowedHosts: 'all',
-		hot: true,
-		headers: {
-			'Cross-Origin-Opener-Policy': 'same-origin',
-			'Cross-Origin-Embedder-Policy': 'require-corp',
-		},
-	},
 	entry: './src/main.tsx',
-	mode: process.env.CI ? 'production' : 'development',
 	resolve: {
 		plugins: [new ResolveTypeScriptPlugin()],
 		extensions: ['.dev.js', '.js', '.json', '.wasm', '.ts', '.tsx'],
