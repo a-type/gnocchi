@@ -1,4 +1,4 @@
-import { unwraps, useQuery } from '@aphro/react';
+import { useQuery } from '@aphro/react';
 import { UpdateType } from '@aphro/runtime-ts';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import useMergedRef from '@react-hook/merged-ref';
@@ -20,9 +20,7 @@ const CategoryContent = forwardRef<
 	HTMLDivElement,
 	{ category: GroceryCategory; animateIn?: boolean }
 >(function CategoryContent({ category, ...rest }, ref) {
-	const [items] = unwraps(
-		useQuery(UpdateType.ANY, () => category.queryItems(), []),
-	);
+	const { data: items } = useQuery(() => category.queryItems(), []);
 	const { isOver, setNodeRef } = useDroppable({
 		id: category.id,
 		data: {

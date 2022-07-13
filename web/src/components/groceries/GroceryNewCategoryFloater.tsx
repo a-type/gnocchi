@@ -1,4 +1,4 @@
-import { unwraps, useQuery } from '@aphro/react';
+import { useQuery } from '@aphro/react';
 import { P, UpdateType } from '@aphro/runtime-ts';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { CardStackPlusIcon } from '@radix-ui/react-icons';
@@ -188,14 +188,13 @@ function NewCategoryForm({
 	const ctx = useGroceryListCtx();
 	const list = useGroceryList();
 
-	const [allCategories, allItems] = unwraps(
-		useQuery(UpdateType.ANY, () => GroceryCategory.queryAll(ctx), []),
+	const [{ data: allCategories }, { data: allItems }] = [
+		useQuery(() => GroceryCategory.queryAll(ctx), []),
 		useQuery(
-			UpdateType.ANY,
 			() => GroceryItem.queryAll(ctx).whereListId(P.equals(list.id)),
 			[],
 		),
-	);
+	];
 
 	const unusedCategories = allCategories.filter((category) => {
 		return !allItems.some((item) => item.categoryId === category.id);

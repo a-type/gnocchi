@@ -1,12 +1,18 @@
-// SIGNED-SOURCE: <11590eef2c088aa90fcd46a55f62c70a>
+// SIGNED-SOURCE: <6f56ec158fcae6fb6a5f403283087e4c>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
- * For partially generated files, place modifications between the generated `BEGIN-MANUAL-SECTION` and
- * `END-MANUAL-SECTION` markers.
  */
+import { applyMixins } from "@aphro/runtime-ts";
 import { default as s } from "./GroceryFoodCategoryLookupSpec.js";
 import { P } from "@aphro/runtime-ts";
+import {
+  ManualMethods,
+  manualMethods,
+} from "./GroceryFoodCategoryLookupManualMethods.js";
+import { UpdateMutationBuilder } from "@aphro/runtime-ts";
+import { CreateMutationBuilder } from "@aphro/runtime-ts";
+import { DeleteMutationBuilder } from "@aphro/runtime-ts";
 import { Node } from "@aphro/runtime-ts";
 import { NodeSpecWithCreate } from "@aphro/runtime-ts";
 import { SID_of } from "@aphro/runtime-ts";
@@ -19,7 +25,7 @@ export type Data = {
   categoryId: SID_of<GroceryCategory>;
 };
 
-export default class GroceryFoodCategoryLookup extends Node<Data> {
+class GroceryFoodCategoryLookup extends Node<Data> {
   readonly spec = s as NodeSpecWithCreate<this, Data>;
 
   get id(): SID_of<this> {
@@ -55,4 +61,22 @@ export default class GroceryFoodCategoryLookup extends Node<Data> {
     }
     return await this.queryAll(ctx).whereId(P.equals(id)).genOnlyValue();
   }
+
+  update(data: Partial<Data>) {
+    return new UpdateMutationBuilder(this.ctx, this.spec, this)
+      .set(data)
+      .toChangeset();
+  }
+
+  static create(ctx: Context, data: Partial<Data>) {
+    return new CreateMutationBuilder(ctx, s).set(data).toChangeset();
+  }
+
+  delete() {
+    return new DeleteMutationBuilder(this.ctx, s, this).toChangeset();
+  }
 }
+
+interface GroceryFoodCategoryLookup extends ManualMethods {}
+applyMixins(GroceryFoodCategoryLookup, [manualMethods]);
+export default GroceryFoodCategoryLookup;

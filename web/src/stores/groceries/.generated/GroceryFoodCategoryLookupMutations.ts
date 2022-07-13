@@ -1,9 +1,7 @@
-// SIGNED-SOURCE: <23875eca786a909dcaef6dcf7627cc39>
+// SIGNED-SOURCE: <d905422fa89cea63f7fccff48c8cd0d0>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
- * For partially generated files, place modifications between the generated `BEGIN-MANUAL-SECTION` and
- * `END-MANUAL-SECTION` markers.
  */
 import * as impls from "./GroceryFoodCategoryLookupMutationsImpl.js";
 import { ICreateOrUpdateBuilder } from "@aphro/runtime-ts";
@@ -48,7 +46,9 @@ class Mutations extends MutationsBase<GroceryFoodCategoryLookup, Data> {
 
 export default class GroceryFoodCategoryLookupMutations {
   static create(ctx: Context, args: CreateArgs): Mutations {
-    return new Mutations(ctx, new CreateMutationBuilder(spec)).create(args);
+    return new Mutations(ctx, new CreateMutationBuilder(ctx, spec)).create(
+      args
+    );
   }
   static setCategory(
     model: GroceryFoodCategoryLookup,
@@ -56,7 +56,7 @@ export default class GroceryFoodCategoryLookupMutations {
   ): Mutations {
     return new Mutations(
       model.ctx,
-      new UpdateMutationBuilder(spec, model)
+      new UpdateMutationBuilder(model.ctx, spec, model)
     ).setCategory(args);
   }
 }

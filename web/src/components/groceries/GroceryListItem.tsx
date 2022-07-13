@@ -6,7 +6,7 @@ import { keyframes, styled, theme } from 'stitches.config';
 import { groceriesState } from './state';
 import { MOBILE_DRAG_ACTIVATION_DELAY } from './constants';
 import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import { unwrap, unwraps, useQuery } from '@aphro/react';
+import { useQuery } from '@aphro/react';
 import { commit, UpdateType } from '@aphro/runtime-ts';
 import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
 import pluralize from 'pluralize';
@@ -25,9 +25,7 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, ...rest }, ref) {
 		const sectionStateSnap = useSnapshot(groceriesState);
-		const [inputs] = unwraps(
-			useQuery(UpdateType.ANY, () => item.queryInputs(), []),
-		);
+		const { data: inputs } = useQuery(() => item.queryInputs(), []);
 
 		const isPurchased = item.purchasedQuantity >= item.totalQuantity;
 		const isPartiallyPurchased = item.purchasedQuantity > 0;

@@ -1,9 +1,7 @@
-// SIGNED-SOURCE: <493541bc5d932850c8d0b4c86da62c88>
+// SIGNED-SOURCE: <921cf7a6d6a06f84a9871e9665f580d6>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
- * For partially generated files, place modifications between the generated `BEGIN-MANUAL-SECTION` and
- * `END-MANUAL-SECTION` markers.
  */
 import * as impls from "./GroceryItemMutationsImpl.js";
 import { ICreateOrUpdateBuilder } from "@aphro/runtime-ts";
@@ -78,7 +76,9 @@ class Mutations extends MutationsBase<GroceryItem, Data> {
 
 export default class GroceryItemMutations {
   static create(ctx: Context, args: CreateArgs): Mutations {
-    return new Mutations(ctx, new CreateMutationBuilder(spec)).create(args);
+    return new Mutations(ctx, new CreateMutationBuilder(ctx, spec)).create(
+      args
+    );
   }
   static setPurchasedQuantity(
     model: GroceryItem,
@@ -86,14 +86,14 @@ export default class GroceryItemMutations {
   ): Mutations {
     return new Mutations(
       model.ctx,
-      new UpdateMutationBuilder(spec, model)
+      new UpdateMutationBuilder(model.ctx, spec, model)
     ).setPurchasedQuantity(args);
   }
 
   static setCategory(model: GroceryItem, args: SetCategoryArgs): Mutations {
     return new Mutations(
       model.ctx,
-      new UpdateMutationBuilder(spec, model)
+      new UpdateMutationBuilder(model.ctx, spec, model)
     ).setCategory(args);
   }
 
@@ -103,13 +103,13 @@ export default class GroceryItemMutations {
   ): Mutations {
     return new Mutations(
       model.ctx,
-      new UpdateMutationBuilder(spec, model)
+      new UpdateMutationBuilder(model.ctx, spec, model)
     ).setTotalQuantity(args);
   }
   static delete(model: GroceryItem, args: DeleteArgs): Mutations {
     return new Mutations(
       model.ctx,
-      new DeleteMutationBuilder(spec, model)
+      new DeleteMutationBuilder(model.ctx, spec, model)
     ).delete(args);
   }
 }

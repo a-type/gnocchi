@@ -1,9 +1,8 @@
 import { Button } from '../primitives';
 import React, { forwardRef } from 'react';
 import { useGroceryList } from 'contexts/GroceryListContext';
-import { useQuery, unwraps } from '@aphro/react';
-import { commit, UpdateType } from '@aphro/runtime-ts';
-import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
+import { useQuery } from '@aphro/react';
+import { commit } from '@aphro/runtime-ts';
 
 export interface DeleteCheckedButtonProps {
 	className?: string;
@@ -14,15 +13,12 @@ export const DeleteCheckedButton = forwardRef<
 	DeleteCheckedButtonProps
 >(function DeleteCheckedButton({ ...rest }, ref) {
 	const list = useGroceryList();
-	const [items] = unwraps(
-		useQuery(
-			UpdateType.ANY,
-			() =>
-				list
-					.queryItems()
-					.where((item) => item.purchasedQuantity >= item.totalQuantity),
-			[],
-		),
+	const { data: items } = useQuery(
+		() =>
+			list
+				.queryItems()
+				.where((item) => item.purchasedQuantity >= item.totalQuantity),
+		[],
 	);
 	const checkedItems = items.filter(
 		(item) => item.purchasedQuantity >= item.totalQuantity,
@@ -31,9 +27,7 @@ export const DeleteCheckedButton = forwardRef<
 	const deleteCompleted = () => {
 		commit(
 			list.ctx,
-			checkedItems.map((item) =>
-				GroceryItemMutations.delete(item, {}).toChangeset(),
-			),
+			checkedItems.map((item) => item.delete()),
 		);
 	};
 

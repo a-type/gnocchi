@@ -1,9 +1,7 @@
-// SIGNED-SOURCE: <ceaf70d3625d81f035550bb73eb94c56>
+// SIGNED-SOURCE: <735312a9bc9fa400bd755cb49ac5c16a>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
- * For partially generated files, place modifications between the generated `BEGIN-MANUAL-SECTION` and
- * `END-MANUAL-SECTION` markers.
  */
 import { Context } from "@aphro/runtime-ts";
 import { SID_of } from "@aphro/runtime-ts";

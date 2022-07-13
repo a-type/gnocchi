@@ -3,7 +3,7 @@ import React, { forwardRef, useRef, useCallback, useEffect } from 'react';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
 import { Formik } from 'formik';
 import { useGroceryList, useGroceryListCtx } from 'contexts/GroceryListContext';
-import { unwraps, useQuery } from '@aphro/react';
+import { useQuery } from '@aphro/react';
 import { commit, P, UpdateType } from '@aphro/runtime-ts';
 import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
 import GroceryInputMutations from 'stores/groceries/.generated/GroceryInputMutations';
@@ -21,9 +21,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 		const inputRef = useRef<HTMLInputElement>(null);
 		const list = useGroceryList();
 		const ctx = useGroceryListCtx();
-		const [items] = unwraps(
-			useQuery(UpdateType.ANY, () => list.queryItems(), []),
-		);
+		const { data: items } = useQuery(() => list.queryItems(), []);
 
 		// prevent immediate input focus on touch so the keyboard has
 		// time to appear

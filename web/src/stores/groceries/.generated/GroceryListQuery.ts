@@ -1,9 +1,7 @@
-// SIGNED-SOURCE: <3afd1f11cac6a4d80e09760946bad8e7>
+// SIGNED-SOURCE: <1648a9935c6b5dd254758670117fe671>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
- * For partially generated files, place modifications between the generated `BEGIN-MANUAL-SECTION` and
- * `END-MANUAL-SECTION` markers.
  */
 import { Context } from "@aphro/runtime-ts";
 import { DerivedQuery } from "@aphro/runtime-ts";

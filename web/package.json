@@ -13,9 +13,9 @@
 		"gen:groceries": "aphro gen src/stores/groceries/domain.aphro -d src/stores/groceries/.generated"
 	},
 	"dependencies": {
-		"@aphro/absurd-sql-connector": "^0.1.0",
-		"@aphro/react": "^0.1.7",
-		"@aphro/runtime-ts": "^0.1.5",
+		"@aphro/absurd-sql-connector": "^0.1.9",
+		"@aphro/react": "^0.2.1",
+		"@aphro/runtime-ts": "^0.2.0",
 		"@dnd-kit/core": "^6.0.5",
 		"@dnd-kit/modifiers": "^6.0.0",
 		"@radix-ui/colors": "^0.1.8",
@@ -44,7 +44,7 @@
 		"yjs": "^13.5.39"
 	},
 	"devDependencies": {
-		"@aphro/codegen-cli": "^0.1.5",
+		"@aphro/codegen-cli": "^0.2.0",
 		"@types/convert-units": "^2.3.5",
 		"@types/jest": "^28.1.4",
 		"@types/pluralize": "^0.0.29",

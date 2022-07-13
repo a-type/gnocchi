@@ -25,9 +25,9 @@ import {
 } from './constants';
 import { useGroceryListCtx } from 'contexts/GroceryListContext';
 import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import { commit, UpdateType } from '@aphro/runtime-ts';
+import { commit } from '@aphro/runtime-ts';
 import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
-import { unwraps, useQuery } from '@aphro/react';
+import { useQuery } from '@aphro/react';
 import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
 import { setItemCategory } from 'stores/groceries/mutations';
 
@@ -40,12 +40,9 @@ export interface GroceryListProps {
 export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 	function GroceryList({ ...rest }, ref) {
 		const ctx = useGroceryListCtx();
-		const [categories] = unwraps(
-			useQuery(
-				UpdateType.CREATE_OR_DELETE,
-				() => GroceryCategory.queryAll(ctx),
-				[],
-			),
+		const { data: categories } = useQuery(
+			() => GroceryCategory.queryAll(ctx),
+			[],
 		);
 
 		const [draggingItem, setDraggingItem] = useState<GroceryItem | null>(null);
@@ -64,7 +61,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 			} else if (dropZone.type === 'new') {
 				groceriesState.newCategoryPendingItem = valtioRef(item);
 			} else if (dropZone.type === 'delete') {
-				commit(item.ctx, [GroceryItemMutations.delete(item, {}).toChangeset()]);
+				item.delete().save();
 			}
 			setDraggingItem(null);
 		};

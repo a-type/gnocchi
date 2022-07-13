@@ -1,9 +1,7 @@
-// SIGNED-SOURCE: <a93f43b679f119b466f0c586056ec196>
+// SIGNED-SOURCE: <b4910f3fb522f41e2f3ea5d25f0d66c9>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
- * For partially generated files, place modifications between the generated `BEGIN-MANUAL-SECTION` and
- * `END-MANUAL-SECTION` markers.
  */
 import * as impls from "./GroceryCategoryMutationsImpl.js";
 import { ICreateOrUpdateBuilder } from "@aphro/runtime-ts";
@@ -36,6 +34,8 @@ class Mutations extends MutationsBase<GroceryCategory, Data> {
 
 export default class GroceryCategoryMutations {
   static create(ctx: Context, args: CreateArgs): Mutations {
-    return new Mutations(ctx, new CreateMutationBuilder(spec)).create(args);
+    return new Mutations(ctx, new CreateMutationBuilder(ctx, spec)).create(
+      args
+    );
   }
 }
