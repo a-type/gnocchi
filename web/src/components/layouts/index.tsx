@@ -6,9 +6,11 @@ export function PageContent({
 	children,
 	css,
 	fullHeight,
+	noPadding,
 	...rest
 }: ComponentPropsWithoutRef<typeof Box> & {
 	fullHeight?: boolean;
+	noPadding?: boolean;
 }) {
 	return (
 		<Box
@@ -21,8 +23,8 @@ export function PageContent({
 					alignItems: 'center',
 					overflowX: 'hidden',
 					position: 'relative',
-					px: '$4',
-					py: '$6',
+					px: noPadding ? 0 : '$4',
+					py: noPadding ? 0 : '$6',
 					...css,
 				} as any
 			}

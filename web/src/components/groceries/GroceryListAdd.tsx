@@ -113,6 +113,8 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 							name="text"
 							required
 							css={{ flex: 1 }}
+							autoComplete="off"
+							placeholder="Add an item..."
 						/>
 						<SubmitButton>Add</SubmitButton>
 					</Box>

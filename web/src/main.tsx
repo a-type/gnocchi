@@ -16,16 +16,25 @@ async function main() {
 		<StrictMode>
 			<GroceryListContext.Provider value={data}>
 				<PageRoot>
-					<PageContent fullHeight flex={1}>
-						<h1>Groceries</h1>
+					<PageContent fullHeight noPadding flex={1}>
+						<Box
+							w="full"
+							p={4}
+							direction="column"
+							gap={2}
+							align="stretch"
+							css={{
+								position: 'sticky',
+								top: 0,
+								zIndex: 1,
+								backgroundColor: '$white',
+							}}
+						>
+							<GroceryListAdd />
+							<DeleteCheckedButton />
+						</Box>
 						<GroceryList />
 					</PageContent>
-					<PageNowPlayingBar>
-						<Box w="full" p={1} direction="column" gap={2} align="stretch">
-							<DeleteCheckedButton />
-							<GroceryListAdd />
-						</Box>
-					</PageNowPlayingBar>
 				</PageRoot>
 			</GroceryListContext.Provider>
 		</StrictMode>,
