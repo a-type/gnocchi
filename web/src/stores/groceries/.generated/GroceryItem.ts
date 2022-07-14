@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <447a7a7534cfe95a662aae608262108e>
+// SIGNED-SOURCE: <b4ac2e7dfaea77567df7e5e3cb9631f8>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -29,6 +29,7 @@ export type Data = {
   purchasedQuantity: number;
   unit: string;
   name: string;
+  sortKey: string;
 };
 
 class GroceryItem extends Node<Data> {
@@ -64,6 +65,10 @@ class GroceryItem extends Node<Data> {
 
   get name(): string {
     return this.data.name;
+  }
+
+  get sortKey(): string {
+    return this.data.sortKey;
   }
 
   queryInputs(): GroceryInputQuery {

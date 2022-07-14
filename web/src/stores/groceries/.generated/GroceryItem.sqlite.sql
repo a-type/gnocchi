@@ -1,4 +1,4 @@
--- SIGNED-SOURCE: <4695ac777516af66787941462809ecc7>
+-- SIGNED-SOURCE: <348b44e65edb70cfd8a8a7fa52d48172>
 CREATE TABLE
   IF NOT EXISTS "groceryitem" (
     "id" bigint NOT NULL,
@@ -9,5 +9,6 @@ CREATE TABLE
     "purchasedQuantity" float NOT NULL,
     "unit" text NOT NULL,
     "name" text NOT NULL,
+    "sortKey" text NOT NULL,
     primary key ("id")
   )

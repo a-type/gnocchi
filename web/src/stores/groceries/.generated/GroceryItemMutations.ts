@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <921cf7a6d6a06f84a9871e9665f580d6>
+// SIGNED-SOURCE: <7733453e909d959103e1900a3e0b4fc1>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -26,6 +26,7 @@ export type CreateArgs = {
   purchasedQuantity: number;
   unit: string;
   name: string;
+  sortKey: string;
 };
 
 export type SetPurchasedQuantityArgs = { purchasedQuantity: number };
@@ -33,6 +34,8 @@ export type SetPurchasedQuantityArgs = { purchasedQuantity: number };
 export type SetCategoryArgs = { categoryId: SID_of<GroceryCategory> };
 
 export type SetTotalQuantityArgs = { totalQuantity: number };
+
+export type SetSortKeyArgs = { sortKey: string };
 
 export type DeleteArgs = {};
 class Mutations extends MutationsBase<GroceryItem, Data> {
@@ -63,6 +66,12 @@ class Mutations extends MutationsBase<GroceryItem, Data> {
 
   setTotalQuantity(args: SetTotalQuantityArgs): this {
     const extraChangesets = impls.setTotalQuantityImpl(this.mutator, args);
+    this.mutator.addExtraChangesets(extraChangesets || undefined);
+    return this;
+  }
+
+  setSortKey(args: SetSortKeyArgs): this {
+    const extraChangesets = impls.setSortKeyImpl(this.mutator, args);
     this.mutator.addExtraChangesets(extraChangesets || undefined);
     return this;
   }
@@ -105,6 +114,13 @@ export default class GroceryItemMutations {
       model.ctx,
       new UpdateMutationBuilder(model.ctx, spec, model)
     ).setTotalQuantity(args);
+  }
+
+  static setSortKey(model: GroceryItem, args: SetSortKeyArgs): Mutations {
+    return new Mutations(
+      model.ctx,
+      new UpdateMutationBuilder(model.ctx, spec, model)
+    ).setSortKey(args);
   }
   static delete(model: GroceryItem, args: DeleteArgs): Mutations {
     return new Mutations(

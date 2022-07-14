@@ -11,6 +11,8 @@ import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
 import GroceryFoodCategoryLookup from 'stores/groceries/.generated/GroceryFoodCategoryLookup';
 import { EMPTY_CATEGORY_NAME } from 'stores/groceries/constants';
 import GroceryCategoryMutations from 'stores/groceries/.generated/GroceryCategoryMutations';
+import { generateKeyBetween } from 'fractional-indexing';
+import GroceryItem from 'stores/groceries/.generated/GroceryItem';
 
 export interface GroceryListAddProps {
 	className?: string;
@@ -74,24 +76,31 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 						}
 						if (!matchingCategoryId) {
 							// there is no empty category?? create one...
-							const [_, newCategory] = await GroceryCategoryMutations.create(
-								ctx,
-								{
-									name: EMPTY_CATEGORY_NAME,
-								},
-							).save();
+							const newCategory = await GroceryCategoryMutations.create(ctx, {
+								name: EMPTY_CATEGORY_NAME,
+							}).save();
 							matchingCategoryId = newCategory.id;
 						}
 
+						const lastCategoryItem = await GroceryItem.queryAll(ctx)
+							.whereCategoryId(P.equals(matchingCategoryId!))
+							.orderBySortKey('desc')
+							.take(1)
+							.genOnlyValue();
+
 						// create a new item
-						const [_, item] = GroceryItemMutations.create(ctx, {
+						const item = await GroceryItemMutations.create(ctx, {
 							name: parsed.food,
 							totalQuantity: parsed.quantity,
 							unit: parsed.unit || '',
-							categoryId: matchingCategoryId,
+							categoryId: matchingCategoryId!,
 							listId: list.id,
 							purchasedQuantity: 0,
 							createdAt: Date.now(),
+							sortKey: generateKeyBetween(
+								lastCategoryItem?.sortKey ?? null,
+								null,
+							),
 						}).save();
 						GroceryInputMutations.create(ctx, {
 							itemId: item.id,

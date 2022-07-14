@@ -49,8 +49,7 @@ async function bootstrap(ctx: Context) {
 
 	let list = await GroceryList.queryAll(ctx).genOnlyValue();
 	if (!list) {
-		let _;
-		[_, list] = GroceryListMutations.create(ctx, {
+		list = await GroceryListMutations.create(ctx, {
 			name: 'Default list',
 		}).save();
 	}
@@ -58,7 +57,7 @@ async function bootstrap(ctx: Context) {
 	const categories = await GroceryCategory.queryAll(ctx).gen();
 	if (!categories.length) {
 		// TODO: default categories
-		GroceryCategoryMutations.create(ctx, {
+		await GroceryCategoryMutations.create(ctx, {
 			name: EMPTY_CATEGORY_NAME,
 		}).save();
 	}

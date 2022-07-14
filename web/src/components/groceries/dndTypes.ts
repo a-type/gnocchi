@@ -1,3 +1,5 @@
+import GroceryItem from 'stores/groceries/.generated/GroceryItem';
+
 export type GroceryDnDDrop =
 	| {
 			type: 'category';
@@ -8,4 +10,12 @@ export type GroceryDnDDrop =
 	  }
 	| {
 			type: 'delete';
-	  };
+	  }
+	| GroceryDnDDrag;
+
+export type GroceryDnDDrag = {
+	type: 'item';
+	value: GroceryItem;
+	nextSortKey: string | null;
+	prevSortKey: string | null;
+};

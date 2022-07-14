@@ -558,6 +558,14 @@
     "@dnd-kit/utilities" "^3.2.0"
     tslib "^2.0.0"
 
+"@dnd-kit/sortable@^7.0.1":
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/@dnd-kit/sortable/-/sortable-7.0.1.tgz#99c6012bbab4d8bb726c0eef7b921a338c404fdb"
+  integrity sha512-n77qAzJQtMMywu25sJzhz3gsHnDOUlEjTtnRl8A87rWIhnu32zuP+7zmFjwGgvqfXmRufqiHOSlH7JPC/tnJ8Q==
+  dependencies:
+    "@dnd-kit/utilities" "^3.2.0"
+    tslib "^2.0.0"
+
 "@dnd-kit/utilities@^3.2.0":
   version "3.2.0"
   resolved "https://registry.npmjs.org/@dnd-kit/utilities/-/utilities-3.2.0.tgz#b3e956ea63a1347c9d0e1316b037ddcc6140acda"
@@ -3139,6 +3147,11 @@ forwarded@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.2.0.tgz#2269936428aad4c15c7ebe9779a84bf0b2a81811"
   integrity sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==
+
+fractional-indexing@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/fractional-indexing/-/fractional-indexing-3.0.1.tgz#7007a780ad0b9e70383d2d716fd56ffcddd2e6da"
+  integrity sha512-+RlZQk/eVY57iWhkUiUE+/pjr0SFqwQ8d4D5a3RZGerpmD2CSLE3R/TVJMOS3yZyGnw80yRjUoe6muNotimdeQ==
 
 fresh@0.5.2:
   version "0.5.2"

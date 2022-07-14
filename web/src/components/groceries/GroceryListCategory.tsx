@@ -1,5 +1,4 @@
 import { useQuery } from '@aphro/react';
-import { UpdateType } from '@aphro/runtime-ts';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import useMergedRef from '@react-hook/merged-ref';
 import React, { forwardRef, useState } from 'react';
@@ -9,6 +8,11 @@ import { useSnapshot } from 'valtio';
 import { H2 } from '../primitives';
 import { GroceryListItem, GroceryListItemDraggable } from './GroceryListItem';
 import { groceriesState } from './state';
+import {
+	SortableContext,
+	verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { GroceryDnDDrop } from './dndTypes';
 
 export function GroceryListCategory(props: { category: GroceryCategory }) {
 	const stateSnap = useSnapshot(groceriesState);
@@ -20,50 +24,82 @@ const CategoryContent = forwardRef<
 	HTMLDivElement,
 	{ category: GroceryCategory; animateIn?: boolean }
 >(function CategoryContent({ category, ...rest }, ref) {
-	const { data: items } = useQuery(() => category.queryItems(), []);
-	const { isOver, setNodeRef } = useDroppable({
-		id: category.id,
-		data: {
-			type: 'category',
-			value: category.id,
-		},
-	});
+	const { data: items } = useQuery(
+		() => category.queryItems().orderBySortKey('asc'),
+		[],
+	);
+	// const { setNodeRef } = useDroppable({
+	// 	id: category.id,
+	// 	data: {
+	// 		type: 'category',
+	// 		value: category.id,
+	// 	},
+	// });
 
 	const [isDragging, setIsDragging] = useState(false);
+	const [isDraggingOver, setIsDraggingOver] = useState(false);
 	useDndMonitor({
 		onDragStart: () => {
 			setIsDragging(true);
 		},
 		onDragEnd: () => {
 			setIsDragging(false);
+			setIsDraggingOver(false);
+		},
+		onDragOver: ({ over }) => {
+			if (!over) {
+				setIsDraggingOver(false);
+				return;
+			}
+			const data = over.data.current as GroceryDnDDrop;
+			if (data.type === 'category') {
+				setIsDraggingOver(data.value === category.id);
+			} else if (data.type === 'item') {
+				setIsDraggingOver(data.value.categoryId === category.id);
+			} else {
+				setIsDraggingOver(false);
+			}
+		},
+		onDragCancel: () => {
+			setIsDraggingOver(false);
 		},
 	});
 
 	const empty = items.length === 0;
 
-	const finalRef = useMergedRef(ref, setNodeRef);
+	// const finalRef = useMergedRef(ref, setNodeRef);
 
 	if (empty) return null;
 
 	return (
 		<CategoryContainer
-			ref={finalRef}
+			ref={ref}
 			className="groceryCategory"
-			draggedOver={isOver}
+			draggedOver={isDraggingOver}
 			isItemDragging={isDragging}
 			empty={empty}
 			{...rest}
 		>
-			<H2 size="micro" css={{ m: '$2' }}>
-				{category.name}
-			</H2>
-			{items.map((item, index) => {
-				return (
-					<GroceryListItemDraggable key={item.id} item={item}>
-						<GroceryListItem item={item} />
-					</GroceryListItemDraggable>
-				);
-			})}
+			<SortableContext
+				items={items.map((i) => i.id)}
+				strategy={verticalListSortingStrategy}
+			>
+				<H2 size="micro" css={{ m: '$2' }}>
+					{category.name}
+				</H2>
+				{items.map((item, index) => {
+					const prevItem = items[index - 1];
+					const nextItem = items[index + 1];
+					return (
+						<GroceryListItemDraggable
+							key={item.id}
+							item={item}
+							nextSortKey={nextItem?.sortKey || null}
+							prevSortKey={prevItem?.sortKey || null}
+						/>
+					);
+				})}
+			</SortableContext>
 		</CategoryContainer>
 	);
 });

@@ -1,35 +1,39 @@
+import { useQuery } from '@aphro/react';
+import { Context } from '@aphro/runtime-ts';
 import {
 	DndContext,
+	DragCancelEvent,
 	DragEndEvent,
+	DragOverEvent,
 	DragOverlay,
 	DragStartEvent,
 	KeyboardSensor,
-	useSensor,
-	useSensors,
+	MeasuringStrategy,
 	MouseSensor,
 	TouchSensor,
+	useSensor,
+	useSensors,
 } from '@dnd-kit/core';
+import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { useGroceryListCtx } from 'contexts/GroceryListContext';
+import { generateKeyBetween } from 'fractional-indexing';
+import React, { forwardRef, useCallback, useState } from 'react';
+import { createPortal } from 'react-dom';
+import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
+import GroceryItem from 'stores/groceries/.generated/GroceryItem';
+import { setItemCategory } from 'stores/groceries/mutations';
 import { ref as valtioRef } from 'valtio';
 import { Box } from '../primitives';
-import React, { forwardRef, useState } from 'react';
-import { createPortal } from 'react-dom';
-import { GroceryDnDDrop } from './dndTypes';
-import { GroceryListCategory } from './GroceryListCategory';
-import { GroceryListItem } from './GroceryListItem';
-import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
-import { DeleteItemFloater } from './DeleteItemFloater';
-import { groceriesState } from './state';
 import {
 	DESKTOP_DRAG_ACTIVATION_DELAY,
 	MOBILE_DRAG_ACTIVATION_DELAY,
 } from './constants';
-import { useGroceryListCtx } from 'contexts/GroceryListContext';
-import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import { commit } from '@aphro/runtime-ts';
-import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
-import { useQuery } from '@aphro/react';
-import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
-import { setItemCategory } from 'stores/groceries/mutations';
+import { DeleteItemFloater } from './DeleteItemFloater';
+import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes';
+import { GroceryListCategory } from './GroceryListCategory';
+import { GroceryListItem } from './GroceryListItem';
+import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
+import { groceriesState } from './state';
 
 const DRAG_ACTIVATION_TOLERANCE = 5;
 
@@ -47,24 +51,19 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 
 		const [draggingItem, setDraggingItem] = useState<GroceryItem | null>(null);
 		const handleDragStart = ({ active }: DragStartEvent) => {
-			setDraggingItem(active.data.current as GroceryItem);
+			const item = (active.data.current as GroceryDnDDrag).value;
+			setDraggingItem(item);
+			groceriesState.draggedItemOriginalCategory = item.categoryId;
+			groceriesState.draggedItemOriginalSortKey = item.sortKey;
 		};
-		const handleDragEnd = async ({ over, active }: DragEndEvent) => {
-			if (!over) return;
 
-			const item = active.data.current as GroceryItem;
-			const dropZone = over.data.current as GroceryDnDDrop;
-			if (dropZone.type === 'category') {
-				if (item.categoryId !== dropZone.value) {
-					await setItemCategory(ctx, item, dropZone.value);
-				}
-			} else if (dropZone.type === 'new') {
-				groceriesState.newCategoryPendingItem = valtioRef(item);
-			} else if (dropZone.type === 'delete') {
-				item.delete().save();
-			}
+		const resetDragStuff = useCallback(() => {
 			setDraggingItem(null);
-		};
+		}, []);
+
+		const handleDragEnd = useOnDragEnd(ctx, resetDragStuff);
+		const handleDragOver = useOnDragOver();
+		const handleDragCancel = useOnDragCancel(resetDragStuff);
 
 		const sensors = useGroceryDndSensors();
 
@@ -72,8 +71,14 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 			<DndContext
 				onDragStart={handleDragStart}
 				onDragEnd={handleDragEnd}
-				// modifiers={[restrictToVerticalAxis]}
+				onDragOver={handleDragOver}
+				onDragCancel={handleDragCancel}
 				sensors={sensors}
+				measuring={{
+					droppable: {
+						strategy: MeasuringStrategy.Always,
+					},
+				}}
 			>
 				<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...rest}>
 					{categories.map((category) => {
@@ -85,7 +90,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				<GroceryNewCategoryFloater />
 				<DeleteItemFloater />
 				{createPortal(
-					<DragOverlay>
+					<DragOverlay dropAnimation={null}>
 						{draggingItem && (
 							<GroceryListItem isDragActive item={draggingItem} />
 						)}
@@ -133,6 +138,183 @@ function useGroceryDndSensors() {
 			tolerance: DRAG_ACTIVATION_TOLERANCE,
 		},
 	});
-	const keyboardSensor = useSensor(KeyboardSensor);
+	const keyboardSensor = useSensor(KeyboardSensor, {
+		coordinateGetter: sortableKeyboardCoordinates,
+	});
 	return useSensors(mouseSensor, touchSensor, keyboardSensor);
 }
+
+function useOnDragEnd(ctx: Context, onEnd: () => void) {
+	return useCallback(
+		async ({ over, active }: DragEndEvent) => {
+			const item = (active.data.current as GroceryDnDDrag).value;
+
+			if (!over) {
+				// they dropped on nothing... cancel any movement
+				await item
+					.update({
+						categoryId: groceriesState.draggedItemOriginalCategory,
+						sortKey: groceriesState.draggedItemOriginalSortKey,
+					})
+					.save();
+				return;
+			}
+
+			const dropZone = over.data.current as GroceryDnDDrop;
+			if (dropZone.type === 'category') {
+				if (item.categoryId !== dropZone.value) {
+					await setItemCategory(ctx, item, dropZone.value);
+				}
+			} else if (dropZone.type === 'new') {
+				groceriesState.newCategoryPendingItem = valtioRef(item);
+			} else if (dropZone.type === 'delete') {
+				item.delete().save();
+			} else if (dropZone.type === 'item') {
+				const dropItem = dropZone.value;
+				console.log('item', item.name, 'dropped on', dropZone.value.name);
+				let sortKey: string;
+				const isBefore = dropItem.sortKey < item.sortKey;
+
+				if (isBefore) {
+					sortKey = generateKeyBetween(dropZone.prevSortKey, dropItem.sortKey);
+				} else {
+					// generate a key between them
+					sortKey = generateKeyBetween(
+						dropZone.value.sortKey,
+						dropZone.nextSortKey,
+					);
+				}
+
+				await item
+					.update({
+						sortKey,
+						// it might also move categories if the drop item
+						// is in a different category
+						categoryId: dropItem.categoryId,
+					})
+					.save();
+			}
+			onEnd();
+		},
+		[ctx, onEnd],
+	);
+}
+
+function useOnDragOver() {
+	return useCallback(async ({ over, active }: DragOverEvent) => {
+		if (!over) return;
+
+		const item = (active.data.current as GroceryDnDDrag).value;
+		const dropZone = over.data.current as GroceryDnDDrop;
+		if (dropZone.type === 'item') {
+			const dropItem = dropZone.value;
+			console.log('item', item.name, 'dropped on', dropZone.value.name);
+			let sortKey: string;
+			const isBefore = dropItem.sortKey < item.sortKey;
+
+			if (isBefore) {
+				sortKey = generateKeyBetween(dropZone.prevSortKey, dropItem.sortKey);
+			} else {
+				// generate a key between them
+				sortKey = generateKeyBetween(
+					dropZone.value.sortKey,
+					dropZone.nextSortKey,
+				);
+			}
+
+			await item
+				.update({
+					sortKey,
+					// it might also move categories if the drop item
+					// is in a different category
+					categoryId: dropItem.categoryId,
+				})
+				.save();
+		}
+	}, []);
+}
+
+function useOnDragCancel(reset: () => void) {
+	return useCallback(
+		({ active }: DragCancelEvent) => {
+			console.log('CANCEL');
+			if (active) {
+				const dragged = active.data.current as GroceryDnDDrag;
+				dragged.value
+					.update({
+						categoryId: groceriesState.draggedItemOriginalCategory,
+						sortKey: groceriesState.draggedItemOriginalSortKey,
+					})
+					.save();
+			}
+			reset();
+		},
+		[reset],
+	);
+}
+
+// function useCustomCollisionStrategy(items: GroceryItem[], activeItem: GroceryItem | null) {
+// 	const activeId = activeItem?.id;
+// 	return useCallback(
+//     (args: Parameters<CollisionDetection>[0]) => {
+//       if (activeId && activeId in items) {
+//         return closestCenter({
+//           ...args,
+//           droppableContainers: args.droppableContainers.filter(
+//             (container) => container.id in items
+//           ),
+//         });
+//       }
+
+//       // Start by finding any intersecting droppable
+//       const pointerIntersections = pointerWithin(args);
+//       const intersections =
+//         pointerIntersections.length > 0
+//           ? // If there are droppables intersecting with the pointer, return those
+//             pointerIntersections
+//           : rectIntersection(args);
+//       let overId = getFirstCollision(intersections, 'id');
+
+//       if (overId != null) {
+//         if (overId === '@@delete') {
+//           // If the intersecting droppable is the trash, return early
+//           // Remove this if you're not using trashable functionality in your app
+//           return intersections;
+//         }
+
+//         if (overId in items) {
+//           const containerItems = items[overId];
+
+//           // If a container is matched and it contains items (columns 'A', 'B', 'C')
+//           if (containerItems.length > 0) {
+//             // Return the closest droppable within that container
+//             overId = closestCenter({
+//               ...args,
+//               droppableContainers: args.droppableContainers.filter(
+//                 (container) =>
+//                   container.id !== overId &&
+//                   containerItems.includes(container.id)
+//               ),
+//             })[0]?.id;
+//           }
+//         }
+
+//         lastOverId.current = overId;
+
+//         return [{id: overId}];
+//       }
+
+//       // When a draggable item moves to a new container, the layout may shift
+//       // and the `overId` may become `null`. We manually set the cached `lastOverId`
+//       // to the id of the draggable item that was moved to the new container, otherwise
+//       // the previous `overId` will be returned which can cause items to incorrectly shift positions
+//       if (recentlyMovedToNewContainer.current) {
+//         lastOverId.current = activeId;
+//       }
+
+//       // If no droppable is matched, return the last match
+//       return lastOverId.current ? [{id: lastOverId.current}] : [];
+//     },
+//     [activeId, items]
+//   );
+// }

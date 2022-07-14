@@ -1,7 +1,14 @@
-import React, { forwardRef, ReactNode, useState } from 'react';
+import React, {
+	CSSProperties,
+	forwardRef,
+	ReactNode,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import { useSnapshot } from 'valtio';
 import { Checkbox, CheckboxIndicator } from '../primitives/Checkbox';
-import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 import { keyframes, styled, theme } from 'stitches.config';
 import { groceriesState } from './state';
 import { MOBILE_DRAG_ACTIVATION_DELAY } from './constants';
@@ -11,11 +18,14 @@ import { commit, UpdateType } from '@aphro/runtime-ts';
 import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
 import pluralize from 'pluralize';
 import { Box } from 'components/primitives';
+import { useSortable } from '@dnd-kit/sortable';
+import useMergedRef from '@react-hook/merged-ref';
 
 export interface GroceryListItemProps {
 	className?: string;
 	item: GroceryItem;
 	isDragActive?: boolean;
+	style?: CSSProperties;
 }
 
 function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
@@ -117,11 +127,11 @@ const ItemContainer = styled('div', {
 	padding: '$3',
 	position: 'relative',
 	animation: 'none',
-	transform: 'scale(1)',
+	// transform: 'scale(1)',
 	userSelect: 'none',
 	cursor: 'grab',
 
-	transition: 'transform 0.2s $springy',
+	transition: 'all 0.2s $springy',
 
 	variants: {
 		hidden: {
@@ -148,7 +158,7 @@ const ItemContainer = styled('div', {
 				border: '1px solid $colors$gray50',
 			},
 			false: {
-				transform: 'scale(1)',
+				// transform: 'scale(1)',
 			},
 		},
 	},
@@ -156,24 +166,46 @@ const ItemContainer = styled('div', {
 
 export function GroceryListItemDraggable({
 	item,
+	nextSortKey,
+	prevSortKey,
 	...rest
 }: {
 	item: GroceryItem;
-	children: ReactNode;
+	nextSortKey: string | null;
+	prevSortKey: string | null;
 }) {
-	const { attributes, listeners, setNodeRef, transform, isDragging } =
-		useDraggable({
-			id: item.id,
-			data: item,
-		});
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: item.id,
+		data: {
+			type: 'item',
+			value: item,
+			nextSortKey,
+			prevSortKey,
+		},
+		// transition: {
+		// 	duration: 200,
+		// 	easing: theme.transitions.springy.value,
+		// },
+		// animateLayoutChanges: () => false,
+	});
 
 	return (
-		<Box
+		<GroceryListItem
 			{...attributes}
 			{...listeners}
+			item={item}
 			ref={setNodeRef}
 			style={{
-				visibility: isDragging ? 'hidden' : 'visible',
+				transform: CSS.Transform.toString(transform),
+				transition,
+				opacity: isDragging ? 0.1 : 1,
 			}}
 			{...rest}
 		/>

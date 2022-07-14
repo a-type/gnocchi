@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <a4d580efd6e4a7ef4fce9f9428f14160>
+// SIGNED-SOURCE: <fd84249d3a5edf2128cc4c5a37b8bbf8>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -108,6 +108,12 @@ export default class GroceryItemQuery extends DerivedQuery<GroceryItem> {
       filter(new ModelFieldGetter<"name", Data, GroceryItem>("name"), p)
     );
   }
+
+  whereSortKey(p: Predicate<Data["sortKey"]>) {
+    return this.derive(
+      filter(new ModelFieldGetter<"sortKey", Data, GroceryItem>("sortKey"), p)
+    );
+  }
   queryInputs(): GroceryInputQuery {
     return new GroceryInputQuery(
       this.ctx,
@@ -188,6 +194,15 @@ export default class GroceryItemQuery extends DerivedQuery<GroceryItem> {
     return this.derive(
       orderBy(
         new ModelFieldGetter<"name", Data, GroceryItem>("name"),
+        direction
+      )
+    );
+  }
+
+  orderBySortKey(direction: "asc" | "desc" = "asc") {
+    return this.derive(
+      orderBy(
+        new ModelFieldGetter<"sortKey", Data, GroceryItem>("sortKey"),
         direction
       )
     );

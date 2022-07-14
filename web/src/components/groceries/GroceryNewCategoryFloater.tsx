@@ -142,6 +142,7 @@ const FloatingZone = styled('div', {
 	justifyContent: 'center',
 	display: 'flex',
 	flexDirection: 'row',
+	zIndex: 100,
 
 	transition: '0.2s ease all',
 
@@ -204,9 +205,9 @@ function NewCategoryForm({
 		<Box direction="column" gap={2} align="stretch" w="full">
 			<Formik
 				initialValues={{ name: '' }}
-				onSubmit={({ name }) => {
+				onSubmit={async ({ name }) => {
 					// create the category
-					const [_, category] = GroceryCategoryMutations.create(ctx, {
+					const category = await GroceryCategoryMutations.create(ctx, {
 						name,
 					}).save();
 					onDone(category);

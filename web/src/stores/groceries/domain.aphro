@@ -46,6 +46,7 @@ GroceryItem as Node {
   purchasedQuantity: float32
   unit: string
   name: string
+  sortKey: string
 } & OutboundEdges {
   inputs: Edge<GroceryInput.itemId>
 } & Mutations {
@@ -57,6 +58,7 @@ GroceryItem as Node {
     purchasedQuantity
     unit
     name
+    sortKey
   }
 
   setPurchasedQuantity as Update {
@@ -69,6 +71,10 @@ GroceryItem as Node {
 
   setTotalQuantity as Update {
     totalQuantity
+  }
+
+  setSortKey as Update {
+    sortKey
   }
 
   delete as Delete {}
