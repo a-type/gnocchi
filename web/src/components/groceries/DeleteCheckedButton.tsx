@@ -36,7 +36,13 @@ export const DeleteCheckedButton = forwardRef<
 	if (!areAnyChecked) return null;
 
 	return (
-		<Button color="ghost" ref={ref} onClick={deleteCompleted} {...rest}>
+		<Button
+			color="default"
+			size="small"
+			ref={ref}
+			onClick={deleteCompleted}
+			{...rest}
+		>
 			Delete Purchased
 		</Button>
 	);

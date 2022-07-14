@@ -1,8 +1,13 @@
 import React, {
+	ComponentPropsWithoutRef,
 	CSSProperties,
 	forwardRef,
+	memo,
 	ReactNode,
+	Ref,
+	useCallback,
 	useEffect,
+	useMemo,
 	useRef,
 	useState,
 } from 'react';
@@ -13,19 +18,38 @@ import { keyframes, styled, theme } from 'stitches.config';
 import { groceriesState } from './state';
 import { MOBILE_DRAG_ACTIVATION_DELAY } from './constants';
 import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import { useQuery } from '@aphro/react';
+import { useBind, useQuery } from '@aphro/react';
 import { commit, UpdateType } from '@aphro/runtime-ts';
 import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
 import pluralize from 'pluralize';
-import { Box } from 'components/primitives';
+import { Box, Button } from 'components/primitives';
 import { useSortable } from '@dnd-kit/sortable';
 import useMergedRef from '@react-hook/merged-ref';
+import {
+	DropdownMenu,
+	DropdownMenuAnchor,
+	DropdownMenuArrow,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from 'components/primitives/DropdownMenu';
+import { DropdownMenuIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
+import {
+	Popover,
+	PopoverArrow,
+	PopoverContent,
+} from 'components/primitives/Popover';
+import { PopoverAnchor } from '@radix-ui/react-popover';
+import { useGroceryListCtx } from 'contexts/GroceryListContext';
 
 export interface GroceryListItemProps {
 	className?: string;
 	item: GroceryItem;
 	isDragActive?: boolean;
 	style?: CSSProperties;
+	menuProps?: Omit<GroceryListItemMenuProps, 'item'> & {
+		ref?: Ref<HTMLButtonElement>;
+	};
 }
 
 function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
@@ -33,9 +57,12 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 }
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
-	function GroceryListItem({ item, isDragActive, ...rest }, ref) {
+	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
 		const sectionStateSnap = useSnapshot(groceriesState);
+		const ctx = useGroceryListCtx();
 		const { data: inputs } = useQuery(() => item.queryInputs(), []);
+
+		useBind(item, ['purchasedQuantity', 'totalQuantity']);
 
 		const isPurchased = item.purchasedQuantity >= item.totalQuantity;
 		const isPartiallyPurchased = item.purchasedQuantity > 0;
@@ -53,39 +80,36 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 						pluralizedUnit && `${pluralizedUnit} `
 				  }${pluralizedName}`;
 
-		const [isPointerDown, setIsPointerDown] = useState(false);
-
-		const updatePurchasedQuantity = (quantity: number) => {
-			commit(item.ctx, [
-				GroceryItemMutations.setPurchasedQuantity(item, {
-					purchasedQuantity: quantity,
-				}).toChangeset(),
-			]);
-		};
+		const updatePurchasedQuantity = useCallback(
+			(quantity: number) => {
+				commit(ctx, [
+					GroceryItemMutations.setPurchasedQuantity(item, {
+						purchasedQuantity: quantity,
+					}).toChangeset(),
+				]);
+			},
+			[ctx, item],
+		);
+		const togglePurchased = useCallback(() => {
+			if (isPurchased) {
+				updatePurchasedQuantity(0);
+			} else {
+				updatePurchasedQuantity(item.totalQuantity);
+			}
+		}, [updatePurchasedQuantity, isPurchased, item]);
 
 		return (
 			<ItemContainer
 				hidden={sectionStateSnap.newCategoryPendingItem?.id === item.id}
 				{...rest}
-				onPointerDown={() => setIsPointerDown(true)}
-				onPointerUp={() => setIsPointerDown(false)}
-				onPointerCancel={() => setIsPointerDown(false)}
-				onPointerLeave={() => setIsPointerDown(false)}
 				ref={ref}
-				pickingUp={isPointerDown}
 				dragging={isDragActive}
 			>
 				<Checkbox
 					checked={
 						isPurchased ? true : isPartiallyPurchased ? 'indeterminate' : false
 					}
-					onCheckedChange={(checked) => {
-						if (isPurchased) {
-							updatePurchasedQuantity(0);
-						} else {
-							updatePurchasedQuantity(item.totalQuantity);
-						}
-					}}
+					onCheckedChange={togglePurchased}
 					// prevent click/tap from reaching draggable container -
 					// don't disrupt a check action
 					onMouseDown={stopPropagation}
@@ -95,27 +119,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				>
 					<CheckboxIndicator />
 				</Checkbox>
-				<span>{displayString}</span>
-				<AnimatedBorder active={isPointerDown} />
+				<Box flex={1}>{displayString}</Box>
+				<GroceryListItemMenu item={item} {...menuProps} />
 			</ItemContainer>
 		);
 	},
 );
-
-const liftUp = keyframes({
-	'0%': {
-		boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
-	},
-	'10%': {
-		boxShadow: '0 0 0 0 rgba(0, 0, 0, 0)',
-	},
-	'50%': {
-		boxShadow: '$md',
-	},
-	'100%': {
-		boxShadow: '$xl',
-	},
-});
 
 const ItemContainer = styled('div', {
 	display: 'flex',
@@ -127,9 +136,7 @@ const ItemContainer = styled('div', {
 	padding: '$3',
 	position: 'relative',
 	animation: 'none',
-	// transform: 'scale(1)',
 	userSelect: 'none',
-	cursor: 'grab',
 
 	transition: 'all 0.2s $springy',
 
@@ -141,24 +148,12 @@ const ItemContainer = styled('div', {
 			},
 			false: {},
 		},
-		pickingUp: {
-			true: {
-				animation: `${MOBILE_DRAG_ACTIVATION_DELAY}ms $transitions$springy ${liftUp}`,
-				zIndex: 1,
-			},
-			false: {
-				animation: 'none',
-			},
-		},
 		dragging: {
 			true: {
 				boxShadow: '$xl',
 				cursor: 'grabbing',
 				touchAction: 'none',
 				border: '1px solid $colors$gray50',
-			},
-			false: {
-				// transform: 'scale(1)',
 			},
 		},
 	},
@@ -181,6 +176,7 @@ export function GroceryListItemDraggable({
 		transform,
 		transition,
 		isDragging,
+		setActivatorNodeRef,
 	} = useSortable({
 		id: item.id,
 		data: {
@@ -189,82 +185,106 @@ export function GroceryListItemDraggable({
 			nextSortKey,
 			prevSortKey,
 		},
-		// transition: {
-		// 	duration: 200,
-		// 	easing: theme.transitions.springy.value,
-		// },
-		// animateLayoutChanges: () => false,
 	});
+
+	const handleProps = useMemo(
+		() => ({
+			...listeners,
+			...attributes,
+			ref: setActivatorNodeRef,
+		}),
+		[listeners, attributes, setActivatorNodeRef],
+	);
+
+	const transformString = CSS.Transform.toString(transform);
+	const style = useMemo(
+		() => ({
+			transform: transformString,
+			opacity: isDragging ? 0.2 : 1,
+		}),
+		[isDragging, transformString],
+	);
 
 	return (
 		<GroceryListItem
-			{...attributes}
-			{...listeners}
 			item={item}
 			ref={setNodeRef}
-			style={{
-				transform: CSS.Transform.toString(transform),
-				transition,
-				opacity: isDragging ? 0.1 : 1,
-			}}
+			style={style}
+			menuProps={handleProps}
 			{...rest}
 		/>
 	);
 }
 
-/**
- * Animates an SVG path border to fill all the way around
- * during the animation.
- */
-function AnimatedBorder({
-	active,
-	...rest
-}: {
-	active: boolean;
-	className?: string;
-}) {
-	const strokeDashoffset = active ? 0 : -2000;
-
-	return (
-		<StyledSvg
-			width="100%"
-			height="100%"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-			vectorEffect={'non-scaling-stroke'}
-			{...rest}
-		>
-			<StyledBox
-				width="100%"
-				height="100%"
-				rx={theme.radii.md.value}
-				strokeWidth="3"
-				strokeLinecap="round"
-				strokeLinejoin="round"
-				strokeDashoffset={strokeDashoffset}
-				strokeDasharray={2000}
-			/>
-		</StyledSvg>
-	);
+interface GroceryListItemMenuProps
+	extends ComponentPropsWithoutRef<typeof Button> {
+	item: GroceryItem;
 }
+const GroceryListItemMenu = memo(
+	forwardRef<HTMLButtonElement, GroceryListItemMenuProps>(
+		function GroceryListItemMenu({ item, ...props }, ref) {
+			const deleteItem = () => {
+				item.delete().save();
+			};
 
-const StyledSvg = styled('svg', {
-	position: 'absolute',
-	top: 0,
-	left: 0,
-	width: '100%',
-	height: '100%',
-	pointerEvents: 'none',
-	zIndex: 1,
-	borderRadius: '$md',
-	overflow: 'hidden',
-});
+			const [menuOpen, setMenuOpen] = useState(false);
 
-const StyledBox = styled('rect', {
-	transition: `stroke-dashoffset ${
-		MOBILE_DRAG_ACTIVATION_DELAY - 100
-	}ms ease-out, stroke-dasharray ${
-		MOBILE_DRAG_ACTIVATION_DELAY - 100
-	}ms ease-out`,
-	stroke: '$gray50',
-});
+			const menuId = `grocery-list-item-menu-${item.id}`;
+
+			return (
+				<Popover
+					modal
+					open={menuOpen}
+					onOpenChange={(isOpen) => {
+						console.log('onOpenChange', isOpen);
+						if (!isOpen) setMenuOpen(false);
+						// ignore open true
+					}}
+				>
+					<PopoverAnchor asChild>
+						<Button
+							aria-haspopup="menu"
+							aria-expanded={menuOpen ? true : undefined}
+							data-state={menuOpen ? 'open' : undefined}
+							aria-controls={menuId}
+							color="ghost"
+							onPointerUp={(event) => {
+								if (event.button === 0 && event.ctrlKey === false) {
+									setMenuOpen(true);
+									event.preventDefault();
+								}
+							}}
+							onKeyDown={(event) => {
+								if (['Enter', ' '].includes(event.key)) {
+									setMenuOpen((v) => !v);
+								}
+								if (event.key === 'ArrowDown') {
+									setMenuOpen(true);
+								}
+								// prevent scrolling
+								if ([' ', 'ArrowDown'].includes(event.key)) {
+									event.preventDefault();
+								}
+							}}
+							{...props}
+							ref={ref}
+						>
+							<HamburgerMenuIcon />
+						</Button>
+					</PopoverAnchor>
+					<PopoverContent id={menuId}>
+						<PopoverArrow />
+						<Button
+							css={{ width: '$full' }}
+							color="ghostDestructive"
+							onClick={deleteItem}
+						>
+							Delete
+						</Button>
+					</PopoverContent>
+				</Popover>
+			);
+		},
+	),
+);
+GroceryListItemMenu.displayName = 'GroceryListItemMenu';

@@ -1,40 +1,33 @@
-import { useQuery } from '@aphro/react';
-import { useDndMonitor, useDroppable } from '@dnd-kit/core';
-import useMergedRef from '@react-hook/merged-ref';
-import React, { forwardRef, useState } from 'react';
-import { keyframes, styled } from 'stitches.config';
-import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
-import { useSnapshot } from 'valtio';
-import { H2 } from '../primitives';
-import { GroceryListItem, GroceryListItemDraggable } from './GroceryListItem';
-import { groceriesState } from './state';
+import { useBind, useQuery } from '@aphro/react';
+import { useDndMonitor } from '@dnd-kit/core';
 import {
 	SortableContext,
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import React, { memo, useState } from 'react';
+import { keyframes, styled } from 'stitches.config';
+import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
+import { useSnapshot } from 'valtio';
+import { H2 } from '../primitives';
 import { GroceryDnDDrop } from './dndTypes';
+import { GroceryListItemDraggable } from './GroceryListItem';
+import { groceriesState } from './state';
 
-export function GroceryListCategory(props: { category: GroceryCategory }) {
+export function GroceryListCategory({
+	category,
+	...rest
+}: {
+	category: GroceryCategory;
+}) {
+	useBind(category, ['name']);
+
 	const stateSnap = useSnapshot(groceriesState);
-	const isJustCreated = stateSnap.justCreatedCategoryId === props.category.id;
-	return <CategoryContent {...props} animateIn={isJustCreated} />;
-}
+	const animateIn = stateSnap.justCreatedCategoryId === category.id;
 
-const CategoryContent = forwardRef<
-	HTMLDivElement,
-	{ category: GroceryCategory; animateIn?: boolean }
->(function CategoryContent({ category, ...rest }, ref) {
 	const { data: items } = useQuery(
 		() => category.queryItems().orderBySortKey('asc'),
 		[],
 	);
-	// const { setNodeRef } = useDroppable({
-	// 	id: category.id,
-	// 	data: {
-	// 		type: 'category',
-	// 		value: category.id,
-	// 	},
-	// });
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [isDraggingOver, setIsDraggingOver] = useState(false);
@@ -69,17 +62,15 @@ const CategoryContent = forwardRef<
 	const snap = useSnapshot(groceriesState);
 	const forceShow = snap.draggedItemOriginalCategory === category.id;
 
-	// const finalRef = useMergedRef(ref, setNodeRef);
-
 	if (empty && !forceShow) return null;
 
 	return (
 		<CategoryContainer
-			ref={ref}
 			className="groceryCategory"
 			draggedOver={isDraggingOver}
 			isItemDragging={isDragging}
 			empty={empty}
+			animateIn={animateIn}
 			{...rest}
 		>
 			<SortableContext
@@ -93,7 +84,7 @@ const CategoryContent = forwardRef<
 					const prevItem = items[index - 1];
 					const nextItem = items[index + 1];
 					return (
-						<GroceryListItemDraggable
+						<MemoizedDraggableItem
 							key={item.id}
 							item={item}
 							nextSortKey={nextItem?.sortKey || null}
@@ -104,7 +95,9 @@ const CategoryContent = forwardRef<
 			</SortableContext>
 		</CategoryContainer>
 	);
-});
+}
+
+const MemoizedDraggableItem = memo(GroceryListItemDraggable);
 
 const popIn = keyframes({
 	'0%': {

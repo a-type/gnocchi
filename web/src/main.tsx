@@ -7,7 +7,7 @@ import { GroceryListAdd } from './components/groceries/GroceryListAdd';
 import { Box } from './components/primitives';
 import { GroceryListContext } from './contexts/GroceryListContext';
 import React, { StrictMode } from 'react';
-import { globalCss } from 'stitches.config';
+import { globalCss, css } from 'stitches.config';
 
 async function main() {
 	const data = await start();
@@ -28,10 +28,11 @@ async function main() {
 								top: 0,
 								zIndex: 1,
 								backgroundColor: '$white',
+								mb: '$6',
 							}}
 						>
 							<GroceryListAdd />
-							<DeleteCheckedButton />
+							<DeleteCheckedButton className={floatingButton()} />
 						</Box>
 						<GroceryList />
 					</PageContent>
@@ -42,6 +43,13 @@ async function main() {
 }
 
 main();
+
+const floatingButton = css({
+	position: 'absolute',
+	left: '50%',
+	bottom: '-20px',
+	transform: 'translate(-50%, 50%)',
+});
 
 globalCss({
 	'html, body': {

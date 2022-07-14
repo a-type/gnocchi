@@ -240,11 +240,35 @@ export const Button = styled('button', {
 					backgroundColor: '$grayBlend',
 				},
 			},
+			destructive: {
+				color: '$white',
+				backgroundColor: '$tomato',
+
+				'&:hover': {
+					backgroundColor: '$tomatoDark',
+				},
+			},
+			ghostDestructive: {
+				color: '$tomatoDark',
+				backgroundColor: 'transparent',
+
+				'&:hover': {
+					backgroundColor: '$tomatoLight',
+				},
+			},
+		},
+		size: {
+			default: {},
+			small: {
+				fontSize: '$sm',
+				borderRadius: '$lg',
+			},
 		},
 	},
 
 	defaultVariants: {
 		color: 'default',
+		size: 'default',
 	},
 });
 

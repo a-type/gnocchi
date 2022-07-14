@@ -38,7 +38,6 @@ export const GroceryNewCategoryFloater = forwardRef<
 	const [state, setState] = useState<
 		'hidden' | 'visible' | 'over' | 'entering'
 	>('hidden');
-	// const state = 'entering';
 	const ctx = useGroceryListCtx();
 
 	const { setNodeRef } = useDroppable({
