@@ -178,7 +178,6 @@ function useOnDragEnd() {
 					item.delete().save();
 				} else if (dropZone.type === 'item') {
 					const dropItem = dropZone.value;
-					console.log('item', item.name, 'dropped on', dropZone.value.name);
 					let sortKey: string;
 					const isBefore = dropItem.sortKey < item.sortKey;
 
@@ -248,7 +247,6 @@ function useOnDragOver() {
 
 function useOnDragCancel() {
 	return useCallback(({ active }: DragCancelEvent) => {
-		console.log('CANCEL');
 		if (active) {
 			const dragged = active.data.current as GroceryDnDDrag;
 			dragged.value
