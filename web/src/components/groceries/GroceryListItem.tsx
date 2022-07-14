@@ -201,6 +201,7 @@ export function GroceryListItemDraggable({
 		() => ({
 			transform: transformString,
 			opacity: isDragging ? 0.2 : 1,
+			touchAction: 'none',
 		}),
 		[isDragging, transformString],
 	);
