@@ -66,10 +66,12 @@ const CategoryContent = forwardRef<
 	});
 
 	const empty = items.length === 0;
+	const snap = useSnapshot(groceriesState);
+	const forceShow = snap.draggedItemOriginalCategory === category.id;
 
 	// const finalRef = useMergedRef(ref, setNodeRef);
 
-	if (empty) return null;
+	if (empty && !forceShow) return null;
 
 	return (
 		<CategoryContainer
