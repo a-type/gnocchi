@@ -147,6 +147,7 @@ function useOnDragStart() {
 		const item = (active.data.current as GroceryDnDDrag).value;
 		groceriesState.draggedItemOriginalCategory = item.categoryId;
 		groceriesState.draggedItemOriginalSortKey = item.sortKey;
+		groceriesState.isAnyItemDragged = true;
 	}, []);
 }
 
@@ -165,43 +166,48 @@ function useOnDragEnd() {
 						sortKey: groceriesState.draggedItemOriginalSortKey,
 					})
 					.save();
-				return;
-			}
+			} else {
+				const dropZone = over.data.current as GroceryDnDDrop;
+				if (dropZone.type === 'category') {
+					if (item.categoryId !== dropZone.value) {
+						await setItemCategory(ctx, item, dropZone.value);
+					}
+				} else if (dropZone.type === 'new') {
+					groceriesState.newCategoryPendingItem = valtioRef(item);
+				} else if (dropZone.type === 'delete') {
+					item.delete().save();
+				} else if (dropZone.type === 'item') {
+					const dropItem = dropZone.value;
+					console.log('item', item.name, 'dropped on', dropZone.value.name);
+					let sortKey: string;
+					const isBefore = dropItem.sortKey < item.sortKey;
 
-			const dropZone = over.data.current as GroceryDnDDrop;
-			if (dropZone.type === 'category') {
-				if (item.categoryId !== dropZone.value) {
-					await setItemCategory(ctx, item, dropZone.value);
+					if (isBefore) {
+						sortKey = generateKeyBetween(
+							dropZone.prevSortKey,
+							dropItem.sortKey,
+						);
+					} else {
+						// generate a key between them
+						sortKey = generateKeyBetween(
+							dropZone.value.sortKey,
+							dropZone.nextSortKey,
+						);
+					}
+
+					await item
+						.update({
+							sortKey,
+							// it might also move categories if the drop item
+							// is in a different category
+							categoryId: dropItem.categoryId,
+						})
+						.save();
 				}
-			} else if (dropZone.type === 'new') {
-				groceriesState.newCategoryPendingItem = valtioRef(item);
-			} else if (dropZone.type === 'delete') {
-				item.delete().save();
-			} else if (dropZone.type === 'item') {
-				const dropItem = dropZone.value;
-				console.log('item', item.name, 'dropped on', dropZone.value.name);
-				let sortKey: string;
-				const isBefore = dropItem.sortKey < item.sortKey;
-
-				if (isBefore) {
-					sortKey = generateKeyBetween(dropZone.prevSortKey, dropItem.sortKey);
-				} else {
-					// generate a key between them
-					sortKey = generateKeyBetween(
-						dropZone.value.sortKey,
-						dropZone.nextSortKey,
-					);
-				}
-
-				await item
-					.update({
-						sortKey,
-						// it might also move categories if the drop item
-						// is in a different category
-						categoryId: dropItem.categoryId,
-					})
-					.save();
 			}
+			groceriesState.draggedItemOriginalCategory = null;
+			groceriesState.draggedItemOriginalSortKey = null;
+			groceriesState.isAnyItemDragged = false;
 		},
 		[ctx],
 	);

@@ -250,6 +250,11 @@ const GroceryListItemMenu = memo(
 							aria-controls={menuId}
 							color="ghost"
 							onPointerUp={(event) => {
+								// don't activate the menu if an item was dragged during this gesture
+								if (groceriesState.isAnyItemDragged) {
+									return;
+								}
+
 								if (event.button === 0 && event.ctrlKey === false) {
 									setMenuOpen(true);
 									event.preventDefault();
