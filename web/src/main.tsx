@@ -8,6 +8,7 @@ import { Box } from './components/primitives';
 import { GroceryListContext } from './contexts/GroceryListContext';
 import React, { StrictMode } from 'react';
 import { globalCss, css } from 'stitches.config';
+import { register } from './serviceWorkerRegistration';
 
 async function main() {
 	const data = await start();
@@ -79,3 +80,5 @@ globalCss({
 		boxSizing: 'border-box',
 	},
 })();
+
+register();
