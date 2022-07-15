@@ -1,3 +1,5 @@
+import useMergedRef from '@react-hook/merged-ref';
+import React, { forwardRef, HTMLProps, useLayoutEffect, useRef } from 'react';
 import { styled } from 'stitches.config';
 
 const BaseBox = styled('div', {
@@ -196,6 +198,52 @@ export const Input = styled('input', {
 	},
 });
 
+export interface TextAreaProps
+	extends Omit<HTMLProps<HTMLTextAreaElement>, 'ref'> {
+	className?: string;
+	autoSize?: boolean;
+}
+
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
+	function TextArea({ autoSize, ...rest }, ref) {
+		const innerRef = useRef<HTMLTextAreaElement>(null);
+		const finalRef = useMergedRef(innerRef, ref);
+
+		useLayoutEffect(() => {
+			if (!autoSize) return;
+			const element = innerRef.current;
+			if (element) {
+				function refresh() {
+					element!.style.height = 'auto';
+					if (element!.value !== '') {
+						element!.style.height = element!.scrollHeight + 'px';
+					}
+				}
+				refresh();
+
+				element.addEventListener('keyup', refresh);
+				return () => {
+					element.removeEventListener('keyup', refresh);
+				};
+			}
+		}, [autoSize]);
+
+		return (
+			<StyledTextArea
+				ref={finalRef}
+				{...rest}
+				rows={autoSize ? 1 : rest.rows}
+			/>
+		);
+	},
+);
+
+const StyledTextArea = styled('textarea', {
+	fontFamily: 'inherit',
+	fontSize: 'inherit',
+	overflow: 'hidden',
+});
+
 export const Button = styled('button', {
 	px: '$3',
 	py: '$2',
@@ -221,15 +269,15 @@ export const Button = styled('button', {
 				backgroundColor: '$lemonDark',
 			},
 			default: {
-				color: '$black',
-				backgroundColor: '$gray30',
+				color: '$lemonDarker',
+				backgroundColor: '$lemonLighter',
 
 				'&:hover': {
-					backgroundColor: '$gray40',
+					backgroundColor: '$lemonLight',
 				},
 
 				'&:focus': {
-					backgroundColor: '$gray40',
+					backgroundColor: '$lemonLight',
 				},
 			},
 			ghost: {

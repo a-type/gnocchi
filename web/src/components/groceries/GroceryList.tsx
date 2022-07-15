@@ -28,7 +28,7 @@ import { Box } from '../primitives';
 import { DeleteItemFloater } from './DeleteItemFloater';
 import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes';
 import { GroceryListCategory } from './GroceryListCategory';
-import { GroceryListItem } from './GroceryListItem';
+import { GroceryListItem } from './items/GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
 

@@ -1,9 +1,23 @@
+import { useBind, useQuery } from '@aphro/react';
+import { commit } from '@aphro/runtime-ts';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { PopoverAnchor } from '@radix-ui/react-popover';
+import { Box, Button } from 'components/primitives';
+import {
+	Popover,
+	PopoverArrow,
+	PopoverContent,
+} from 'components/primitives/Popover';
+import { useGroceryListCtx } from 'contexts/GroceryListContext';
+import { useIsFirstRender } from 'hooks/usePrevious';
+import pluralize from 'pluralize';
 import React, {
 	ComponentPropsWithoutRef,
 	CSSProperties,
 	forwardRef,
 	memo,
-	ReactNode,
 	Ref,
 	useCallback,
 	useEffect,
@@ -11,36 +25,13 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { useSnapshot } from 'valtio';
-import { Checkbox, CheckboxIndicator } from '../primitives/Checkbox';
-import { CSS } from '@dnd-kit/utilities';
-import { keyframes, styled, theme } from 'stitches.config';
-import { groceriesState } from './state';
-import { MOBILE_DRAG_ACTIVATION_DELAY } from './constants';
+import { styled } from 'stitches.config';
 import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import { useBind, useQuery } from '@aphro/react';
-import { commit, UpdateType } from '@aphro/runtime-ts';
 import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
-import pluralize from 'pluralize';
-import { Box, Button } from 'components/primitives';
-import { useSortable } from '@dnd-kit/sortable';
-import useMergedRef from '@react-hook/merged-ref';
-import {
-	DropdownMenu,
-	DropdownMenuAnchor,
-	DropdownMenuArrow,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from 'components/primitives/DropdownMenu';
-import { DropdownMenuIcon, HamburgerMenuIcon } from '@radix-ui/react-icons';
-import {
-	Popover,
-	PopoverArrow,
-	PopoverContent,
-} from 'components/primitives/Popover';
-import { PopoverAnchor } from '@radix-ui/react-popover';
-import { useGroceryListCtx } from 'contexts/GroceryListContext';
+import { useSnapshot } from 'valtio';
+import { Checkbox } from '../../primitives/Checkbox';
+import { groceriesState } from '../state';
+import { ItemQuantityNumber } from './ItemQuantityNumber';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -73,12 +64,10 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 			: '';
 		const pluralizedName =
 			item.totalQuantity === 1 ? item.name : pluralize(item.name);
-		const displayString =
-			inputs.length === 1
-				? inputs[0].text
-				: `${item.totalQuantity} ${
-						pluralizedUnit && `${pluralizedUnit} `
-				  }${pluralizedName}`;
+		const showOnlyInput = inputs.length === 1;
+		const displayString = showOnlyInput
+			? inputs[0].text
+			: `${pluralizedUnit && `${pluralizedUnit} `}${pluralizedName}`;
 
 		const updatePurchasedQuantity = useCallback(
 			(quantity: number) => {
@@ -98,11 +87,14 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 			}
 		}, [updatePurchasedQuantity, isPurchased, item]);
 
+		const quantityJustChanged = useDidQuantityJustChange(item);
+
 		return (
 			<ItemContainer
 				hidden={sectionStateSnap.newCategoryPendingItem?.id === item.id}
 				{...rest}
 				ref={ref}
+				highlighted={quantityJustChanged}
 				dragging={isDragActive}
 			>
 				<Checkbox
@@ -117,12 +109,32 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					onPointerDown={stopPropagation}
 					onPointerUp={stopPropagation}
 				/>
-				<Box flex={1}>{displayString}</Box>
+				<Box direction="row" gap={1} flex={1}>
+					{!showOnlyInput && <ItemQuantityNumber value={item.totalQuantity} />}
+					{displayString}
+				</Box>
 				<GroceryListItemMenu item={item} {...menuProps} />
 			</ItemContainer>
 		);
 	},
 );
+
+function useDidQuantityJustChange(item: GroceryItem) {
+	const [didQuantityChange, setDidQuantityChange] = useState(false);
+	const isFirstRenderRef = useIsFirstRender();
+	useEffect(() => {
+		if (isFirstRenderRef.current) {
+			console.log('skip first', item.totalQuantity);
+		} else {
+			console.log(item.totalQuantity);
+			setDidQuantityChange(true);
+			const timeout = setTimeout(() => setDidQuantityChange(false), 1000);
+			return () => clearTimeout(timeout);
+		}
+	}, [item.totalQuantity, isFirstRenderRef]);
+
+	return didQuantityChange;
+}
 
 const ItemContainer = styled('div', {
 	display: 'flex',
@@ -136,7 +148,7 @@ const ItemContainer = styled('div', {
 	animation: 'none',
 	userSelect: 'none',
 
-	transition: 'all 0.2s $springy',
+	transition: 'all 0.2s $transitions$springy',
 
 	variants: {
 		hidden: {
@@ -152,6 +164,11 @@ const ItemContainer = styled('div', {
 				cursor: 'grabbing',
 				touchAction: 'none',
 				border: '1px solid $colors$gray50',
+			},
+		},
+		highlighted: {
+			true: {
+				backgroundColor: '$lemonLighter',
 			},
 		},
 	},

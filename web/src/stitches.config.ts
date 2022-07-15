@@ -15,6 +15,8 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				garlic: '#f7f0e1',
 				onion: '#f6d7f2',
 				wood: '#ebab5c',
+				lemonLighter: '#fef8e0',
+				lemonLight: '#f7e794',
 				lemon: '#f9f083',
 				lemonDark: '#f7d352',
 				lemonDarker: '#b38507',

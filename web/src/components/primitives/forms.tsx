@@ -7,7 +7,7 @@ import React, {
 	useRef,
 	Ref,
 } from 'react';
-import { Button, Input } from './primitives';
+import { Button, Input, TextArea, TextAreaProps } from './primitives';
 import { Form as FormikForm } from 'formik';
 import useMergedRef from '@react-hook/merged-ref';
 
@@ -35,16 +35,7 @@ export const Form = styled(FormikForm, {
 
 const emptyRef = (() => {}) as any;
 
-export function TextField({
-	name,
-	label,
-	css,
-	className,
-	autoFocusDelay,
-	autoFocus,
-	inputRef,
-	...rest
-}: {
+export type TextFieldProps = {
 	name: string;
 	label?: string;
 	required?: boolean;
@@ -56,7 +47,18 @@ export function TextField({
 	autoFocus?: InputHTMLAttributes<HTMLInputElement>['autoFocus'];
 	autoFocusDelay?: number;
 	inputRef?: Ref<HTMLInputElement>;
-}) {
+} & ComponentProps<typeof Input>;
+
+export function TextField({
+	name,
+	label,
+	css,
+	className,
+	autoFocusDelay,
+	autoFocus,
+	inputRef,
+	...rest
+}: TextFieldProps) {
 	const [props] = useField(name);
 	const innerInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,13 +83,7 @@ export function TextField({
 	);
 }
 
-export function TextAreaField({
-	name,
-	label,
-	className,
-	css,
-	...rest
-}: {
+export type TextAreaFieldProps = {
 	name: string;
 	label?: string;
 	required?: boolean;
@@ -95,12 +91,22 @@ export function TextAreaField({
 	disabled?: boolean;
 	className?: string;
 	css?: ComponentProps<typeof FieldGroup>['css'];
-}) {
+	inputRef?: Ref<HTMLTextAreaElement>;
+} & TextAreaProps;
+
+export function TextAreaField({
+	name,
+	label,
+	className,
+	css,
+	inputRef,
+	...rest
+}: TextAreaFieldProps) {
 	const [props] = useField(name);
 	return (
 		<FieldGroup className={className} css={css}>
 			{label && <FieldLabel>{label}</FieldLabel>}
-			<Input as="textarea" {...props} {...rest} />
+			<Input ref={inputRef} as={TextArea} {...props} {...rest} />
 		</FieldGroup>
 	);
 }

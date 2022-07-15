@@ -10,7 +10,7 @@ import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
 import { useSnapshot } from 'valtio';
 import { H2 } from '../primitives';
 import { GroceryDnDDrop } from './dndTypes';
-import { GroceryListItemDraggable } from './GroceryListItem';
+import { GroceryListItemDraggable } from './items/GroceryListItem';
 import { groceriesState } from './state';
 
 export function GroceryListCategory({

@@ -54,6 +54,7 @@ const config = {
 			contexts: path.resolve(__dirname, 'src/contexts'),
 			lib: path.resolve(__dirname, 'src/lib'),
 			stores: path.resolve(__dirname, 'src/stores'),
+			hooks: path.resolve(__dirname, 'src/hooks'),
 			'stitches.config': path.resolve(__dirname, 'src/stitches.config'),
 		},
 	},
