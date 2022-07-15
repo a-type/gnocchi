@@ -4,7 +4,7 @@ import {
 	SortableContext,
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import React, { memo, useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import { keyframes, styled } from 'stitches.config';
 import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
 import { useSnapshot } from 'valtio';
@@ -62,6 +62,8 @@ export function GroceryListCategory({
 	const snap = useSnapshot(groceriesState);
 	const forceShow = snap.draggedItemOriginalCategory === category.id;
 
+	const sortedIds = useMemo(() => items.map((i) => i.id), [items]);
+
 	if (empty && !forceShow) return null;
 
 	return (
@@ -73,10 +75,7 @@ export function GroceryListCategory({
 			animateIn={animateIn}
 			{...rest}
 		>
-			<SortableContext
-				items={items.map((i) => i.id)}
-				strategy={verticalListSortingStrategy}
-			>
+			<SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
 				<H2 size="micro" css={{ m: '$2' }}>
 					{category.name}
 				</H2>

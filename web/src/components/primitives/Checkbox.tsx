@@ -1,9 +1,9 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, forwardRef } from 'react';
 import { styled } from 'stitches.config';
 import { CheckIcon } from '@radix-ui/react-icons';
 
-export const Checkbox = styled(CheckboxPrimitive.Root, {
+const CheckboxRoot = styled(CheckboxPrimitive.Root, {
 	width: 24,
 	height: 24,
 	backgroundColor: '$white',
@@ -34,3 +34,14 @@ export function CheckboxIndicator({
 		</OuterCheckboxIndicator>
 	);
 }
+
+export const Checkbox = forwardRef<
+	HTMLButtonElement,
+	ComponentProps<typeof CheckboxRoot>
+>(function Checkbox(props, ref) {
+	return (
+		<CheckboxRoot ref={ref} {...props}>
+			<CheckboxIndicator />
+		</CheckboxRoot>
+	);
+});

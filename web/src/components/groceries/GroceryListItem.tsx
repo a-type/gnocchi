@@ -116,9 +116,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					onMouseUp={stopPropagation}
 					onPointerDown={stopPropagation}
 					onPointerUp={stopPropagation}
-				>
-					<CheckboxIndicator />
-				</Checkbox>
+				/>
 				<Box flex={1}>{displayString}</Box>
 				<GroceryListItemMenu item={item} {...menuProps} />
 			</ItemContainer>
