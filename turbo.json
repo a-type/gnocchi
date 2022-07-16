@@ -16,6 +16,9 @@
 		"gen": {
 			"cache": false,
 			"outputs": ["**/.generated/*.ts"]
+		},
+		"preview": {
+			"cache": false
 		}
 	}
 }

@@ -16,6 +16,7 @@ import GroceryItemMutations from './.generated/GroceryItemMutations';
 import GroceryInputMutations from './.generated/GroceryInputMutations';
 import GroceryFoodCategoryLookup from './.generated/GroceryFoodCategoryLookup';
 import GroceryFoodCategoryLookupMutations from './.generated/GroceryFoodCategoryLookupMutations';
+import { attachToPwaEvents } from './pwaEventListener';
 
 export type GroceryInputData = {
 	text: string;
@@ -75,6 +76,8 @@ export async function start() {
 	const resolver = await createResolver();
 	const ctx = context(anonymous(), resolver);
 	const data = await bootstrap(ctx);
+
+	attachToPwaEvents(data.ctx, data.list);
 
 	// expose some tools
 	(window as any).ctx = ctx;

@@ -9,7 +9,8 @@
 	"scripts": {
 		"dev": "turbo run dev",
 		"gen": "turbo run gen",
-		"build": "turbo run build"
+		"build": "turbo run build",
+		"preview": "turbo run preview"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",

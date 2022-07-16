@@ -95,3 +95,30 @@ self.addEventListener('message', (event) => {
 });
 
 // Any other custom service worker logic can go here.
+
+self.addEventListener('fetch', (event) => {
+	const url = new URL(event.request.url);
+
+	// detect a share event from the PWA
+	if (event.request.method === 'POST' && url.pathname === '/share') {
+		event.respondWith(
+			(async () => {
+				const formData = await event.request.formData();
+				const text = formData.get('text');
+				if (text && typeof text === 'string') {
+					// check if text is a URL
+					try {
+						const url = new URL(text);
+						postMessage({ type: 'pwa-share', url });
+					} catch (e) {
+						// not a URL, could be ingredients list
+						const items = text.split('\n');
+						postMessage({ type: 'pwa-share', items });
+					}
+				}
+
+				return Response.redirect('/', 303);
+			})(),
+		);
+	}
+});
