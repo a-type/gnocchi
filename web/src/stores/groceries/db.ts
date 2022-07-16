@@ -14,7 +14,7 @@ import {
 import { getRxStorageDexie } from 'rxdb/plugins/dexie';
 import cuid from 'cuid';
 import { suspend } from 'suspend-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { generateKeyBetween } from 'fractional-indexing';
 
 export const DEFAULT_CATEGORY = 'None';
@@ -243,9 +243,8 @@ export class GroceryListDb {
 				.exec();
 			if (firstMatch) {
 				itemId = firstMatch.id;
-				await firstMatch.atomicPatch({
-					totalQuantity: firstMatch.totalQuantity + parsed.quantity,
-				});
+				totalQuantity: firstMatch.totalQuantity + parsed.quantity,
+					await firstMatch.atomicPatch({});
 			} else {
 				itemId = cuid();
 
@@ -325,7 +324,13 @@ export class GroceryListDb {
 	) => {
 		const db = suspend(() => this.ready, ['database']);
 		// TODO: lost in hooks dep confusion...
-		const creatorCallback = useCallback(creator, deps);
+		const creatorRef = useRef(creator);
+		creatorRef.current = creator;
+		const creatorCallback = useCallback(
+			(db: Database) => creatorRef.current(db),
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			deps,
+		);
 		const query = creatorCallback(db);
 		// TODO: is this a good cache key?
 		const firstValue = suspend(() => query.exec(), [query._creationTime]);
