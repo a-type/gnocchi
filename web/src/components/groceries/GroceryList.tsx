@@ -15,7 +15,13 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { generateKeyBetween } from 'fractional-indexing';
-import React, { forwardRef, memo, useCallback, useState } from 'react';
+import React, {
+	forwardRef,
+	memo,
+	Suspense,
+	useCallback,
+	useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
 import { Box } from '../primitives';
@@ -51,10 +57,12 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				onDragCancel={handleDragCancel}
 				sensors={sensors}
 			>
-				<GroceryListCategories {...rest} ref={ref} />
-				<GroceryNewCategoryFloater />
-				<DeleteItemFloater />
-				<GroceryListDragOverlay />
+				<Suspense fallback={null}>
+					<GroceryListCategories {...rest} ref={ref} />
+					<GroceryNewCategoryFloater />
+					<DeleteItemFloater />
+					<GroceryListDragOverlay />
+				</Suspense>
 			</DndContext>
 		);
 	},

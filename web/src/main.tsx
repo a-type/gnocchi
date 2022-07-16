@@ -15,7 +15,7 @@ const floatingButton = css({
 	transform: 'translate(-50%, 50%)',
 });
 
-async function main() {
+function main() {
 	const root = createRoot(document.getElementById('root')!);
 	root.render(
 		<StrictMode>
@@ -37,7 +37,9 @@ async function main() {
 							}}
 						>
 							<GroceryListAdd />
-							<DeleteCheckedButton className={floatingButton()} />
+							<Suspense fallback={null}>
+								<DeleteCheckedButton className={floatingButton()} />
+							</Suspense>
 						</Box>
 						<GroceryList />
 					</Suspense>
