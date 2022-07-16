@@ -1,5 +1,3 @@
-import { useQuery } from '@aphro/react';
-import { P, UpdateType } from '@aphro/runtime-ts';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { CardStackPlusIcon } from '@radix-ui/react-icons';
 import useMergedRef from '@react-hook/merged-ref';
@@ -10,7 +8,7 @@ import {
 	SubmitButton,
 	TextField,
 } from 'components/primitives';
-import { useGroceryList, useGroceryListCtx } from 'contexts/GroceryListContext';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { Formik } from 'formik';
 import React, {
 	forwardRef,
@@ -20,10 +18,7 @@ import React, {
 	useState,
 } from 'react';
 import { styled } from 'stitches.config';
-import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
-import GroceryCategoryMutations from 'stores/groceries/.generated/GroceryCategoryMutations';
-import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import { setItemCategory } from 'stores/groceries/mutations';
+import { groceries, GroceryCategory } from 'stores/groceries/db';
 import { GroceryDnDDrop } from './dndTypes';
 import { groceriesState } from './state';
 
@@ -38,8 +33,6 @@ export const GroceryNewCategoryFloater = forwardRef<
 	const [state, setState] = useState<
 		'hidden' | 'visible' | 'over' | 'entering'
 	>('hidden');
-	const ctx = useGroceryListCtx();
-
 	const { setNodeRef } = useDroppable({
 		id: '@@new',
 		data: {
@@ -70,20 +63,17 @@ export const GroceryNewCategoryFloater = forwardRef<
 
 	const zoneRef = useRef<HTMLDivElement>(null);
 
-	const handleNewCreate = useCallback(
-		async (category: GroceryCategory) => {
-			if (groceriesState.newCategoryPendingItem) {
-				const item = groceriesState.newCategoryPendingItem;
-				await setItemCategory(ctx, item, category.id);
-				groceriesState.newCategoryPendingItem = null;
-			}
+	const handleNewCreate = useCallback(async (category: GroceryCategory) => {
+		if (groceriesState.newCategoryPendingItem) {
+			const item = groceriesState.newCategoryPendingItem;
+			await groceries.setItemCategory(item.id, category.id);
+			groceriesState.newCategoryPendingItem = null;
+		}
 
-			groceriesState.justCreatedCategoryId = category.id;
+		groceriesState.justCreatedCategoryId = category.id;
 
-			setState('hidden');
-		},
-		[ctx],
-	);
+		setState('hidden');
+	}, []);
 
 	const cancelNewCreate = useCallback(() => {
 		setState('hidden');
@@ -183,21 +173,11 @@ function NewCategoryForm({
 }: {
 	onDone: (category: GroceryCategory) => void;
 }) {
-	// warning: truly awful querying below!
-
-	const ctx = useGroceryListCtx();
-	const list = useGroceryList();
-
-	const [{ data: allCategories }, { data: allItems }] = [
-		useQuery(() => GroceryCategory.queryAll(ctx), []),
-		useQuery(
-			() => GroceryItem.queryAll(ctx).whereListId(P.equals(list.id)),
-			[],
-		),
-	];
-
-	const unusedCategories = allCategories.filter((category) => {
-		return !allItems.some((item) => item.categoryId === category.id);
+	// TODO: reevaluate UX - this should probably just search all categories
+	// by the input value.
+	const categories = useLiveQuery(async () => {
+		const categories = await groceries.categories.toArray();
+		return categories;
 	});
 
 	return (
@@ -206,9 +186,7 @@ function NewCategoryForm({
 				initialValues={{ name: '' }}
 				onSubmit={async ({ name }) => {
 					// create the category
-					const category = await GroceryCategoryMutations.create(ctx, {
-						name,
-					}).save();
+					const category = await groceries.createCategory(name);
 					onDone(category);
 				}}
 			>
@@ -224,9 +202,9 @@ function NewCategoryForm({
 					</Box>
 				</Form>
 			</Formik>
-			{!!unusedCategories.length && (
+			{!!categories?.length && (
 				<Box flex={1} align="stretch" gap={2}>
-					{unusedCategories.map((category) => (
+					{categories.map((category) => (
 						<Button
 							color="ghost"
 							css={{

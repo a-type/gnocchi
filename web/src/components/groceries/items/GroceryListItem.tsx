@@ -1,5 +1,3 @@
-import { useBind, useQuery } from '@aphro/react';
-import { commit } from '@aphro/runtime-ts';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
@@ -10,7 +8,6 @@ import {
 	PopoverArrow,
 	PopoverContent,
 } from 'components/primitives/Popover';
-import { useGroceryListCtx } from 'contexts/GroceryListContext';
 import { useIsFirstRender } from 'hooks/usePrevious';
 import pluralize from 'pluralize';
 import React, {
@@ -26,12 +23,12 @@ import React, {
 	useState,
 } from 'react';
 import { styled } from 'stitches.config';
-import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import GroceryItemMutations from 'stores/groceries/.generated/GroceryItemMutations';
+import { groceries, GroceryItem } from 'stores/groceries/db';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox';
 import { groceriesState } from '../state';
 import { ItemQuantityNumber } from './ItemQuantityNumber';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -50,10 +47,9 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
 		const sectionStateSnap = useSnapshot(groceriesState);
-		const ctx = useGroceryListCtx();
-		const { data: inputs } = useQuery(() => item.queryInputs(), []);
-
-		useBind(item, ['purchasedQuantity', 'totalQuantity']);
+		const inputs = useLiveQuery(() => {
+			return groceries.inputs.where('itemId').equals(item.id).toArray();
+		}, [item.id]);
 
 		const isPurchased = item.purchasedQuantity >= item.totalQuantity;
 		const isPartiallyPurchased = item.purchasedQuantity > 0;
@@ -63,21 +59,19 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				: pluralize(item.unit)
 			: '';
 		const pluralizedName =
-			item.totalQuantity === 1 ? item.name : pluralize(item.name);
-		const showOnlyInput = inputs.length === 1;
+			item.totalQuantity === 1 ? item.food : pluralize(item.food);
+		const showOnlyInput = inputs?.length === 1;
 		const displayString = showOnlyInput
 			? inputs[0].text
 			: `${pluralizedUnit && `${pluralizedUnit} `}${pluralizedName}`;
 
 		const updatePurchasedQuantity = useCallback(
-			(quantity: number) => {
-				commit(ctx, [
-					GroceryItemMutations.setPurchasedQuantity(item, {
-						purchasedQuantity: quantity,
-					}).toChangeset(),
-				]);
+			async (quantity: number) => {
+				await groceries.items.update(item.id, {
+					purchasedQuantity: quantity,
+				});
 			},
-			[ctx, item],
+			[item],
 		);
 		const togglePurchased = useCallback(() => {
 			if (isPurchased) {
@@ -124,7 +118,7 @@ function useDidQuantityJustChange(item: GroceryItem) {
 	const isFirstRenderRef = useIsFirstRender();
 	useEffect(() => {
 		if (isFirstRenderRef.current) {
-			console.log('skip first', item.totalQuantity);
+			return;
 		} else {
 			console.log(item.totalQuantity);
 			setDidQuantityChange(true);
@@ -239,8 +233,8 @@ interface GroceryListItemMenuProps
 const GroceryListItemMenu = memo(
 	forwardRef<HTMLButtonElement, GroceryListItemMenuProps>(
 		function GroceryListItemMenu({ item, ...props }, ref) {
-			const deleteItem = () => {
-				item.delete().save();
+			const deleteItem = async () => {
+				await groceries.items.delete(item.id);
 			};
 
 			const [menuOpen, setMenuOpen] = useState(false);

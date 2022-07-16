@@ -1,12 +1,12 @@
-import { useBind, useQuery } from '@aphro/react';
 import { useDndMonitor } from '@dnd-kit/core';
 import {
 	SortableContext,
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { useLiveQuery } from 'dexie-react-hooks';
 import React, { memo, useMemo, useState } from 'react';
 import { keyframes, styled } from 'stitches.config';
-import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
+import { groceries, GroceryCategory } from 'stores/groceries/db';
 import { useSnapshot } from 'valtio';
 import { H2 } from '../primitives';
 import { GroceryDnDDrop } from './dndTypes';
@@ -19,15 +19,15 @@ export function GroceryListCategory({
 }: {
 	category: GroceryCategory;
 }) {
-	useBind(category, ['name']);
-
 	const stateSnap = useSnapshot(groceriesState);
 	const animateIn = stateSnap.justCreatedCategoryId === category.id;
 
-	const { data: items } = useQuery(
-		() => category.queryItems().orderBySortKey('asc'),
-		[],
-	);
+	const items = useLiveQuery(() => {
+		return groceries.items
+			.where('categoryId')
+			.equals(category.id)
+			.sortBy('sortKey');
+	});
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [isDraggingOver, setIsDraggingOver] = useState(false);
@@ -58,11 +58,11 @@ export function GroceryListCategory({
 		},
 	});
 
-	const empty = items.length === 0;
+	const empty = items?.length === 0;
 	const snap = useSnapshot(groceriesState);
 	const forceShow = snap.draggedItemOriginalCategory === category.id;
 
-	const sortedIds = useMemo(() => items.map((i) => i.id), [items]);
+	const sortedIds = useMemo(() => items?.map((i) => i.id) || [], [items]);
 
 	if (empty && !forceShow) return null;
 
@@ -79,7 +79,7 @@ export function GroceryListCategory({
 				<H2 size="micro" css={{ m: '$2' }}>
 					{category.name}
 				</H2>
-				{items.map((item, index) => {
+				{items?.map((item, index) => {
 					const prevItem = items[index - 1];
 					const nextItem = items[index + 1];
 					return (

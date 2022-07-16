@@ -1,8 +1,7 @@
 import { Button } from '../primitives';
 import React, { forwardRef } from 'react';
-import { useGroceryList } from 'contexts/GroceryListContext';
-import { useQuery } from '@aphro/react';
-import { commit } from '@aphro/runtime-ts';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { groceries } from 'stores/groceries/db';
 
 export interface DeleteCheckedButtonProps {
 	className?: string;
@@ -12,26 +11,18 @@ export const DeleteCheckedButton = forwardRef<
 	HTMLButtonElement,
 	DeleteCheckedButtonProps
 >(function DeleteCheckedButton({ ...rest }, ref) {
-	const list = useGroceryList();
-	const { data: items } = useQuery(
-		() =>
-			list
-				.queryItems()
-				.where((item) => item.purchasedQuantity >= item.totalQuantity),
-		[],
-	);
-	const checkedItems = items.filter(
-		(item) => item.purchasedQuantity >= item.totalQuantity,
-	);
+	const items = useLiveQuery(() => {
+		return groceries.items
+			.filter((item) => item.purchasedQuantity >= item.totalQuantity)
+			.toArray();
+	});
 
-	const deleteCompleted = () => {
-		commit(
-			list.ctx,
-			checkedItems.map((item) => item.delete()),
-		);
+	const deleteCompleted = async () => {
+		if (!items) return;
+		await groceries.items.bulkDelete(items.map((item) => item.id));
 	};
 
-	const areAnyChecked = checkedItems.length > 0;
+	const areAnyChecked = !!items?.length;
 
 	if (!areAnyChecked) return null;
 

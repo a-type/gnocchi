@@ -9,7 +9,7 @@ import {
 import { numberParser } from './numberParser';
 import { unitParser } from './unitParser';
 
-const DEFAULT_UNIT = null;
+const DEFAULT_UNIT = '';
 const DEFAULT_QUANTITY = 1;
 const DEFAULT_FOOD = null;
 

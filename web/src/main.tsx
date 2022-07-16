@@ -1,49 +1,12 @@
-import { start } from './stores/groceries';
 import { createRoot } from 'react-dom/client';
 import { PageContent, PageNowPlayingBar, PageRoot } from './components/layouts';
 import GroceryList from './components/groceries/GroceryList';
 import DeleteCheckedButton from './components/groceries/DeleteCheckedButton';
 import { GroceryListAdd } from './components/groceries/GroceryListAdd';
 import { Box } from './components/primitives';
-import { GroceryListContext } from './contexts/GroceryListContext';
 import React, { StrictMode } from 'react';
 import { globalCss, css } from 'stitches.config';
 import { register } from './serviceWorkerRegistration';
-
-async function main() {
-	const data = await start();
-	const root = createRoot(document.getElementById('root')!);
-	root.render(
-		<StrictMode>
-			<GroceryListContext.Provider value={data}>
-				<PageRoot>
-					<PageContent fullHeight noPadding flex={1}>
-						<Box
-							w="full"
-							p={4}
-							direction="column"
-							gap={2}
-							align="stretch"
-							css={{
-								position: 'sticky',
-								top: 0,
-								zIndex: 1,
-								backgroundColor: '$white',
-								mb: '$6',
-							}}
-						>
-							<GroceryListAdd />
-							<DeleteCheckedButton className={floatingButton()} />
-						</Box>
-						<GroceryList />
-					</PageContent>
-				</PageRoot>
-			</GroceryListContext.Provider>
-		</StrictMode>,
-	);
-}
-
-main();
 
 const floatingButton = css({
 	position: 'absolute',
@@ -51,6 +14,38 @@ const floatingButton = css({
 	bottom: '-20px',
 	transform: 'translate(-50%, 50%)',
 });
+
+async function main() {
+	const root = createRoot(document.getElementById('root')!);
+	root.render(
+		<StrictMode>
+			<PageRoot>
+				<PageContent fullHeight noPadding flex={1}>
+					<Box
+						w="full"
+						p={4}
+						direction="column"
+						gap={2}
+						align="stretch"
+						css={{
+							position: 'sticky',
+							top: 0,
+							zIndex: 1,
+							backgroundColor: '$white',
+							mb: '$6',
+						}}
+					>
+						<GroceryListAdd />
+						<DeleteCheckedButton className={floatingButton()} />
+					</Box>
+					<GroceryList />
+				</PageContent>
+			</PageRoot>
+		</StrictMode>,
+	);
+}
+
+main();
 
 globalCss({
 	'html, body': {

@@ -1,5 +1,3 @@
-import { useQuery } from '@aphro/react';
-import { Context } from '@aphro/runtime-ts';
 import {
 	DndContext,
 	DragCancelEvent,
@@ -16,13 +14,9 @@ import {
 	useSensors,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useGroceryListCtx } from 'contexts/GroceryListContext';
 import { generateKeyBetween } from 'fractional-indexing';
 import React, { forwardRef, memo, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
-import GroceryCategory from 'stores/groceries/.generated/GroceryCategory';
-import GroceryItem from 'stores/groceries/.generated/GroceryItem';
-import { setItemCategory } from 'stores/groceries/mutations';
 import { ref as valtioRef } from 'valtio';
 import { Box } from '../primitives';
 import { DeleteItemFloater } from './DeleteItemFloater';
@@ -31,6 +25,8 @@ import { GroceryListCategory } from './GroceryListCategory';
 import { GroceryListItem } from './items/GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { groceries, GroceryItem } from 'stores/groceries/db';
 
 export interface GroceryListProps {
 	className?: string;
@@ -70,15 +66,13 @@ const GroceryListCategories = forwardRef<
 	HTMLDivElement,
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
-	const ctx = useGroceryListCtx();
-	const { data: categories } = useQuery(
-		() => GroceryCategory.queryAll(ctx),
-		[],
-	);
+	const categories = useLiveQuery(() => {
+		return groceries.categories.toArray();
+	});
 
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
-			{categories.map((category) => {
+			{categories?.map((category) => {
 				return <MemoizedCategory key={category.id} category={category} />;
 			})}
 		</Box>
@@ -152,64 +146,56 @@ function useOnDragStart() {
 }
 
 function useOnDragEnd() {
-	const ctx = useGroceryListCtx();
+	return useCallback(async ({ over, active }: DragEndEvent) => {
+		const item = (active.data.current as GroceryDnDDrag).value;
 
-	return useCallback(
-		async ({ over, active }: DragEndEvent) => {
-			const item = (active.data.current as GroceryDnDDrag).value;
+		if (!over) {
+			// they dropped on nothing... cancel any movement
+			await item
+				.update({
+					categoryId: groceriesState.draggedItemOriginalCategory,
+					sortKey: groceriesState.draggedItemOriginalSortKey,
+				})
+				.save();
+		} else {
+			const dropZone = over.data.current as GroceryDnDDrop;
+			if (dropZone.type === 'category') {
+				if (item.categoryId !== dropZone.value) {
+					await groceries.setItemCategory(item.id, dropZone.value);
+				}
+			} else if (dropZone.type === 'new') {
+				groceriesState.newCategoryPendingItem = valtioRef(item);
+			} else if (dropZone.type === 'delete') {
+				item.delete().save();
+			} else if (dropZone.type === 'item') {
+				const dropItem = dropZone.value;
+				let sortKey: string;
+				const isBefore = dropItem.sortKey < item.sortKey;
 
-			if (!over) {
-				// they dropped on nothing... cancel any movement
+				if (isBefore) {
+					sortKey = generateKeyBetween(dropZone.prevSortKey, dropItem.sortKey);
+				} else {
+					// generate a key between them
+					sortKey = generateKeyBetween(
+						dropZone.value.sortKey,
+						dropZone.nextSortKey,
+					);
+				}
+
 				await item
 					.update({
-						categoryId: groceriesState.draggedItemOriginalCategory,
-						sortKey: groceriesState.draggedItemOriginalSortKey,
+						sortKey,
+						// it might also move categories if the drop item
+						// is in a different category
+						categoryId: dropItem.categoryId,
 					})
 					.save();
-			} else {
-				const dropZone = over.data.current as GroceryDnDDrop;
-				if (dropZone.type === 'category') {
-					if (item.categoryId !== dropZone.value) {
-						await setItemCategory(ctx, item, dropZone.value);
-					}
-				} else if (dropZone.type === 'new') {
-					groceriesState.newCategoryPendingItem = valtioRef(item);
-				} else if (dropZone.type === 'delete') {
-					item.delete().save();
-				} else if (dropZone.type === 'item') {
-					const dropItem = dropZone.value;
-					let sortKey: string;
-					const isBefore = dropItem.sortKey < item.sortKey;
-
-					if (isBefore) {
-						sortKey = generateKeyBetween(
-							dropZone.prevSortKey,
-							dropItem.sortKey,
-						);
-					} else {
-						// generate a key between them
-						sortKey = generateKeyBetween(
-							dropZone.value.sortKey,
-							dropZone.nextSortKey,
-						);
-					}
-
-					await item
-						.update({
-							sortKey,
-							// it might also move categories if the drop item
-							// is in a different category
-							categoryId: dropItem.categoryId,
-						})
-						.save();
-				}
 			}
-			groceriesState.draggedItemOriginalCategory = null;
-			groceriesState.draggedItemOriginalSortKey = null;
-			groceriesState.isAnyItemDragged = false;
-		},
-		[ctx],
-	);
+		}
+		groceriesState.draggedItemOriginalCategory = null;
+		groceriesState.draggedItemOriginalSortKey = null;
+		groceriesState.isAnyItemDragged = false;
+	}, []);
 }
 
 function useOnDragOver() {
