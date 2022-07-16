@@ -2,8 +2,6 @@ import {
 	Box,
 	Form,
 	SubmitButton,
-	TextAreaField,
-	TextAreaFieldProps,
 	TextField,
 	TextFieldProps,
 } from 'components/primitives';

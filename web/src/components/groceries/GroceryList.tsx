@@ -25,8 +25,8 @@ import { GroceryListCategory } from './GroceryListCategory';
 import { GroceryListItem } from './items/GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { groceries, GroceryItem } from 'stores/groceries/db';
+import { RxDocument } from 'rxdb';
 
 export interface GroceryListProps {
 	className?: string;
@@ -66,9 +66,7 @@ const GroceryListCategories = forwardRef<
 	HTMLDivElement,
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
-	const categories = useLiveQuery(() => {
-		return groceries.categories.toArray();
-	});
+	const categories = groceries.useQuery((db) => db.categories.find());
 
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
@@ -80,7 +78,8 @@ const GroceryListCategories = forwardRef<
 });
 
 function GroceryListDragOverlay() {
-	const [draggingItem, setDraggingItem] = useState<GroceryItem | null>(null);
+	const [draggingItem, setDraggingItem] =
+		useState<RxDocument<GroceryItem> | null>(null);
 	useDndMonitor({
 		onDragStart: ({ active }) => {
 			const item = (active.data.current as GroceryDnDDrag).value;
@@ -151,22 +150,20 @@ function useOnDragEnd() {
 
 		if (!over) {
 			// they dropped on nothing... cancel any movement
-			await item
-				.update({
-					categoryId: groceriesState.draggedItemOriginalCategory,
-					sortKey: groceriesState.draggedItemOriginalSortKey,
-				})
-				.save();
+			await groceries.updateItem(item, {
+				categoryId: groceriesState.draggedItemOriginalCategory,
+				sortKey: groceriesState.draggedItemOriginalSortKey,
+			});
 		} else {
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
 				if (item.categoryId !== dropZone.value) {
-					await groceries.setItemCategory(item.id, dropZone.value);
+					await groceries.setItemCategory(item, dropZone.value);
 				}
 			} else if (dropZone.type === 'new') {
 				groceriesState.newCategoryPendingItem = valtioRef(item);
 			} else if (dropZone.type === 'delete') {
-				item.delete().save();
+				await groceries.deleteItem(item);
 			} else if (dropZone.type === 'item') {
 				const dropItem = dropZone.value;
 				let sortKey: string;
@@ -182,14 +179,12 @@ function useOnDragEnd() {
 					);
 				}
 
-				await item
-					.update({
-						sortKey,
-						// it might also move categories if the drop item
-						// is in a different category
-						categoryId: dropItem.categoryId,
-					})
-					.save();
+				await groceries.updateItem(item, {
+					sortKey,
+					// it might also move categories if the drop item
+					// is in a different category
+					categoryId: dropItem.categoryId,
+				});
 			}
 		}
 		groceriesState.draggedItemOriginalCategory = null;
@@ -219,14 +214,12 @@ function useOnDragOver() {
 				);
 			}
 
-			await item
-				.update({
-					sortKey,
-					// it might also move categories if the drop item
-					// is in a different category
-					categoryId: dropItem.categoryId,
-				})
-				.save();
+			await groceries.updateItem(item, {
+				sortKey,
+				// it might also move categories if the drop item
+				// is in a different category
+				categoryId: dropItem.categoryId,
+			});
 		}
 	}, []);
 }
@@ -235,12 +228,10 @@ function useOnDragCancel() {
 	return useCallback(({ active }: DragCancelEvent) => {
 		if (active) {
 			const dragged = active.data.current as GroceryDnDDrag;
-			dragged.value
-				.update({
-					categoryId: groceriesState.draggedItemOriginalCategory,
-					sortKey: groceriesState.draggedItemOriginalSortKey,
-				})
-				.save();
+			groceries.updateItem(dragged.value, {
+				categoryId: groceriesState.draggedItemOriginalCategory,
+				sortKey: groceriesState.draggedItemOriginalSortKey,
+			});
 		}
 	}, []);
 }

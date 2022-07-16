@@ -28,11 +28,11 @@ import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox';
 import { groceriesState } from '../state';
 import { ItemQuantityNumber } from './ItemQuantityNumber';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { RxDocument } from 'rxdb';
 
 export interface GroceryListItemProps {
 	className?: string;
-	item: GroceryItem;
+	item: RxDocument<GroceryItem>;
 	isDragActive?: boolean;
 	style?: CSSProperties;
 	menuProps?: Omit<GroceryListItemMenuProps, 'item'> & {
@@ -47,9 +47,15 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
 		const sectionStateSnap = useSnapshot(groceriesState);
-		const inputs = useLiveQuery(() => {
-			return groceries.inputs.where('itemId').equals(item.id).toArray();
-		}, [item.id]);
+		const inputs = groceries.useQuery(
+			(db) =>
+				db.inputs.find({
+					selector: {
+						itemId: item.id,
+					},
+				}),
+			[item.id],
+		);
 
 		const isPurchased = item.purchasedQuantity >= item.totalQuantity;
 		const isPartiallyPurchased = item.purchasedQuantity > 0;
@@ -65,21 +71,13 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 			? inputs[0].text
 			: `${pluralizedUnit && `${pluralizedUnit} `}${pluralizedName}`;
 
-		const updatePurchasedQuantity = useCallback(
-			async (quantity: number) => {
-				await groceries.items.update(item.id, {
-					purchasedQuantity: quantity,
-				});
-			},
-			[item],
-		);
 		const togglePurchased = useCallback(() => {
 			if (isPurchased) {
-				updatePurchasedQuantity(0);
+				groceries.setItemPurchasedQuantity(item, 0);
 			} else {
-				updatePurchasedQuantity(item.totalQuantity);
+				groceries.setItemPurchasedQuantity(item, item.totalQuantity);
 			}
-		}, [updatePurchasedQuantity, isPurchased, item]);
+		}, [isPurchased, item]);
 
 		const quantityJustChanged = useDidQuantityJustChange(item);
 
@@ -174,7 +172,7 @@ export function GroceryListItemDraggable({
 	prevSortKey,
 	...rest
 }: {
-	item: GroceryItem;
+	item: RxDocument<GroceryItem>;
 	nextSortKey: string | null;
 	prevSortKey: string | null;
 }) {
@@ -228,13 +226,13 @@ export function GroceryListItemDraggable({
 
 interface GroceryListItemMenuProps
 	extends ComponentPropsWithoutRef<typeof Button> {
-	item: GroceryItem;
+	item: RxDocument<GroceryItem>;
 }
 const GroceryListItemMenu = memo(
 	forwardRef<HTMLButtonElement, GroceryListItemMenuProps>(
 		function GroceryListItemMenu({ item, ...props }, ref) {
 			const deleteItem = async () => {
-				await groceries.items.delete(item.id);
+				await groceries.deleteItem(item);
 			};
 
 			const [menuOpen, setMenuOpen] = useState(false);

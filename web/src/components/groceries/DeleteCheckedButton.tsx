@@ -1,6 +1,5 @@
 import { Button } from '../primitives';
 import React, { forwardRef } from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { groceries } from 'stores/groceries/db';
 
 export interface DeleteCheckedButtonProps {
@@ -11,15 +10,14 @@ export const DeleteCheckedButton = forwardRef<
 	HTMLButtonElement,
 	DeleteCheckedButtonProps
 >(function DeleteCheckedButton({ ...rest }, ref) {
-	const items = useLiveQuery(() => {
-		return groceries.items
-			.filter((item) => item.purchasedQuantity >= item.totalQuantity)
-			.toArray();
-	});
+	const allItems = groceries.useQuery((db) => db.items.find());
+	const items = allItems.filter(
+		(item) => item.purchasedQuantity >= item.totalQuantity,
+	);
 
 	const deleteCompleted = async () => {
 		if (!items) return;
-		await groceries.items.bulkDelete(items.map((item) => item.id));
+		await groceries.deleteItems(items.map((item) => item.id));
 	};
 
 	const areAnyChecked = !!items?.length;

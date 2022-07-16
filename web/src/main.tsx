@@ -4,7 +4,7 @@ import GroceryList from './components/groceries/GroceryList';
 import DeleteCheckedButton from './components/groceries/DeleteCheckedButton';
 import { GroceryListAdd } from './components/groceries/GroceryListAdd';
 import { Box } from './components/primitives';
-import React, { StrictMode } from 'react';
+import React, { StrictMode, Suspense } from 'react';
 import { globalCss, css } from 'stitches.config';
 import { register } from './serviceWorkerRegistration';
 
@@ -21,24 +21,26 @@ async function main() {
 		<StrictMode>
 			<PageRoot>
 				<PageContent fullHeight noPadding flex={1}>
-					<Box
-						w="full"
-						p={4}
-						direction="column"
-						gap={2}
-						align="stretch"
-						css={{
-							position: 'sticky',
-							top: 0,
-							zIndex: 1,
-							backgroundColor: '$white',
-							mb: '$6',
-						}}
-					>
-						<GroceryListAdd />
-						<DeleteCheckedButton className={floatingButton()} />
-					</Box>
-					<GroceryList />
+					<Suspense fallback={<div>Loading...</div>}>
+						<Box
+							w="full"
+							p={4}
+							direction="column"
+							gap={2}
+							align="stretch"
+							css={{
+								position: 'sticky',
+								top: 0,
+								zIndex: 1,
+								backgroundColor: '$white',
+								mb: '$6',
+							}}
+						>
+							<GroceryListAdd />
+							<DeleteCheckedButton className={floatingButton()} />
+						</Box>
+						<GroceryList />
+					</Suspense>
 				</PageContent>
 			</PageRoot>
 		</StrictMode>,

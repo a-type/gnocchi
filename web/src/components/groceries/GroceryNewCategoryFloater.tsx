@@ -8,7 +8,6 @@ import {
 	SubmitButton,
 	TextField,
 } from 'components/primitives';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { Formik } from 'formik';
 import React, {
 	forwardRef,
@@ -21,6 +20,7 @@ import { styled } from 'stitches.config';
 import { groceries, GroceryCategory } from 'stores/groceries/db';
 import { GroceryDnDDrop } from './dndTypes';
 import { groceriesState } from './state';
+import { RxDocument } from 'rxdb';
 
 export interface GroceryNewCategoryFloaterProps {
 	className?: string;
@@ -66,7 +66,7 @@ export const GroceryNewCategoryFloater = forwardRef<
 	const handleNewCreate = useCallback(async (category: GroceryCategory) => {
 		if (groceriesState.newCategoryPendingItem) {
 			const item = groceriesState.newCategoryPendingItem;
-			await groceries.setItemCategory(item.id, category.id);
+			await groceries.setItemCategory(item, category.id);
 			groceriesState.newCategoryPendingItem = null;
 		}
 
@@ -171,14 +171,11 @@ const FloatingZone = styled('div', {
 function NewCategoryForm({
 	onDone,
 }: {
-	onDone: (category: GroceryCategory) => void;
+	onDone: (category: RxDocument<GroceryCategory>) => void;
 }) {
 	// TODO: reevaluate UX - this should probably just search all categories
 	// by the input value.
-	const categories = useLiveQuery(async () => {
-		const categories = await groceries.categories.toArray();
-		return categories;
-	});
+	const categories = groceries.useQuery((db) => db.categories.find());
 
 	return (
 		<Box direction="column" gap={2} align="stretch" w="full">

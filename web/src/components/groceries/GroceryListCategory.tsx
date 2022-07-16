@@ -3,31 +3,35 @@ import {
 	SortableContext,
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useLiveQuery } from 'dexie-react-hooks';
 import React, { memo, useMemo, useState } from 'react';
 import { keyframes, styled } from 'stitches.config';
-import { groceries, GroceryCategory } from 'stores/groceries/db';
+import { groceries, GroceryCategory, GroceryItem } from 'stores/groceries/db';
 import { useSnapshot } from 'valtio';
 import { H2 } from '../primitives';
 import { GroceryDnDDrop } from './dndTypes';
 import { GroceryListItemDraggable } from './items/GroceryListItem';
 import { groceriesState } from './state';
+import { RxDocument } from 'rxdb';
 
 export function GroceryListCategory({
 	category,
 	...rest
 }: {
-	category: GroceryCategory;
+	category: RxDocument<GroceryCategory>;
 }) {
 	const stateSnap = useSnapshot(groceriesState);
 	const animateIn = stateSnap.justCreatedCategoryId === category.id;
 
-	const items = useLiveQuery(() => {
-		return groceries.items
-			.where('categoryId')
-			.equals(category.id)
-			.sortBy('sortKey');
-	});
+	const items = groceries.useQuery<GroceryItem>(
+		(db) =>
+			db.items.find({
+				selector: {
+					categoryId: category.id,
+				},
+				sort: [{ sortKey: 'asc' }],
+			}),
+		[category.id],
+	);
 
 	const [isDragging, setIsDragging] = useState(false);
 	const [isDraggingOver, setIsDraggingOver] = useState(false);

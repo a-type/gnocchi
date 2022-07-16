@@ -1,4 +1,5 @@
-import GroceryItem from 'stores/groceries/.generated/GroceryItem';
+import { RxDocument } from 'rxdb';
+import { GroceryItem } from 'stores/groceries/db';
 
 export type GroceryDnDDrop =
 	| {
@@ -15,7 +16,7 @@ export type GroceryDnDDrop =
 
 export type GroceryDnDDrag = {
 	type: 'item';
-	value: GroceryItem;
+	value: RxDocument<GroceryItem>;
 	nextSortKey: string | null;
 	prevSortKey: string | null;
 };
