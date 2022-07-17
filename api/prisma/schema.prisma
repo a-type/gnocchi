@@ -55,6 +55,8 @@ model Plan {
   members                 Profile[]
   invitations             PlanInvitation[]
 
+  documents Document[]
+
   @@unique([stripeSubscriptionId])
   @@map("plans")
 }
@@ -72,4 +74,20 @@ model PlanInvitation {
   plan        Plan      @relation(fields: [planId], references: [id])
 
   @@map("plan_invitations")
+}
+
+model Document {
+  id          String   @id
+  firstSeenAt DateTime @default(now()) @map("first_seen_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  // TODO: support JSON field type
+  // https://github.com/prisma/prisma/issues/3786
+  collection  String
+  contents    String
+
+  planId String @map("plan_id")
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  @@index([collection, id])
+  @@map("documents")
 }

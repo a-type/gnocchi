@@ -31,7 +31,7 @@ import { GroceryListCategory } from './GroceryListCategory';
 import { GroceryListItem } from './items/GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
-import { groceries, GroceryItem } from 'stores/groceries/db';
+import { groceries, GroceryItem } from 'stores/groceries';
 import { RxDocument } from 'rxdb';
 
 export interface GroceryListProps {

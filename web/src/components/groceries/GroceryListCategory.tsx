@@ -5,7 +5,7 @@ import {
 } from '@dnd-kit/sortable';
 import React, { memo, useMemo, useState } from 'react';
 import { keyframes, styled } from 'stitches.config';
-import { groceries, GroceryCategory, GroceryItem } from 'stores/groceries/db';
+import { groceries, GroceryCategory, GroceryItem } from 'stores/groceries';
 import { useSnapshot } from 'valtio';
 import { H2 } from '../primitives';
 import { GroceryDnDDrop } from './dndTypes';

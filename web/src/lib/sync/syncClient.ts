@@ -1,4 +1,5 @@
 import { API_ORIGIN, SECURE } from 'config';
+import { clientProtocol } from '@aglio/common';
 
 export class SyncClient {
 	private me: { userId: string; name: string } | null = null;
@@ -29,7 +30,15 @@ export class SyncClient {
 		this.socket = new SyncSocketClient();
 	};
 
-	handleChange = () => {};
+	onPatch = (patch: any) => {
+		if (this.socket) {
+			this.socket.send(
+				clientProtocol.patch({
+					patch,
+				}),
+			);
+		}
+	};
 }
 
 class SyncSocketClient {
@@ -42,7 +51,11 @@ class SyncSocketClient {
 	private handleOpen = () => {
 		console.log('connected');
 		setInterval(() => {
-			this.ws.send('ping');
+			this.ws.send(
+				JSON.stringify({
+					type: 'ping',
+				}),
+			);
 		}, 1000 * 10);
 
 		this.ws.addEventListener('message', this.handleMessage);
@@ -50,6 +63,10 @@ class SyncSocketClient {
 
 	private handleMessage = (event: MessageEvent) => {
 		console.log('received: %s', event.data);
+	};
+
+	send = (message: string) => {
+		this.ws.send(message);
 	};
 }
 

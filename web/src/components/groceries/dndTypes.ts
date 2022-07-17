@@ -1,5 +1,5 @@
 import { RxDocument } from 'rxdb';
-import { GroceryItem } from 'stores/groceries/db';
+import { GroceryItem } from 'stores/groceries';
 
 export type GroceryDnDDrop =
 	| {

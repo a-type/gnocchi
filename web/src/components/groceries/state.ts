@@ -1,4 +1,4 @@
-import { GroceryItem } from 'stores/groceries/db';
+import { GroceryItem } from 'stores/groceries';
 import { proxy, ref } from 'valtio';
 import { RxDocument } from 'rxdb';
 

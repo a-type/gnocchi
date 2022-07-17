@@ -23,7 +23,7 @@ import React, {
 	useState,
 } from 'react';
 import { styled } from 'stitches.config';
-import { groceries, GroceryItem } from 'stores/groceries/db';
+import { groceries, GroceryItem } from 'stores/groceries';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox';
 import { groceriesState } from '../state';
@@ -47,15 +47,7 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
 		const sectionStateSnap = useSnapshot(groceriesState);
-		const inputs = groceries.useQuery(
-			(db) =>
-				db.inputs.find({
-					selector: {
-						itemId: item.id,
-					},
-				}),
-			[item.id],
-		);
+		const inputs = item.inputs;
 
 		const isPurchased = item.purchasedQuantity >= item.totalQuantity;
 		const isPartiallyPurchased = item.purchasedQuantity > 0;

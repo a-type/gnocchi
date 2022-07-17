@@ -2,6 +2,7 @@ import { IncomingMessage, Server } from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import { getLoginSession } from './auth';
 import { Session } from './auth/session';
+import { syncService } from './sync/syncService';
 
 async function authenticate(req: IncomingMessage): Promise<Session> {
 	const session = await getLoginSession(req);
@@ -18,8 +19,19 @@ export function attachSocketServer(server: Server) {
 	});
 
 	wss.on('connection', (ws: WebSocket, request: Request, identity: Session) => {
-		ws.on('message', (message) => {
-			console.log('received: %s', message, 'from', identity.name);
+		ws.on('message', async (message) => {
+			const messageData = message.toString('utf-8');
+			console.log('received: %s', messageData, 'from', identity.name);
+			try {
+				await syncService.handleMessage(messageData, identity);
+			} catch (err: any) {
+				console.error(err);
+				ws.send(
+					JSON.stringify({
+						error: err.message,
+					}),
+				);
+			}
 		});
 
 		ws.send('hello');

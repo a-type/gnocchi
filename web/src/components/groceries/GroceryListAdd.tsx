@@ -7,7 +7,7 @@ import {
 } from 'components/primitives';
 import { Formik, useFormikContext } from 'formik';
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
-import { groceries } from 'stores/groceries/db';
+import { groceries } from 'stores/groceries';
 
 export interface GroceryListAddProps {
 	className?: string;

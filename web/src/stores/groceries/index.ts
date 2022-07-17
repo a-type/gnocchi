@@ -15,9 +15,8 @@ import cuid from 'cuid';
 import { suspend } from 'suspend-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { generateKeyBetween } from 'fractional-indexing';
-import { syncClient } from 'lib/sync/syncClient';
-
-syncClient.handleChange();
+import 'lib/sync/syncClient';
+import 'lib/sync/syncPlugin';
 
 export const DEFAULT_CATEGORY = 'None';
 
@@ -74,33 +73,6 @@ export type FoodCategoryLookup = ExtractDocumentTypeFromTypedRxJsonSchema<
 const foodCategoryLookupSchema =
 	foodCategoryLookupSchemaLiteral as RxJsonSchema<FoodCategoryLookup>;
 
-const inputSchemaLiteral = {
-	title: 'Input schema',
-	description: 'Schema for grocery inputs',
-	version: 0,
-	keyCompression: true,
-	primaryKey: 'id',
-	type: 'object',
-	properties: {
-		id: {
-			type: 'string',
-		},
-		itemId: {
-			type: 'string',
-		},
-		text: {
-			type: 'string',
-		},
-	},
-	required: ['id', 'itemId', 'text'],
-	indexes: ['itemId'],
-} as const;
-const inputSchemaTyped = toTypedRxJsonSchema(inputSchemaLiteral);
-export type GroceryInput = ExtractDocumentTypeFromTypedRxJsonSchema<
-	typeof inputSchemaTyped
->;
-const inputSchema = inputSchemaLiteral as RxJsonSchema<GroceryInput>;
-
 const itemSchemaLiteral = {
 	title: 'Item schema',
 	description: 'Schema for grocery items',
@@ -133,6 +105,18 @@ const itemSchemaLiteral = {
 		sortKey: {
 			type: 'string',
 		},
+		inputs: {
+			type: 'array',
+			uniqueItems: true,
+			items: {
+				type: 'object',
+				properties: {
+					text: {
+						type: 'string',
+					},
+				},
+			},
+		},
 	},
 	required: [
 		'id',
@@ -143,6 +127,7 @@ const itemSchemaLiteral = {
 		'unit',
 		'food',
 		'sortKey',
+		'inputs',
 	],
 	indexes: ['categoryId', 'food'],
 } as const;
@@ -156,7 +141,6 @@ type Database = RxDatabase<{
 	categories: RxCollection<GroceryCategory>;
 	foodCategoryLookups: RxCollection<FoodCategoryLookup>;
 	items: RxCollection<GroceryItem>;
-	inputs: RxCollection<GroceryInput>;
 }>;
 
 export class GroceryListDb {
@@ -175,15 +159,13 @@ export class GroceryListDb {
 	get items() {
 		return this.ready.then((db) => db.items);
 	}
-	get inputs() {
-		return this.ready.then((db) => db.inputs);
-	}
 
 	private init = async () => {
 		const db: Database = await createRxDatabase({
 			name: 'groceries-rx',
 			storage: getRxStorageDexie(),
 		});
+
 		await db.addCollections({
 			categories: {
 				schema: categorySchema,
@@ -193,9 +175,6 @@ export class GroceryListDb {
 			},
 			items: {
 				schema: itemSchema,
-			},
-			inputs: {
-				schema: inputSchema,
 			},
 		});
 		return db;
@@ -235,7 +214,6 @@ export class GroceryListDb {
 
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
-			let itemId: string;
 			const firstMatch = await db.items
 				.findOne({
 					selector: {
@@ -244,12 +222,16 @@ export class GroceryListDb {
 				})
 				.exec();
 			if (firstMatch) {
-				itemId = firstMatch.id;
-				totalQuantity: firstMatch.totalQuantity + parsed.quantity,
-					await firstMatch.atomicPatch({});
+				await firstMatch.atomicPatch({
+					totalQuantity: firstMatch.totalQuantity + parsed.quantity,
+					inputs: [
+						...firstMatch.inputs,
+						{
+							text: line,
+						},
+					],
+				});
 			} else {
-				itemId = cuid();
-
 				const lookup = await db.foodCategoryLookups
 					.findOne({
 						selector: {
@@ -273,7 +255,7 @@ export class GroceryListDb {
 					.exec();
 
 				await db.items.insert({
-					id: itemId,
+					id: cuid(),
 					categoryId,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
@@ -281,14 +263,13 @@ export class GroceryListDb {
 					unit: parsed.unit,
 					food: parsed.food,
 					sortKey: generateKeyBetween(lastCategoryItem?.sortKey ?? null, null),
+					inputs: [
+						{
+							text: line,
+						},
+					],
 				});
 			}
-			assert(itemId);
-			await db.inputs.insert({
-				id: cuid(),
-				itemId,
-				text: line,
-			});
 		}
 	};
 

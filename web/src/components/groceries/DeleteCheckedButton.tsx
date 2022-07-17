@@ -1,6 +1,6 @@
 import { Button } from '../primitives';
 import React, { forwardRef } from 'react';
-import { groceries } from 'stores/groceries/db';
+import { groceries } from 'stores/groceries';
 
 export interface DeleteCheckedButtonProps {
 	className?: string;

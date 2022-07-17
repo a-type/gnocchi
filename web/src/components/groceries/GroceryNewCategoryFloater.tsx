@@ -17,7 +17,7 @@ import React, {
 	useState,
 } from 'react';
 import { styled } from 'stitches.config';
-import { groceries, GroceryCategory } from 'stores/groceries/db';
+import { groceries, GroceryCategory } from 'stores/groceries';
 import { GroceryDnDDrop } from './dndTypes';
 import { groceriesState } from './state';
 import { RxDocument } from 'rxdb';

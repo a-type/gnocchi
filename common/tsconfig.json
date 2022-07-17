@@ -15,12 +15,9 @@
 		"downlevelIteration": true,
 		"sourceMap": true,
 		"experimentalDecorators": true,
-		"declaration": false
+		"declaration": true,
+		"declarationMap": true,
+		"composite": true
 	},
-	"include": ["src/**/*.ts"],
-	"references": [
-		{
-			"path": "../common/tsconfig.json"
-		}
-	]
+	"include": ["src/**/*.ts"]
 }
