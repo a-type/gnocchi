@@ -1,8 +1,19 @@
-// expressjs hello world
 import express from 'express';
 import bodyParser from 'body-parser';
+import { attachSocketServer } from './socketServer';
+import { createServer } from 'http';
+import cors from 'cors';
+import apiRouter from './api';
 
 const app = express();
+const server = createServer(app);
+
+app.use(
+	cors({
+		origin: ['http://localhost:8080', 'https://aglio.gfor.rest'],
+		credentials: true,
+	}),
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -10,6 +21,10 @@ app.get('/', (req, res) => {
 	res.send('Hello World!');
 });
 
-app.listen(3001, () => {
+app.use('/api', apiRouter);
+
+server.listen(3001, () => {
 	console.log('http://localhost:3001');
 });
+
+attachSocketServer(server);

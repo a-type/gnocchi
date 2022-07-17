@@ -9,6 +9,8 @@ import { GroceryListContext } from './contexts/GroceryListContext';
 import React, { StrictMode } from 'react';
 import { globalCss, css } from 'stitches.config';
 import { register } from './serviceWorkerRegistration';
+import { SyncMenu } from 'components/sync/SyncMenu';
+import { AuthProvider } from 'contexts/AuthContext';
 
 async function main() {
 	const data = await start();
