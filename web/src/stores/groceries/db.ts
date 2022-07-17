@@ -1,4 +1,3 @@
-import Dexie, { Table } from 'dexie';
 import { assert } from 'lib/assert';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
 import {
@@ -16,6 +15,9 @@ import cuid from 'cuid';
 import { suspend } from 'suspend-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { generateKeyBetween } from 'fractional-indexing';
+import { syncClient } from 'lib/sync/syncClient';
+
+syncClient.handleChange();
 
 export const DEFAULT_CATEGORY = 'None';
 

@@ -7,6 +7,8 @@ import { Box } from './components/primitives';
 import React, { StrictMode, Suspense } from 'react';
 import { globalCss, css } from 'stitches.config';
 import { register } from './serviceWorkerRegistration';
+import { SyncMenu } from 'components/sync/SyncMenu';
+import { AuthProvider } from 'contexts/AuthContext';
 
 const floatingButton = css({
 	position: 'absolute',
@@ -19,32 +21,35 @@ function main() {
 	const root = createRoot(document.getElementById('root')!);
 	root.render(
 		<StrictMode>
-			<PageRoot>
-				<PageContent fullHeight noPadding flex={1}>
-					<Suspense fallback={<div>Loading...</div>}>
-						<Box
-							w="full"
-							p={4}
-							direction="column"
-							gap={2}
-							align="stretch"
-							css={{
-								position: 'sticky',
-								top: 0,
-								zIndex: 1,
-								backgroundColor: '$white',
-								mb: '$6',
-							}}
-						>
-							<GroceryListAdd />
-							<Suspense fallback={null}>
-								<DeleteCheckedButton className={floatingButton()} />
-							</Suspense>
-						</Box>
-						<GroceryList />
-					</Suspense>
-				</PageContent>
-			</PageRoot>
+			<AuthProvider>
+				<PageRoot>
+					<PageContent fullHeight noPadding flex={1}>
+						<Suspense fallback={<div>Loading...</div>}>
+							<Box
+								w="full"
+								p={4}
+								direction="column"
+								gap={2}
+								align="stretch"
+								css={{
+									position: 'sticky',
+									top: 0,
+									zIndex: 1,
+									backgroundColor: '$white',
+									mb: '$6',
+								}}
+							>
+								<SyncMenu />
+								<GroceryListAdd />
+								<Suspense fallback={null}>
+									<DeleteCheckedButton className={floatingButton()} />
+								</Suspense>
+							</Box>
+							<GroceryList />
+						</Suspense>
+					</PageContent>
+				</PageRoot>
+			</AuthProvider>
 		</StrictMode>,
 	);
 }
