@@ -1,1 +1,1 @@
-export { createStorage, collection } from './Storage';
+export { Storage, collection } from './Storage';

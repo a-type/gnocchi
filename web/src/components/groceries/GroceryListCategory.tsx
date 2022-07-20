@@ -5,32 +5,32 @@ import {
 } from '@dnd-kit/sortable';
 import React, { memo, useMemo, useState } from 'react';
 import { keyframes, styled } from 'stitches.config';
-import { groceries, GroceryCategory, GroceryItem } from 'stores/groceries';
+import {
+	groceries,
+	GroceryCategory,
+	GroceryItem,
+	hooks,
+} from 'stores/groceries';
 import { useSnapshot } from 'valtio';
 import { H2 } from '../primitives';
 import { GroceryDnDDrop } from './dndTypes';
 import { GroceryListItemDraggable } from './items/GroceryListItem';
 import { groceriesState } from './state';
-import { RxDocument } from 'rxdb';
 
 export function GroceryListCategory({
 	category,
 	...rest
 }: {
-	category: RxDocument<GroceryCategory>;
+	category: GroceryCategory;
 }) {
 	const stateSnap = useSnapshot(groceriesState);
 	const animateIn = stateSnap.justCreatedCategoryId === category.id;
 
-	const items = groceries.useQuery<GroceryItem>(
-		(db) =>
-			db.items.find({
-				selector: {
-					categoryId: category.id,
-				},
-				sort: [{ sortKey: 'asc' }],
-			}),
-		[category.id],
+	const { data: items } = hooks.useAllItems(
+		{
+			where: 'categoryId',
+			equals: category.id,
+		} /* TODO: Sort */,
 	);
 
 	const [isDragging, setIsDragging] = useState(false);

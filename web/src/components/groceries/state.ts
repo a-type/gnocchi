@@ -1,9 +1,8 @@
-import { GroceryItem } from 'stores/groceries';
-import { proxy, ref } from 'valtio';
-import { RxDocument } from 'rxdb';
+import { GroceryItem } from 'stores/groceries/index';
+import { proxy } from 'valtio';
 
 export const groceriesState = proxy({
-	newCategoryPendingItem: null as RxDocument<GroceryItem> | null,
+	newCategoryPendingItem: null as GroceryItem | null,
 	justCreatedCategoryId: null as any | null,
 	draggedItemOriginalCategory: null as any | null,
 	draggedItemOriginalSortKey: null as any | null,

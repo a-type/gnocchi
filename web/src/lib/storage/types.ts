@@ -145,3 +145,18 @@ export type StorageDocumentProperties<
 	Collection extends StorageCollectionSchema<any, any, any>,
 > = ShapeFromFields<Collection['schema']['fields']> &
 	ShapeFromComputeds<Collection['schema']['synthetics']>;
+
+export type CollectionIndex<
+	Collection extends StorageCollectionSchema<any, any, any>,
+> = Collection['schema']['indexes'][number];
+export type CollectionProperties<
+	Collection extends StorageCollectionSchema<any, any, any>,
+> = Collection['schema']['fields'] & Collection['schema']['synthetics'];
+
+export type CollectionIndexFilter<
+	Collection extends StorageCollectionSchema<any, any, any>,
+	Index extends CollectionIndex<Collection>,
+> = {
+	where: Index;
+	equals: ShapeFromProperty<CollectionProperties<Collection>[Index]>;
+};

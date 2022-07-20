@@ -23,16 +23,15 @@ import React, {
 	useState,
 } from 'react';
 import { styled } from 'stitches.config';
-import { groceries, GroceryItem } from 'stores/groceries';
+import { groceries, GroceryItem, hooks } from 'stores/groceries';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox';
 import { groceriesState } from '../state';
 import { ItemQuantityNumber } from './ItemQuantityNumber';
-import { RxDocument } from 'rxdb';
 
 export interface GroceryListItemProps {
 	className?: string;
-	item: RxDocument<GroceryItem>;
+	item: GroceryItem;
 	isDragActive?: boolean;
 	style?: CSSProperties;
 	menuProps?: Omit<GroceryListItemMenuProps, 'item'> & {
@@ -46,6 +45,8 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
+		hooks.useWatch(item);
+
 		const sectionStateSnap = useSnapshot(groceriesState);
 		const inputs = item.inputs;
 
@@ -164,7 +165,7 @@ export function GroceryListItemDraggable({
 	prevSortKey,
 	...rest
 }: {
-	item: RxDocument<GroceryItem>;
+	item: GroceryItem;
 	nextSortKey: string | null;
 	prevSortKey: string | null;
 }) {
@@ -177,6 +178,7 @@ export function GroceryListItemDraggable({
 		isDragging,
 		setActivatorNodeRef,
 	} = useSortable({
+		// FIXME:
 		id: item.id,
 		data: {
 			type: 'item',
@@ -218,11 +220,12 @@ export function GroceryListItemDraggable({
 
 interface GroceryListItemMenuProps
 	extends ComponentPropsWithoutRef<typeof Button> {
-	item: RxDocument<GroceryItem>;
+	item: GroceryItem;
 }
 const GroceryListItemMenu = memo(
 	forwardRef<HTMLButtonElement, GroceryListItemMenuProps>(
-		function GroceryListItemMenu({ item, ...props }, ref) {
+		function GroceryListItemMenu({ item: liveItem, ...props }, ref) {
+			const item = hooks.useWatch(liveItem);
 			const deleteItem = async () => {
 				await groceries.deleteItem(item);
 			};

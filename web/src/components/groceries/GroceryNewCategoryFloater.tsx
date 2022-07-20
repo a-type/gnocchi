@@ -17,10 +17,9 @@ import React, {
 	useState,
 } from 'react';
 import { styled } from 'stitches.config';
-import { groceries, GroceryCategory } from 'stores/groceries';
+import { groceries, GroceryCategory, hooks } from 'stores/groceries';
 import { GroceryDnDDrop } from './dndTypes';
 import { groceriesState } from './state';
-import { RxDocument } from 'rxdb';
 
 export interface GroceryNewCategoryFloaterProps {
 	className?: string;
@@ -171,11 +170,11 @@ const FloatingZone = styled('div', {
 function NewCategoryForm({
 	onDone,
 }: {
-	onDone: (category: RxDocument<GroceryCategory>) => void;
+	onDone: (category: GroceryCategory) => void;
 }) {
 	// TODO: reevaluate UX - this should probably just search all categories
 	// by the input value.
-	const categories = groceries.useQuery((db) => db.categories.find());
+	const { data: categories } = hooks.useAllCategories();
 
 	return (
 		<Box direction="column" gap={2} align="stretch" w="full">

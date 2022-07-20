@@ -1,6 +1,6 @@
-import { collection, createStorage } from './Storage';
+import { collection, Storage } from './Storage';
 
-const foo2Collection = collection({
+export const fooCollection = collection({
 	name: 'foo2',
 	historicalSchemas: [],
 	schema: {
@@ -24,7 +24,7 @@ const foo2Collection = collection({
 	},
 });
 
-const barCollection = collection({
+export const barCollection = collection({
 	name: 'bar',
 	historicalSchemas: [],
 	schema: {
@@ -41,11 +41,9 @@ const barCollection = collection({
 });
 
 async function test() {
-	const storage = await createStorage({
-		collections: {
-			foo: foo2Collection,
-			bar: barCollection,
-		},
+	const storage = new Storage({
+		foo: fooCollection,
+		bar: barCollection,
 	});
 
 	const foo = storage.get('foo');
@@ -58,11 +56,11 @@ async function test() {
 	foo.findOne('world', '1');
 
 	const bar = storage.get('bar');
-	const thing = await bar.findOne('agh', true);
-	thing.agh;
+	const thing = bar.findOne('agh', true);
+	thing.current?.agh;
 
 	// @ts-expect-error
-	thing.hello;
+	thing.current?.hello;
 
-	thing.id;
+	thing.current?.id;
 }

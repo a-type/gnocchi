@@ -1,261 +1,177 @@
+import cuid from 'cuid';
+import { generateKeyBetween } from 'fractional-indexing';
 import { assert } from 'lib/assert';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
-import {
-	toTypedRxJsonSchema,
-	ExtractDocumentTypeFromTypedRxJsonSchema,
-	createRxDatabase,
-	RxDatabase,
-	RxCollection,
-	RxJsonSchema,
-	RxDocument,
-	RxQuery,
-} from 'rxdb';
-import { getRxStorageDexie } from 'rxdb/plugins/dexie';
-import cuid from 'cuid';
-import { suspend } from 'suspend-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { generateKeyBetween } from 'fractional-indexing';
-import 'lib/sync/syncClient';
-import 'lib/sync/syncPlugin';
+import { collection } from 'lib/storage';
+import { createHooks } from 'lib/storage/hooks';
+import { storage, Storage } from 'lib/storage/Storage';
+import { StorageDocument } from 'lib/storage/types';
 
-export const DEFAULT_CATEGORY = 'None';
-
-type ID = string;
-
-const categorySchemaLiteral = {
-	title: 'Category schema',
-	description: 'Schema for grocery categories',
-	version: 0,
-	keyCompression: true,
-	primaryKey: 'id',
-	type: 'object',
-	properties: {
-		id: {
-			type: 'string',
+const categoryCollection = collection({
+	name: 'categories',
+	schema: {
+		version: 1,
+		fields: {
+			name: {
+				type: 'string',
+			},
 		},
-		name: {
-			type: 'string',
-		},
+		synthetics: {},
+		indexes: [],
+		unique: [],
 	},
-	required: ['id', 'name'],
-	indexes: ['name'],
-} as const;
-const categorySchemaTyped = toTypedRxJsonSchema(categorySchemaLiteral);
-export type GroceryCategory = ExtractDocumentTypeFromTypedRxJsonSchema<
-	typeof categorySchemaTyped
->;
-const categorySchema = categorySchemaLiteral as RxJsonSchema<GroceryCategory>;
+});
+export type GroceryCategory = StorageDocument<typeof categoryCollection>;
 
-const foodCategoryLookupSchemaLiteral = {
-	title: 'Food category lookup schema',
-	description: 'Schema for food category lookups',
-	version: 0,
-	keyCompression: true,
-	primaryKey: 'foodName',
-	type: 'object',
-	properties: {
-		foodName: {
-			type: 'string',
+const foodCategoryLookupCollection = collection({
+	name: 'foodCategoryLookups',
+	schema: {
+		version: 1,
+		fields: {
+			categoryId: {
+				type: 'string',
+			},
 		},
-		categoryId: {
-			type: 'string',
-		},
+		synthetics: {},
+		indexes: ['categoryId'],
+		unique: [],
 	},
-	required: ['foodName', 'categoryId'],
-	indexes: ['categoryId'],
-} as const;
-const foodCategoryLookupSchemaTyped = toTypedRxJsonSchema(
-	foodCategoryLookupSchemaLiteral,
-);
-export type FoodCategoryLookup = ExtractDocumentTypeFromTypedRxJsonSchema<
-	typeof foodCategoryLookupSchemaTyped
+});
+export type FoodCategoryLookup = StorageDocument<
+	typeof foodCategoryLookupCollection
 >;
-const foodCategoryLookupSchema =
-	foodCategoryLookupSchemaLiteral as RxJsonSchema<FoodCategoryLookup>;
 
-const itemSchemaLiteral = {
-	title: 'Item schema',
-	description: 'Schema for grocery items',
-	version: 0,
-	keyCompression: true,
-	primaryKey: 'id',
-	type: 'object',
-	properties: {
-		id: {
-			type: 'string',
-		},
-		categoryId: {
-			type: 'string',
-		},
-		createdAt: {
-			type: 'number',
-		},
-		totalQuantity: {
-			type: 'number',
-		},
-		purchasedQuantity: {
-			type: 'number',
-		},
-		unit: {
-			type: 'string',
-		},
-		food: {
-			type: 'string',
-		},
-		sortKey: {
-			type: 'string',
-		},
-		inputs: {
-			type: 'array',
-			uniqueItems: true,
-			items: {
-				type: 'object',
-				properties: {
-					text: {
-						type: 'string',
+const itemCollection = collection({
+	name: 'items',
+	schema: {
+		version: 1,
+		fields: {
+			categoryId: {
+				type: 'string',
+			},
+			createdAt: {
+				type: 'number',
+			},
+			totalQuantity: {
+				type: 'number',
+			},
+			purchasedQuantity: {
+				type: 'number',
+			},
+			unit: {
+				type: 'string',
+			},
+			food: {
+				type: 'string',
+			},
+			sortKey: {
+				type: 'string',
+			},
+			inputs: {
+				type: 'array',
+				items: {
+					type: 'object',
+					properties: {
+						text: {
+							type: 'string',
+						},
 					},
 				},
 			},
 		},
+		synthetics: {
+			purchased: {
+				type: '#string',
+				compute: (doc) =>
+					doc.purchasedQuantity >= doc.totalQuantity ? 'yes' : 'no',
+			},
+		},
+		indexes: ['purchased', 'categoryId', 'food'],
+		unique: [],
 	},
-	required: [
-		'id',
-		'categoryId',
-		'createdAt',
-		'totalQuantity',
-		'purchasedQuantity',
-		'unit',
-		'food',
-		'sortKey',
-		'inputs',
-	],
-	indexes: ['categoryId', 'food'],
-} as const;
-const itemSchemaTyped = toTypedRxJsonSchema(itemSchemaLiteral);
-export type GroceryItem = ExtractDocumentTypeFromTypedRxJsonSchema<
-	typeof itemSchemaTyped
->;
-const itemSchema = itemSchemaLiteral as RxJsonSchema<GroceryItem>;
+});
+export type GroceryItem = StorageDocument<typeof itemCollection>;
 
-type Database = RxDatabase<{
-	categories: RxCollection<GroceryCategory>;
-	foodCategoryLookups: RxCollection<FoodCategoryLookup>;
-	items: RxCollection<GroceryItem>;
-}>;
+const DEFAULT_CATEGORY = 'None';
 
-export class GroceryListDb {
-	ready: Promise<Database>;
+const _groceries = storage({
+	items: itemCollection,
+	categories: categoryCollection,
+	foodCategoryLookups: foodCategoryLookupCollection,
+});
 
-	constructor() {
-		this.ready = this.init();
-	}
+export const hooks = createHooks(_groceries);
+console.log(hooks);
 
-	get categories() {
-		return this.ready.then((db) => db.categories);
-	}
-	get foodCategoryLookups() {
-		return this.ready.then((db) => db.foodCategoryLookups);
-	}
-	get items() {
-		return this.ready.then((db) => db.items);
-	}
-
-	private init = async () => {
-		const db: Database = await createRxDatabase({
-			name: 'groceries-rx',
-			storage: getRxStorageDexie(),
-		});
-
-		await db.addCollections({
-			categories: {
-				schema: categorySchema,
-			},
-			foodCategoryLookups: {
-				schema: foodCategoryLookupSchema,
-			},
-			items: {
-				schema: itemSchema,
-			},
-		});
-		return db;
-	};
-
-	setItemPurchasedQuantity = async (
-		item: RxDocument<GroceryItem>,
-		quantity: number,
-	) => {
-		await item.atomicPatch({
+export const mutations = {
+	deleteItem: (item: GroceryItem) => {
+		return _groceries.get('items').delete(item.id);
+	},
+	deleteItems: (ids: string[]) => {
+		return _groceries.get('items').deleteAll(ids);
+	},
+	setItemPurchasedQuantity: (item: GroceryItem, quantity: number) => {
+		return _groceries.get('items').update(item.id, {
 			purchasedQuantity: quantity,
 		});
-	};
-
-	setItemCategory = async (item: RxDocument<GroceryItem>, categoryId: ID) => {
-		await Promise.all([
-			item.atomicPatch({
+	},
+	updateItem: (item: GroceryItem, updates: Partial<GroceryItem>) => {
+		return _groceries.get('items').update(item.id, updates);
+	},
+	setItemCategory: (item: GroceryItem, categoryId: string) => {
+		return Promise.all([
+			_groceries.get('items').update(item.id, {
 				categoryId,
 			}),
-			(async () => {
-				const db = await this.ready;
-				return db.foodCategoryLookups.upsert({
-					foodName: item.food,
-					categoryId,
-				});
-			})(),
+			_groceries.get('foodCategoryLookups').upsert({
+				id: item.food,
+				categoryId,
+			}),
 		]);
-	};
-
-	addItems = async (lines: string[]) => {
+	},
+	createCategory: (name: string) => {
+		return _groceries.get('categories').create({
+			name,
+		});
+	},
+	addItems: async (lines: string[]) => {
 		if (!lines.length) return;
-		const db = await this.ready;
-		const defaultCategory = await db.categories.upsert({
+		const defaultCategory = await _groceries.get('categories').upsert({
 			id: DEFAULT_CATEGORY,
 			name: DEFAULT_CATEGORY,
 		});
 
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
-			const firstMatch = await db.items
-				.findOne({
-					selector: {
-						food: parsed.food,
-					},
-				})
-				.exec();
+			let itemId: string;
+			const firstMatch = await _groceries
+				.get('items')
+				.findOne('food', parsed.food).resolved;
 			if (firstMatch) {
-				await firstMatch.atomicPatch({
-					totalQuantity: firstMatch.totalQuantity + parsed.quantity,
-					inputs: [
-						...firstMatch.inputs,
-						{
-							text: line,
-						},
-					],
+				itemId = firstMatch.id;
+				const totalQuantity = firstMatch.totalQuantity + parsed.quantity;
+				await _groceries.get('items').update(firstMatch.id, {
+					totalQuantity,
 				});
 			} else {
-				const lookup = await db.foodCategoryLookups
-					.findOne({
-						selector: {
-							foodName: parsed.food,
-						},
-					})
-					.exec();
+				itemId = cuid();
+
+				const lookup = await _groceries
+					.get('foodCategoryLookups')
+					.get(parsed.food).resolved;
 				const categoryId = lookup?.categoryId ?? defaultCategory.id;
 
-				const lastCategoryItem = await db.items
-					.findOne({
-						selector: {
-							categoryId,
-						},
-						sort: [
-							{
-								sortKey: 'desc',
-							},
-						],
-					})
-					.exec();
+				// TODO: findOne with a sort order applied to get just
+				// the last item
+				const categoryItems = await _groceries.get('items').getAll({
+					where: 'categoryId',
+					equals: categoryId,
+				}).resolved;
+				const lastCategoryItem = categoryItems?.sort((a, b) =>
+					a.sortKey < b.sortKey ? -1 : 1,
+				)[0];
 
-				await db.items.insert({
-					id: cuid(),
+				await _groceries.get('items').create({
 					categoryId,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
@@ -263,72 +179,13 @@ export class GroceryListDb {
 					unit: parsed.unit,
 					food: parsed.food,
 					sortKey: generateKeyBetween(lastCategoryItem?.sortKey ?? null, null),
-					inputs: [
-						{
-							text: line,
-						},
-					],
+					inputs: [],
 				});
 			}
+			assert(itemId);
 		}
-	};
+	},
+};
 
-	createCategory = async (name: string) => {
-		const db = await this.ready;
-		return db.categories.insert({
-			name,
-			id: cuid(),
-		});
-	};
-
-	deleteItem = async (item: RxDocument<GroceryItem>) => {
-		await item.remove();
-	};
-
-	deleteItems = async (itemIds: string[]) => {
-		const db = await this.ready;
-		return db.items.bulkRemove(itemIds);
-	};
-
-	updateItem = async (
-		item: RxDocument<GroceryItem>,
-		update: Partial<GroceryItem>,
-	) => {
-		await item.atomicPatch(update);
-	};
-
-	/**
-	 * A very basic useQuery hook with no loading state which
-	 * suspends.
-	 */
-	useQuery = <Result>(
-		creator: (db: Database) => RxQuery<Result, RxDocument<Result>[]>,
-		deps: any[] = [],
-	) => {
-		const db = suspend(() => this.ready, ['database']);
-		// TODO: lost in hooks dep confusion...
-		const creatorRef = useRef(creator);
-		creatorRef.current = creator;
-		const creatorCallback = useCallback(
-			(db: Database) => creatorRef.current(db),
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-			deps,
-		);
-		const query = creatorCallback(db);
-		// TODO: is this a good cache key?
-		const firstValue = suspend(() => query.exec(), [query._creationTime]);
-		const [value, setValue] = useState(firstValue);
-		useEffect(() => {
-			const sub = query.$.subscribe((result) => {
-				setValue(result);
-			});
-			return () => {
-				sub.unsubscribe();
-			};
-		}, [query]);
-
-		return value;
-	};
-}
-
-export const groceries = new GroceryListDb();
+export const groceries = Object.assign(_groceries, mutations);
+// export const groceries = _groceries;

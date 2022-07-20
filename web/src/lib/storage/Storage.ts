@@ -10,49 +10,51 @@ import {
 	StorageFieldsSchema,
 	StoragePropertyName,
 	StorageSchema,
+	CollectionIndex,
+	CollectionIndexFilter,
 } from './types';
-import { Cell } from '@starbeam/core';
 import { EventsOf, EventSubscriber } from 'lib/EventSubscriber';
+import { assert } from 'lib/assert';
 
-export async function createStorage<
+function initializeDatabases<
 	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
 >({ collections }: { collections: Schemas }) {
 	// initialize collections as indexddb databases
-	const databases = await Promise.all(
-		Object.values(collections).map(async (collection) => {
-			const { name, schema } = collection;
-			return new Promise<[string, IDBDatabase]>((resolve, reject) => {
-				const request = indexedDB.open(name, schema.version);
-				request.onupgradeneeded = async (event) => {
-					const db = request.result;
+	const keys = Object.keys(collections);
+	console.log('Initializing databases:', keys);
+	const databases = keys.map((name) => {
+		const { schema } = collections[name];
+		return new Promise<IDBDatabase>((resolve, reject) => {
+			const request = indexedDB.open(name, schema.version);
+			request.onupgradeneeded = async (event) => {
+				const db = request.result;
 
-					if (!event.oldVersion) {
-						// if previous version doesn't exist, create it
-						initializeDatabase(db, collection);
-					} else {
-						// otherwise migrate data if needed
-						await migrateDatabase(db, event.oldVersion, collection);
-					}
-				};
-				request.onerror = () => {
-					console.error('Error opening database', name, request.error);
-				};
-				request.onsuccess = () => {
-					resolve([name, request.result]);
-				};
-				request.onblocked = () => {
-					// TODO:
-				};
-			});
-		}),
-	);
+				if (!event.oldVersion) {
+					// if previous version doesn't exist, create it
+					initializeDatabase(db, collections[name]);
+				} else {
+					// otherwise migrate data if needed
+					await migrateDatabase(db, event.oldVersion, collections[name]);
+				}
+			};
+			request.onerror = () => {
+				console.error('Error opening database', name, request.error);
+			};
+			request.onsuccess = () => {
+				resolve(request.result);
+			};
+			request.onblocked = () => {
+				// TODO:
+			};
+		});
+	});
 
-	const databasesMap = databases.reduce((acc, [name, db]) => {
-		acc[name as keyof Schemas] = db;
+	const databasesMap = keys.reduce((acc, name, index) => {
+		acc[name as keyof Schemas] = databases[index];
 		return acc;
-	}, {} as Record<keyof Schemas, IDBDatabase>);
+	}, {} as Record<keyof Schemas, Promise<IDBDatabase>>);
 
-	return new Storage<Schemas>(databasesMap);
+	return databasesMap;
 }
 
 function initializeDatabase(
@@ -70,7 +72,7 @@ function initializeDatabase(
 		if (!def) {
 			throw new Error('Index not found: ' + name);
 		}
-		const unique = schema.unique.includes(name);
+		const unique = schema.unique?.includes(name);
 		objectStore.createIndex(name, name, { unique });
 	}
 }
@@ -146,7 +148,7 @@ async function migrateDatabase(
 			if (!def) {
 				throw new Error('Index not found: ' + indexName);
 			}
-			const unique = schema.unique.includes(indexName);
+			const unique = schema.unique?.includes(indexName);
 			objectStore.createIndex(indexName, indexName, { unique });
 		}
 
@@ -159,22 +161,39 @@ async function migrateDatabase(
 export class Storage<
 	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
 > {
-	// initialized in constructor
-	private collections: Record<keyof Schemas, StorageCollection<any>> =
+	private _collections: Record<keyof Schemas, StorageCollection<any>> =
 		{} as any;
 
-	constructor(databases: Record<keyof Schemas, IDBDatabase>) {
+	constructor(private collectionSchemas: Schemas) {
+		const databases = initializeDatabases({
+			collections: this.collectionSchemas,
+		});
 		for (const [name, database] of Object.entries(databases)) {
-			this.collections[name as keyof Schemas] = new StorageCollection(
-				database as IDBDatabase,
-				this.collections[name] as any,
+			this._collections[name as keyof Schemas] = new StorageCollection(
+				database,
+				this.collectionSchemas[name as keyof Schemas],
 			);
 		}
 	}
 
-	get<T extends keyof Schemas>(collection: T): StorageCollection<Schemas[T]> {
-		return this.collections[collection];
+	get<T extends keyof Schemas>(name: T): StorageCollection<Schemas[T]> {
+		const collection = this._collections[name];
+		assert(
+			!!collection,
+			'Sanity check: collection ' + collection + ' not found',
+		);
+		return collection;
 	}
+
+	get collections() {
+		return this._collections;
+	}
+}
+
+export function storage<
+	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
+>(collectionSchemas: Schemas) {
+	return new Storage(collectionSchemas);
 }
 
 type CollectionEvents<
@@ -187,49 +206,52 @@ type CollectionEvents<
 	[key: `delete:${string}`]: () => void;
 }>;
 
-class StorageCollection<
+export class StorageCollection<
 	Collection extends StorageCollectionSchema<any, any, any>,
 > {
 	private events: CollectionEvents<Collection> = new EventSubscriber();
-	private liveObjectCache: Record<
-		string,
-		LiveObject<Collection, StorageDocument<Collection>>
-	> = {};
-	constructor(private db: IDBDatabase, private collection: Collection) {}
+	private liveObjectCache: Record<string, StorageDocument<Collection>> = {};
+	constructor(
+		private db: Promise<IDBDatabase>,
+		private collection: Collection,
+	) {}
 
 	get name() {
 		return this.collection.name;
 	}
 
-	private readTransaction = () => {
-		const transaction = this.db.transaction([this.name]);
+	get initialized(): Promise<void> {
+		return this.db.then();
+	}
+
+	private readTransaction = async () => {
+		const db = await this.db;
+		const transaction = db.transaction('objects', 'readonly');
 		const store = transaction.objectStore('objects');
 		return store;
 	};
 
-	private readWriteTransaction = () => {
-		const transaction = this.db.transaction([this.name], 'readwrite');
+	private readWriteTransaction = async () => {
+		const db = await this.db;
+		const transaction = db.transaction('objects', 'readwrite');
 		const store = transaction.objectStore('objects');
 		return store;
 	};
 
 	private getLiveObject = (record: StorageDocument<Collection>) => {
 		if (!this.liveObjectCache[record.id]) {
-			const liveObject = new LiveObject<
-				Collection,
-				StorageDocument<Collection>
-			>(record);
-			this.liveObjectCache[record.id] = liveObject;
+			this.liveObjectCache[record.id] = makeLiveObject(record);
 		}
 		return this.liveObjectCache[record.id]!;
 	};
 
-	get = async (id: string) => {
+	get = (id: string) => {
 		return new LiveQuery(
 			async () => {
-				const store = this.readTransaction();
+				const store = await this.readTransaction();
 				const request = store.get(id);
 				const result = await storeRequestPromise(request);
+				if (!result) return null;
 				return this.getLiveObject(result);
 			},
 			this.events,
@@ -237,7 +259,8 @@ class StorageCollection<
 		);
 	};
 
-	findOne = async <Key extends Collection['schema']['indexes'][number]>(
+	// TODO: use index filter param, ordering
+	findOne = <Key extends CollectionIndex<Collection>>(
 		key: Key,
 		value: ShapeFromProperty<
 			GetSchemaProperty<
@@ -249,9 +272,10 @@ class StorageCollection<
 	) => {
 		return new LiveQuery(
 			async () => {
-				const store = this.readTransaction();
+				const store = await this.readTransaction();
 				const request = store.index(key).get(value as any);
 				const raw = await storeRequestPromise(request);
+				if (!raw) return null;
 				return this.getLiveObject(raw);
 			},
 			this.events,
@@ -259,17 +283,26 @@ class StorageCollection<
 		);
 	};
 
-	getAll = () => {
-		return new LiveQuery<
-			Collection,
-			LiveObject<Collection, StorageDocument<Collection>>[]
-		>(
-			() => {
-				const store = this.readTransaction();
-				const request = store.openCursor();
+	private getIndexedListRequest = (
+		store: IDBObjectStore,
+		index?: CollectionIndexFilter<Collection, any>,
+	) => {
+		if (!index) return store.openCursor();
+		const indexName = index.where;
+		// TODO: fix any typing? the value of the indexed property type
+		// is too broad, it doesn't know we don't index booleans, etc.
+		const indexValue = index.equals as any;
+		return store.index(indexName).openCursor(indexValue);
+	};
+	getAll = <Index extends CollectionIndex<Collection>>(
+		index?: CollectionIndexFilter<Collection, Index>,
+	) => {
+		return new LiveQuery<Collection, StorageDocument<Collection>[]>(
+			async () => {
+				const store = await this.readTransaction();
+				const request = this.getIndexedListRequest(store, index);
 				return new Promise((resolve, reject) => {
-					const results: LiveObject<Collection, StorageDocument<Collection>>[] =
-						[];
+					const results: StorageDocument<Collection>[] = [];
 					request.onsuccess = (event) => {
 						const cursor = request.result;
 						if (cursor) {
@@ -290,7 +323,7 @@ class StorageCollection<
 	};
 
 	update = async (id: string, data: Partial<StorageDocument<Collection>>) => {
-		const store = this.readWriteTransaction();
+		const store = await this.readWriteTransaction();
 		const getRequest = store.get(id);
 		const existing: StorageDocument<Collection> = await new Promise(
 			(resolve, reject) => {
@@ -321,14 +354,14 @@ class StorageCollection<
 		this.events.emit('update', updatedWithComputed);
 		this.events.emit(`update:${id}`, updatedWithComputed);
 		if (this.liveObjectCache[id]) {
-			this.liveObjectCache[id][LIVE_OBJECT_SET](updatedWithComputed);
+			setLiveObject(this.liveObjectCache[id], updatedWithComputed);
 		}
 
 		return this.getLiveObject(updatedWithComputed);
 	};
 
 	create = async (data: ShapeFromFields<Collection['schema']['fields']>) => {
-		const store = this.readWriteTransaction();
+		const store = await this.readWriteTransaction();
 		const obj = {
 			...data,
 			...this.computeProperties(data),
@@ -343,8 +376,27 @@ class StorageCollection<
 		return this.getLiveObject(obj);
 	};
 
+	upsert = async (
+		data: ShapeFromFields<Collection['schema']['fields']> & { id: string },
+	) => {
+		const store = await this.readWriteTransaction();
+		const existing = await storeRequestPromise(store.get(data.id));
+		const obj = {
+			...data,
+			...this.computeProperties(data),
+			id: existing?.id || cuid(),
+		};
+		const request = store.put(obj);
+
+		await storeRequestPromise(request);
+
+		this.events.emit('add', obj);
+
+		return this.getLiveObject(obj);
+	};
+
 	delete = async (id: string) => {
-		const store = this.readWriteTransaction();
+		const store = await this.readWriteTransaction();
 		const request = store.delete(id);
 
 		const result = await storeRequestPromise(request);
@@ -352,10 +404,30 @@ class StorageCollection<
 		this.events.emit('delete', id);
 		this.events.emit(`delete:${id}`);
 		if (this.liveObjectCache[id]) {
-			this.liveObjectCache[id][LIVE_OBJECT_SET](null);
+			setLiveObject(this.liveObjectCache[id], null);
 		}
 
 		return result;
+	};
+
+	deleteAll = async (ids: string[]) => {
+		const store = await this.readWriteTransaction();
+
+		const promises = new Array<Promise<any>>();
+		for (const id of ids) {
+			const request = store.delete(id);
+			promises.push(
+				storeRequestPromise(request).then(() => {
+					this.events.emit('delete', id);
+					this.events.emit(`delete:${id}`);
+					if (this.liveObjectCache[id]) {
+						setLiveObject(this.liveObjectCache[id], null);
+					}
+				}),
+			);
+		}
+
+		await Promise.all(promises);
 	};
 
 	private computeProperties = (
@@ -392,19 +464,23 @@ export function collection<
 	return input;
 }
 
-class LiveQuery<Collection extends StorageCollectionSchema<any, any, any>, T> {
+export class LiveQuery<
+	Collection extends StorageCollectionSchema<any, any, any>,
+	T,
+> {
 	private _current: T | null = null;
 	private _subscribers: Set<(value: T | null) => void> = new Set();
+	resolved: Promise<T | null>;
 
 	constructor(
 		private exec: () => Promise<T>,
 		private events: CollectionEvents<Collection>,
 		listen: EventsOf<CollectionEvents<Collection>>[],
 	) {
-		this.update();
+		this.resolved = this.update();
 		for (const event of listen) {
 			this.events.subscribe(event, () => {
-				this.update();
+				this.resolved = this.update();
 			});
 		}
 	}
@@ -416,6 +492,7 @@ class LiveQuery<Collection extends StorageCollectionSchema<any, any, any>, T> {
 	private update = async () => {
 		this._current = await this.exec();
 		this._subscribers.forEach((subscriber) => subscriber(this._current));
+		return this._current;
 	};
 
 	subscribe = (callback: (value: T | null) => void) => {
@@ -427,27 +504,54 @@ class LiveQuery<Collection extends StorageCollectionSchema<any, any, any>, T> {
 }
 
 const LIVE_OBJECT_SET = Symbol('@@live-object-set');
-class LiveObject<Collection extends StorageCollectionSchema<any, any, any>, T> {
-	private _current: T | null = null;
-	private _subscribers: Set<(value: T | null) => void> = new Set();
+const LIVE_OBJECT_SUBSCRIBE = Symbol('@@live-object-subscribe');
 
-	constructor(initial: T | null) {
-		this._current = initial;
+type LiveObject = {
+	[LIVE_OBJECT_SET]: (value: any) => void;
+	[LIVE_OBJECT_SUBSCRIBE]: (callback: (value: any) => void) => () => void;
+};
+
+export function subscribe<T extends Record<string | symbol, any>>(
+	obj: T,
+	callback: (value: T | null) => void,
+) {
+	if (!obj[LIVE_OBJECT_SUBSCRIBE]) {
+		throw new Error('Cannot subscribe to a non-live object: ' + obj);
 	}
+	return obj[LIVE_OBJECT_SUBSCRIBE](callback);
+}
 
-	get current() {
-		return this._current;
+function setLiveObject(obj: any, value: any) {
+	if (!obj[LIVE_OBJECT_SET]) {
+		throw new Error('Cannot set a non-live object');
 	}
+	obj[LIVE_OBJECT_SET](value);
+}
 
-	[LIVE_OBJECT_SET] = async (value: T | null) => {
-		this._current = value;
-		this._subscribers.forEach((subscriber) => subscriber(this._current));
-	};
-
-	subscribe = (callback: (value: T | null) => void) => {
-		this._subscribers.add(callback);
+function makeLiveObject<T extends Record<string, any>>(source: T) {
+	const ref = { current: source };
+	function setSource(value: T) {
+		ref.current = value;
+	}
+	const subscribers = new Set<(value: T) => void>();
+	function subscribe(callback: (value: T) => void) {
+		subscribers.add(callback);
 		return () => {
-			this._subscribers.delete(callback);
+			subscribers.delete(callback);
 		};
-	};
+	}
+	return new Proxy(ref, {
+		get: (target, key) => {
+			if (key === LIVE_OBJECT_SET) {
+				return setSource;
+			}
+			if (key === LIVE_OBJECT_SUBSCRIBE) {
+				return subscribe;
+			}
+			return Reflect.get(target.current, key);
+		},
+		set: (target, key, value) => {
+			throw new Error('Cannot set properties on a live object');
+		},
+	}) as unknown as T;
 }

@@ -31,8 +31,7 @@ import { GroceryListCategory } from './GroceryListCategory';
 import { GroceryListItem } from './items/GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
-import { groceries, GroceryItem } from 'stores/groceries';
-import { RxDocument } from 'rxdb';
+import { groceries, GroceryItem, hooks } from 'stores/groceries';
 
 export interface GroceryListProps {
 	className?: string;
@@ -74,7 +73,7 @@ const GroceryListCategories = forwardRef<
 	HTMLDivElement,
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
-	const categories = groceries.useQuery((db) => db.categories.find());
+	const { data: categories } = hooks.useAllCategories();
 
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
@@ -86,8 +85,7 @@ const GroceryListCategories = forwardRef<
 });
 
 function GroceryListDragOverlay() {
-	const [draggingItem, setDraggingItem] =
-		useState<RxDocument<GroceryItem> | null>(null);
+	const [draggingItem, setDraggingItem] = useState<GroceryItem | null>(null);
 	useDndMonitor({
 		onDragStart: ({ active }) => {
 			const item = (active.data.current as GroceryDnDDrag).value;
