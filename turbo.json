@@ -19,6 +19,9 @@
 		},
 		"preview": {
 			"cache": false
+		},
+		"typecheck": {
+			"inputs": ["**/*.ts", "**/*.tsx"]
 		}
 	}
 }

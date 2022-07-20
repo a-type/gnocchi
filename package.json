@@ -12,6 +12,7 @@
 		"gen": "turbo run gen",
 		"build": "turbo run build",
 		"preview": "turbo run preview",
+		"typecheck": "turbo run typecheck",
 		"prisma": "yarn workspace @aglio/api prisma"
 	},
 	"repository": "https://github.com/a-type/aglio",

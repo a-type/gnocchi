@@ -1,8 +1,8 @@
 import { computeSynthetics } from './synthetics';
-import { StorageCollectionSchema } from './types';
+import { StorageCollectionSchema, StorageFieldSchema } from './types';
 
 export function initializeDatabases<
-	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
+	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
 >({ collections }: { collections: Schemas }) {
 	// initialize collections as indexddb databases
 	const keys = Object.keys(collections);
@@ -44,7 +44,7 @@ export function initializeDatabases<
 
 function initializeDatabase(
 	db: IDBDatabase,
-	{ name, schema }: StorageCollectionSchema<any, any, any>,
+	{ name, schema }: StorageCollectionSchema<any, any>,
 ) {
 	// create the object store
 	const objectStore = db.createObjectStore('objects', {
@@ -52,12 +52,11 @@ function initializeDatabase(
 		autoIncrement: false,
 	});
 
-	for (const name of schema.indexes) {
-		const def = schema.fields[name] || schema.synthetics[name];
-		if (!def) {
-			throw new Error('Index not found: ' + name);
-		}
-		const unique = schema.unique?.includes(name);
+	for (const [name, def] of Object.entries(schema.fields)) {
+		// primary key is already taken care of.
+		if (name === schema.primaryKey) continue;
+
+		const unique = (def as any).unique;
 		objectStore.createIndex(name, name, { unique });
 	}
 }
@@ -65,7 +64,7 @@ function initializeDatabase(
 async function migrateDatabase(
 	db: IDBDatabase,
 	oldVersion: number,
-	{ schema, historicalSchemas }: StorageCollectionSchema<any, any, any>,
+	{ schema, historicalSchemas }: StorageCollectionSchema<any, any>,
 ) {
 	if (!historicalSchemas) {
 		throw new Error('No historical schemas for migration');
@@ -133,7 +132,7 @@ async function migrateDatabase(
 			if (!def) {
 				throw new Error('Index not found: ' + indexName);
 			}
-			const unique = schema.unique?.includes(indexName);
+			const unique = def.unique;
 			objectStore.createIndex(indexName, indexName, { unique });
 		}
 

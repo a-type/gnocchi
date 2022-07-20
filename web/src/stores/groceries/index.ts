@@ -7,7 +7,7 @@ import { createHooks } from 'lib/storage/hooks';
 import { storage } from 'lib/storage/Storage';
 import { StorageDocument } from 'lib/storage/types';
 
-const categoryCollection = collection({
+export const categoryCollection = collection({
 	name: 'categories',
 	schema: {
 		version: 1,
@@ -15,19 +15,21 @@ const categoryCollection = collection({
 		fields: {
 			id: {
 				type: 'string',
+				indexed: true,
+				unique: true,
 			},
 			name: {
 				type: 'string',
+				indexed: false,
+				unique: false,
 			},
 		},
 		synthetics: {},
-		indexes: [],
-		unique: ['id'],
 	},
 });
 export type GroceryCategory = StorageDocument<typeof categoryCollection>;
 
-const foodCategoryLookupCollection = collection({
+export const foodCategoryLookupCollection = collection({
 	name: 'foodCategoryLookups',
 	schema: {
 		version: 1,
@@ -35,21 +37,23 @@ const foodCategoryLookupCollection = collection({
 		fields: {
 			foodName: {
 				type: 'string',
+				indexed: true,
+				unique: true,
 			},
 			categoryId: {
 				type: 'string',
+				indexed: true,
+				unique: false,
 			},
 		},
 		synthetics: {},
-		indexes: ['categoryId'],
-		unique: ['foodName'],
 	},
 });
 export type FoodCategoryLookup = StorageDocument<
 	typeof foodCategoryLookupCollection
 >;
 
-const itemCollection = collection({
+export const itemCollection = collection({
 	name: 'items',
 	schema: {
 		version: 1,
@@ -57,27 +61,43 @@ const itemCollection = collection({
 		fields: {
 			id: {
 				type: 'string',
+				indexed: true,
+				unique: true,
 			},
 			categoryId: {
 				type: 'string',
+				indexed: true,
+				unique: false,
 			},
 			createdAt: {
 				type: 'number',
+				indexed: false,
+				unique: false,
 			},
 			totalQuantity: {
 				type: 'number',
+				indexed: false,
+				unique: false,
 			},
 			purchasedQuantity: {
 				type: 'number',
+				indexed: false,
+				unique: false,
 			},
 			unit: {
 				type: 'string',
+				indexed: false,
+				unique: false,
 			},
 			food: {
 				type: 'string',
+				indexed: true,
+				unique: false,
 			},
 			sortKey: {
 				type: 'string',
+				indexed: false,
+				unique: false,
 			},
 			inputs: {
 				type: 'array',
@@ -86,6 +106,8 @@ const itemCollection = collection({
 					properties: {
 						text: {
 							type: 'string',
+							indexed: false,
+							unique: false,
 						},
 					},
 				},
@@ -94,12 +116,12 @@ const itemCollection = collection({
 		synthetics: {
 			purchased: {
 				type: '#string',
+				indexed: true,
+				unique: false,
 				compute: (doc) =>
 					doc.purchasedQuantity >= doc.totalQuantity ? 'yes' : 'no',
 			},
 		},
-		indexes: ['purchased', 'categoryId', 'food'],
-		unique: ['id'],
 	},
 });
 export type GroceryItem = StorageDocument<typeof itemCollection>;
@@ -113,7 +135,6 @@ const _groceries = storage({
 });
 
 export const hooks = createHooks(_groceries);
-console.log(hooks);
 
 export const mutations = {
 	deleteItem: (item: GroceryItem) => {
@@ -157,9 +178,11 @@ export const mutations = {
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
 			let itemId: string;
-			const firstMatch = await _groceries
-				.get('items')
-				.findOne('food', parsed.food).resolved;
+			const items = _groceries.get('items');
+			const firstMatch = await _groceries.get('items').findOne({
+				where: 'food',
+				equals: parsed.food,
+			}).resolved;
 			if (firstMatch) {
 				itemId = firstMatch.id;
 				const totalQuantity = firstMatch.totalQuantity + parsed.quantity;

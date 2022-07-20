@@ -8,7 +8,8 @@
 		"build": "webpack --config webpack.prod.js",
 		"preview": "node ./previewServer.js",
 		"gen": "yarn gen:groceries",
-		"gen:groceries": "aphro gen src/stores/groceries/domain.aphro -d src/stores/groceries/.generated"
+		"gen:groceries": "aphro gen src/stores/groceries/domain.aphro -d src/stores/groceries/.generated",
+		"typecheck": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@aglio/common": "^0.0.1",

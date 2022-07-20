@@ -16,7 +16,7 @@ type QueryHookResult<T> = {
 
 type CollectionHooks<
 	Name extends string,
-	Schema extends StorageCollectionSchema<any, any, any>,
+	Schema extends StorageCollectionSchema<any, any>,
 > = {
 	[key in Name as `use${Capitalize<Name>}`]: (
 		id: string,
@@ -39,7 +39,7 @@ type Flatten<T extends Record<string, any>> = T extends Record<string, infer V>
 	: never;
 
 type GeneratedHooks<
-	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
+	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
 > = Flatten<{
 	[CollectionName in Extract<keyof Schemas, string>]: CollectionHooks<
 		CollectionName,
@@ -48,7 +48,7 @@ type GeneratedHooks<
 }>;
 
 function useLiveQuery<
-	CollectionSchema extends StorageCollectionSchema<any, any, any>,
+	CollectionSchema extends StorageCollectionSchema<any, any>,
 	T,
 >(liveQuery: LiveQuery<CollectionSchema, T>) {
 	return useSyncExternalStore(liveQuery.subscribe, () => liveQuery.current);
@@ -59,11 +59,11 @@ function capitalize<T extends string>(str: T) {
 }
 
 type CapitalizedCollectionName<
-	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
+	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
 > = Capitalize<Extract<keyof Schemas, string>>;
 
 export function createHooks<
-	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
+	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
 >(
 	storage: Storage<Schemas>,
 ): GeneratedHooks<Schemas> & {

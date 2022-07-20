@@ -1,5 +1,3 @@
-import cuid from 'cuid';
-import { assert } from 'lib/assert';
 import { EventSubscriber } from 'lib/EventSubscriber';
 import { makeLiveObject, setLiveObject } from './LiveObject';
 import { LiveQuery } from './LiveQuery';
@@ -8,19 +6,15 @@ import {
 	CollectionEvents,
 	CollectionIndex,
 	CollectionIndexFilter,
-	GetSchemaProperty,
 	ShapeFromFields,
-	ShapeFromProperty,
 	StorageCollectionSchema,
 	StorageDocument,
 	StorageFieldsSchema,
-	StorageIndexablePropertyName,
-	StoragePropertyName,
 	StorageSyntheticsSchema,
 } from './types';
 
 export class StorageCollection<
-	Collection extends StorageCollectionSchema<any, any, any>,
+	Collection extends StorageCollectionSchema<any, any>,
 > {
 	private events: CollectionEvents<Collection> = new EventSubscriber();
 	private liveObjectCache: Record<
@@ -80,21 +74,14 @@ export class StorageCollection<
 		);
 	};
 
-	// TODO: use index filter param, ordering
-	findOne = <Key extends CollectionIndex<Collection>>(
-		key: Key,
-		value: ShapeFromProperty<
-			GetSchemaProperty<
-				Collection['schema']['fields'],
-				Collection['schema']['synthetics'],
-				Key
-			>
-		>,
+	// TODO: ordering
+	findOne = (
+		filter: CollectionIndexFilter<Collection, CollectionIndex<Collection>>,
 	) => {
 		return new LiveQuery(
 			async () => {
 				const store = await this.readTransaction();
-				const request = store.index(key).get(value as any);
+				const request = store.index(filter.where).get(filter.equals as any);
 				const raw = await storeRequestPromise(request);
 				if (!raw) return null;
 				return this.getLiveObject(raw);
@@ -106,7 +93,7 @@ export class StorageCollection<
 
 	private getIndexedListRequest = (
 		store: IDBObjectStore,
-		index?: CollectionIndexFilter<Collection, any>,
+		index?: CollectionIndexFilter<Collection, CollectionIndex<Collection>>,
 	) => {
 		if (!index) return store.openCursor();
 		const indexName = index.where;
@@ -267,7 +254,6 @@ function storeRequestPromise<T>(request: IDBRequest<T>) {
 export function collection<
 	Fields extends StorageFieldsSchema,
 	Computeds extends StorageSyntheticsSchema<Fields>,
-	Indexes extends StoragePropertyName<Fields, Computeds>[],
->(input: StorageCollectionSchema<Fields, Computeds, Indexes>) {
+>(input: StorageCollectionSchema<Fields, Computeds>) {
 	return input;
 }

@@ -2,7 +2,7 @@ import type { EventsOf } from 'lib/EventSubscriber';
 import { CollectionEvents, StorageCollectionSchema } from './types';
 
 export class LiveQuery<
-	Collection extends StorageCollectionSchema<any, any, any>,
+	Collection extends StorageCollectionSchema<any, any>,
 	T,
 > {
 	private _current: T | null = null;

@@ -4,7 +4,7 @@ import { StorageCollection } from './StorageCollection';
 import { StorageCollectionSchema } from './types';
 
 export class Storage<
-	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
+	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
 > {
 	private _collections: Record<keyof Schemas, StorageCollection<any>> =
 		{} as any;
@@ -36,7 +36,7 @@ export class Storage<
 }
 
 export function storage<
-	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
+	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
 >(collectionSchemas: Schemas) {
 	return new Storage(collectionSchemas);
 }
