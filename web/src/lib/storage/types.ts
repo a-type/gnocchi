@@ -1,3 +1,5 @@
+import type { EventSubscriber } from 'lib/EventSubscriber';
+
 export type StorageStringFieldSchema = {
 	type: 'string';
 };
@@ -55,6 +57,36 @@ export type StoragePropertyName<
 	| Exclude<keyof Fields, number | symbol>
 	| Exclude<keyof Computeds, number | symbol>;
 
+export type StorageIndexableFields<Fields extends StorageFieldsSchema> = {
+	[K in keyof Fields]: Fields[K]['type'] extends 'string' | 'number'
+		? K
+		: never;
+};
+
+export type StorageIndexableSynthetics<
+	Fields extends StorageFieldsSchema,
+	Synthetics extends StorageSyntheticsSchema<Fields>,
+> = {
+	[K in keyof Synthetics]: Synthetics[K]['type'] extends '#string' | '#number'
+		? K
+		: never;
+};
+
+export type StorageIndexablePropertyName<
+	Fields extends StorageFieldsSchema,
+	Computeds extends StorageSyntheticsSchema<Fields>,
+> =
+	| Extract<keyof StorageIndexableFields<Fields>, string>
+	| Extract<keyof StorageIndexableSynthetics<Fields, Computeds>, string>;
+
+export type OnlyIndexablePropertyNames<
+	Fields extends StorageFieldsSchema,
+	Synthetics extends StorageSyntheticsSchema<Fields>,
+	Name extends string,
+> = Name extends StorageIndexablePropertyName<Fields, Synthetics>
+	? Name
+	: never;
+
 export type StoragePropertiesSchema<BaseFields extends StorageFieldsSchema> =
 	BaseFields & StorageComputedSchema<BaseFields>;
 
@@ -110,20 +142,21 @@ export type StorageSchema<
 	synthetics: Synthetics;
 	indexes: Indexes;
 	unique: readonly StoragePropertyName<Fields, Synthetics>[];
+	primaryKey: StorageIndexablePropertyName<Fields, Synthetics>;
 	migrate?: (oldData: any) => ShapeFromFields<Fields>;
 };
 
 export interface StorageCollectionSchema<
 	Fields extends StorageFieldsSchema,
-	Computeds extends StorageSyntheticsSchema<Fields> = StorageSyntheticsSchema<Fields>,
+	Synthetics extends StorageSyntheticsSchema<Fields> = StorageSyntheticsSchema<Fields>,
 	Indexes extends StoragePropertyName<
 		Fields,
-		Computeds
-	>[] = StoragePropertyName<Fields, Computeds>[],
+		Synthetics
+	>[] = StoragePropertyName<Fields, Synthetics>[],
 > {
 	name: string;
 	historicalSchemas?: StorageSchema<any, any, any>[];
-	schema: StorageSchema<Fields, Computeds, Indexes>;
+	schema: StorageSchema<Fields, Synthetics, Indexes>;
 }
 
 export interface StorageInit<
@@ -139,7 +172,7 @@ export type NamedSchema<
 
 export type StorageDocument<
 	Collection extends StorageCollectionSchema<any, any, any>,
-> = { id: string } & StorageDocumentProperties<Collection>;
+> = StorageDocumentProperties<Collection>;
 
 export type StorageDocumentProperties<
 	Collection extends StorageCollectionSchema<any, any, any>,
@@ -160,3 +193,13 @@ export type CollectionIndexFilter<
 	where: Index;
 	equals: ShapeFromProperty<CollectionProperties<Collection>[Index]>;
 };
+
+export type CollectionEvents<
+	Collection extends StorageCollectionSchema<any, any, any>,
+> = EventSubscriber<{
+	add: (value: StorageDocument<Collection>) => void;
+	update: (value: StorageDocument<Collection>) => void;
+	delete: (id: string) => void;
+	[key: `update:${string}`]: (value: StorageDocument<Collection>) => void;
+	[key: `delete:${string}`]: () => void;
+}>;

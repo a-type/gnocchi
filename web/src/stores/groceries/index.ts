@@ -4,21 +4,25 @@ import { assert } from 'lib/assert';
 import { parseIngredient } from 'lib/conversion/parseIngredient';
 import { collection } from 'lib/storage';
 import { createHooks } from 'lib/storage/hooks';
-import { storage, Storage } from 'lib/storage/Storage';
+import { storage } from 'lib/storage/Storage';
 import { StorageDocument } from 'lib/storage/types';
 
 const categoryCollection = collection({
 	name: 'categories',
 	schema: {
 		version: 1,
+		primaryKey: 'id',
 		fields: {
+			id: {
+				type: 'string',
+			},
 			name: {
 				type: 'string',
 			},
 		},
 		synthetics: {},
 		indexes: [],
-		unique: [],
+		unique: ['id'],
 	},
 });
 export type GroceryCategory = StorageDocument<typeof categoryCollection>;
@@ -27,14 +31,18 @@ const foodCategoryLookupCollection = collection({
 	name: 'foodCategoryLookups',
 	schema: {
 		version: 1,
+		primaryKey: 'foodName',
 		fields: {
+			foodName: {
+				type: 'string',
+			},
 			categoryId: {
 				type: 'string',
 			},
 		},
 		synthetics: {},
 		indexes: ['categoryId'],
-		unique: [],
+		unique: ['foodName'],
 	},
 });
 export type FoodCategoryLookup = StorageDocument<
@@ -45,7 +53,11 @@ const itemCollection = collection({
 	name: 'items',
 	schema: {
 		version: 1,
+		primaryKey: 'id',
 		fields: {
+			id: {
+				type: 'string',
+			},
 			categoryId: {
 				type: 'string',
 			},
@@ -87,7 +99,7 @@ const itemCollection = collection({
 			},
 		},
 		indexes: ['purchased', 'categoryId', 'food'],
-		unique: [],
+		unique: ['id'],
 	},
 });
 export type GroceryItem = StorageDocument<typeof itemCollection>;
@@ -124,13 +136,14 @@ export const mutations = {
 				categoryId,
 			}),
 			_groceries.get('foodCategoryLookups').upsert({
-				id: item.food,
+				foodName: item.food,
 				categoryId,
 			}),
 		]);
 	},
 	createCategory: (name: string) => {
 		return _groceries.get('categories').create({
+			id: cuid(),
 			name,
 		});
 	},
@@ -172,6 +185,7 @@ export const mutations = {
 				)[0];
 
 				await _groceries.get('items').create({
+					id: cuid(),
 					categoryId,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,

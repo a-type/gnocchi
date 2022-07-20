@@ -1,7 +1,6 @@
 import { useMemo, useRef, useSyncExternalStore } from 'react';
 import { suspend } from 'suspend-react';
-import { LiveQuery, Storage, subscribe } from './Storage';
-import { barCollection, fooCollection } from './test';
+import { LiveQuery, Storage, subscribe } from '.';
 import {
 	CollectionIndex,
 	CollectionIndexFilter,
