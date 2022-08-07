@@ -174,6 +174,8 @@ const ItemContainer = styled('div', {
 	},
 });
 
+const touchActionNoneStyle = { touchAction: 'none' };
+
 export function GroceryListItemDraggable({
 	item,
 	nextSortKey,
@@ -206,6 +208,7 @@ export function GroceryListItemDraggable({
 		() => ({
 			...listeners,
 			...attributes,
+			style: touchActionNoneStyle,
 			ref: setActivatorNodeRef,
 		}),
 		[listeners, attributes, setActivatorNodeRef],
@@ -216,7 +219,6 @@ export function GroceryListItemDraggable({
 		() => ({
 			transform: transformString,
 			opacity: isDragging ? 0.2 : 1,
-			touchAction: 'none',
 		}),
 		[isDragging, transformString],
 	);
