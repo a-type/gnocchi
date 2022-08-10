@@ -3,8 +3,12 @@
 	"version": "1.0.0",
 	"private": true,
 	"workspaces": [
-		"web",
-		"api"
+		"apps/web",
+		"apps/api",
+		"packages/conversion",
+		"packages/data",
+		"packages/tools",
+		"packages/wc2"
 	],
 	"scripts": {
 		"dev": "turbo run dev",
@@ -15,6 +19,19 @@
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",
 	"devDependencies": {
-		"turbo": "^1.3.1"
+		"@types/jest": "27.4.1",
+		"@types/node": "16.11.7",
+		"@typescript-eslint/eslint-plugin": "^5.29.0",
+		"@typescript-eslint/parser": "^5.29.0",
+		"babel-jest": "27.5.1",
+		"cypress": "^10.2.0",
+		"eslint": "~8.15.0",
+		"eslint-config-prettier": "8.1.0",
+		"eslint-plugin-cypress": "^2.10.3",
+		"jest": "27.5.1",
+		"ts-jest": "27.1.4",
+		"ts-node": "~10.8.0",
+		"turbo": "^1.3.1",
+		"typescript": "^4.7.4"
 	}
 }
