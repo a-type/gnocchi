@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "es2017",
+		"lib": ["dom", "esnext"],
+		"outDir": "./dist",
+		"allowJs": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"esModuleInterop": true,
+		"module": "es2022",
+		"moduleResolution": "node16",
+		"resolveJsonModule": true,
+		"jsx": "preserve",
+		"downlevelIteration": true,
+		"sourceMap": true,
+		"experimentalDecorators": true,
+		"declaration": true,
+		"declarationMap": true
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.mts", "./typings"],
+	"exclude": ["node_modules", "../node_modules", "./dist"]
+}

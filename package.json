@@ -9,7 +9,8 @@
 		"packages/conversion",
 		"packages/data",
 		"packages/tools",
-		"packages/wc2"
+		"packages/wc2",
+		"packages/storage"
 	],
 	"scripts": {
 		"dev": "turbo run dev",
