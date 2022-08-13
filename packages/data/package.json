@@ -15,6 +15,7 @@
 		"gen": "yarn aphro gen src/lib/domain.aphro -d src/lib/domain"
 	},
 	"dependencies": {
+		"@aglio/conversion": "^0.0.1",
 		"@aglio/tools": "^0.0.1",
 		"@aphro/absurd-sql": "^0.0.53",
 		"@aphro/absurd-sql-connector": "^0.2.1",
