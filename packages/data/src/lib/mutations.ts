@@ -2,15 +2,15 @@ import { commit, Context, P, SID_of } from '@aphro/runtime-ts';
 import { generateKeyBetween } from 'fractional-indexing';
 import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
-import GroceryCategory from './domain/GroceryCategory';
-import GroceryCategoryMutations from './domain/generated/GroceryCategoryMutations';
-import GroceryFoodCategoryLookup from './domain/GroceryFoodCategoryLookup';
-import GroceryFoodCategoryLookupMutations from './domain/generated/GroceryFoodCategoryLookupMutations';
-import GroceryInputMutations from './domain/generated/GroceryInputMutations';
-import GroceryItem from './domain/GroceryItem';
-import GroceryItemMutations from './domain/generated/GroceryItemMutations';
-import GroceryList from './domain/GroceryList';
-import { EMPTY_CATEGORY_NAME } from './constants';
+import GroceryCategory from './domain/GroceryCategory.js';
+import GroceryCategoryMutations from './domain/generated/GroceryCategoryMutations.js';
+import GroceryFoodCategoryLookup from './domain/GroceryFoodCategoryLookup.js';
+import GroceryFoodCategoryLookupMutations from './domain/generated/GroceryFoodCategoryLookupMutations.js';
+import GroceryInputMutations from './domain/generated/GroceryInputMutations.js';
+import GroceryItem from './domain/GroceryItem.js';
+import GroceryItemMutations from './domain/generated/GroceryItemMutations.js';
+import GroceryList from './domain/GroceryList.js';
+import { EMPTY_CATEGORY_NAME } from './constants.js';
 
 export async function setItemCategory(
 	ctx: Context,
@@ -21,17 +21,17 @@ export async function setItemCategory(
 	const existing = await GroceryFoodCategoryLookup.gen(ctx, item.name as any);
 
 	return commit(ctx, [
-		GroceryItemMutations.setCategory(item, {
+		...GroceryItemMutations.setCategory(item, {
 			categoryId,
-		}).toChangeset(),
-		!existing
+		}).toChangesets(),
+		...(!existing
 			? GroceryFoodCategoryLookupMutations.create(ctx, {
 					id: item.name as any,
 					categoryId,
-			  }).toChangeset()
+			  }).toChangesets()
 			: GroceryFoodCategoryLookupMutations.setCategory(existing, {
 					categoryId,
-			  }).toChangeset(),
+			  }).toChangesets()),
 	]);
 }
 
@@ -69,13 +69,13 @@ export async function addItems(
 		if (match) {
 			// add the quantity to the existing item
 			commit(ctx, [
-				GroceryItemMutations.setTotalQuantity(match, {
+				...GroceryItemMutations.setTotalQuantity(match, {
 					totalQuantity: match.totalQuantity + parsed.quantity,
-				}).toChangeset(),
-				GroceryInputMutations.create(ctx, {
+				}).toChangesets(),
+				...GroceryInputMutations.create(ctx, {
 					itemId: match.id,
 					text: line,
-				}).toChangeset(),
+				}).toChangesets(),
 			]);
 		} else {
 			// lookup the category

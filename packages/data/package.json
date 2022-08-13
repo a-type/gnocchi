@@ -4,11 +4,13 @@
 	"private": true,
 	"main": "./dist/index.js",
 	"typings": "./dist/index.d.ts",
+	"type": "module",
 	"files": [
 		"dist"
 	],
 	"scripts": {
 		"build": "tsc",
+		"postbuild": "node ./scripts/copySql.js",
 		"dev": "tsc --watch",
 		"gen": "yarn aphro gen src/lib/domain.aphro -d src/lib/domain"
 	},
@@ -16,9 +18,10 @@
 		"@aglio/tools": "^0.0.1",
 		"@aphro/absurd-sql": "^0.0.53",
 		"@aphro/absurd-sql-connector": "^0.2.1",
-		"@aphro/runtime-ts": "^0.3.2"
+		"@aphro/runtime-ts": "^0.3.4"
 	},
 	"devDependencies": {
-		"@aphro/codegen-cli": "^0.3.2"
+		"@aphro/codegen-cli": "^0.3.5",
+		"cpy": "^9.0.1"
 	}
 }

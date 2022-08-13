@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <0800ebcd67681647a0298bd74c02e11a>
+// SIGNED-SOURCE: <ee43084f28e4f20561ecebec99cc1535>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -45,12 +45,14 @@ export default class GroceryListQuery extends DerivedQuery<GroceryList> {
 
   whereId(p: Predicate<Data["id"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"id", Data, GroceryList>("id"), p)
     );
   }
 
   whereName(p: Predicate<Data["name"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"name", Data, GroceryList>("name"), p)
     );
   }

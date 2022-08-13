@@ -342,3 +342,26 @@ export function from<In extends AnyReactive | ListOfReactives, Out>(
 export function unwrap<T extends AnyReactive>(value: T): UnwrappedReactive<T> {
 	return value[REF].current;
 }
+
+export function view<In>(
+	subscribe: (cb: () => void) => void | (() => void),
+	snapshot: () => In,
+) {
+	const rValue = reactive(snapshot());
+	const cleanup = subscribe(() => {
+		rValue[ASSIGN](snapshot());
+	});
+	// TODO: what with cleanup?
+	return rValue;
+}
+
+export function map<In extends object, Out>(
+	input: ReactiveObject<In>,
+	process: (value: In) => Out,
+) {
+	const rValue = reactive(process(unwrap(input) as In));
+	subscribe(input, () => {
+		rValue[ASSIGN](process(unwrap(input) as In));
+	});
+	return rValue;
+}

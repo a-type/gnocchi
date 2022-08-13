@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <3ace469997315292c1ace9d607de1f5d>
+// SIGNED-SOURCE: <55c8f24d2301ee3d78580b5432a09286>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -44,18 +44,21 @@ export default class GroceryInputQuery extends DerivedQuery<GroceryInput> {
 
   whereId(p: Predicate<Data["id"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"id", Data, GroceryInput>("id"), p)
     );
   }
 
   whereItemId(p: Predicate<Data["itemId"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"itemId", Data, GroceryInput>("itemId"), p)
     );
   }
 
   whereText(p: Predicate<Data["text"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"text", Data, GroceryInput>("text"), p)
     );
   }

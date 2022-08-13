@@ -29,8 +29,6 @@
 		"@types/jest": "^28.1.4",
 		"@types/pluralize": "^0.0.29",
 		"dotenv": "^16.0.1",
-		"eslint": "8.18.0",
-		"eslint-config-next": "12.2.0",
 		"html-webpack-plugin": "^5.5.0",
 		"raw-loader": "^4.0.2",
 		"resolve-typescript-plugin": "^1.2.0",

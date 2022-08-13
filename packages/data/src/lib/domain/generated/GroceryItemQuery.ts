@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <c2efad754887c7e4803fada490c93e39>
+// SIGNED-SOURCE: <a75a02972a65168d7a2fbb73ee709249>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -47,18 +47,21 @@ export default class GroceryItemQuery extends DerivedQuery<GroceryItem> {
 
   whereId(p: Predicate<Data["id"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"id", Data, GroceryItem>("id"), p)
     );
   }
 
   whereListId(p: Predicate<Data["listId"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"listId", Data, GroceryItem>("listId"), p)
     );
   }
 
   whereCategoryId(p: Predicate<Data["categoryId"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(
         new ModelFieldGetter<"categoryId", Data, GroceryItem>("categoryId"),
         p
@@ -68,6 +71,7 @@ export default class GroceryItemQuery extends DerivedQuery<GroceryItem> {
 
   whereCreatedAt(p: Predicate<Data["createdAt"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(
         new ModelFieldGetter<"createdAt", Data, GroceryItem>("createdAt"),
         p
@@ -77,6 +81,7 @@ export default class GroceryItemQuery extends DerivedQuery<GroceryItem> {
 
   whereTotalQuantity(p: Predicate<Data["totalQuantity"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(
         new ModelFieldGetter<"totalQuantity", Data, GroceryItem>(
           "totalQuantity"
@@ -88,6 +93,7 @@ export default class GroceryItemQuery extends DerivedQuery<GroceryItem> {
 
   wherePurchasedQuantity(p: Predicate<Data["purchasedQuantity"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(
         new ModelFieldGetter<"purchasedQuantity", Data, GroceryItem>(
           "purchasedQuantity"
@@ -99,18 +105,21 @@ export default class GroceryItemQuery extends DerivedQuery<GroceryItem> {
 
   whereUnit(p: Predicate<Data["unit"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"unit", Data, GroceryItem>("unit"), p)
     );
   }
 
   whereName(p: Predicate<Data["name"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"name", Data, GroceryItem>("name"), p)
     );
   }
 
   whereSortKey(p: Predicate<Data["sortKey"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(new ModelFieldGetter<"sortKey", Data, GroceryItem>("sortKey"), p)
     );
   }

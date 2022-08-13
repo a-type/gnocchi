@@ -17,6 +17,7 @@ export default merge(common, {
 		},
 		allowedHosts: 'all',
 		hot: true,
+		port: 8081,
 		headers: {
 			'Cross-Origin-Opener-Policy': 'same-origin',
 			'Cross-Origin-Embedder-Policy': 'require-corp',

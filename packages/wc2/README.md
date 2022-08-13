@@ -1,14 +1,34 @@
-# wc2
+# notes
 
-This library was generated with [Nx](https://nx.dev).
+## What needs to be reactive?
 
+- The props object itself does not (this is not React - components will not be re-rendered with different props)
+- Individual props do, if you want them to change and update the UI
 
-## Running unit tests
+## Rendering UI
 
-Run `nx test wc2` to execute the unit tests via [Jest](https://jestjs.io).
+Basic: non-reactive. Elements are just appended to parents.
 
+```ts
+natives.div({
+	children: natives.span({
+		children: 'Hello World',
+	}),
+});
+```
 
-## Running lint
+Reactive: map a reactive value to an element to dynamically change content.
 
-Run `nx lint wc2` to execute the lint via [ESLint](https://eslint.org/).
+```ts
+const loading = reactive(false);
+natives.div({
+	children: map(loading, (isLoading) => {
+		if (isLoading) return 'Loading...';
+		return natives.span({
+			children: 'Hello World',
+		});
+	}),
+});
+```
 
+### Lists of elements

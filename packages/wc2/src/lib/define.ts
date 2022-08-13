@@ -29,7 +29,7 @@ type Tools = {
 type CreatorFn<Props extends Record<any, any>> = (
 	props: ReactiveObject<Props>,
 	tools: Tools,
-) => CleanupFn | void;
+) => CleanupFn | Promise<CleanupFn> | void | Promise<void>;
 
 export class ReactiveComponent<
 	Props extends Record<any, any>,
@@ -43,7 +43,7 @@ export class ReactiveComponent<
 		this.shadow = this.shadowRoot || this.attachShadow({ mode: 'open' });
 	}
 
-	initialize = () => {
+	initialize = async () => {
 		const self = this;
 
 		function doCleanup(cleanup: CleanupFn | Disposable<any>) {
@@ -60,7 +60,7 @@ export class ReactiveComponent<
 			return node;
 		}
 
-		const uncreate = this._creator(this.getProps(), {
+		const uncreate = await this._creator(this.getProps(), {
 			cleanup: (fn: CleanupFn) => {
 				this._cleanups.push(fn);
 			},

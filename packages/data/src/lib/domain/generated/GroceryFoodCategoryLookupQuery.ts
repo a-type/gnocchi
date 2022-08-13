@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <a8facad64323b2615b1254ba0f7f648d>
+// SIGNED-SOURCE: <e4dd7e509d28087092cfdf6a5ecc49f1>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -44,6 +44,7 @@ export default class GroceryFoodCategoryLookupQuery extends DerivedQuery<Grocery
 
   whereId(p: Predicate<Data["id"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(
         new ModelFieldGetter<"id", Data, GroceryFoodCategoryLookup>("id"),
         p
@@ -53,6 +54,7 @@ export default class GroceryFoodCategoryLookupQuery extends DerivedQuery<Grocery
 
   whereCategoryId(p: Predicate<Data["categoryId"]>) {
     return this.derive(
+      // @ts-ignore #43
       filter(
         new ModelFieldGetter<"categoryId", Data, GroceryFoodCategoryLookup>(
           "categoryId"

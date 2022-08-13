@@ -1,7 +1,7 @@
-export { default as GroceryList } from './lib/.generated/GroceryList';
-export { default as GroceryItem } from './lib/.generated/GroceryItem';
-export { default as GroceryInput } from './lib/.generated/GroceryInput';
-export { default as GroceryCategory } from './lib/.generated/GroceryCategory';
+export { default as GroceryList } from './lib/domain/GroceryList.js';
+export { default as GroceryItem } from './lib/domain/GroceryItem.js';
+export { default as GroceryInput } from './lib/domain/GroceryInput.js';
+export { default as GroceryCategory } from './lib/domain/GroceryCategory.js';
 
-export * from './lib/index';
-export * as mutations from './lib/mutations';
+export * from './lib/index.js';
+export * as mutations from './lib/mutations.js';
