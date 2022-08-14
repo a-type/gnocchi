@@ -44,10 +44,10 @@
   dependencies:
     "@aphro/schema-api" "0.2.4"
 
-"@aphro/codegen-cli@^0.3.7":
-  version "0.3.7"
-  resolved "https://registry.yarnpkg.com/@aphro/codegen-cli/-/codegen-cli-0.3.7.tgz#e64cc56497aec270e46a3e589af54d6ecee0157d"
-  integrity sha512-NO1B3bYY7Ykm7dEywAhxeLprMzDrJtT0q00WoarD881/RGs1UoDEq867QIGFlFZqFPe6+rlJBkb/BVyJQ75gjw==
+"@aphro/codegen-cli@^0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@aphro/codegen-cli/-/codegen-cli-0.3.8.tgz#87a53e34e546a1988873ef349a36a4bde4710784"
+  integrity sha512-j/YnX3pVhKcS5aLUTaMRO4afJXpREM3N9dziziYnJHm3wo/WbPgRHJHszgRP/WQpj3280tcNvUXDr5HS7/yuwg==
   dependencies:
     "@aphro/codegen" "0.2.6"
     "@aphro/codegen-api" "0.2.4"
@@ -55,7 +55,7 @@
     "@aphro/codegen-ts" "0.4.0"
     "@aphro/graphql-codegen" "0.2.7"
     "@aphro/graphql-grammar" "0.2.6"
-    "@aphro/mutation-codegen" "0.4.0"
+    "@aphro/mutation-codegen" "0.4.1"
     "@aphro/mutation-grammar" "0.3.0"
     "@aphro/schema" "0.3.0"
     "@aphro/schema-api" "0.2.4"
@@ -179,10 +179,10 @@
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
 
-"@aphro/mutation-codegen@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@aphro/mutation-codegen/-/mutation-codegen-0.4.0.tgz#5dcb1c379e7e99627b8a9622db242855ae16875b"
-  integrity sha512-ldcY8pS+n6CI4CUQGoNAQ+Nncr6ytrQJteuh214VTcWByrfbPpMdc02XSqxKr9sMnsC2GRO3Q00ZeSuChi0a/w==
+"@aphro/mutation-codegen@0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@aphro/mutation-codegen/-/mutation-codegen-0.4.1.tgz#e18a292910af0400a46707c1e2c8bbddab4f42bb"
+  integrity sha512-3ww32EDsE5sED+j2OxaeFDT26NMZgHpcNifbyHakcBGvlZ9tIBxxmoJhFnvkJ9wwV+PwKxzN8crSuS3LYVmtRg==
   dependencies:
     "@aphro/codegen" "0.2.6"
     "@aphro/codegen-api" "0.2.4"
@@ -239,10 +239,10 @@
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
 
-"@aphro/react@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@aphro/react/-/react-1.2.0.tgz#2c69dc5fc8a4d6ac1c08b1759cd6c5410b4f3a99"
-  integrity sha512-pwiuNXS7NIyMyaP3bS2A++uD/mMlGgQRZuVjGT3JuVopiwgJ1FnW/YxiwL93/zPFteA4F4ZWMb6RMRKQjm2lmQ==
+"@aphro/react@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@aphro/react/-/react-1.2.1.tgz#27f0e20630045c50ebd3834751f137270384aafc"
+  integrity sha512-2jHvbVxo5vhiOP3MhEVYPB3RWWWUWgWJ/Kc0qHWyfMbL10aoR7Oqqs2appd8bcCAEj113RJUhpycLjfZ8iqO/g==
   dependencies:
     "@strut/counter" "^0.0.11"
     suspend-react "^0.0.8"

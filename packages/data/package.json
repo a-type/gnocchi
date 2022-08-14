@@ -22,7 +22,7 @@
 		"@aphro/runtime-ts": "^0.3.6"
 	},
 	"devDependencies": {
-		"@aphro/codegen-cli": "^0.3.7",
+		"@aphro/codegen-cli": "^0.3.8",
 		"cpy": "^9.0.1"
 	}
 }
