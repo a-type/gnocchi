@@ -150,9 +150,11 @@ function useOnDragEnd() {
 
 		if (!over) {
 			// they dropped on nothing... cancel any movement
-			await item
-				.update({
+			await item.mutations
+				.setCategory({
 					categoryId: groceriesState.draggedItemOriginalCategory,
+				})
+				.setSortKey({
 					sortKey: groceriesState.draggedItemOriginalSortKey,
 				})
 				.save();
@@ -181,9 +183,9 @@ function useOnDragEnd() {
 					);
 				}
 
-				await item
-					.update({
-						sortKey,
+				await item.mutations
+					.setSortKey({ sortKey })
+					.setCategory({
 						// it might also move categories if the drop item
 						// is in a different category
 						categoryId: dropItem.categoryId,
@@ -218,9 +220,11 @@ function useOnDragOver() {
 				);
 			}
 
-			await item
-				.update({
+			await item.mutations
+				.setSortKey({
 					sortKey,
+				})
+				.setCategory({
 					// it might also move categories if the drop item
 					// is in a different category
 					categoryId: dropItem.categoryId,
@@ -234,10 +238,12 @@ function useOnDragCancel() {
 	return useCallback(({ active }: DragCancelEvent) => {
 		if (active) {
 			const dragged = active.data.current as GroceryDnDDrag;
-			dragged.value
-				.update({
-					categoryId: groceriesState.draggedItemOriginalCategory,
+			dragged.value.mutations
+				.setSortKey({
 					sortKey: groceriesState.draggedItemOriginalSortKey,
+				})
+				.setCategory({
+					categoryId: groceriesState.draggedItemOriginalCategory,
 				})
 				.save();
 		}
