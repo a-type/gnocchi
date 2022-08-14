@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <52b0a235a47f844ac74895c6dbed174c>
+// SIGNED-SOURCE: <d273627d73b7e9717c8af6d262e288dc>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -7,7 +7,7 @@ import * as impls from "../GroceryCategoryMutationsImpl.js";
 import { ICreateOrUpdateBuilder } from "@aphro/runtime-ts";
 import { Context } from "@aphro/runtime-ts";
 import { MutationsBase } from "@aphro/runtime-ts";
-import GroceryCategory from "../GroceryCategory.js";
+import type GroceryCategory from "../GroceryCategory.js";
 import { default as spec } from "./GroceryCategorySpec.js";
 import { Data } from "./GroceryCategoryBase.js";
 import { UpdateMutationBuilder } from "@aphro/runtime-ts";
@@ -20,7 +20,8 @@ export type CreateArgs = { name: string };
 class Mutations extends MutationsBase<GroceryCategory, Data> {
   constructor(
     ctx: Context,
-    mutator: ICreateOrUpdateBuilder<GroceryCategory, Data>
+    mutator: ICreateOrUpdateBuilder<GroceryCategory, Data>,
+    private model?: GroceryCategory
   ) {
     super(ctx, mutator);
   }
@@ -32,10 +33,16 @@ class Mutations extends MutationsBase<GroceryCategory, Data> {
   }
 }
 
-export default class GroceryCategoryMutations {
-  static create(ctx: Context, args: CreateArgs): Mutations {
+const staticMutations = {
+  create(ctx: Context, args: CreateArgs): Mutations {
     return new Mutations(ctx, new CreateMutationBuilder(ctx, spec)).create(
       args
     );
-  }
+  },
+};
+
+export default staticMutations;
+
+export class InstancedMutations {
+  constructor(private model: GroceryCategory) {}
 }

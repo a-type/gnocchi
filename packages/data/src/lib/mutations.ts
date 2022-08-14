@@ -21,17 +21,21 @@ export async function setItemCategory(
 	const existing = await GroceryFoodCategoryLookup.gen(ctx, item.name as any);
 
 	return commit(ctx, [
-		...GroceryItemMutations.setCategory(item, {
-			categoryId,
-		}).toChangesets(),
+		...item.mutations
+			.setCategory({
+				categoryId,
+			})
+			.toChangesets(),
 		...(!existing
 			? GroceryFoodCategoryLookupMutations.create(ctx, {
 					id: item.name as any,
 					categoryId,
 			  }).toChangesets()
-			: GroceryFoodCategoryLookupMutations.setCategory(existing, {
-					categoryId,
-			  }).toChangesets()),
+			: existing.mutations
+					.setCategory({
+						categoryId,
+					})
+					.toChangesets()),
 	]);
 }
 
@@ -69,9 +73,11 @@ export async function addItems(
 		if (match) {
 			// add the quantity to the existing item
 			commit(ctx, [
-				...GroceryItemMutations.setTotalQuantity(match, {
-					totalQuantity: match.totalQuantity + parsed.quantity,
-				}).toChangesets(),
+				...match.mutations
+					.setTotalQuantity({
+						totalQuantity: match.totalQuantity + parsed.quantity,
+					})
+					.toChangesets(),
 				...GroceryInputMutations.create(ctx, {
 					itemId: match.id,
 					text: line,

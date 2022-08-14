@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <91553f90fbd818d6cf5a8bdb2286e90e>
+// SIGNED-SOURCE: <4a91d37e9ab06e8ec9b23f2add58439c>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -18,6 +18,11 @@ import GroceryListQuery from "./GroceryListQuery.js";
 import { Context } from "@aphro/runtime-ts";
 import GroceryItemQuery from "./GroceryItemQuery.js";
 import GroceryItem from "../GroceryItem.js";
+import GroceryListMutations from "./GroceryListMutations.js";
+import { InstancedMutations } from "./GroceryListMutations.js";
+
+declare type Muts = typeof GroceryListMutations;
+declare type IMuts = InstancedMutations;
 
 export type Data = {
   id: SID_of<GroceryList>;
@@ -27,6 +32,14 @@ export type Data = {
 // @Sealed(GroceryList)
 export default abstract class GroceryListBase extends Node<Data> {
   readonly spec = s as unknown as NodeSpecWithCreate<this, Data>;
+
+  static get mutations(): Muts {
+    return GroceryListMutations;
+  }
+
+  get mutations(): IMuts {
+    return new InstancedMutations(this as any);
+  }
 
   get id(): SID_of<this> {
     return this.data.id as unknown as SID_of<this>;
@@ -67,13 +80,6 @@ export default abstract class GroceryListBase extends Node<Data> {
       new UpdateMutationBuilder(this.ctx, this.spec, this)
         .set(data)
         .toChangesets()[0]
-    );
-  }
-
-  static create(ctx: Context, data: Partial<Data>) {
-    return makeSavable(
-      ctx,
-      new CreateMutationBuilder(ctx, s).set(data).toChangesets()[0]
     );
   }
 

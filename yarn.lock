@@ -10,15 +10,14 @@
     "@jridgewell/gen-mapping" "^0.1.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@aphro/absurd-sql-connector@^0.2.1":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/absurd-sql-connector/-/absurd-sql-connector-0.2.3.tgz#7cc6b7985a90f01f42ddb2d3891524d25e571a1a"
-  integrity sha512-5IFuLI4iWfNbxsX8qwYq+a1ANgdUe9JJ8HIOfDoCZabun8dSbz7tWq+uyJl/cVhKW3yQ3cyMlI9HighahQ4wjg==
+"@aphro/absurd-sql-connector@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@aphro/absurd-sql-connector/-/absurd-sql-connector-0.3.0.tgz#097a1f23088bf808c066ef12eca271578c54896d"
+  integrity sha512-C9IG1dikMdy/lxg9A2QcGxIfIE/O1kKdUEKNpsvrNkxpwcQEtWlv0B1zLi77/K2Dm2mSzUql7Ts4Z0jbmqNcsQ==
   dependencies:
     "@aphro/absurd-sql" "^0.0.53"
-    "@aphro/context-runtime-ts" "0.3.3"
-    "@aphro/instrument" "0.0.3"
-    "@aphro/sql-ts" "0.2.3"
+    "@aphro/instrument" "0.0.4"
+    "@aphro/runtime-ts" "0.3.6"
     "@aphro/sql.js" "^1.7.0"
     "@opentelemetry/api" "^1.1.0"
     "@strut/counter" "^0.0.11"
@@ -30,14 +29,6 @@
   dependencies:
     safari-14-idb-fix "^1.0.4"
 
-"@aphro/cache-runtime-ts@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/cache-runtime-ts/-/cache-runtime-ts-0.2.3.tgz#46051fcdf4978fa2867d22af662c089cb8615308"
-  integrity sha512-Y8A93GFO2DrcDNgn89s7KYY/WIEID/MGTIpJfaB1aWAp8S0UG+tWtisjl5TOau+zBrMTScopN9bP666Z0CNTnw==
-  dependencies:
-    "@strut/sid" "^0.1.2"
-    "@strut/utils" "^0.1.1"
-
 "@aphro/cache-runtime-ts@0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@aphro/cache-runtime-ts/-/cache-runtime-ts-0.2.4.tgz#e63fc7eb366efaa3b77acce1d29c4c2cb09094f1"
@@ -46,28 +37,28 @@
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
 
-"@aphro/codegen-api@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/codegen-api/-/codegen-api-0.2.3.tgz#61485a56a411812b18c985de3f486c82556da4bd"
-  integrity sha512-4tdPV4g1rmOPKNAl1gFEMruOxdRXxmXQrLiEh8EOidePCpO+axk1i9RaEsCMvsrRtO0Ig2VlkVb1mmtYk77QxA==
+"@aphro/codegen-api@0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@aphro/codegen-api/-/codegen-api-0.2.4.tgz#9775edbc3255929f602c3e2182f62c1c68961049"
+  integrity sha512-uD7Fcg9ZMNS6NU5SF8pASi+EFNlXYywLVcRnPllfgzp/xHovBLlJRkkcbnc5Dn/xxL4j2x/kO/aYUCOKQngyig==
   dependencies:
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/schema-api" "0.2.4"
 
-"@aphro/codegen-cli@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@aphro/codegen-cli/-/codegen-cli-0.3.5.tgz#dc233f687a8bf09795e789d3d00d3010e220bacc"
-  integrity sha512-wMaHyGZtsv13gSlMfd1r4diSmmUULCjFXuI4LV4sWJDiEB+0dL7S8nIjvAkYiyYTfOQm27SlyZoXtKl0lBDt5Q==
+"@aphro/codegen-cli@^0.3.7":
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/@aphro/codegen-cli/-/codegen-cli-0.3.7.tgz#e64cc56497aec270e46a3e589af54d6ecee0157d"
+  integrity sha512-NO1B3bYY7Ykm7dEywAhxeLprMzDrJtT0q00WoarD881/RGs1UoDEq867QIGFlFZqFPe6+rlJBkb/BVyJQ75gjw==
   dependencies:
-    "@aphro/codegen" "0.2.4"
-    "@aphro/codegen-api" "0.2.3"
-    "@aphro/codegen-sql" "0.2.4"
-    "@aphro/codegen-ts" "0.3.5"
-    "@aphro/graphql-codegen" "0.2.5"
-    "@aphro/graphql-grammar" "0.2.4"
-    "@aphro/mutation-codegen" "0.3.5"
-    "@aphro/mutation-grammar" "0.2.4"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/codegen" "0.2.6"
+    "@aphro/codegen-api" "0.2.4"
+    "@aphro/codegen-sql" "0.2.6"
+    "@aphro/codegen-ts" "0.4.0"
+    "@aphro/graphql-codegen" "0.2.7"
+    "@aphro/graphql-grammar" "0.2.6"
+    "@aphro/mutation-codegen" "0.4.0"
+    "@aphro/mutation-grammar" "0.3.0"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
     "@strut/counter" "^0.0.11"
     "@strut/utils" "^0.1.1"
     chalk "^5.0.1"
@@ -76,59 +67,47 @@
     md5 "^2.3.0"
     prettier "^2.5.1"
 
-"@aphro/codegen-sql@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@aphro/codegen-sql/-/codegen-sql-0.2.4.tgz#a85e895a561390bcb3ead60af458c305da86b361"
-  integrity sha512-a5J9Qz1p8A3jIP/PUiiIZwE9oYEjJS5LxAtzJYBWu/LKljkNr3adx749JvFu0eSUpXQEK5dAKpsjEn4k5m6eLQ==
+"@aphro/codegen-sql@0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@aphro/codegen-sql/-/codegen-sql-0.2.6.tgz#eacf83c474dc72709fc631fd45a63b3261a3a87b"
+  integrity sha512-vRCCoUY+WResDNL0RmhVlH3Lg9caxWu43Zgw8BlNtIg7sLNAwWI4960ZXcwQGBKBighEm8fuUItgzIRcJbghVA==
   dependencies:
-    "@aphro/codegen" "0.2.4"
-    "@aphro/codegen-api" "0.2.3"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
-    "@aphro/sql-ts" "0.2.3"
+    "@aphro/codegen" "0.2.6"
+    "@aphro/codegen-api" "0.2.4"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
+    "@aphro/sql-ts" "0.2.4"
     "@strut/counter" "^0.0.11"
     "@strut/utils" "^0.1.1"
     "@types/node" "^17.0.31"
     sql-formatter "6.1.1"
 
-"@aphro/codegen-ts@0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@aphro/codegen-ts/-/codegen-ts-0.3.5.tgz#8ab6e59f7a5db52b93680938cdfe6a44812ccdc2"
-  integrity sha512-7PCj5ykygLnx4xlULNNmLiafzoppuoS/6Hh2sxfUo4ryCZehkZZbnBfwW/+mZSCTvXY0wkuUF9iQc6xAM+tkDw==
+"@aphro/codegen-ts@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@aphro/codegen-ts/-/codegen-ts-0.4.0.tgz#545bcc58fb261e9a35ff042a42e69df1d598cda0"
+  integrity sha512-yLcNRAW5F+Kt4f4EounDqO6njxOzAUvBYNQ4H48mNxWEWkQEkyt5d3QDRrQk42Mkfq5+Me3d+D/tT08MGer9vg==
   dependencies:
-    "@aphro/codegen" "0.2.4"
-    "@aphro/codegen-api" "0.2.3"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/codegen" "0.2.6"
+    "@aphro/codegen-api" "0.2.4"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
     "@strut/counter" "^0.0.11"
     "@strut/utils" "^0.1.1"
     md5 "^2.3.0"
     prettier "^2.5.1"
 
-"@aphro/codegen@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@aphro/codegen/-/codegen-0.2.4.tgz#c8ab548aed9c9bbaba7fca1ce2c10a30e57fcc8f"
-  integrity sha512-riDdcjmWYJxePjvyQDrG/ibbIsoYk42j0dVHGSnI03cjXDI7L+U35hRMGoOB6qYdv93pPLrLGz0YOX0jeuiKSw==
+"@aphro/codegen@0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@aphro/codegen/-/codegen-0.2.6.tgz#7cde2a4c10c0338f1d7531f83871056e8c23ab28"
+  integrity sha512-8ILzxxaceP6O/mEULd2msDTFQZWNAhgNKqdzySTMqJiyVxTqQRvHXUYqftLeiusVzbtLTI/851L6eMMCQZxpjw==
   dependencies:
-    "@aphro/codegen-api" "0.2.3"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/codegen-api" "0.2.4"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
     "@strut/counter" "^0.0.11"
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
     md5 "^2.3.0"
-
-"@aphro/context-runtime-ts@0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@aphro/context-runtime-ts/-/context-runtime-ts-0.3.3.tgz#be3946418161ffdf8c1e5b0d5628e2ec1f07d1d5"
-  integrity sha512-ZcQOR7CK49RWHts5CJPMtWMRvRacdEt4f1lV5SI9Bf4zs4CZJrs2q1ZxqfnIUiNF2ZCIkHeOzmjAiZPBcQ3DAA==
-  dependencies:
-    "@aphro/cache-runtime-ts" "0.2.3"
-    "@aphro/schema-api" "0.2.3"
-    "@aphro/sql-ts" "0.2.3"
-    "@strut/events" "^0.0.10"
-    "@strut/sid" "^0.1.2"
-    "@strut/utils" "^0.1.1"
 
 "@aphro/context-runtime-ts@0.3.4":
   version "0.3.4"
@@ -142,42 +121,35 @@
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
 
-"@aphro/grammar-extension-api@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/grammar-extension-api/-/grammar-extension-api-0.2.3.tgz#e01aa0d3ce4000bec00b6b18b9a6abc6ac807a62"
-  integrity sha512-jhj7yQcIHuqC3LW4y6wCy5qRZUaK+24AVfJI5Uz9Rl4ZGkG2aSusk04bGd3WPTVEHnIO67i3YJgyCkONTbrefQ==
+"@aphro/grammar-extension-api@0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@aphro/grammar-extension-api/-/grammar-extension-api-0.2.4.tgz#fccc7580966ea4068a4949e61c035d430b2c2de8"
+  integrity sha512-YP0BQe0GXbdAjckU6NY500eo1zbMC8C1bF02/RM4EyTlhfW6thtMrsCP8T8VckdZ7mPw7m149atpenaX5weLNw==
   dependencies:
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/schema-api" "0.2.4"
     ohm-js "^16.3.4"
 
-"@aphro/graphql-codegen@0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@aphro/graphql-codegen/-/graphql-codegen-0.2.5.tgz#bbe1faad145324b4addbb3d798a92863fa44600b"
-  integrity sha512-XxVzC0HlcUDhtCCG4C5VdMybYJ9u6pRpaHkoyeYolOeY/qe7D5VQqwFbZ/QcWod51nV3JKMXn4NY291ASOeh6w==
+"@aphro/graphql-codegen@0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@aphro/graphql-codegen/-/graphql-codegen-0.2.7.tgz#d97e19eae4926d251448da4f64a52adc3d5deab4"
+  integrity sha512-+eRSeT4WqJ01URfsMvRUDhcwCnkBFkNWoChU5F/Bk1FRYg6iiyay8hgSZnPeU/fuaf8+oAhcYe3OOw50IEOCHg==
   dependencies:
-    "@aphro/codegen" "0.2.4"
-    "@aphro/codegen-api" "0.2.3"
-    "@aphro/codegen-ts" "0.3.5"
-    "@aphro/graphql-grammar" "0.2.4"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/codegen" "0.2.6"
+    "@aphro/codegen-api" "0.2.4"
+    "@aphro/codegen-ts" "0.4.0"
+    "@aphro/graphql-grammar" "0.2.6"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
     "@strut/utils" "^0.1.1"
 
-"@aphro/graphql-grammar@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@aphro/graphql-grammar/-/graphql-grammar-0.2.4.tgz#bb963721c72ad0b6497e47fdaef489f5c0edcc14"
-  integrity sha512-sW1uy16ByN+ItYTWUNXPyMXF7ygQyZ8z63zS13yJsxHm29XxGdZYq/xiVoB9DdnGnxPRBPJ0ATlswniPE2YnPA==
+"@aphro/graphql-grammar@0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@aphro/graphql-grammar/-/graphql-grammar-0.2.6.tgz#319a3bcc3a2d852d23899fa16318f01aa4f9eefd"
+  integrity sha512-Dfaf/+xoPfs1/A64aiI60YRS2/GAIGCd9Bc1MRhOx6e3HtB9r0WW45vTtIoKxU33LhTYcn/QSP4TgQepurqvtg==
   dependencies:
-    "@aphro/grammar-extension-api" "0.2.3"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
-
-"@aphro/instrument@0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@aphro/instrument/-/instrument-0.0.3.tgz#3c67daf31eacb74838e659bdb8bff8f98c0699c3"
-  integrity sha512-O453gbDrlDY+Yz8VAWbdwHATan1lvFjsIwGTaI9vrarCnSZ3w3TN1Gc7xUF/C5yZv6gkAap6u+v+fSwsHz0/ig==
-  dependencies:
-    "@opentelemetry/api" "^1.1.0"
+    "@aphro/grammar-extension-api" "0.2.4"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
 
 "@aphro/instrument@0.0.4":
   version "0.0.4"
@@ -186,15 +158,6 @@
   dependencies:
     "@opentelemetry/api" "^1.1.0"
 
-"@aphro/migration-runtime-ts@0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@aphro/migration-runtime-ts/-/migration-runtime-ts-0.1.4.tgz#bbcb2b7a14508160ee251e926dbbca1376d46259"
-  integrity sha512-40a+Az8mBtMUwIdcXSORcSEuPwEwD73wuaYt+dTqmr0bnRlhMupyTsE1/ElKMYbWDDTOqZ96XlYQjp8f3Le0Ag==
-  dependencies:
-    "@aphro/context-runtime-ts" "0.3.3"
-    "@aphro/sql-ts" "0.2.3"
-    "@strut/utils" "^0.1.1"
-
 "@aphro/migration-runtime-ts@0.1.5":
   version "0.1.5"
   resolved "https://registry.yarnpkg.com/@aphro/migration-runtime-ts/-/migration-runtime-ts-0.1.5.tgz#36d6bec1c702ec1d483146d9a8f25706a2da999e"
@@ -202,18 +165,6 @@
   dependencies:
     "@aphro/context-runtime-ts" "0.3.4"
     "@aphro/sql-ts" "0.2.4"
-    "@strut/utils" "^0.1.1"
-
-"@aphro/model-runtime-ts@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/model-runtime-ts/-/model-runtime-ts-0.2.3.tgz#706cf5dbb0fc46d232a7c23c46c5c2448138a4a9"
-  integrity sha512-WHBpwfhTnSThbjp1kRc+sn+mo8Rlc5GfrG9EGmJqh0Vz0np+G+A5bPkqYcSCr/QYG1EIiGKNAfuxPS36BgY6/A==
-  dependencies:
-    "@aphro/context-runtime-ts" "0.3.3"
-    "@aphro/schema-api" "0.2.3"
-    "@strut/counter" "^0.0.11"
-    "@strut/events" "^0.0.10"
-    "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
 
 "@aphro/model-runtime-ts@0.2.4":
@@ -228,47 +179,34 @@
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
 
-"@aphro/mutation-codegen@0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@aphro/mutation-codegen/-/mutation-codegen-0.3.5.tgz#fcbc23a10f6282a2c9147f183a28c6ed65eb484d"
-  integrity sha512-VjAZ0jzdX8RnuzF9VaWnCkSinVHrmWiz4atg7BkAWEpuzzH1GUETBAJP3wRtvMTut52ZUMiaKn9g1V8C2o5JEg==
+"@aphro/mutation-codegen@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@aphro/mutation-codegen/-/mutation-codegen-0.4.0.tgz#5dcb1c379e7e99627b8a9622db242855ae16875b"
+  integrity sha512-ldcY8pS+n6CI4CUQGoNAQ+Nncr6ytrQJteuh214VTcWByrfbPpMdc02XSqxKr9sMnsC2GRO3Q00ZeSuChi0a/w==
   dependencies:
-    "@aphro/codegen" "0.2.4"
-    "@aphro/codegen-api" "0.2.3"
-    "@aphro/codegen-ts" "0.3.5"
-    "@aphro/mutation-grammar" "0.2.4"
-    "@aphro/parse-ts" "0.2.3"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/codegen" "0.2.6"
+    "@aphro/codegen-api" "0.2.4"
+    "@aphro/codegen-ts" "0.4.0"
+    "@aphro/mutation-grammar" "0.3.0"
+    "@aphro/parse-ts" "0.2.4"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
     "@strut/utils" "^0.1.1"
     "@types/node" "^17.0.31"
 
-"@aphro/mutation-grammar@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@aphro/mutation-grammar/-/mutation-grammar-0.2.4.tgz#797022b95d32b80dbbd006c87b2f6e076e079bf9"
-  integrity sha512-s4epnhfIz2jFXJAyntudU49pDY4Y9WAZPfpVZMJpCLbflOy/YlPn9hel9xh1xM43GOtMLtE6ZPu7h7DU/KSoFQ==
+"@aphro/mutation-grammar@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@aphro/mutation-grammar/-/mutation-grammar-0.3.0.tgz#ffddca659a32fa04b8e1c96891abb021c6ca9270"
+  integrity sha512-XKSB/cwZtHNFiDS0vC/CeVFMHRgS1Tg/J2aTlRn0s/7EE41HDNmneFoP+SVTS8GLkw16c7iHHSAtGJV09Thnig==
   dependencies:
-    "@aphro/grammar-extension-api" "0.2.3"
-    "@aphro/schema" "0.2.4"
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/grammar-extension-api" "0.2.4"
+    "@aphro/schema" "0.3.0"
+    "@aphro/schema-api" "0.2.4"
 
-"@aphro/mutator-runtime-ts@0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@aphro/mutator-runtime-ts/-/mutator-runtime-ts-0.3.4.tgz#b911e374d9940ec434c0352bc0a1ac96bbd78cce"
-  integrity sha512-V9Pzv8PrWO8IKPJWw4QXxsdgaNTA22L+RuFzwMofbM4LPnhxKdUF04lJt7WrhfbtqbiwPg8VVd5JarcEWUNBRA==
-  dependencies:
-    "@aphro/context-runtime-ts" "0.3.3"
-    "@aphro/model-runtime-ts" "0.2.3"
-    "@aphro/schema-api" "0.2.3"
-    "@aphro/sql-ts" "0.2.3"
-    "@strut/sid" "^0.1.2"
-    "@strut/utils" "^0.1.1"
-    nanoid "^4.0.0"
-
-"@aphro/mutator-runtime-ts@0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@aphro/mutator-runtime-ts/-/mutator-runtime-ts-0.3.5.tgz#5a25f47ae680757d03bbabf7e4e031df8366de98"
-  integrity sha512-gSuM3bDaeqtzrkG69khwI8vlJ8OMlaSFWmbVxvoh5rpRLch/KE3EI39XTvSM1RVzq4yZ1x+zev33AxgXdBeFSg==
+"@aphro/mutator-runtime-ts@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@aphro/mutator-runtime-ts/-/mutator-runtime-ts-0.4.0.tgz#7929877442d983e0f0c39a95805fb27002ac1d2c"
+  integrity sha512-sBM5h5X9bGkrF1CC+kk1CclNSrHS9OOSHtVK6t5Jlv9bUXZFLnQ/DLv0ZoOYo9fiBf2INhOdVe8IBZ4I4Ufn3A==
   dependencies:
     "@aphro/context-runtime-ts" "0.3.4"
     "@aphro/instrument" "0.0.4"
@@ -279,31 +217,17 @@
     "@strut/utils" "^0.1.1"
     nanoid "^4.0.0"
 
-"@aphro/parse-ts@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/parse-ts/-/parse-ts-0.2.3.tgz#b977e605854cc3667393e4831b8437ac8821b292"
-  integrity sha512-a3QTTK5htBx3mz5tuvmHmm1hNUnri6NFFfh1X1m+dGuNUyQwdYcoF3LSrIZdMExfCsTASmrq6Mj5w2/5HL+DXQ==
+"@aphro/parse-ts@0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@aphro/parse-ts/-/parse-ts-0.2.4.tgz#40905edc78e80929597670060c12ea21cc2dde84"
+  integrity sha512-mKhe69qQO9lZeGxb9mNyCVIoti0SV5WmiolREILbMer1NWf0HlZJn3Jo6afC61EtmF3aeaQ1hATRGZPY6pN0nQ==
   dependencies:
     typescript "^4.6.4"
 
-"@aphro/query-runtime-ts@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/query-runtime-ts/-/query-runtime-ts-0.2.3.tgz#b5a6b02b9f0c25f987638aad6fe1052904b26dfd"
-  integrity sha512-ZEdszoOUVBI+T3a21lKbJdJu3+oQ+wpAfFJFQWeybufQuhdnGr7rPmad1BcaX2NUJAmcGF9R6+JQ7EGj/fluTw==
-  dependencies:
-    "@aphro/cache-runtime-ts" "0.2.3"
-    "@aphro/context-runtime-ts" "0.3.3"
-    "@aphro/model-runtime-ts" "0.2.3"
-    "@aphro/schema-api" "0.2.3"
-    "@aphro/sql-ts" "0.2.3"
-    "@strut/counter" "^0.0.11"
-    "@strut/sid" "^0.1.2"
-    "@strut/utils" "^0.1.1"
-
-"@aphro/query-runtime-ts@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@aphro/query-runtime-ts/-/query-runtime-ts-0.2.4.tgz#164bcbd3a98471ad049e36b9ab8c3cef1ada18db"
-  integrity sha512-O7MDnICXtqxBJ0dS140ycgKWyEaII4EJ1SJldnV69/372rpxItnoJhWaTg7efGCjgHlNs2Z78hmSy+UQBgYIng==
+"@aphro/query-runtime-ts@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@aphro/query-runtime-ts/-/query-runtime-ts-0.3.0.tgz#a1cff6f10e2b9a250a686d72fee97050504c0abb"
+  integrity sha512-uHozdp8F3A59Wza+6xSt6QvAwObsiq5l+9a3ITGS5sdmOl7j1bK+JBYf1f0goM7zGP4JXAVqIcJGy/h/2GiH1g==
   dependencies:
     "@aphro/cache-runtime-ts" "0.2.4"
     "@aphro/context-runtime-ts" "0.3.4"
@@ -315,72 +239,45 @@
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
 
-"@aphro/react@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@aphro/react/-/react-1.0.3.tgz#355c5fd64c98240e80c21f4fb782e8b95847d4b2"
-  integrity sha512-mes4LQhhqhDYPt63XtUkbjwNukIcc2svj8ljyoiv4yy/4i1X6TxMzHkUNYk0WqBk/kadnA1owBAqUDCq48RJlw==
+"@aphro/react@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@aphro/react/-/react-1.2.0.tgz#2c69dc5fc8a4d6ac1c08b1759cd6c5410b4f3a99"
+  integrity sha512-pwiuNXS7NIyMyaP3bS2A++uD/mMlGgQRZuVjGT3JuVopiwgJ1FnW/YxiwL93/zPFteA4F4ZWMb6RMRKQjm2lmQ==
   dependencies:
     "@strut/counter" "^0.0.11"
+    suspend-react "^0.0.8"
 
-"@aphro/runtime-ts@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@aphro/runtime-ts/-/runtime-ts-0.3.4.tgz#7a6b07b71f769572d996b5748d6842e61d9ff38d"
-  integrity sha512-zarqKWph2q8RXeyeK/SyF3MI0xOJP9YPLDhWVRyfY4UyBrUfwN/FowFUdRgNP1YnxRQ5FXMctpHWFgBOjUOscQ==
-  dependencies:
-    "@aphro/cache-runtime-ts" "0.2.3"
-    "@aphro/context-runtime-ts" "0.3.3"
-    "@aphro/migration-runtime-ts" "0.1.4"
-    "@aphro/model-runtime-ts" "0.2.3"
-    "@aphro/mutator-runtime-ts" "0.3.4"
-    "@aphro/query-runtime-ts" "0.2.3"
-    "@aphro/sql-ts" "0.2.3"
-    "@strut/sid" "^0.1.2"
-    "@strut/utils" "^0.1.1"
-
-"@aphro/runtime-ts@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@aphro/runtime-ts/-/runtime-ts-0.3.5.tgz#1f44e34d89968396eb69058ebdaedd2e48bc8c0a"
-  integrity sha512-v0YK4btBxY5axBupvZKKR/Jdr1wFVY+9tmo5phT/UhmVhBi68rSCuS8x8pXACENTur8FzyBX4Wwt9IE04zovYA==
+"@aphro/runtime-ts@0.3.6", "@aphro/runtime-ts@^0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@aphro/runtime-ts/-/runtime-ts-0.3.6.tgz#9989a2a467d9d05616e9bf879b9b900e2473c954"
+  integrity sha512-S3JpCW/5JD+pvZPfb8S48U35lfa499PUTZHsRamFavRHnP9ftQYhYGNeyDd8LCmhnP6CnzaDmTPEY23TtIzlng==
   dependencies:
     "@aphro/cache-runtime-ts" "0.2.4"
     "@aphro/context-runtime-ts" "0.3.4"
     "@aphro/migration-runtime-ts" "0.1.5"
     "@aphro/model-runtime-ts" "0.2.4"
-    "@aphro/mutator-runtime-ts" "0.3.5"
-    "@aphro/query-runtime-ts" "0.2.4"
+    "@aphro/mutator-runtime-ts" "0.4.0"
+    "@aphro/query-runtime-ts" "0.3.0"
     "@aphro/sql-ts" "0.2.4"
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
-
-"@aphro/schema-api@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/schema-api/-/schema-api-0.2.3.tgz#5e5f520b34355cc7f45105faa13559c2ff395dfe"
-  integrity sha512-JEc/P2JiQJhAaafB55OIoHqHi+ERXI3dyDOTHSomZMzDUAzYVn0bNVyoOXOoyVZ/Xx0sfH3Jjqa1zqCkgZAMJA==
 
 "@aphro/schema-api@0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@aphro/schema-api/-/schema-api-0.2.4.tgz#aaae844900e67f127236718362c6e09d6087da6a"
   integrity sha512-nBHFOGuVacaZCFduGrPPjtu4sO9/fMmhfF/b0fDRXEtWOLOX1tI8y6vKdznvdExos8jZGk3YfTtOsIVNuZS6kA==
 
-"@aphro/schema@0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@aphro/schema/-/schema-0.2.4.tgz#34d3e2a806682587495d947b62f3b97755961b45"
-  integrity sha512-1Wil/zGcTywbl0MDdg62pQ2uUoh9873x5Z21WkyCKxtu86FKcLFqwPY9OlJWFOGCAx6gocUTnKQ9zv/ekYX0YA==
+"@aphro/schema@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@aphro/schema/-/schema-0.3.0.tgz#b8d4d543dc5508f1efcb6b4fb33811e709751c86"
+  integrity sha512-H5QtGUX3sQco2xwYuhZQ5t5TAteJVIvxV/8n4RVlh+l9dLC2CQT89tFa8EvteBPqB91vRBvzFX+mTS5fZQXHPA==
   dependencies:
-    "@aphro/codegen-api" "0.2.3"
-    "@aphro/grammar-extension-api" "0.2.3"
-    "@aphro/schema-api" "0.2.3"
+    "@aphro/codegen-api" "0.2.4"
+    "@aphro/grammar-extension-api" "0.2.4"
+    "@aphro/schema-api" "0.2.4"
     "@strut/counter" "^0.0.11"
     "@strut/sid" "^0.1.2"
     "@strut/utils" "^0.1.1"
-
-"@aphro/sql-ts@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@aphro/sql-ts/-/sql-ts-0.2.3.tgz#2efaeb5d3edaba62c2689e7fe2fb802a9068c436"
-  integrity sha512-MZOSqfQlDbdR4/WJT0Xa63LnzAcwQN7H7z1XHSex3p3hsmeNbCp+eLu6JMRb5FRRvy5WVeFm9MWpcUp3tfH+Yw==
-  dependencies:
-    "@databases/escape-identifier" "^1.0.3"
-    "@databases/sql" "^3.2.0"
 
 "@aphro/sql-ts@0.2.4":
   version "0.2.4"
