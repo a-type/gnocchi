@@ -22,6 +22,12 @@ State-based or operation based? I guess I'm partial to operation-based, it just 
 
 I guess you can store the current view of the final document where it would normally be, then also store the history. If anything gets inserted in history, you'd recompute the document and store it again.
 
+## Some assumptions
+
+- Only one client (the first) will ever connect to the server for the first time with local changes. All other clients will connect to the server with no local changes and receive their initial state entirely.
+  - Therefore, the server will always know about all clients who have access to the shared collections.
+- A client is the only one who can undo their own operations. No other client can undo an operation from a different client.
+
 ## Deleting documents
 
 I'd prefer not to have unbounded growth of the set of documents. That means actually deleting things.
@@ -45,14 +51,130 @@ When the server knows a document is ready to be deleted, it marks it with a set 
 
 Once a document has been deleted, all messages related to that document can also be cleaned out.
 
-### Determining the undo window
+## What the server knows
 
 To actually achieve this the server needs to keep track of a few things.
 
-**A bounded operation history for each client it knows about.**
+### A bounded operation history for each client it knows about.
 
 Then it can know when all clients undo window has passed a delete operation.
 
 This is bounded to the size of the window, so if the history no longer contains the delete, it's no longer undoable.
 
 That means the computation to determine if a delete is finalized is "does any client history include the latest delete operation?" This can be recomputed each time the history changes I guess. Seems easy to optimize from there.
+
+### For each document, a history of changes and a baseline
+
+Past operations are stored alongside each document's current state. A 'baseline' is also stored - a snapshot of the document before any of the operations were applied.
+
+```
+[Baseline] - [Operation History] -> [Current State]
+- Snapshot   - Client ID            - Snapshot
+- Timestamp  - Key/Value            - Timestamp
+             - Timestamp            - Vector clocks?
+```
+
+As known client histories are updated, the operation history of each object can also be recomputed. You could take the oldest item in history and determine if its identifier is still included in the client history for the client who made the change. If not, it can be applied to the baseline and dropped.
+
+When a client connects to the server, it receives the baselines for any changed objects. When it receives a baseline it can rebase its local operation history based on the timestamp of the baseline - drop any older items.
+
+#### Can a client connect to a server and receive a rebase which overtakes its own local changes?
+
+Is it logically possible for the server to perform a rebase, and then later a client connects with unacknowledged local changes which are timestamped before the new baseline?
+
+Recalling that a server only drops operations which are no longer included in their client's history window. "No longer" because every operation the server stores is guaranteed to be included in the client's history window at the point it is received. Therefore if it is missing from the history window set, it is only because it is too far in the past relative to the client's history.
+
+Since a client will not connect and present new history items which occurred _before_ their previous connection, a client will never present operations which are older than a rebase which occurred by dropping the client's _own_ operations.
+
+What about operations from a different client?
+
+Suppose a server knows only of clients A and B, and the history window size is 10, and the operation history for object X looks like this:
+
+```
+Timestamp | Client ID
+---------------------
+1         | A
+2         | B
+3         | A
+4         | A
+5         | A
+6         | A
+```
+
+Client histories look like this:
+
+```
+A: 1, 3, 4, 5, 6, 7, 8, 9, 10, 11
+B: 2
+```
+
+Now client A adds `12` to its history, dropping `1`. This sets up a potential rebase to drop `1` from the operation history.
+
+Logically we know this is valid because the latest entry from B is `2`, which is newer than `1`. We therefore know that B cannot deliver any history prior to `2`, so even if it connects with new operations, they will not disrupt a rebase up to timestamp `2`.
+
+**Therefore we add one rule to our rebasing requirements:** all known clients in good standing must have an entry in their history window which is later than the proposed rebase timestamp. We can verify this cheaply by looking at the client's latest history timestamp.
+
+What if a client has no history at all? In such a case we cannot know if it will connect and provide operations from the distant past at any time in the future. We are therefore blocked from rebasing any documents at all until the ambiguity is resolved.
+
+This seems unlikely in practice. We can also rely on the client being evicted eventually if it stops reconnecting. However, if there were a read-only client which connected frequently, that would be a problem.
+
+To resolve this, rather than relying on history for the latest known timestamp for any client, we could just track a timestamp of their last connection.
+
+### Summing up: what the server knows
+
+For the whole library of collections accessible to a group of clients, the server stores:
+
+```
+ClientConnectionData {
+  // the client represented by this metadata
+  clientId: String
+  // the wall clock time the server last saw this client
+  lastSeenWallClock: DateTime
+  // the logical clock timestamp of when the server last saw this client
+  lastSeenLogical: String
+  // a bounded history of operation identifiers this client has applied to any document
+  clientHistory: [String]
+}
+
+OperationHistory {
+  // the collection the document is in
+  collection: String
+  // the ID of the document
+  documentId: String
+  // the operation applied to the document. the format of this patch
+  // is not semantically important at this point.
+  patch: Json
+  // the logical clock timestamp of when the operation was applied
+  timestamp: String
+}[]
+```
+
+Note that the entire operation history for the library is stored as a single list. This synergizes with the client histories also being global. Instead of checking each individual document for rebases, we just look at the oldest X items in the global history.
+
+For each individual document, the server stores:
+
+```
+DocumentBaseline {
+  // the document's id
+  id: String
+  // the snapshot of the baseline state of the document
+  snapshot: Json
+  // the logical clock timestamp of the baseline
+  timestamp: String
+}
+
+Document {
+  // the document's id
+  id: String
+  // the snapshot of the current state of the document
+  snapshot: Json
+  // the logical clock timestamp of the last operation applied
+  timestamp: String
+}
+```
+
+## 'Evicting' clients
+
+Seems like eventually if a client is offline long enough they get evicted from the general consensus stuff.
+
+Like if the server hasn't seen you in 30 days, it drops your history.
