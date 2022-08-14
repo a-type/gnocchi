@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <d273627d73b7e9717c8af6d262e288dc>
+// SIGNED-SOURCE: <a4166fff1cf5bfcc993b61831280ed1e>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -7,7 +7,7 @@ import * as impls from "../GroceryCategoryMutationsImpl.js";
 import { ICreateOrUpdateBuilder } from "@aphro/runtime-ts";
 import { Context } from "@aphro/runtime-ts";
 import { MutationsBase } from "@aphro/runtime-ts";
-import type GroceryCategory from "../GroceryCategory.js";
+import GroceryCategory from "../GroceryCategory.js";
 import { default as spec } from "./GroceryCategorySpec.js";
 import { Data } from "./GroceryCategoryBase.js";
 import { UpdateMutationBuilder } from "@aphro/runtime-ts";
