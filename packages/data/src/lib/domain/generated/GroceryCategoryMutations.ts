@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <52b0a235a47f844ac74895c6dbed174c>
+// SIGNED-SOURCE: <a4166fff1cf5bfcc993b61831280ed1e>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -20,7 +20,8 @@ export type CreateArgs = { name: string };
 class Mutations extends MutationsBase<GroceryCategory, Data> {
   constructor(
     ctx: Context,
-    mutator: ICreateOrUpdateBuilder<GroceryCategory, Data>
+    mutator: ICreateOrUpdateBuilder<GroceryCategory, Data>,
+    private model?: GroceryCategory
   ) {
     super(ctx, mutator);
   }
@@ -32,10 +33,16 @@ class Mutations extends MutationsBase<GroceryCategory, Data> {
   }
 }
 
-export default class GroceryCategoryMutations {
-  static create(ctx: Context, args: CreateArgs): Mutations {
+const staticMutations = {
+  create(ctx: Context, args: CreateArgs): Mutations {
     return new Mutations(ctx, new CreateMutationBuilder(ctx, spec)).create(
       args
     );
-  }
+  },
+};
+
+export default staticMutations;
+
+export class InstancedMutations {
+  constructor(private model: GroceryCategory) {}
 }

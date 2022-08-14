@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <7300d1be01b3db160edbed64bf20d15e>
+// SIGNED-SOURCE: <ecdd5d3587936224183ecb72575dc2d1>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -20,6 +20,11 @@ import GroceryInputQuery from "./GroceryInputQuery.js";
 import GroceryInput from "../GroceryInput.js";
 import GroceryList from "../GroceryList.js";
 import GroceryCategory from "../GroceryCategory.js";
+import GroceryItemMutations from "./GroceryItemMutations.js";
+import { InstancedMutations } from "./GroceryItemMutations.js";
+
+declare type Muts = typeof GroceryItemMutations;
+declare type IMuts = InstancedMutations;
 
 export type Data = {
   id: SID_of<GroceryItem>;
@@ -36,6 +41,14 @@ export type Data = {
 // @Sealed(GroceryItem)
 export default abstract class GroceryItemBase extends Node<Data> {
   readonly spec = s as unknown as NodeSpecWithCreate<this, Data>;
+
+  static get mutations(): Muts {
+    return GroceryItemMutations;
+  }
+
+  get mutations(): IMuts {
+    return new InstancedMutations(this as any);
+  }
 
   get id(): SID_of<this> {
     return this.data.id as unknown as SID_of<this>;
@@ -97,27 +110,4 @@ export default abstract class GroceryItemBase extends Node<Data> {
     (ctx: Context, id: SID_of<GroceryItem>): Promise<GroceryItem | null> =>
       this.queryAll(ctx).whereId(P.equals(id)).genOnlyValue()
   );
-
-  update(data: Partial<Data>) {
-    return makeSavable(
-      this.ctx,
-      new UpdateMutationBuilder(this.ctx, this.spec, this)
-        .set(data)
-        .toChangesets()[0]
-    );
-  }
-
-  static create(ctx: Context, data: Partial<Data>) {
-    return makeSavable(
-      ctx,
-      new CreateMutationBuilder(ctx, s).set(data).toChangesets()[0]
-    );
-  }
-
-  delete() {
-    return makeSavable(
-      this.ctx,
-      new DeleteMutationBuilder(this.ctx, this.spec, this).toChangesets()[0]
-    );
-  }
 }

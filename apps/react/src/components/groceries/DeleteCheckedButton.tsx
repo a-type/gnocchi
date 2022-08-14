@@ -31,7 +31,9 @@ export const DeleteCheckedButton = forwardRef<
 		if (items.length) {
 			commit(
 				items[0].ctx,
-				checkedItems.map((item) => item.delete()),
+				checkedItems.flatMap((item) =>
+					item.mutations.delete({}).toChangesets(),
+				),
 			);
 		}
 	};

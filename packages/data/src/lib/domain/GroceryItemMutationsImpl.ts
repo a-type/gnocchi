@@ -36,6 +36,7 @@ export function createImpl(
 }
 
 export function setPurchasedQuantityImpl(
+  model: GroceryItem,
   mutator: Omit<IMutationBuilder<GroceryItem, Data>, "toChangeset">,
   { purchasedQuantity }: SetPurchasedQuantityArgs
 ): void | Changeset<any>[] {
@@ -43,6 +44,7 @@ export function setPurchasedQuantityImpl(
 }
 
 export function setCategoryImpl(
+  model: GroceryItem,
   mutator: Omit<IMutationBuilder<GroceryItem, Data>, "toChangeset">,
   { categoryId }: SetCategoryArgs
 ): void | Changeset<any>[] {
@@ -50,6 +52,7 @@ export function setCategoryImpl(
 }
 
 export function setTotalQuantityImpl(
+  model: GroceryItem,
   mutator: Omit<IMutationBuilder<GroceryItem, Data>, "toChangeset">,
   { totalQuantity }: SetTotalQuantityArgs
 ): void | Changeset<any>[] {
@@ -57,6 +60,7 @@ export function setTotalQuantityImpl(
 }
 
 export function setSortKeyImpl(
+  model: GroceryItem,
   mutator: Omit<IMutationBuilder<GroceryItem, Data>, "toChangeset">,
   { sortKey }: SetSortKeyArgs
 ): void | Changeset<any>[] {
@@ -64,6 +68,7 @@ export function setSortKeyImpl(
 }
 
 export function deleteImpl(
+  model: GroceryItem,
   mutator: Omit<IMutationBuilder<GroceryItem, Data>, "toChangeset">,
   {}: DeleteArgs
 ): void | Changeset<any>[] {}

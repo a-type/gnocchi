@@ -25,6 +25,7 @@ export function GroceryListCategory({
 	const stateSnap = useSnapshot(groceriesState);
 	const animateIn = stateSnap.justCreatedCategoryId === category.id;
 
+	console.log('wtf?');
 	const items = useQuery(() => category.queryItems().orderBySortKey('asc'), {
 		key: `items-${category.id}`,
 		deps: [category],

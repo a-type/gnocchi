@@ -225,7 +225,7 @@ const GroceryListItemMenu = memo(
 	forwardRef<HTMLButtonElement, GroceryListItemMenuProps>(
 		function GroceryListItemMenu({ item, ...props }, ref) {
 			const deleteItem = () => {
-				item.delete().save();
+				item.mutations.delete({}).save();
 			};
 
 			const [menuOpen, setMenuOpen] = useState(false);

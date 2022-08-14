@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <ab9fd1c7a4660461963cfc91bbdbe063>
+// SIGNED-SOURCE: <71c786e06da97f57f326bc8817f4078f>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -26,7 +26,8 @@ export type SetCategoryArgs = { categoryId: SID_of<GroceryCategory> };
 class Mutations extends MutationsBase<GroceryFoodCategoryLookup, Data> {
   constructor(
     ctx: Context,
-    mutator: ICreateOrUpdateBuilder<GroceryFoodCategoryLookup, Data>
+    mutator: ICreateOrUpdateBuilder<GroceryFoodCategoryLookup, Data>,
+    private model?: GroceryFoodCategoryLookup
   ) {
     super(ctx, mutator);
   }
@@ -38,25 +39,34 @@ class Mutations extends MutationsBase<GroceryFoodCategoryLookup, Data> {
   }
 
   setCategory(args: SetCategoryArgs): this {
-    const extraChangesets = impls.setCategoryImpl(this.mutator, args);
+    const extraChangesets = impls.setCategoryImpl(
+      this.model!,
+      this.mutator,
+      args
+    );
     this.mutator.addExtraChangesets(extraChangesets || undefined);
     return this;
   }
 }
 
-export default class GroceryFoodCategoryLookupMutations {
-  static create(ctx: Context, args: CreateArgs): Mutations {
+const staticMutations = {
+  create(ctx: Context, args: CreateArgs): Mutations {
     return new Mutations(ctx, new CreateMutationBuilder(ctx, spec)).create(
       args
     );
-  }
-  static setCategory(
-    model: GroceryFoodCategoryLookup,
-    args: SetCategoryArgs
-  ): Mutations {
+  },
+};
+
+export default staticMutations;
+
+export class InstancedMutations {
+  constructor(private model: GroceryFoodCategoryLookup) {}
+
+  setCategory(args: SetCategoryArgs): Mutations {
     return new Mutations(
-      model.ctx,
-      new UpdateMutationBuilder(model.ctx, spec, model)
+      this.model.ctx,
+      new UpdateMutationBuilder(this.model.ctx, spec, this.model),
+      this.model
     ).setCategory(args);
   }
 }

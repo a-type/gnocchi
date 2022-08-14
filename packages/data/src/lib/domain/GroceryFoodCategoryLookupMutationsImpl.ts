@@ -16,6 +16,7 @@ export function createImpl(
 }
 
 export function setCategoryImpl(
+  model: GroceryFoodCategoryLookup,
   mutator: Omit<
     IMutationBuilder<GroceryFoodCategoryLookup, Data>,
     "toChangeset"

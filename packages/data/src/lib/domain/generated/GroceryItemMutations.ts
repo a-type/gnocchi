@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <8e2c8c44b6cb5df51c30ea47cbe1d9dc>
+// SIGNED-SOURCE: <4fc44bcca6d8a7c8cb15eadd6191d537>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -41,7 +41,8 @@ export type DeleteArgs = {};
 class Mutations extends MutationsBase<GroceryItem, Data> {
   constructor(
     ctx: Context,
-    mutator: ICreateOrUpdateBuilder<GroceryItem, Data>
+    mutator: ICreateOrUpdateBuilder<GroceryItem, Data>,
+    private model?: GroceryItem
   ) {
     super(ctx, mutator);
   }
@@ -53,79 +54,101 @@ class Mutations extends MutationsBase<GroceryItem, Data> {
   }
 
   setPurchasedQuantity(args: SetPurchasedQuantityArgs): this {
-    const extraChangesets = impls.setPurchasedQuantityImpl(this.mutator, args);
+    const extraChangesets = impls.setPurchasedQuantityImpl(
+      this.model!,
+      this.mutator,
+      args
+    );
     this.mutator.addExtraChangesets(extraChangesets || undefined);
     return this;
   }
 
   setCategory(args: SetCategoryArgs): this {
-    const extraChangesets = impls.setCategoryImpl(this.mutator, args);
+    const extraChangesets = impls.setCategoryImpl(
+      this.model!,
+      this.mutator,
+      args
+    );
     this.mutator.addExtraChangesets(extraChangesets || undefined);
     return this;
   }
 
   setTotalQuantity(args: SetTotalQuantityArgs): this {
-    const extraChangesets = impls.setTotalQuantityImpl(this.mutator, args);
+    const extraChangesets = impls.setTotalQuantityImpl(
+      this.model!,
+      this.mutator,
+      args
+    );
     this.mutator.addExtraChangesets(extraChangesets || undefined);
     return this;
   }
 
   setSortKey(args: SetSortKeyArgs): this {
-    const extraChangesets = impls.setSortKeyImpl(this.mutator, args);
+    const extraChangesets = impls.setSortKeyImpl(
+      this.model!,
+      this.mutator,
+      args
+    );
     this.mutator.addExtraChangesets(extraChangesets || undefined);
     return this;
   }
 
   delete(args: DeleteArgs): this {
-    const extraChangesets = impls.deleteImpl(this.mutator, args);
+    const extraChangesets = impls.deleteImpl(this.model!, this.mutator, args);
     this.mutator.addExtraChangesets(extraChangesets || undefined);
     return this;
   }
 }
 
-export default class GroceryItemMutations {
-  static create(ctx: Context, args: CreateArgs): Mutations {
+const staticMutations = {
+  create(ctx: Context, args: CreateArgs): Mutations {
     return new Mutations(ctx, new CreateMutationBuilder(ctx, spec)).create(
       args
     );
-  }
-  static setPurchasedQuantity(
-    model: GroceryItem,
-    args: SetPurchasedQuantityArgs
-  ): Mutations {
+  },
+};
+
+export default staticMutations;
+
+export class InstancedMutations {
+  constructor(private model: GroceryItem) {}
+
+  setPurchasedQuantity(args: SetPurchasedQuantityArgs): Mutations {
     return new Mutations(
-      model.ctx,
-      new UpdateMutationBuilder(model.ctx, spec, model)
+      this.model.ctx,
+      new UpdateMutationBuilder(this.model.ctx, spec, this.model),
+      this.model
     ).setPurchasedQuantity(args);
   }
 
-  static setCategory(model: GroceryItem, args: SetCategoryArgs): Mutations {
+  setCategory(args: SetCategoryArgs): Mutations {
     return new Mutations(
-      model.ctx,
-      new UpdateMutationBuilder(model.ctx, spec, model)
+      this.model.ctx,
+      new UpdateMutationBuilder(this.model.ctx, spec, this.model),
+      this.model
     ).setCategory(args);
   }
 
-  static setTotalQuantity(
-    model: GroceryItem,
-    args: SetTotalQuantityArgs
-  ): Mutations {
+  setTotalQuantity(args: SetTotalQuantityArgs): Mutations {
     return new Mutations(
-      model.ctx,
-      new UpdateMutationBuilder(model.ctx, spec, model)
+      this.model.ctx,
+      new UpdateMutationBuilder(this.model.ctx, spec, this.model),
+      this.model
     ).setTotalQuantity(args);
   }
 
-  static setSortKey(model: GroceryItem, args: SetSortKeyArgs): Mutations {
+  setSortKey(args: SetSortKeyArgs): Mutations {
     return new Mutations(
-      model.ctx,
-      new UpdateMutationBuilder(model.ctx, spec, model)
+      this.model.ctx,
+      new UpdateMutationBuilder(this.model.ctx, spec, this.model),
+      this.model
     ).setSortKey(args);
   }
-  static delete(model: GroceryItem, args: DeleteArgs): Mutations {
+  delete(args: DeleteArgs): Mutations {
     return new Mutations(
-      model.ctx,
-      new DeleteMutationBuilder(model.ctx, spec, model)
+      this.model.ctx,
+      new DeleteMutationBuilder(this.model.ctx, spec, this.model),
+      this.model
     ).delete(args);
   }
 }

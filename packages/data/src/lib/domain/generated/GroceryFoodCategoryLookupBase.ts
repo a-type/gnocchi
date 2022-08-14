@@ -1,4 +1,4 @@
-// SIGNED-SOURCE: <9a02b5d0005eec607b19a1ca9d6b66c5>
+// SIGNED-SOURCE: <d334ffea70c9cf2f8cdcc3e6eb406052>
 /**
  * AUTO-GENERATED FILE
  * Do not modify. Update your schema and re-generate for changes.
@@ -17,6 +17,11 @@ import { SID_of } from "@aphro/runtime-ts";
 import GroceryFoodCategoryLookupQuery from "./GroceryFoodCategoryLookupQuery.js";
 import { Context } from "@aphro/runtime-ts";
 import GroceryCategory from "../GroceryCategory.js";
+import GroceryFoodCategoryLookupMutations from "./GroceryFoodCategoryLookupMutations.js";
+import { InstancedMutations } from "./GroceryFoodCategoryLookupMutations.js";
+
+declare type Muts = typeof GroceryFoodCategoryLookupMutations;
+declare type IMuts = InstancedMutations;
 
 export type Data = {
   id: SID_of<GroceryFoodCategoryLookup>;
@@ -26,6 +31,14 @@ export type Data = {
 // @Sealed(GroceryFoodCategoryLookup)
 export default abstract class GroceryFoodCategoryLookupBase extends Node<Data> {
   readonly spec = s as unknown as NodeSpecWithCreate<this, Data>;
+
+  static get mutations(): Muts {
+    return GroceryFoodCategoryLookupMutations;
+  }
+
+  get mutations(): IMuts {
+    return new InstancedMutations(this as any);
+  }
 
   get id(): SID_of<this> {
     return this.data.id as unknown as SID_of<this>;
@@ -59,22 +72,6 @@ export default abstract class GroceryFoodCategoryLookupBase extends Node<Data> {
     ): Promise<GroceryFoodCategoryLookup | null> =>
       this.queryAll(ctx).whereId(P.equals(id)).genOnlyValue()
   );
-
-  update(data: Partial<Data>) {
-    return makeSavable(
-      this.ctx,
-      new UpdateMutationBuilder(this.ctx, this.spec, this)
-        .set(data)
-        .toChangesets()[0]
-    );
-  }
-
-  static create(ctx: Context, data: Partial<Data>) {
-    return makeSavable(
-      ctx,
-      new CreateMutationBuilder(ctx, s).set(data).toChangesets()[0]
-    );
-  }
 
   delete() {
     return makeSavable(
