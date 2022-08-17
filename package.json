@@ -3,14 +3,9 @@
 	"version": "1.0.0",
 	"private": true,
 	"workspaces": [
-		"apps/web",
-		"apps/api",
-		"apps/react",
-		"packages/conversion",
-		"packages/data",
-		"packages/tools",
-		"packages/wc2",
-		"packages/storage"
+		"apps/*",
+		"packages/*",
+		"tests/*"
 	],
 	"scripts": {
 		"dev": "turbo run dev",

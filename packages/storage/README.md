@@ -122,21 +122,30 @@ To resolve this, rather than relying on history for the latest known timestamp f
 
 ### Summing up: what the server knows
 
-For the whole library of collections accessible to a group of clients, the server stores:
+For each known client, the server stores:
 
 ```
 ClientConnectionData {
+  // the library this client has access to
+  libraryId: String
   // the client represented by this metadata
   clientId: String
   // the wall clock time the server last saw this client
   lastSeenWallClock: DateTime
   // the logical clock timestamp of when the server last saw this client
   lastSeenLogical: String
-  // a bounded history of operation identifiers this client has applied to any document
-  clientHistory: [String]
+  // the oldest operation the client has in its "undo stack," as reported
+  // to the server by the client after each operation.
+  oldestOperationTimestamp: String
 }
+```
 
+For the whole library of collections accessible to a group of clients, the server stores:
+
+```
 OperationHistory {
+  // the library this history is for
+  libraryId: String
   // the collection the document is in
   collection: String
   // the ID of the document

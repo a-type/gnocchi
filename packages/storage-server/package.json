@@ -1,5 +1,5 @@
 {
-	"name": "@aglio/storage",
+	"name": "@aglio/storage-server",
 	"version": "0.0.1",
 	"private": true,
 	"main": "./dist/index.js",
@@ -12,16 +12,13 @@
 		"build": "tsc",
 		"dev": "tsc --watch"
 	},
-	"peerDependencies": {
-		"react": "^18.2.0"
-	},
 	"dependencies": {
 		"@aglio/tools": "^0.0.1",
-		"@aglio/storage-common": "^0.0.1"
+		"@aglio/storage-common": "^0.0.1",
+		"better-sqlite3": "^7.6.2"
 	},
 	"devDependencies": {
-		"@types/react": "^18.0.17",
-		"react": "^18.2.0",
+		"@types/better-sqlite3": "^7.6.0",
 		"typescript": "^4.7.4"
 	}
 }

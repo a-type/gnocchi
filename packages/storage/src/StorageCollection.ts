@@ -12,6 +12,8 @@ import {
 	StorageFieldsSchema,
 	StorageSyntheticsSchema,
 } from './types.js';
+import { SyncOperation } from '@aglio/storage-common';
+import { Sync } from './Sync.js';
 
 export class StorageCollection<
 	Collection extends StorageCollectionSchema<any, any>,
@@ -21,9 +23,11 @@ export class StorageCollection<
 		string | number | symbol,
 		StorageDocument<Collection>
 	> = {};
+
 	constructor(
 		private db: Promise<IDBDatabase>,
 		private collection: Collection,
+		private sync: Sync,
 	) {}
 
 	get name() {
@@ -129,6 +133,8 @@ export class StorageCollection<
 			['add', 'delete', 'update'],
 		);
 	};
+
+	private applyOperation = async (operation: SyncOperation) => {};
 
 	update = async (id: string, data: Partial<StorageDocument<Collection>>) => {
 		const store = await this.readWriteTransaction();
