@@ -76,6 +76,7 @@ export class ServerLibrary {
 			type: 'sync-resp',
 			ops: ops.map((op) => ({
 				type: 'op',
+				id: op.id,
 				collection: op.collection,
 				documentId: op.documentId,
 				patch: op.patch,

@@ -41,7 +41,7 @@ export class OperationHistory {
       ORDER BY timestamp ASC
     `,
 			)
-			.all(libraryId, timestamp);
+			.all(this.libraryId, timestamp);
 	};
 
 	insert = (item: OperationHistoryItemSpec) => {

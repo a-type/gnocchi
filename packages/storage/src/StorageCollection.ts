@@ -28,6 +28,10 @@ export class StorageCollection<
 		private db: Promise<IDBDatabase>,
 		private collection: Collection,
 		private sync: Sync,
+		private metaStores: Promise<{
+			operations: IDBObjectStore;
+			baselines: IDBObjectStore;
+		}>,
 	) {}
 
 	get name() {
@@ -39,7 +43,7 @@ export class StorageCollection<
 	}
 
 	get initialized(): Promise<void> {
-		return this.db.then();
+		return Promise.all([this.db, this.metaStores]).then();
 	}
 
 	private readTransaction = async () => {
@@ -134,7 +138,29 @@ export class StorageCollection<
 		);
 	};
 
-	private applyOperation = async (operation: SyncOperation) => {};
+	private createOperation = async (operation: SyncOperation) => {
+		this.applyOperation(operation);
+	};
+
+	private applyOperation = async (operation: SyncOperation) => {
+		// to apply an operation we have to first insert it in the operation
+		// history, then lookup and reapply all operations for that document
+		// to the baseline.
+		const { baselines, operations } = await this.metaStores;
+
+		const opRequest = operations.put(operation);
+		const baselineRequest = baselines.get(
+			operation.collection + ':' + operation.documentId,
+		);
+		const [baseline, _] = await Promise.all([
+			storeRequestPromise(baselineRequest),
+			storeRequestPromise(opRequest),
+		]);
+
+		// we can use a cursor to iterate over all matching operations
+		// and reapply them to the baseline.
+		const cursor = operations.index();
+	};
 
 	update = async (id: string, data: Partial<StorageDocument<Collection>>) => {
 		const store = await this.readWriteTransaction();

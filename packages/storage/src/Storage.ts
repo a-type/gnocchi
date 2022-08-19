@@ -19,14 +19,14 @@ export class Storage<
 		{} as any;
 	private collectionSchemas: Schemas;
 	private sync: Sync;
-	private operationHistoryDatabase: Promise<IDBDatabase>;
+	private meta: Meta;
 
 	constructor(options: StorageOptions<Schemas>) {
 		this.collectionSchemas = options.schemas;
 		this.sync = options.sync || new LocalSync();
 
 		// centralized storage for all stored operations
-		this.operationHistoryDatabase = this.openOperationHistoryDatabase();
+		this.meta = new Meta();
 
 		const databases = initializeDatabases({
 			collections: this.collectionSchemas,
@@ -37,26 +37,10 @@ export class Storage<
 				database,
 				this.collectionSchemas[name as keyof Schemas],
 				this.sync,
+				this.meta,
 			);
 		}
 	}
-
-	private openOperationHistoryDatabase = () => {
-		return new Promise<IDBDatabase>((resolve, reject) => {
-			const request = indexedDB.open('operationHistory', 1);
-			request.onupgradeneeded = (event) => {
-				const db = request.result;
-				db.createObjectStore('operations', { keyPath: 'id' });
-			};
-			request.onerror = () => {
-				console.error('Error opening database', request.error);
-				reject(request.error);
-			};
-			request.onsuccess = () => {
-				resolve(request.result);
-			};
-		});
-	};
 
 	private beginSync = async () => {
 		//

@@ -35,12 +35,12 @@ export class ServerStorage {
 				.prepare(
 					`
         CREATE TABLE IF NOT EXISTS OperationHistory (
+					id TEXT PRIMARY KEY,
           libraryId TEXT,
           collection TEXT,
           documentId TEXT,
           patch TEXT,
-          timestamp INTEGER,
-          PRIMARY KEY (documentId, timestamp)
+          timestamp INTEGER
         );
       `,
 				)

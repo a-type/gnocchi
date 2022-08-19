@@ -20,6 +20,7 @@ export class ServerCollection {
 		const run = this.db.transaction(() => {
 			// insert operation into history for the document
 			this.operationHistory.insert({
+				id: message.id,
 				libraryId: this.libraryId,
 				collection: this.name,
 				documentId: message.documentId,

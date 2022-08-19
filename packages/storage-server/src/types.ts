@@ -1,4 +1,5 @@
 export interface OperationHistoryItemSpec {
+	id: string;
 	libraryId: string;
 	collection: string;
 	documentId: string;
