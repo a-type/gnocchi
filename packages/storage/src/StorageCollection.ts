@@ -12,8 +12,16 @@ import {
 	StorageFieldsSchema,
 	StorageSyntheticsSchema,
 } from './types.js';
-import { SyncOperation } from '@aglio/storage-common';
+import {
+	createPatch,
+	ServerMessage,
+	SyncOperation,
+	SyncResponseMessage,
+} from '@aglio/storage-common';
 import { Sync } from './Sync.js';
+import { Meta } from './Meta.js';
+import { storeRequestPromise } from './idb.js';
+import cuid from 'cuid';
 
 export class StorageCollection<
 	Collection extends StorageCollectionSchema<any, any>,
@@ -28,10 +36,7 @@ export class StorageCollection<
 		private db: Promise<IDBDatabase>,
 		private collection: Collection,
 		private sync: Sync,
-		private metaStores: Promise<{
-			operations: IDBObjectStore;
-			baselines: IDBObjectStore;
-		}>,
+		private meta: Meta,
 	) {}
 
 	get name() {
@@ -43,7 +48,7 @@ export class StorageCollection<
 	}
 
 	get initialized(): Promise<void> {
-		return Promise.all([this.db, this.metaStores]).then();
+		return Promise.all([this.db, this.meta.ready]).then();
 	}
 
 	private readTransaction = async () => {
@@ -138,131 +143,87 @@ export class StorageCollection<
 		);
 	};
 
-	private createOperation = async (operation: SyncOperation) => {
-		this.applyOperation(operation);
-	};
-
-	private applyOperation = async (operation: SyncOperation) => {
-		// to apply an operation we have to first insert it in the operation
-		// history, then lookup and reapply all operations for that document
-		// to the baseline.
-		const { baselines, operations } = await this.metaStores;
-
-		const opRequest = operations.put(operation);
-		const baselineRequest = baselines.get(
-			operation.collection + ':' + operation.documentId,
-		);
-		const [baseline, _] = await Promise.all([
-			storeRequestPromise(baselineRequest),
-			storeRequestPromise(opRequest),
-		]);
-
-		// we can use a cursor to iterate over all matching operations
-		// and reapply them to the baseline.
-		const cursor = operations.index();
-	};
-
-	update = async (id: string, data: Partial<StorageDocument<Collection>>) => {
-		const store = await this.readWriteTransaction();
-		const getRequest = store.get(id);
-		const existing: StorageDocument<Collection> = await new Promise(
-			(resolve, reject) => {
-				getRequest.onsuccess = () => {
-					const { result } = getRequest;
-					if (result) {
-						resolve(result);
-					} else {
-						reject(new Error('Document not found'));
-					}
-				};
-				getRequest.onerror = () => {
-					reject(getRequest.error);
-				};
-			},
-		);
-		const updated = { ...existing, ...data };
-		const updatedWithComputed = {
-			...updated,
-			...this.computeProperties(updated),
-			id,
-		};
-		const request = store.put(updatedWithComputed);
-
-		await storeRequestPromise(request);
-
-		// issue update events and set on liveobject if it exists.
-		this.events.emit('update', updatedWithComputed);
-		this.events.emit(`update:${id}`, updatedWithComputed);
+	private onUpdate = (doc: StorageDocument<Collection>) => {
+		const id = doc[this.primaryKey] as string;
+		this.events.emit('update', doc);
+		this.events.emit(`update:${id}`, doc);
 		if (this.liveObjectCache[id]) {
-			setLiveObject(this.liveObjectCache[id], updatedWithComputed);
+			setLiveObject(this.liveObjectCache[id], doc);
+		}
+	};
+
+	update = async (
+		id: string,
+		data: Partial<ShapeFromFields<Collection['schema']['fields']>>,
+	) => {
+		const current = await this.get(id).resolved;
+		if (!current) {
+			throw new Error(`No document with id ${id}`);
 		}
 
-		return this.getLiveObject(updatedWithComputed);
+		const updatedRaw = {
+			...current,
+			...data,
+		};
+		const updatedWithComputed = {
+			...updatedRaw,
+			...this.computeProperties(updatedRaw),
+			[this.primaryKey]: id,
+		};
+
+		const final = await this.createOperation({
+			id: cuid(),
+			collection: this.name,
+			documentId: id,
+			patch: createPatch(current, updatedWithComputed),
+			timestamp: this.sync.now(),
+		});
+
+		this.onUpdate(final);
+
+		return final;
 	};
 
 	create = async (data: ShapeFromFields<Collection['schema']['fields']>) => {
-		const store = await this.readWriteTransaction();
-		const obj = {
-			...data,
-			...this.computeProperties(data),
-		};
-		const request = store.add(obj);
+		const final = await this.createOperation({
+			id: cuid(),
+			collection: this.name,
+			documentId: data[this.primaryKey] as string,
+			patch: createPatch({}, data),
+			timestamp: this.sync.now(),
+		});
+		this.events.emit('add', final);
 
-		await storeRequestPromise(request);
-
-		this.events.emit('add', obj);
-
-		return this.getLiveObject(obj);
+		return this.getLiveObject(final);
 	};
 
 	upsert = async (data: ShapeFromFields<Collection['schema']['fields']>) => {
-		const store = await this.readWriteTransaction();
-		const obj = {
-			...data,
-			...this.computeProperties(data),
-		};
-		const request = store.put(obj);
-
-		await storeRequestPromise(request);
-
-		this.events.emit('add', obj);
-
-		return this.getLiveObject(obj);
+		const id = data[this.primaryKey] as string;
+		const current = await this.get(id).resolved;
+		if (current) {
+			return this.update(id, data);
+		}
+		return this.create(data);
 	};
 
 	delete = async (id: string) => {
-		const store = await this.readWriteTransaction();
-		const request = store.delete(id);
-
-		const result = await storeRequestPromise(request);
+		await this.createOperation({
+			id: cuid(),
+			collection: this.name,
+			documentId: id,
+			patch: 'DELETE',
+			timestamp: this.sync.now(),
+		});
 
 		this.events.emit('delete', id);
 		this.events.emit(`delete:${id}`);
 		if (this.liveObjectCache[id]) {
 			setLiveObject(this.liveObjectCache[id], null);
 		}
-
-		return result;
 	};
 
 	deleteAll = async (ids: string[]) => {
-		const store = await this.readWriteTransaction();
-
-		const promises = new Array<Promise<any>>();
-		for (const id of ids) {
-			const request = store.delete(id);
-			promises.push(
-				storeRequestPromise(request).then(() => {
-					this.events.emit('delete', id);
-					this.events.emit(`delete:${id}`);
-					if (this.liveObjectCache[id]) {
-						setLiveObject(this.liveObjectCache[id], null);
-					}
-				}),
-			);
-		}
-
-		await Promise.all(promises);
+		return Promise.all(ids.map((id) => this.delete(id)));
 	};
 
 	private computeProperties = (
@@ -270,17 +231,53 @@ export class StorageCollection<
 	) => {
 		return computeSynthetics(this.collection.schema, fields);
 	};
-}
 
-function storeRequestPromise<T>(request: IDBRequest<T>) {
-	return new Promise<T>((resolve, reject) => {
-		request.onsuccess = () => {
-			resolve(request.result);
-		};
-		request.onerror = () => {
-			reject(request.error);
-		};
-	});
+	/** Sync Methods */
+
+	private createOperation = async (operation: SyncOperation) => {
+		// optimistic application
+		const result = await this.applyOperation(operation);
+		// sync to network
+		this.sync.send({
+			type: 'op',
+			...operation,
+		});
+
+		return result;
+	};
+
+	applyOperation = async (operation: SyncOperation) => {
+		// to apply an operation we have to first insert it in the operation
+		// history, then lookup and reapply all operations for that document
+		// to the baseline.
+
+		await this.meta.insertOperation(operation);
+		return this.recomputeDocument(operation.documentId);
+	};
+
+	recomputeDocument = async (id: string) => {
+		const updatedView = await this.meta.getComputedView(this.name, id);
+
+		// undefined means the document was deleted
+		if (updatedView === undefined) {
+			const store = await this.readWriteTransaction();
+			const request = store.delete(id);
+			await storeRequestPromise(request);
+			return undefined;
+		} else {
+			// write the new view to the document
+			const store = await this.readWriteTransaction();
+			const updatedWithComputed = {
+				...updatedView,
+				...this.computeProperties(updatedView),
+				[this.primaryKey]: id,
+			};
+			const request = store.put(updatedWithComputed);
+			await storeRequestPromise(request);
+
+			return updatedWithComputed;
+		}
+	};
 }
 
 export function collection<

@@ -1,5 +1,15 @@
 import { computeSynthetics } from './synthetics.js';
-import { StorageCollectionSchema, StorageFieldSchema } from './types.js';
+import {
+	NumberStorageComputedSchema,
+	StorageCollectionSchema,
+	StorageComputedSchema,
+	StorageFieldSchema,
+	StorageFieldsSchema,
+	StorageNumberFieldSchema,
+	StorageStringFieldSchema,
+	StorageSyntheticsSchema,
+	StringStorageComputedSchema,
+} from './types.js';
 
 export function initializeDatabases<
 	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
@@ -42,9 +52,31 @@ export function initializeDatabases<
 	return databasesMap;
 }
 
+// determines if a field is indexed. also narrows the type to only indexable fields.
+function isIndexedField(
+	field: StorageFieldSchema,
+): field is StorageStringFieldSchema | StorageNumberFieldSchema {
+	return (
+		field.type !== 'boolean' &&
+		field.type !== 'array' &&
+		field.type !== 'object' &&
+		field.indexed
+	);
+}
+function isIndexedSynthetic(
+	synthetic: StorageComputedSchema<any>,
+): synthetic is
+	| StringStorageComputedSchema<any>
+	| NumberStorageComputedSchema<any> {
+	return synthetic.type !== '#boolean' && synthetic.indexed;
+}
+
 function initializeDatabase(
 	db: IDBDatabase,
-	{ name, schema }: StorageCollectionSchema<any, any>,
+	{
+		name,
+		schema,
+	}: StorageCollectionSchema<StorageFieldsSchema, StorageSyntheticsSchema<any>>,
 ) {
 	// create the object store
 	const objectStore = db.createObjectStore('objects', {
@@ -55,9 +87,16 @@ function initializeDatabase(
 	for (const [name, def] of Object.entries(schema.fields)) {
 		// primary key is already taken care of.
 		if (name === schema.primaryKey) continue;
-
-		const unique = (def as any).unique;
-		objectStore.createIndex(name, name, { unique });
+		if (isIndexedField(def)) {
+			const unique = def.unique;
+			objectStore.createIndex(name, name, { unique });
+		}
+	}
+	for (const [name, def] of Object.entries(schema.synthetics)) {
+		if (isIndexedSynthetic(def)) {
+			const unique = def.unique;
+			objectStore.createIndex(name, name, { unique });
+		}
 	}
 }
 

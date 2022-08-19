@@ -68,7 +68,7 @@ export class ServerLibrary {
 		// OPTIMIZE: just keep this list in memory?
 		const peersList = this.clients.allForLibrary(this.id);
 		const peers = peersList.map((peer) => ({
-			id: peer.id,
+			replicaId: peer.replicaId,
 			oldestOperationLogicalTime: peer.oldestOperationLogicalTime,
 			lastSeenLogicalTime: peer.lastSeenLogicalTime,
 		}));

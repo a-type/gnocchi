@@ -1,6 +1,7 @@
 // client ID, and therefore library ID, is inferred
 
 import { SyncOperation } from './operation.js';
+import { ReplicaInfo } from './replica.js';
 
 // from connection metadata.
 export type OperationMessage = {
@@ -26,11 +27,7 @@ export type SyncResponseMessage = {
 	type: 'sync-resp';
 	ops: OperationMessage[];
 	// update the client on the state of its peers
-	peers: {
-		id: string;
-		oldestOperationLogicalTime: string;
-		lastSeenLogicalTime: string;
-	}[];
+	peers: ReplicaInfo[];
 };
 
 export type Message =

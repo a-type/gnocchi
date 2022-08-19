@@ -15,7 +15,9 @@
 	"dependencies": {
 		"@aglio/tools": "^0.0.1",
 		"@consento/hlc": "^2.1.0",
-		"bigint-time": "^1.0.2"
+		"bigint-time": "^1.0.2",
+		"fast-json-patch": "^3.1.1",
+		"jiff": "^0.7.3"
 	},
 	"devDependencies": {
 		"typescript": "^4.7.4"

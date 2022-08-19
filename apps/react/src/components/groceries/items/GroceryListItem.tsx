@@ -23,12 +23,11 @@ import React, {
 	useState,
 } from 'react';
 import { styled } from 'stitches.config';
-import { GroceryItem } from '@aglio/data';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox';
 import { groceriesState } from '../state';
 import { ItemQuantityNumber } from './ItemQuantityNumber';
-import { groceries, useBind, useQuery } from 'stores/groceries';
+import { groceries, hooks, GroceryItem } from 'stores/groceries';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -46,12 +45,10 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
-		const sectionStateSnap = useSnapshot(groceriesState);
-		const inputs = useQuery(() => item.queryInputs(), {
-			key: `inputs-${item.id}`,
-		});
+		hooks.useWatch(item);
 
-		useBind(item, ['purchasedQuantity', 'totalQuantity']);
+		const sectionStateSnap = useSnapshot(groceriesState);
+		const inputs = item.inputs;
 
 		const isPurchased = item.purchasedQuantity >= item.totalQuantity;
 		const isPartiallyPurchased = item.purchasedQuantity > 0;
@@ -61,7 +58,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				: pluralize(item.unit)
 			: '';
 		const pluralizedName =
-			item.totalQuantity === 1 ? item.name : pluralize(item.name);
+			item.totalQuantity === 1 ? item.food : pluralize(item.food);
 		const showOnlyInput = inputs.length === 1;
 		const displayString = showOnlyInput
 			? inputs[0].text
@@ -225,7 +222,7 @@ const GroceryListItemMenu = memo(
 	forwardRef<HTMLButtonElement, GroceryListItemMenuProps>(
 		function GroceryListItemMenu({ item, ...props }, ref) {
 			const deleteItem = () => {
-				item.delete().save();
+				groceries.deleteItem(item);
 			};
 
 			const [menuOpen, setMenuOpen] = useState(false);

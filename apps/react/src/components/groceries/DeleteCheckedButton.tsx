@@ -1,8 +1,6 @@
 import { Button } from '../primitives';
 import React, { forwardRef } from 'react';
-import { commit } from '@aphro/runtime-ts';
-import { useQuery } from 'stores/groceries';
-import { GroceryItem } from '@aglio/data';
+import { hooks, groceries } from 'stores/groceries';
 
 export interface DeleteCheckedButtonProps {
 	className?: string;
@@ -14,29 +12,18 @@ export const DeleteCheckedButton = forwardRef<
 >(function DeleteCheckedButton({ ...rest }, ref) {
 	// TODO: if multiple lists are ever supported, this
 	// will need to query based on list.
-	const items = useQuery(
-		(ctx) =>
-			GroceryItem.queryAll(ctx).where(
-				(item) => item.purchasedQuantity >= item.totalQuantity,
-			),
-		{
-			key: 'purchased-items',
-		},
-	);
-	const checkedItems = items.filter(
-		(item) => item.purchasedQuantity >= item.totalQuantity,
-	);
+	const { data: items } = hooks.useAllItems({
+		where: 'purchased',
+		equals: 'yes',
+	});
 
-	const deleteCompleted = () => {
-		if (items.length) {
-			commit(
-				items[0].ctx,
-				checkedItems.map((item) => item.delete()),
-			);
+	const deleteCompleted = async () => {
+		if (items?.length) {
+			await groceries.deleteItems(items.map((i) => i.id));
 		}
 	};
 
-	const areAnyChecked = checkedItems.length > 0;
+	const areAnyChecked = !!items?.length;
 
 	if (!areAnyChecked) return null;
 

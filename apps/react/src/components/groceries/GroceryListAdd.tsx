@@ -6,13 +6,7 @@ import {
 	TextFieldProps,
 } from 'components/primitives';
 import { Formik, useFormikContext } from 'formik';
-import React, {
-	forwardRef,
-	startTransition,
-	useCallback,
-	useEffect,
-	useRef,
-} from 'react';
+import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
 import { groceries } from 'stores/groceries';
 
 export interface GroceryListAddProps {

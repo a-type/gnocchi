@@ -16,8 +16,9 @@
 		"react": "^18.2.0"
 	},
 	"dependencies": {
+		"@aglio/storage-common": "^0.0.1",
 		"@aglio/tools": "^0.0.1",
-		"@aglio/storage-common": "^0.0.1"
+		"cuid": "^2.1.8"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.17",

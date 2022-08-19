@@ -1,3 +1,5 @@
+import { DocumentBaseline, ReplicaInfo } from '@aglio/storage-common';
+
 export interface OperationHistoryItemSpec {
 	id: string;
 	libraryId: string;
@@ -7,11 +9,7 @@ export interface OperationHistoryItemSpec {
 	timestamp: string;
 }
 
-export interface DocumentBaselineSpec {
-	documentId: string;
-	snapshot: any;
-	timestamp: string;
-}
+export interface DocumentBaselineSpec extends DocumentBaseline<any> {}
 
 export interface DocumentSpec {
 	id: string;
@@ -21,10 +19,7 @@ export interface DocumentSpec {
 	timestamp: string;
 }
 
-export interface ClientConnectionDataSpec {
-	id: string;
+export interface ClientConnectionDataSpec extends ReplicaInfo {
 	libraryId: string;
 	lastSeenWallClockTime: number;
-	lastSeenLogicalTime: string;
-	oldestOperationLogicalTime: string;
 }

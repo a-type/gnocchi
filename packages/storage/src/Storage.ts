@@ -1,5 +1,11 @@
+import {
+	HybridLogicalClockTimestampProvider,
+	ServerMessage,
+	SyncResponseMessage,
+} from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import { initializeDatabases } from './databaseManagement.js';
+import { Meta } from './Meta.js';
 import { StorageCollection } from './StorageCollection.js';
 import { LocalSync, Sync } from './Sync.js';
 import { StorageCollectionSchema } from './types.js';
@@ -23,7 +29,8 @@ export class Storage<
 
 	constructor(options: StorageOptions<Schemas>) {
 		this.collectionSchemas = options.schemas;
-		this.sync = options.sync || new LocalSync();
+		this.sync =
+			options.sync || new LocalSync(new HybridLogicalClockTimestampProvider());
 
 		// centralized storage for all stored operations
 		this.meta = new Meta();
@@ -58,6 +65,31 @@ export class Storage<
 	get collections() {
 		return this._collections;
 	}
+
+	private handleSyncMessage = (message: ServerMessage) => {
+		switch (message.type) {
+			case 'op-re':
+				this.get(message.op.collection).applyOperation(message.op);
+				break;
+			case 'sync-resp':
+				this.handleSyncResponse(message);
+				break;
+		}
+	};
+
+	private handleSyncResponse = async (message: SyncResponseMessage) => {
+		// update our replica info
+		for (const replica of message.peers) {
+			this.meta.setReplica(replica);
+		}
+		// we need to add all operations to the operation history
+		// and then recompute views of each affected document
+		const affectedDocuments = await this.meta.insertOperations(message.ops);
+		// refresh all those documents
+		for (const doc of affectedDocuments) {
+			this.get(doc.collection).recomputeDocument(doc.documentId);
+		}
+	};
 }
 
 export function storage<

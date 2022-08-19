@@ -1,7 +1,9 @@
+import { SyncPatch } from './patch.js';
+
 export interface SyncOperation {
 	id: string;
 	collection: string;
 	documentId: string;
-	patch: any; // TODO:
+	patch: SyncPatch; // TODO: encode?
 	timestamp: string;
 }

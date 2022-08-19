@@ -16,8 +16,12 @@ import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { generateKeyBetween } from 'fractional-indexing';
 import React, { forwardRef, memo, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { GroceryCategory, GroceryItem } from '@aglio/data';
-import { groceries, useQuery } from 'stores/groceries';
+import {
+	groceries,
+	hooks,
+	GroceryItem,
+	GroceryCategory,
+} from 'stores/groceries';
 import { ref as valtioRef } from 'valtio';
 import { Box } from '../primitives';
 import { DeleteItemFloater } from './DeleteItemFloater';
@@ -65,13 +69,11 @@ const GroceryListCategories = forwardRef<
 	HTMLDivElement,
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
-	const categories = useQuery(GroceryCategory.queryAll, {
-		key: 'categories',
-	});
+	const { data: categories } = hooks.useAllCategories();
 
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
-			{categories.map((category) => {
+			{categories?.map((category) => {
 				return <MemoizedCategory key={category.id} category={category} />;
 			})}
 		</Box>
