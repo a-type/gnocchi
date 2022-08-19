@@ -187,3 +187,50 @@ Document {
 Seems like eventually if a client is offline long enough they get evicted from the general consensus stuff.
 
 Like if the server hasn't seen you in 30 days, it drops your history.
+
+# Migrations
+
+Changing the shape of data is hard in a distributed system! Luckily we again get some advantages by using an authoritative server.
+
+When a client is offline and a new change to the app is deployed which modifies how data is stored, it will continue making changes using its old code, of course.
+
+The process of coming back online looks kind of like this:
+
+1. The client connects and requests sync, stating its schema version.
+2. The server rejects the clients request because it has an old version.
+3. Meanwhile, the client's service worker has been downloading the latest client code.
+4. When the client gets the rejection, it prompts the user to update the app in order to resume sync.
+5. Updating of course triggers the reload from the newly downloaded client files.
+
+So far so good - we haven't synced any invalid operations.
+
+Now, once the client reloads with the latest code, it will begin the migration process.
+
+To migrate, we need a transformer for each changed document shape, which converts one document shape to another. To enable more complex refactorings, we could also allow reading other documents\*.
+
+The trick is that rather than simply migrating each stored document, we need to migrate _each operation._ So in fact, what we do is iterate through the entire operation history, incrementally apply the operation to the document, apply the migration transform to the document, and then rewrite the operation to be the patch from MigratedDocument -> MigratedDocument'.
+
+Example:
+
+- Migrate Baseline = MigratedBaseline
+- Apply Operation 1 to **unmigrated** baseline = MigratedDocument 1
+- Rewrite Operation 1 to be diff(MigratedBaseline, MigratedDocument 1)
+- Apply Operation 2 to MigratedDocument 1 = MigratedDocument 2
+- Rewrite Operation 2 to be diff(MigratedDocument 1, MigratedDocument 2)
+- Etc.
+
+The client has to do all this work before it syncs to the server again.
+
+After that, the sync process is normal.
+
+\* doing this is a little ambiguous. In theory we'd want to keep a copy of the entire unmigrated dataset so that the migration can reference 'old' documents no matter where we are in the migration process.
+
+## How does the server migrate? What happens to stored operations?
+
+Good point. The server is always the first one to see new schema changes. It can do the same migration as the client, though, as long as it has the schema information, too.
+
+## Data consistency
+
+It would be easy to make a mistake and end up with invalid, unmigrated operations. One way to avoid this might be to add a schema version field to each operation.
+
+It's probably possible to make a system which guarantees this state can't be reached though. If server and client both immediately migrate all stored data when a schema change is detected, and if the server rejects operations from unmigrated clients, then every operation should be valid.
