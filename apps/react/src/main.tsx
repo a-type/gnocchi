@@ -8,6 +8,8 @@ import React, { StrictMode, Suspense } from 'react';
 import { globalCss, css } from 'stitches.config';
 import { register } from './serviceWorkerRegistration';
 import { attachToPwaEvents } from './pwaEventListener';
+import { AuthProvider } from 'contexts/AuthContext';
+import { SyncMenu } from 'components/sync/SyncMenu';
 
 const floatingButton = css({
 	position: 'absolute',
@@ -49,30 +51,33 @@ function main() {
 	const root = createRoot(document.getElementById('root')!);
 	root.render(
 		<StrictMode>
-			<PageRoot>
-				<PageContent fullHeight noPadding flex={1}>
-					<Box
-						w="full"
-						p={4}
-						direction="column"
-						gap={2}
-						align="stretch"
-						css={{
-							position: 'sticky',
-							top: 0,
-							zIndex: 1,
-							backgroundColor: '$white',
-							mb: '$6',
-						}}
-					>
-						<GroceryListAdd />
-						<DeleteCheckedButton className={floatingButton()} />
-					</Box>
-					<Suspense>
-						<GroceryList />
-					</Suspense>
-				</PageContent>
-			</PageRoot>
+			<AuthProvider>
+				<PageRoot>
+					<PageContent fullHeight noPadding flex={1}>
+						<SyncMenu />
+						<Box
+							w="full"
+							p={4}
+							direction="column"
+							gap={2}
+							align="stretch"
+							css={{
+								position: 'sticky',
+								top: 0,
+								zIndex: 1,
+								backgroundColor: '$white',
+								mb: '$6',
+							}}
+						>
+							<GroceryListAdd />
+							<DeleteCheckedButton className={floatingButton()} />
+						</Box>
+						<Suspense>
+							<GroceryList />
+						</Suspense>
+					</PageContent>
+				</PageRoot>
+			</AuthProvider>
 		</StrictMode>,
 	);
 

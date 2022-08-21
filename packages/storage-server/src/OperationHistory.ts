@@ -1,3 +1,4 @@
+import { SyncOperation } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
 import { OperationHistoryItemSpec } from './types.js';
 
@@ -29,10 +30,7 @@ export class OperationHistory {
 			.all(this.libraryId, count);
 	};
 
-	getAfter = (
-		libraryId: string,
-		timestamp: string,
-	): OperationHistoryItemSpec[] => {
+	getAfter = (timestamp: string): OperationHistoryItemSpec[] => {
 		return this.db
 			.prepare(
 				`
@@ -44,7 +42,7 @@ export class OperationHistory {
 			.all(this.libraryId, timestamp);
 	};
 
-	insert = (item: OperationHistoryItemSpec) => {
+	insert = (item: SyncOperation) => {
 		return this.db
 			.prepare(
 				`
@@ -60,5 +58,27 @@ export class OperationHistory {
 				item.patch,
 				item.timestamp,
 			);
+	};
+
+	insertAll = async (items: SyncOperation[]) => {
+		const insertStatement = this.db.prepare(
+			`
+			INSERT INTO OperationHistory (libraryId, collection
+			, documentId, patch, timestamp)
+			VALUES (?, ?, ?, ?, ?)
+			`,
+		);
+
+		this.db.transaction(() => {
+			for (const item of items) {
+				insertStatement.run(
+					this.libraryId,
+					item.collection,
+					item.documentId,
+					item.patch,
+					item.timestamp,
+				);
+			}
+		});
 	};
 }

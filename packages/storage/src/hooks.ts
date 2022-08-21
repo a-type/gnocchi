@@ -8,7 +8,8 @@ import {
 	CollectionIndexFilter,
 	StorageCollectionSchema,
 	StorageDocument,
-} from './types.js';
+	StorageSchema,
+} from '@aglio/storage-common';
 
 type QueryHookResult<T> = {
 	data: T | null;
@@ -41,12 +42,14 @@ type Flatten<T extends Record<string, any>> = T extends Record<string, infer V>
 	: never;
 
 type GeneratedHooks<
-	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
+	Schema extends StorageSchema<{
+		[k: string]: StorageCollectionSchema<any, any>;
+	}>,
 > = Flatten<{
-	[CollectionName in Extract<keyof Schemas, string>]: CollectionHooks<
-		CollectionName,
-		Schemas[CollectionName]
-	>;
+	[CollectionName in Extract<
+		keyof Schema['collections'],
+		string
+	>]: CollectionHooks<CollectionName, Schema['collections'][CollectionName]>;
 }>;
 
 function useLiveQuery<
@@ -61,14 +64,18 @@ function capitalize<T extends string>(str: T) {
 }
 
 type CapitalizedCollectionName<
-	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
-> = Capitalize<Extract<keyof Schemas, string>>;
+	Schema extends StorageSchema<{
+		[k: string]: StorageCollectionSchema<any, any>;
+	}>,
+> = Capitalize<Extract<keyof Schema['collections'], string>>;
 
 export function createHooks<
-	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
+	Schema extends StorageSchema<{
+		[k: string]: StorageCollectionSchema<any, any>;
+	}>,
 >(
-	storage: Storage<Schemas>,
-): GeneratedHooks<Schemas> & {
+	storage: Storage<Schema>,
+): GeneratedHooks<Schema> & {
 	useWatch<T>(liveObject: T): T;
 } {
 	function useWatch(liveObject: any) {
@@ -86,7 +93,7 @@ export function createHooks<
 		const collection = storage.collections[name];
 		const getOneHookName = `use${capitalize(
 			name,
-		)}` as `use${CapitalizedCollectionName<Schemas>}`;
+		)}` as `use${CapitalizedCollectionName<Schema>}`;
 		hooks[getOneHookName] = function useOne(id: string) {
 			suspend(() => collection.initialized, [name]);
 			const liveQuery = useMemo(() => {
@@ -104,7 +111,7 @@ export function createHooks<
 
 		const getAllHookName = `useAll${capitalize(
 			name,
-		)}` as `useAll${CapitalizedCollectionName<Schemas>}`;
+		)}` as `useAll${CapitalizedCollectionName<Schema>}`;
 		hooks[getAllHookName] = function useAll(
 			index?: CollectionIndexFilter<any, any>,
 		) {
@@ -129,7 +136,7 @@ export function createHooks<
 			};
 		};
 	}
-	return hooks as GeneratedHooks<Schemas> & {
+	return hooks as GeneratedHooks<Schema> & {
 		useWatch<T>(liveObject: T): T;
 	};
 }

@@ -14,7 +14,13 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { generateKeyBetween } from 'fractional-indexing';
-import React, { forwardRef, memo, useCallback, useState } from 'react';
+import React, {
+	forwardRef,
+	memo,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import {
 	groceries,
@@ -30,6 +36,7 @@ import { GroceryListCategory } from './GroceryListCategory';
 import { GroceryListItem } from './items/GroceryListItem';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
 import { groceriesState } from './state';
+import { useAuth } from 'contexts/AuthContext';
 
 export interface GroceryListProps {
 	className?: string;
@@ -45,6 +52,8 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 		const handleDragCancel = useOnDragCancel();
 
 		const sensors = useGroceryDndSensors();
+
+		useGrocerySync();
 
 		return (
 			<DndContext
@@ -64,6 +73,17 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 );
 
 export default GroceryList;
+
+function useGrocerySync() {
+	const session = useAuth();
+	useEffect(() => {
+		if (session) {
+			groceries.sync.goOnline();
+		} else {
+			groceries.sync.goOffline();
+		}
+	}, [session]);
+}
 
 const GroceryListCategories = forwardRef<
 	HTMLDivElement,

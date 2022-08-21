@@ -9,24 +9,17 @@ import {
 	ShapeFromFields,
 	StorageCollectionSchema,
 	StorageDocument,
-	StorageFieldsSchema,
-	StorageSyntheticsSchema,
-} from './types.js';
-import {
-	createPatch,
-	ServerMessage,
-	SyncOperation,
-	SyncResponseMessage,
 } from '@aglio/storage-common';
+import { createPatch, SyncOperation } from '@aglio/storage-common';
 import { Sync } from './Sync.js';
 import { Meta } from './Meta.js';
 import { storeRequestPromise } from './idb.js';
-import cuid from 'cuid';
 
 export class StorageCollection<
 	Collection extends StorageCollectionSchema<any, any>,
 > {
-	private events: CollectionEvents<Collection> = new EventSubscriber();
+	private events: EventSubscriber<CollectionEvents<Collection>> =
+		new EventSubscriber();
 	private liveObjectCache: Record<
 		string | number | symbol,
 		StorageDocument<Collection>
@@ -44,7 +37,7 @@ export class StorageCollection<
 	}
 
 	private get primaryKey() {
-		return this.collection.schema.primaryKey;
+		return this.collection.primaryKey;
 	}
 
 	get initialized(): Promise<void> {
@@ -53,15 +46,15 @@ export class StorageCollection<
 
 	private readTransaction = async () => {
 		const db = await this.db;
-		const transaction = db.transaction('objects', 'readonly');
-		const store = transaction.objectStore('objects');
+		const transaction = db.transaction(this.name, 'readonly');
+		const store = transaction.objectStore(this.name);
 		return store;
 	};
 
 	private readWriteTransaction = async () => {
 		const db = await this.db;
-		const transaction = db.transaction('objects', 'readwrite');
-		const store = transaction.objectStore('objects');
+		const transaction = db.transaction(this.name, 'readwrite');
+		const store = transaction.objectStore(this.name);
 		return store;
 	};
 
@@ -154,7 +147,7 @@ export class StorageCollection<
 
 	update = async (
 		id: string,
-		data: Partial<ShapeFromFields<Collection['schema']['fields']>>,
+		data: Partial<ShapeFromFields<Collection['fields']>>,
 	) => {
 		const current = await this.get(id).resolved;
 		if (!current) {
@@ -171,33 +164,31 @@ export class StorageCollection<
 			[this.primaryKey]: id,
 		};
 
-		const final = await this.createOperation({
-			id: cuid(),
+		const op = await this.meta.createOperation({
 			collection: this.name,
 			documentId: id,
 			patch: createPatch(current, updatedWithComputed),
-			timestamp: this.sync.now(),
 		});
+		const final = await this.applyLocalOperation(op);
 
 		this.onUpdate(final);
 
 		return final;
 	};
 
-	create = async (data: ShapeFromFields<Collection['schema']['fields']>) => {
-		const final = await this.createOperation({
-			id: cuid(),
+	create = async (data: ShapeFromFields<Collection['fields']>) => {
+		const op = await this.meta.createOperation({
 			collection: this.name,
 			documentId: data[this.primaryKey] as string,
 			patch: createPatch({}, data),
-			timestamp: this.sync.now(),
 		});
+		const final = await this.applyLocalOperation(op);
 		this.events.emit('add', final);
 
 		return this.getLiveObject(final);
 	};
 
-	upsert = async (data: ShapeFromFields<Collection['schema']['fields']>) => {
+	upsert = async (data: ShapeFromFields<Collection['fields']>) => {
 		const id = data[this.primaryKey] as string;
 		const current = await this.get(id).resolved;
 		if (current) {
@@ -207,13 +198,12 @@ export class StorageCollection<
 	};
 
 	delete = async (id: string) => {
-		await this.createOperation({
-			id: cuid(),
+		const op = await this.meta.createOperation({
 			collection: this.name,
 			documentId: id,
 			patch: 'DELETE',
-			timestamp: this.sync.now(),
 		});
+		await this.applyLocalOperation(op);
 
 		this.events.emit('delete', id);
 		this.events.emit(`delete:${id}`);
@@ -227,19 +217,20 @@ export class StorageCollection<
 	};
 
 	private computeProperties = (
-		fields: ShapeFromFields<Collection['schema']['fields']>,
+		fields: ShapeFromFields<Collection['fields']>,
 	) => {
-		return computeSynthetics(this.collection.schema, fields);
+		return computeSynthetics(this.collection, fields);
 	};
 
 	/** Sync Methods */
 
-	private createOperation = async (operation: SyncOperation) => {
+	private applyLocalOperation = async (operation: SyncOperation) => {
 		// optimistic application
 		const result = await this.applyOperation(operation);
 		// sync to network
 		this.sync.send({
 			type: 'op',
+			replicaInfo: await this.meta.getLocalReplicaInfo(),
 			...operation,
 		});
 
@@ -278,11 +269,4 @@ export class StorageCollection<
 			return updatedWithComputed;
 		}
 	};
-}
-
-export function collection<
-	Fields extends StorageFieldsSchema,
-	Computeds extends StorageSyntheticsSchema<Fields>,
->(input: StorageCollectionSchema<Fields, Computeds>) {
-	return input;
 }

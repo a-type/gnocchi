@@ -1,5 +1,3 @@
-import type { EventSubscriber } from './EventSubscriber.js';
-
 export type StorageStringFieldSchema = {
 	type: 'string';
 	indexed: boolean;
@@ -88,26 +86,30 @@ export type StorageIndexablePropertyName<
 export type StoragePropertiesSchema<BaseFields extends StorageFieldsSchema> =
 	BaseFields & StorageComputedSchema<BaseFields>;
 
-export type StorageSchemaProperties<Schema extends StorageSchema<any, any>> =
-	Schema extends StorageSchema<infer F, infer S> ? F & S : never;
+export type StorageSchemaProperties<
+	Schema extends StorageCollectionSchema<any, any>,
+> = Schema extends StorageCollectionSchema<infer F, infer S> ? F & S : never;
 
-export type StorageIndexableProperties<Schema extends StorageSchema<any, any>> =
-	{
-		[K in keyof StorageSchemaProperties<Schema>]: StorageSchemaProperties<Schema>[K] extends {
-			indexed: boolean;
-		}
-			? StorageSchemaProperties<Schema>[K]
-			: never;
-	};
+export type StorageIndexableProperties<
+	Schema extends StorageCollectionSchema<any, any>,
+> = {
+	[K in keyof StorageSchemaProperties<Schema>]: StorageSchemaProperties<Schema>[K] extends {
+		indexed: boolean;
+	}
+		? StorageSchemaProperties<Schema>[K]
+		: never;
+};
 
-export type StorageSchemaProperty<Schema extends StorageSchema<any, any>> =
-	StorageSchemaProperties<Schema>[keyof StorageSchemaProperties<Schema>];
+export type StorageSchemaProperty<
+	Schema extends StorageCollectionSchema<any, any>,
+> = StorageSchemaProperties<Schema>[keyof StorageSchemaProperties<Schema>];
 
-export type StorageSchemaPropertyName<Schema extends StorageSchema<any, any>> =
-	Extract<keyof StorageSchemaProperties<Schema>, string>;
+export type StorageSchemaPropertyName<
+	Schema extends StorageCollectionSchema<any, any>,
+> = Extract<keyof StorageSchemaProperties<Schema>, string>;
 
 export type GetSchemaProperty<
-	Schema extends StorageSchema<any, any>,
+	Schema extends StorageCollectionSchema<any, any>,
 	Key extends StorageSchemaPropertyName<Schema>,
 > = StorageSchemaProperties<Schema>[Key];
 
@@ -138,25 +140,21 @@ export type ShapeFromComputeds<T extends StorageSyntheticsSchema<any>> = {
 	[K in keyof T]: ShapeFromProperty<T[K]>;
 };
 
-export type StorageSchema<
+export type StorageCollectionSchema<
 	Fields extends StorageFieldsSchema,
 	Synthetics extends StorageSyntheticsSchema<Fields>,
 > = {
-	version: number;
+	name: string;
 	fields: Fields;
 	synthetics: Synthetics;
 	primaryKey: StorageIndexablePropertyName<Fields, Synthetics>;
-	migrate?: (oldData: any) => ShapeFromFields<Fields>;
 };
 
-export interface StorageCollectionSchema<
-	Fields extends StorageFieldsSchema,
-	Synthetics extends StorageSyntheticsSchema<Fields> = StorageSyntheticsSchema<Fields>,
-> {
-	name: string;
-	historicalSchemas?: StorageSchema<any, any>[];
-	schema: StorageSchema<Fields, Synthetics>;
-}
+export type StorageSchema<
+	Collections extends {
+		[k: string]: StorageCollectionSchema<any, any>;
+	},
+> = { version: number; collections: Collections };
 
 export interface StorageInit<
 	Schemas extends StorageCollectionSchema<any, any>,
@@ -175,10 +173,12 @@ export type StorageDocument<
 
 export type StorageDocumentProperties<
 	Collection extends StorageCollectionSchema<any, any>,
-> = ShapeFromFields<Collection['schema']['fields']> &
-	ShapeFromComputeds<Collection['schema']['synthetics']>;
+> = ShapeFromFields<Collection['fields']> &
+	ShapeFromComputeds<Collection['synthetics']>;
 
-export type IndexedSchemaProperties<Schema extends StorageSchema<any, any>> = {
+export type IndexedSchemaProperties<
+	Schema extends StorageCollectionSchema<any, any>,
+> = {
 	[K in keyof StorageSchemaProperties<Schema> as StorageSchemaProperties<Schema>[K] extends {
 		indexed: true;
 	}
@@ -188,11 +188,11 @@ export type IndexedSchemaProperties<Schema extends StorageSchema<any, any>> = {
 
 export type CollectionIndex<
 	Collection extends StorageCollectionSchema<any, any>,
-> = Extract<keyof IndexedSchemaProperties<Collection['schema']>, string>;
+> = Extract<keyof IndexedSchemaProperties<Collection>, string>;
 
 export type CollectionProperties<
 	Collection extends StorageCollectionSchema<any, any>,
-> = Collection['schema']['fields'] & Collection['schema']['synthetics'];
+> = Collection['fields'] & Collection['synthetics'];
 
 export type CollectionIndexFilter<
 	Collection extends StorageCollectionSchema<any, any>,
@@ -204,14 +204,14 @@ export type CollectionIndexFilter<
 
 export type CollectionEvents<
 	Collection extends StorageCollectionSchema<any, any>,
-> = EventSubscriber<{
+> = {
 	add: (value: StorageDocument<Collection>) => void;
 	update: (value: StorageDocument<Collection>) => void;
 	delete: (id: string) => void;
 	[key: `update:${string}`]: (value: StorageDocument<Collection>) => void;
 	[key: `delete:${string}`]: () => void;
-}>;
+};
 
 export type SchemaForCollection<
 	Collection extends StorageCollectionSchema<any, any>,
-> = Collection['schema'];
+> = Collection;

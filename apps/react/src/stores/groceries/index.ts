@@ -11,45 +11,39 @@ import {
 
 export const categoryCollection = collection({
 	name: 'categories',
-	schema: {
-		version: 1,
-		primaryKey: 'id',
-		fields: {
-			id: {
-				type: 'string',
-				indexed: true,
-				unique: true,
-			},
-			name: {
-				type: 'string',
-				indexed: false,
-				unique: false,
-			},
+	primaryKey: 'id',
+	fields: {
+		id: {
+			type: 'string',
+			indexed: true,
+			unique: true,
 		},
-		synthetics: {},
+		name: {
+			type: 'string',
+			indexed: false,
+			unique: false,
+		},
 	},
+	synthetics: {},
 });
 export type GroceryCategory = StorageDocument<typeof categoryCollection>;
 
 export const foodCategoryLookupCollection = collection({
 	name: 'foodCategoryLookups',
-	schema: {
-		version: 1,
-		primaryKey: 'foodName',
-		fields: {
-			foodName: {
-				type: 'string',
-				indexed: true,
-				unique: true,
-			},
-			categoryId: {
-				type: 'string',
-				indexed: true,
-				unique: false,
-			},
+	primaryKey: 'foodName',
+	fields: {
+		foodName: {
+			type: 'string',
+			indexed: true,
+			unique: true,
 		},
-		synthetics: {},
+		categoryId: {
+			type: 'string',
+			indexed: true,
+			unique: false,
+		},
 	},
+	synthetics: {},
 });
 export type FoodCategoryLookup = StorageDocument<
 	typeof foodCategoryLookupCollection
@@ -57,72 +51,69 @@ export type FoodCategoryLookup = StorageDocument<
 
 export const itemCollection = collection({
 	name: 'items',
-	schema: {
-		version: 1,
-		primaryKey: 'id',
-		fields: {
-			id: {
-				type: 'string',
-				indexed: true,
-				unique: true,
-			},
-			categoryId: {
-				type: 'string',
-				indexed: true,
-				unique: false,
-			},
-			createdAt: {
-				type: 'number',
-				indexed: false,
-				unique: false,
-			},
-			totalQuantity: {
-				type: 'number',
-				indexed: false,
-				unique: false,
-			},
-			purchasedQuantity: {
-				type: 'number',
-				indexed: false,
-				unique: false,
-			},
-			unit: {
-				type: 'string',
-				indexed: false,
-				unique: false,
-			},
-			food: {
-				type: 'string',
-				indexed: true,
-				unique: false,
-			},
-			sortKey: {
-				type: 'string',
-				indexed: false,
-				unique: false,
-			},
-			inputs: {
-				type: 'array',
-				items: {
-					type: 'object',
-					properties: {
-						text: {
-							type: 'string',
-							indexed: false,
-							unique: false,
-						},
+	primaryKey: 'id',
+	fields: {
+		id: {
+			type: 'string',
+			indexed: true,
+			unique: true,
+		},
+		categoryId: {
+			type: 'string',
+			indexed: true,
+			unique: false,
+		},
+		createdAt: {
+			type: 'number',
+			indexed: false,
+			unique: false,
+		},
+		totalQuantity: {
+			type: 'number',
+			indexed: false,
+			unique: false,
+		},
+		purchasedQuantity: {
+			type: 'number',
+			indexed: false,
+			unique: false,
+		},
+		unit: {
+			type: 'string',
+			indexed: false,
+			unique: false,
+		},
+		food: {
+			type: 'string',
+			indexed: true,
+			unique: false,
+		},
+		sortKey: {
+			type: 'string',
+			indexed: false,
+			unique: false,
+		},
+		inputs: {
+			type: 'array',
+			items: {
+				type: 'object',
+				properties: {
+					text: {
+						type: 'string',
+						indexed: false,
+						unique: false,
 					},
 				},
 			},
 		},
-		synthetics: {
-			purchased: {
-				type: '#string',
-				indexed: true,
-				unique: false,
-				compute: (doc) =>
-					doc.purchasedQuantity >= doc.totalQuantity ? 'yes' : 'no',
-			},
+	},
+	synthetics: {
+		purchased: {
+			type: '#string',
+			indexed: true,
+			unique: false,
+			compute: (doc) =>
+				doc.purchasedQuantity >= doc.totalQuantity ? 'yes' : 'no',
 		},
 	},
 });
@@ -131,10 +122,16 @@ export type GroceryItem = StorageDocument<typeof itemCollection>;
 const DEFAULT_CATEGORY = 'None';
 
 const _groceries = storage({
-	schemas: {
-		items: itemCollection,
-		categories: categoryCollection,
-		foodCategoryLookups: foodCategoryLookupCollection,
+	syncOptions: {
+		host: 'ws://localhost:3001',
+	},
+	schema: {
+		version: 1,
+		collections: {
+			items: itemCollection,
+			categories: categoryCollection,
+			foodCategoryLookups: foodCategoryLookupCollection,
+		},
 	},
 });
 

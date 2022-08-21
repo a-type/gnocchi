@@ -1,4 +1,4 @@
-import { StorageComputedSchema, StorageSchema } from './types.js';
+import { StorageComputedSchema, StorageSchema } from '@aglio/storage-common';
 
 export function computeSynthetics(schema: StorageSchema<any, any>, obj: any) {
 	const result: Record<string, any> = {};

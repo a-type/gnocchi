@@ -11,8 +11,10 @@ export class ServerStorage {
 	}
 
 	receive = (libraryId: string, message: ClientMessage, clientId: string) => {
+		// TODO: validate clientID access to replicaID on the message.
+
 		const library = this.libraries.open(libraryId);
-		library.receive(message, clientId);
+		library.receive(message);
 	};
 
 	createSchema = () => {
@@ -20,9 +22,10 @@ export class ServerStorage {
 			this.db
 				.prepare(
 					`
-        CREATE TABLE IF NOT EXISTS ClientConnectionData (
+        CREATE TABLE IF NOT EXISTS ReplicaInfo (
           id TEXT PRIMARY KEY,
           libraryId: TEXT,
+					clientId: TEXT,
           lastSeenWallClockTime INTEGER,
           lastSeenLogicalTime TEXT,
           oldestOperationLogicalTime TEXT
@@ -37,6 +40,7 @@ export class ServerStorage {
         CREATE TABLE IF NOT EXISTS OperationHistory (
 					id TEXT PRIMARY KEY,
           libraryId TEXT,
+					replicaId TEXT,
           collection TEXT,
           documentId TEXT,
           patch TEXT,

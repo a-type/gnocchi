@@ -1,4 +1,4 @@
-import { Message, OperationMessage } from '@aglio/storage-common';
+import { applyPatch, Message, OperationMessage } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
 import { OperationHistory } from './OperationHistory.js';
 import { OperationHistoryItemSpec } from './types.js';
@@ -21,7 +21,7 @@ export class ServerCollection {
 			// insert operation into history for the document
 			this.operationHistory.insert({
 				id: message.id,
-				libraryId: this.libraryId,
+				replicaId: message.replicaId,
 				collection: this.name,
 				documentId: message.documentId,
 				patch: message.patch,
@@ -62,22 +62,23 @@ export class ServerCollection {
 		run();
 	};
 
-	private applyOperations = (
-		baseline: any,
+	private applyOperations = <T>(
+		baseline: T,
 		operations: OperationHistoryItemSpec[],
 	) => {
+		let result: T | undefined = baseline;
 		for (const operation of operations) {
-			baseline = this.applyOperation(baseline, operation);
+			result = this.applyOperation(result, operation);
 		}
 
-		return baseline;
+		return result;
 	};
 
-	private applyOperation = (
-		baseline: any,
+	private applyOperation = <T>(
+		baseline: T,
 		operation: OperationHistoryItemSpec,
 	) => {
-		// TODO:
+		return applyPatch<T>(baseline, operation.patch);
 	};
 }
 

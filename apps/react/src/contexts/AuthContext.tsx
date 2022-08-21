@@ -14,7 +14,9 @@ async function getSession() {
 			},
 		);
 		if (meResult.ok) {
-			return await meResult.json();
+			const json = await meResult.json();
+			if (json.session) return json.session;
+			return null;
 		}
 	} catch (e) {
 		console.error(e);

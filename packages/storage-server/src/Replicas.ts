@@ -1,25 +1,33 @@
 import { Database } from 'better-sqlite3';
-import { ClientConnectionDataSpec } from './types.js';
+import { ReplicaInfoSpec } from './types.js';
 
-export class ClientConnectionData {
+export class ReplicaInfoStorage {
 	constructor(private db: Database, public readonly id: string) {}
 
-	getOrCreate = () => {
-		return this.db
+	getOrCreate = (): ReplicaInfoSpec => {
+		this.db
 			.prepare(
 				`
-      INSERT OR IGNORE INTO ClientConnectionData (id)
+      INSERT OR IGNORE INTO ReplicaInfo (id)
       VALUES (?)
     `,
 			)
 			.run(this.id);
+		return this.db
+			.prepare(
+				`
+			SELECT * FROM ReplicaInfo
+			WHERE id = ?
+			`,
+			)
+			.get(this.id);
 	};
 
 	updateOldestOperationTimestamp = (timestamp: string) => {
 		return this.db
 			.prepare(
 				`
-      UPDATE ClientConnectionData
+      UPDATE ReplicaInfo
       SET oldestOperationTimestamp = ?
       WHERE id = ?
     `,
@@ -32,7 +40,7 @@ export class ClientConnectionData {
 		return this.db
 			.prepare(
 				`
-      UPDATE ClientConnectionData
+      UPDATE ReplicaInfo
       SET lastSeenLogicalTime = ?, lastSeenWallClockTime = ?
       WHERE id = ?
     `,
@@ -41,14 +49,14 @@ export class ClientConnectionData {
 	};
 }
 
-export class ClientConnectionDataManager {
-	private cache = new Map<string, ClientConnectionData>();
+export class ReplicaInfoStorageManager {
+	private cache = new Map<string, ReplicaInfoStorage>();
 
 	constructor(private db: Database) {}
 
 	open = (id: string) => {
 		if (!this.cache.has(id)) {
-			this.cache.set(id, new ClientConnectionData(this.db, id));
+			this.cache.set(id, new ReplicaInfoStorage(this.db, id));
 		}
 
 		return this.cache.get(id)!;
@@ -59,11 +67,11 @@ export class ClientConnectionDataManager {
 			.prepare(
 				`
         SELECT id
-        FROM ClientConnectionData
+        FROM ReplicaInfo
         WHERE libraryId = ?
       `,
 			)
-			.all(libraryId) as ClientConnectionDataSpec[];
+			.all(libraryId) as ReplicaInfoSpec[];
 		return clients;
 	};
 

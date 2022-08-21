@@ -3,3 +3,5 @@ export interface ReplicaInfo {
 	lastSeenLogicalTime: string;
 	oldestOperationLogicalTime: string;
 }
+
+export const SERVER_REPLICA_ID = 'SERVER';

@@ -4,14 +4,14 @@ import {
 	SyncMessage,
 } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
-import { ClientConnectionDataManager } from './ClientConnectionData.js';
+import { ReplicaInfoStorageManager } from './Replicas.js';
 import { MessageSender } from './MessageSender.js';
 import { OperationHistory } from './OperationHistory.js';
 import { ServerCollectionManager } from './ServerCollection.js';
 
 export class ServerLibrary {
 	private collections = new ServerCollectionManager(this.db, this.id);
-	private clients = new ClientConnectionDataManager(this.db);
+	private replicas = new ReplicaInfoStorageManager(this.db);
 	private operations = new OperationHistory(this.db, this.id);
 
 	constructor(
@@ -20,19 +20,19 @@ export class ServerLibrary {
 		public readonly id: string,
 	) {}
 
-	receive = (message: ClientMessage, clientId: string) => {
+	receive = (message: ClientMessage) => {
 		switch (message.type) {
 			case 'op':
-				return this.handleOperation(message, clientId);
+				return this.handleOperation(message);
 			case 'sync':
-				return this.handleSync(message, clientId);
+				return this.handleSync(message);
 			default:
 				console.log('Unknown message type', (message as any).type);
 				break;
 		}
 	};
 
-	private handleOperation = (message: OperationMessage, clientId: string) => {
+	private handleOperation = (message: OperationMessage) => {
 		const collection = this.collections.open(message.collection);
 
 		const run = this.db.transaction(() => {
@@ -40,7 +40,7 @@ export class ServerLibrary {
 			collection.receive(message);
 
 			// update client's oldest timestamp
-			const client = this.clients.open(clientId);
+			const client = this.replicas.open(message.replicaInfo.replicaId);
 			client.updateOldestOperationTimestamp(message.timestamp);
 		});
 
@@ -51,32 +51,40 @@ export class ServerLibrary {
 		// rebroadcast to whole library
 		this.sender.broadcast(this.id, {
 			type: 'op-re',
-			clientId,
+			replicaInfo: message.replicaInfo,
 			op: message,
 		});
 	};
 
-	private handleSync = (message: SyncMessage, clientId: string) => {
-		// lookup operations after the client's requested timestamp
-		const ops = this.operations.getAfter(this.id, message.from);
-
+	private handleSync = (message: SyncMessage) => {
+		const replicaId = message.replicaInfo.replicaId;
 		// note the client's latest timestamp
-		const client = this.clients.open(clientId);
-		client.updateLastSeen(message.timestamp);
+		const replicaInfoStorage = this.replicas.open(replicaId);
+		const priorReplicaInfo = replicaInfoStorage.getOrCreate();
+
+		// store all incoming operations
+		this.operations.insertAll(message.ops);
+
+		replicaInfoStorage.updateLastSeen(message.timestamp);
 
 		// respond to client
-		// OPTIMIZE: just keep this list in memory?
-		const peersList = this.clients.allForLibrary(this.id);
+
+		// lookup operations after the last time we saw the client
+		const ops = this.operations.getAfter(priorReplicaInfo.lastSeenLogicalTime);
+
+		// TODO: OPTIMIZE: just keep this list in memory?
+		const peersList = this.replicas.allForLibrary(this.id);
 		const peers = peersList.map((peer) => ({
 			replicaId: peer.replicaId,
 			oldestOperationLogicalTime: peer.oldestOperationLogicalTime,
 			lastSeenLogicalTime: peer.lastSeenLogicalTime,
 		}));
-		this.sender.send(this.id, clientId, {
+		this.sender.send(this.id, replicaId, {
 			type: 'sync-resp',
 			ops: ops.map((op) => ({
 				type: 'op',
 				id: op.id,
+				replicaId: op.replicaId,
 				collection: op.collection,
 				documentId: op.documentId,
 				patch: op.patch,
