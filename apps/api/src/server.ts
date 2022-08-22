@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { attachSocketServer } from './socketServer';
+import { attachSocketServer } from './socketServer.js';
 import { createServer } from 'http';
 import cors from 'cors';
-import apiRouter from './api';
+import apiRouter from './api/index.js';
 
 const app = express();
 const server = createServer(app);

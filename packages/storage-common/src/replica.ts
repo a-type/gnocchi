@@ -1,6 +1,6 @@
 export interface ReplicaInfo {
-	replicaId: string;
-	lastSeenLogicalTime: string;
+	id: string;
+	ackedLogicalTime: string;
 	oldestOperationLogicalTime: string;
 }
 

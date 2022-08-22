@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'http';
-import { assert } from '../utils/assert';
-import { MAX_AGE, setTokenCookie, getTokenCookie } from './cookies';
-import { Session } from './session';
+import { assert } from '@aglio/tools';
+import { MAX_AGE, setTokenCookie, getTokenCookie } from './cookies.js';
+import { Session } from './session.js';
 import jwt from 'jsonwebtoken';
 import { Response } from 'express';
 

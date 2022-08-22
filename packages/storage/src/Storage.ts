@@ -99,6 +99,7 @@ export class Storage<
 		for (const replica of message.peers) {
 			this.meta.setReplica(replica);
 		}
+		this.meta.setReplica(message.replicaInfo);
 		// we need to add all operations to the operation history
 		// and then recompute views of each affected document
 		const affectedDocuments = await this.meta.insertOperations(message.ops);

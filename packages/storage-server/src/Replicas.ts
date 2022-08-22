@@ -1,18 +1,26 @@
+import { ReplicaInfo, SERVER_REPLICA_ID } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
 import { ReplicaInfoSpec } from './types.js';
 
-export class ReplicaInfoStorage {
-	constructor(private db: Database, public readonly id: string) {}
+export class ReplicaInfos {
+	constructor(private db: Database, private libraryId: string) {}
 
-	getOrCreate = (): ReplicaInfoSpec => {
+	getOrCreate = (
+		replicaId: string,
+		clientId: string | null,
+	): ReplicaInfoSpec => {
+		if (replicaId !== SERVER_REPLICA_ID && clientId === null) {
+			throw new Error('Client ID must be provided for non-server replicas');
+		}
+
 		this.db
 			.prepare(
 				`
-      INSERT OR IGNORE INTO ReplicaInfo (id)
-      VALUES (?)
+      INSERT OR IGNORE INTO ReplicaInfo (id, libraryId, clientId)
+      VALUES (?, ?, ?)
     `,
 			)
-			.run(this.id);
+			.run(replicaId, this.libraryId, clientId);
 		return this.db
 			.prepare(
 				`
@@ -20,10 +28,21 @@ export class ReplicaInfoStorage {
 			WHERE id = ?
 			`,
 			)
-			.get(this.id);
+			.get(replicaId);
 	};
 
-	updateOldestOperationTimestamp = (timestamp: string) => {
+	getAll = (): ReplicaInfoSpec[] => {
+		return this.db
+			.prepare(
+				`
+			SELECT * FROM ReplicaInfo
+			WHERE libraryId = ?
+		`,
+			)
+			.all(this.libraryId);
+	};
+
+	updateOldestOperationTimestamp = (replicaId: string, timestamp: string) => {
 		return this.db
 			.prepare(
 				`
@@ -32,10 +51,10 @@ export class ReplicaInfoStorage {
       WHERE id = ?
     `,
 			)
-			.run(timestamp, this.id);
+			.run(timestamp, replicaId);
 	};
 
-	updateLastSeen = (timestamp: string) => {
+	updateLastSeen = (replicaId: string, timestamp: string) => {
 		const clockTime = new Date().getTime();
 		return this.db
 			.prepare(
@@ -45,37 +64,8 @@ export class ReplicaInfoStorage {
       WHERE id = ?
     `,
 			)
-			.run(timestamp, clockTime, this.id);
-	};
-}
-
-export class ReplicaInfoStorageManager {
-	private cache = new Map<string, ReplicaInfoStorage>();
-
-	constructor(private db: Database) {}
-
-	open = (id: string) => {
-		if (!this.cache.has(id)) {
-			this.cache.set(id, new ReplicaInfoStorage(this.db, id));
-		}
-
-		return this.cache.get(id)!;
+			.run(timestamp, clockTime, replicaId);
 	};
 
-	allForLibrary = (libraryId: string) => {
-		const clients = this.db
-			.prepare(
-				`
-        SELECT id
-        FROM ReplicaInfo
-        WHERE libraryId = ?
-      `,
-			)
-			.all(libraryId) as ReplicaInfoSpec[];
-		return clients;
-	};
-
-	close = (id: string) => {
-		this.cache.delete(id);
-	};
+	updateAcknowledged = (replicaId: string, timestamp: string) => {};
 }

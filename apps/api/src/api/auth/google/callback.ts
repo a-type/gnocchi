@@ -1,8 +1,8 @@
 import { Profile } from '@prisma/client';
-import { setLoginSession } from '../../../auth';
-import { googleOauth } from '../../../auth/googleOauth';
-import { prisma } from '../../../data/prisma';
-import { assert } from '../../../utils/assert';
+import { setLoginSession } from '../../../auth/index.js';
+import { googleOauth } from '../../../auth/googleOauth.js';
+import { prisma } from '../../../data/prisma.js';
+import { assert } from '@aglio/tools';
 import { Request, Response } from 'express';
 
 export default async function googleCallbackHandler(

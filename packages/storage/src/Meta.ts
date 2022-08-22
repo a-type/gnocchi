@@ -31,7 +31,7 @@ export class Meta {
 
 	private openMetaDatabase = () => {
 		return new Promise<IDBDatabase>((resolve, reject) => {
-			const request = indexedDB.open('operationHistory', 1);
+			const request = indexedDB.open('meta', 1);
 			request.onupgradeneeded = (event) => {
 				const db = request.result;
 				const opsStore = db.createObjectStore('operations', { keyPath: 'id' });
@@ -39,13 +39,14 @@ export class Meta {
 					keyPath: 'documentId',
 				});
 				const replicasStore = db.createObjectStore('replicas', {
-					keyPath: 'replicaId',
+					keyPath: 'id',
 				});
 
 				opsStore.createIndex('timestamp', 'timestamp');
 				opsStore.createIndex('documentId_timestamp', 'documentId_timestamp');
 				opsStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
 				replicasStore.createIndex('isLocal', 'isLocal');
+				baselinesStore.createIndex('timestamp', 'timestamp');
 			};
 			request.onerror = () => {
 				console.error('Error opening database', request.error);
@@ -80,9 +81,9 @@ export class Meta {
 			// create our own replica info now
 			const replicaId = cuid();
 			const replicaInfo: ReplicaInfo & { isLocal: 0 | 1 } = {
-				replicaId,
+				id: replicaId,
 				isLocal: 1,
-				lastSeenLogicalTime: this.sync.time.now(),
+				ackedLogicalTime: this.sync.time.now(),
 				oldestOperationLogicalTime: this.sync.time.now(),
 			};
 			const transaction = db.transaction('replicas', 'readwrite');
@@ -119,7 +120,7 @@ export class Meta {
 		return {
 			timestamp: this.sync.time.now(),
 			...init,
-			replicaId: localInfo.replicaId,
+			replicaId: localInfo.id,
 			id: cuid(),
 		};
 	};
@@ -211,6 +212,16 @@ export class Meta {
 		});
 	};
 
+	getBaselinesForDocuments = async (docIds: string[]) => {
+		const db = await this.db;
+		const transaction = db.transaction('operations', 'readonly');
+		const store = transaction.objectStore('operations');
+		const requests = docIds.map((docId) => {
+			return store.get(docId);
+		});
+		return Promise.all(requests.map(storeRequestPromise));
+	};
+
 	private getOperationCompoundIndices = (operation: SyncOperation) => {
 		return {
 			documentId_timestamp: `${operation.documentId}${COMPOUND_INDEX_SEPARATOR}${operation.timestamp}`,
@@ -300,7 +311,7 @@ export class Meta {
 	 * Pulls all local operations the server has not seen.
 	 */
 	getServerSyncInfo = async (): Promise<
-		Pick<SyncMessage, 'ops' | 'replicaInfo' | 'timestamp'>
+		Pick<SyncMessage, 'ops' | 'replicaInfo' | 'timestamp' | 'baselines'>
 	> => {
 		const db = await this.db;
 		const localReplicaInfo = await this.getLocalReplicaInfo();
@@ -309,18 +320,30 @@ export class Meta {
 		// if server replica isn't stored, we're syncing for the first time.
 		const serverReplicaInfo = await this.getServerReplicaInfo();
 		const syncFrom = serverReplicaInfo
-			? serverReplicaInfo.lastSeenLogicalTime
+			? serverReplicaInfo.ackedLogicalTime
 			: undefined;
 		const operations = await this.getAllOperationsFromReplica(
-			localReplicaInfo.replicaId,
+			localReplicaInfo.id,
 			{
 				from: syncFrom,
 			},
 		);
+		// for now we just send every baseline for every
+		// affected document... TODO: optimize this
+		const affectedDocs = new Set(operations.map((op) => op.documentId));
+		const baselines = await this.getBaselinesForDocuments(
+			Array.from(affectedDocs),
+		);
 		return {
 			ops: operations,
-			replicaInfo: localReplicaInfo,
+			replicaInfo: {
+				id: localReplicaInfo.id,
+				ackedLogicalTime: localReplicaInfo.ackedLogicalTime,
+				oldestOperationLogicalTime: localReplicaInfo.oldestOperationLogicalTime,
+			},
 			timestamp: this.sync.time.now(),
+			// don't send empty baselines
+			baselines: baselines.filter(Boolean),
 		};
 	};
 

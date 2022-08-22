@@ -1,10 +1,15 @@
-import { applyPatch, Message, OperationMessage } from '@aglio/storage-common';
+import {
+	applyPatch,
+	OperationMessage,
+	SyncOperation,
+} from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
+import { Baselines } from './Baselines.js';
 import { OperationHistory } from './OperationHistory.js';
-import { OperationHistoryItemSpec } from './types.js';
 
 export class ServerCollection {
 	private operationHistory = new OperationHistory(this.db, this.libraryId);
+	private baselines = new Baselines(this.db, this.libraryId);
 
 	constructor(
 		private db: Database,
@@ -33,19 +38,9 @@ export class ServerCollection {
 
 			// reapply operations to baseline to reconstruct document -
 			// assume empty document if no baseline exists.
-			const baseline = this.db
-				.prepare(
-					`
-					SELECT snapshot, timestamp
-					FROM DocumentBaseline
-					WHERE documentId = ?
-					ORDER BY timestamp DESC
-					LIMIT 1
-				`,
-				)
-				.get(message.documentId);
+			const baseline = this.baselines.get(message.documentId);
 
-			const baselineSnapshot = baseline.snapshot || {};
+			const baselineSnapshot = baseline?.snapshot || {};
 			const updatedView = this.applyOperations(baselineSnapshot, history);
 
 			// update document
@@ -62,10 +57,7 @@ export class ServerCollection {
 		run();
 	};
 
-	private applyOperations = <T>(
-		baseline: T,
-		operations: OperationHistoryItemSpec[],
-	) => {
+	private applyOperations = <T>(baseline: T, operations: SyncOperation[]) => {
 		let result: T | undefined = baseline;
 		for (const operation of operations) {
 			result = this.applyOperation(result, operation);
@@ -74,10 +66,7 @@ export class ServerCollection {
 		return result;
 	};
 
-	private applyOperation = <T>(
-		baseline: T,
-		operation: OperationHistoryItemSpec,
-	) => {
+	private applyOperation = <T>(baseline: T, operation: SyncOperation) => {
 		return applyPatch<T>(baseline, operation.patch);
 	};
 }

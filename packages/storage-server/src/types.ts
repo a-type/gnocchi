@@ -4,11 +4,16 @@ import {
 	SyncOperation,
 } from '@aglio/storage-common';
 
-export type OperationHistoryItemSpec = SyncOperation & {
+export type OperationHistoryItemSpec = Omit<SyncOperation, 'patch'> & {
 	libraryId: string;
+	patch: string;
 };
 
-export interface DocumentBaselineSpec extends DocumentBaseline<any> {}
+export interface DocumentBaselineSpec
+	extends Omit<DocumentBaseline<any>, 'snapshot'> {
+	snapshot: string;
+	libraryId: string;
+}
 
 export interface DocumentSpec {
 	id: string;
