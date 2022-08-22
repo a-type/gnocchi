@@ -1,9 +1,9 @@
 import { json, Router } from 'express';
-import googleCallbackHandler from './google/callback';
-import loginSuccessHandler from './loginSuccess';
-import googleLoginHandler from './google/login';
-import logoutHandler from './logout';
-import sessionHandler from './session';
+import googleCallbackHandler from './google/callback.js';
+import loginSuccessHandler from './loginSuccess.js';
+import googleLoginHandler from './google/login.js';
+import logoutHandler from './logout.js';
+import sessionHandler from './session.js';
 
 const authRouter = Router();
 authRouter.use(json());

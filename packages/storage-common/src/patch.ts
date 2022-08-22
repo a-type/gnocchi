@@ -1,9 +1,5 @@
-import {
-	compare,
-	applyPatch as libApply,
-	Operation,
-	deepClone,
-} from 'fast-json-patch';
+import jsp, { Operation } from 'fast-json-patch';
+const { compare, applyPatch: libApply, deepClone } = jsp;
 
 export type SyncPatch = readonly Operation[] | 'DELETE';
 

@@ -57,7 +57,7 @@ export class WebsocketSync implements Sync {
 				type: 'heartbeat',
 				timestamp: this.time.now(),
 			});
-		}, 10000);
+		}, 60000);
 	};
 
 	private onMessage = (event: MessageEvent) => {

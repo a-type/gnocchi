@@ -1,5 +1,8 @@
-import type { EventsOf } from './EventSubscriber.js';
-import { CollectionEvents, StorageCollectionSchema } from './types.js';
+import type { EventsOf, EventSubscriber } from './EventSubscriber.js';
+import {
+	CollectionEvents,
+	StorageCollectionSchema,
+} from '@aglio/storage-common';
 
 export class LiveQuery<
 	Collection extends StorageCollectionSchema<any, any>,
@@ -11,8 +14,8 @@ export class LiveQuery<
 
 	constructor(
 		private exec: () => Promise<T>,
-		private events: CollectionEvents<Collection>,
-		listen: EventsOf<CollectionEvents<Collection>>[],
+		private events: EventSubscriber<CollectionEvents<Collection>>,
+		listen: (keyof CollectionEvents<Collection>)[],
 	) {
 		this.resolved = this.update();
 		for (const event of listen) {

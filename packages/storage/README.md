@@ -144,6 +144,10 @@ For the whole library of collections accessible to a group of clients, the serve
 
 ```
 OperationHistory {
+  // unique ID of the operation
+  id: String
+  // which replica created the operation
+  replicaId: String
   // the library this history is for
   libraryId: String
   // the collection the document is in
@@ -175,6 +179,8 @@ DocumentBaseline {
 Document {
   // the document's id
   id: String
+  // collection the document belongs to
+  collection: String
   // the snapshot of the current state of the document
   snapshot: Json
   // the logical clock timestamp of the last operation applied

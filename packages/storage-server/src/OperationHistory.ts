@@ -5,7 +5,14 @@ import { OperationHistoryItemSpec } from './types.js';
 export class OperationHistory {
 	constructor(private db: Database, private libraryId: string) {}
 
-	getAllFor = (documentId: string): OperationHistoryItemSpec[] => {
+	private hydrateOperation = (operation: OperationHistoryItemSpec) => {
+		return {
+			...operation,
+			patch: JSON.parse(operation.patch),
+		};
+	};
+
+	getAllFor = (documentId: string): SyncOperation[] => {
 		return this.db
 			.prepare(
 				`
@@ -14,10 +21,11 @@ export class OperationHistory {
       ORDER BY timestamp ASC
     `,
 			)
-			.all(this.libraryId, documentId);
+			.all(this.libraryId, documentId)
+			.map(this.hydrateOperation);
 	};
 
-	getEarliest = (count: number): OperationHistoryItemSpec[] => {
+	getEarliest = (count: number): SyncOperation[] => {
 		return this.db
 			.prepare(
 				`
@@ -27,10 +35,23 @@ export class OperationHistory {
       LIMIT ?
     `,
 			)
-			.all(this.libraryId, count);
+			.all(this.libraryId, count)
+			.map(this.hydrateOperation);
 	};
 
-	getAfter = (timestamp: string): OperationHistoryItemSpec[] => {
+	getAfter = (timestamp: string | null = null): SyncOperation[] => {
+		if (timestamp === null) {
+			return this.db
+				.prepare(
+					`
+					SELECT * FROM OperationHistory
+					WHERE libraryId = ?
+					ORDER BY timestamp ASC
+				`,
+				)
+				.all(this.libraryId)
+				.map(this.hydrateOperation);
+		}
 		return this.db
 			.prepare(
 				`
@@ -39,23 +60,25 @@ export class OperationHistory {
       ORDER BY timestamp ASC
     `,
 			)
-			.all(this.libraryId, timestamp);
+			.all(this.libraryId, timestamp)
+			.map(this.hydrateOperation);
 	};
 
 	insert = (item: SyncOperation) => {
 		return this.db
 			.prepare(
 				`
-      INSERT INTO OperationHistory (libraryId, collection
+      INSERT INTO OperationHistory (id, libraryId, collection
       , documentId, patch, timestamp)
-      VALUES (?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?)
     `,
 			)
 			.run(
+				item.id,
 				this.libraryId,
 				item.collection,
 				item.documentId,
-				item.patch,
+				JSON.stringify(item.patch),
 				item.timestamp,
 			);
 	};
@@ -63,22 +86,25 @@ export class OperationHistory {
 	insertAll = async (items: SyncOperation[]) => {
 		const insertStatement = this.db.prepare(
 			`
-			INSERT INTO OperationHistory (libraryId, collection
+			INSERT INTO OperationHistory (id, libraryId, collection
 			, documentId, patch, timestamp)
-			VALUES (?, ?, ?, ?, ?)
+			VALUES (?, ?, ?, ?, ?, ?)
 			`,
 		);
 
-		this.db.transaction(() => {
+		const tx = this.db.transaction(() => {
 			for (const item of items) {
 				insertStatement.run(
+					item.id,
 					this.libraryId,
 					item.collection,
 					item.documentId,
-					item.patch,
+					JSON.stringify(item.patch),
 					item.timestamp,
 				);
 			}
 		});
+
+		tx();
 	};
 }

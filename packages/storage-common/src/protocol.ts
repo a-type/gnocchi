@@ -1,10 +1,21 @@
 // client ID, and therefore library ID, is inferred
 
+import { DocumentBaseline } from './baseline.js';
 import { SyncOperation } from './operation.js';
 import { ReplicaInfo } from './replica.js';
 
 export type HeartbeatMessage = {
 	type: 'heartbeat';
+	timestamp: string;
+};
+
+/**
+ * Used by clients to indicate they have
+ * successfully applied all operations from the
+ * server up to this logical timestamp.
+ */
+export type AckMessage = {
+	type: 'ack';
 	timestamp: string;
 };
 
@@ -31,11 +42,18 @@ export type SyncMessage = {
 	replicaInfo: ReplicaInfo;
 	// local operations this client has applied since last online
 	ops: SyncOperation[];
+	// baselines this client has applied since last online
+	baselines: DocumentBaseline<any>[];
 };
 
 export type SyncResponseMessage = {
 	type: 'sync-resp';
+	// the server's replica info
+	replicaInfo: ReplicaInfo;
+	// operations this client should apply
 	ops: SyncOperation[];
+	// baselines this client should apply
+	baselines: DocumentBaseline<any>[];
 	// update the client on the state of its peers
 	peers: ReplicaInfo[];
 };
@@ -51,10 +69,16 @@ export type Message =
 	| SyncMessage
 	| SyncResponseMessage
 	| OperationRebroadcastMessage
-	| UpdateRequiredMessage;
+	| UpdateRequiredMessage
+	| AckMessage;
 
-export type ClientMessage = HeartbeatMessage | SyncMessage | OperationMessage;
+export type ClientMessage =
+	| HeartbeatMessage
+	| SyncMessage
+	| OperationMessage
+	| AckMessage;
 export type ServerMessage =
+	| HeartbeatMessage
 	| SyncResponseMessage
 	| OperationRebroadcastMessage
 	| UpdateRequiredMessage;
