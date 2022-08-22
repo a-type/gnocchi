@@ -182,6 +182,16 @@ Document {
 }
 ```
 
+## What the client knows
+
+On the other side, the client needs to know less to make the same decisions.
+
+Particularly, it only needs a `globalAck` timestamp instead of tracking the latest ack of each replica.
+
+It also only needs a `globalPrehistory` timestamp instead of tracking the earliest operation in the history window of each replica.
+
+The server can summarize both of these for each client.
+
 ## 'Evicting' clients
 
 Seems like eventually if a client is offline long enough they get evicted from the general consensus stuff.
