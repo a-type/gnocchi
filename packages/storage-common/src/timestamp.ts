@@ -8,7 +8,7 @@ export interface TimestampProvider {
 
 export class NaiveTimestampProvider implements TimestampProvider {
 	now = () => {
-		return new Date().toUTCString();
+		return Date.now().toString();
 	};
 	update = () => {};
 }

@@ -1,8 +1,10 @@
 import {
+	AckMessage,
 	ClientMessage,
 	OperationMessage,
 	SERVER_REPLICA_ID,
 	SyncMessage,
+	SyncStep2Message,
 } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
 import { ReplicaInfos } from './Replicas.js';
@@ -31,6 +33,10 @@ export class ServerLibrary {
 				return this.handleOperation(message);
 			case 'sync':
 				return this.handleSync(message, clientId);
+			case 'sync-step2':
+				return this.handleSyncStep2(message, clientId);
+			case 'ack':
+				return this.handleAck(message, clientId);
 			default:
 				console.log('Unknown message type', (message as any).type);
 				break;
@@ -38,7 +44,7 @@ export class ServerLibrary {
 	};
 
 	private handleOperation = (message: OperationMessage) => {
-		const collection = this.collections.open(message.collection);
+		const collection = this.collections.open(message.op.collection);
 
 		const run = this.db.transaction(() => {
 			// apply the operation to the document
@@ -46,8 +52,8 @@ export class ServerLibrary {
 
 			// update client's oldest timestamp
 			this.replicas.updateOldestOperationTimestamp(
-				message.replicaId,
-				message.timestamp,
+				message.op.replicaId,
+				message.op.timestamp,
 			);
 		});
 
@@ -55,72 +61,68 @@ export class ServerLibrary {
 
 		// TODO: enqueue a rebase
 
-		// rebroadcast to whole library
-		this.sender.broadcast(this.id, {
-			type: 'op-re',
-			replicaInfo: message.replicaInfo,
-			op: message,
-		});
+		const globalAck = this.replicas.getGlobalAck();
+
+		// rebroadcast to whole library except the sender
+		this.sender.broadcast(
+			this.id,
+			{
+				type: 'op-re',
+				op: message.op,
+				globalAckTimestamp: globalAck,
+			},
+			[message.op.replicaId],
+		);
 	};
 
 	private handleSync = (message: SyncMessage, clientId: string) => {
-		const replicaId = message.replicaInfo.id;
-		// note the client's latest timestamp
-		const priorReplicaInfo = this.replicas.getOrCreate(replicaId, clientId);
-
-		// store all incoming operations
-		console.debug('Storing', message.ops.length, 'operations');
-		this.operations.insertAll(message.ops);
-
-		this.replicas.updateLastSeen(replicaId, message.timestamp);
+		const replicaId = message.replicaId;
+		const clientReplicaInfo = this.replicas.getOrCreate(replicaId, clientId);
 
 		// respond to client
 
-		// lookup operations after the last time we saw the client
-		const ops = this.operations.getAfter(priorReplicaInfo.ackedLogicalTime);
+		// lookup operations after the last ack the client gave us
+		const ops = this.operations.getAfter(clientReplicaInfo.ackedLogicalTime);
 		const baselines = this.baselines.getAllAfter(
-			priorReplicaInfo.ackedLogicalTime,
+			clientReplicaInfo.ackedLogicalTime,
 		);
 
-		const serverReplicaInfo = this.replicas.getOrCreate(
-			SERVER_REPLICA_ID,
-			null,
-		);
-
-		// TODO: OPTIMIZE: just keep this list in memory?
-		const peers = this.replicas.getAll().map((peer) => ({
-			id: peer.id,
-			oldestOperationLogicalTime: peer.oldestOperationLogicalTime,
-			ackedLogicalTime: peer.ackedLogicalTime,
-		}));
 		this.sender.send(this.id, replicaId, {
 			type: 'sync-resp',
-			ops: ops.map((op) => ({
-				type: 'op',
-				id: op.id,
-				replicaId: op.replicaId,
-				collection: op.collection,
-				documentId: op.documentId,
-				patch: op.patch,
-				timestamp: op.timestamp,
-			})),
-			replicaInfo: {
-				id: serverReplicaInfo.id,
-				ackedLogicalTime: serverReplicaInfo.ackedLogicalTime,
-				oldestOperationLogicalTime:
-					serverReplicaInfo.oldestOperationLogicalTime,
-			},
+			ops,
 			baselines: baselines.map((baseline) => ({
 				documentId: baseline.documentId,
 				snapshot: baseline.snapshot,
 				timestamp: baseline.timestamp,
 			})),
-			peers,
+			provideChangesSince: clientReplicaInfo.ackedLogicalTime,
+			globalAckTimestamp: this.replicas.getGlobalAck(),
 		});
+	};
+
+	private handleSyncStep2 = (message: SyncStep2Message, clientId: string) => {
+		// store all incoming operations and baselines
+		this.baselines.insertAll(message.baselines);
+
+		console.debug('Storing', message.ops.length, 'operations');
+		this.operations.insertAll(message.ops);
+
+		// update the client's ackedLogicalTime
+		const lastOperation = message.ops[message.ops.length - 1];
+		if (lastOperation) {
+			this.replicas.updateAcknowledged(
+				message.replicaId,
+				lastOperation.timestamp,
+			);
+		}
 	};
 
 	private setupServerReplica = () => {
 		this.replicas.getOrCreate(SERVER_REPLICA_ID, null);
+	};
+
+	private handleAck = (message: AckMessage, clientId: string) => {
+		this.replicas.updateAcknowledged(message.replicaId, message.timestamp);
 	};
 }
 

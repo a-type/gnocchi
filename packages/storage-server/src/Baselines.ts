@@ -33,6 +33,22 @@ export class Baselines {
 			.run(this.libraryId, documentId, JSON.stringify(snapshot));
 	};
 
+	insertAll = (baselines: DocumentBaseline[]) => {
+		const tx = this.db.transaction(() => {
+			for (const baseline of baselines) {
+				this.db
+					.prepare(
+						`
+				INSERT OR REPLACE INTO DocumentBaseline (libraryId, documentId, snapshot)
+				VALUES (?, ?, ?)
+			`,
+					)
+					.run(this.libraryId, baseline.documentId, baseline.snapshot);
+			}
+		});
+		tx();
+	};
+
 	private hydrateSnapshot = (
 		snapshot: DocumentBaselineSpec,
 	): DocumentBaseline<any> => {

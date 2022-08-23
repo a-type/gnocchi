@@ -1,0 +1,23 @@
+export function take<T, Keys extends keyof T>(
+	obj: T,
+	keys: Keys[],
+): Pick<T, Keys> {
+	const result: any = {};
+	for (const key of keys) {
+		result[key] = obj[key];
+	}
+	return result;
+}
+
+export function omit<T, Keys extends keyof T>(
+	obj: T,
+	keys: Keys[],
+): Omit<T, Keys> {
+	const result: any = {};
+	for (const key of Object.keys(obj)) {
+		if (!keys.includes(key as Keys)) {
+			result[key] = (obj as any)[key];
+		}
+	}
+	return result;
+}

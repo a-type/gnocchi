@@ -8,6 +8,7 @@ import {
 	storage,
 	StorageDocument,
 } from '@aglio/storage';
+import { NaiveTimestampProvider } from '@aglio/storage-common';
 
 export const categoryCollection = collection({
 	name: 'categories',
@@ -124,6 +125,7 @@ const DEFAULT_CATEGORY = 'None';
 const _groceries = storage({
 	syncOptions: {
 		host: 'ws://localhost:3001',
+		timestampProvider: new NaiveTimestampProvider(),
 	},
 	schema: {
 		version: 1,

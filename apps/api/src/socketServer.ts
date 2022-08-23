@@ -26,6 +26,7 @@ const replicaToConnectionMap = new Map<string, WebSocket>();
  * to all clients in a library.
  */
 const libraryToConnectionMap = new Map<string, WebSocket[]>();
+const connectionToReplicaIdMap = new WeakMap<WebSocket, string>();
 
 export function attachSocketServer(server: Server) {
 	const wss = new WebSocketServer({
@@ -43,7 +44,8 @@ export function attachSocketServer(server: Server) {
 			const data = JSON.parse(message.toString()) as ClientMessage;
 
 			if (data.type === 'sync') {
-				replicaToConnectionMap.set(data.replicaInfo.id, ws);
+				replicaToConnectionMap.set(data.replicaId, ws);
+				connectionToReplicaIdMap.set(ws, data.replicaId);
 			}
 
 			storage.receive(identity.planId, data, identity.userId);
@@ -67,10 +69,13 @@ export function attachSocketServer(server: Server) {
 	// forward them to the appropriate clients
 	outgoingMessages.on(
 		'broadcast',
-		(libraryId: string, message: ServerMessage) => {
+		(libraryId: string, message: ServerMessage, omitReplicas: string[]) => {
 			const connections = libraryToConnectionMap.get(libraryId) || [];
 			connections.forEach((connection) => {
-				connection.send(JSON.stringify(message));
+				const replicaId = connectionToReplicaIdMap.get(connection);
+				if (replicaId && !omitReplicas.includes(replicaId)) {
+					connection.send(JSON.stringify(message));
+				}
 			});
 		},
 	);

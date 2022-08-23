@@ -95,11 +95,9 @@ export class Storage<
 	};
 
 	private handleSyncResponse = async (message: SyncResponseMessage) => {
-		// update our replica info
-		for (const replica of message.peers) {
-			this.meta.setReplica(replica);
-		}
-		this.meta.setReplica(message.replicaInfo);
+		// store the global ack info
+		await this.meta.setGlobalAck(message.globalAckTimestamp);
+
 		// we need to add all operations to the operation history
 		// and then recompute views of each affected document
 		const affectedDocuments = await this.meta.insertOperations(message.ops);
@@ -107,11 +105,18 @@ export class Storage<
 		for (const doc of affectedDocuments) {
 			this.get(doc.collection).recomputeDocument(doc.documentId);
 		}
+
+		// respond to the server
+		const sync2 = await this.meta.getSyncStep2(message.provideChangesSince);
+		this.sync.send({
+			type: 'sync-step2',
+			...sync2,
+		});
 	};
 
 	private handleOnlineChange = async (online: boolean) => {
 		if (!online) return;
-		const sync = await this.meta.getServerSyncInfo();
+		const sync = await this.meta.getSync();
 		this.sync.send({
 			type: 'sync',
 			...sync,

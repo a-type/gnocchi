@@ -68,9 +68,9 @@ export class OperationHistory {
 		return this.db
 			.prepare(
 				`
-      INSERT INTO OperationHistory (id, libraryId, collection
-      , documentId, patch, timestamp)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT OR REPLACE INTO OperationHistory (id, libraryId, collection
+      , documentId, patch, timestamp, replicaId)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `,
 			)
 			.run(
@@ -80,15 +80,16 @@ export class OperationHistory {
 				item.documentId,
 				JSON.stringify(item.patch),
 				item.timestamp,
+				item.replicaId,
 			);
 	};
 
 	insertAll = async (items: SyncOperation[]) => {
 		const insertStatement = this.db.prepare(
 			`
-			INSERT INTO OperationHistory (id, libraryId, collection
-			, documentId, patch, timestamp)
-			VALUES (?, ?, ?, ?, ?, ?)
+			INSERT OR REPLACE INTO OperationHistory (id, libraryId, collection
+			, documentId, patch, timestamp, replicaId)
+			VALUES (?, ?, ?, ?, ?, ?, ?)
 			`,
 		);
 
@@ -101,6 +102,7 @@ export class OperationHistory {
 					item.documentId,
 					JSON.stringify(item.patch),
 					item.timestamp,
+					item.replicaId,
 				);
 			}
 		});

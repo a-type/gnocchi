@@ -6,9 +6,11 @@ import {
 	CollectionEvents,
 	CollectionIndex,
 	CollectionIndexFilter,
+	omit,
 	ShapeFromFields,
 	StorageCollectionSchema,
 	StorageDocument,
+	SyncPatch,
 } from '@aglio/storage-common';
 import { createPatch, SyncOperation } from '@aglio/storage-common';
 import { Sync } from './Sync.js';
@@ -38,6 +40,10 @@ export class StorageCollection<
 
 	private get primaryKey() {
 		return this.collection.primaryKey;
+	}
+
+	private get syntheticKeys() {
+		return Object.keys(this.collection.synthetics);
 	}
 
 	get initialized(): Promise<void> {
@@ -76,7 +82,9 @@ export class StorageCollection<
 				return this.getLiveObject(result);
 			},
 			this.events,
-			['add', 'delete'],
+			// is PUT relevant? do we support getting by id before the id
+			// is created? probably should.
+			['put', 'delete'],
 		);
 	};
 
@@ -93,7 +101,7 @@ export class StorageCollection<
 				return this.getLiveObject(raw);
 			},
 			this.events,
-			['add', 'delete', 'update'],
+			['delete', 'put'],
 		);
 	};
 
@@ -132,17 +140,21 @@ export class StorageCollection<
 				});
 			},
 			this.events,
-			['add', 'delete', 'update'],
+			['delete', 'put'],
 		);
 	};
 
-	private onUpdate = (doc: StorageDocument<Collection>) => {
-		const id = doc[this.primaryKey] as string;
-		this.events.emit('update', doc);
-		this.events.emit(`update:${id}`, doc);
-		if (this.liveObjectCache[id]) {
-			setLiveObject(this.liveObjectCache[id], doc);
-		}
+	/**
+	 * Diffs the two versions of the document, removes synthetics, and returns a patch.
+	 */
+	private createDiffPatch = (
+		from: Partial<StorageDocument<Collection>>,
+		to: StorageDocument<Collection>,
+	): SyncPatch => {
+		return createPatch(
+			omit(from, this.syntheticKeys),
+			omit(to, this.syntheticKeys),
+		);
 	};
 
 	update = async (
@@ -154,24 +166,17 @@ export class StorageCollection<
 			throw new Error(`No document with id ${id}`);
 		}
 
-		const updatedRaw = {
+		const updated = {
 			...current,
 			...data,
-		};
-		const updatedWithComputed = {
-			...updatedRaw,
-			...this.computeProperties(updatedRaw),
-			[this.primaryKey]: id,
 		};
 
 		const op = await this.meta.createOperation({
 			collection: this.name,
 			documentId: id,
-			patch: createPatch(current, updatedWithComputed),
+			patch: this.createDiffPatch(current, updated),
 		});
 		const final = await this.applyLocalOperation(op);
-
-		this.onUpdate(final);
 
 		return final;
 	};
@@ -180,10 +185,9 @@ export class StorageCollection<
 		const op = await this.meta.createOperation({
 			collection: this.name,
 			documentId: data[this.primaryKey] as string,
-			patch: createPatch({}, data),
+			patch: this.createDiffPatch({}, data),
 		});
 		const final = await this.applyLocalOperation(op);
-		this.events.emit('add', final);
 
 		return this.getLiveObject(final);
 	};
@@ -204,12 +208,6 @@ export class StorageCollection<
 			patch: 'DELETE',
 		});
 		await this.applyLocalOperation(op);
-
-		this.events.emit('delete', id);
-		this.events.emit(`delete:${id}`);
-		if (this.liveObjectCache[id]) {
-			setLiveObject(this.liveObjectCache[id], null);
-		}
 	};
 
 	deleteAll = async (ids: string[]) => {
@@ -230,8 +228,14 @@ export class StorageCollection<
 		// sync to network
 		this.sync.send({
 			type: 'op',
-			replicaInfo: await this.meta.getLocalReplicaInfo(),
-			...operation,
+			op: {
+				collection: operation.collection,
+				documentId: operation.documentId,
+				id: operation.id,
+				patch: operation.patch,
+				replicaId: operation.replicaId,
+				timestamp: operation.timestamp,
+			},
 		});
 
 		return result;
@@ -243,6 +247,7 @@ export class StorageCollection<
 		// to the baseline.
 
 		await this.meta.insertOperation(operation);
+		await this.meta.ack(operation.timestamp);
 		return this.recomputeDocument(operation.documentId);
 	};
 
@@ -254,6 +259,15 @@ export class StorageCollection<
 			const store = await this.readWriteTransaction();
 			const request = store.delete(id);
 			await storeRequestPromise(request);
+
+			// emit events for this change
+			this.events.emit('delete', id);
+			this.events.emit(`delete:${id}`);
+
+			if (this.liveObjectCache[id]) {
+				setLiveObject(this.liveObjectCache[id], null);
+			}
+
 			return undefined;
 		} else {
 			// write the new view to the document
@@ -265,6 +279,13 @@ export class StorageCollection<
 			};
 			const request = store.put(updatedWithComputed);
 			await storeRequestPromise(request);
+
+			if (this.liveObjectCache[id]) {
+				setLiveObject(this.liveObjectCache[id], updatedWithComputed);
+			}
+
+			this.events.emit('put', updatedWithComputed);
+			this.events.emit(`put:${id}`, updatedWithComputed);
 
 			return updatedWithComputed;
 		}

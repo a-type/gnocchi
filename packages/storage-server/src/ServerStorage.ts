@@ -25,11 +25,11 @@ export class ServerStorage {
 				.prepare(
 					`
         CREATE TABLE IF NOT EXISTS ReplicaInfo (
-          id TEXT PRIMARY KEY,
-          libraryId TEXT,
-					clientId TEXT,
+          id TEXT PRIMARY KEY NOT NULL,
+          libraryId TEXT NOT NULL,
+					clientId TEXT NOT NULL,
           lastSeenWallClockTime INTEGER,
-          lastSeenLogicalTime TEXT,
+          ackedLogicalTime TEXT,
           oldestOperationLogicalTime TEXT
         );
       `,
@@ -40,13 +40,13 @@ export class ServerStorage {
 				.prepare(
 					`
         CREATE TABLE IF NOT EXISTS OperationHistory (
-					id TEXT PRIMARY KEY,
-          libraryId TEXT,
-					replicaId TEXT,
-          collection TEXT,
-          documentId TEXT,
-          patch TEXT,
-          timestamp INTEGER
+					id TEXT PRIMARY KEY NOT NULL,
+          libraryId TEXT NOT NULL,
+					replicaId TEXT NOT NULL,
+          collection TEXT NOT NULL,
+          documentId TEXT NOT NULL,
+          patch TEXT NOT NULL,
+          timestamp INTEGER NOT NULL
         );
       `,
 				)
@@ -56,10 +56,10 @@ export class ServerStorage {
 				.prepare(
 					`
         CREATE TABLE IF NOT EXISTS DocumentBaseline (
-          documentId TEXT PRIMARY KEY,
+          documentId TEXT PRIMARY KEY NOT NULL,
           snapshot TEXT,
-          timestamp TEXT,
-					libraryId TEXT
+          timestamp TEXT NOT NULL,
+					libraryId TEXT NOT NULL
         );
       `,
 				)
@@ -69,11 +69,11 @@ export class ServerStorage {
 				.prepare(
 					`
         CREATE TABLE IF NOT EXISTS Document (
-          id TEXT PRIMARY KEY,
-          libraryId TEXT,
-          collection TEXT,
-          snapshot TEXT,
-          timestamp TEXT
+          id TEXT PRIMARY KEY NOT NULL,
+          libraryId TEXT NOT NULL,
+          collection TEXT NOT NULL,
+          snapshot TEXT NOT NULL,
+          timestamp TEXT NOT NULL
         );
       `,
 				)

@@ -205,10 +205,9 @@ export type CollectionIndexFilter<
 export type CollectionEvents<
 	Collection extends StorageCollectionSchema<any, any>,
 > = {
-	add: (value: StorageDocument<Collection>) => void;
-	update: (value: StorageDocument<Collection>) => void;
+	put: (value: StorageDocument<Collection>) => void;
 	delete: (id: string) => void;
-	[key: `update:${string}`]: (value: StorageDocument<Collection>) => void;
+	[key: `put:${string}`]: (value: StorageDocument<Collection>) => void;
 	[key: `delete:${string}`]: () => void;
 };
 

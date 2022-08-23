@@ -1,10 +1,14 @@
 import {
+	AckMessage,
 	applyPatch,
 	DocumentBaseline,
+	omit,
 	ReplicaInfo,
 	SERVER_REPLICA_ID,
 	SyncMessage,
 	SyncOperation,
+	SyncResponseMessage,
+	SyncStep2Message,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import cuid from 'cuid';
@@ -17,6 +21,17 @@ const COMPOUND_INDEX_SEPARATOR = '#';
 const COMPOUND_INDEX_LOWER_BOUND_SEPARATOR = '"';
 // 1 higher in ASCII table than the separator
 const COMPOUND_INDEX_UPPER_BOUND_SEPARATOR = '$';
+
+// local info types for the client
+type LocalReplicaInfo = ReplicaInfo & {
+	type: 'localReplicaInfo';
+};
+type AckInfo = {
+	type: 'ack';
+	// null means no operations are acknowledged
+	// by every peer yet.
+	globalAckTimestamp: string | null;
+};
 
 export class Meta {
 	private db: Promise<IDBDatabase>;
@@ -41,6 +56,7 @@ export class Meta {
 				const replicasStore = db.createObjectStore('replicas', {
 					keyPath: 'id',
 				});
+				const infoStore = db.createObjectStore('info', { keyPath: 'type' });
 
 				opsStore.createIndex('timestamp', 'timestamp');
 				opsStore.createIndex('documentId_timestamp', 'documentId_timestamp');
@@ -58,15 +74,36 @@ export class Meta {
 		});
 	};
 
+	/**
+	 * Acks that we have seen a timestamp to the server
+	 * and stores it as our local ackedLogicalTime if it's
+	 * greater than our current ackedLogicalTime.
+	 */
+	ack = async (timestamp: string) => {
+		const localReplicaInfo = await this.getLocalReplicaInfo();
+		this.sync.send({
+			type: 'ack',
+			replicaId: localReplicaInfo.id,
+			timestamp,
+		});
+		if (timestamp > localReplicaInfo.ackedLogicalTime) {
+			localReplicaInfo.ackedLogicalTime = timestamp;
+			const db = await this.db;
+			const transaction = db.transaction('info', 'readwrite');
+			const store = transaction.objectStore('info');
+			const request = store.put(localReplicaInfo);
+			await storeRequestPromise(request);
+		}
+	};
+
 	// TODO: cache this in memory
 	async getLocalReplicaInfo(): Promise<ReplicaInfo> {
 		const db = await this.db;
-		const transaction = db.transaction('replicas', 'readonly');
-		const store = transaction.objectStore('replicas');
-		// find the replica which has isLocal=true
-		const index = store.index('isLocal');
-		const request = index.get(1);
-		const lookup = await new Promise<ReplicaInfo | undefined>(
+		const transaction = db.transaction('info', 'readonly');
+		const store = transaction.objectStore('info');
+
+		const request = store.get('localReplicaInfo');
+		const lookup = await new Promise<LocalReplicaInfo | undefined>(
 			(resolve, reject) => {
 				request.onerror = () => {
 					reject(request.error);
@@ -80,35 +117,20 @@ export class Meta {
 		if (!lookup) {
 			// create our own replica info now
 			const replicaId = cuid();
-			const replicaInfo: ReplicaInfo & { isLocal: 0 | 1 } = {
+			const replicaInfo: LocalReplicaInfo = {
+				type: 'localReplicaInfo',
 				id: replicaId,
-				isLocal: 1,
 				ackedLogicalTime: this.sync.time.now(),
 				oldestOperationLogicalTime: this.sync.time.now(),
 			};
-			const transaction = db.transaction('replicas', 'readwrite');
-			const store = transaction.objectStore('replicas');
+			const transaction = db.transaction('info', 'readwrite');
+			const store = transaction.objectStore('info');
 			const request = store.add(replicaInfo);
 			await storeRequestPromise(request);
 			return replicaInfo;
 		}
 
 		return lookup;
-	}
-
-	async getServerReplicaInfo(): Promise<ReplicaInfo | null> {
-		const db = await this.db;
-		const transaction = db.transaction('replicas', 'readonly');
-		const store = transaction.objectStore('replicas');
-		return new Promise<ReplicaInfo | null>((resolve, reject) => {
-			const request = store.get(SERVER_REPLICA_ID);
-			request.onerror = () => {
-				reject(request.error);
-			};
-			request.onsuccess = () => {
-				resolve(request.result || null);
-			};
-		});
 	}
 
 	createOperation = async (
@@ -158,7 +180,7 @@ export class Meta {
 							cursor.value.timestamp > previousTimestamp,
 					);
 
-					iterator(cursor.value);
+					iterator(this.stripOperationCompoundIndices(cursor.value));
 
 					previousTimestamp = cursor.value.timestamp;
 
@@ -176,7 +198,7 @@ export class Meta {
 
 	getAllOperationsFromReplica = async (
 		replicaId: string,
-		{ from, to }: { from?: string; to?: string },
+		{ from, to }: { from?: string | null; to?: string | null },
 	) => {
 		const db = await this.db;
 		const transaction = db.transaction('operations', 'readonly');
@@ -185,10 +207,10 @@ export class Meta {
 
 		// similar start/end range semantics to iterateOverAllOperationsForDocument
 		const start = from
-			? `${replicaId}_${from}`
+			? `${replicaId}${COMPOUND_INDEX_SEPARATOR}${from}`
 			: `${replicaId}${COMPOUND_INDEX_LOWER_BOUND_SEPARATOR}`;
 		const end = to
-			? `${replicaId}_${to}`
+			? `${replicaId}${COMPOUND_INDEX_SEPARATOR}${to}`
 			: `${replicaId}${COMPOUND_INDEX_UPPER_BOUND_SEPARATOR}`;
 		// range ends are open if a from/to was not specified
 		const range = IDBKeyRange.bound(start, end, !from, !to);
@@ -199,7 +221,7 @@ export class Meta {
 			request.onsuccess = (event) => {
 				const cursor = request.result;
 				if (cursor) {
-					operations.push(cursor.value);
+					operations.push(this.stripOperationCompoundIndices(cursor.value));
 					cursor.continue();
 				} else {
 					resolve(operations);
@@ -229,16 +251,24 @@ export class Meta {
 		};
 	};
 
+	private stripOperationCompoundIndices = (
+		op: SyncOperation & {
+			documentId_timestamp: string;
+			replicaId_timestamp: string;
+		},
+	): SyncOperation => {
+		return omit(op, ['documentId_timestamp', 'replicaId_timestamp']);
+	};
+
 	insertOperation = async (item: SyncOperation) => {
 		const db = await this.db;
 		const transaction = db.transaction('operations', 'readwrite');
 		const store = transaction.objectStore('operations');
-		const request = store.add({
+		const request = store.put({
 			...item,
 			...this.getOperationCompoundIndices(item),
 		});
 		await storeRequestPromise(request);
-		// TODO: update our replica info for the affected replica
 	};
 
 	/**
@@ -251,7 +281,7 @@ export class Meta {
 		const affected: Record<string, { documentId: string; collection: string }> =
 			{};
 		for (const item of items) {
-			store.add({
+			store.put({
 				...item,
 				...this.getOperationCompoundIndices(item),
 			});
@@ -299,33 +329,55 @@ export class Meta {
 		return computed as T;
 	};
 
-	setReplica = async (replica: ReplicaInfo) => {
+	getAckInfo = async (): Promise<AckInfo> => {
 		const db = await this.db;
-		const transaction = db.transaction('replicas', 'readwrite');
-		const store = transaction.objectStore('replicas');
-		const request = store.put(replica);
-		return storeRequestPromise(request);
+		const transaction = db.transaction('info', 'readonly');
+		const store = transaction.objectStore('info');
+		const request = store.get('ack');
+		const result = await storeRequestPromise<AckInfo>(request);
+		if (result) {
+			return result;
+		} else {
+			return {
+				globalAckTimestamp: null,
+				type: 'ack',
+			};
+		}
+	};
+
+	setGlobalAck = async (ack: string) => {
+		const ackInfo = await this.getAckInfo();
+		const db = await this.db;
+		const transaction = db.transaction('info', 'readwrite');
+		const store = transaction.objectStore('info');
+		const request = store.put({
+			...ackInfo,
+			globalAckTimestamp: ack,
+		});
 	};
 
 	/**
 	 * Pulls all local operations the server has not seen.
 	 */
-	getServerSyncInfo = async (): Promise<
-		Pick<SyncMessage, 'ops' | 'replicaInfo' | 'timestamp' | 'baselines'>
-	> => {
-		const db = await this.db;
+	getSync = async (): Promise<Pick<SyncMessage, 'timestamp' | 'replicaId'>> => {
 		const localReplicaInfo = await this.getLocalReplicaInfo();
 
+		return {
+			timestamp: this.sync.time.now(),
+			replicaId: localReplicaInfo.id,
+		};
+	};
+
+	getSyncStep2 = async (
+		provideChangesSince: SyncResponseMessage['provideChangesSince'],
+	): Promise<Omit<SyncStep2Message, 'type'>> => {
+		const localReplicaInfo = await this.getLocalReplicaInfo();
 		// collect all of our operations that are newer than the server's last operation
 		// if server replica isn't stored, we're syncing for the first time.
-		const serverReplicaInfo = await this.getServerReplicaInfo();
-		const syncFrom = serverReplicaInfo
-			? serverReplicaInfo.ackedLogicalTime
-			: undefined;
 		const operations = await this.getAllOperationsFromReplica(
 			localReplicaInfo.id,
 			{
-				from: syncFrom,
+				from: provideChangesSince,
 			},
 		);
 		// for now we just send every baseline for every
@@ -334,16 +386,13 @@ export class Meta {
 		const baselines = await this.getBaselinesForDocuments(
 			Array.from(affectedDocs),
 		);
+
 		return {
-			ops: operations,
-			replicaInfo: {
-				id: localReplicaInfo.id,
-				ackedLogicalTime: localReplicaInfo.ackedLogicalTime,
-				oldestOperationLogicalTime: localReplicaInfo.oldestOperationLogicalTime,
-			},
 			timestamp: this.sync.time.now(),
+			ops: operations,
 			// don't send empty baselines
 			baselines: baselines.filter(Boolean),
+			replicaId: localReplicaInfo.id,
 		};
 	};
 

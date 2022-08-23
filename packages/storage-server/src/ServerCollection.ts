@@ -21,24 +21,24 @@ export class ServerCollection {
 	 * Applies an operation, inserting it into the operation history
 	 * and recomputing the document snapshot.
 	 */
-	receive = (message: OperationMessage) => {
+	receive = ({ op }: OperationMessage) => {
 		const run = this.db.transaction(() => {
 			// insert operation into history for the document
 			this.operationHistory.insert({
-				id: message.id,
-				replicaId: message.replicaId,
+				id: op.id,
+				replicaId: op.replicaId,
 				collection: this.name,
-				documentId: message.documentId,
-				patch: message.patch,
-				timestamp: message.timestamp,
+				documentId: op.documentId,
+				patch: op.patch,
+				timestamp: op.timestamp,
 			});
 
 			// read operation history for affected document
-			const history = this.operationHistory.getAllFor(message.documentId);
+			const history = this.operationHistory.getAllFor(op.documentId);
 
 			// reapply operations to baseline to reconstruct document -
 			// assume empty document if no baseline exists.
-			const baseline = this.baselines.get(message.documentId);
+			const baseline = this.baselines.get(op.documentId);
 
 			const baselineSnapshot = baseline?.snapshot || {};
 			const updatedView = this.applyOperations(baselineSnapshot, history);
@@ -47,11 +47,17 @@ export class ServerCollection {
 			this.db
 				.prepare(
 					`
-					INSERT OR REPLACE INTO Document (documentId, snapshot, timestamp)
-					VALUES (?, ?, ?)
+					INSERT OR REPLACE INTO Document (id, libraryId, collection, snapshot, timestamp)
+					VALUES (?, ?, ?, ?, ?)
 				`,
 				)
-				.run(message.documentId, updatedView, message.timestamp);
+				.run(
+					op.documentId,
+					this.libraryId,
+					this.name,
+					JSON.stringify(updatedView),
+					op.timestamp,
+				);
 		});
 
 		run();

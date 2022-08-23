@@ -47,25 +47,47 @@ export class ReplicaInfos {
 			.prepare(
 				`
       UPDATE ReplicaInfo
-      SET oldestOperationTimestamp = ?
+      SET oldestOperationLogicalTime = ?
       WHERE id = ?
     `,
 			)
 			.run(timestamp, replicaId);
 	};
 
-	updateLastSeen = (replicaId: string, timestamp: string) => {
+	updateLastSeen = (replicaId: string) => {
 		const clockTime = new Date().getTime();
 		return this.db
 			.prepare(
 				`
       UPDATE ReplicaInfo
-      SET lastSeenLogicalTime = ?, lastSeenWallClockTime = ?
+      SET lastSeenWallClockTime = ?
       WHERE id = ?
     `,
 			)
-			.run(timestamp, clockTime, replicaId);
+			.run(clockTime, replicaId);
 	};
 
-	updateAcknowledged = (replicaId: string, timestamp: string) => {};
+	updateAcknowledged = (replicaId: string, timestamp: string) => {
+		return this.db
+			.prepare(
+				`
+			UPDATE ReplicaInfo
+			SET ackedLogicalTime = ?
+			WHERE id = ?
+		`,
+			)
+			.run(timestamp, replicaId);
+	};
+
+	getGlobalAck = () => {
+		return this.db
+			.prepare(
+				`
+			SELECT MIN(ackedLogicalTime) AS ackedLogicalTime
+			FROM ReplicaInfo
+			WHERE libraryId = ?
+		`,
+			)
+			.get(this.libraryId);
+	};
 }
