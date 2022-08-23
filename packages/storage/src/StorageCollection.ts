@@ -224,7 +224,13 @@ export class StorageCollection<
 
 	private applyLocalOperation = async (operation: SyncOperation) => {
 		// optimistic application
-		const result = await this.applyOperation(operation);
+		const oldestHistoryTimestamp = await this.meta.insertLocalOperation(
+			operation,
+		);
+		// TODO: should local ops be acked?
+		await this.meta.ack(operation.timestamp);
+		const result = this.recomputeDocument(operation.documentId);
+
 		// sync to network
 		this.sync.send({
 			type: 'op',
@@ -236,12 +242,13 @@ export class StorageCollection<
 				replicaId: operation.replicaId,
 				timestamp: operation.timestamp,
 			},
+			oldestHistoryTimestamp,
 		});
 
 		return result;
 	};
 
-	applyOperation = async (operation: SyncOperation) => {
+	applyRemoteOperation = async (operation: SyncOperation) => {
 		// to apply an operation we have to first insert it in the operation
 		// history, then lookup and reapply all operations for that document
 		// to the baseline.
@@ -289,5 +296,9 @@ export class StorageCollection<
 
 			return updatedWithComputed;
 		}
+	};
+
+	rebaseDocument = async (id: string, upTo: string) => {
+		const squashed = await this.meta.rebase(this.name, id, upTo);
 	};
 }

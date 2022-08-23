@@ -24,6 +24,7 @@ export type AckMessage = {
 export type OperationMessage = {
 	type: 'op';
 	op: SyncOperation;
+	oldestHistoryTimestamp: string;
 };
 
 export type OperationRebroadcastMessage = {
@@ -57,9 +58,6 @@ export type SyncResponseMessage = {
 	 * Update client on the global ack
 	 */
 	globalAckTimestamp: string;
-	/**
-	 * TODO: update client on global prehistory
-	 */
 };
 
 export type SyncStep2Message = {
@@ -83,15 +81,15 @@ export type UpdateRequiredMessage = {
 	requiredSchemaVersion: number;
 };
 
-export type Message =
-	| HeartbeatMessage
-	| OperationMessage
-	| SyncMessage
-	| SyncResponseMessage
-	| SyncStep2Message
-	| OperationRebroadcastMessage
-	| UpdateRequiredMessage
-	| AckMessage;
+export type RebasesMessage = {
+	type: 'rebases';
+	/**
+	 * Rebases the client can perform. All operations
+	 * for this document before this timestamp can
+	 * be applied and dropped.
+	 */
+	rebases: { collection: string; documentId: string; upTo: string }[];
+};
 
 export type ClientMessage =
 	| HeartbeatMessage
@@ -103,4 +101,5 @@ export type ServerMessage =
 	| HeartbeatMessage
 	| SyncResponseMessage
 	| OperationRebroadcastMessage
-	| UpdateRequiredMessage;
+	| UpdateRequiredMessage
+	| RebasesMessage;

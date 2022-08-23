@@ -1,4 +1,5 @@
 import {
+	RebasesMessage,
 	ServerMessage,
 	StorageSchema,
 	SyncResponseMessage,
@@ -87,11 +88,14 @@ export class Storage<
 		switch (message.type) {
 			case 'op-re':
 				for (const op of message.ops) {
-					this.get(op.collection).applyOperation(op);
+					this.get(op.collection).applyRemoteOperation(op);
 				}
 				break;
 			case 'sync-resp':
 				this.handleSyncResponse(message);
+				break;
+			case 'rebases':
+				this.handleRebases(message);
 				break;
 		}
 	};
@@ -116,6 +120,15 @@ export class Storage<
 		});
 	};
 
+	private handleRebases = async (message: RebasesMessage) => {
+		for (const rebase of message.rebases) {
+			this.collections[rebase.collection].rebaseDocument(
+				rebase.documentId,
+				rebase.upTo,
+			);
+		}
+	};
+
 	private handleOnlineChange = async (online: boolean) => {
 		if (!online) return;
 		const sync = await this.meta.getSync();
@@ -124,6 +137,10 @@ export class Storage<
 			...sync,
 			schemaVersion: this.schema.version,
 		});
+	};
+
+	stats = async () => {
+		return this.meta.stats();
 	};
 }
 

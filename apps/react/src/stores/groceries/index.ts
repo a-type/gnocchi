@@ -137,6 +137,10 @@ const _groceries = storage({
 	},
 });
 
+(window as any).stats = () => {
+	_groceries.stats().then(console.info);
+};
+
 export const hooks = createHooks(_groceries);
 
 export const mutations = {

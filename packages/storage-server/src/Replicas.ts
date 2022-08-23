@@ -88,6 +88,6 @@ export class ReplicaInfos {
 			WHERE libraryId = ?
 		`,
 			)
-			.get(this.libraryId);
+			.get(this.libraryId).ackedLogicalTime;
 	};
 }

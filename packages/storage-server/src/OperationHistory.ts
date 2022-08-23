@@ -64,6 +64,23 @@ export class OperationHistory {
 			.map(this.hydrateOperation);
 	};
 
+	/**
+	 * Returns all operations before the given timestamp
+	 * in ascending chronological order
+	 */
+	getBefore = (before: string): SyncOperation[] => {
+		return this.db
+			.prepare(
+				`
+			SELECT * FROM OperationHistory
+			WHERE libraryId = ? AND timestamp < ?
+			ORDER BY timestamp ASC
+		`,
+			)
+			.all(this.libraryId, before)
+			.map(this.hydrateOperation);
+	};
+
 	insert = (item: SyncOperation) => {
 		return this.db
 			.prepare(
@@ -108,5 +125,20 @@ export class OperationHistory {
 		});
 
 		tx();
+	};
+
+	dropAll = async (items: SyncOperation[]) => {
+		const deleteStatement = this.db.prepare(
+			`
+			DELETE FROM OperationHistory
+			WHERE id = ?
+			`,
+		);
+
+		this.db.transaction(() => {
+			for (const item of items) {
+				deleteStatement.run(item.id);
+			}
+		})();
 	};
 }

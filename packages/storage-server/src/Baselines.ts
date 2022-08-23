@@ -1,4 +1,8 @@
-import { DocumentBaseline } from '@aglio/storage-common';
+import {
+	applyPatch,
+	DocumentBaseline,
+	SyncOperation,
+} from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
 import { DocumentBaselineSpec } from './types.js';
 
@@ -22,15 +26,20 @@ export class Baselines {
 		return this.hydrateSnapshot(row);
 	};
 
-	set = (documentId: string, snapshot: DocumentBaseline<any>) => {
+	set = (baseline: DocumentBaseline) => {
 		return this.db
 			.prepare(
 				`
-      INSERT OR REPLACE INTO DocumentBaseline (libraryId, documentId, snapshot)
-      VALUES (?, ?, ?)
+      INSERT OR REPLACE INTO DocumentBaseline (libraryId, documentId, snapshot, timestamp)
+      VALUES (?, ?, ?, ?)
     `,
 			)
-			.run(this.libraryId, documentId, JSON.stringify(snapshot));
+			.run(
+				this.libraryId,
+				baseline.documentId,
+				JSON.stringify(baseline.snapshot),
+				baseline.timestamp,
+			);
 	};
 
 	insertAll = (baselines: DocumentBaseline[]) => {
@@ -69,5 +78,23 @@ export class Baselines {
 			)
 			.all(this.libraryId, timestamp)
 			.map(this.hydrateSnapshot);
+	};
+
+	applyOperations = (documentId: string, operations: SyncOperation[]) => {
+		if (operations.length === 0) return;
+
+		let baseline = this.get(documentId);
+		if (!baseline) {
+			baseline = {
+				documentId,
+				snapshot: {},
+				timestamp: operations[0].timestamp,
+			};
+		}
+		for (const operation of operations) {
+			baseline.snapshot = applyPatch(baseline.snapshot, operation.patch);
+		}
+		baseline.timestamp = operations[operations.length - 1].timestamp;
+		this.set(baseline);
 	};
 }

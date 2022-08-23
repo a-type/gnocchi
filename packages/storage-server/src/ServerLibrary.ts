@@ -2,8 +2,10 @@ import {
 	AckMessage,
 	ClientMessage,
 	OperationMessage,
+	ReplicaInfo,
 	SERVER_REPLICA_ID,
 	SyncMessage,
+	SyncOperation,
 	SyncStep2Message,
 } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
@@ -59,19 +61,30 @@ export class ServerLibrary {
 
 		run();
 
-		// TODO: enqueue a rebase
+		// update replica's oldest operation
+		this.replicas.updateOldestOperationTimestamp(
+			message.op.replicaId,
+			message.oldestHistoryTimestamp,
+		);
 
-		const globalAck = this.replicas.getGlobalAck();
+		this.enqueueRebase();
 
 		// rebroadcast to whole library except the sender
+		this.rebroadcastOperations([message.op], [message.op.replicaId]);
+	};
+
+	private rebroadcastOperations = (
+		ops: SyncOperation[],
+		ignoreReplicas: string[],
+	) => {
 		this.sender.broadcast(
 			this.id,
 			{
 				type: 'op-re',
-				ops: [message.op],
-				globalAckTimestamp: globalAck,
+				ops,
+				globalAckTimestamp: this.replicas.getGlobalAck(),
 			},
-			[message.op.replicaId],
+			ignoreReplicas,
 		);
 	};
 
@@ -106,15 +119,7 @@ export class ServerLibrary {
 
 		console.debug('Storing', message.ops.length, 'operations');
 		this.operations.insertAll(message.ops);
-		this.sender.broadcast(
-			this.id,
-			{
-				type: 'op-re',
-				ops: message.ops,
-				globalAckTimestamp: this.replicas.getGlobalAck(),
-			},
-			[message.replicaId],
-		);
+		this.rebroadcastOperations(message.ops, [message.replicaId]);
 
 		// update the client's ackedLogicalTime
 		const lastOperation = message.ops[message.ops.length - 1];
@@ -132,6 +137,88 @@ export class ServerLibrary {
 
 	private handleAck = (message: AckMessage, clientId: string) => {
 		this.replicas.updateAcknowledged(message.replicaId, message.timestamp);
+	};
+
+	private pendingRebaseTimeout: NodeJS.Timeout | null = null;
+	private enqueueRebase = () => {
+		if (!this.pendingRebaseTimeout) {
+			setTimeout(this.rebase, 0);
+		}
+	};
+
+	private rebase = () => {
+		console.log('Performing rebase check');
+
+		// fundamentally a rebase occurs when some conditions are met:
+		// 1. the replica which created an operation has dropped that operation
+		//    from their history stack, i.e. their oldest timestamp is after it.
+		// 2. all other replicas have acknowledged an operation since the
+		//    operation which will be flattened to the baseline. i.e. global
+		//    ack > timestamp.
+		//
+		// to determine which rebases we can do, we use a heuristic.
+		// the maximal set of operations we could potentially rebase is
+		// up to the newest 'oldest timestamp' of any replica. so we
+		// grab that slice of the operations history, then iterate over it
+		// and check if any rebase conditions are met.
+
+		const replicas = this.replicas.getAll();
+		// more convenient access
+		const replicaMap = replicas.reduce((map, replica) => {
+			map[replica.id] = replica;
+			return map;
+		}, {} as Record<string, ReplicaInfo>);
+		// will be useful
+		const globalAck = this.replicas.getGlobalAck();
+
+		const newestOldestTimestamp = replicas
+			.map((r) => r.oldestOperationLogicalTime)
+			.reduce((a, b) => (a > b ? a : b), '');
+
+		// these are in forward chronological order
+		const ops = this.operations.getBefore(newestOldestTimestamp);
+
+		const opsToApply: Record<string, SyncOperation[]> = {};
+		// if we encounter a sequential operation in history which does
+		// not meet our conditions, we must ignore subsequent operations
+		// applied to that document.
+		const hardStops: Record<string, boolean> = {};
+
+		for (const op of ops) {
+			const creator = replicaMap[op.replicaId];
+			const isBeforeCreatorsOldestHistory =
+				creator.oldestOperationLogicalTime > op.timestamp;
+			const isBeforeGlobalAck = globalAck > op.timestamp;
+			if (
+				!hardStops[op.documentId] &&
+				isBeforeCreatorsOldestHistory &&
+				isBeforeGlobalAck
+			) {
+				opsToApply[op.documentId] = opsToApply[op.documentId] || [];
+				opsToApply[op.documentId].push(op);
+			} else {
+				hardStops[op.documentId] = true;
+			}
+		}
+
+		for (const [documentId, ops] of Object.entries(opsToApply)) {
+			console.log('Rebasing', documentId);
+			this.baselines.applyOperations(documentId, ops);
+			this.operations.dropAll(ops);
+		}
+
+		// now that we know exactly which operations can be squashed,
+		// we can summarize that for the clients so they don't have to
+		// do this work!
+		const rebases = Object.entries(opsToApply).map(([documentId, ops]) => ({
+			documentId,
+			collection: ops[0].collection,
+			upTo: ops[ops.length - 1].timestamp,
+		}));
+		this.sender.broadcast(this.id, {
+			type: 'rebases',
+			rebases,
+		});
 	};
 }
 

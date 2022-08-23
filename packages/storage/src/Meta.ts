@@ -23,8 +23,10 @@ const COMPOUND_INDEX_LOWER_BOUND_SEPARATOR = '"';
 const COMPOUND_INDEX_UPPER_BOUND_SEPARATOR = '$';
 
 // local info types for the client
-type LocalReplicaInfo = ReplicaInfo & {
+type LocalReplicaInfo = {
 	type: 'localReplicaInfo';
+	id: string;
+	ackedLogicalTime: string | null;
 };
 type AckInfo = {
 	type: 'ack';
@@ -32,9 +34,23 @@ type AckInfo = {
 	// by every peer yet.
 	globalAckTimestamp: string | null;
 };
+type LocalHistoryItem = {
+	operationId: string;
+	timestamp: string;
+};
+type LocalHistory = {
+	type: 'localHistory';
+	items: LocalHistoryItem[];
+};
+type StoredBaseline = DocumentBaseline & {
+	collection_documentId: string;
+};
 
 export class Meta {
 	private db: Promise<IDBDatabase>;
+	// low value for testing
+	private localHistoryLength = 10;
+	private cachedLocalReplicaInfo: LocalReplicaInfo | undefined;
 
 	constructor(private sync: Sync) {
 		this.db = this.openMetaDatabase();
@@ -49,20 +65,20 @@ export class Meta {
 			const request = indexedDB.open('meta', 1);
 			request.onupgradeneeded = (event) => {
 				const db = request.result;
-				const opsStore = db.createObjectStore('operations', { keyPath: 'id' });
-				const baselinesStore = db.createObjectStore('baselines', {
-					keyPath: 'documentId',
-				});
-				const replicasStore = db.createObjectStore('replicas', {
-					keyPath: 'id',
-				});
-				const infoStore = db.createObjectStore('info', { keyPath: 'type' });
-
-				opsStore.createIndex('timestamp', 'timestamp');
-				opsStore.createIndex('documentId_timestamp', 'documentId_timestamp');
-				opsStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
-				replicasStore.createIndex('isLocal', 'isLocal');
-				baselinesStore.createIndex('timestamp', 'timestamp');
+				// version 1: operations list, baselines, and local info
+				if (!event.oldVersion) {
+					const opsStore = db.createObjectStore('operations', {
+						keyPath: 'id',
+					});
+					const baselinesStore = db.createObjectStore('baselines', {
+						keyPath: 'collection_documentId',
+					});
+					const infoStore = db.createObjectStore('info', { keyPath: 'type' });
+					opsStore.createIndex('timestamp', 'timestamp');
+					opsStore.createIndex('documentId_timestamp', 'documentId_timestamp');
+					opsStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
+					baselinesStore.createIndex('timestamp', 'timestamp');
+				}
 			};
 			request.onerror = () => {
 				console.error('Error opening database', request.error);
@@ -86,33 +102,25 @@ export class Meta {
 			replicaId: localReplicaInfo.id,
 			timestamp,
 		});
-		if (timestamp > localReplicaInfo.ackedLogicalTime) {
-			localReplicaInfo.ackedLogicalTime = timestamp;
-			const db = await this.db;
-			const transaction = db.transaction('info', 'readwrite');
-			const store = transaction.objectStore('info');
-			const request = store.put(localReplicaInfo);
-			await storeRequestPromise(request);
+		if (
+			!localReplicaInfo.ackedLogicalTime ||
+			timestamp > localReplicaInfo.ackedLogicalTime
+		) {
+			this.updateLocalReplicaInfo({ ackedLogicalTime: timestamp });
 		}
 	};
 
-	// TODO: cache this in memory
-	async getLocalReplicaInfo(): Promise<ReplicaInfo> {
+	async getLocalReplicaInfo(): Promise<LocalReplicaInfo> {
+		if (this.cachedLocalReplicaInfo) {
+			return this.cachedLocalReplicaInfo;
+		}
+
 		const db = await this.db;
 		const transaction = db.transaction('info', 'readonly');
 		const store = transaction.objectStore('info');
 
 		const request = store.get('localReplicaInfo');
-		const lookup = await new Promise<LocalReplicaInfo | undefined>(
-			(resolve, reject) => {
-				request.onerror = () => {
-					reject(request.error);
-				};
-				request.onsuccess = () => {
-					resolve(request.result);
-				};
-			},
-		);
+		const lookup = await storeRequestPromise(request);
 
 		if (!lookup) {
 			// create our own replica info now
@@ -120,18 +128,30 @@ export class Meta {
 			const replicaInfo: LocalReplicaInfo = {
 				type: 'localReplicaInfo',
 				id: replicaId,
-				ackedLogicalTime: this.sync.time.now(),
-				oldestOperationLogicalTime: this.sync.time.now(),
+				ackedLogicalTime: null,
 			};
 			const transaction = db.transaction('info', 'readwrite');
 			const store = transaction.objectStore('info');
 			const request = store.add(replicaInfo);
 			await storeRequestPromise(request);
+			this.cachedLocalReplicaInfo = replicaInfo;
 			return replicaInfo;
 		}
 
+		this.cachedLocalReplicaInfo = lookup;
 		return lookup;
 	}
+
+	updateLocalReplicaInfo = async (data: Partial<LocalReplicaInfo>) => {
+		const localReplicaInfo = await this.getLocalReplicaInfo();
+		Object.assign(localReplicaInfo, data);
+		const db = await this.db;
+		const transaction = db.transaction('info', 'readwrite');
+		const store = transaction.objectStore('info');
+		const request = store.put(localReplicaInfo);
+		await storeRequestPromise(request);
+		this.cachedLocalReplicaInfo = localReplicaInfo;
+	};
 
 	createOperation = async (
 		init: Pick<SyncOperation, 'collection' | 'documentId' | 'patch'> & {
@@ -149,10 +169,21 @@ export class Meta {
 
 	iterateOverAllOperationsForDocument = async (
 		documentId: string,
-		iterator: (op: SyncOperation) => void,
+		iterator: (op: SyncOperation, store: IDBObjectStore) => void,
+		{
+			to,
+			from,
+			after,
+			mode = 'readonly',
+		}: {
+			to?: string;
+			from?: string;
+			after?: string;
+			mode?: 'readwrite' | 'readonly';
+		} = {},
 	): Promise<void> => {
 		const db = await this.db;
-		const transaction = db.transaction('operations', 'readonly');
+		const transaction = db.transaction('operations', mode);
 		const store = transaction.objectStore('operations');
 		const index = store.index('documentId_timestamp');
 
@@ -160,9 +191,14 @@ export class Meta {
 		// by iterating over the index from (documentId{LOWER_BOUND_SEPARATOR} to documentId{UPPER_BOUND_SEPARATOR}).
 		// because lexogrpahically these two end points are boundaries of the
 		// range.
-		const start = `${documentId}${COMPOUND_INDEX_LOWER_BOUND_SEPARATOR}`;
-		const end = `${documentId}${COMPOUND_INDEX_UPPER_BOUND_SEPARATOR}`;
-		const range = IDBKeyRange.bound(start, end, true, true);
+		const start =
+			from || after
+				? `${documentId}${COMPOUND_INDEX_SEPARATOR}${from || after}`
+				: `${documentId}${COMPOUND_INDEX_LOWER_BOUND_SEPARATOR}`;
+		const end = to
+			? `${documentId}${COMPOUND_INDEX_SEPARATOR}${to}`
+			: `${documentId}${COMPOUND_INDEX_UPPER_BOUND_SEPARATOR}`;
+		const range = IDBKeyRange.bound(start, end, !from, !to);
 
 		// iterate over operations in timestamp order from oldest to newest
 		const request = index.openCursor(range, 'next');
@@ -180,7 +216,7 @@ export class Meta {
 							cursor.value.timestamp > previousTimestamp,
 					);
 
-					iterator(this.stripOperationCompoundIndices(cursor.value));
+					iterator(this.stripOperationCompoundIndices(cursor.value), store);
 
 					previousTimestamp = cursor.value.timestamp;
 
@@ -271,8 +307,14 @@ export class Meta {
 		await storeRequestPromise(request);
 	};
 
+	insertLocalOperation = async (item: SyncOperation) => {
+		this.insertOperation(item);
+		return this.addLocalHistoryItem(item.id, item.timestamp);
+	};
+
 	/**
 	 * inserts all operations. returns a list of affected document ids (and their collections)
+	 * NOTE: operations added with this method are never added to local history!
 	 */
 	insertOperations = async (items: SyncOperation[]) => {
 		const db = await this.db;
@@ -301,28 +343,93 @@ export class Meta {
 		return Object.values(affected);
 	};
 
-	getBaseline = async <T>(
+	private addLocalHistoryItem = async (
+		operationId: string,
+		timestamp: string,
+	) => {
+		// TODO: PERF: cache this in memory
+		const db = await this.db;
+		const transaction = db.transaction('info', 'readwrite');
+		const store = transaction.objectStore('info');
+		let history = await storeRequestPromise<LocalHistory>(
+			store.get('localHistory'),
+		);
+		if (!history) {
+			history = {
+				type: 'localHistory',
+				items: [],
+			};
+		}
+
+		// TODO: PERF: find a better way to avoid duplicate items
+		const existing = history.items.find(
+			(item) => item.operationId === operationId,
+		);
+		if (existing) {
+			return history.items[0].timestamp;
+		}
+
+		history.items.push({
+			operationId,
+			timestamp,
+		});
+		// drop old items
+		if (history.items.length > this.localHistoryLength) {
+			history.items.shift();
+		}
+		const oldestHistoryTimestamp = history.items[0].timestamp;
+		await storeRequestPromise(store.put(history));
+		return oldestHistoryTimestamp;
+	};
+
+	getBaseline = async (
 		collection: string,
 		documentId: string,
-	): Promise<DocumentBaseline<T>> => {
+	): Promise<DocumentBaseline> => {
 		const db = await this.db;
 		const transaction = db.transaction('baselines', 'readonly');
 		const store = transaction.objectStore('baselines');
-		const request = store.get(`${collection}/${documentId}`);
-		const result = await storeRequestPromise<DocumentBaseline<T>>(request);
-		return result;
+		const request = store.get(
+			`${collection}${COMPOUND_INDEX_SEPARATOR}${documentId}`,
+		);
+		const result = await storeRequestPromise<StoredBaseline>(request);
+		if (!result) {
+			return result;
+		}
+		return omit(result, ['collection_documentId']);
+	};
+
+	setBaseline = async <T>(
+		collection: string,
+		baseline: DocumentBaseline<T>,
+	) => {
+		const db = await this.db;
+		const transaction = db.transaction('baselines', 'readwrite');
+		const store = transaction.objectStore('baselines');
+		const request = store.put({
+			...baseline,
+			collection_documentId: `${collection}${COMPOUND_INDEX_SEPARATOR}${baseline.documentId}`,
+		});
+		await storeRequestPromise(request);
 	};
 
 	getComputedView = async <T = any>(
 		collection: string,
 		documentId: string,
+		upToTimestamp?: string,
 	): Promise<T> => {
 		// lookup baseline and get all operations
-		const baseline = await this.getBaseline<T>(collection, documentId);
+		const baseline = await this.getBaseline(collection, documentId);
 		let computed: T | {} | undefined = baseline?.snapshot || {};
-		await this.iterateOverAllOperationsForDocument(documentId, (op) => {
-			computed = this.applyOperation(computed, op);
-		});
+		await this.iterateOverAllOperationsForDocument(
+			documentId,
+			(op) => {
+				computed = this.applyOperation(computed, op);
+			},
+			{
+				after: baseline?.timestamp,
+			},
+		);
 
 		// asserting T type - even if baseline is an empty object, applying
 		// operations should conform it to the final shape.
@@ -401,5 +508,70 @@ export class Meta {
 		operation: SyncOperation,
 	): T | undefined => {
 		return applyPatch(doc, operation.patch);
+	};
+
+	rebase = async (collection: string, documentId: string, upTo: string) => {
+		let baseline = await this.getBaseline(collection, documentId);
+		if (!baseline) {
+			baseline = {
+				documentId,
+				snapshot: {},
+				timestamp: upTo,
+			};
+		}
+		console.debug(`rebase ${collection}/${documentId} up to ${upTo}`);
+		console.debug(`baseline: ${JSON.stringify(baseline)}`);
+		await this.iterateOverAllOperationsForDocument(
+			documentId,
+			(op) => {
+				console.debug(`applying op ${JSON.stringify(op)}`);
+				baseline.snapshot = this.applyOperation(baseline.snapshot, op);
+			},
+			{
+				to: upTo,
+			},
+		);
+		await this.setBaseline(collection, baseline);
+		// separate iteration to ensure the above has completed before destructive
+		// actions. TODO: use a transaction instead
+		await this.iterateOverAllOperationsForDocument(
+			documentId,
+			(op, store) => {
+				store.delete(op.id);
+			},
+			{
+				to: upTo,
+				mode: 'readwrite',
+			},
+		);
+
+		console.log(
+			'successfully rebased',
+			collection,
+			':',
+			documentId,
+			'up to',
+			upTo,
+		);
+	};
+
+	stats = async () => {
+		const db = await this.db;
+		// total number of operations
+		const transaction = db.transaction(['operations', 'info'], 'readonly');
+		const opsStore = transaction.objectStore('operations');
+		const request = opsStore.count();
+		const count = await storeRequestPromise<number>(request);
+
+		const infoStore = transaction.objectStore('info');
+		const localHistoryRequest = infoStore.get('localHistory');
+		const history = await storeRequestPromise<LocalHistory>(
+			localHistoryRequest,
+		);
+
+		return {
+			operationCount: count,
+			localHistoryLength: history?.items.length || 0,
+		};
 	};
 }
