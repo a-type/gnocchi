@@ -28,7 +28,7 @@ export type OperationMessage = {
 
 export type OperationRebroadcastMessage = {
 	type: 'op-re';
-	op: SyncOperation;
+	ops: SyncOperation[];
 	globalAckTimestamp: string;
 };
 

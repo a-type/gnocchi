@@ -72,7 +72,7 @@ export class ServerStorage {
           id TEXT PRIMARY KEY NOT NULL,
           libraryId TEXT NOT NULL,
           collection TEXT NOT NULL,
-          snapshot TEXT NOT NULL,
+          snapshot TEXT,
           timestamp TEXT NOT NULL
         );
       `,

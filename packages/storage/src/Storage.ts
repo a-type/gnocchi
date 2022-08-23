@@ -86,7 +86,9 @@ export class Storage<
 	private handleSyncMessage = (message: ServerMessage) => {
 		switch (message.type) {
 			case 'op-re':
-				this.get(message.op.collection).applyOperation(message.op);
+				for (const op of message.ops) {
+					this.get(op.collection).applyOperation(op);
+				}
 				break;
 			case 'sync-resp':
 				this.handleSyncResponse(message);

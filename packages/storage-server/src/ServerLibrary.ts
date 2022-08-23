@@ -68,7 +68,7 @@ export class ServerLibrary {
 			this.id,
 			{
 				type: 'op-re',
-				op: message.op,
+				ops: [message.op],
 				globalAckTimestamp: globalAck,
 			},
 			[message.op.replicaId],
@@ -106,6 +106,15 @@ export class ServerLibrary {
 
 		console.debug('Storing', message.ops.length, 'operations');
 		this.operations.insertAll(message.ops);
+		this.sender.broadcast(
+			this.id,
+			{
+				type: 'op-re',
+				ops: message.ops,
+				globalAckTimestamp: this.replicas.getGlobalAck(),
+			},
+			[message.replicaId],
+		);
 
 		// update the client's ackedLogicalTime
 		const lastOperation = message.ops[message.ops.length - 1];
