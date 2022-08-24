@@ -1,8 +1,6 @@
 import { useMemo, useRef, useSyncExternalStore } from 'react';
 import { suspend } from 'suspend-react';
-import { LiveQuery } from './LiveQuery.js';
 import { Storage } from './Storage.js';
-import { subscribe } from './LiveObject.js';
 import {
 	CollectionIndex,
 	CollectionIndexFilter,
@@ -10,6 +8,8 @@ import {
 	StorageDocument,
 	StorageSchema,
 } from '@aglio/storage-common';
+import { LiveQuery } from './reactives/LiveQuery.js';
+import { subscribe } from './reactives/LiveDocument.js';
 
 type QueryHookResult<T> = {
 	data: T | null;

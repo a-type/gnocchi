@@ -140,7 +140,18 @@ export class Storage<
 	};
 
 	stats = async () => {
-		return this.meta.stats();
+		const base = {
+			meta: await this.meta.stats(),
+			collections: Object.entries(this.collections).reduce(
+				(acc, [name, coll]) => {
+					acc[name] = coll.stats();
+					return acc;
+				},
+				{} as Record<string, any>,
+			),
+		};
+
+		return base;
 	};
 }
 

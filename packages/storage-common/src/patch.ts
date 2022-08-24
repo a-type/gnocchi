@@ -1,9 +1,31 @@
 import jsp, { Operation } from 'fast-json-patch';
 const { compare, applyPatch: libApply, deepClone } = jsp;
 
-export type SyncPatch = readonly Operation[] | 'DELETE';
+export type SyncPatchDiff = Operation[];
+export type SyncPatch = SyncPatchDiff | 'DELETE';
 
-export function createPatch(from: any, to: any): SyncPatch {
+function constructNested(obj: any, path: string[]) {
+	let current = obj;
+	for (const key of path) {
+		if (!current[key]) {
+			current[key] = {};
+		}
+		current = current[key];
+	}
+	return current;
+}
+
+export function createPatch(
+	from: any,
+	to: any,
+	keyPath?: string[],
+): SyncPatchDiff {
+	if (keyPath) {
+		return compare(
+			constructNested(from, keyPath),
+			constructNested(to, keyPath),
+		);
+	}
 	return compare(from, to);
 }
 

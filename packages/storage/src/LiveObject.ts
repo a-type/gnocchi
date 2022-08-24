@@ -18,8 +18,12 @@ export function setLiveObject(obj: any, value: any) {
 	obj[LIVE_OBJECT_SET](value);
 }
 
-export function makeLiveObject<T extends Record<string, any>>(source: T) {
+export function makeLiveObject<T extends Record<string, any>>(
+	source: T,
+	onDispose: () => void,
+) {
 	const ref = { current: source };
+	let disposed = false;
 	function setSource(value: T) {
 		ref.current = value;
 	}
@@ -28,17 +32,34 @@ export function makeLiveObject<T extends Record<string, any>>(source: T) {
 		subscribers.add(callback);
 		return () => {
 			subscribers.delete(callback);
+			if (subscribers.size === 0) {
+				// enqueue a microtask to wait for any new subscribers
+				// before disposing the object
+				queueMicrotask(() => {
+					if (subscribers.size === 0) {
+						disposed = true;
+						onDispose();
+					}
+				});
+			}
 		};
 	}
 	return new Proxy(ref, {
 		get: (target, key) => {
+			if (disposed) {
+				throw new Error(
+					'This LiveObject has no subscribers and has been disposed',
+				);
+			}
 			if (key === LIVE_OBJECT_SET) {
 				return setSource;
 			}
 			if (key === LIVE_OBJECT_SUBSCRIBE) {
 				return subscribe;
 			}
-			return Reflect.get(target.current, key);
+			const value = Reflect.get(target.current, key);
+
+			return value;
 		},
 		set: (target, key, value) => {
 			throw new Error('Cannot set properties on a live object');

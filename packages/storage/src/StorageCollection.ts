@@ -1,6 +1,4 @@
 import { EventSubscriber } from './EventSubscriber.js';
-import { makeLiveObject, setLiveObject } from './LiveObject.js';
-import { LiveQuery } from './LiveQuery.js';
 import { computeSynthetics } from './synthetics.js';
 import {
 	CollectionEvents,
@@ -16,16 +14,38 @@ import { createPatch, SyncOperation } from '@aglio/storage-common';
 import { Sync } from './Sync.js';
 import { Meta } from './Meta.js';
 import { storeRequestPromise } from './idb.js';
+import { QueryCache } from './reactives/QueryCache.js';
+import { DocumentCache } from './reactives/DocumentCache.js';
+import { LiveDocument } from './reactives/LiveDocument.js';
 
 export class StorageCollection<
 	Collection extends StorageCollectionSchema<any, any>,
 > {
 	private events: EventSubscriber<CollectionEvents<Collection>> =
 		new EventSubscriber();
-	private liveObjectCache: Record<
-		string | number | symbol,
-		StorageDocument<Collection>
-	> = {};
+
+	private queryCache = new QueryCache<Collection>(this.events);
+
+	private applyLocalDocumentCacheOperations = async (
+		ops: { documentId: string; patch: SyncPatch }[],
+	) => {
+		// TODO: apply multiple operations at once
+		for (const { documentId, patch } of ops) {
+			this.applyLocalOperation(
+				await this.meta.createOperation({
+					collection: this.name,
+					documentId,
+					patch,
+				}),
+			);
+		}
+	};
+	private documentCache = new DocumentCache<Collection>(
+		{
+			applyOperations: this.applyLocalDocumentCacheOperations,
+		},
+		this.primaryKey,
+	);
 
 	constructor(
 		private db: Promise<IDBDatabase>,
@@ -64,24 +84,16 @@ export class StorageCollection<
 		return store;
 	};
 
-	private getLiveObject = (record: StorageDocument<Collection>) => {
-		const id = record[this.primaryKey] as string;
-		if (!this.liveObjectCache[id]) {
-			this.liveObjectCache[id] = makeLiveObject(record);
-		}
-		return this.liveObjectCache[id]!;
-	};
-
 	get = (id: string) => {
-		return new LiveQuery(
+		return this.queryCache.get(
+			this.queryCache.getKey('get', id),
 			async () => {
 				const store = await this.readTransaction();
 				const request = store.get(id);
 				const result = await storeRequestPromise(request);
 				if (!result) return null;
-				return this.getLiveObject(result);
+				return this.documentCache.get(result);
 			},
-			this.events,
 			// is PUT relevant? do we support getting by id before the id
 			// is created? probably should.
 			['put', 'delete'],
@@ -92,15 +104,15 @@ export class StorageCollection<
 	findOne = (
 		filter: CollectionIndexFilter<Collection, CollectionIndex<Collection>>,
 	) => {
-		return new LiveQuery(
+		return this.queryCache.get(
+			this.queryCache.getKey('findOne', filter),
 			async () => {
 				const store = await this.readTransaction();
 				const request = store.index(filter.where).get(filter.equals as any);
 				const raw = await storeRequestPromise(request);
 				if (!raw) return null;
-				return this.getLiveObject(raw);
+				return this.documentCache.get(raw);
 			},
-			this.events,
 			['delete', 'put'],
 		);
 	};
@@ -119,27 +131,30 @@ export class StorageCollection<
 	getAll = <Index extends CollectionIndex<Collection>>(
 		index?: CollectionIndexFilter<Collection, Index>,
 	) => {
-		return new LiveQuery<Collection, StorageDocument<Collection>[]>(
+		return this.queryCache.get(
+			this.queryCache.getKey('getAll', index),
 			async () => {
 				const store = await this.readTransaction();
 				const request = this.getIndexedListRequest(store, index);
-				return new Promise((resolve, reject) => {
-					const results: StorageDocument<Collection>[] = [];
-					request.onsuccess = (event) => {
-						const cursor = request.result;
-						if (cursor) {
-							results.push(this.getLiveObject(cursor.value));
-							cursor.continue();
-						} else {
-							resolve(results);
-						}
-					};
-					request.onerror = () => {
-						reject(request.error);
-					};
-				});
+				const results = await new Promise<StorageDocument<Collection>[]>(
+					(resolve, reject) => {
+						const results: StorageDocument<Collection>[] = [];
+						request.onsuccess = (event) => {
+							const cursor = request.result;
+							if (cursor) {
+								results.push(cursor.value);
+								cursor.continue();
+							} else {
+								resolve(results);
+							}
+						};
+						request.onerror = () => {
+							reject(request.error);
+						};
+					},
+				);
+				return results.map((raw) => this.documentCache.get(raw));
 			},
-			this.events,
 			['delete', 'put'],
 		);
 	};
@@ -189,7 +204,7 @@ export class StorageCollection<
 		});
 		const final = await this.applyLocalOperation(op);
 
-		return this.getLiveObject(final);
+		return final;
 	};
 
 	upsert = async (data: ShapeFromFields<Collection['fields']>) => {
@@ -271,9 +286,7 @@ export class StorageCollection<
 			this.events.emit('delete', id);
 			this.events.emit(`delete:${id}`);
 
-			if (this.liveObjectCache[id]) {
-				setLiveObject(this.liveObjectCache[id], null);
-			}
+			this.documentCache.assign(id, null);
 
 			return undefined;
 		} else {
@@ -287,9 +300,7 @@ export class StorageCollection<
 			const request = store.put(updatedWithComputed);
 			await storeRequestPromise(request);
 
-			if (this.liveObjectCache[id]) {
-				setLiveObject(this.liveObjectCache[id], updatedWithComputed);
-			}
+			this.documentCache.assign(id, updatedWithComputed);
 
 			this.events.emit('put', updatedWithComputed);
 			this.events.emit(`put:${id}`, updatedWithComputed);
@@ -300,5 +311,14 @@ export class StorageCollection<
 
 	rebaseDocument = async (id: string, upTo: string) => {
 		const squashed = await this.meta.rebase(this.name, id, upTo);
+	};
+
+	stats = () => {
+		return {
+			caches: {
+				...this.documentCache.stats(),
+				...this.queryCache.stats(),
+			},
+		};
 	};
 }
