@@ -4,10 +4,12 @@ import {
 	CollectionEvents,
 	CollectionIndex,
 	CollectionIndexFilter,
+	CollectionSchemaComputedIndexes,
 	omit,
 	ShapeFromFields,
 	StorageCollectionSchema,
 	StorageDocument,
+	StorageDocumentWithComputedIndices,
 	SyncPatch,
 } from '@aglio/storage-common';
 import { createPatch, SyncOperation } from '@aglio/storage-common';
@@ -62,7 +64,7 @@ export class StorageCollection<
 		return this.collection.primaryKey;
 	}
 
-	private get syntheticKeys() {
+	private get compoundIndexKeys(): (keyof CollectionSchemaComputedIndexes<Collection>)[] {
 		return Object.keys(this.collection.synthetics);
 	}
 
@@ -84,6 +86,12 @@ export class StorageCollection<
 		return store;
 	};
 
+	private getLiveDocument = (
+		storedDoc: StorageDocumentWithComputedIndices<Collection>,
+	) => {
+		return this.documentCache.get(this.stripComputedIndices(storedDoc));
+	};
+
 	get = (id: string) => {
 		return this.queryCache.get(
 			this.queryCache.getKey('get', id),
@@ -92,7 +100,7 @@ export class StorageCollection<
 				const request = store.get(id);
 				const result = await storeRequestPromise(request);
 				if (!result) return null;
-				return this.documentCache.get(result);
+				return this.getLiveDocument(result);
 			},
 			// is PUT relevant? do we support getting by id before the id
 			// is created? probably should.
@@ -111,7 +119,7 @@ export class StorageCollection<
 				const request = store.index(filter.where).get(filter.equals as any);
 				const raw = await storeRequestPromise(request);
 				if (!raw) return null;
-				return this.documentCache.get(raw);
+				return this.getLiveDocument(raw);
 			},
 			['delete', 'put'],
 		);
@@ -153,7 +161,7 @@ export class StorageCollection<
 						};
 					},
 				);
-				return results.map((raw) => this.documentCache.get(raw));
+				return results.map((raw) => this.getLiveDocument(raw));
 			},
 			['delete', 'put'],
 		);
@@ -167,8 +175,8 @@ export class StorageCollection<
 		to: StorageDocument<Collection>,
 	): SyncPatch => {
 		return createPatch(
-			omit(from, this.syntheticKeys),
-			omit(to, this.syntheticKeys),
+			omit(from, this.compoundIndexKeys),
+			omit(to, this.compoundIndexKeys),
 		);
 	};
 
@@ -237,6 +245,12 @@ export class StorageCollection<
 		return computeSynthetics(this.collection, fields);
 	};
 
+	private stripComputedIndices = (
+		doc: StorageDocumentWithComputedIndices<Collection>,
+	): StorageDocument<Collection> => {
+		return omit(doc, this.compoundIndexKeys) as any;
+	};
+
 	/** Sync Methods */
 
 	private applyLocalOperation = async (operation: SyncOperation) => {
@@ -296,6 +310,8 @@ export class StorageCollection<
 		} else {
 			// write the new view to the document
 			const store = await this.readWriteTransaction();
+			// apply computed indices to the document before
+			// storing
 			const updatedWithComputed = {
 				...updatedView,
 				...this.computeProperties(updatedView),
@@ -304,12 +320,12 @@ export class StorageCollection<
 			const request = store.put(updatedWithComputed);
 			await storeRequestPromise(request);
 
-			this.documentCache.assign(id, updatedWithComputed);
+			this.documentCache.assign(id, updatedView);
 
-			this.events.emit('put', updatedWithComputed);
-			this.events.emit(`put:${id}`, updatedWithComputed);
+			this.events.emit('put', updatedView);
+			this.events.emit(`put:${id}`, updatedView);
 
-			return updatedWithComputed;
+			return updatedView;
 		}
 	};
 

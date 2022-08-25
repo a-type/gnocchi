@@ -105,7 +105,7 @@ function createLiveArray<T>({
 	dispose: () => void;
 	context: LiveDocumentContext;
 }): LiveArray<T> {
-	const ref = { current: initial };
+	const ref = { current: initial, updated: undefined as T[] | undefined };
 
 	const wrappedProperties: Liveify<T>[] = [];
 
@@ -135,16 +135,8 @@ function createLiveArray<T>({
 	}
 	// applies a patch to the current object and enqueues it for
 	// storage update
-	function update(values: Partial<T>) {
-		const updated = { ...ref.current, ...values };
-		const patch = createPatch(ref.current, updated, keyPath);
-		pendingUpdates[pendingUpdates.length - 1].concat(...patch);
+	// TODO: mutations here which queue updates
 
-		if (!updatesQueued) {
-			queueMicrotask(applyUpdates);
-			updatesQueued = true;
-		}
-	}
 	function applyUpdates() {
 		if (pendingUpdates.length === 0) {
 			return;
@@ -166,10 +158,6 @@ function createLiveArray<T>({
 			}
 			if (name === LIVE_DOCUMENT_SUBSCRIBE) {
 				return subscribe;
-			}
-
-			if (key === LIVE_DOCUMENT_UPDATE) {
-				return update;
 			}
 
 			if (key === LIVE_DOCUMENT_COMMIT) {
@@ -200,7 +188,10 @@ function createLiveObject<T extends object>({
 	dispose: () => void;
 	context: LiveDocumentContext;
 }): LiveObject<T> {
-	const ref: { current: T } = { current: initial };
+	const ref: { current: T; updated: T | undefined } = {
+		current: initial,
+		updated: undefined,
+	};
 
 	const wrappedProperties: {
 		[k in keyof T]?: Liveify<T[k]>;
@@ -212,15 +203,18 @@ function createLiveObject<T extends object>({
 		if (value === null) {
 			ref.current = null as any;
 			dispose();
-			return;
-		}
-		// recursively assign properties to the source.
-		for (const key in value) {
-			if (wrappedProperties[key]) {
-				assign(wrappedProperties[key], value[key]);
+		} else {
+			// recursively assign properties to the source.
+			for (const key in value) {
+				if (wrappedProperties[key]) {
+					assign(wrappedProperties[key], value[key]);
+				}
+				ref.current[key] = value[key];
 			}
-			ref.current[key] = value[key];
 		}
+		// reset updated
+		ref.updated = undefined;
+
 		trigger();
 	}
 
@@ -239,9 +233,9 @@ function createLiveObject<T extends object>({
 	// applies a patch to the current object and enqueues it for
 	// storage update
 	function update(values: Partial<T>) {
-		const updated = { ...ref.current, ...values };
-		const patch = createPatch(ref.current, updated, keyPath);
-		pendingUpdates[pendingUpdates.length - 1].concat(...patch);
+		ref.updated = { ...ref.current, ...values };
+		const patch = createPatch(ref.current, ref.updated, keyPath);
+		pendingUpdates[pendingUpdates.length - 1].push(...patch);
 
 		if (!updatesQueued) {
 			queueMicrotask(applyUpdates);
@@ -280,7 +274,9 @@ function createLiveObject<T extends object>({
 				return commit;
 			}
 
-			const value = Reflect.get(ref.current, name);
+			const value = ref.updated
+				? Reflect.get(ref.updated, name)
+				: Reflect.get(ref.current, name);
 			return wrappedProperty<any, any>(name, value, {
 				wrappedProperties,
 				context,

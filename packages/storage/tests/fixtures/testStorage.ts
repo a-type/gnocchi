@@ -1,3 +1,4 @@
+import { NaiveTimestampProvider } from '@aglio/storage-common';
 import { IDBFactory } from 'fake-indexeddb';
 import { Storage, collection, schema } from '../../src/index.js';
 
@@ -15,7 +16,13 @@ const todo = collection({
 			type: 'boolean',
 		},
 	},
-	synthetics: {},
+	synthetics: {
+		example: {
+			type: '#string',
+			compute: (doc) => doc.content,
+			unique: false,
+		},
+	},
 });
 
 const testSchema = schema({
@@ -32,6 +39,7 @@ export function createTestStorage() {
 		indexedDB: idb,
 		syncOptions: {
 			host: 'none',
+			timestampProvider: new NaiveTimestampProvider(),
 		},
 	});
 	return storage;

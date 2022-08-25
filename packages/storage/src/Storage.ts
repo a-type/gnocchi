@@ -108,7 +108,9 @@ export class Storage<
 
 		// we need to add all operations to the operation history
 		// and then recompute views of each affected document
-		const affectedDocuments = await this.meta.insertOperations(message.ops);
+		const affectedDocuments = await this.meta.insertRemoteOperations(
+			message.ops,
+		);
 		// refresh all those documents
 		for (const doc of affectedDocuments) {
 			this.get(doc.collection).recomputeDocument(doc.documentId);

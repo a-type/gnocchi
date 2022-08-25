@@ -2,12 +2,12 @@ import {
 	StorageCollectionSchema,
 	StorageFieldsSchema,
 	StorageSchema,
-	StorageSyntheticsSchema,
+	StorageCompoundIndices,
 } from './types.js';
 
 export function collection<
 	Fields extends StorageFieldsSchema,
-	Computeds extends StorageSyntheticsSchema<Fields>,
+	Computeds extends StorageCompoundIndices<Fields>,
 >(input: StorageCollectionSchema<Fields, Computeds>) {
 	return input;
 }

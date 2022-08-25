@@ -1,14 +1,13 @@
-import { computeSynthetics } from './synthetics.js';
 import {
-	NumberStorageComputedSchema,
+	StorageNumberCompoundSchema,
 	StorageCollectionSchema,
-	StorageComputedSchema,
+	StorageCompoundIndexSchema,
 	StorageFieldSchema,
 	StorageFieldsSchema,
 	StorageNumberFieldSchema,
 	StorageStringFieldSchema,
-	StorageSyntheticsSchema,
-	StringStorageComputedSchema,
+	StorageStringCompoundSchema,
+	StorageCompoundIndices,
 } from '@aglio/storage-common';
 
 const globalIDB =
@@ -60,19 +59,12 @@ function isIndexedField(
 		field.indexed
 	);
 }
-function isIndexedSynthetic(
-	synthetic: StorageComputedSchema<any>,
-): synthetic is
-	| StringStorageComputedSchema<any>
-	| NumberStorageComputedSchema<any> {
-	return synthetic.type !== '#boolean' && synthetic.indexed;
-}
 
 function initializeDatabase(
 	db: IDBDatabase,
 	schema: StorageCollectionSchema<
 		StorageFieldsSchema,
-		StorageSyntheticsSchema<any>
+		StorageCompoundIndices<StorageFieldsSchema>
 	>,
 ) {
 	// create the object store
@@ -90,9 +82,7 @@ function initializeDatabase(
 		}
 	}
 	for (const [name, def] of Object.entries(schema.synthetics)) {
-		if (isIndexedSynthetic(def)) {
-			const unique = def.unique;
-			objectStore.createIndex(name, name, { unique });
-		}
+		const unique = def.unique;
+		objectStore.createIndex(name, name, { unique });
 	}
 }

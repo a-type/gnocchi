@@ -319,7 +319,7 @@ export class Meta {
 	 * inserts all operations. returns a list of affected document ids (and their collections)
 	 * NOTE: operations added with this method are never added to local history!
 	 */
-	insertOperations = async (items: SyncOperation[]) => {
+	insertRemoteOperations = async (items: SyncOperation[]) => {
 		const db = await this.db;
 		const transaction = db.transaction('operations', 'readwrite');
 		const store = transaction.objectStore('operations');

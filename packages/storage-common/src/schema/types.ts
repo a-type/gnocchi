@@ -26,79 +26,71 @@ export type StorageFieldSchema =
 	| StorageArrayFieldSchema
 	| StorageObjectFieldSchema;
 
-export type StringStorageComputedSchema<Fields extends StorageFieldsSchema> = {
+export type StorageStringCompoundSchema<Fields extends StorageFieldsSchema> = {
 	type: '#string';
-	indexed: boolean;
 	unique: boolean;
 	compute: (value: ShapeFromFields<Fields>) => string;
 };
-export type NumberStorageComputedSchema<Fields extends StorageFieldsSchema> = {
+export type StorageNumberCompoundSchema<Fields extends StorageFieldsSchema> = {
 	type: '#number';
-	indexed: boolean;
 	unique: boolean;
 	compute: (value: ShapeFromFields<Fields>) => number;
 };
-export type BooleanStorageComputedSchema<Fields extends StorageFieldsSchema> = {
-	type: '#boolean';
-	compute: (value: ShapeFromFields<Fields>) => boolean;
-};
-export type StorageComputedSchema<Fields extends StorageFieldsSchema> =
-	| StringStorageComputedSchema<Fields>
-	| NumberStorageComputedSchema<Fields>
-	| BooleanStorageComputedSchema<Fields>;
+export type StorageCompoundIndexSchema<Fields extends StorageFieldsSchema> =
+	| StorageStringCompoundSchema<Fields>
+	| StorageNumberCompoundSchema<Fields>;
 
 export type StoragePropertySchema<BaseFields extends StorageFieldsSchema> =
 	| StorageFieldSchema
-	| StorageComputedSchema<BaseFields>;
+	| StorageCompoundIndexSchema<BaseFields>;
 
 export type StorageFieldsSchema = Record<string, StorageFieldSchema>;
 
-export type StorageSyntheticsSchema<Fields extends StorageFieldsSchema> =
-	Record<string, StorageComputedSchema<Fields>>;
+export type StorageCompoundIndices<Fields extends StorageFieldsSchema> = Record<
+	string,
+	StorageCompoundIndexSchema<Fields>
+>;
 
 export type StoragePropertyName<
 	Fields extends StorageFieldsSchema,
-	Computeds extends StorageSyntheticsSchema<Fields>,
+	Compounds extends StorageCompoundIndices<Fields>,
 > =
 	| Exclude<keyof Fields, number | symbol>
-	| Exclude<keyof Computeds, number | symbol>;
+	| Exclude<keyof Compounds, number | symbol>;
 
+// filters to only fields which can be indexed
 export type StorageIndexableFields<Fields extends StorageFieldsSchema> = {
 	[K in keyof Fields]: Fields[K] extends { indexed: boolean } ? K : never;
 };
 
-export type StorageIndexableSynthetics<
-	Fields extends StorageFieldsSchema,
-	Synthetics extends StorageSyntheticsSchema<Fields>,
-> = {
-	[K in keyof Synthetics]: Synthetics[K] extends { indexed: boolean }
-		? K
-		: never;
-};
-
 export type StorageIndexablePropertyName<
 	Fields extends StorageFieldsSchema,
-	Computeds extends StorageSyntheticsSchema<Fields>,
+	Compounds extends StorageCompoundIndices<Fields>,
 > =
 	| Extract<keyof StorageIndexableFields<Fields>, string>
-	| Extract<keyof StorageIndexableSynthetics<Fields, Computeds>, string>;
-
-export type StoragePropertiesSchema<BaseFields extends StorageFieldsSchema> =
-	BaseFields & StorageComputedSchema<BaseFields>;
+	| Extract<keyof Compounds, string>;
 
 export type StorageSchemaProperties<
 	Schema extends StorageCollectionSchema<any, any>,
 > = Schema extends StorageCollectionSchema<infer F, infer S> ? F & S : never;
 
+// extracting fields/computed from schema
+export type CollectionSchemaFields<
+	Schema extends StorageCollectionSchema<any, any>,
+> = Schema extends StorageCollectionSchema<infer F, any> ? F : never;
+export type CollectionSchemaComputedIndexes<
+	Schema extends StorageCollectionSchema<any, any>,
+> = Schema extends StorageCollectionSchema<any, infer C> ? C : never;
+
 export type StorageIndexableProperties<
 	Schema extends StorageCollectionSchema<any, any>,
 > = {
-	[K in keyof StorageSchemaProperties<Schema>]: StorageSchemaProperties<Schema>[K] extends {
+	[K in keyof CollectionSchemaFields<Schema>]: CollectionSchemaFields<Schema>[K] extends {
 		indexed: boolean;
 	}
-		? StorageSchemaProperties<Schema>[K]
+		? CollectionSchemaFields<Schema>[K]
 		: never;
-};
+} & CollectionSchemaComputedIndexes<Schema>;
 
 export type StorageSchemaProperty<
 	Schema extends StorageCollectionSchema<any, any>,
@@ -120,12 +112,10 @@ export type ShapeFromProperty<T extends StoragePropertySchema<any>> =
 		? number
 		: T extends StorageBooleanFieldSchema
 		? boolean
-		: T extends StringStorageComputedSchema<any>
+		: T extends StorageStringCompoundSchema<any>
 		? string
-		: T extends NumberStorageComputedSchema<any>
+		: T extends StorageNumberCompoundSchema<any>
 		? number
-		: T extends BooleanStorageComputedSchema<any>
-		? boolean
 		: T extends StorageObjectFieldSchema
 		? ShapeFromFields<T['properties']>
 		: T extends StorageArrayFieldSchema
@@ -136,13 +126,13 @@ export type ShapeFromFields<T extends StorageFieldsSchema> = {
 	[K in keyof T]: ShapeFromProperty<T[K]>;
 };
 
-export type ShapeFromComputeds<T extends StorageSyntheticsSchema<any>> = {
+export type ShapeFromComputeds<T extends StorageCompoundIndices<any>> = {
 	[K in keyof T]: ShapeFromProperty<T[K]>;
 };
 
 export type StorageCollectionSchema<
 	Fields extends StorageFieldsSchema,
-	Synthetics extends StorageSyntheticsSchema<Fields>,
+	Synthetics extends StorageCompoundIndices<Fields>,
 > = {
 	name: string;
 	fields: Fields;
@@ -169,22 +159,17 @@ export type NamedSchema<
 
 export type StorageDocument<
 	Collection extends StorageCollectionSchema<any, any>,
-> = StorageDocumentProperties<Collection>;
-
-export type StorageDocumentProperties<
-	Collection extends StorageCollectionSchema<any, any>,
-> = ShapeFromFields<Collection['fields']> &
-	ShapeFromComputeds<Collection['synthetics']>;
+> = ShapeFromFields<Collection['fields']>;
 
 export type IndexedSchemaProperties<
 	Schema extends StorageCollectionSchema<any, any>,
 > = {
-	[K in keyof StorageSchemaProperties<Schema> as StorageSchemaProperties<Schema>[K] extends {
+	[K in keyof CollectionSchemaFields<Schema> as CollectionSchemaFields<Schema>[K] extends {
 		indexed: true;
 	}
 		? K
-		: never]: StorageSchemaProperties<Schema>[K];
-};
+		: never]: CollectionSchemaFields<Schema>[K];
+} & CollectionSchemaComputedIndexes<Schema>;
 
 export type CollectionIndex<
 	Collection extends StorageCollectionSchema<any, any>,
@@ -214,3 +199,8 @@ export type CollectionEvents<
 export type SchemaForCollection<
 	Collection extends StorageCollectionSchema<any, any>,
 > = Collection;
+
+export type StorageDocumentWithComputedIndices<
+	Collection extends StorageCollectionSchema<any, any>,
+> = StorageDocument<Collection> &
+	ShapeFromComputeds<CollectionSchemaComputedIndexes<Collection>>;
