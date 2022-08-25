@@ -46,21 +46,24 @@ type StoredBaseline = DocumentBaseline & {
 	collection_documentId: string;
 };
 
+const globalIDB =
+	typeof window !== 'undefined' ? window.indexedDB : (undefined as any);
+
 export class Meta {
 	private db: Promise<IDBDatabase>;
 	// low value for testing
 	private localHistoryLength = 10;
 	private cachedLocalReplicaInfo: LocalReplicaInfo | undefined;
 
-	constructor(private sync: Sync) {
-		this.db = this.openMetaDatabase();
+	constructor(private sync: Sync, indexedDB: IDBFactory = globalIDB) {
+		this.db = this.openMetaDatabase(indexedDB);
 	}
 
 	get ready(): Promise<void> {
 		return this.db.then();
 	}
 
-	private openMetaDatabase = () => {
+	private openMetaDatabase = (indexedDB: IDBFactory) => {
 		return new Promise<IDBDatabase>((resolve, reject) => {
 			const request = indexedDB.open('meta', 1);
 			request.onupgradeneeded = (event) => {

@@ -4,7 +4,7 @@ const { compare, applyPatch: libApply, deepClone } = jsp;
 export type SyncPatchDiff = Operation[];
 export type SyncPatch = SyncPatchDiff | 'DELETE';
 
-function constructNested(obj: any, path: string[]) {
+function constructNested(obj: any, path: (string | number | symbol)[]) {
 	let current = obj;
 	for (const key of path) {
 		if (!current[key]) {
@@ -18,7 +18,7 @@ function constructNested(obj: any, path: string[]) {
 export function createPatch(
 	from: any,
 	to: any,
-	keyPath?: string[],
+	keyPath?: (string | number | symbol)[],
 ): SyncPatchDiff {
 	if (keyPath) {
 		return compare(

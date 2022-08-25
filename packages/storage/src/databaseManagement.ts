@@ -11,9 +11,15 @@ import {
 	StringStorageComputedSchema,
 } from '@aglio/storage-common';
 
+const globalIDB =
+	typeof window !== 'undefined' ? window.indexedDB : (undefined as any);
+
 export function initializeDatabases<
 	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
->({ collections, version }: { collections: Schemas; version: number }) {
+>(
+	{ collections, version }: { collections: Schemas; version: number },
+	indexedDB: IDBFactory = globalIDB,
+) {
 	// initialize collections as indexddb databases
 	const keys = Object.keys(collections);
 	console.log('Initializing database for:', keys);

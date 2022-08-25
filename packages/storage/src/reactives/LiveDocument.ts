@@ -200,7 +200,6 @@ function createLiveObject<T extends object>({
 	dispose: () => void;
 	context: LiveDocumentContext;
 }): LiveObject<T> {
-	console.log('create live obj', initial, context.id, keyPath);
 	const ref: { current: T } = { current: initial };
 
 	const wrappedProperties: {

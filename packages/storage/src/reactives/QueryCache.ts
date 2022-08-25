@@ -2,8 +2,10 @@ import {
 	CollectionEvents,
 	CollectionIndexFilter,
 	StorageCollectionSchema,
+	StorageDocument,
 } from '@aglio/storage-common';
 import { EventSubscriber } from '../EventSubscriber.js';
+import { LiveDocument } from './LiveDocument.js';
 import { LiveQuery } from './LiveQuery.js';
 
 function orderedReplacer(_: any, v: any) {
@@ -30,19 +32,24 @@ export class QueryCache<Collection extends StorageCollectionSchema<any, any>> {
 		return `${type}_${filter ? hashFilter(filter) : ''}`;
 	};
 
-	get = (
+	get = <
+		T extends
+			| null
+			| LiveDocument<StorageDocument<Collection>>
+			| LiveDocument<StorageDocument<Collection>>[],
+	>(
 		key: string,
-		exec: () => any,
+		exec: () => Promise<T>,
 		listen: (keyof CollectionEvents<Collection>)[],
 	) => {
-		let query = this.queries.get(key);
+		let query = this.queries.get(key) as LiveQuery<Collection, T> | undefined;
 		if (!query) {
-			query = new LiveQuery<Collection, any>(exec, this.events, listen, () => {
+			query = new LiveQuery<Collection, T>(exec, this.events, listen, () => {
 				this.dispose(key);
 			});
 			this.queries.set(key, query);
 		}
-		return query;
+		return query!;
 	};
 
 	dispose = (key: string) => {

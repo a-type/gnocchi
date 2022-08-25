@@ -18,6 +18,8 @@ export interface StorageOptions<
 > {
 	schema: Schema;
 	syncOptions: HybridSyncOptions;
+	/** Provide an explicit IDBFactory for non-browser environments */
+	indexedDB?: IDBFactory;
 }
 
 type SchemaToCollections<
@@ -49,9 +51,9 @@ export class Storage<
 		this._sync.subscribe(this.handleSyncMessage);
 
 		// centralized storage for all stored operations
-		this.meta = new Meta(this._sync);
+		this.meta = new Meta(this._sync, options.indexedDB);
 
-		const database = initializeDatabases(this.schema);
+		const database = initializeDatabases(this.schema, options.indexedDB);
 		for (const [name, collection] of Object.entries(this.schema.collections)) {
 			this._collections[name as keyof Schema['collections']] =
 				new StorageCollection<

@@ -204,7 +204,9 @@ export class StorageCollection<
 		});
 		const final = await this.applyLocalOperation(op);
 
-		return final;
+		// non-null assertion - we know it's not deleted if we just created it,
+		// right?
+		return final!;
 	};
 
 	upsert = async (data: ShapeFromFields<Collection['fields']>) => {
@@ -273,7 +275,9 @@ export class StorageCollection<
 		return this.recomputeDocument(operation.documentId);
 	};
 
-	recomputeDocument = async (id: string) => {
+	recomputeDocument = async (
+		id: string,
+	): Promise<StorageDocument<Collection> | undefined> => {
 		const updatedView = await this.meta.getComputedView(this.name, id);
 
 		// undefined means the document was deleted

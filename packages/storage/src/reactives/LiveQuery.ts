@@ -10,7 +10,7 @@ export class LiveQuery<
 > {
 	private _current: T | null = null;
 	private _subscribers: Set<(value: T | null) => void> = new Set();
-	resolved: Promise<T | null>;
+	resolved: Promise<T>;
 
 	constructor(
 		private exec: () => Promise<T>,
