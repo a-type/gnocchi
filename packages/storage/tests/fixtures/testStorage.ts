@@ -26,7 +26,7 @@ const todo = collection({
 	},
 	synthetics: {
 		example: {
-			type: '#string',
+			type: 'string',
 			compute: (doc) => doc.content,
 			unique: false,
 		},
@@ -47,7 +47,6 @@ export function createTestStorage() {
 		indexedDB: idb,
 		syncOptions: {
 			host: 'none',
-			timestampProvider: new NaiveTimestampProvider(),
 		},
 	});
 	return storage;

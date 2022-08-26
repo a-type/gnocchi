@@ -56,7 +56,7 @@ function isIndexedField(
 		field.type !== 'boolean' &&
 		field.type !== 'array' &&
 		field.type !== 'object' &&
-		field.indexed
+		!!field.indexed
 	);
 }
 

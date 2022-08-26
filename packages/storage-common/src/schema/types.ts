@@ -1,23 +1,23 @@
 export type StorageStringFieldSchema = {
 	type: 'string';
-	indexed: boolean;
-	unique: boolean;
+	indexed?: boolean;
+	unique?: boolean;
 };
 export type StorageNumberFieldSchema = {
 	type: 'number';
-	indexed: boolean;
-	unique: boolean;
+	indexed?: boolean;
+	unique?: boolean;
 };
 export type StorageBooleanFieldSchema = {
 	type: 'boolean';
 };
 export type StorageArrayFieldSchema = {
 	type: 'array';
-	items: StorageFieldSchema;
+	items: NestedStorageFieldSchema;
 };
 export type StorageObjectFieldSchema = {
 	type: 'object';
-	properties: StorageFieldsSchema;
+	properties: NestedStorageFieldsSchema;
 };
 export type StorageFieldSchema =
 	| StorageStringFieldSchema
@@ -26,14 +26,29 @@ export type StorageFieldSchema =
 	| StorageArrayFieldSchema
 	| StorageObjectFieldSchema;
 
+// nested versions don't have index info
+export type NestedStorageStringFieldSchema = {
+	type: 'string';
+};
+export type NestedStorageNumberFieldSchema = {
+	type: 'number';
+};
+
+export type NestedStorageFieldSchema =
+	| NestedStorageStringFieldSchema
+	| NestedStorageNumberFieldSchema
+	| StorageBooleanFieldSchema
+	| StorageArrayFieldSchema
+	| StorageObjectFieldSchema;
+
 export type StorageStringCompoundSchema<Fields extends StorageFieldsSchema> = {
-	type: '#string';
-	unique: boolean;
+	type: 'string';
+	unique?: boolean;
 	compute: (value: ShapeFromFields<Fields>) => string;
 };
 export type StorageNumberCompoundSchema<Fields extends StorageFieldsSchema> = {
-	type: '#number';
-	unique: boolean;
+	type: 'number';
+	unique?: boolean;
 	compute: (value: ShapeFromFields<Fields>) => number;
 };
 export type StorageCompoundIndexSchema<Fields extends StorageFieldsSchema> =
@@ -42,9 +57,15 @@ export type StorageCompoundIndexSchema<Fields extends StorageFieldsSchema> =
 
 export type StoragePropertySchema<BaseFields extends StorageFieldsSchema> =
 	| StorageFieldSchema
+	| NestedStorageFieldSchema
 	| StorageCompoundIndexSchema<BaseFields>;
 
 export type StorageFieldsSchema = Record<string, StorageFieldSchema>;
+
+export type NestedStorageFieldsSchema = Record<
+	string,
+	NestedStorageFieldSchema
+>;
 
 export type StorageCompoundIndices<Fields extends StorageFieldsSchema> = Record<
 	string,
@@ -106,23 +127,21 @@ export type GetSchemaProperty<
 > = StorageSchemaProperties<Schema>[Key];
 
 export type ShapeFromProperty<T extends StoragePropertySchema<any>> =
-	T extends StorageStringFieldSchema
+	T['type'] extends 'string'
 		? string
-		: T extends StorageNumberFieldSchema
+		: T['type'] extends 'number'
 		? number
-		: T extends StorageBooleanFieldSchema
+		: T['type'] extends 'boolean'
 		? boolean
-		: T extends StorageStringCompoundSchema<any>
-		? string
-		: T extends StorageNumberCompoundSchema<any>
-		? number
-		: T extends StorageObjectFieldSchema
-		? ShapeFromFields<T['properties']>
 		: T extends StorageArrayFieldSchema
 		? ShapeFromProperty<T['items']>[]
+		: T extends StorageObjectFieldSchema
+		? ShapeFromFields<T['properties']>
 		: never;
 
-export type ShapeFromFields<T extends StorageFieldsSchema> = {
+export type ShapeFromFields<
+	T extends StorageFieldsSchema | NestedStorageFieldsSchema,
+> = {
 	[K in keyof T]: ShapeFromProperty<T[K]>;
 };
 

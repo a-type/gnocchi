@@ -11,7 +11,6 @@ import { GroceryDnDDrop } from './dndTypes';
 import { GroceryListItemDraggable } from './items/GroceryListItem';
 import { groceriesState } from './state';
 import { hooks, GroceryCategory } from 'stores/groceries';
-import { UpdateType } from '@aphro/runtime-ts';
 
 export function GroceryListCategory({
 	category,
