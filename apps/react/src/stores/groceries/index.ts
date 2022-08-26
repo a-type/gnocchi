@@ -2,12 +2,8 @@ import cuid from 'cuid';
 import { generateKeyBetween } from 'fractional-indexing';
 import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
-import {
-	collection,
-	createHooks,
-	storage,
-	StorageDocument,
-} from '@aglio/storage';
+import { collection, storage, StorageDocument } from '@aglio/storage';
+import { createHooks } from '@aglio/storage-react';
 import { NaiveTimestampProvider } from '@aglio/storage-common';
 
 export const categoryCollection = collection({

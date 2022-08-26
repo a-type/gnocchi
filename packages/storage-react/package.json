@@ -1,5 +1,5 @@
 {
-	"name": "@aglio/storage",
+	"name": "@aglio/storage-react",
 	"version": "0.0.1",
 	"private": true,
 	"main": "./dist/index.js",
@@ -13,14 +13,18 @@
 		"dev": "tsc --watch",
 		"test": "vitest"
 	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
 	"dependencies": {
 		"@aglio/storage-common": "^0.0.1",
-		"@aglio/tools": "^0.0.1",
-		"cuid": "^2.1.8"
+		"@aglio/storage": "^0.0.1",
+		"@aglio/tools": "^0.0.1"
 	},
 	"devDependencies": {
-		"fake-indexeddb": "^4.0.0",
+		"@types/react": "^18.0.17",
 		"jsdom": "^20.0.0",
+		"react": "^18.2.0",
 		"typescript": "^4.7.4",
 		"vitest": "^0.22.1"
 	}

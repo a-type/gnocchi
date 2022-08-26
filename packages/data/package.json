@@ -9,9 +9,9 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "tsc",
-		"postbuild": "node ./scripts/copySql.js",
-		"dev": "tsc --watch",
+		"//build": "tsc",
+		"//postbuild": "node ./scripts/copySql.js",
+		"//dev": "tsc --watch",
 		"gen": "yarn aphro gen src/lib/domain.aphro -d src/lib/domain"
 	},
 	"dependencies": {

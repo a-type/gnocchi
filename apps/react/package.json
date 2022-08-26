@@ -12,6 +12,9 @@
 	},
 	"dependencies": {
 		"@aglio/data": "^0.0.1",
+		"@aglio/storage": "^0.0.1",
+		"@aglio/storage-react": "^0.0.1",
+		"@aglio/storage-common": "^0.0.1",
 		"@aphro/react": "1.0.3",
 		"@aphro/runtime-ts": "^0.3.5",
 		"@dnd-kit/core": "^6.0.5",

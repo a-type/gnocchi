@@ -266,7 +266,7 @@ function createLiveObject<T extends object>({
 	dispose: () => void;
 	context: LiveDocumentContext;
 }): LiveObject<T> {
-	const allowedKeys = Object.keys(initial);
+	const allowedKeys = Object.keys(initial) as any[];
 
 	const ref: { current: T; updated: T | undefined } = {
 		current: initial,

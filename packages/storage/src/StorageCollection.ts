@@ -203,7 +203,7 @@ export class StorageCollection<
 		});
 		const final = await this.applyLocalOperation(op);
 
-		return final;
+		return final!;
 	};
 
 	create = async (data: ShapeFromFields<Collection['fields']>) => {

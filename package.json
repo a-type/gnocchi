@@ -12,7 +12,7 @@
 		"gen": "turbo run gen",
 		"build": "turbo run build",
 		"preview": "turbo run preview",
-		"dev:storage": "turbo run dev --filter=storage-server --filter=storage --filter=storage-common"
+		"dev:storage": "turbo run dev --filter=storage-server --filter=storage --filter=storage-common --filter=storage-react"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",
