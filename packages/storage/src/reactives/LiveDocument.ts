@@ -1,27 +1,51 @@
-import { createPatch, SyncPatchDiff } from '@aglio/storage-common';
+import {
+	createAssignPatch,
+	createListMovePatch,
+	createListPushPatch,
+	createPatch,
+	SyncPatchDiff,
+} from '@aglio/storage-common';
 import { DocumentMutations } from './DocumentCache.js';
+
+// easier for testing things :/
+const DEBUG = false;
+function debugLog(...args: any[]) {
+	if (DEBUG) {
+		console.log(...args);
+	}
+}
 
 // internal assignment - applies updated document view to the live document
 // after storage updates have been applied
 export const LIVE_DOCUMENT_ASSIGN = Symbol('@@live-document-assign');
 // exposes the subscription function for the live document
 export const LIVE_DOCUMENT_SUBSCRIBE = Symbol('@@live-document-subscribe');
+// allows getting the raw value from the proxy
+export const LIVE_DOCUMENT_RAW = Symbol('@@live-document-raw');
 
 const LIVE_DOCUMENT_UPDATE = '$update';
 const LIVE_DOCUMENT_COMMIT = '$commit';
+const LIVE_LIST_PUSH = '$push';
+const LIVE_LIST_MOVE = '$move';
 
-export type LiveObject<T> = T & {
+export type LiveObject<T> = LiveifyProperties<T> & {
 	[LIVE_DOCUMENT_UPDATE]: (values: Partial<T>) => void;
 	[LIVE_DOCUMENT_COMMIT]: () => void;
 };
 
-export type LiveArray<T> = T[];
+export type LiveArray<T> = LiveifyProperties<T>[] & {
+	[LIVE_LIST_PUSH]: (item: T) => void;
+	[LIVE_LIST_MOVE]: (from: number, to: number) => void;
+};
 
 type Liveify<T> = T extends Array<any>
 	? LiveArray<T[number]>
 	: T extends object
 	? LiveObject<T>
 	: T;
+type LiveifyProperties<T> = {
+	[K in keyof T]: Liveify<T[K]>;
+};
 
 export type LiveDocument<T> = LiveObject<T>;
 
@@ -40,6 +64,13 @@ export function assign(obj: any, value: any) {
 		throw new Error('Cannot set a non-live object');
 	}
 	obj[LIVE_DOCUMENT_ASSIGN](value);
+}
+
+export function getRaw(obj: any) {
+	if (!obj[LIVE_DOCUMENT_RAW]) {
+		throw new Error('Cannot get raw value from non-live object');
+	}
+	return obj[LIVE_DOCUMENT_RAW];
 }
 
 export interface LiveDocumentContext {
@@ -112,12 +143,14 @@ function createLiveArray<T>({
 	const { subscribe, trigger } = createSubscribe(ref, dispose);
 
 	function setSource(value: T[]) {
+		debugLog('array setsource', value);
 		for (let i = 0; i < value.length; i++) {
 			if (wrappedProperties[i]) {
 				assign(wrappedProperties[i], value[i]);
 			}
 			ref.current[i] = value[i];
 		}
+		ref.updated = undefined;
 		trigger();
 	}
 
@@ -125,6 +158,14 @@ function createLiveArray<T>({
 	// that have yet to be flushed to storage
 	const pendingUpdates = new Array<SyncPatchDiff>([]);
 	let updatesQueued = false;
+
+	function enqueueUpdates() {
+		if (!updatesQueued) {
+			queueMicrotask(applyUpdates);
+			updatesQueued = true;
+		}
+	}
+
 	// creates a new update set and closes the current one. this
 	// creates a new atomic operation which is applied separately
 	// from any prior updates this frame.
@@ -133,9 +174,28 @@ function createLiveArray<T>({
 			pendingUpdates.push([]);
 		}
 	}
-	// applies a patch to the current object and enqueues it for
-	// storage update
-	// TODO: mutations here which queue updates
+
+	function push(item: T) {
+		ref.updated = ref.updated || [...ref.current];
+		ref.updated.push(item);
+		debugLog('pushed', ref.updated);
+		pendingUpdates[0].push(...createListPushPatch(item, keyPath));
+		enqueueUpdates();
+	}
+
+	function move(from: number, to: number) {
+		ref.updated = ref.updated || [...ref.current];
+		ref.updated.splice(to, 0, ref.updated.splice(from, 1)[0]);
+		pendingUpdates[0].push(...createListMovePatch(from, to, keyPath));
+		enqueueUpdates();
+	}
+
+	function set(value: T, index: number) {
+		ref.updated = ref.updated || [...ref.current];
+		ref.updated[index] = value;
+		pendingUpdates[0].push(...createAssignPatch(value, index, keyPath));
+		enqueueUpdates();
+	}
 
 	function applyUpdates() {
 		if (pendingUpdates.length === 0) {
@@ -159,20 +219,38 @@ function createLiveArray<T>({
 			if (name === LIVE_DOCUMENT_SUBSCRIBE) {
 				return subscribe;
 			}
+			if (name === LIVE_DOCUMENT_RAW) {
+				return ref.current;
+			}
 
 			if (key === LIVE_DOCUMENT_COMMIT) {
 				return commit;
 			}
 
-			const value = Reflect.get(ref.current, name);
-			return wrappedProperty<any, any>(value, name, {
+			if (key === LIVE_LIST_PUSH) {
+				return push;
+			}
+
+			if (key === LIVE_LIST_MOVE) {
+				return move;
+			}
+
+			const value = ref.updated
+				? Reflect.get(ref.updated, name)
+				: Reflect.get(ref.current, name);
+			debugLog('array get', name, value, ref.updated, ref.current);
+			return wrappedProperty<any, any>(name, value, {
 				wrappedProperties,
 				context,
 				keyPath,
 			});
 		},
 		set: (target, key, value) => {
-			throw new Error('TODO: set');
+			if (typeof key === 'number') {
+				set(value, key);
+				return true;
+			}
+			throw new Error('Assignment not supported');
 		},
 	});
 }
@@ -188,6 +266,8 @@ function createLiveObject<T extends object>({
 	dispose: () => void;
 	context: LiveDocumentContext;
 }): LiveObject<T> {
+	const allowedKeys = Object.keys(initial);
+
 	const ref: { current: T; updated: T | undefined } = {
 		current: initial,
 		updated: undefined,
@@ -222,6 +302,13 @@ function createLiveObject<T extends object>({
 	// that have yet to be flushed to storage
 	let pendingUpdates = new Array<SyncPatchDiff>([]);
 	let updatesQueued = false;
+
+	function enqueueUpdates() {
+		if (!updatesQueued) {
+			queueMicrotask(applyUpdates);
+			updatesQueued = true;
+		}
+	}
 	// creates a new update set and closes the current one. this
 	// creates a new atomic operation which is applied separately
 	// from any prior updates this frame.
@@ -236,12 +323,18 @@ function createLiveObject<T extends object>({
 		ref.updated = { ...ref.current, ...values };
 		const patch = createPatch(ref.current, ref.updated, keyPath);
 		pendingUpdates[pendingUpdates.length - 1].push(...patch);
-
-		if (!updatesQueued) {
-			queueMicrotask(applyUpdates);
-			updatesQueued = true;
-		}
+		enqueueUpdates();
 	}
+
+	function set(value: T[keyof T], key: keyof T) {
+		ref.updated = ref.updated || { ...ref.current };
+		ref.updated[key] = value;
+		pendingUpdates[pendingUpdates.length - 1].push(
+			...createAssignPatch(value, key, keyPath),
+		);
+		enqueueUpdates();
+	}
+
 	function applyUpdates() {
 		if (pendingUpdates.length === 0) {
 			return;
@@ -265,6 +358,9 @@ function createLiveObject<T extends object>({
 			if (name === LIVE_DOCUMENT_SUBSCRIBE) {
 				return subscribe;
 			}
+			if (name === LIVE_DOCUMENT_RAW) {
+				return ref.current;
+			}
 
 			if (key === LIVE_DOCUMENT_UPDATE) {
 				return update;
@@ -284,7 +380,11 @@ function createLiveObject<T extends object>({
 			});
 		},
 		set: (target, key, value) => {
-			throw new Error('TODO: set');
+			if (allowedKeys.includes(key)) {
+				set(value, key as keyof T);
+				return true;
+			}
+			throw new Error('Assignment not supported');
 		},
 	});
 }
@@ -303,6 +403,9 @@ function wrappedProperty<T extends any, K extends keyof T>(
 	},
 ) {
 	if (typeof value === 'object' && value !== null) {
+		if (wrappedProperties[key]) {
+			return wrappedProperties[key];
+		}
 		if (Array.isArray(value)) {
 			const array = createLiveArray({
 				initial: value,

@@ -10,7 +10,8 @@
 	],
 	"scripts": {
 		"build": "tsc",
-		"dev": "tsc --watch"
+		"dev": "tsc --watch",
+		"test": "vitest"
 	},
 	"dependencies": {
 		"@aglio/tools": "^0.0.1",
@@ -20,6 +21,7 @@
 		"jiff": "^0.7.3"
 	},
 	"devDependencies": {
-		"typescript": "^4.7.4"
+		"typescript": "^4.7.4",
+		"vitest": "^0.22.1"
 	}
 }

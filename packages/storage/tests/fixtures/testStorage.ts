@@ -15,6 +15,14 @@ const todo = collection({
 		done: {
 			type: 'boolean',
 		},
+		tags: {
+			type: 'array',
+			items: {
+				type: 'string',
+				indexed: false,
+				unique: false,
+			},
+		},
 	},
 	synthetics: {
 		example: {

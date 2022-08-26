@@ -18,7 +18,7 @@ import { Meta } from './Meta.js';
 import { storeRequestPromise } from './idb.js';
 import { QueryCache } from './reactives/QueryCache.js';
 import { DocumentCache } from './reactives/DocumentCache.js';
-import { LiveDocument } from './reactives/LiveDocument.js';
+import { getRaw, LiveDocument } from './reactives/LiveDocument.js';
 
 export class StorageCollection<
 	Collection extends StorageCollectionSchema<any, any>,
@@ -189,15 +189,17 @@ export class StorageCollection<
 			throw new Error(`No document with id ${id}`);
 		}
 
+		const rawCurrent = getRaw(current) as StorageDocument<Collection>;
+
 		const updated = {
-			...current,
+			...rawCurrent,
 			...data,
 		};
 
 		const op = await this.meta.createOperation({
 			collection: this.name,
 			documentId: id,
-			patch: this.createDiffPatch(current, updated),
+			patch: this.createDiffPatch(rawCurrent, updated),
 		});
 		const final = await this.applyLocalOperation(op);
 
