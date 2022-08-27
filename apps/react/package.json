@@ -6,9 +6,7 @@
 	"scripts": {
 		"dev": "webpack serve --config webpack.dev.js",
 		"build": "webpack --config webpack.prod.js",
-		"preview": "node ./previewServer.js",
-		"gen": "yarn gen:groceries",
-		"gen:groceries": "aphro gen src/stores/groceries/domain.aphro -d src/stores/groceries/.generated"
+		"preview": "node ./previewServer.js"
 	},
 	"dependencies": {
 		"@aglio/storage": "workspace:*",

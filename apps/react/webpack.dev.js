@@ -26,7 +26,8 @@ export default merge(common, {
 		new webpack.DefinePlugin({
 			'process.env': JSON.stringify({
 				NODE_ENV: process.env.NODE_ENV,
-				PUBLIC_URL: 'http://localhost:8080',
+				PUBLIC_URL: process.env.PUBLIC_URL || 'http://localhost:8080',
+				API_ORIGIN: process.env.API_ORIGIN,
 			}),
 		}),
 	],
