@@ -1,24 +1,25 @@
 {
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"target": "ESNext",
-		"useDefineForClassFields": true,
-		"lib": ["DOM", "DOM.Iterable", "ESNext"],
-		"allowJs": false,
-		"skipLibCheck": true,
-		"esModuleInterop": false,
-		"allowSyntheticDefaultImports": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"module": "ESNext",
-		"moduleResolution": "Node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"noEmit": true,
 		"jsx": "react",
-		"baseUrl": "src",
-		"outDir": "./dist/",
-		"rootDir": "./",
-		"sourceMap": true
+		"outDir": "./dist"
 	},
-	"include": ["src"]
+	"include": ["src"],
+	"references": [
+		{
+			"path": "../../packages/storage-common/tsconfig.json"
+		},
+		{
+			"path": "../../packages/storage/tsconfig.json"
+		},
+		{
+			"path": "../../packages/storage-react/tsconfig.json"
+		},
+		{
+			"path": "../../packages/conversion/tsconfig.json"
+		},
+		{
+			"path": "../../packages/tools/tsconfig.json"
+		}
+	]
 }

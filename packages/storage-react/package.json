@@ -2,24 +2,19 @@
 	"name": "@aglio/storage-react",
 	"version": "0.0.1",
 	"private": true,
-	"main": "./dist/index.js",
-	"typings": "./dist/index.d.ts",
+	"main": "src/index.ts",
+	"module": "src/index.ts",
 	"type": "module",
-	"files": [
-		"dist"
-	],
 	"scripts": {
-		"build": "tsc",
-		"dev": "tsc --watch",
 		"test": "vitest"
 	},
 	"peerDependencies": {
 		"react": "^18.2.0"
 	},
 	"dependencies": {
-		"@aglio/storage-common": "^0.0.1",
-		"@aglio/storage": "^0.0.1",
-		"@aglio/tools": "^0.0.1"
+		"@aglio/storage-common": "workspace:*",
+		"@aglio/storage": "workspace:*",
+		"@aglio/tools": "workspace:*"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.17",

@@ -5,7 +5,7 @@ import googleLoginHandler from './google/login.js';
 import logoutHandler from './logout.js';
 import sessionHandler from './session.js';
 
-const authRouter = Router();
+const authRouter: Router = Router();
 authRouter.use(json());
 
 authRouter.post('/logout', logoutHandler);

@@ -1,0 +1,23 @@
+// tsconfig.json
+{
+	"compilerOptions": {
+		"declaration": true,
+		"declarationMap": true,
+		"noImplicitAny": true,
+		"noLib": false,
+		"target": "es2017",
+		"sourceMap": true,
+		"module": "es2022",
+		"moduleResolution": "node16",
+		"lib": ["dom", "esnext", "webworker"],
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"jsx": "preserve",
+		"downlevelIteration": true,
+		"experimentalDecorators": true
+	},
+	"exclude": ["node_modules", "**/*/dist"]
+}

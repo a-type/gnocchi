@@ -7,13 +7,14 @@
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
 		"start": "node ./dist/server.js",
-		"build": "tsc",
-		"typecheck": "tsc --noEmit"
+		"build": "tsc --build tsconfig.json",
+		"typecheck": "tsc --noEmit",
+		"postinstall": "prisma generate"
 	},
 	"dependencies": {
-		"@aglio/storage-common": "^0.0.1",
-		"@aglio/storage-server": "^0.0.1",
-		"@aglio/tools": "^0.0.1",
+		"@aglio/storage-common": "workspace:*",
+		"@aglio/storage-server": "workspace:*",
+		"@aglio/tools": "workspace:*",
 		"@prisma/client": "^4.0.0",
 		"@types/cors": "^2.8.12",
 		"better-sqlite3": "^7.6.2",

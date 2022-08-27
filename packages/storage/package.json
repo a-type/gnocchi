@@ -2,20 +2,15 @@
 	"name": "@aglio/storage",
 	"version": "0.0.1",
 	"private": true,
-	"main": "./dist/index.js",
-	"typings": "./dist/index.d.ts",
+	"main": "src/index.ts",
+	"module": "src/index.ts",
 	"type": "module",
-	"files": [
-		"dist"
-	],
 	"scripts": {
-		"build": "tsc",
-		"dev": "tsc --watch",
 		"test": "vitest"
 	},
 	"dependencies": {
-		"@aglio/storage-common": "^0.0.1",
-		"@aglio/tools": "^0.0.1",
+		"@aglio/storage-common": "workspace:*",
+		"@aglio/tools": "workspace:*",
 		"cuid": "^2.1.8"
 	},
 	"devDependencies": {

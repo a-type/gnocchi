@@ -1,4 +1,4 @@
-export function take<T, Keys extends keyof T>(
+export function take<T extends object, Keys extends keyof T>(
 	obj: T,
 	keys: Keys[],
 ): Pick<T, Keys> {
@@ -9,7 +9,7 @@ export function take<T, Keys extends keyof T>(
 	return result;
 }
 
-export function omit<T, Keys extends keyof T>(
+export function omit<T extends object, Keys extends keyof T>(
 	obj: T,
 	keys: Keys[],
 ): Omit<T, Keys> {

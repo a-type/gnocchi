@@ -1,13 +1,13 @@
-import { commentsParser } from './commentsParser';
-import { depluralize } from './depluralize';
+import { commentsParser } from './commentsParser.js';
+import { depluralize } from './depluralize.js';
 import {
 	greedyMatchNumber,
 	greedyMatchOf,
 	greedyMatchUnit,
 	reverseGreedyMatchComment,
-} from './greedyMatchers';
-import { numberParser } from './numberParser';
-import { unitParser } from './unitParser';
+} from './greedyMatchers.js';
+import { numberParser } from './numberParser.js';
+import { unitParser } from './unitParser.js';
 
 const DEFAULT_UNIT = '';
 const DEFAULT_QUANTITY = 1;

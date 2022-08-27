@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import authRouter from './auth/index.js';
 
-const apiRouter = Router();
+const apiRouter: Router = Router();
 
 apiRouter.use('/auth', authRouter);
 

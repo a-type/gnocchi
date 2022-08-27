@@ -2,19 +2,14 @@
 	"name": "@aglio/storage-common",
 	"version": "0.0.1",
 	"private": true,
-	"main": "./dist/index.js",
-	"typings": "./dist/index.d.ts",
+	"main": "src/index.ts",
 	"type": "module",
-	"files": [
-		"dist"
-	],
+	"module": "src/index.ts",
 	"scripts": {
-		"build": "tsc",
-		"dev": "tsc --watch",
 		"test": "vitest"
 	},
 	"dependencies": {
-		"@aglio/tools": "^0.0.1",
+		"@aglio/tools": "workspace:*",
 		"fast-json-patch": "^3.1.1",
 		"uuid": "^8.3.2"
 	},

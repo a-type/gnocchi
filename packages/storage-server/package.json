@@ -2,20 +2,12 @@
 	"name": "@aglio/storage-server",
 	"version": "0.0.1",
 	"private": true,
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"typings": "./dist/index.d.ts",
+	"main": "src/index.ts",
 	"type": "module",
-	"files": [
-		"dist"
-	],
-	"scripts": {
-		"build": "tsc",
-		"dev": "tsc --watch"
-	},
+	"scripts": {},
 	"dependencies": {
-		"@aglio/tools": "^0.0.1",
-		"@aglio/storage-common": "^0.0.1",
+		"@aglio/tools": "workspace:*",
+		"@aglio/storage-common": "workspace:*",
 		"better-sqlite3": "^7.6.2"
 	},
 	"devDependencies": {
