@@ -10,7 +10,6 @@
 	},
 	"dependencies": {
 		"@aglio/conversion": "^0.0.1",
-		"@aglio/data": "^0.0.1",
 		"@aglio/tools": "^0.0.1",
 		"@aglio/wc2": "^0.0.1",
 		"copy-webpack-plugin": "^11.0.0",
