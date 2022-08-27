@@ -1,4 +1,4 @@
-import GroceryItem from 'stores/groceries/.generated/GroceryItem';
+import GroceryItem from 'stores/groceries/index.js';
 import { proxy, ref } from 'valtio';
 
 export const groceriesState = proxy({

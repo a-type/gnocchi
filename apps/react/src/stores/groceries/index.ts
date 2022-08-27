@@ -4,19 +4,22 @@ import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
 import { storage } from '@aglio/storage';
 import { createHooks } from '@aglio/storage-react';
-import { groceriesSchema, GroceryItem } from './schema';
+import { groceriesSchema, GroceryItem } from './schema.js';
+import { SECURE } from 'config.js';
 
 export type {
 	GroceryItem,
 	GroceryCategory,
 	FoodCategoryLookup,
-} from './schema';
+} from './schema.js';
 
 const DEFAULT_CATEGORY = 'None';
 
+const syncOrigin = process.env.API_ORIGIN || 'localhost:3001';
+
 const _groceries = storage({
 	syncOptions: {
-		host: 'ws://localhost:3001',
+		host: `ws${SECURE ? 's' : ''}://${syncOrigin}:3001`,
 	},
 	schema: groceriesSchema,
 });

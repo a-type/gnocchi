@@ -1,4 +1,3 @@
-import { P } from '@aphro/runtime-ts';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { CardStackPlusIcon } from '@radix-ui/react-icons';
 import useMergedRef from '@react-hook/merged-ref';
@@ -8,7 +7,7 @@ import {
 	Form,
 	SubmitButton,
 	TextField,
-} from 'components/primitives';
+} from 'components/primitives/index.js';
 import { Formik } from 'formik';
 import React, {
 	forwardRef,
@@ -17,10 +16,10 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { styled } from 'stitches.config';
-import { groceries, GroceryCategory, hooks } from 'stores/groceries';
-import { GroceryDnDDrop } from './dndTypes';
-import { groceriesState } from './state';
+import { styled } from 'stitches.config.js';
+import { groceries, GroceryCategory, hooks } from 'stores/groceries/index.js';
+import { GroceryDnDDrop } from './dndTypes.js';
+import { groceriesState } from './state.js';
 
 export interface GroceryNewCategoryFloaterProps {
 	className?: string;

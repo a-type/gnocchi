@@ -4,10 +4,10 @@ import {
 	SubmitButton,
 	TextField,
 	TextFieldProps,
-} from 'components/primitives';
+} from 'components/primitives/index.js';
 import { Formik, useFormikContext } from 'formik';
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
-import { groceries } from 'stores/groceries';
+import { groceries } from 'stores/groceries/index.js';
 
 export interface GroceryListAddProps {
 	className?: string;

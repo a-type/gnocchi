@@ -2,13 +2,13 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { PopoverAnchor } from '@radix-ui/react-popover';
-import { Box, Button } from 'components/primitives';
+import { Box, Button } from 'components/primitives/index.js';
 import {
 	Popover,
 	PopoverArrow,
 	PopoverContent,
-} from 'components/primitives/Popover';
-import { useIsFirstRender } from 'hooks/usePrevious';
+} from 'components/primitives/Popover.js';
+import { useIsFirstRender } from 'hooks/usePrevious.js';
 import pluralize from 'pluralize';
 import React, {
 	ComponentPropsWithoutRef,
@@ -22,12 +22,12 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { styled } from 'stitches.config';
+import { styled } from 'stitches.config.js';
 import { useSnapshot } from 'valtio';
-import { Checkbox } from '../../primitives/Checkbox';
-import { groceriesState } from '../state';
-import { ItemQuantityNumber } from './ItemQuantityNumber';
-import { groceries, hooks, GroceryItem } from 'stores/groceries';
+import { Checkbox } from '../../primitives/Checkbox.js';
+import { groceriesState } from '../state.js';
+import { ItemQuantityNumber } from './ItemQuantityNumber.js';
+import { groceries, hooks, GroceryItem } from 'stores/groceries/index.js';
 
 export interface GroceryListItemProps {
 	className?: string;

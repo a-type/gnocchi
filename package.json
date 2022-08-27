@@ -7,11 +7,8 @@
 		"packages/*"
 	],
 	"scripts": {
-		"dev": "turbo run dev",
-		"gen": "turbo run gen",
-		"build": "turbo run build",
-		"preview": "turbo run preview",
-		"dev:storage": "turbo run dev --filter=storage-server --filter=storage --filter=storage-common --filter=storage-react"
+		"dev": "pnpm -r --if-present --parallel dev",
+		"build": "pnpm -r --if-present run build"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",
@@ -26,9 +23,11 @@
 		"@aglio/react": "workspace:^0.0.1",
 		"@aglio/storage-react": "workspace:^0.0.1",
 		"@dnd-kit/utilities": "^3.2.0",
+		"@radix-ui/react-menu": "^1.0.0",
 		"@types/body-parser": "^1.19.2",
 		"@types/ws": "^8.5.3",
 		"react": "^18.2.0",
+		"react-dom": "18.2.0",
 		"suspend-react": "^0.0.8",
 		"vitest": "^0.22.1"
 	}

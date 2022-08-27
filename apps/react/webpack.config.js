@@ -55,8 +55,8 @@ const config = {
 			lib: path.resolve(__dirname, 'src/lib'),
 			stores: path.resolve(__dirname, 'src/stores'),
 			hooks: path.resolve(__dirname, 'src/hooks'),
-			'stitches.config': path.resolve(__dirname, 'src/stitches.config'),
-			config: path.resolve(__dirname, 'src/config'),
+			'stitches.config.js': path.resolve(__dirname, 'src/stitches.config.js'),
+			'config.js': path.resolve(__dirname, 'src/config.js'),
 		},
 	},
 	plugins: [
@@ -67,10 +67,6 @@ const config = {
 	],
 	module: {
 		rules: [
-			{
-				test: /\.sql$/i,
-				use: 'raw-loader',
-			},
 			{
 				test: /\.tsx?$/,
 				use: [

@@ -22,16 +22,16 @@ import React, {
 	useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { groceries, hooks, GroceryItem } from 'stores/groceries';
+import { groceries, hooks, GroceryItem } from 'stores/groceries/index.js';
 import { ref as valtioRef } from 'valtio';
-import { Box } from '../primitives';
-import { DeleteItemFloater } from './DeleteItemFloater';
-import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes';
-import { GroceryListCategory } from './GroceryListCategory';
-import { GroceryListItem } from './items/GroceryListItem';
-import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
-import { groceriesState } from './state';
-import { useAuth } from 'contexts/AuthContext';
+import { Box } from '../primitives/index.js';
+import { DeleteItemFloater } from './DeleteItemFloater.js';
+import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
+import { GroceryListCategory } from './GroceryListCategory.js';
+import { GroceryListItem } from './items/GroceryListItem.js';
+import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater.js';
+import { groceriesState } from './state.js';
+import { useAuth } from 'contexts/AuthContext.js';
 
 export interface GroceryListProps {
 	className?: string;

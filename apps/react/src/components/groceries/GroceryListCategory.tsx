@@ -4,13 +4,13 @@ import {
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import React, { memo, useMemo, useState } from 'react';
-import { keyframes, styled } from 'stitches.config';
+import { keyframes, styled } from 'stitches.config.js';
 import { useSnapshot } from 'valtio';
-import { H2 } from '../primitives';
-import { GroceryDnDDrop } from './dndTypes';
-import { GroceryListItemDraggable } from './items/GroceryListItem';
-import { groceriesState } from './state';
-import { hooks, GroceryCategory } from 'stores/groceries';
+import { H2 } from '../primitives/index.js';
+import { GroceryDnDDrop } from './dndTypes.js';
+import { GroceryListItemDraggable } from './items/GroceryListItem.js';
+import { groceriesState } from './state.js';
+import { hooks, GroceryCategory } from 'stores/groceries/index.js';
 
 export function GroceryListCategory({
 	category,

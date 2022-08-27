@@ -1,6 +1,6 @@
 import React, { ComponentPropsWithoutRef } from 'react';
-import { styled } from 'stitches.config';
-import { Box } from 'components/primitives';
+import { styled } from 'stitches.config.js';
+import { Box } from 'components/primitives/index.js';
 
 export function PageContent({
 	children,

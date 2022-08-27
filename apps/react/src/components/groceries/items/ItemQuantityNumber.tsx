@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { styled } from 'stitches.config';
+import { styled } from 'stitches.config.js';
 import { animated, config, useSpring } from '@react-spring/web';
 
 export interface ItemQuantityNumberProps {

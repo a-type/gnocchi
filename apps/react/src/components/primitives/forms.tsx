@@ -1,4 +1,4 @@
-import { styled } from 'stitches.config';
+import { styled } from 'stitches.config.js';
 import { useField } from 'formik';
 import React, {
 	ComponentProps,
@@ -7,7 +7,7 @@ import React, {
 	useRef,
 	Ref,
 } from 'react';
-import { Button, Input, TextArea, TextAreaProps } from './primitives';
+import { Button, Input, TextArea, TextAreaProps } from './primitives.js';
 import { Form as FormikForm } from 'formik';
 import useMergedRef from '@react-hook/merged-ref';
 

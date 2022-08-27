@@ -1,15 +1,15 @@
 import { createRoot } from 'react-dom/client';
-import { PageContent, PageRoot } from './components/layouts';
-import GroceryList from './components/groceries/GroceryList';
-import DeleteCheckedButton from './components/groceries/DeleteCheckedButton';
-import { GroceryListAdd } from './components/groceries/GroceryListAdd';
-import { Box } from './components/primitives';
+import { PageContent, PageRoot } from './components/layouts/index.js';
+import GroceryList from './components/groceries/GroceryList.js';
+import DeleteCheckedButton from './components/groceries/DeleteCheckedButton.js';
+import { GroceryListAdd } from './components/groceries/GroceryListAdd.js';
+import { Box } from './components/primitives/index.js';
 import React, { StrictMode, Suspense } from 'react';
-import { globalCss, css } from 'stitches.config';
-import { register } from './serviceWorkerRegistration';
-import { attachToPwaEvents } from './pwaEventListener';
-import { AuthProvider } from 'contexts/AuthContext';
-import { SyncMenu } from 'components/sync/SyncMenu';
+import { globalCss, css } from 'stitches.config.js';
+import { register } from './serviceWorkerRegistration.js';
+import { attachToPwaEvents } from './pwaEventListener.js';
+import { AuthProvider } from 'contexts/AuthContext.js';
+import { SyncMenu } from 'components/sync/SyncMenu.js';
 
 const floatingButton = css({
 	position: 'absolute',

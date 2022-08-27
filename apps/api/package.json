@@ -6,7 +6,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
-		"start": "node ./dist/server.js",
+		"start": "tsx ./src/server.ts",
+		"start:local": "env-cmd pnpm start",
 		"build": "tsc --build tsconfig.json",
 		"postinstall": "prisma generate"
 	},
