@@ -14,7 +14,6 @@
 		"@aglio/wc2": "^0.0.1",
 		"copy-webpack-plugin": "^11.0.0",
 		"cuid": "^2.1.8",
-		"formik": "^2.2.9",
 		"fractional-indexing": "^3.0.1",
 		"pluralize": "^8.0.0",
 		"workbox-core": "^6.5.3",
@@ -25,7 +24,6 @@
 		"workbox-webpack-plugin": "^6.5.3"
 	},
 	"devDependencies": {
-		"@types/jest": "^28.1.4",
 		"@types/pluralize": "^0.0.29",
 		"dotenv": "^16.0.1",
 		"html-webpack-plugin": "^5.5.0",
