@@ -1,8 +1,6 @@
 // tsconfig.json
 {
 	"compilerOptions": {
-		"declaration": true,
-		"declarationMap": true,
 		"noImplicitAny": true,
 		"noLib": false,
 		"target": "es2017",
@@ -19,5 +17,25 @@
 		"downlevelIteration": true,
 		"experimentalDecorators": true
 	},
-	"exclude": ["node_modules", "**/*/dist"]
+	"exclude": ["node_modules", "**/*/dist"],
+	"references": [
+		{
+			"path": "./packages/conversion"
+		},
+		{
+			"path": "./packages/storage"
+		},
+		{
+			"path": "./packages/storage-common"
+		},
+		{
+			"path": "./packages/storage-server"
+		},
+		{
+			"path": "./packages/storage-react"
+		},
+		{
+			"path": "./packages/tools"
+		}
+	]
 }

@@ -8,7 +8,6 @@
 		"dev": "env-cmd tsx watch ./src/server.ts",
 		"start": "node ./dist/server.js",
 		"build": "tsc --build tsconfig.json",
-		"typecheck": "tsc --noEmit",
 		"postinstall": "prisma generate"
 	},
 	"dependencies": {

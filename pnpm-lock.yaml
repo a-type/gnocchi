@@ -9,6 +9,7 @@ importers:
       '@aglio/react': workspace:^0.0.1
       '@aglio/storage-react': workspace:^0.0.1
       '@dnd-kit/utilities': ^3.2.0
+      '@types/body-parser': ^1.19.2
       '@types/node': 16.11.7
       '@types/ws': ^8.5.3
       react: ^18.2.0
@@ -22,6 +23,7 @@ importers:
       '@aglio/react': link:apps/react
       '@aglio/storage-react': link:packages/storage-react
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
+      '@types/body-parser': 1.19.2
       '@types/ws': 8.5.3
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0

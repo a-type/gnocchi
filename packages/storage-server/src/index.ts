@@ -1,2 +1,2 @@
 export { ServerStorage } from './ServerStorage.js';
-export { MessageSender } from './MessageSender.js';
+export type { MessageSender } from './MessageSender.js';
