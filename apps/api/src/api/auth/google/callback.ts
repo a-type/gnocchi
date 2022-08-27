@@ -22,7 +22,6 @@ export default async function googleCallbackHandler(
 		);
 	}
 	const profile = profileResponse.data as GoogleOAuthProfile;
-	console.log(profile);
 
 	// find an existing Google account association and user
 	const accountAndUser = await prisma.account.findUnique({

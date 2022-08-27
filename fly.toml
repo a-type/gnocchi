@@ -11,6 +11,7 @@ dockerfile = "Dockerfile"
 [env]
 DATABASE_URL = "file:/data/aglio.db"
 STORAGE_DATABASE_URL = "/data/aglio-storage.db"
+HOST = "https://api.aglio.gfor.rest"
 
 [experimental]
 allowed_public_ports = []
