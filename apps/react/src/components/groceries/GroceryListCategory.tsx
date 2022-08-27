@@ -24,9 +24,14 @@ export function GroceryListCategory({
 	const animateIn = stateSnap.justCreatedCategoryId === category.id;
 
 	const { data: items } = hooks.useAllItems({
-		where: 'categoryId',
-		equals: category.id,
-		// TODO: sort
+		index: {
+			where: 'categoryId',
+			equals: category.id,
+		},
+		filter: {
+			key: 'sortKey',
+			sort: (a, b) => (a.sortKey > b.sortKey ? 1 : -1),
+		},
 	});
 
 	const [isDragging, setIsDragging] = useState(false);

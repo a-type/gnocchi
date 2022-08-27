@@ -1,3 +1,4 @@
+import { LiveDocument } from '@aglio/storage';
 import { collection, schema, StorageDocument } from '@aglio/storage-common';
 
 export const categoryCollection = collection({
@@ -17,7 +18,9 @@ export const categoryCollection = collection({
 	},
 	synthetics: {},
 });
-export type GroceryCategory = StorageDocument<typeof categoryCollection>;
+export type GroceryCategory = LiveDocument<
+	StorageDocument<typeof categoryCollection>
+>;
 
 export const foodCategoryLookupCollection = collection({
 	name: 'foodCategoryLookups',
@@ -36,8 +39,8 @@ export const foodCategoryLookupCollection = collection({
 	},
 	synthetics: {},
 });
-export type FoodCategoryLookup = StorageDocument<
-	typeof foodCategoryLookupCollection
+export type FoodCategoryLookup = LiveDocument<
+	StorageDocument<typeof foodCategoryLookupCollection>
 >;
 
 export const itemCollection = collection({
@@ -99,14 +102,14 @@ export const itemCollection = collection({
 	synthetics: {
 		purchased: {
 			type: 'string',
-			indexed: true,
-			unique: false,
 			compute: (doc) =>
-				doc.purchasedQuantity >= doc.totalQuantity ? 'yes' : 'no',
+				doc.totalQuantity > 0 && doc.purchasedQuantity >= doc.totalQuantity
+					? 'yes'
+					: 'no',
 		},
 	},
 });
-export type GroceryItem = StorageDocument<typeof itemCollection>;
+export type GroceryItem = LiveDocument<StorageDocument<typeof itemCollection>>;
 
 export const groceriesSchema = schema({
 	version: 1,

@@ -21,3 +21,22 @@ export function omit<T, Keys extends keyof T>(
 	}
 	return result;
 }
+
+export function getSortedIndex<T>(
+	array: T[],
+	insert: T,
+	compare: (a: T, b: T) => number,
+) {
+	let low = 0;
+	let high = array.length;
+	while (low < high) {
+		const mid = (low + high) >>> 1;
+		const cmp = compare(array[mid], insert);
+		if (cmp < 0) {
+			low = mid + 1;
+		} else {
+			high = mid;
+		}
+	}
+	return low;
+}

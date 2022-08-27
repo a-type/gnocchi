@@ -13,8 +13,10 @@ export const DeleteCheckedButton = forwardRef<
 	// TODO: if multiple lists are ever supported, this
 	// will need to query based on list.
 	const { data: items } = hooks.useAllItems({
-		where: 'purchased',
-		equals: 'yes',
+		index: {
+			where: 'purchased',
+			equals: 'yes',
+		},
 	});
 
 	const deleteCompleted = async () => {

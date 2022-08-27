@@ -21,3 +21,5 @@ export function schema<
 }
 
 export * from './types.js';
+
+export * from './indexFilters.js';

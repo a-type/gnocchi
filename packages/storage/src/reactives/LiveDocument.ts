@@ -210,7 +210,7 @@ function createLiveArray<T>({
 		updatesQueued = false;
 	}
 
-	return new Proxy({} as any, {
+	return new Proxy(ref as any, {
 		get: (_, key) => {
 			const name = key as keyof T;
 			if (name === LIVE_DOCUMENT_ASSIGN) {
@@ -233,6 +233,10 @@ function createLiveArray<T>({
 
 			if (key === LIVE_LIST_MOVE) {
 				return move;
+			}
+
+			if (key === 'toString') {
+				return () => JSON.stringify(ref.current);
 			}
 
 			const value = ref.updated
@@ -349,7 +353,7 @@ function createLiveObject<T extends object>({
 		pendingUpdates = [[]];
 	}
 
-	return new Proxy({} as any, {
+	return new Proxy(ref as any, {
 		get: (_, key) => {
 			const name = key as keyof T;
 			if (name === LIVE_DOCUMENT_ASSIGN) {
@@ -368,6 +372,10 @@ function createLiveObject<T extends object>({
 
 			if (key === LIVE_DOCUMENT_COMMIT) {
 				return commit;
+			}
+
+			if (key === 'toString') {
+				return () => JSON.stringify(ref.current);
 			}
 
 			const value = ref.updated

@@ -13,6 +13,7 @@ export class LiveQuery<
 	resolved: Promise<T>;
 
 	constructor(
+		readonly key: string,
 		private exec: () => Promise<T>,
 		private events: EventSubscriber<CollectionEvents<Collection>>,
 		listen: (keyof CollectionEvents<Collection>)[],
@@ -31,6 +32,7 @@ export class LiveQuery<
 	}
 
 	private update = async () => {
+		console.debug('Recomputing query', this.key);
 		this._current = await this.exec();
 		this._subscribers.forEach((subscriber) => subscriber(this._current));
 		return this._current;

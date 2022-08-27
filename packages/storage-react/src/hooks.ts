@@ -1,6 +1,12 @@
 import { useMemo, useRef, useSyncExternalStore } from 'react';
 import { suspend } from 'suspend-react';
-import { Storage, LiveQuery, subscribe } from '@aglio/storage';
+import {
+	Storage,
+	LiveQuery,
+	subscribe,
+	CollectionInMemoryFilters,
+	LiveDocument,
+} from '@aglio/storage';
 import {
 	CollectionIndex,
 	CollectionIndexFilter,
@@ -21,13 +27,14 @@ type CollectionHooks<
 > = {
 	[key in Name as `use${Capitalize<Name>}`]: (
 		id: string,
-	) => QueryHookResult<StorageDocument<Schema>>;
+	) => QueryHookResult<LiveDocument<StorageDocument<Schema>>>;
 } & {
 	[key in Name as `useAll${Capitalize<Name>}`]: <
 		Index extends CollectionIndex<Schema>,
-	>(
-		index?: CollectionIndexFilter<Schema, Index>,
-	) => QueryHookResult<StorageDocument<Schema>[]>;
+	>(config?: {
+		index?: CollectionIndexFilter<Schema, Index>;
+		filter?: CollectionInMemoryFilters<Schema>;
+	}) => QueryHookResult<LiveDocument<StorageDocument<Schema>>[]>;
 };
 
 type UnionToIntersection<T> = (T extends any ? (k: T) => void : never) extends (
@@ -111,20 +118,15 @@ export function createHooks<
 			name,
 		)}` as `useAll${CapitalizedCollectionName<Schema>}`;
 		hooks[getAllHookName] = function useAll(
-			index?: CollectionIndexFilter<any, any>,
+			config: {
+				index?: CollectionIndexFilter<any, any>;
+				filter?: CollectionInMemoryFilters<any>;
+			} = {},
 		) {
 			suspend(() => collection.initialized, [name]);
-			// only rerender if filter changes
-			// FIXME: make this better
-			const filterRef = useRef(index);
-			const notEqual =
-				JSON.stringify(filterRef.current) !== JSON.stringify(index);
-			if (notEqual) {
-				filterRef.current = index;
-			}
-			const liveQuery = useMemo(() => {
-				return collection.getAll(filterRef.current);
-			}, [filterRef.current]);
+			// assumptions: this query getter is fast and returns the same
+			// query identity for subsequent calls.
+			const liveQuery = collection.getAll(config.index, config.filter);
 			const data = useLiveQuery(liveQuery);
 			return {
 				data,

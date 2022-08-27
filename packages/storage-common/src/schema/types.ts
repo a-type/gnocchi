@@ -198,13 +198,33 @@ export type CollectionProperties<
 	Collection extends StorageCollectionSchema<any, any>,
 > = Collection['fields'] & Collection['synthetics'];
 
-export type CollectionIndexFilter<
+export type MatchCollectionIndexFilter<
 	Collection extends StorageCollectionSchema<any, any>,
 	Index extends CollectionIndex<Collection>,
 > = {
 	where: Index;
 	equals: ShapeFromProperty<CollectionProperties<Collection>[Index]>;
+	order?: 'asc' | 'desc';
 };
+
+export type RangeCollectionIndexFilter<
+	Collection extends StorageCollectionSchema<any, any>,
+	Index extends CollectionIndex<Collection>,
+> = {
+	where: Index;
+	gte?: ShapeFromProperty<CollectionProperties<Collection>[Index]>;
+	lte?: ShapeFromProperty<CollectionProperties<Collection>[Index]>;
+	gt?: ShapeFromProperty<CollectionProperties<Collection>[Index]>;
+	lt?: ShapeFromProperty<CollectionProperties<Collection>[Index]>;
+	order?: 'asc' | 'desc';
+};
+
+export type CollectionIndexFilter<
+	Collection extends StorageCollectionSchema<any, any>,
+	Index extends CollectionIndex<Collection>,
+> =
+	| MatchCollectionIndexFilter<Collection, Index>
+	| RangeCollectionIndexFilter<Collection, Index>;
 
 export type CollectionEvents<
 	Collection extends StorageCollectionSchema<any, any>,

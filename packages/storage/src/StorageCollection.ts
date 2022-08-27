@@ -1,11 +1,15 @@
 import { EventSubscriber } from './EventSubscriber.js';
 import { computeSynthetics } from './synthetics.js';
 import {
+	getSortedIndex,
 	CollectionEvents,
 	CollectionIndex,
 	CollectionIndexFilter,
 	CollectionSchemaComputedIndexes,
+	isRangeIndexFilter,
+	MatchCollectionIndexFilter,
 	omit,
+	RangeCollectionIndexFilter,
 	ShapeFromFields,
 	StorageCollectionSchema,
 	StorageDocument,
@@ -15,10 +19,26 @@ import {
 import { createPatch, SyncOperation } from '@aglio/storage-common';
 import { Sync } from './Sync.js';
 import { Meta } from './Meta.js';
-import { storeRequestPromise } from './idb.js';
+import { cursorIterator, storeRequestPromise } from './idb.js';
 import { QueryCache } from './reactives/QueryCache.js';
 import { DocumentCache } from './reactives/DocumentCache.js';
 import { getRaw, LiveDocument } from './reactives/LiveDocument.js';
+
+export type CollectionInMemoryFilters<
+	Collection extends StorageCollectionSchema<any, any>,
+> = {
+	/**
+	 * This key must correspond to the filters being used.
+	 * If you sort or filter in a different way but use the same key,
+	 * the results will be wrong.
+	 */
+	key: string;
+	filter?: (doc: StorageDocumentWithComputedIndices<Collection>) => boolean;
+	sort?: (
+		a: StorageDocumentWithComputedIndices<Collection>,
+		b: StorageDocumentWithComputedIndices<Collection>,
+	) => number;
+};
 
 export class StorageCollection<
 	Collection extends StorageCollectionSchema<any, any>,
@@ -108,21 +128,51 @@ export class StorageCollection<
 		);
 	};
 
-	// TODO: ordering
 	findOne = (
-		filter: CollectionIndexFilter<Collection, CollectionIndex<Collection>>,
+		filter: MatchCollectionIndexFilter<Collection, CollectionIndex<Collection>>,
 	) => {
 		return this.queryCache.get(
 			this.queryCache.getKey('findOne', filter),
 			async () => {
 				const store = await this.readTransaction();
-				const request = store.index(filter.where).get(filter.equals as any);
-				const raw = await storeRequestPromise(request);
-				if (!raw) return null;
-				return this.getLiveDocument(raw);
+				const request = this.getIndexedListRequest(store, filter);
+				let result: StorageDocumentWithComputedIndices<Collection> | undefined =
+					undefined;
+				await cursorIterator<StorageDocumentWithComputedIndices<Collection>>(
+					request,
+					(doc) => {
+						if (doc) {
+							result = doc;
+							return false;
+						}
+						return true;
+					},
+				);
+				if (!result) return null;
+				return this.getLiveDocument(result);
 			},
 			['delete', 'put'],
 		);
+	};
+
+	private rangeIndexToIdbKeyBound = (
+		filter: RangeCollectionIndexFilter<Collection, CollectionIndex<Collection>>,
+	) => {
+		const lower = filter.gte || filter.gt;
+		const upper = filter.lte || filter.lt;
+		if (!lower) {
+			return IDBKeyRange.upperBound(upper, !!filter.lt);
+		} else if (!upper) {
+			return IDBKeyRange.lowerBound(lower, !!filter.gt);
+		} else {
+			return IDBKeyRange.bound(lower, upper, !!filter.gt, !!filter.lt);
+		}
+	};
+
+	private matchIndexToIdbKeyRange = (
+		filter: MatchCollectionIndexFilter<Collection, CollectionIndex<Collection>>,
+	) => {
+		return IDBKeyRange.only(filter.equals as string | number);
 	};
 
 	private getIndexedListRequest = (
@@ -131,34 +181,51 @@ export class StorageCollection<
 	) => {
 		if (!index) return store.openCursor();
 		const indexName = index.where;
-		// TODO: fix any typing? the value of the indexed property type
-		// is too broad, it doesn't know we don't index booleans, etc.
-		const indexValue = index.equals as any;
-		return store.index(indexName).openCursor(indexValue);
+		const range = isRangeIndexFilter(index)
+			? this.rangeIndexToIdbKeyBound(index)
+			: this.matchIndexToIdbKeyRange(index);
+		return store
+			.index(indexName)
+			.openCursor(range, index.order === 'desc' ? 'prev' : 'next');
 	};
 	getAll = <Index extends CollectionIndex<Collection>>(
 		index?: CollectionIndexFilter<Collection, Index>,
+		/**
+		 * The secondary filtering allows in-memory filtering
+		 * which is applied while the cursor is being iterated,
+		 * which may be more efficient than filtering afterward.
+		 */
+		filters?: CollectionInMemoryFilters<Collection>,
 	) => {
+		const filter = filters?.filter;
+		const sort = filters?.sort;
 		return this.queryCache.get(
-			this.queryCache.getKey('getAll', index),
+			this.queryCache.getKey('getAll', index, filters),
 			async () => {
 				const store = await this.readTransaction();
 				const request = this.getIndexedListRequest(store, index);
-				const results = await new Promise<StorageDocument<Collection>[]>(
-					(resolve, reject) => {
-						const results: StorageDocument<Collection>[] = [];
-						request.onsuccess = (event) => {
-							const cursor = request.result;
-							if (cursor) {
-								results.push(cursor.value);
-								cursor.continue();
+				const results: StorageDocument<Collection>[] = [];
+				await cursorIterator<StorageDocumentWithComputedIndices<Collection>>(
+					request,
+					(item) => {
+						// skip empty docs
+						if (!item) return true;
+
+						// if no filter or filter matches, add to results
+						if (!filter || filter(item)) {
+							// sort the insertion if a sort is provided
+							if (sort) {
+								// find the index to insert the item using binary search
+								const index = getSortedIndex(results, item, sort);
+								results.splice(index, 0, item);
 							} else {
-								resolve(results);
+								// otherwise just push to end
+								results.push(item);
 							}
-						};
-						request.onerror = () => {
-							reject(request.error);
-						};
+						}
+
+						// always keep going
+						return true;
 					},
 				);
 				return results.map((raw) => this.getLiveDocument(raw));

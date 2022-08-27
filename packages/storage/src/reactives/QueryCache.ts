@@ -5,6 +5,7 @@ import {
 	StorageDocument,
 } from '@aglio/storage-common';
 import { EventSubscriber } from '../EventSubscriber.js';
+import { CollectionInMemoryFilters } from '../StorageCollection.js';
 import { LiveDocument } from './LiveDocument.js';
 import { LiveQuery } from './LiveQuery.js';
 
@@ -16,7 +17,7 @@ function orderedReplacer(_: any, v: any) {
 		Object.entries(v).sort(([ka], [kb]) => (ka < kb ? -1 : ka > kb ? 1 : 0)),
 	);
 }
-function hashFilter(filter: any) {
+function hashIndex(filter: any) {
 	return JSON.stringify(filter, orderedReplacer);
 }
 
@@ -27,9 +28,10 @@ export class QueryCache<Collection extends StorageCollectionSchema<any, any>> {
 
 	getKey = (
 		type: 'get' | 'findOne' | 'getAll',
-		filter?: CollectionIndexFilter<Collection, any> | string,
+		index?: CollectionIndexFilter<Collection, any> | string,
+		filter?: CollectionInMemoryFilters<Collection>,
 	) => {
-		return `${type}_${filter ? hashFilter(filter) : ''}`;
+		return `${type}_${index ? hashIndex(index) : ''}_${filter?.key || ''}`;
 	};
 
 	get = <
@@ -44,9 +46,15 @@ export class QueryCache<Collection extends StorageCollectionSchema<any, any>> {
 	) => {
 		let query = this.queries.get(key) as LiveQuery<Collection, T> | undefined;
 		if (!query) {
-			query = new LiveQuery<Collection, T>(exec, this.events, listen, () => {
-				this.dispose(key);
-			});
+			query = new LiveQuery<Collection, T>(
+				key,
+				exec,
+				this.events,
+				listen,
+				() => {
+					this.dispose(key);
+				},
+			);
 			this.queries.set(key, query);
 		}
 		return query!;

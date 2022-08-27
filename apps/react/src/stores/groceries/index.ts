@@ -35,9 +35,26 @@ export const mutations = {
 		return _groceries.get('items').deleteAll(ids);
 	},
 	setItemPurchasedQuantity: (item: GroceryItem, quantity: number) => {
-		return _groceries.get('items').update(item.id, {
+		item.$update({
 			purchasedQuantity: quantity,
 		});
+	},
+	setItemPosition: (
+		item: GroceryItem,
+		sortKey: string,
+		categoryId?: string,
+	) => {
+		item.$update({
+			sortKey,
+			categoryId,
+		});
+		// if category changed, update lookups
+		if (categoryId) {
+			_groceries.get('foodCategoryLookups').upsert({
+				foodName: item.food,
+				categoryId,
+			});
+		}
 	},
 	toggleItemPurchased: (item: GroceryItem) => {
 		if (item.purchasedQuantity >= item.totalQuantity) {
