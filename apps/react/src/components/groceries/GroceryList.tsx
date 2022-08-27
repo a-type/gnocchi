@@ -223,25 +223,6 @@ function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
 	groceries.setItemPosition(draggedItem, sortKey, dropZone.value.categoryId);
 }
 
-function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
-	if (draggedItem.id === dropZone.value.id) return;
-
-	let sortKey: string;
-
-	if (dropZone.value.sortKey < draggedItem.sortKey) {
-		sortKey = generateKeyBetween(dropZone.prevSortKey, draggedItem.sortKey);
-	} else if (dropZone.value.sortKey > draggedItem.sortKey) {
-		// generate a key between them
-		sortKey = generateKeyBetween(dropZone.value.sortKey, dropZone.nextSortKey);
-	} else {
-		// problem... sort keys are the same.
-		// this should never happen in theory but could :/
-		sortKey = generateKeyBetween(null, dropZone.value.sortKey);
-	}
-
-	groceries.setItemPosition(draggedItem, sortKey, dropZone.value.categoryId);
-}
-
 function useOnDragCancel() {
 	return useCallback(({ active }: DragCancelEvent) => {
 		if (active) {
