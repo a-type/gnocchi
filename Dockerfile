@@ -13,6 +13,7 @@ COPY . .
 RUN pnpm install --filter . --frozen-lockfile
 RUN pnpm install --filter "@aglio/api..." --frozen-lockfile --unsafe-perm
 RUN pnpm --filter "@aglio/api" run build
+RUN pnpm --filter "@aglio/api" run gen
 
 WORKDIR /root/monorepo/apps/api
 EXPOSE 3001

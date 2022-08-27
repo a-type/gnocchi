@@ -19,7 +19,7 @@ const syncOrigin = process.env.API_ORIGIN || 'localhost:3001';
 
 const _groceries = storage({
 	syncOptions: {
-		host: `ws${SECURE ? 's' : ''}://${syncOrigin}:3001`,
+		host: `ws${SECURE ? 's' : ''}://${syncOrigin}`,
 	},
 	schema: groceriesSchema,
 });

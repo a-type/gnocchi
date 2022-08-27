@@ -6,9 +6,11 @@
 	"type": "module",
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
-		"start": "tsx ./src/server.ts",
+		"prestart": "prisma migrate deploy",
+		"start": "pnpm prestart && tsx ./src/server.ts",
 		"start:local": "env-cmd pnpm start",
 		"build": "tsc --build tsconfig.json",
+		"gen": "prisma generate",
 		"postinstall": "prisma generate"
 	},
 	"dependencies": {
