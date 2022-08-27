@@ -1,4 +1,3 @@
-import { P } from '@aphro/runtime-ts';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { CardStackPlusIcon } from '@radix-ui/react-icons';
 import useMergedRef from '@react-hook/merged-ref';
@@ -8,7 +7,7 @@ import {
 	Form,
 	SubmitButton,
 	TextField,
-} from 'components/primitives';
+} from 'components/primitives/index.js';
 import { Formik } from 'formik';
 import React, {
 	forwardRef,
@@ -17,11 +16,10 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { styled } from 'stitches.config';
-import { GroceryCategory, GroceryItem } from '@aglio/data';
-import { groceries, useQuery } from 'stores/groceries';
-import { GroceryDnDDrop } from './dndTypes';
-import { groceriesState } from './state';
+import { styled } from 'stitches.config.js';
+import { groceries, GroceryCategory, hooks } from 'stores/groceries/index.js';
+import { GroceryDnDDrop } from './dndTypes.js';
+import { groceriesState } from './state.js';
 
 export interface GroceryNewCategoryFloaterProps {
 	className?: string;
@@ -175,22 +173,9 @@ function NewCategoryForm({
 }: {
 	onDone: (category: GroceryCategory) => void;
 }) {
-	// warning: truly awful querying below!
-
-	const [allCategories, allItems] = [
-		useQuery(GroceryCategory.queryAll, {
-			key: 'categories',
-		}),
-		// TODO: if multiple lists are ever supported, this will need
-		// to query based on the current list.
-		useQuery(GroceryItem.queryAll, {
-			key: `all-items`,
-		}),
-	];
-
-	const unusedCategories = allCategories.filter((category) => {
-		return !allItems.some((item) => item.categoryId === category.id);
-	});
+	// TODO: reevaluate UX - this should probably just search all categories
+	// by the input value.
+	const { data: categories } = hooks.useAllCategories();
 
 	return (
 		<Box direction="column" gap={2} align="stretch" w="full">
@@ -214,9 +199,9 @@ function NewCategoryForm({
 					</Box>
 				</Form>
 			</Formik>
-			{!!unusedCategories.length && (
+			{!!categories?.length && (
 				<Box flex={1} align="stretch" gap={2}>
-					{unusedCategories.map((category) => (
+					{categories.map((category) => (
 						<Button
 							color="ghost"
 							css={{

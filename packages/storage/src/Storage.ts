@@ -1,27 +1,79 @@
+import {
+	RebasesMessage,
+	ServerMessage,
+	StorageSchema,
+	SyncResponseMessage,
+} from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import { initializeDatabases } from './databaseManagement.js';
+import { Meta } from './Meta.js';
 import { StorageCollection } from './StorageCollection.js';
-import { StorageCollectionSchema } from './types.js';
+import { HybridSync, HybridSyncOptions } from './Sync.js';
+import { StorageCollectionSchema } from '@aglio/storage-common';
+
+export interface StorageOptions<
+	Schema extends StorageSchema<{
+		[key: string]: StorageCollectionSchema<any, any>;
+	}>,
+> {
+	schema: Schema;
+	syncOptions: HybridSyncOptions;
+	/** Provide an explicit IDBFactory for non-browser environments */
+	indexedDB?: IDBFactory;
+}
+
+type SchemaToCollections<
+	Schema extends StorageSchema<{
+		[key: string]: StorageCollectionSchema<any, any>;
+	}>,
+> = {
+	[key in keyof Schema['collections']]: StorageCollection<
+		Schema['collections'][key]
+	>;
+};
 
 export class Storage<
-	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
+	Schema extends StorageSchema<{
+		[key: string]: StorageCollectionSchema<any, any>;
+	}>,
 > {
-	private _collections: Record<keyof Schemas, StorageCollection<any>> =
-		{} as any;
+	// TODO: mapped type so collection identities are preserved
+	private _collections: SchemaToCollections<Schema> = {} as any;
+	private schema: Schema;
+	private _sync: HybridSync;
+	private meta: Meta;
 
-	constructor(private collectionSchemas: Schemas) {
-		const databases = initializeDatabases({
-			collections: this.collectionSchemas,
-		});
-		for (const [name, database] of Object.entries(databases)) {
-			this._collections[name as keyof Schemas] = new StorageCollection(
-				database,
-				this.collectionSchemas[name as keyof Schemas],
-			);
+	constructor(options: StorageOptions<Schema>) {
+		this.schema = options.schema;
+		this._sync = new HybridSync(options.syncOptions);
+
+		this._sync.subscribeToNetworkChange(this.handleOnlineChange);
+		this._sync.subscribe(this.handleSyncMessage);
+
+		// centralized storage for all stored operations
+		this.meta = new Meta(this._sync, options.indexedDB);
+
+		const database = initializeDatabases(this.schema, options.indexedDB);
+		for (const [name, collection] of Object.entries(this.schema.collections)) {
+			this._collections[name as keyof Schema['collections']] =
+				new StorageCollection<
+					Schema['collections'][keyof Schema['collections']]
+				>(
+					database,
+					collection as Schema['collections'][keyof Schema['collections']],
+					this._sync,
+					this.meta,
+				);
 		}
 	}
 
-	get<T extends keyof Schemas>(name: T): StorageCollection<Schemas[T]> {
+	get sync() {
+		return this._sync;
+	}
+
+	get<T extends keyof Schema['collections']>(
+		name: T,
+	): StorageCollection<Schema['collections'][T]> {
 		const collection = this._collections[name];
 		assert(
 			!!collection,
@@ -33,10 +85,84 @@ export class Storage<
 	get collections() {
 		return this._collections;
 	}
+
+	private handleSyncMessage = (message: ServerMessage) => {
+		switch (message.type) {
+			case 'op-re':
+				for (const op of message.ops) {
+					this.get(op.collection).applyRemoteOperation(op);
+				}
+				break;
+			case 'sync-resp':
+				this.handleSyncResponse(message);
+				break;
+			case 'rebases':
+				this.handleRebases(message);
+				break;
+		}
+	};
+
+	private handleSyncResponse = async (message: SyncResponseMessage) => {
+		// store the global ack info
+		await this.meta.setGlobalAck(message.globalAckTimestamp);
+
+		// we need to add all operations to the operation history
+		// and then recompute views of each affected document
+		const affectedDocuments = await this.meta.insertRemoteOperations(
+			message.ops,
+		);
+		// refresh all those documents
+		for (const doc of affectedDocuments) {
+			this.get(doc.collection).recomputeDocument(doc.documentId);
+		}
+
+		// respond to the server
+		const sync2 = await this.meta.getSyncStep2(message.provideChangesSince);
+		this.sync.send({
+			type: 'sync-step2',
+			...sync2,
+		});
+	};
+
+	private handleRebases = async (message: RebasesMessage) => {
+		for (const rebase of message.rebases) {
+			this.collections[rebase.collection].rebaseDocument(
+				rebase.documentId,
+				rebase.upTo,
+			);
+		}
+	};
+
+	private handleOnlineChange = async (online: boolean) => {
+		if (!online) return;
+		const sync = await this.meta.getSync();
+		this.sync.send({
+			type: 'sync',
+			...sync,
+			schemaVersion: this.schema.version,
+		});
+	};
+
+	stats = async () => {
+		const base = {
+			meta: await this.meta.stats(),
+			collections: Object.entries(this.collections).reduce(
+				(acc, [name, coll]) => {
+					acc[name] = coll.stats();
+					return acc;
+				},
+				{} as Record<string, any>,
+			),
+		};
+
+		return base;
+	};
 }
 
 export function storage<
-	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
->(collectionSchemas: Schemas) {
-	return new Storage(collectionSchemas);
+	Schema extends StorageSchema<{
+		[k: string]: StorageCollectionSchema<any, any>;
+	}>,
+>(options: StorageOptions<Schema>) {
+	return new Storage(options);
 }

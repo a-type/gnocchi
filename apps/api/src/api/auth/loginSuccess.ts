@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getReturnToCookie, removeReturnToCookie } from '../../auth/cookies';
+import { getReturnToCookie, removeReturnToCookie } from '../../auth/cookies.js';
 
 export default async function loginSuccessHandler(req: Request, res: Response) {
 	// read returnTo cookie to see if we have a redirect,

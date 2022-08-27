@@ -1,4 +1,4 @@
-import { API_ORIGIN, SECURE } from 'config';
+import { API_ORIGIN, SECURE } from 'config.js';
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
 export const AuthContext = createContext<{
@@ -14,7 +14,9 @@ async function getSession() {
 			},
 		);
 		if (meResult.ok) {
-			return await meResult.json();
+			const json = await meResult.json();
+			if (json.session) return json.session;
+			return null;
 		}
 	} catch (e) {
 		console.error(e);

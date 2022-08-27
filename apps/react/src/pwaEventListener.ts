@@ -1,4 +1,4 @@
-import { groceries } from './stores/groceries';
+import { groceries } from './stores/groceries/index.js';
 
 export function attachToPwaEvents() {
 	if (typeof window === 'undefined') return;

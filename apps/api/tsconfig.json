@@ -1,21 +1,19 @@
 {
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"target": "es6",
-		"lib": ["dom", "esnext"],
 		"outDir": "./dist",
-		"allowJs": true,
-		"strict": true,
-		"forceConsistentCasingInFileNames": true,
-		"esModuleInterop": true,
-		"module": "commonjs",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"downlevelIteration": true,
-		"sourceMap": true,
-		"experimentalDecorators": true,
-		"declaration": false
+		"baseUrl": "."
 	},
-	"include": ["src/**/*.ts"]
+	"include": ["src"],
+	"references": [
+		{
+			"path": "../../packages/storage-common/tsconfig.json"
+		},
+		{
+			"path": "../../packages/storage-server/tsconfig.json"
+		},
+		{
+			"path": "../../packages/tools/tsconfig.json"
+		}
+	]
 }

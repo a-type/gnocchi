@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import { DEPLOYED_HOST } from '../config/deployedContext';
+import { DEPLOYED_HOST } from '../config/deployedContext.js';
 
 export const googleOauth = new google.auth.OAuth2(
 	process.env.GOOGLE_AUTH_CLIENT_ID,

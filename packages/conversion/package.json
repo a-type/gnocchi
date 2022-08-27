@@ -2,14 +2,11 @@
 	"name": "@aglio/conversion",
 	"version": "0.0.1",
 	"private": true,
-	"main": "./dist/index.js",
-	"typings": "./dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"main": "src/index.ts",
+	"module": "src/index.ts",
+	"type": "module",
 	"scripts": {
-		"build": "tsc",
-		"dev": "tsc --watch"
+		"test": "vitest"
 	},
 	"dependencies": {
 		"convert-units": "3.0.0-beta.4",
@@ -17,6 +14,7 @@
 		"pluralize": "^8.0.0"
 	},
 	"devDependencies": {
-		"@types/convert-units": "2.3.5"
+		"@types/convert-units": "2.3.5",
+		"vitest": "^0.22.1"
 	}
 }

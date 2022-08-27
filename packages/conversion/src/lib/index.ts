@@ -1,1 +1,1 @@
-export * from './parseIngredient';
+export * from './parseIngredient.js';

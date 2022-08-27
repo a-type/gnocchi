@@ -1,6 +1,6 @@
-import { Box, Button } from 'components/primitives';
-import { API_ORIGIN, SECURE } from 'config';
-import { useAuth } from 'contexts/AuthContext';
+import { Box, Button } from 'components/primitives/index.js';
+import { API_ORIGIN, SECURE } from 'config.js';
+import { useAuth } from 'contexts/AuthContext.js';
 import React, { ReactNode } from 'react';
 
 export function SyncMenu() {

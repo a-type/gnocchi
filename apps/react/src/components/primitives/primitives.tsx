@@ -1,6 +1,6 @@
 import useMergedRef from '@react-hook/merged-ref';
 import React, { forwardRef, HTMLProps, useLayoutEffect, useRef } from 'react';
-import { styled } from 'stitches.config';
+import { styled } from 'stitches.config.js';
 
 const BaseBox = styled('div', {
 	display: 'flex',

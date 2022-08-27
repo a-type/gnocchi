@@ -1,13 +1,15 @@
 import { createRoot } from 'react-dom/client';
-import { PageContent, PageRoot } from './components/layouts';
-import GroceryList from './components/groceries/GroceryList';
-import DeleteCheckedButton from './components/groceries/DeleteCheckedButton';
-import { GroceryListAdd } from './components/groceries/GroceryListAdd';
-import { Box } from './components/primitives';
+import { PageContent, PageRoot } from './components/layouts/index.js';
+import GroceryList from './components/groceries/GroceryList.js';
+import DeleteCheckedButton from './components/groceries/DeleteCheckedButton.js';
+import { GroceryListAdd } from './components/groceries/GroceryListAdd.js';
+import { Box } from './components/primitives/index.js';
 import React, { StrictMode, Suspense } from 'react';
-import { globalCss, css } from 'stitches.config';
-import { register } from './serviceWorkerRegistration';
-import { attachToPwaEvents } from './pwaEventListener';
+import { globalCss, css } from 'stitches.config.js';
+import { register } from './serviceWorkerRegistration.js';
+import { attachToPwaEvents } from './pwaEventListener.js';
+import { AuthProvider } from 'contexts/AuthContext.js';
+import { SyncMenu } from 'components/sync/SyncMenu.js';
 
 const floatingButton = css({
 	position: 'absolute',
@@ -49,30 +51,33 @@ function main() {
 	const root = createRoot(document.getElementById('root')!);
 	root.render(
 		<StrictMode>
-			<PageRoot>
-				<PageContent fullHeight noPadding flex={1}>
-					<Box
-						w="full"
-						p={4}
-						direction="column"
-						gap={2}
-						align="stretch"
-						css={{
-							position: 'sticky',
-							top: 0,
-							zIndex: 1,
-							backgroundColor: '$white',
-							mb: '$6',
-						}}
-					>
-						<GroceryListAdd />
-						<DeleteCheckedButton className={floatingButton()} />
-					</Box>
-					<Suspense>
-						<GroceryList />
-					</Suspense>
-				</PageContent>
-			</PageRoot>
+			<AuthProvider>
+				<PageRoot>
+					<PageContent fullHeight noPadding flex={1}>
+						<SyncMenu />
+						<Box
+							w="full"
+							p={4}
+							direction="column"
+							gap={2}
+							align="stretch"
+							css={{
+								position: 'sticky',
+								top: 0,
+								zIndex: 1,
+								backgroundColor: '$white',
+								mb: '$6',
+							}}
+						>
+							<GroceryListAdd />
+							<DeleteCheckedButton className={floatingButton()} />
+						</Box>
+						<Suspense>
+							<GroceryList />
+						</Suspense>
+					</PageContent>
+				</PageRoot>
+			</AuthProvider>
 		</StrictMode>,
 	);
 

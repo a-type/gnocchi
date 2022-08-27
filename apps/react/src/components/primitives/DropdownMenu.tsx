@@ -1,6 +1,6 @@
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import * as MenuPrimitive from '@radix-ui/react-menu';
-import { keyframes, styled } from 'stitches.config';
+import { keyframes, styled } from 'stitches.config.js';
 
 const slideUpAndFade = keyframes({
 	'0%': { opacity: 0, transform: 'translateY(2px)' },

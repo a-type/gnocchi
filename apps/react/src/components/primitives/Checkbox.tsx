@@ -1,6 +1,6 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import React, { ComponentProps, forwardRef } from 'react';
-import { styled } from 'stitches.config';
+import { styled } from 'stitches.config.js';
 import { CheckIcon } from '@radix-ui/react-icons';
 
 const CheckboxRoot = styled(CheckboxPrimitive.Root, {

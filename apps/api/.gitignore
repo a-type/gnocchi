@@ -3,3 +3,6 @@ node_modules
 .env
 
 db.sqlite*
+*.sqlite
+
+.generated

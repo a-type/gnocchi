@@ -14,18 +14,24 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { generateKeyBetween } from 'fractional-indexing';
-import React, { forwardRef, memo, useCallback, useState } from 'react';
+import React, {
+	forwardRef,
+	memo,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import { createPortal } from 'react-dom';
-import { GroceryCategory, GroceryItem } from '@aglio/data';
-import { groceries, useQuery } from 'stores/groceries';
+import { groceries, hooks, GroceryItem } from 'stores/groceries/index.js';
 import { ref as valtioRef } from 'valtio';
-import { Box } from '../primitives';
-import { DeleteItemFloater } from './DeleteItemFloater';
-import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes';
-import { GroceryListCategory } from './GroceryListCategory';
-import { GroceryListItem } from './items/GroceryListItem';
-import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater';
-import { groceriesState } from './state';
+import { Box } from '../primitives/index.js';
+import { DeleteItemFloater } from './DeleteItemFloater.js';
+import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
+import { GroceryListCategory } from './GroceryListCategory.js';
+import { GroceryListItem } from './items/GroceryListItem.js';
+import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater.js';
+import { groceriesState } from './state.js';
+import { useAuth } from 'contexts/AuthContext.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -41,6 +47,8 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 		const handleDragCancel = useOnDragCancel();
 
 		const sensors = useGroceryDndSensors();
+
+		useGrocerySync();
 
 		return (
 			<DndContext
@@ -61,17 +69,26 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 
 export default GroceryList;
 
+function useGrocerySync() {
+	const session = useAuth();
+	useEffect(() => {
+		if (session) {
+			groceries.sync.goOnline();
+		} else {
+			groceries.sync.goOffline();
+		}
+	}, [session]);
+}
+
 const GroceryListCategories = forwardRef<
 	HTMLDivElement,
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
-	const categories = useQuery(GroceryCategory.queryAll, {
-		key: 'categories',
-	});
+	const { data: categories } = hooks.useAllCategories();
 
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
-			{categories.map((category) => {
+			{categories?.map((category) => {
 				return <MemoizedCategory key={category.id} category={category} />;
 			})}
 		</Box>
@@ -150,14 +167,10 @@ function useOnDragEnd() {
 
 		if (!over) {
 			// they dropped on nothing... cancel any movement
-			await item.mutations
-				.setCategory({
-					categoryId: groceriesState.draggedItemOriginalCategory,
-				})
-				.setSortKey({
-					sortKey: groceriesState.draggedItemOriginalSortKey,
-				})
-				.save();
+			item.$update({
+				categoryId: groceriesState.draggedItemOriginalCategory,
+				sortKey: groceriesState.draggedItemOriginalSortKey,
+			});
 		} else {
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
@@ -167,30 +180,9 @@ function useOnDragEnd() {
 			} else if (dropZone.type === 'new') {
 				groceriesState.newCategoryPendingItem = valtioRef(item);
 			} else if (dropZone.type === 'delete') {
-				item.delete().save();
+				await groceries.deleteItem(item);
 			} else if (dropZone.type === 'item') {
-				const dropItem = dropZone.value;
-				let sortKey: string;
-				const isBefore = dropItem.sortKey < item.sortKey;
-
-				if (isBefore) {
-					sortKey = generateKeyBetween(dropZone.prevSortKey, dropItem.sortKey);
-				} else {
-					// generate a key between them
-					sortKey = generateKeyBetween(
-						dropZone.value.sortKey,
-						dropZone.nextSortKey,
-					);
-				}
-
-				await item.mutations
-					.setSortKey({ sortKey })
-					.setCategory({
-						// it might also move categories if the drop item
-						// is in a different category
-						categoryId: dropItem.categoryId,
-					})
-					.save();
+				// reorderItem(item, dropZone);
 			}
 		}
 		groceriesState.draggedItemOriginalCategory = null;
@@ -206,46 +198,58 @@ function useOnDragOver() {
 		const item = (active.data.current as GroceryDnDDrag).value;
 		const dropZone = over.data.current as GroceryDnDDrop;
 		if (dropZone.type === 'item') {
-			const dropItem = dropZone.value;
-			let sortKey: string;
-			const isBefore = dropItem.sortKey < item.sortKey;
-
-			if (isBefore) {
-				sortKey = generateKeyBetween(dropZone.prevSortKey, dropItem.sortKey);
-			} else {
-				// generate a key between them
-				sortKey = generateKeyBetween(
-					dropZone.value.sortKey,
-					dropZone.nextSortKey,
-				);
-			}
-
-			await item.mutations
-				.setSortKey({
-					sortKey,
-				})
-				.setCategory({
-					// it might also move categories if the drop item
-					// is in a different category
-					categoryId: dropItem.categoryId,
-				})
-				.save();
+			console.info(item, 'over', dropZone.value);
+			reorderItem(item, dropZone);
 		}
 	}, []);
+}
+
+function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
+	if (draggedItem.id === dropZone.value.id) return;
+
+	let sortKey: string;
+
+	if (dropZone.value.sortKey < draggedItem.sortKey) {
+		sortKey = generateKeyBetween(dropZone.prevSortKey, draggedItem.sortKey);
+	} else if (dropZone.value.sortKey > draggedItem.sortKey) {
+		// generate a key between them
+		sortKey = generateKeyBetween(dropZone.value.sortKey, dropZone.nextSortKey);
+	} else {
+		// problem... sort keys are the same.
+		// this should never happen in theory but could :/
+		sortKey = generateKeyBetween(null, dropZone.value.sortKey);
+	}
+
+	groceries.setItemPosition(draggedItem, sortKey, dropZone.value.categoryId);
+}
+
+function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
+	if (draggedItem.id === dropZone.value.id) return;
+
+	let sortKey: string;
+
+	if (dropZone.value.sortKey < draggedItem.sortKey) {
+		sortKey = generateKeyBetween(dropZone.prevSortKey, draggedItem.sortKey);
+	} else if (dropZone.value.sortKey > draggedItem.sortKey) {
+		// generate a key between them
+		sortKey = generateKeyBetween(dropZone.value.sortKey, dropZone.nextSortKey);
+	} else {
+		// problem... sort keys are the same.
+		// this should never happen in theory but could :/
+		sortKey = generateKeyBetween(null, dropZone.value.sortKey);
+	}
+
+	groceries.setItemPosition(draggedItem, sortKey, dropZone.value.categoryId);
 }
 
 function useOnDragCancel() {
 	return useCallback(({ active }: DragCancelEvent) => {
 		if (active) {
 			const dragged = active.data.current as GroceryDnDDrag;
-			dragged.value.mutations
-				.setSortKey({
-					sortKey: groceriesState.draggedItemOriginalSortKey,
-				})
-				.setCategory({
-					categoryId: groceriesState.draggedItemOriginalCategory,
-				})
-				.save();
+			dragged.value.$update({
+				categoryId: groceriesState.draggedItemOriginalCategory,
+				sortKey: groceriesState.draggedItemOriginalSortKey,
+			});
 		}
 	}, []);
 }

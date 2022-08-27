@@ -1,0 +1,42 @@
+// tsconfig.json
+{
+	"compilerOptions": {
+		"noImplicitAny": true,
+		"noLib": false,
+		"target": "es2017",
+		"sourceMap": true,
+		"module": "es2022",
+		"moduleResolution": "node16",
+		"lib": ["dom", "esnext", "webworker"],
+		"skipLibCheck": true,
+		"strict": true,
+		"forceConsistentCasingInFileNames": true,
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"jsx": "preserve",
+		"downlevelIteration": true,
+		"experimentalDecorators": true,
+		"isolatedModules": true
+	},
+	"exclude": ["node_modules", "**/*/dist"],
+	"references": [
+		{
+			"path": "./packages/conversion"
+		},
+		{
+			"path": "./packages/storage"
+		},
+		{
+			"path": "./packages/storage-common"
+		},
+		{
+			"path": "./packages/storage-server"
+		},
+		{
+			"path": "./packages/storage-react"
+		},
+		{
+			"path": "./packages/tools"
+		}
+	]
+}

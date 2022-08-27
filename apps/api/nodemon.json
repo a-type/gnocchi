@@ -1,6 +1,6 @@
 {
-  "ignore": ["**/*.test.ts", "**/*.spec.ts", "node_modules"],
-  "watch": ["src"],
-  "exec": "yarn dev:run",
-  "ext": "ts"
+	"ignore": ["**/*.test.ts", "**/*.spec.ts", "node_modules"],
+	"watch": ["src", "../../packages/**/dist/**/*.js"],
+	"exec": "yarn dev:run",
+	"ext": "ts"
 }

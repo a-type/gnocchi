@@ -14,6 +14,7 @@ export default merge(common, {
 			'process.env': JSON.stringify({
 				NODE_ENV: 'production',
 				PUBLIC_URL: process.env.PUBLIC_URL || 'https://aglio.gfor.rest',
+				API_ORIGIN: process.env.API_ORIGIN || 'api.aglio.gfor.rest',
 			}),
 		}),
 		new WorkboxWebpackPlugin.InjectManifest({
