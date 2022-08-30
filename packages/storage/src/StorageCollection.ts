@@ -3,7 +3,7 @@ import { computeSynthetics } from './synthetics.js';
 import {
 	getSortedIndex,
 	CollectionEvents,
-	CollectionIndex,
+	CollectionIndexName,
 	CollectionIndexFilter,
 	CollectionSchemaComputedIndexes,
 	isRangeIndexFilter,
@@ -15,6 +15,15 @@ import {
 	StorageDocument,
 	StorageDocumentWithComputedIndices,
 	SyncPatch,
+	createCompoundIndexValue,
+	CompoundIndexValue,
+	CollectionCompoundIndexFilter,
+	CollectionFilter,
+	isMatchIndexFilter,
+	CollectionCompoundIndexName,
+	createLowerBoundIndexValue,
+	createUpperBoundIndexValue,
+	CollectionCompoundIndex,
 } from '@aglio/storage-common';
 import { createPatch, SyncOperation } from '@aglio/storage-common';
 import { Sync } from './Sync.js';
@@ -23,9 +32,10 @@ import { cursorIterator, storeRequestPromise } from './idb.js';
 import { QueryCache } from './reactives/QueryCache.js';
 import { DocumentCache } from './reactives/DocumentCache.js';
 import { getRaw, LiveDocument } from './reactives/LiveDocument.js';
+import { TEST_API } from './constants.js';
 
 export type CollectionInMemoryFilters<
-	Collection extends StorageCollectionSchema<any, any>,
+	Collection extends StorageCollectionSchema<any, any, any>,
 > = {
 	/**
 	 * This key must correspond to the filters being used.
@@ -41,7 +51,7 @@ export type CollectionInMemoryFilters<
 };
 
 export class StorageCollection<
-	Collection extends StorageCollectionSchema<any, any>,
+	Collection extends StorageCollectionSchema<any, any, any>,
 > {
 	private events: EventSubscriber<CollectionEvents<Collection>> =
 		new EventSubscriber();
@@ -71,21 +81,25 @@ export class StorageCollection<
 
 	constructor(
 		private db: Promise<IDBDatabase>,
-		private collection: Collection,
+		private schema: Collection,
 		private sync: Sync,
 		private meta: Meta,
 	) {}
 
 	get name() {
-		return this.collection.name;
+		return this.schema.name;
 	}
 
 	private get primaryKey() {
-		return this.collection.primaryKey;
+		return this.schema.primaryKey;
 	}
 
-	private get compoundIndexKeys(): (keyof CollectionSchemaComputedIndexes<Collection>)[] {
-		return Object.keys(this.collection.synthetics);
+	private get syntheticIndexKeys(): (keyof CollectionSchemaComputedIndexes<Collection>)[] {
+		return Object.keys(this.schema.synthetics);
+	}
+
+	private get compoundIndexKeys(): string[] {
+		return Object.keys(this.schema.compounds);
 	}
 
 	get initialized(): Promise<void> {
@@ -129,7 +143,10 @@ export class StorageCollection<
 	};
 
 	findOne = (
-		filter: MatchCollectionIndexFilter<Collection, CollectionIndex<Collection>>,
+		filter: MatchCollectionIndexFilter<
+			Collection,
+			CollectionIndexName<Collection>
+		>,
 	) => {
 		return this.queryCache.get(
 			this.queryCache.getKey('findOne', filter),
@@ -156,7 +173,10 @@ export class StorageCollection<
 	};
 
 	private rangeIndexToIdbKeyBound = (
-		filter: RangeCollectionIndexFilter<Collection, CollectionIndex<Collection>>,
+		filter: RangeCollectionIndexFilter<
+			Collection,
+			CollectionIndexName<Collection>
+		>,
 	) => {
 		const lower = filter.gte || filter.gt;
 		const upper = filter.lte || filter.lt;
@@ -170,26 +190,64 @@ export class StorageCollection<
 	};
 
 	private matchIndexToIdbKeyRange = (
-		filter: MatchCollectionIndexFilter<Collection, CollectionIndex<Collection>>,
+		filter: MatchCollectionIndexFilter<
+			Collection,
+			CollectionIndexName<Collection>
+		>,
 	) => {
 		return IDBKeyRange.only(filter.equals as string | number);
 	};
 
-	private getIndexedListRequest = (
+	private compoundIndexToIdbKeyRange = (
+		filter: CollectionCompoundIndexFilter<
+			Collection,
+			CollectionIndexName<Collection>
+		>,
+	) => {
+		// validate the usage of the compound index:
+		// - all match fields must be contiguous at the start of the compound order
+		const indexDefinition = this.schema.compounds[filter.where];
+		const matchedKeys = Object.keys(filter.match).sort(
+			(a, b) => indexDefinition.of.indexOf(a) - indexDefinition.of.indexOf(b),
+		);
+		for (const key of matchedKeys) {
+			if (indexDefinition.of.indexOf(key) !== matchedKeys.indexOf(key)) {
+				throw new Error(
+					`Compound index ${filter.where} does not have ${key} at the start of its order`,
+				);
+			}
+		}
+
+		const matchedValues = matchedKeys.map(
+			(key) =>
+				filter.match[key as keyof typeof filter.match] as string | number,
+		);
+
+		// create our bounds for the matched values
+		const lower = createLowerBoundIndexValue(...matchedValues);
+		const upper = createUpperBoundIndexValue(...matchedValues);
+		return IDBKeyRange.bound(lower, upper);
+	};
+
+	private getIndexedListRequest = <
+		IndexName extends CollectionIndexName<Collection>,
+	>(
 		store: IDBObjectStore,
-		index?: CollectionIndexFilter<Collection, CollectionIndex<Collection>>,
+		index?: CollectionFilter<Collection, IndexName>,
 	) => {
 		if (!index) return store.openCursor();
 		const indexName = index.where;
 		const range = isRangeIndexFilter(index)
 			? this.rangeIndexToIdbKeyBound(index)
-			: this.matchIndexToIdbKeyRange(index);
+			: isMatchIndexFilter(index)
+			? this.matchIndexToIdbKeyRange(index)
+			: this.compoundIndexToIdbKeyRange(index);
 		return store
 			.index(indexName)
 			.openCursor(range, index.order === 'desc' ? 'prev' : 'next');
 	};
-	getAll = <Index extends CollectionIndex<Collection>>(
-		index?: CollectionIndexFilter<Collection, Index>,
+	getAll = <IndexName extends CollectionIndexName<Collection>>(
+		index?: CollectionFilter<Collection, IndexName>,
 		/**
 		 * The secondary filtering allows in-memory filtering
 		 * which is applied while the cursor is being iterated,
@@ -242,8 +300,8 @@ export class StorageCollection<
 		to: StorageDocument<Collection>,
 	): SyncPatch => {
 		return createPatch(
-			omit(from, this.compoundIndexKeys),
-			omit(to, this.compoundIndexKeys),
+			omit(from, this.syntheticIndexKeys),
+			omit(to, this.syntheticIndexKeys),
 		);
 	};
 
@@ -308,16 +366,40 @@ export class StorageCollection<
 		return Promise.all(ids.map((id) => this.delete(id)));
 	};
 
-	private computeProperties = (
+	// unchecked types, these field names are highly dynamic and not
+	// visible to external consumers
+	private computeCompoundIndices = (
+		doc: StorageDocumentWithComputedIndices<Collection>,
+	): any => {
+		return Object.entries(this.schema.compounds).reduce<
+			Record<string, CompoundIndexValue>
+		>((acc, [indexKey, index]) => {
+			acc[indexKey] = createCompoundIndexValue(
+				...(index as CollectionCompoundIndex<any, any>).of.map(
+					(key) => doc[key] as string | number,
+				),
+			);
+			return acc;
+		}, {} as Record<string, CompoundIndexValue>);
+	};
+	private applyIndices = (
 		fields: ShapeFromFields<Collection['fields']>,
-	) => {
-		return computeSynthetics(this.collection, fields);
+	): StorageDocumentWithComputedIndices<Collection> => {
+		const withSynthetics: StorageDocumentWithComputedIndices<Collection> = {
+			...fields,
+			...computeSynthetics(this.schema, fields),
+		};
+		Object.assign(withSynthetics, this.computeCompoundIndices(withSynthetics));
+		return withSynthetics;
 	};
 
 	private stripComputedIndices = (
 		doc: StorageDocumentWithComputedIndices<Collection>,
 	): StorageDocument<Collection> => {
-		return omit(doc, this.compoundIndexKeys) as any;
+		return omit(doc, [
+			...this.syntheticIndexKeys,
+			...this.compoundIndexKeys,
+		]) as any;
 	};
 
 	/** Sync Methods */
@@ -381,11 +463,7 @@ export class StorageCollection<
 			const store = await this.readWriteTransaction();
 			// apply computed indices to the document before
 			// storing
-			const updatedWithComputed = {
-				...updatedView,
-				...this.computeProperties(updatedView),
-				[this.primaryKey]: id,
-			};
+			const updatedWithComputed = this.applyIndices(updatedView);
 			const request = store.put(updatedWithComputed);
 			await storeRequestPromise(request);
 
@@ -409,5 +487,13 @@ export class StorageCollection<
 				...this.queryCache.stats(),
 			},
 		};
+	};
+
+	[TEST_API] = {
+		getAllRaw: async (): Promise<any[]> => {
+			const store = await this.readWriteTransaction();
+			const request = store.getAll();
+			return storeRequestPromise(request);
+		},
 	};
 }

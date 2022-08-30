@@ -1,1 +1,1 @@
-export const FOO = 'nothing';
+export const TEST_API = Symbol('test api');

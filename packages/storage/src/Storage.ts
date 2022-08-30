@@ -13,7 +13,7 @@ import { StorageCollectionSchema } from '@aglio/storage-common';
 
 export interface StorageOptions<
 	Schema extends StorageSchema<{
-		[key: string]: StorageCollectionSchema<any, any>;
+		[key: string]: StorageCollectionSchema<any, any, any>;
 	}>,
 > {
 	schema: Schema;
@@ -24,7 +24,7 @@ export interface StorageOptions<
 
 type SchemaToCollections<
 	Schema extends StorageSchema<{
-		[key: string]: StorageCollectionSchema<any, any>;
+		[key: string]: StorageCollectionSchema<any, any, any>;
 	}>,
 > = {
 	[key in keyof Schema['collections']]: StorageCollection<
@@ -34,7 +34,7 @@ type SchemaToCollections<
 
 export class Storage<
 	Schema extends StorageSchema<{
-		[key: string]: StorageCollectionSchema<any, any>;
+		[key: string]: StorageCollectionSchema<any, any, any>;
 	}>,
 > {
 	// TODO: mapped type so collection identities are preserved
@@ -161,7 +161,7 @@ export class Storage<
 
 export function storage<
 	Schema extends StorageSchema<{
-		[k: string]: StorageCollectionSchema<any, any>;
+		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
 >(options: StorageOptions<Schema>) {
 	return new Storage(options);

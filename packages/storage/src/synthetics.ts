@@ -1,15 +1,15 @@
 import {
 	StorageCollectionSchema,
-	StorageCompoundIndexSchema,
+	StorageSyntheticIndexSchema,
 } from '@aglio/storage-common';
 
 export function computeSynthetics(
-	schema: StorageCollectionSchema<any, any>,
+	schema: StorageCollectionSchema<any, any, any>,
 	obj: any,
 ) {
 	const result: Record<string, any> = {};
 	for (const [name, property] of Object.entries(schema.synthetics)) {
-		result[name] = (property as StorageCompoundIndexSchema<any>).compute(obj);
+		result[name] = (property as StorageSyntheticIndexSchema<any>).compute(obj);
 	}
 	return result;
 }

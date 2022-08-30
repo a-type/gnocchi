@@ -6,3 +6,4 @@ export * from './patch.js';
 export * from './replica.js';
 export * from './schema/index.js';
 export * from './utils.js';
+export * from './indexes.js';

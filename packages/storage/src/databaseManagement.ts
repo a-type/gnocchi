@@ -1,20 +1,18 @@
 import {
-	StorageNumberCompoundSchema,
 	StorageCollectionSchema,
-	StorageCompoundIndexSchema,
 	StorageFieldSchema,
 	StorageFieldsSchema,
 	StorageNumberFieldSchema,
 	StorageStringFieldSchema,
-	StorageStringCompoundSchema,
-	StorageCompoundIndices,
+	StorageSyntheticIndices,
+	CollectionCompoundIndices,
 } from '@aglio/storage-common';
 
 const globalIDB =
 	typeof window !== 'undefined' ? window.indexedDB : (undefined as any);
 
 export function initializeDatabases<
-	Schemas extends Record<string, StorageCollectionSchema<any, any>>,
+	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
 >(
 	{ collections, version }: { collections: Schemas; version: number },
 	indexedDB: IDBFactory = globalIDB,
@@ -64,7 +62,11 @@ function initializeDatabase(
 	db: IDBDatabase,
 	schema: StorageCollectionSchema<
 		StorageFieldsSchema,
-		StorageCompoundIndices<StorageFieldsSchema>
+		StorageSyntheticIndices<StorageFieldsSchema>,
+		CollectionCompoundIndices<
+			StorageFieldsSchema,
+			StorageSyntheticIndices<StorageFieldsSchema>
+		>
 	>,
 ) {
 	// create the object store
@@ -84,5 +86,13 @@ function initializeDatabase(
 	for (const [name, def] of Object.entries(schema.synthetics)) {
 		const unique = def.unique;
 		objectStore.createIndex(name, name, { unique });
+	}
+	for (const [name, def] of Object.entries(schema.compounds)) {
+		const unique = def.unique;
+		// if any of the referenced fields are arrays, this will be a multi entry index
+		const multiEntry = def.of.some(
+			(field) => schema.fields[field].type === 'array',
+		);
+		objectStore.createIndex(name, name, { unique, multiEntry });
 	}
 }

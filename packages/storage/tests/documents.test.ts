@@ -1,7 +1,7 @@
 import cuid from 'cuid';
 import { describe, it, expect, vi, MockedFunction } from 'vitest';
 import { subscribe } from '../src/index.js';
-import { createTestStorage } from './fixtures/testStorage';
+import { createTestStorage } from './fixtures/testStorage.js';
 
 async function waitForStoragePropagation(mock: MockedFunction<any>) {
 	await new Promise<void>((resolve, reject) => {
@@ -31,12 +31,14 @@ describe('storage documents', () => {
 			content: 'item 1',
 			done: false,
 			tags: [],
+			category: 'general',
 		});
 		const item2 = await todos.create({
 			id: cuid(),
 			content: 'item 2',
 			done: true,
 			tags: [],
+			category: 'general',
 		});
 
 		const singleItemQuery = todos.get(item1.id);
@@ -60,6 +62,7 @@ describe('storage documents', () => {
 			content: 'item 1',
 			done: false,
 			tags: [],
+			category: 'general',
 		});
 
 		const liveItem1 = await todos.get(item1.id).resolved;
@@ -77,6 +80,7 @@ describe('storage documents', () => {
 			content: 'item 1 updated',
 			done: true,
 			tags: [],
+			category: 'general',
 		});
 	});
 
@@ -90,6 +94,7 @@ describe('storage documents', () => {
 			content: 'item 1',
 			done: false,
 			tags: [],
+			category: 'general',
 		});
 
 		const liveItem1 = await todos.get(item1.id).resolved;
@@ -113,6 +118,7 @@ describe('storage documents', () => {
 			content: 'item 1 updated',
 			done: true,
 			tags: [],
+			category: 'general',
 		});
 	});
 
@@ -126,6 +132,7 @@ describe('storage documents', () => {
 			content: 'item 1',
 			done: false,
 			tags: [],
+			category: 'general',
 		});
 
 		const liveItem1 = await todos.get(item1.id).resolved;
@@ -150,6 +157,7 @@ describe('storage documents', () => {
 			content: 'item 1',
 			done: false,
 			tags: ['tag 1', 'tag 3', 'tag 2'],
+			category: 'general',
 		});
 	});
 
@@ -163,6 +171,7 @@ describe('storage documents', () => {
 			content: 'item 1',
 			done: false,
 			tags: [],
+			category: 'general',
 		});
 
 		const liveItem1 = await todos.get(item1.id).resolved;
@@ -181,6 +190,7 @@ describe('storage documents', () => {
 			content: 'item 1',
 			done: true,
 			tags: [],
+			category: 'general',
 		});
 	});
 });

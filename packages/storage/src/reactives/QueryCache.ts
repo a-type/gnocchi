@@ -1,4 +1,5 @@
 import {
+	CollectionCompoundIndexFilter,
 	CollectionEvents,
 	CollectionIndexFilter,
 	StorageCollectionSchema,
@@ -21,14 +22,19 @@ function hashIndex(filter: any) {
 	return JSON.stringify(filter, orderedReplacer);
 }
 
-export class QueryCache<Collection extends StorageCollectionSchema<any, any>> {
+export class QueryCache<
+	Collection extends StorageCollectionSchema<any, any, any>,
+> {
 	private queries: Map<string, LiveQuery<Collection, any>> = new Map();
 
 	constructor(private events: EventSubscriber<CollectionEvents<Collection>>) {}
 
 	getKey = (
 		type: 'get' | 'findOne' | 'getAll',
-		index?: CollectionIndexFilter<Collection, any> | string,
+		index?:
+			| CollectionIndexFilter<Collection, any>
+			| string
+			| CollectionCompoundIndexFilter<Collection, any>,
 		filter?: CollectionInMemoryFilters<Collection>,
 	) => {
 		return `${type}_${index ? hashIndex(index) : ''}_${filter?.key || ''}`;

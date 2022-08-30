@@ -33,7 +33,8 @@ export type LiveObject<T> = LiveifyProperties<T> & {
 	[LIVE_DOCUMENT_COMMIT]: () => void;
 };
 
-export type LiveArray<T> = LiveifyProperties<T>[] & {
+export type LiveArray<T> = {
+	[index: number]: LiveifyProperties<T>;
 	[LIVE_LIST_PUSH]: (item: T) => void;
 	[LIVE_LIST_MOVE]: (from: number, to: number) => void;
 };
@@ -210,7 +211,7 @@ function createLiveArray<T>({
 		updatesQueued = false;
 	}
 
-	return new Proxy(ref as any, {
+	return new Proxy([] as any, {
 		get: (_, key) => {
 			const name = key as keyof T;
 			if (name === LIVE_DOCUMENT_ASSIGN) {
@@ -235,8 +236,25 @@ function createLiveArray<T>({
 				return move;
 			}
 
+			// override the iterator
+			if (key === Symbol.iterator) {
+				return function* () {
+					for (const item of ref.updated || ref.current) {
+						yield wrappedProperty<any, any>(name, item, {
+							wrappedProperties,
+							context,
+							keyPath,
+						});
+					}
+				} as any;
+			}
+
 			if (key === 'toString') {
-				return () => JSON.stringify(ref.current);
+				return () => JSON.stringify(ref.updated ?? ref.current);
+			}
+
+			if (key === 'getOwnPropertyNames') {
+				return () => Object.getOwnPropertyNames(ref.updated ?? ref.current);
 			}
 
 			const value = ref.updated
@@ -375,7 +393,11 @@ function createLiveObject<T extends object>({
 			}
 
 			if (key === 'toString') {
-				return () => JSON.stringify(ref.current);
+				return () => JSON.stringify(ref.updated ?? ref.current);
+			}
+
+			if (key === 'getOwnPropertyNames') {
+				return () => Object.getOwnPropertyNames(ref.updated ?? ref.current);
 			}
 
 			const value = ref.updated
@@ -394,6 +416,7 @@ function createLiveObject<T extends object>({
 			}
 			throw new Error('Assignment not supported');
 		},
+		ownKeys: () => allowedKeys,
 	});
 }
 

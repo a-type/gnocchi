@@ -9,18 +9,14 @@ import {
 	SyncOperation,
 	SyncResponseMessage,
 	SyncStep2Message,
+	createCompoundIndexValue,
+	createUpperBoundIndexValue,
+	createLowerBoundIndexValue,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import cuid from 'cuid';
 import { storeRequestPromise } from './idb.js';
 import { Sync } from './Sync.js';
-
-// arbitrary early ASCII character
-const COMPOUND_INDEX_SEPARATOR = '#';
-// 1 lower in ASCII table than the separator
-const COMPOUND_INDEX_LOWER_BOUND_SEPARATOR = '"';
-// 1 higher in ASCII table than the separator
-const COMPOUND_INDEX_UPPER_BOUND_SEPARATOR = '$';
 
 // local info types for the client
 type LocalReplicaInfo = {
@@ -194,13 +190,13 @@ export class Meta {
 		// by iterating over the index from (documentId{LOWER_BOUND_SEPARATOR} to documentId{UPPER_BOUND_SEPARATOR}).
 		// because lexogrpahically these two end points are boundaries of the
 		// range.
-		const start =
-			from || after
-				? `${documentId}${COMPOUND_INDEX_SEPARATOR}${from || after}`
-				: `${documentId}${COMPOUND_INDEX_LOWER_BOUND_SEPARATOR}`;
+		const startValue = from || after;
+		const start = startValue
+			? createCompoundIndexValue(documentId, startValue)
+			: createLowerBoundIndexValue(documentId);
 		const end = to
-			? `${documentId}${COMPOUND_INDEX_SEPARATOR}${to}`
-			: `${documentId}${COMPOUND_INDEX_UPPER_BOUND_SEPARATOR}`;
+			? createCompoundIndexValue(documentId, to)
+			: createUpperBoundIndexValue(documentId);
 		const range = IDBKeyRange.bound(start, end, !from, !to);
 
 		// iterate over operations in timestamp order from oldest to newest
@@ -246,11 +242,11 @@ export class Meta {
 
 		// similar start/end range semantics to iterateOverAllOperationsForDocument
 		const start = from
-			? `${replicaId}${COMPOUND_INDEX_SEPARATOR}${from}`
-			: `${replicaId}${COMPOUND_INDEX_LOWER_BOUND_SEPARATOR}`;
+			? createCompoundIndexValue(replicaId, from)
+			: createLowerBoundIndexValue(replicaId);
 		const end = to
-			? `${replicaId}${COMPOUND_INDEX_SEPARATOR}${to}`
-			: `${replicaId}${COMPOUND_INDEX_UPPER_BOUND_SEPARATOR}`;
+			? createCompoundIndexValue(replicaId, to)
+			: createUpperBoundIndexValue(replicaId);
 		// range ends are open if a from/to was not specified
 		const range = IDBKeyRange.bound(start, end, !from, !to);
 
@@ -285,8 +281,14 @@ export class Meta {
 
 	private getOperationCompoundIndices = (operation: SyncOperation) => {
 		return {
-			documentId_timestamp: `${operation.documentId}${COMPOUND_INDEX_SEPARATOR}${operation.timestamp}`,
-			replicaId_timestamp: `${operation.replicaId}${COMPOUND_INDEX_SEPARATOR}${operation.timestamp}`,
+			documentId_timestamp: createCompoundIndexValue(
+				operation.documentId,
+				operation.timestamp,
+			),
+			replicaId_timestamp: createCompoundIndexValue(
+				operation.replicaId,
+				operation.timestamp,
+			),
 		};
 	};
 
@@ -392,9 +394,7 @@ export class Meta {
 		const db = await this.db;
 		const transaction = db.transaction('baselines', 'readonly');
 		const store = transaction.objectStore('baselines');
-		const request = store.get(
-			`${collection}${COMPOUND_INDEX_SEPARATOR}${documentId}`,
-		);
+		const request = store.get(createCompoundIndexValue(collection, documentId));
 		const result = await storeRequestPromise<StoredBaseline>(request);
 		if (!result) {
 			return result;
@@ -411,7 +411,10 @@ export class Meta {
 		const store = transaction.objectStore('baselines');
 		const request = store.put({
 			...baseline,
-			collection_documentId: `${collection}${COMPOUND_INDEX_SEPARATOR}${baseline.documentId}`,
+			collection_documentId: createCompoundIndexValue(
+				collection,
+				baseline.documentId,
+			),
 		});
 		await storeRequestPromise(request);
 	};

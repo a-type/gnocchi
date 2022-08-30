@@ -1,8 +1,7 @@
-import { NaiveTimestampProvider } from '@aglio/storage-common';
 import { IDBFactory } from 'fake-indexeddb';
 import { Storage, collection, schema } from '../../src/index.js';
 
-const todo = collection({
+export const todoCollection = collection({
 	name: 'todo',
 	primaryKey: 'id',
 	fields: {
@@ -19,9 +18,10 @@ const todo = collection({
 			type: 'array',
 			items: {
 				type: 'string',
-				indexed: false,
-				unique: false,
 			},
+		},
+		category: {
+			type: 'string',
 		},
 	},
 	synthetics: {
@@ -31,12 +31,20 @@ const todo = collection({
 			unique: false,
 		},
 	},
+	compounds: {
+		tagsSortedByDone: {
+			of: ['tags', 'done'],
+		},
+		categorySortedByDone: {
+			of: ['category', 'done'],
+		},
+	},
 });
 
 const testSchema = schema({
 	version: 1,
 	collections: {
-		todo,
+		todo: todoCollection,
 	},
 });
 
