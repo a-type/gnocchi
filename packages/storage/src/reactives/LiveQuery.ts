@@ -5,7 +5,7 @@ import {
 } from '@aglio/storage-common';
 
 export class LiveQuery<
-	Collection extends StorageCollectionSchema<any, any>,
+	Collection extends StorageCollectionSchema<any, any, any>,
 	T,
 > {
 	private _current: T | null = null;
