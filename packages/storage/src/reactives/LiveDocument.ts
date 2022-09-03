@@ -35,6 +35,7 @@ export type LiveObject<T> = LiveifyProperties<T> & {
 
 export type LiveArray<T> = {
 	[index: number]: LiveifyProperties<T>;
+	length: number;
 	[LIVE_LIST_PUSH]: (item: T) => void;
 	[LIVE_LIST_MOVE]: (from: number, to: number) => void;
 };

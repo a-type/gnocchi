@@ -1,6 +1,6 @@
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { CardStackPlusIcon } from '@radix-ui/react-icons';
-import useMergedRef from '@react-hook/merged-ref';
+import useMergedRef from 'hooks/useMergedRef.js';
 import {
 	Box,
 	Button,
@@ -175,7 +175,7 @@ function NewCategoryForm({
 }) {
 	// TODO: reevaluate UX - this should probably just search all categories
 	// by the input value.
-	const { data: categories } = hooks.useAllCategories();
+	const categories = hooks.useAllCategories();
 
 	return (
 		<Box direction="column" gap={2} align="stretch" w="full">

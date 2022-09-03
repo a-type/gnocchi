@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { Button, Input, TextArea, TextAreaProps } from './primitives.js';
 import { Form as FormikForm } from 'formik';
-import useMergedRef from '@react-hook/merged-ref';
+import useMergedRef from 'hooks/useMergedRef.js';
 
 export const FieldGroup = styled('div', {
 	display: 'flex',

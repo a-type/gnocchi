@@ -8,33 +8,29 @@ import {
 	LiveDocument,
 } from '@aglio/storage';
 import {
-	CollectionIndex,
 	CollectionIndexFilter,
+	CollectionIndexName,
 	StorageCollectionSchema,
 	StorageDocument,
 	StorageSchema,
 } from '@aglio/storage-common';
 
-type QueryHookResult<T> = {
-	data: T | null;
-	loading: boolean;
-	error: Error | null;
-};
+type QueryHookResult<T> = T;
 
 type CollectionHooks<
 	Name extends string,
-	Schema extends StorageCollectionSchema<any, any>,
+	Collection extends StorageCollectionSchema<any, any, any>,
 > = {
 	[key in Name as `use${Capitalize<Name>}`]: (
 		id: string,
-	) => QueryHookResult<LiveDocument<StorageDocument<Schema>>>;
+	) => QueryHookResult<LiveDocument<StorageDocument<Collection>>>;
 } & {
 	[key in Name as `useAll${Capitalize<Name>}`]: <
-		Index extends CollectionIndex<Schema>,
+		IndexName extends CollectionIndexName<Collection>,
 	>(config?: {
-		index?: CollectionIndexFilter<Schema, Index>;
-		filter?: CollectionInMemoryFilters<Schema>;
-	}) => QueryHookResult<LiveDocument<StorageDocument<Schema>>[]>;
+		index?: CollectionIndexFilter<Collection, IndexName>;
+		filter?: CollectionInMemoryFilters<Collection>;
+	}) => QueryHookResult<LiveDocument<StorageDocument<Collection>>[]>;
 };
 
 type UnionToIntersection<T> = (T extends any ? (k: T) => void : never) extends (
@@ -48,7 +44,7 @@ type Flatten<T extends Record<string, any>> = T extends Record<string, infer V>
 
 type GeneratedHooks<
 	Schema extends StorageSchema<{
-		[k: string]: StorageCollectionSchema<any, any>;
+		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
 > = Flatten<{
 	[CollectionName in Extract<
@@ -58,9 +54,10 @@ type GeneratedHooks<
 }>;
 
 function useLiveQuery<
-	CollectionSchema extends StorageCollectionSchema<any, any>,
+	CollectionSchema extends StorageCollectionSchema<any, any, any>,
 	T,
 >(liveQuery: LiveQuery<CollectionSchema, T>) {
+	suspend(() => liveQuery.resolved, [liveQuery.key]);
 	return useSyncExternalStore(liveQuery.subscribe, () => liveQuery.current);
 }
 
@@ -70,13 +67,13 @@ function capitalize<T extends string>(str: T) {
 
 type CapitalizedCollectionName<
 	Schema extends StorageSchema<{
-		[k: string]: StorageCollectionSchema<any, any>;
+		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
 > = Capitalize<Extract<keyof Schema['collections'], string>>;
 
 export function createHooks<
 	Schema extends StorageSchema<{
-		[k: string]: StorageCollectionSchema<any, any>;
+		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
 >(
 	storage: Storage<Schema>,
@@ -106,12 +103,7 @@ export function createHooks<
 			}, [id]);
 			const data = useLiveQuery(liveQuery);
 
-			return {
-				data,
-				// TODO:
-				loading: false,
-				error: null,
-			};
+			return data;
 		};
 
 		const getAllHookName = `useAll${capitalize(
@@ -128,12 +120,7 @@ export function createHooks<
 			// query identity for subsequent calls.
 			const liveQuery = collection.getAll(config.index, config.filter);
 			const data = useLiveQuery(liveQuery);
-			return {
-				data,
-				// TODO:
-				loading: false,
-				error: null,
-			};
+			return data;
 		};
 	}
 	return hooks as GeneratedHooks<Schema> & {

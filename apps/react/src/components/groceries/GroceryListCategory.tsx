@@ -23,14 +23,13 @@ export function GroceryListCategory({
 	const stateSnap = useSnapshot(groceriesState);
 	const animateIn = stateSnap.justCreatedCategoryId === category.id;
 
-	const { data: items } = hooks.useAllItems({
+	const items = hooks.useAllItems({
 		index: {
-			where: 'categoryId',
-			equals: category.id,
-		},
-		filter: {
-			key: 'sortKey',
-			sort: (a, b) => (a.sortKey > b.sortKey ? 1 : -1),
+			where: 'categoryId_sortKey',
+			match: {
+				categoryId: category.id,
+			},
+			order: 'asc',
 		},
 	});
 

@@ -84,7 +84,7 @@ const GroceryListCategories = forwardRef<
 	HTMLDivElement,
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
-	const { data: categories } = hooks.useAllCategories();
+	const categories = hooks.useAllCategories();
 
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
@@ -198,7 +198,13 @@ function useOnDragOver() {
 		const item = (active.data.current as GroceryDnDDrag).value;
 		const dropZone = over.data.current as GroceryDnDDrop;
 		if (dropZone.type === 'item') {
-			console.info(item, 'over', dropZone.value);
+			console.info(
+				item.food,
+				item.sortKey,
+				'over',
+				dropZone.value.food,
+				dropZone.value.sortKey,
+			);
 			reorderItem(item, dropZone);
 		}
 	}, []);
@@ -210,13 +216,32 @@ function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
 	let sortKey: string;
 
 	if (dropZone.value.sortKey < draggedItem.sortKey) {
-		sortKey = generateKeyBetween(dropZone.prevSortKey, draggedItem.sortKey);
+		sortKey = generateKeyBetween(dropZone.prevSortKey, dropZone.value.sortKey);
+		console.debug(
+			'dragged > droppped',
+			sortKey,
+			'generated between',
+			dropZone.prevSortKey,
+			dropZone.value.sortKey,
+		);
 	} else if (dropZone.value.sortKey > draggedItem.sortKey) {
 		// generate a key between them
 		sortKey = generateKeyBetween(dropZone.value.sortKey, dropZone.nextSortKey);
+		console.debug(
+			'dragged < dropped',
+			sortKey,
+			'generated between',
+			dropZone.value.sortKey,
+			dropZone.nextSortKey,
+		);
 	} else {
 		// problem... sort keys are the same.
 		// this should never happen in theory but could :/
+		console.warn(
+			'identical sortKeys',
+			draggedItem.sortKey,
+			dropZone.value.sortKey,
+		);
 		sortKey = generateKeyBetween(null, dropZone.value.sortKey);
 	}
 

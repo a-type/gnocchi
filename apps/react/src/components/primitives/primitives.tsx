@@ -1,4 +1,4 @@
-import useMergedRef from '@react-hook/merged-ref';
+import useMergedRef from 'hooks/useMergedRef.js';
 import React, { forwardRef, HTMLProps, useLayoutEffect, useRef } from 'react';
 import { styled } from 'stitches.config.js';
 
