@@ -1,13 +1,45 @@
+import { ExclamationTriangleIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Box, Button } from 'components/primitives/index.js';
 import { API_ORIGIN, SECURE } from 'config.js';
 import { useAuth } from 'contexts/AuthContext.js';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { styled } from 'stitches.config.js';
+import { groceries } from 'stores/groceries/index.js';
 
 export function SyncMenu() {
-	const session = useAuth();
+	const { session, error, refetch } = useAuth();
+
+	const [reconnecting, setReconnecting] = useState(false);
+
+	useEffect(() => {
+		return groceries.sync.subscribe('onlineChange', (online) => {
+			setReconnecting(!online);
+		});
+	}, []);
 
 	if (session === undefined) {
 		return null;
+	}
+
+	if (error) {
+		return (
+			<Container>
+				<ExclamationTriangleIcon />
+				<span>Offline</span>
+				<Button color="default" onClick={refetch}>
+					Retry
+				</Button>
+			</Container>
+		);
+	}
+
+	if (reconnecting) {
+		return (
+			<Container>
+				<ExclamationTriangleIcon />
+				<span>Reconnecting...</span>
+			</Container>
+		);
 	}
 
 	if (!session) {
@@ -15,11 +47,20 @@ export function SyncMenu() {
 	}
 
 	return (
-		<Box direction="row" align="center" gap={2}>
-			Syncing<LogoutButton>Logout</LogoutButton>
-		</Box>
+		<Container>
+			<UpdateIcon />
+			<span>Syncing</span>
+			<LogoutButton>Logout</LogoutButton>
+		</Container>
 	);
 }
+
+const Container = styled('div', {
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	gap: '$2',
+});
 
 function OAuthLoginButton({
 	provider,
@@ -53,7 +94,9 @@ function LogoutButton({ children, ...rest }: { children?: ReactNode }) {
 			method="post"
 			{...rest}
 		>
-			<Button type="submit">{children}</Button>
+			<Button type="submit" color="ghost">
+				{children}
+			</Button>
 		</form>
 	);
 }

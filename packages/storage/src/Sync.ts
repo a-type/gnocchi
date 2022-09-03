@@ -7,61 +7,68 @@ import {
 import { EventSubscriber } from './EventSubscriber.js';
 
 export interface Sync {
-	subscribe(handler: (message: ServerMessage) => void): () => void;
+	subscribe(
+		event: 'message',
+		handler: (message: ServerMessage) => void,
+	): () => void;
+	subscribe(event: 'onlineChange', handler: () => void): () => void;
 
 	send(message: ClientMessage): void;
 
+	start(): void;
+	stop(): void;
+
+	dispose(): void;
+
+	reconnect(): void;
+
+	readonly active: boolean;
+
 	readonly time: TimestampProvider;
 }
 
-/**
- * Basically a no-op sync.
- */
-export class LocalSync implements Sync {
-	constructor(readonly time: TimestampProvider) {}
-
-	subscribe = () => () => {};
-	send = () => {};
-}
-
-export class WebsocketSync implements Sync {
+export class WebsocketSync
+	extends EventSubscriber<{
+		message: (message: ServerMessage) => void;
+		onlineChange: (online: boolean) => void;
+	}>
+	implements Sync
+{
 	readonly time: TimestampProvider;
-	private socket: WebSocket;
-	private events = new EventSubscriber<{
-		message: (msg: ServerMessage) => void;
-	}>();
+	private socket: WebSocket | null = null;
 	private messageQueue: ClientMessage[] = [];
-	private schemaVersion: number;
+	private reconnectBackoffTime = 100;
+	private host: string;
+	private reconnectAttempt: NodeJS.Timer | null = null;
 
 	constructor({
 		host,
 		time: timestampProvider,
-		schemaVersion,
 	}: {
 		host: string;
 		time?: TimestampProvider;
-		schemaVersion: number;
 	}) {
+		super();
+		this.host = host;
 		this.time = timestampProvider || new HybridLogicalClockTimestampProvider();
-		this.schemaVersion = schemaVersion;
-		this.socket = new WebSocket(host);
-		this.socket.addEventListener('message', this.onMessage);
-		this.socket.addEventListener('open', this.onOpen);
-		// TODO: reconnection
 	}
 
 	private onOpen = () => {
+		if (!this.socket) {
+			throw new Error('Invalid sync state: online but socket is null');
+		}
 		if (this.messageQueue.length) {
-			this.messageQueue.forEach((msg) => this.socket.send(JSON.stringify(msg)));
+			for (const msg of this.messageQueue) {
+				this.socket.send(JSON.stringify(msg));
+			}
 			this.messageQueue = [];
 		}
-
-		setInterval(() => {
-			this.send({
-				type: 'heartbeat',
-				timestamp: this.time.now(this.schemaVersion),
-			});
-		}, 60000);
+		this.reconnectBackoffTime = 100;
+		console.info('Sync connected');
+		if (this.reconnectAttempt) {
+			clearTimeout(this.reconnectAttempt);
+		}
+		this.emit('onlineChange', true);
 	};
 
 	private onMessage = (event: MessageEvent) => {
@@ -69,80 +76,77 @@ export class WebsocketSync implements Sync {
 		if ((message as any).timestamp) {
 			this.time.update((message as any).timestamp);
 		}
-		this.events.emit('message', message);
+		this.emit('message', message);
 	};
 
-	subscribe = (handler: (message: ServerMessage) => void) => {
-		return this.events.subscribe('message', handler);
+	private onError = (event: Event) => {
+		console.error(event);
+		console.info(
+			`Attempting reconnect in ${Math.round(
+				this.reconnectBackoffTime / 1000,
+			)} seconds`,
+		);
+		if (this.reconnectAttempt) {
+			clearTimeout(this.reconnectAttempt);
+		}
+		this.reconnectAttempt = setTimeout(() => {
+			console.info('Reconnecting...');
+			this.reconnectBackoffTime *= 2;
+			this.initializeSocket();
+		}, this.reconnectBackoffTime);
+	};
+
+	private onClose = (event: CloseEvent) => {
+		console.info('Sync disconnected');
+		this.emit('onlineChange', false);
+		this.onError(event);
+	};
+
+	private initializeSocket = () => {
+		this.socket = new WebSocket(this.host);
+		this.socket.addEventListener('message', this.onMessage);
+		this.socket.addEventListener('open', this.onOpen);
+		this.socket.addEventListener('error', this.onError);
+		this.socket.addEventListener('close', this.onClose);
+		return this.socket;
+	};
+
+	reconnect = () => {
+		this.stop();
+		this.start();
 	};
 
 	send = (message: ClientMessage) => {
-		if (this.socket.readyState === WebSocket.OPEN) {
+		if (this.socket?.readyState === WebSocket.OPEN) {
 			this.socket.send(JSON.stringify(message));
 		} else {
 			this.messageQueue.push(message);
 		}
 	};
+
+	dispose = () => {
+		this.socket?.removeEventListener('close', this.onClose);
+		this.socket?.close();
+	};
+
+	start = () => {
+		if (this.socket) {
+			return;
+		}
+		this.initializeSocket();
+	};
+
+	stop = () => {
+		this.dispose();
+		this.socket = null;
+	};
+
+	get active() {
+		return this.socket?.readyState === WebSocket.OPEN;
+	}
 }
 
 export interface HybridSyncOptions {
 	host: string;
 	timestampProvider?: TimestampProvider;
-	schemaVersion: number;
-}
-
-export class HybridSync implements Sync {
-	readonly time: TimestampProvider;
-	private host: string;
-	private schemaVersion: number;
-	private active: Sync;
-	private events = new EventSubscriber<{
-		message: (msg: ServerMessage) => void;
-		networkChange: (isOnline: boolean) => void;
-	}>();
-	private unsubscribeActive: () => void;
-
-	constructor({ host, timestampProvider, schemaVersion }: HybridSyncOptions) {
-		this.time = timestampProvider || new HybridLogicalClockTimestampProvider();
-		this.host = host;
-		this.schemaVersion = schemaVersion;
-		this.active = new LocalSync(this.time);
-		this.unsubscribeActive = this.active.subscribe(this.onMessage);
-	}
-
-	private onMessage = (message: ServerMessage) => {
-		this.events.emit('message', message);
-	};
-
-	goOnline = () => {
-		if (this.active instanceof WebsocketSync) return;
-		this.active = new WebsocketSync({
-			host: this.host,
-			time: this.time,
-			schemaVersion: this.schemaVersion,
-		});
-		this.unsubscribeActive();
-		this.unsubscribeActive = this.active.subscribe(this.onMessage);
-		this.events.emit('networkChange', true);
-	};
-
-	goOffline = () => {
-		if (this.active instanceof LocalSync) return;
-		this.active = new LocalSync(this.time);
-		this.unsubscribeActive();
-		this.unsubscribeActive = this.active.subscribe(this.onMessage);
-		this.events.emit('networkChange', false);
-	};
-
-	subscribe = (handler: (message: ServerMessage) => void) => {
-		return this.events.subscribe('message', handler);
-	};
-
-	subscribeToNetworkChange = (handler: (isOnline: boolean) => void) => {
-		return this.events.subscribe('networkChange', handler);
-	};
-
-	send = (message: ClientMessage) => {
-		this.active.send(message);
-	};
 }

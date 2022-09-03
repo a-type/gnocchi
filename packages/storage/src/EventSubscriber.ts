@@ -9,7 +9,7 @@ export class EventSubscriber<
 			this.events[event] = new Set();
 		}
 		this.events[event].add(callback);
-		return () => this.events[event].delete(callback);
+		return () => void this.events[event].delete(callback);
 	};
 
 	emit = <K extends keyof Events>(event: K, ...args: Parameters<Events[K]>) => {

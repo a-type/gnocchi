@@ -9,9 +9,10 @@ import { assert } from '@aglio/tools';
 import { initializeDatabases } from './databaseManagement.js';
 import { Meta } from './Meta.js';
 import { StorageCollection } from './StorageCollection.js';
-import { HybridSync, HybridSyncOptions } from './Sync.js';
+import { WebsocketSync } from './Sync.js';
 import { StorageCollectionSchema } from '@aglio/storage-common';
 import { TEST_API } from './constants.js';
+import { Heartbeat } from './Heartbeat.js';
 
 export interface StorageOptions<
 	Schema extends StorageSchema<{
@@ -20,7 +21,9 @@ export interface StorageOptions<
 > {
 	schema: Schema;
 	migrations?: Migration[];
-	syncOptions: Omit<HybridSyncOptions, 'schemaVersion'>;
+	syncOptions: {
+		host: string;
+	};
 	/** Provide an explicit IDBFactory for non-browser environments */
 	indexedDB?: IDBFactory;
 }
@@ -43,7 +46,8 @@ export class Storage<
 	// TODO: mapped type so collection identities are preserved
 	private _collections: SchemaToCollections<Schema> = {} as any;
 	private schema: Schema;
-	private _sync: HybridSync;
+	private _sync: WebsocketSync;
+	private _heartbeat: Heartbeat;
 	private meta: Meta;
 	private indexedDB: IDBFactory;
 
@@ -52,17 +56,22 @@ export class Storage<
 
 	constructor(options: StorageOptions<Schema>) {
 		this.schema = options.schema;
-		this._sync = new HybridSync({
-			schemaVersion: this.schema.version,
+		this._sync = new WebsocketSync({
 			...options.syncOptions,
 		});
 		this.indexedDB = options.indexedDB || window.indexedDB;
 
-		this._sync.subscribeToNetworkChange(this.handleOnlineChange);
-		this._sync.subscribe(this.handleSyncMessage);
+		this._sync.subscribe('onlineChange', this.handleOnlineChange);
+		this._sync.subscribe('message', this.handleSyncMessage);
 
 		// centralized storage for all stored operations
 		this.meta = new Meta(this._sync, options.indexedDB);
+
+		this._heartbeat = new Heartbeat({
+			sync: this._sync,
+			meta: this.meta,
+		});
+		this._heartbeat.subscribe('missed', this._sync.reconnect);
 
 		this._database = initializeDatabases({
 			schema: this.schema,
@@ -180,19 +189,23 @@ export class Storage<
 	};
 
 	private handleOnlineChange = async (online: boolean) => {
-		if (!online) return;
-		const sync = await this.meta.getSync();
-		this.sync.send({
-			type: 'sync',
-			...sync,
-			schemaVersion: this.schema.version,
-		});
+		if (!online) {
+			this._heartbeat.stop();
+		} else {
+			const sync = await this.meta.getSync();
+			this.sync.send({
+				type: 'sync',
+				...sync,
+				schemaVersion: this.schema.version,
+			});
+			this._heartbeat.start();
+		}
 	};
 
 	stats = async () => {
 		const base = {
 			meta: await this.meta.stats(),
-			collections: Object.entries(this.collections).reduce(
+			collections: Object.entries(this.collections).reduce<Record<string, any>>(
 				(acc, [name, coll]) => {
 					acc[name] = coll.stats();
 					return acc;

@@ -13,6 +13,7 @@ import {
 	createUpperBoundIndexValue,
 	createLowerBoundIndexValue,
 	StorageSchema,
+	HeartbeatMessage,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import cuid from 'cuid';
@@ -623,6 +624,19 @@ export class Meta {
 			'up to',
 			upTo,
 		);
+	};
+
+	createHeartbeat = async (): Promise<HeartbeatMessage> => {
+		const localReplicaInfo = await this.getLocalReplicaInfo();
+		const schema = this.cachedSchema;
+		if (!schema) {
+			throw new Error('Cannot sync before schema is loaded');
+		}
+		return {
+			type: 'heartbeat',
+			timestamp: this.sync.time.now(schema.version),
+			replicaId: localReplicaInfo.id,
+		};
 	};
 
 	stats = async () => {
