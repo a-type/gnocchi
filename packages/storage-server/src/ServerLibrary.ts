@@ -1,6 +1,7 @@
 import {
 	AckMessage,
 	ClientMessage,
+	HeartbeatMessage,
 	OperationMessage,
 	ReplicaInfo,
 	SERVER_REPLICA_ID,
@@ -39,6 +40,8 @@ export class ServerLibrary {
 				return this.handleSyncStep2(message, clientId);
 			case 'ack':
 				return this.handleAck(message, clientId);
+			case 'heartbeat':
+				return this.handleHeartbeat(message, clientId);
 			default:
 				console.log('Unknown message type', (message as any).type);
 				break;
@@ -218,6 +221,12 @@ export class ServerLibrary {
 		this.sender.broadcast(this.id, {
 			type: 'rebases',
 			rebases,
+		});
+	};
+
+	private handleHeartbeat = (message: HeartbeatMessage, clientId: string) => {
+		this.sender.send(this.id, message.replicaId, {
+			type: 'heartbeat-response',
 		});
 	};
 }

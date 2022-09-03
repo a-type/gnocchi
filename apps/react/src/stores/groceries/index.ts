@@ -4,14 +4,14 @@ import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
 import { storage } from '@aglio/storage';
 import { createHooks } from '@aglio/storage-react';
-import { groceriesSchema, GroceryItem } from './schema.js';
+import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { SECURE } from 'config.js';
 
 export type {
 	GroceryItem,
 	GroceryCategory,
 	FoodCategoryLookup,
-} from './schema.js';
+} from './schema/schema.js';
 
 const DEFAULT_CATEGORY = 'None';
 
@@ -21,12 +21,14 @@ const _groceries = storage({
 	syncOptions: {
 		host: `ws${SECURE ? 's' : ''}://${syncOrigin}`,
 	},
-	schema: groceriesSchema,
+	schema,
+	migrations,
 });
 
 (window as any).stats = () => {
 	_groceries.stats().then(console.info);
 };
+(window as any).groceries = _groceries;
 
 export const hooks = createHooks(_groceries);
 
@@ -70,7 +72,10 @@ export const mutations = {
 			});
 		}
 	},
-	updateItem: (item: GroceryItem, updates: Partial<GroceryItem>) => {
+	updateItem: (
+		item: GroceryItem,
+		updates: Omit<Partial<GroceryItem>, 'inputs'>,
+	) => {
 		return _groceries.get('items').update(item.id, updates);
 	},
 	setItemCategory: (item: GroceryItem, categoryId: string) => {
@@ -100,7 +105,6 @@ export const mutations = {
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
 			let itemId: string;
-			const items = _groceries.get('items');
 			const firstMatch = await _groceries.get('items').findOne({
 				where: 'food',
 				equals: parsed.food,

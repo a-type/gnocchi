@@ -2,11 +2,15 @@
 
 import { DocumentBaseline } from './baseline.js';
 import { SyncOperation } from './operation.js';
-import { ReplicaInfo } from './replica.js';
 
 export type HeartbeatMessage = {
 	type: 'heartbeat';
 	timestamp: string;
+	replicaId: string;
+};
+
+export type HeartbeatResponseMessage = {
+	type: 'heartbeat-response';
 };
 
 /**
@@ -71,16 +75,6 @@ export type SyncStep2Message = {
 	timestamp: string;
 };
 
-/**
- * If the server detects schema drift from a client, it will
- * terminate the sync process and require the client to update
- * before syncing.
- */
-export type UpdateRequiredMessage = {
-	type: 'update-req';
-	requiredSchemaVersion: number;
-};
-
 export type RebasesMessage = {
 	type: 'rebases';
 	/**
@@ -98,8 +92,7 @@ export type ClientMessage =
 	| OperationMessage
 	| AckMessage;
 export type ServerMessage =
-	| HeartbeatMessage
+	| HeartbeatResponseMessage
 	| SyncResponseMessage
 	| OperationRebroadcastMessage
-	| UpdateRequiredMessage
 	| RebasesMessage;

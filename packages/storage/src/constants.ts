@@ -1,1 +1,1 @@
-export const TEST_API = Symbol('test api');
+export const TEST_API = '__unsafe__test_api__';

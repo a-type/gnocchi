@@ -31,15 +31,19 @@ export class WebsocketSync implements Sync {
 		message: (msg: ServerMessage) => void;
 	}>();
 	private messageQueue: ClientMessage[] = [];
+	private schemaVersion: number;
 
 	constructor({
 		host,
 		time: timestampProvider,
+		schemaVersion,
 	}: {
 		host: string;
 		time?: TimestampProvider;
+		schemaVersion: number;
 	}) {
 		this.time = timestampProvider || new HybridLogicalClockTimestampProvider();
+		this.schemaVersion = schemaVersion;
 		this.socket = new WebSocket(host);
 		this.socket.addEventListener('message', this.onMessage);
 		this.socket.addEventListener('open', this.onOpen);
@@ -55,7 +59,7 @@ export class WebsocketSync implements Sync {
 		setInterval(() => {
 			this.send({
 				type: 'heartbeat',
-				timestamp: this.time.now(),
+				timestamp: this.time.now(this.schemaVersion),
 			});
 		}, 60000);
 	};
@@ -84,11 +88,13 @@ export class WebsocketSync implements Sync {
 export interface HybridSyncOptions {
 	host: string;
 	timestampProvider?: TimestampProvider;
+	schemaVersion: number;
 }
 
 export class HybridSync implements Sync {
 	readonly time: TimestampProvider;
 	private host: string;
+	private schemaVersion: number;
 	private active: Sync;
 	private events = new EventSubscriber<{
 		message: (msg: ServerMessage) => void;
@@ -96,9 +102,10 @@ export class HybridSync implements Sync {
 	}>();
 	private unsubscribeActive: () => void;
 
-	constructor({ host, timestampProvider }: HybridSyncOptions) {
+	constructor({ host, timestampProvider, schemaVersion }: HybridSyncOptions) {
 		this.time = timestampProvider || new HybridLogicalClockTimestampProvider();
 		this.host = host;
+		this.schemaVersion = schemaVersion;
 		this.active = new LocalSync(this.time);
 		this.unsubscribeActive = this.active.subscribe(this.onMessage);
 	}
@@ -112,6 +119,7 @@ export class HybridSync implements Sync {
 		this.active = new WebsocketSync({
 			host: this.host,
 			time: this.time,
+			schemaVersion: this.schemaVersion,
 		});
 		this.unsubscribeActive();
 		this.unsubscribeActive = this.active.subscribe(this.onMessage);

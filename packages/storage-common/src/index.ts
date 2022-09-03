@@ -7,3 +7,9 @@ export * from './replica.js';
 export * from './schema/index.js';
 export * from './utils.js';
 export * from './indexes.js';
+export {
+	migrate,
+	migrationRange,
+	createDefaultMigration,
+} from './migration.js';
+export type { Migration } from './migration.js';

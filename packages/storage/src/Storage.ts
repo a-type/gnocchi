@@ -3,6 +3,7 @@ import {
 	ServerMessage,
 	StorageSchema,
 	SyncResponseMessage,
+	Migration,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import { initializeDatabases } from './databaseManagement.js';
@@ -10,6 +11,7 @@ import { Meta } from './Meta.js';
 import { StorageCollection } from './StorageCollection.js';
 import { HybridSync, HybridSyncOptions } from './Sync.js';
 import { StorageCollectionSchema } from '@aglio/storage-common';
+import { TEST_API } from './constants.js';
 
 export interface StorageOptions<
 	Schema extends StorageSchema<{
@@ -17,7 +19,8 @@ export interface StorageOptions<
 	}>,
 > {
 	schema: Schema;
-	syncOptions: HybridSyncOptions;
+	migrations?: Migration[];
+	syncOptions: Omit<HybridSyncOptions, 'schemaVersion'>;
 	/** Provide an explicit IDBFactory for non-browser environments */
 	indexedDB?: IDBFactory;
 }
@@ -42,10 +45,18 @@ export class Storage<
 	private schema: Schema;
 	private _sync: HybridSync;
 	private meta: Meta;
+	private indexedDB: IDBFactory;
+
+	private _database: Promise<IDBDatabase>;
+	private _initializedPromise: Promise<void>;
 
 	constructor(options: StorageOptions<Schema>) {
 		this.schema = options.schema;
-		this._sync = new HybridSync(options.syncOptions);
+		this._sync = new HybridSync({
+			schemaVersion: this.schema.version,
+			...options.syncOptions,
+		});
+		this.indexedDB = options.indexedDB || window.indexedDB;
 
 		this._sync.subscribeToNetworkChange(this.handleOnlineChange);
 		this._sync.subscribe(this.handleSyncMessage);
@@ -53,13 +64,19 @@ export class Storage<
 		// centralized storage for all stored operations
 		this.meta = new Meta(this._sync, options.indexedDB);
 
-		const database = initializeDatabases(this.schema, options.indexedDB);
+		this._database = initializeDatabases({
+			schema: this.schema,
+			migrations: options.migrations || [],
+			indexedDB: options.indexedDB,
+			meta: this.meta,
+		});
+		this._initializedPromise = this.initialize();
 		for (const [name, collection] of Object.entries(this.schema.collections)) {
 			this._collections[name as keyof Schema['collections']] =
 				new StorageCollection<
 					Schema['collections'][keyof Schema['collections']]
 				>(
-					database,
+					this.readyDatabasePromise,
 					collection as Schema['collections'][keyof Schema['collections']],
 					this._sync,
 					this.meta,
@@ -67,9 +84,38 @@ export class Storage<
 		}
 	}
 
+	private get readyDatabasePromise() {
+		return this._initializedPromise.then(() => this._database);
+	}
+
 	get sync() {
 		return this._sync;
 	}
+
+	private initialize = async () => {
+		// wait for migration to complete - if migrations fail we cannot
+		// store the new schema.
+		await this._database;
+
+		const storedSchema = await this.meta.getSchema();
+		if (storedSchema) {
+			// version changes will be handled by migration routines in
+			// the actual idb database loading code (see: initializeDatabases)
+
+			// but this check determines if the schema has been changed without
+			// a version change. if so, it will error.
+			if (
+				storedSchema.version === this.schema.version &&
+				JSON.stringify(storedSchema) !== JSON.stringify(this.schema)
+			) {
+				throw new Error(
+					'Schema has changed without a version change! Any changes to your schema must be accompanied by a change in schema version and a migration routine.',
+				);
+			}
+		}
+
+		await this.meta.setSchema(this.schema);
+	};
 
 	get<T extends keyof Schema['collections']>(
 		name: T,
@@ -156,6 +202,13 @@ export class Storage<
 		};
 
 		return base;
+	};
+
+	[TEST_API] = {
+		uninstall: async () => {
+			this.meta[TEST_API].uninstall();
+			this.indexedDB.deleteDatabase('collections');
+		},
 	};
 }
 

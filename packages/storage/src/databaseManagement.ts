@@ -1,33 +1,114 @@
 import {
-	StorageCollectionSchema,
-	StorageFieldSchema,
-	StorageFieldsSchema,
-	StorageNumberFieldSchema,
-	StorageStringFieldSchema,
-	StorageSyntheticIndices,
-	CollectionCompoundIndices,
+	Migration,
+	StorageSchema,
+	cloneDeep,
+	createPatch,
+	createDefaultMigration,
+	migrationRange,
 } from '@aglio/storage-common';
+import { Meta } from './Meta.js';
 
 const globalIDB =
 	typeof window !== 'undefined' ? window.indexedDB : (undefined as any);
 
-export function initializeDatabases<
-	Schemas extends Record<string, StorageCollectionSchema<any, any, any>>,
->(
-	{ collections, version }: { collections: Schemas; version: number },
-	indexedDB: IDBFactory = globalIDB,
-) {
+export function initializeDatabases<Schema extends StorageSchema<any>>({
+	schema,
+	indexedDB = globalIDB,
+	migrations,
+	meta,
+}: {
+	schema: Schema;
+	migrations: Migration[];
+	indexedDB?: IDBFactory;
+	meta: Meta;
+}) {
+	const { collections, version } = schema;
 	// initialize collections as indexddb databases
 	const keys = Object.keys(collections);
 	console.log('Initializing database for:', keys);
 	const database = new Promise<IDBDatabase>((resolve, reject) => {
 		const request = indexedDB.open('collections', version);
-		request.onupgradeneeded = (event) => {
-			// TODO: migrations
-
+		request.onupgradeneeded = async (event) => {
 			const db = request.result;
-			for (const name of keys) {
-				initializeDatabase(db, collections[name]);
+
+			// migrations
+			const toRunVersions = migrationRange(event.oldVersion, version);
+			console.log(event.oldVersion, version, toRunVersions);
+			const toRun = toRunVersions.map((ver) =>
+				migrations.find((m) => m.version === ver),
+			);
+			if (toRun.some((m) => !m)) {
+				throw new Error(`No migration found for version(s) ${toRunVersions}`);
+			}
+
+			for (const migration of toRun as Migration[]) {
+				for (const newCollection of migration.addedCollections) {
+					db.createObjectStore(newCollection, {
+						keyPath: collections[newCollection].primaryKey,
+						autoIncrement: false,
+					});
+				}
+
+				const transaction = request.transaction!;
+
+				// apply high-level database work on each collection's object store
+				for (const collection of migration.allCollections) {
+					const store = transaction.objectStore(collection);
+					// apply new indexes
+					for (const newIndex of migration.addedIndexes[collection] || []) {
+						const unique = newIndex.unique;
+						store.createIndex(newIndex.name, newIndex.name, { unique });
+					}
+					// remove old indexes
+					for (const oldIndex of migration.removedIndexes[collection] || []) {
+						store.deleteIndex(oldIndex.name);
+					}
+				}
+
+				// do the data migration portion of the migration
+				await migration.migrate({
+					migrate: (collection, strategy) => {
+						return new Promise((resolve, reject) => {
+							const store = transaction.objectStore(collection);
+							const cursorReq = store.openCursor();
+							cursorReq.onsuccess = (event) => {
+								const cursor = cursorReq.result;
+								if (cursor) {
+									const original = cloneDeep(cursor.value);
+									const newValue = strategy(cursor.value);
+									if (newValue) {
+										// the migration has altered the shape of our document. we need
+										// to create the operation from the diff and write it to meta
+										// then recompute the document.
+										const patch = createPatch(original, newValue);
+										if (patch.length > 0) {
+											meta
+												.createMigrationOperation({
+													targetVersion: migration.version,
+													collection,
+													patch,
+													documentId: cursor.primaryKey.toString(),
+												})
+												.then((operation) => {
+													meta.insertLocalOperation(operation);
+												});
+										}
+									}
+									cursor.continue();
+								} else {
+									resolve();
+								}
+							};
+							cursorReq.onerror = (event) => {
+								reject(cursorReq.error);
+							};
+						});
+					},
+				});
+
+				for (const removedCollection of migration.removedCollections) {
+					db.deleteObjectStore(removedCollection);
+				}
 			}
 		};
 		request.onsuccess = (event) => {
@@ -44,55 +125,4 @@ export function initializeDatabases<
 	});
 
 	return database;
-}
-
-// determines if a field is indexed. also narrows the type to only indexable fields.
-function isIndexedField(
-	field: StorageFieldSchema,
-): field is StorageStringFieldSchema | StorageNumberFieldSchema {
-	return (
-		field.type !== 'boolean' &&
-		field.type !== 'array' &&
-		field.type !== 'object' &&
-		!!field.indexed
-	);
-}
-
-function initializeDatabase(
-	db: IDBDatabase,
-	schema: StorageCollectionSchema<
-		StorageFieldsSchema,
-		StorageSyntheticIndices<StorageFieldsSchema>,
-		CollectionCompoundIndices<
-			StorageFieldsSchema,
-			StorageSyntheticIndices<StorageFieldsSchema>
-		>
-	>,
-) {
-	// create the object store
-	const objectStore = db.createObjectStore(schema.name, {
-		keyPath: schema.primaryKey,
-		autoIncrement: false,
-	});
-
-	for (const [name, def] of Object.entries(schema.fields)) {
-		// primary key is already taken care of.
-		if (name === schema.primaryKey) continue;
-		if (isIndexedField(def)) {
-			const unique = def.unique;
-			objectStore.createIndex(name, name, { unique });
-		}
-	}
-	for (const [name, def] of Object.entries(schema.synthetics)) {
-		const unique = def.unique;
-		objectStore.createIndex(name, name, { unique });
-	}
-	for (const [name, def] of Object.entries(schema.compounds)) {
-		const unique = def.unique;
-		// if any of the referenced fields are arrays, this will be a multi entry index
-		const multiEntry = def.of.some(
-			(field) => schema.fields[field].type === 'array',
-		);
-		objectStore.createIndex(name, name, { unique, multiEntry });
-	}
 }

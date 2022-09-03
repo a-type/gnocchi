@@ -40,3 +40,23 @@ export function getSortedIndex<T>(
 	}
 	return low;
 }
+
+function orderedReplacer(_: any, v: any) {
+	if (typeof v !== 'object' || v === null || Array.isArray(v)) {
+		return v;
+	}
+	return Object.fromEntries(
+		Object.entries(v).sort(([ka], [kb]) => (ka < kb ? -1 : ka > kb ? 1 : 0)),
+	);
+}
+/**
+ * Consistently stringifies an object regardless
+ * of key insertion order
+ */
+export function stableStringify(obj: any) {
+	return JSON.stringify(obj, orderedReplacer);
+}
+
+export function cloneDeep<T>(obj: T): T {
+	return JSON.parse(JSON.stringify(obj));
+}

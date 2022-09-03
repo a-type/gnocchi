@@ -1,41 +1,54 @@
 import { v4 } from 'uuid';
 
 export interface TimestampProvider {
-	now(): string;
+	now(version: number): string;
 	update(remoteTimestamp: string): void;
+	zero(version: number): string;
+}
+
+const VERSION_BLOCK_LENGTH = 6;
+
+function encodeVersion(version: number | string): string {
+	return version.toString().padStart(VERSION_BLOCK_LENGTH, '0');
 }
 
 export class NaiveTimestampProvider implements TimestampProvider {
-	now = () => {
-		return Date.now().toString();
+	now = (version: number | string) => {
+		return encodeVersion(version) + Date.now().toString();
 	};
 	update = () => {};
+	zero = (version: number | string) => {
+		return encodeVersion(version) + '0';
+	};
 }
 
 export class HybridLogicalClockTimestampProvider implements TimestampProvider {
-	private clock = {
-		timestamp: MutableTimestamp.from(0, 0),
+	private latest: HLCTimestamp = {
+		time: Date.now(),
+		counter: 0,
+		node: generateNodeId(),
 	};
 
-	now = () => {
-		return Timestamp.send(this.clock).toString();
+	now = (version: string | number) => {
+		return (
+			encodeVersion(version) + serializeHlcTimestamp(getHlcNow(this.latest))
+		);
 	};
 	update = (remoteTimestamp: string) => {
-		const remote = Timestamp.parse(remoteTimestamp);
-		if (!remote) {
-			throw new Error('Invalid remote timestamp: ' + remoteTimestamp);
-		}
-		Timestamp.recv(this.clock, remote);
+		// strip version from remote timestamp
+		const hlcString = remoteTimestamp.slice(VERSION_BLOCK_LENGTH);
+		this.latest = updateFromRemote(this.latest, deserializeHlcClock(hlcString));
 	};
-}
-
-class DuplicateNodeError extends Error {
-	type: string;
-	constructor(node: string) {
-		super();
-		this.type = 'DuplicateNodeError';
-		this.message = 'duplicate node identifier ' + node;
-	}
+	zero = (version: string | number) => {
+		return (
+			encodeVersion(version) +
+			serializeHlcTimestamp({
+				time: 0,
+				counter: 0,
+				node: this.latest.node,
+			})
+		);
+	};
 }
 
 class ClockDriftError extends Error {
@@ -56,192 +69,111 @@ class OverflowError extends Error {
 	}
 }
 
-var config = {
-	// Maximum physical clock drift allowed, in ms
-	maxDrift: 60000,
-};
+interface HLCTimestamp {
+	time: number;
+	counter: number;
+	node: string;
+}
 
-// James Long's HLC implementation.
-// I respect him for building a great foundation but the API design
-// is wild lol.
-class Timestamp {
-	_state: {
-		millis: number;
-		counter: number;
-		node: string;
-	};
+const COUNTER_BLOCK_LENGTH = 4;
+const NODE_BLOCK_LENGTH = 16;
+const MAX_CLOCK_DRIFT = 60 * 1000;
 
-	constructor(millis: number, counter: number, node?: string) {
-		this._state = {
-			millis: millis,
-			counter: counter,
-			node: node || v4().replace(/-/g, '').slice(-16),
-		};
+function generateNodeId() {
+	return v4().replace(/-/g, '').slice(-16);
+}
+
+function serializeHlcTimestamp(ts: HLCTimestamp): string {
+	// ISO string representation of the time
+	const dateString = new Date(ts.time).toISOString();
+	// counter, base16, padded to 4 characters
+	const counter = ts.counter
+		.toString(16)
+		.toUpperCase()
+		.padStart(COUNTER_BLOCK_LENGTH, '0');
+	// node id padded to 16 characters
+	const node = ts.node.padStart(NODE_BLOCK_LENGTH, '0');
+	return `${dateString}-${counter}-${node}`;
+}
+
+function getHlcNow(prev: HLCTimestamp): HLCTimestamp {
+	const wallTime = Date.now();
+
+	// pick prev's time if it's later than our local device
+	const newWallTime = Math.max(prev.time, wallTime);
+	// reset counter if wall time changed
+	const newCounter = prev.time === newWallTime ? prev.counter + 1 : 0;
+
+	// check for drift
+	if (newWallTime - wallTime > MAX_CLOCK_DRIFT) {
+		throw new ClockDriftError(newWallTime, wallTime, MAX_CLOCK_DRIFT);
+	}
+	// check for counter overflow (max is 4 bytes)
+	if (newCounter > 65535) {
+		throw new OverflowError();
 	}
 
-	valueOf() {
-		return this.toString();
-	}
-
-	toString() {
-		return [
-			new Date(this.millis()).toISOString(),
-			('0000' + this.counter().toString(16).toUpperCase()).slice(-4),
-			('0000000000000000' + this.node()).slice(-16),
-		].join('-');
-	}
-
-	millis() {
-		return this._state.millis;
-	}
-
-	counter() {
-		return this._state.counter;
-	}
-
-	node() {
-		return this._state.node;
-	}
-
-	// Timestamp generator initialization
-	// * sets the node ID to an arbitrary value
-	// * useful for mocking/unit testing
-	static init = function (options: { maxDrift?: number } = {}) {
-		if (options.maxDrift) {
-			config.maxDrift = options.maxDrift;
-		}
-	};
-
-	/**
-	 * Timestamp send. Generates a unique, monotonic timestamp suitable
-	 * for transmission to another system in string format
-	 */
-	static send = (clock: { timestamp: MutableTimestamp }) => {
-		// Retrieve the local wall time
-		var phys = Date.now();
-
-		// Unpack the clock.timestamp logical time and counter
-		var lOld = clock.timestamp.millis();
-		var cOld = clock.timestamp.counter();
-
-		// Calculate the next logical time and counter
-		// * ensure that the logical time never goes backward
-		// * increment the counter if phys time does not advance
-		var lNew = Math.max(lOld, phys);
-		var cNew = lOld === lNew ? cOld + 1 : 0;
-
-		// Check the result for drift and counter overflow
-		if (lNew - phys > config.maxDrift) {
-			throw new ClockDriftError(lNew, phys, config.maxDrift);
-		}
-		if (cNew > 65535) {
-			throw new OverflowError();
-		}
-
-		// Repack the logical time/counter
-		clock.timestamp.setMillis(lNew);
-		clock.timestamp.setCounter(cNew);
-
-		return new Timestamp(
-			clock.timestamp.millis(),
-			clock.timestamp.counter(),
-			clock.timestamp.node(),
-		);
-	};
-
-	// Timestamp receive. Parses and merges a timestamp from a remote
-	// system with the local timeglobal uniqueness and monotonicity are
-	// preserved
-	static recv = function (
-		clock: { timestamp: MutableTimestamp },
-		msg: Timestamp,
-	) {
-		var phys = Date.now();
-
-		// Unpack the message wall time/counter
-		var lMsg = msg.millis();
-		var cMsg = msg.counter();
-
-		// Assert the node id and remote clock drift
-		// if (msg.node() === clock.timestamp.node()) {
-		// 	throw new DuplicateNodeError(clock.timestamp.node());
-		// }
-		if (lMsg - phys > config.maxDrift) {
-			throw new ClockDriftError();
-		}
-
-		// Unpack the clock.timestamp logical time and counter
-		var lOld = clock.timestamp.millis();
-		var cOld = clock.timestamp.counter();
-
-		// Calculate the next logical time and counter.
-		// Ensure that the logical time never goes backward;
-		// * if all logical clocks are equal, increment the max counter,
-		// * if max = old > message, increment local counter,
-		// * if max = messsage > old, increment message counter,
-		// * otherwise, clocks are monotonic, reset counter
-		var lNew = Math.max(Math.max(lOld, phys), lMsg);
-		var cNew =
-			lNew === lOld && lNew === lMsg
-				? Math.max(cOld, cMsg) + 1
-				: lNew === lOld
-				? cOld + 1
-				: lNew === lMsg
-				? cMsg + 1
-				: 0;
-
-		// Check the result for drift and counter overflow
-		if (lNew - phys > config.maxDrift) {
-			throw new ClockDriftError();
-		}
-		if (cNew > 65535) {
-			throw new OverflowError();
-		}
-
-		// Repack the logical time/counter
-		clock.timestamp.setMillis(lNew);
-		clock.timestamp.setCounter(cNew);
-
-		return new Timestamp(
-			clock.timestamp.millis(),
-			clock.timestamp.counter(),
-			clock.timestamp.node(),
-		);
-	};
-
-	static parse = function (timestamp: string) {
-		if (typeof timestamp === 'string') {
-			var parts = timestamp.split('-');
-			if (parts && parts.length === 5) {
-				var millis = Date.parse(parts.slice(0, 3).join('-')).valueOf();
-				var counter = parseInt(parts[3], 16);
-				var node = parts[4];
-				if (!isNaN(millis) && !isNaN(counter))
-					return new Timestamp(millis, counter, node);
-			}
-		}
-		return null;
-	};
-
-	static since = (isoString: string) => {
-		return isoString + '-0000-0000000000000000';
+	return {
+		time: newWallTime,
+		counter: newCounter,
+		node: prev.node,
 	};
 }
 
-class MutableTimestamp extends Timestamp {
-	setMillis(n: number) {
-		this._state.millis = n;
+function updateFromRemote(
+	local: HLCTimestamp,
+	remote: HLCTimestamp,
+): HLCTimestamp {
+	const wallTime = Date.now();
+	// pick remote's time if it's later than our local device
+	const newTime = Math.max(wallTime, Math.max(local.time, remote.time));
+
+	const maxCounter = Math.max(local.counter, remote.counter);
+	let newCounter;
+	// if all clocks are the same, increment the counter
+	if (local.time === newTime && remote.time === newTime) {
+		newCounter = maxCounter + 1;
+	}
+	// if local time is the same as new time, increment our local counter
+	else if (local.time === newTime) {
+		newCounter = local.counter + 1;
+	}
+	// if remote time is the same as new time, increment remote counter
+	else if (remote.time === newTime) {
+		newCounter = remote.counter + 1;
+	}
+	// otherwise, reset the counter
+	else {
+		newCounter = 0;
 	}
 
-	setCounter(n: number) {
-		this._state.counter = n;
+	// check for drift
+	if (newTime - wallTime > MAX_CLOCK_DRIFT) {
+		throw new ClockDriftError(newTime, wallTime, MAX_CLOCK_DRIFT);
+	}
+	if (newCounter > 65535) {
+		throw new OverflowError();
 	}
 
-	setNode(n: string) {
-		this._state.node = n;
+	return {
+		time: newTime,
+		counter: newCounter,
+		node: local.node,
+	};
+}
+
+function deserializeHlcClock(clock: string): HLCTimestamp {
+	const [dateString, counter, node] = clock.split('-');
+	const time = new Date(dateString).getTime();
+	const counterNum = parseInt(counter, 16);
+
+	if (isNaN(time) || isNaN(counterNum)) {
+		throw new Error('invalid clock format');
 	}
 
-	static from = (millis: number, counter: number) => {
-		return new MutableTimestamp(millis, counter);
+	return {
+		time,
+		counter: counterNum,
+		node,
 	};
 }

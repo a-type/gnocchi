@@ -142,11 +142,8 @@ export class StorageCollection<
 		);
 	};
 
-	findOne = (
-		filter: MatchCollectionIndexFilter<
-			Collection,
-			CollectionIndexName<Collection>
-		>,
+	findOne = <IndexName extends CollectionIndexName<Collection>>(
+		filter: MatchCollectionIndexFilter<Collection, IndexName>,
 	) => {
 		return this.queryCache.get(
 			this.queryCache.getKey('findOne', filter),
@@ -321,10 +318,16 @@ export class StorageCollection<
 			...data,
 		};
 
+		const patch = this.createDiffPatch(rawCurrent, updated);
+
+		if (!patch.length) {
+			return current;
+		}
+
 		const op = await this.meta.createOperation({
 			collection: this.name,
 			documentId: id,
-			patch: this.createDiffPatch(rawCurrent, updated),
+			patch,
 		});
 		const final = await this.applyLocalOperation(op);
 

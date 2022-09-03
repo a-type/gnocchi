@@ -12,9 +12,11 @@ import {
 	createCompoundIndexValue,
 	createUpperBoundIndexValue,
 	createLowerBoundIndexValue,
+	StorageSchema,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import cuid from 'cuid';
+import { TEST_API } from './constants.js';
 import { storeRequestPromise } from './idb.js';
 import { Sync } from './Sync.js';
 
@@ -41,6 +43,10 @@ type LocalHistory = {
 type StoredBaseline = DocumentBaseline & {
 	collection_documentId: string;
 };
+type StoredSchema = {
+	type: 'schema';
+	schema: string;
+};
 
 const globalIDB =
 	typeof window !== 'undefined' ? window.indexedDB : (undefined as any);
@@ -50,8 +56,9 @@ export class Meta {
 	// low value for testing
 	private localHistoryLength = 10;
 	private cachedLocalReplicaInfo: LocalReplicaInfo | undefined;
+	private cachedSchema: StorageSchema<any> | undefined;
 
-	constructor(private sync: Sync, indexedDB: IDBFactory = globalIDB) {
+	constructor(private sync: Sync, private indexedDB: IDBFactory = globalIDB) {
 		this.db = this.openMetaDatabase(indexedDB);
 	}
 
@@ -87,6 +94,32 @@ export class Meta {
 				resolve(request.result);
 			};
 		});
+	};
+
+	getSchema = async (): Promise<StorageSchema<any> | null> => {
+		const db = await this.db;
+		const transaction = db.transaction('info', 'readonly');
+		const store = transaction.objectStore('info');
+		const request = store.get('schema');
+		const value = (await storeRequestPromise(request)) as
+			| StoredSchema
+			| undefined;
+		if (!value) {
+			return null;
+		}
+		return JSON.parse(value.schema);
+	};
+
+	setSchema = async (schema: StorageSchema<any>): Promise<void> => {
+		const db = await this.db;
+		const transaction = db.transaction('info', 'readwrite');
+		const store = transaction.objectStore('info');
+		const request = store.put({
+			type: 'schema',
+			schema: JSON.stringify(schema),
+		} as StoredSchema);
+		this.cachedSchema = schema;
+		await storeRequestPromise(request);
 	};
 
 	/**
@@ -158,9 +191,29 @@ export class Meta {
 		},
 	): Promise<SyncOperation> => {
 		const localInfo = await this.getLocalReplicaInfo();
+		const schema = this.cachedSchema;
+		if (!schema) {
+			throw new Error('Cannot create an operation before schema is loaded');
+		}
+		const version = schema.version;
 		return {
-			timestamp: this.sync.time.now(),
+			timestamp: this.sync.time.now(version),
 			...init,
+			replicaId: localInfo.id,
+			id: cuid(),
+		};
+	};
+
+	createMigrationOperation = async ({
+		targetVersion,
+		...init
+	}: Pick<SyncOperation, 'collection' | 'documentId' | 'patch'> & {
+		targetVersion: number;
+	}): Promise<SyncOperation> => {
+		const localInfo = await this.getLocalReplicaInfo();
+		return {
+			...init,
+			timestamp: this.sync.time.zero(targetVersion),
 			replicaId: localInfo.id,
 			id: cuid(),
 		};
@@ -213,6 +266,9 @@ export class Meta {
 					assert(
 						previousTimestamp === undefined ||
 							cursor.value.timestamp > previousTimestamp,
+						`Operation ${JSON.stringify(
+							cursor.value,
+						)} is not after ${previousTimestamp}`,
 					);
 
 					iterator(this.stripOperationCompoundIndices(cursor.value), store);
@@ -474,9 +530,13 @@ export class Meta {
 	 */
 	getSync = async (): Promise<Pick<SyncMessage, 'timestamp' | 'replicaId'>> => {
 		const localReplicaInfo = await this.getLocalReplicaInfo();
+		const schema = this.cachedSchema;
+		if (!schema) {
+			throw new Error('Cannot sync before schema is loaded');
+		}
 
 		return {
-			timestamp: this.sync.time.now(),
+			timestamp: this.sync.time.now(schema.version),
 			replicaId: localReplicaInfo.id,
 		};
 	};
@@ -485,6 +545,10 @@ export class Meta {
 		provideChangesSince: SyncResponseMessage['provideChangesSince'],
 	): Promise<Omit<SyncStep2Message, 'type'>> => {
 		const localReplicaInfo = await this.getLocalReplicaInfo();
+		const schema = this.cachedSchema;
+		if (!schema) {
+			throw new Error('Cannot sync before schema is loaded');
+		}
 		// collect all of our operations that are newer than the server's last operation
 		// if server replica isn't stored, we're syncing for the first time.
 		const operations = await this.getAllOperationsFromReplica(
@@ -501,7 +565,7 @@ export class Meta {
 		);
 
 		return {
-			timestamp: this.sync.time.now(),
+			timestamp: this.sync.time.now(schema.version),
 			ops: operations,
 			// don't send empty baselines
 			baselines: baselines.filter(Boolean),
@@ -579,5 +643,11 @@ export class Meta {
 			operationCount: count,
 			localHistoryLength: history?.items.length || 0,
 		};
+	};
+
+	[TEST_API] = {
+		uninstall: async () => {
+			this.indexedDB.deleteDatabase('meta');
+		},
 	};
 }

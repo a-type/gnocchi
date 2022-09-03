@@ -1,5 +1,8 @@
-import { LiveDocument } from '@aglio/storage';
-import { collection, schema, StorageDocument } from '@aglio/storage-common';
+import {
+	collection,
+	createDefaultMigration,
+	schema,
+} from '@aglio/storage-common';
 
 export const categoryCollection = collection({
 	name: 'categories',
@@ -17,10 +20,8 @@ export const categoryCollection = collection({
 		},
 	},
 	synthetics: {},
+	compounds: {},
 });
-export type GroceryCategory = LiveDocument<
-	StorageDocument<typeof categoryCollection>
->;
 
 export const foodCategoryLookupCollection = collection({
 	name: 'foodCategoryLookups',
@@ -38,10 +39,8 @@ export const foodCategoryLookupCollection = collection({
 		},
 	},
 	synthetics: {},
+	compounds: {},
 });
-export type FoodCategoryLookup = LiveDocument<
-	StorageDocument<typeof foodCategoryLookupCollection>
->;
 
 export const itemCollection = collection({
 	name: 'items',
@@ -108,10 +107,10 @@ export const itemCollection = collection({
 					: 'no',
 		},
 	},
+	compounds: {},
 });
-export type GroceryItem = LiveDocument<StorageDocument<typeof itemCollection>>;
 
-export const groceriesSchema = schema({
+export const v1Schema = schema({
 	version: 1,
 	collections: {
 		categories: categoryCollection,
@@ -119,3 +118,5 @@ export const groceriesSchema = schema({
 		items: itemCollection,
 	},
 });
+
+export default createDefaultMigration(v1Schema);
