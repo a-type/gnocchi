@@ -4,6 +4,9 @@ import {
 	StorageCollectionSchema,
 } from '@aglio/storage-common';
 
+export const LIVE_QUERY_SUBSCRIBE = Symbol('LIVE_QUERY_SUBSCRIBE');
+export const LIVE_QUERY_ACTIVATE = Symbol('LIVE_QUERY_ACTIVATE');
+
 export class LiveQuery<
 	Collection extends StorageCollectionSchema<any, any, any>,
 	T,
@@ -16,15 +19,9 @@ export class LiveQuery<
 		readonly key: string,
 		private exec: () => Promise<T>,
 		private events: EventSubscriber<CollectionEvents<Collection>>,
-		listen: (keyof CollectionEvents<Collection>)[],
-		private dispose: () => void,
+		private triggers: (keyof CollectionEvents<Collection>)[],
 	) {
 		this.resolved = this.update();
-		for (const event of listen) {
-			this.events.subscribe(event, () => {
-				this.resolved = this.update();
-			});
-		}
 	}
 
 	get current() {
@@ -32,23 +29,31 @@ export class LiveQuery<
 	}
 
 	private update = async () => {
-		console.debug('Recomputing query', this.key);
 		this._current = await this.exec();
 		this._subscribers.forEach((subscriber) => subscriber(this._current));
 		return this._current;
 	};
 
-	subscribe = (callback: (value: T | null) => void) => {
+	[LIVE_QUERY_ACTIVATE] = () => {
+		const unsubs = this.triggers.map((trigger) =>
+			this.events.subscribe(trigger, () => {
+				console.debug('Recomputing query', this.key);
+				this.resolved = this.update();
+			}),
+		);
+		return () => {
+			unsubs.forEach((unsub) => unsub());
+		};
+	};
+
+	get subscriberCount() {
+		return this._subscribers.size;
+	}
+
+	[LIVE_QUERY_SUBSCRIBE] = (callback: (value: T | null) => void) => {
 		this._subscribers.add(callback);
 		return () => {
 			this._subscribers.delete(callback);
-			if (this._subscribers.size === 0) {
-				queueMicrotask(() => {
-					if (this._subscribers.size === 0) {
-						this.dispose();
-					}
-				});
-			}
 		};
 	};
 }

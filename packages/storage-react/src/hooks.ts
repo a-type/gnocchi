@@ -6,6 +6,7 @@ import {
 	subscribe,
 	CollectionInMemoryFilters,
 	LiveDocument,
+	StorageCollection,
 } from '@aglio/storage';
 import {
 	CollectionIndexFilter,
@@ -56,9 +57,17 @@ type GeneratedHooks<
 function useLiveQuery<
 	CollectionSchema extends StorageCollectionSchema<any, any, any>,
 	T,
->(liveQuery: LiveQuery<CollectionSchema, T>) {
+>(
+	collection: StorageCollection<CollectionSchema>,
+	liveQuery: LiveQuery<CollectionSchema, T>,
+) {
 	suspend(() => liveQuery.resolved, [liveQuery.key]);
-	return useSyncExternalStore(liveQuery.subscribe, () => liveQuery.current);
+	return useSyncExternalStore(
+		(callback) => {
+			return collection.subscribe(liveQuery, callback);
+		},
+		() => liveQuery.current,
+	);
 }
 
 function capitalize<T extends string>(str: T) {
@@ -101,7 +110,7 @@ export function createHooks<
 			const liveQuery = useMemo(() => {
 				return collection.get(id);
 			}, [id]);
-			const data = useLiveQuery(liveQuery);
+			const data = useLiveQuery(collection, liveQuery);
 
 			return data;
 		};
@@ -119,7 +128,7 @@ export function createHooks<
 			// assumptions: this query getter is fast and returns the same
 			// query identity for subsequent calls.
 			const liveQuery = collection.getAll(config.index, config.filter);
-			const data = useLiveQuery(liveQuery);
+			const data = useLiveQuery(collection, liveQuery);
 			return data;
 		};
 	}

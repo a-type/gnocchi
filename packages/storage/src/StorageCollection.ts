@@ -33,6 +33,8 @@ import { QueryCache } from './reactives/QueryCache.js';
 import { DocumentCache } from './reactives/DocumentCache.js';
 import { getRaw, LiveDocument } from './reactives/LiveDocument.js';
 import { TEST_API } from './constants.js';
+import { LiveQuery } from './index.js';
+import { LIVE_QUERY_SUBSCRIBE } from './reactives/LiveQuery.js';
 
 export type CollectionInMemoryFilters<
 	Collection extends StorageCollectionSchema<any, any, any>,
@@ -56,7 +58,7 @@ export class StorageCollection<
 	private events: EventSubscriber<CollectionEvents<Collection>> =
 		new EventSubscriber();
 
-	private queryCache = new QueryCache<Collection>(this.events);
+	private queryCache = new QueryCache<Collection>();
 
 	private applyLocalDocumentCacheOperations = async (
 		ops: { documentId: string; patch: SyncPatch }[],
@@ -126,9 +128,40 @@ export class StorageCollection<
 		return this.documentCache.get(this.stripComputedIndices(storedDoc));
 	};
 
+	/**
+	 * Subscribes to a query, re-running it on change and returning the results.
+	 * @param query A query to be updated on
+	 * @param callback
+	 */
+	subscribe = <T>(
+		query: LiveQuery<Collection, T>,
+		callback: (value: T) => void,
+	) => {
+		const subscribedQuery = this.queryCache.add(query);
+		const unsubscribe = subscribedQuery[LIVE_QUERY_SUBSCRIBE](callback);
+		return () => {
+			unsubscribe();
+			// if no one is listening anymore, dispose it
+			if (subscribedQuery.subscriberCount === 0) {
+				queueMicrotask(() => {
+					if (subscribedQuery.subscriberCount === 0) {
+						console.debug('Cleaning up query', subscribedQuery);
+						this.queryCache.delete(subscribedQuery.key);
+					}
+				});
+			}
+		};
+	};
+
 	get = (id: string) => {
-		return this.queryCache.get(
-			this.queryCache.getKey('get', id),
+		// check the cache for a version of this query
+		// which already exists
+		const key = this.queryCache.getKey('get', id);
+		if (this.queryCache.has(key)) {
+			return this.queryCache.get(key)!;
+		}
+		return new LiveQuery(
+			key,
 			async () => {
 				const store = await this.readTransaction();
 				const request = store.get(id);
@@ -136,6 +169,7 @@ export class StorageCollection<
 				if (!result) return null;
 				return this.getLiveDocument(result);
 			},
+			this.events,
 			// is PUT relevant? do we support getting by id before the id
 			// is created? probably should.
 			['put', 'delete'],
@@ -145,8 +179,12 @@ export class StorageCollection<
 	findOne = <IndexName extends CollectionIndexName<Collection>>(
 		filter: MatchCollectionIndexFilter<Collection, IndexName>,
 	) => {
-		return this.queryCache.get(
-			this.queryCache.getKey('findOne', filter),
+		const key = this.queryCache.getKey('findOne', filter);
+		if (this.queryCache.has(key)) {
+			return this.queryCache.get(key)!;
+		}
+		return new LiveQuery(
+			key,
 			async () => {
 				const store = await this.readTransaction();
 				const request = this.getIndexedListRequest(store, filter);
@@ -165,6 +203,7 @@ export class StorageCollection<
 				if (!result) return null;
 				return this.getLiveDocument(result);
 			},
+			this.events,
 			['delete', 'put'],
 		);
 	};
@@ -252,10 +291,14 @@ export class StorageCollection<
 		 */
 		filters?: CollectionInMemoryFilters<Collection>,
 	) => {
+		const key = this.queryCache.getKey('getAll', index, filters);
+		if (this.queryCache.has(key)) {
+			return this.queryCache.get(key)!;
+		}
 		const filter = filters?.filter;
 		const sort = filters?.sort;
-		return this.queryCache.get(
-			this.queryCache.getKey('getAll', index, filters),
+		return new LiveQuery(
+			key,
 			async () => {
 				const store = await this.readTransaction();
 				const request = this.getIndexedListRequest(store, index);
@@ -285,6 +328,7 @@ export class StorageCollection<
 				);
 				return results.map((raw) => this.getLiveDocument(raw));
 			},
+			this.events,
 			['delete', 'put'],
 		);
 	};
