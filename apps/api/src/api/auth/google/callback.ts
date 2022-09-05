@@ -4,6 +4,7 @@ import { googleOauth } from '../../../auth/googleOauth.js';
 import { prisma } from '../../../data/prisma.js';
 import { assert } from '@aglio/tools';
 import { Request, Response } from 'express';
+import { getInviteIdCookie } from 'src/auth/cookies.js';
 
 export default async function googleCallbackHandler(
 	req: Request,
@@ -23,6 +24,8 @@ export default async function googleCallbackHandler(
 	}
 	const profile = profileResponse.data as GoogleOAuthProfile;
 
+	const inviteId = getInviteIdCookie(req);
+
 	// find an existing Google account association and user
 	const accountAndUser = await prisma.account.findUnique({
 		where: {
@@ -37,43 +40,118 @@ export default async function googleCallbackHandler(
 	});
 
 	let user: Profile;
+
+	let joiningPlanId: string | null = null;
+	if (inviteId) {
+		// check validity of invite
+		const invite = await prisma.planInvitation.findUnique({
+			where: {
+				id: inviteId,
+			},
+		});
+		if (!invite) {
+			return res.status(400).send('Invalid invite code');
+		}
+		if (invite.expiresAt < new Date()) {
+			return res.status(400).send('Invite expired');
+		}
+		if (invite.claimedAt) {
+			return res.status(400).send('Invite already claimed');
+		}
+		joiningPlanId = invite.planId;
+	}
+
 	if (!accountAndUser) {
 		// create a new account and user
 		const email = profile.email;
-		// user might already exist, check by email
-		user = await prisma.profile.upsert({
-			where: { email },
-			update: {
-				accounts: {
-					create: {
-						provider: 'google',
-						providerAccountId: profile.sub,
-						type: 'oauth2',
-						accessToken: tokens.access_token,
-						tokenType: 'Bearer',
+
+		if (joiningPlanId) {
+			user = await prisma.profile.upsert({
+				where: { email },
+				update: {
+					accounts: {
+						create: {
+							provider: 'google',
+							providerAccountId: profile.sub,
+							type: 'oauth2',
+							accessToken: tokens.access_token,
+							tokenType: 'Bearer',
+						},
+					},
+					plan: {
+						connect: {
+							id: joiningPlanId,
+						},
 					},
 				},
-			},
-			create: {
-				email,
-				fullName: profile.name,
-				friendlyName: profile.given_name || profile.name,
-				imageUrl: profile.picture,
-				accounts: {
-					create: {
-						provider: 'google',
-						providerAccountId: profile.sub,
-						type: 'oauth2',
-						accessToken: tokens.access_token,
-						tokenType: 'Bearer',
+				create: {
+					email,
+					fullName: profile.name,
+					friendlyName: profile.given_name || profile.name,
+					imageUrl: profile.picture,
+					accounts: {
+						create: {
+							provider: 'google',
+							providerAccountId: profile.sub,
+							type: 'oauth2',
+							accessToken: tokens.access_token,
+							tokenType: 'Bearer',
+						},
+					},
+					// create a default plan for new users who aren't using an invite
+					plan: {
+						connect: {
+							id: joiningPlanId,
+						},
 					},
 				},
-				// create a default plan for new users
-				plan: {
-					create: {},
+			});
+
+			// i'm feeling pretty sloppy right now. maybe refactor later.
+			if (inviteId) {
+				await prisma.planInvitation.update({
+					where: { id: inviteId },
+					data: {
+						claimedAt: new Date(),
+					},
+				});
+			}
+		} else {
+			// user might already exist, check by email
+			user = await prisma.profile.upsert({
+				where: { email },
+				update: {
+					accounts: {
+						create: {
+							provider: 'google',
+							providerAccountId: profile.sub,
+							type: 'oauth2',
+							accessToken: tokens.access_token,
+							tokenType: 'Bearer',
+						},
+					},
 				},
-			},
-		});
+				create: {
+					email,
+					fullName: profile.name,
+					friendlyName: profile.given_name || profile.name,
+					imageUrl: profile.picture,
+					accounts: {
+						create: {
+							provider: 'google',
+							providerAccountId: profile.sub,
+							type: 'oauth2',
+							accessToken: tokens.access_token,
+							tokenType: 'Bearer',
+						},
+					},
+					// create a default plan for new users who aren't using an invite
+					plan: {
+						create: {},
+					},
+				},
+			});
+		}
 	} else {
 		user = accountAndUser.profile;
 	}

@@ -45,16 +45,17 @@ model Account {
 }
 
 model Plan {
-  id                      String           @id @default(cuid())
-  createdAt               DateTime         @default(now()) @map("created_at")
-  updatedAt               DateTime         @updatedAt @map("updated_at")
-  deletedAt               DateTime?        @map("deleted_at")
-  stripeCustomerId        String?          @map("stripe_customer_id")
-  stripeSubscriptionId    String?          @map("stripe_subscription_id")
-  subscriptionExpiresAt   DateTime?        @map("subscription_expires_at")
-  subscriptionCancelledAt DateTime?        @map("subscription_cancelled_at")
-  members                 Profile[]
-  invitations             PlanInvitation[]
+  id                     String           @id @default(cuid())
+  createdAt              DateTime         @default(now()) @map("created_at")
+  updatedAt              DateTime         @updatedAt @map("updated_at")
+  deletedAt              DateTime?        @map("deleted_at")
+  stripeCustomerId       String?          @map("stripe_customer_id")
+  stripeSubscriptionId   String?          @map("stripe_subscription_id")
+  subscriptionExpiresAt  DateTime?        @map("subscription_expires_at")
+  subscriptionCanceledAt DateTime?        @map("subscription_canceled_at")
+  subscriptionStatus     String?          @map("subscription_status")
+  members                Profile[]
+  invitations            PlanInvitation[]
 
   @@unique([stripeSubscriptionId])
   @@map("plans")

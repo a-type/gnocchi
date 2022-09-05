@@ -1,13 +1,26 @@
-import { ExclamationTriangleIcon, UpdateIcon } from '@radix-ui/react-icons';
-import { Box, Button } from 'components/primitives/index.js';
+import {
+	ExclamationTriangleIcon,
+	HamburgerMenuIcon,
+	UpdateIcon,
+} from '@radix-ui/react-icons';
+import { Box, Button, Span } from 'components/primitives/index.js';
+import {
+	Popover,
+	PopoverArrow,
+	PopoverContent,
+	PopoverTrigger,
+} from 'components/primitives/Popover.js';
 import { API_ORIGIN, SECURE } from 'config.js';
 import { useAuth } from 'contexts/AuthContext.js';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { styled } from 'stitches.config.js';
 import { groceries } from 'stores/groceries/index.js';
+import { LoginButton } from './LoginButton.js';
+import { LogoutButton } from './LogoutButton.js';
+import { ManageSubscriptionButton } from './ManageSubscriptionButton.js';
 
 export function SyncMenu() {
-	const { session, error, refetch } = useAuth();
+	const { session, error, refetch, isSubscribed } = useAuth();
 
 	const [reconnecting, setReconnecting] = useState(false);
 
@@ -24,12 +37,17 @@ export function SyncMenu() {
 	if (error) {
 		return (
 			<Container>
+				<OfflineMenu refetch={refetch} />
 				<ExclamationTriangleIcon />
-				<span>Offline</span>
-				<Button color="default" onClick={refetch}>
-					Retry
-				</Button>
 			</Container>
+		);
+	}
+
+	if (!session) {
+		return (
+			<LoginButton provider="google" returnTo="/">
+				Sync
+			</LoginButton>
 		);
 	}
 
@@ -37,20 +55,24 @@ export function SyncMenu() {
 		return (
 			<Container>
 				<ExclamationTriangleIcon />
-				<span>Reconnecting...</span>
+				<Span size="small">Reconnecting...</Span>
 			</Container>
 		);
 	}
 
-	if (!session) {
-		return <OAuthLoginButton provider="google">Sync</OAuthLoginButton>;
+	if (!isSubscribed) {
+		return (
+			<Container>
+				<ExpiredSyncMenu />
+				<ExclamationTriangleIcon />
+			</Container>
+		);
 	}
 
 	return (
 		<Container>
+			<ActiveSyncMenu status="Sync active" />
 			<UpdateIcon />
-			<span>Syncing</span>
-			<LogoutButton>Logout</LogoutButton>
 		</Container>
 	);
 }
@@ -62,41 +84,63 @@ const Container = styled('div', {
 	gap: '$2',
 });
 
-function OAuthLoginButton({
-	provider,
-	returnTo,
-	children,
-	...rest
-}: {
-	provider: string;
-	returnTo?: string;
-	children?: ReactNode;
-}) {
+function ActiveSyncMenu({ status }: { status: string }) {
 	return (
-		<form
-			action={`${
-				SECURE ? 'https' : 'http'
-			}://${API_ORIGIN}/api/auth/${provider}/login${
-				returnTo ? `?returnTo=${returnTo}` : ''
-			}`}
-			method="post"
-			{...rest}
-		>
-			<Button type="submit">{children}</Button>
-		</form>
+		<Popover>
+			<PopoverTrigger asChild>
+				<Button size="small" color="ghost">
+					<HamburgerMenuIcon />
+				</Button>
+			</PopoverTrigger>
+			<PopoverContent>
+				<PopoverArrow />
+				<Box direction="column" gap="2">
+					<Span size="small">{status}</Span>
+					<ManageSubscriptionButton />
+					<LogoutButton>Log out</LogoutButton>
+				</Box>
+			</PopoverContent>
+		</Popover>
 	);
 }
 
-function LogoutButton({ children, ...rest }: { children?: ReactNode }) {
+function ExpiredSyncMenu() {
 	return (
-		<form
-			action={`${SECURE ? 'https' : 'http'}://${API_ORIGIN}/api/auth/logout`}
-			method="post"
-			{...rest}
-		>
-			<Button type="submit" color="ghost">
-				{children}
-			</Button>
-		</form>
+		<Popover>
+			<PopoverTrigger asChild>
+				<Button size="small" color="ghost">
+					<HamburgerMenuIcon />
+				</Button>
+			</PopoverTrigger>
+			<PopoverContent>
+				<PopoverArrow />
+				<Box direction="column" gap="2">
+					<Span size="small">Subscription expired</Span>
+					<ManageSubscriptionButton />
+					<LogoutButton>Log out</LogoutButton>
+				</Box>
+			</PopoverContent>
+		</Popover>
+	);
+}
+
+function OfflineMenu({ refetch }: { refetch: () => void }) {
+	return (
+		<Popover>
+			<PopoverTrigger asChild>
+				<Button size="small" color="ghost">
+					<HamburgerMenuIcon />
+				</Button>
+			</PopoverTrigger>
+			<PopoverContent>
+				<PopoverArrow />
+				<Box direction="column" gap="2">
+					<Span size="small">Offline</Span>
+					<Button color="default" onClick={refetch}>
+						Retry connection
+					</Button>
+				</Box>
+			</PopoverContent>
+		</Popover>
 	);
 }

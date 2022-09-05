@@ -1,22 +1,15 @@
-import { createRoot } from 'react-dom/client';
-import { PageContent, PageRoot } from './components/layouts/index.js';
-import GroceryList from './components/groceries/GroceryList.js';
-import DeleteCheckedButton from './components/groceries/DeleteCheckedButton.js';
-import { GroceryListAdd } from './components/groceries/GroceryListAdd.js';
-import { Box } from './components/primitives/index.js';
-import React, { StrictMode, Suspense } from 'react';
-import { globalCss, css } from 'stitches.config.js';
-import { register } from './serviceWorkerRegistration.js';
-import { attachToPwaEvents } from './pwaEventListener.js';
 import { AuthProvider } from 'contexts/AuthContext.js';
-import { SyncMenu } from 'components/sync/SyncMenu.js';
-
-const floatingButton = css({
-	position: 'absolute',
-	left: '50%',
-	bottom: '-20px',
-	transform: 'translate(-50%, 50%)',
-});
+import { ClaimInvitePage } from 'pages/ClaimInvitePage.js';
+import { GroceriesPage } from 'pages/GroceriesPage.js';
+import { NevermindPage } from 'pages/NevermindPage.js';
+import { NotFoundPage } from 'pages/NotFoundPage.js';
+import React, { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { globalCss } from 'stitches.config.js';
+import { PageContent, PageRoot } from './components/layouts/index.js';
+import { attachToPwaEvents } from './pwaEventListener.js';
+import { register } from './serviceWorkerRegistration.js';
 
 globalCss({
 	'html, body': {
@@ -51,33 +44,20 @@ function main() {
 	const root = createRoot(document.getElementById('root')!);
 	root.render(
 		<StrictMode>
-			<AuthProvider>
-				<PageRoot>
-					<PageContent fullHeight noPadding flex={1}>
-						<SyncMenu />
-						<Box
-							w="full"
-							p={4}
-							direction="column"
-							gap={2}
-							align="stretch"
-							css={{
-								position: 'sticky',
-								top: 0,
-								zIndex: 1,
-								backgroundColor: '$white',
-								mb: '$6',
-							}}
-						>
-							<GroceryListAdd />
-							<DeleteCheckedButton className={floatingButton()} />
-						</Box>
-						<Suspense>
-							<GroceryList />
-						</Suspense>
-					</PageContent>
-				</PageRoot>
-			</AuthProvider>
+			<BrowserRouter>
+				<AuthProvider>
+					<PageRoot>
+						<PageContent fullHeight noPadding flex={1}>
+							<Routes>
+								<Route path="/" element={<GroceriesPage />} />
+								<Route path="/claim/:inviteId" element={<ClaimInvitePage />} />
+								<Route path="/nevermind" element={<NevermindPage />} />
+								<Route path="*" element={<NotFoundPage />} />
+							</Routes>
+						</PageContent>
+					</PageRoot>
+				</AuthProvider>
+			</BrowserRouter>
 		</StrictMode>,
 	);
 

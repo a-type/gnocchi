@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
-import { setReturnToCookie } from '../../../auth/cookies.js';
+import { setInviteIdCookie, setReturnToCookie } from '../../../auth/cookies.js';
 import { googleOauth } from '../../../auth/googleOauth.js';
 
 export default async function googleLoginHandler(req: Request, res: Response) {
 	setReturnToCookie(req, res);
+	setInviteIdCookie(req, res);
 
 	const authorizationUrl = googleOauth.generateAuthUrl({
 		access_type: 'online',

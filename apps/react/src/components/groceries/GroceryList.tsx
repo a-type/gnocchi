@@ -70,14 +70,15 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 export default GroceryList;
 
 function useGrocerySync() {
-	const { session } = useAuth();
+	const { session, isSubscribed } = useAuth();
+	const syncEnabled = session && isSubscribed;
 	useEffect(() => {
-		if (session) {
+		if (syncEnabled) {
 			groceries.sync.start();
 		} else {
 			groceries.sync.stop();
 		}
-	}, [session]);
+	}, [syncEnabled]);
 }
 
 const GroceryListCategories = forwardRef<

@@ -1,5 +1,11 @@
 import useMergedRef from 'hooks/useMergedRef.js';
-import React, { forwardRef, HTMLProps, useLayoutEffect, useRef } from 'react';
+import React, {
+	ComponentProps,
+	forwardRef,
+	HTMLProps,
+	useLayoutEffect,
+	useRef,
+} from 'react';
 import { styled } from 'stitches.config.js';
 
 const BaseBox = styled('div', {
@@ -253,6 +259,7 @@ export const Button = styled('button', {
 	borderRadius: '$md',
 	cursor: 'pointer',
 	fontWeight: 'bold',
+	display: 'flex',
 
 	'&:focus': {
 		outline: 'none',
@@ -319,6 +326,7 @@ export const Button = styled('button', {
 		size: 'default',
 	},
 });
+export type ButtonProps = ComponentProps<typeof Button>;
 
 const headingCommonStyles = {
 	mt: 0,
@@ -346,4 +354,26 @@ export const H4 = styled('h4', {
 });
 export const H5 = styled('h5', {
 	...headingCommonStyles,
+});
+
+export const Span = styled('span', {
+	variants: {
+		size: {
+			xs: {
+				fontSize: '$xs',
+			},
+			small: {
+				fontSize: '$sm',
+			},
+			sm: {
+				fontSize: '$sm',
+			},
+			default: {
+				fontSize: '$md',
+			},
+		},
+	},
+	defaultVariants: {
+		size: 'default',
+	},
 });

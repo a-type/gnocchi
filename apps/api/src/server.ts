@@ -4,6 +4,7 @@ import { attachSocketServer } from './socketServer.js';
 import { createServer } from 'http';
 import cors from 'cors';
 import apiRouter from './api/index.js';
+import audit from 'express-requests-logger';
 
 const app = express();
 const server = createServer(app);
@@ -14,7 +15,30 @@ app.use(
 		credentials: true,
 	}),
 );
-app.use(bodyParser.json());
+app.use(
+	audit({
+		logger: {
+			info: ({ request }: any) => {
+				console.info(`${request.method} ${request.url}`);
+			},
+		},
+		request: {
+			excludeBody: ['*'],
+			excludeHeaders: ['*'],
+		},
+		response: {
+			excludeBody: ['*'],
+			excludeHeaders: ['*'],
+		},
+	}),
+);
+app.use((req, res, next) => {
+	if (req.originalUrl.includes('/webhook')) {
+		next();
+	} else {
+		bodyParser.json()(req, res, next);
+	}
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {

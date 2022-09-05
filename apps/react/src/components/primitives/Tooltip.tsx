@@ -1,7 +1,7 @@
-import * as PopoverPrimitive from '@radix-ui/react-popover';
 import React, { ComponentPropsWithoutRef } from 'react';
-
-import { keyframes, styled } from 'stitches.config.js';
+import { styled, keyframes } from '@stitches/react';
+import { violet } from '@radix-ui/colors';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
 const slideUpAndFade = keyframes({
 	'0%': { opacity: 0, transform: 'translateY(2px)' },
@@ -22,65 +22,67 @@ const slideLeftAndFade = keyframes({
 	'0%': { opacity: 0, transform: 'translateX(2px)' },
 	'100%': { opacity: 1, transform: 'translateX(0)' },
 });
-const StyledContent = styled(PopoverPrimitive.Content, {
-	borderRadius: '$xl',
-	padding: '$5',
-	minWidth: 120,
+
+const StyledContent = styled(TooltipPrimitive.Content, {
+	borderRadius: 4,
+	padding: '10px 15px',
+	fontSize: 15,
+	lineHeight: 1,
+	color: violet.violet11,
 	backgroundColor: 'white',
-	zIndex: '$menu',
 	boxShadow:
 		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
+	userSelect: 'none',
 	'@media (prefers-reduced-motion: no-preference)': {
 		animationDuration: '400ms',
 		animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-		animationFillMode: 'forwards',
 		willChange: 'transform, opacity',
-		'&[data-state="open"]': {
+		'&[data-state="delayed-open"]': {
 			'&[data-side="top"]': { animationName: slideDownAndFade },
 			'&[data-side="right"]': { animationName: slideLeftAndFade },
 			'&[data-side="bottom"]': { animationName: slideUpAndFade },
 			'&[data-side="left"]': { animationName: slideRightAndFade },
 		},
 	},
-	'&:focus': {
-		boxShadow: `hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px, 0 0 0 2px $colors$lemon`,
-	},
 });
 
-const StyledArrow = styled(PopoverPrimitive.Arrow, {
+const StyledArrow = styled(TooltipPrimitive.Arrow, {
 	fill: 'white',
 });
 
-const StyledClose = styled(PopoverPrimitive.Close, {
-	all: 'unset',
-	fontFamily: 'inherit',
-	borderRadius: '100%',
-	height: 25,
-	width: 25,
-	display: 'inline-flex',
-	alignItems: 'center',
-	justifyContent: 'center',
-	color: '$darkBlend',
-	position: 'absolute',
-	top: 5,
-	right: 5,
-
-	'&:hover': { backgroundColor: '$lightBlend' },
-	'&:focus': { boxShadow: `0 0 0 2px $colors$lemon` },
-});
+function Content({
+	children,
+	...props
+}: ComponentPropsWithoutRef<typeof StyledContent>) {
+	return (
+		<TooltipPrimitive.Portal>
+			<StyledContent {...props}>
+				{children}
+				<StyledArrow />
+			</StyledContent>
+		</TooltipPrimitive.Portal>
+	);
+}
 
 // Exports
-export const Popover = PopoverPrimitive.Root;
-export const PopoverTrigger = PopoverPrimitive.Trigger;
-export const PopoverArrow = StyledArrow;
-export const PopoverClose = StyledClose;
+export const Provider = TooltipPrimitive.Provider;
+export const TooltipRoot = TooltipPrimitive.Root;
+export const TooltipTrigger = TooltipPrimitive.Trigger;
+export const TooltipContent = Content;
 
-export const PopoverContent = (
-	props: ComponentPropsWithoutRef<typeof StyledContent>,
-) => {
+export function Tooltip({
+	content,
+	children,
+	...rest
+}: { content: React.ReactNode } & ComponentPropsWithoutRef<
+	typeof TooltipTrigger
+>) {
 	return (
-		<PopoverPrimitive.Portal>
-			<StyledContent {...props} />
-		</PopoverPrimitive.Portal>
+		<TooltipRoot>
+			<TooltipTrigger asChild {...rest}>
+				{children}
+			</TooltipTrigger>
+			<TooltipContent sideOffset={5}>{content}</TooltipContent>
+		</TooltipRoot>
 	);
-};
+}

@@ -3,6 +3,7 @@ import { IncomingMessage, Server } from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import { getLoginSession } from './auth/index.js';
 import { Session } from './auth/session.js';
+import { verifySubscription } from './auth/verifySubscription.js';
 import { outgoingMessages } from './data/storage/outgoingMessages.js';
 import { storage } from './data/storage/storage.js';
 
@@ -11,6 +12,8 @@ async function authenticate(req: IncomingMessage): Promise<Session> {
 	if (!session) {
 		throw new Error('Not authenticated');
 	}
+
+	await verifySubscription(session);
 
 	return session;
 }

@@ -55,6 +55,7 @@ const config = {
 			lib: path.resolve(__dirname, 'src/lib'),
 			stores: path.resolve(__dirname, 'src/stores'),
 			hooks: path.resolve(__dirname, 'src/hooks'),
+			pages: path.resolve(__dirname, 'src/pages'),
 			'stitches.config.js': path.resolve(__dirname, 'src/stitches.config.js'),
 			'config.js': path.resolve(__dirname, 'src/config.js'),
 		},

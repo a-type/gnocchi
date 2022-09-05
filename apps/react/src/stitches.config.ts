@@ -40,6 +40,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				title: '"Kufam", sans-serif',
 			},
 			fontSizes: {
+				xs: '0.75rem',
 				sm: '0.88888888888888888888rem',
 				md: '1rem',
 				lg: '1.25rem',
@@ -95,6 +96,11 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 			},
 			transitions: {
 				springy: 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+			},
+			zIndices: {
+				menu: 100,
+				dialog: 1000,
+				dialogBackdrop: 900,
 			},
 		},
 		media: {

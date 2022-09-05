@@ -21,6 +21,7 @@ export default merge(common, {
 			'Cross-Origin-Opener-Policy': 'same-origin',
 			'Cross-Origin-Embedder-Policy': 'require-corp',
 		},
+		historyApiFallback: true,
 	},
 	plugins: [
 		new webpack.DefinePlugin({
