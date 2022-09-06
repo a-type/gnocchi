@@ -1,10 +1,8 @@
-import { Button } from '../primitives/index.js';
+import { Button, ButtonProps } from '../primitives/index.js';
 import React, { forwardRef } from 'react';
 import { hooks, groceries } from 'stores/groceries/index.js';
 
-export interface DeleteCheckedButtonProps {
-	className?: string;
-}
+export interface DeleteCheckedButtonProps extends ButtonProps {}
 
 export const DeleteCheckedButton = forwardRef<
 	HTMLButtonElement,

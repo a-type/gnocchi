@@ -8,12 +8,7 @@ import { SyncMenu } from 'components/sync/SyncMenu.js';
 import React, { Suspense } from 'react';
 import { css } from 'stitches.config.js';
 
-const floatingButton = css({
-	position: 'absolute',
-	left: '50%',
-	bottom: '-20px',
-	transform: 'translate(-50%, 50%)',
-});
+const floatingButton = css();
 
 export function GroceriesPage() {
 	return (
@@ -36,7 +31,14 @@ export function GroceriesPage() {
 				}}
 			>
 				<GroceryListAdd />
-				<DeleteCheckedButton className={floatingButton()} />
+				<DeleteCheckedButton
+					css={{
+						position: 'absolute !important',
+						left: '50%',
+						bottom: '-20px',
+						transform: 'translate(-50%, 50%)',
+					}}
+				/>
 			</Box>
 			<Suspense>
 				<GroceryList />

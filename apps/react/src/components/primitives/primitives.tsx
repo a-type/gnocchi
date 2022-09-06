@@ -189,10 +189,11 @@ export const Input = styled('input', {
 	py: '$2',
 	fontSize: '$md',
 	fontFamily: '$sans',
-	border: 'none',
 	borderRadius: '$md',
-	backgroundColor: '$gray20',
+	backgroundColor: '$grayBlend',
 	userSelect: 'auto',
+
+	border: '1px solid currentColor',
 
 	'&:focus': {
 		outline: 'none',
@@ -251,6 +252,9 @@ const StyledTextArea = styled('textarea', {
 });
 
 export const Button = styled('button', {
+	$$bg: 'transparent',
+
+	background: '$$bg',
 	px: '$3',
 	py: '$2',
 	fontSize: '$md',
@@ -260,6 +264,16 @@ export const Button = styled('button', {
 	cursor: 'pointer',
 	fontWeight: 'bold',
 	display: 'flex',
+
+	// expanding background
+	position: 'relative',
+	overflow: 'visible',
+
+	transition: 'box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out',
+
+	'&:hover': {
+		boxShadow: '0 0 0 6px $$bg',
+	},
 
 	'&:focus': {
 		outline: 'none',
@@ -271,44 +285,47 @@ export const Button = styled('button', {
 
 	variants: {
 		color: {
-			primary: {
-				color: '$black',
-				backgroundColor: '$lemonDark',
-			},
 			default: {
+				color: '$black',
+				$$bg: '$colors$lemonLighter',
+				border: '1px solid currentColor',
+			},
+			primary: {
 				color: '$lemonDarker',
-				backgroundColor: '$lemonLighter',
+				$$bg: '$colors$lemonLighter',
+				border: '1px solid currentColor',
 
 				'&:hover': {
-					backgroundColor: '$lemonLight',
+					$$bg: '$colors$lemonLight',
 				},
 
 				'&:focus': {
-					backgroundColor: '$lemonLight',
+					$$bg: '$colors$lemonLight',
 				},
 			},
 			ghost: {
 				color: '$darkBlend',
-				backgroundColor: 'transparent',
+				$$bg: 'transparent',
 
 				'&:hover': {
-					backgroundColor: '$grayBlend',
+					$$bg: '$colors$grayBlend',
 				},
 			},
 			destructive: {
-				color: '$white',
-				backgroundColor: '$tomato',
+				color: '$black',
+				$$bg: '$colors$tomatoLight',
+				border: '1px solid currentColor',
 
 				'&:hover': {
-					backgroundColor: '$tomatoDark',
+					$$bg: '$colors$tomato',
 				},
 			},
 			ghostDestructive: {
 				color: '$tomatoDark',
-				backgroundColor: 'transparent',
+				$$bg: 'transparent',
 
 				'&:hover': {
-					backgroundColor: '$tomatoLight',
+					$$bg: '$colors$tomatoLight',
 				},
 			},
 		},

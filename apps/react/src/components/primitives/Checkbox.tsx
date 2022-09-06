@@ -7,13 +7,21 @@ const CheckboxRoot = styled(CheckboxPrimitive.Root, {
 	width: 24,
 	height: 24,
 	backgroundColor: '$white',
-	border: '2px solid $black',
+	border: '1px solid currentColor',
 	position: 'relative',
 	borderRadius: '$sm',
 
 	'&[data-state="checked"]': {
-		backgroundColor: '$lemon',
-		borderColor: '$lemon',
+		backgroundColor: '$lemonLighter',
+		borderColor: '$lemonLight',
+	},
+
+	'&:focus': {},
+
+	'&:focus-visible': {
+		boxShadow: '$focus',
+		borderWidth: 1,
+		outline: 'none',
 	},
 });
 

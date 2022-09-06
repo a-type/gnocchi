@@ -22,6 +22,7 @@ globalCss({
 
 	body: {
 		height: '100%',
+		backgroundColor: '$light',
 	},
 
 	'#root': {
