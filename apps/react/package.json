@@ -12,6 +12,7 @@
 		"@aglio/storage": "workspace:*",
 		"@aglio/storage-common": "workspace:*",
 		"@aglio/storage-react": "workspace:*",
+		"@aglio/conversion": "workspace:*",
 		"@aglio/tools": "workspace:*",
 		"@dnd-kit/core": "^6.0.5",
 		"@dnd-kit/modifiers": "^6.0.0",

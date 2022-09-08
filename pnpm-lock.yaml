@@ -102,6 +102,7 @@ importers:
 
   apps/react:
     specifiers:
+      '@aglio/conversion': workspace:*
       '@aglio/storage': workspace:*
       '@aglio/storage-common': workspace:*
       '@aglio/storage-react': workspace:*
@@ -161,6 +162,7 @@ importers:
       workbox-strategies: ^6.5.3
       workbox-webpack-plugin: ^6.5.3
     dependencies:
+      '@aglio/conversion': link:../../packages/conversion
       '@aglio/storage': link:../../packages/storage
       '@aglio/storage-common': link:../../packages/storage-common
       '@aglio/storage-react': link:../../packages/storage-react
