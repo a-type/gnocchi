@@ -1,5 +1,5 @@
-import { Button, Span } from 'components/primitives/primitives.js';
-import { API_HOST_HTTP } from 'config.js';
+import { Button, Span } from '@/components/primitives/primitives.js';
+import { API_HOST_HTTP } from '@/config.js';
 import React from 'react';
 
 export interface SubscribeButtonProps {}

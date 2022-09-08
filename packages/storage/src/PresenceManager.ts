@@ -39,7 +39,7 @@ export class PresenceManager<
 		const peerIdsSet = new Set<string>(this.peerIds);
 
 		if (message.type === 'presence-changed') {
-			if (message.replicaId === localReplicaInfo.id) {
+			if (message.userInfo.replicaId === localReplicaInfo.id) {
 				this._self = message.userInfo;
 				this.emit('selfChanged', message.userInfo);
 			} else {
@@ -59,10 +59,10 @@ export class PresenceManager<
 					this.emit('peerChanged', id, presence);
 				}
 			}
-			if (peersChanged) {
-				this._peerIds = Array.from(peerIdsSet);
-				this.emit('peersChanged', this._peers);
-			}
+		}
+		if (peersChanged) {
+			this._peerIds = Array.from(peerIdsSet);
+			this.emit('peersChanged', this._peers);
 		}
 	};
 

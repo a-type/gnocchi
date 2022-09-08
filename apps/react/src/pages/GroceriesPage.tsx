@@ -1,12 +1,12 @@
-import DeleteCheckedButton from 'components/groceries/DeleteCheckedButton.js';
-import GroceryList from 'components/groceries/GroceryList.js';
-import { GroceryListAdd } from 'components/groceries/GroceryListAdd.js';
-import { Box } from 'components/primitives/primitives.js';
-import { CompleteSignupDialog } from 'components/sync/CompleteSignupDialog.js';
-import { SubscriptionExpiredDialog } from 'components/sync/SubscriptionExpiredDialog.js';
-import { SyncMenu } from 'components/sync/SyncMenu.js';
+import DeleteCheckedButton from '@/components/groceries/DeleteCheckedButton.js';
+import GroceryList from '@/components/groceries/GroceryList.js';
+import { GroceryListAdd } from '@/components/groceries/GroceryListAdd.js';
+import { Box } from '@/components/primitives/primitives.js';
+import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js';
+import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
+import { SyncMenu } from '@/components/sync/SyncMenu.js';
 import React, { Suspense } from 'react';
-import { css } from 'stitches.config.js';
+import { css } from '@/stitches.config.js';
 
 const floatingButton = css();
 

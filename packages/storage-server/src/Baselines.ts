@@ -67,7 +67,20 @@ export class Baselines {
 		};
 	};
 
-	getAllAfter = (timestamp: string): DocumentBaseline<any>[] => {
+	getAllAfter = (timestamp: string | null): DocumentBaseline<any>[] => {
+		if (!timestamp) {
+			console.log('query', this.libraryId);
+			return this.db
+				.prepare(
+					`
+					SELECT * FROM DocumentBaseline
+					WHERE libraryId = ?
+					ORDER BY timestamp ASC
+				`,
+				)
+				.all(this.libraryId)
+				.map(this.hydrateSnapshot);
+		}
 		return this.db
 			.prepare(
 				`

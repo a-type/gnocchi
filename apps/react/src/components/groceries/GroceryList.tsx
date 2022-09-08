@@ -22,7 +22,7 @@ import React, {
 	useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { groceries, hooks, GroceryItem } from 'stores/groceries/index.js';
+import { groceries, hooks, GroceryItem } from '@/stores/groceries/index.js';
 import { ref as valtioRef } from 'valtio';
 import { Box } from '../primitives/index.js';
 import { DeleteItemFloater } from './DeleteItemFloater.js';
@@ -31,7 +31,7 @@ import { GroceryListCategory } from './GroceryListCategory.js';
 import { GroceryListItem } from './items/GroceryListItem.js';
 import { GroceryNewCategoryFloater } from './GroceryNewCategoryFloater.js';
 import { groceriesState } from './state.js';
-import { useAuth } from 'contexts/AuthContext.js';
+import { useAuth } from '@/contexts/AuthContext.js';
 
 export interface GroceryListProps {
 	className?: string;

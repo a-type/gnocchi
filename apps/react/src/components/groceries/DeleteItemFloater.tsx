@@ -1,8 +1,8 @@
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { ArchiveIcon } from '@radix-ui/react-icons';
-import { Box } from 'components/primitives/index.js';
+import { Box } from '@/components/primitives/index.js';
 import React, { forwardRef, useState } from 'react';
-import { styled } from 'stitches.config.js';
+import { styled } from '@/stitches.config.js';
 
 export interface DeleteItemFloaterProps {
 	className?: string;

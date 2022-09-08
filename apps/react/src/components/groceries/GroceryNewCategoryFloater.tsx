@@ -1,13 +1,13 @@
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { CardStackPlusIcon } from '@radix-ui/react-icons';
-import useMergedRef from 'hooks/useMergedRef.js';
+import useMergedRef from '@/hooks/useMergedRef.js';
 import {
 	Box,
 	Button,
 	Form,
 	SubmitButton,
 	TextField,
-} from 'components/primitives/index.js';
+} from '@/components/primitives/index.js';
 import { Formik } from 'formik';
 import React, {
 	forwardRef,
@@ -16,8 +16,8 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { styled } from 'stitches.config.js';
-import { groceries, GroceryCategory, hooks } from 'stores/groceries/index.js';
+import { styled } from '@/stitches.config.js';
+import { groceries, GroceryCategory, hooks } from '@/stores/groceries/index.js';
 import { GroceryDnDDrop } from './dndTypes.js';
 import { groceriesState } from './state.js';
 

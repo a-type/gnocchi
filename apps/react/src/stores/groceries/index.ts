@@ -5,7 +5,7 @@ import { parseIngredient } from '@aglio/conversion';
 import { Storage } from '@aglio/storage';
 import { createHooks } from '@aglio/storage-react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
-import { SECURE } from 'config.js';
+import { API_ORIGIN, SECURE } from '@/config.js';
 
 export type {
 	GroceryItem,
@@ -15,7 +15,7 @@ export type {
 
 const DEFAULT_CATEGORY = 'None';
 
-const syncOrigin = process.env.API_ORIGIN || 'localhost:3001';
+const syncOrigin = API_ORIGIN || 'localhost:3001';
 
 const _groceries = new Storage({
 	syncOptions: {

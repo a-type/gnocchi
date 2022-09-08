@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box } from 'components/primitives/primitives.js';
-import { LogoutButton } from 'components/sync/LogoutButton.js';
+import { Box } from '@/components/primitives/primitives.js';
+import { LogoutButton } from '@/components/sync/LogoutButton.js';
 
 export function NevermindPage() {
 	return (

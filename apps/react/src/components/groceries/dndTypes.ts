@@ -1,4 +1,4 @@
-import { GroceryItem } from 'stores/groceries/index.js';
+import { GroceryItem } from '@/stores/groceries/index.js';
 
 export type GroceryDnDDrop =
 	| {

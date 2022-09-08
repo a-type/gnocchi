@@ -28,5 +28,5 @@ export interface ReplicaInfoSpec extends ReplicaInfo {
 	// the authenticated client ID authorized
 	// to write to this replica
 	clientId: string;
-	lastSeenWallClockTime: number;
+	lastSeenWallClockTime: number | null;
 }

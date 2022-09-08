@@ -1,5 +1,5 @@
-import { Button, ButtonProps } from 'components/primitives/primitives.js';
-import { API_ORIGIN, SECURE } from 'config.js';
+import { Button, ButtonProps } from '@/components/primitives/primitives.js';
+import { API_ORIGIN, SECURE } from '@/config.js';
 import React, { ReactNode } from 'react';
 
 export function LogoutButton({ children, ...rest }: ButtonProps) {

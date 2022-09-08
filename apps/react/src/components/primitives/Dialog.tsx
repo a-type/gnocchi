@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
-import { keyframes, styled } from 'stitches.config.js';
+import { keyframes, styled } from '@/stitches.config.js';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { blackA, mauve } from '@radix-ui/colors';
 

@@ -36,10 +36,11 @@ export async function claimPlanInviteHandler(req: Request, res: Response) {
 	}
 
 	if (session.planId) {
-		return res.status(400).send('You already have a plan');
+		// TODO: end old plan
+		// TODO: cancel stripe subscription
 	}
 
-	const inviteId = req.body.inviteId;
+	const inviteId = req.params.inviteId;
 
 	const invite = await prisma.planInvitation.findUnique({
 		where: { id: inviteId },

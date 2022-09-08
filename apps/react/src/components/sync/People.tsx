@@ -1,9 +1,9 @@
 import { UserInfo } from '@aglio/storage-common';
-import { ErrorBoundary } from 'components/primitives/ErrorBoundary.js';
-import { Tooltip } from 'components/primitives/Tooltip.js';
+import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.js';
+import { Tooltip } from '@/components/primitives/Tooltip.js';
 import React from 'react';
-import { styled } from 'stitches.config.js';
-import { hooks } from 'stores/groceries/index.js';
+import { styled } from '@/stitches.config.js';
+import { hooks } from '@/stores/groceries/index.js';
 
 export function People() {
 	const peerIds = hooks.usePeerIds();
@@ -44,11 +44,11 @@ function PeerAvatar({ peerId }: { peerId: string }) {
 	}
 
 	return (
-		<Tooltip content={peer.profile?.name}>
-			<Avatar>
-				<AvatarContent user={peer} />
-			</Avatar>
-		</Tooltip>
+		// <Tooltip content={peer.profile?.name}>
+		<Avatar>
+			<AvatarContent user={peer} />
+		</Avatar>
+		// </Tooltip>
 	);
 }
 

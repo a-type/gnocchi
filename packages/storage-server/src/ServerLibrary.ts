@@ -184,7 +184,11 @@ export class ServerLibrary {
 
 		const newestOldestTimestamp = replicas
 			.map((r) => r.oldestOperationLogicalTime)
-			.reduce((a, b) => (a > b ? a : b), '');
+			.reduce((a, b) => (a && b && a > b ? a : b), '');
+
+		if (!newestOldestTimestamp) {
+			return;
+		}
 
 		// these are in forward chronological order
 		const ops = this.operations.getBefore(newestOldestTimestamp);
@@ -198,6 +202,7 @@ export class ServerLibrary {
 		for (const op of ops) {
 			const creator = replicaMap[op.replicaId];
 			const isBeforeCreatorsOldestHistory =
+				creator.oldestOperationLogicalTime &&
 				creator.oldestOperationLogicalTime > op.timestamp;
 			const isBeforeGlobalAck = globalAck > op.timestamp;
 			if (

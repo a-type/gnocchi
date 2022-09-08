@@ -1,4 +1,4 @@
-import { styled } from 'stitches.config.js';
+import { styled } from '@/stitches.config.js';
 import { useField } from 'formik';
 import React, {
 	ComponentProps,
@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 import { Button, Input, TextArea, TextAreaProps } from './primitives.js';
 import { Form as FormikForm } from 'formik';
-import useMergedRef from 'hooks/useMergedRef.js';
+import useMergedRef from '@/hooks/useMergedRef.js';
 
 export const FieldGroup = styled('div', {
 	display: 'flex',

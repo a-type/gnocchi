@@ -3,18 +3,18 @@ import {
 	HamburgerMenuIcon,
 	UpdateIcon,
 } from '@radix-ui/react-icons';
-import { Box, Button, Span } from 'components/primitives/index.js';
+import { Box, Button, Span } from '@/components/primitives/index.js';
 import {
 	Popover,
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
-} from 'components/primitives/Popover.js';
-import { API_ORIGIN, SECURE } from 'config.js';
-import { useAuth } from 'contexts/AuthContext.js';
+} from '@/components/primitives/Popover.js';
+import { useAuth } from '@/contexts/AuthContext.js';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { styled } from 'stitches.config.js';
-import { groceries } from 'stores/groceries/index.js';
+import { styled } from '@/stitches.config.js';
+import { groceries } from '@/stores/groceries/index.js';
+import { InviteLinkButton } from './InviteLinkButton.js';
 import { LoginButton } from './LoginButton.js';
 import { LogoutButton } from './LogoutButton.js';
 import { ManageSubscriptionButton } from './ManageSubscriptionButton.js';
@@ -99,6 +99,7 @@ function ActiveSyncMenu({ status }: { status: string }) {
 				<Box direction="column" gap="2">
 					<Span size="small">{status}</Span>
 					<ManageSubscriptionButton />
+					<InviteLinkButton />
 					<LogoutButton>Log out</LogoutButton>
 				</Box>
 			</PopoverContent>

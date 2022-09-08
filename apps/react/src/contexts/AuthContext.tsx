@@ -1,4 +1,4 @@
-import { API_ORIGIN, SECURE } from 'config.js';
+import { API_ORIGIN, SECURE } from '@/config.js';
 import React, {
 	createContext,
 	ReactNode,
