@@ -9,11 +9,13 @@ import {
 	StorageCollection,
 } from '@aglio/storage';
 import {
+	BasePresence,
 	CollectionIndexFilter,
 	CollectionIndexName,
 	StorageCollectionSchema,
 	StorageDocument,
 	StorageSchema,
+	UserInfo,
 } from '@aglio/storage-common';
 
 type QueryHookResult<T> = T;
@@ -80,15 +82,29 @@ type CapitalizedCollectionName<
 	}>,
 > = Capitalize<Extract<keyof Schema['collections'], string>>;
 
+type CreatedHooks<
+	Schema extends StorageSchema<{
+		[k: string]: StorageCollectionSchema<any, any, any>;
+	}>,
+	Profile,
+	Presence extends BasePresence,
+> = GeneratedHooks<Schema> & {
+	useWatch<T>(liveObject: T): T;
+	useSelf(): UserInfo<Profile, Presence>;
+	usePeerIds(): string[];
+	usePeer(peerId: string): UserInfo<Profile, Presence>;
+	useSyncStatus(): boolean;
+};
+
 export function createHooks<
 	Schema extends StorageSchema<{
 		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
+	Profile,
+	Presence extends BasePresence,
 >(
-	storage: Storage<Schema>,
-): GeneratedHooks<Schema> & {
-	useWatch<T>(liveObject: T): T;
-} {
+	storage: Storage<Schema, Profile, Presence>,
+): CreatedHooks<Schema, Profile, Presence> {
 	function useWatch(liveObject: any) {
 		return useSyncExternalStore(
 			(handler) => subscribe(liveObject, handler),
@@ -96,8 +112,45 @@ export function createHooks<
 		);
 	}
 
+	function useSelf() {
+		return useSyncExternalStore(
+			(callback) => storage.presence.subscribe('selfChanged', callback),
+			() => storage.presence.self,
+		);
+	}
+
+	function usePeerIds() {
+		return useSyncExternalStore(
+			(callback) => storage.presence.subscribe('peersChanged', callback),
+			() => storage.presence.peerIds,
+		);
+	}
+
+	function usePeer(peerId: string) {
+		return useSyncExternalStore(
+			(callback) =>
+				storage.presence.subscribe('peerChanged', (id, user) => {
+					if (id === peerId) {
+						callback();
+					}
+				}),
+			() => storage.presence.peers[peerId],
+		);
+	}
+
+	function useSyncStatus() {
+		return useSyncExternalStore(
+			(callback) => storage.sync.subscribe('onlineChange', callback),
+			() => storage.sync.active,
+		);
+	}
+
 	const hooks: Record<string, any> = {
 		useWatch,
+		useSelf,
+		usePeerIds,
+		usePeer,
+		useSyncStatus,
 	};
 
 	for (const name of Object.keys(storage.collections)) {
@@ -132,7 +185,5 @@ export function createHooks<
 			return data;
 		};
 	}
-	return hooks as GeneratedHooks<Schema> & {
-		useWatch<T>(liveObject: T): T;
-	};
+	return hooks as any;
 }

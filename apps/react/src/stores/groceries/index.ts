@@ -2,7 +2,7 @@ import cuid from 'cuid';
 import { generateKeyBetween } from 'fractional-indexing';
 import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
-import { storage } from '@aglio/storage';
+import { Storage } from '@aglio/storage';
 import { createHooks } from '@aglio/storage-react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { SECURE } from 'config.js';
@@ -17,12 +17,13 @@ const DEFAULT_CATEGORY = 'None';
 
 const syncOrigin = process.env.API_ORIGIN || 'localhost:3001';
 
-const _groceries = storage({
+const _groceries = new Storage({
 	syncOptions: {
 		host: `ws${SECURE ? 's' : ''}://${syncOrigin}`,
 	},
 	schema,
 	migrations,
+	initialPresence: {},
 });
 
 (window as any).stats = () => {

@@ -30,7 +30,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				gray80: '#616168',
 				gray90: '#42424a',
 				gray0: '#21212b',
-				grayBlend: 'rgba(0, 0, 10, 0.025)',
+				grayBlend: 'rgba(0, 0, 20, 0.025)',
 				darkBlend: 'rgba(30, 0, 0, 0.5)',
 				lightBlend: 'rgba(255, 250, 250, 0.5)',
 			},

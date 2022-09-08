@@ -7,7 +7,7 @@
 		"packages/*"
 	],
 	"scripts": {
-		"dev": "pnpm -r --if-present --parallel run dev",
+		"dev": "turbo run dev",
 		"build": "pnpm -r --if-present run build"
 	},
 	"repository": "https://github.com/a-type/aglio",

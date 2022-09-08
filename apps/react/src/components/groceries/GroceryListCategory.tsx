@@ -119,7 +119,7 @@ const CategoryContainer = styled('div', {
 	// p: '$2',
 	gap: '$1',
 	borderRadius: '$md',
-	backgroundColor: '$white',
+	backgroundColor: '$light',
 	transition: 'all 0.2s $springy',
 	mb: '$4',
 
@@ -129,12 +129,12 @@ const CategoryContainer = styled('div', {
 				backgroundColor: '$gray10',
 			},
 			false: {
-				backgroundColor: '$white',
+				backgroundColor: '$light',
 			},
 		},
 		isItemDragging: {
 			true: {
-				boxShadow: '0 0 0 2px $colors$gray30',
+				boxShadow: '0 0 0 1px $colors$gray30',
 			},
 			false: {},
 		},

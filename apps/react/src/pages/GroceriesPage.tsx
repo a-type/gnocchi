@@ -26,7 +26,7 @@ export function GroceriesPage() {
 					position: 'sticky',
 					top: 0,
 					zIndex: 1,
-					backgroundColor: '$white',
+					backgroundColor: '$light',
 					mb: '$6',
 				}}
 			>

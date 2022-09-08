@@ -2,12 +2,24 @@ import { Database } from 'better-sqlite3';
 import { ClientMessage } from '@aglio/storage-common';
 import { ServerLibraryManager } from './ServerLibrary.js';
 import { MessageSender } from './MessageSender.js';
+import { UserProfiles, UserProfileLoader } from './Profiles.js';
 
 export class ServerStorage {
-	private libraries = new ServerLibraryManager(this.db, this.sender);
+	private profileLoader;
+	private libraries;
 
-	constructor(private db: Database, private sender: MessageSender) {
+	constructor(
+		private db: Database,
+		private sender: MessageSender,
+		profiles: UserProfiles<any>,
+	) {
 		this.createSchema();
+		this.profileLoader = new UserProfileLoader(profiles);
+		this.libraries = new ServerLibraryManager(
+			this.db,
+			this.sender,
+			this.profileLoader,
+		);
 	}
 
 	receive = (libraryId: string, message: ClientMessage, clientId: string) => {

@@ -122,7 +122,7 @@ const ItemContainer = styled('div', {
 	flexDirection: 'row',
 	alignItems: 'center',
 	gap: '$2',
-	backgroundColor: '$white',
+	backgroundColor: '$light',
 	borderRadius: '$md',
 	padding: '$3',
 	position: 'relative',

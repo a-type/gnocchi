@@ -2,6 +2,7 @@
 
 import { DocumentBaseline } from './baseline.js';
 import { SyncOperation } from './operation.js';
+import { UserInfo } from './presence.js';
 
 export type HeartbeatMessage = {
 	type: 'heartbeat';
@@ -27,6 +28,7 @@ export type AckMessage = {
 // from connection metadata.
 export type OperationMessage = {
 	type: 'op';
+	replicaId: string;
 	op: SyncOperation;
 	oldestHistoryTimestamp: string;
 };
@@ -62,6 +64,11 @@ export type SyncResponseMessage = {
 	 * Update client on the global ack
 	 */
 	globalAckTimestamp: string;
+
+	/**
+	 * A map of connected clients' presences values
+	 */
+	peerPresence: Record<string, UserInfo<any, any>>;
 };
 
 export type SyncStep2Message = {
@@ -85,14 +92,39 @@ export type RebasesMessage = {
 	rebases: { collection: string; documentId: string; upTo: string }[];
 };
 
+export type PresenceUpdateMessage = {
+	type: 'presence-update';
+	/** The client's replica ID */
+	replicaId: string;
+	/** new presence value */
+	presence: any;
+};
+
+export type PresenceChangedMessage = {
+	type: 'presence-changed';
+	/** The client's replica ID */
+	replicaId: string;
+
+	userInfo: UserInfo<any, any>;
+};
+
+export type PresenceOfflineMessage = {
+	type: 'presence-offline';
+	userId: string;
+	replicaId: string;
+};
+
 export type ClientMessage =
 	| HeartbeatMessage
 	| SyncMessage
 	| SyncStep2Message
 	| OperationMessage
-	| AckMessage;
+	| AckMessage
+	| PresenceUpdateMessage;
 export type ServerMessage =
 	| HeartbeatResponseMessage
 	| SyncResponseMessage
 	| OperationRebroadcastMessage
-	| RebasesMessage;
+	| RebasesMessage
+	| PresenceChangedMessage
+	| PresenceOfflineMessage;

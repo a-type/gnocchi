@@ -18,6 +18,7 @@ import { groceries } from 'stores/groceries/index.js';
 import { LoginButton } from './LoginButton.js';
 import { LogoutButton } from './LogoutButton.js';
 import { ManageSubscriptionButton } from './ManageSubscriptionButton.js';
+import { People } from './People.js';
 
 export function SyncMenu() {
 	const { session, error, refetch, isSubscribed } = useAuth();
@@ -73,6 +74,7 @@ export function SyncMenu() {
 		<Container>
 			<ActiveSyncMenu status="Sync active" />
 			<UpdateIcon />
+			<People />
 		</Container>
 	);
 }

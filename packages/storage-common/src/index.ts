@@ -13,3 +13,4 @@ export {
 	createDefaultMigration,
 } from './migration.js';
 export type { Migration } from './migration.js';
+export type { UserInfo, BasePresence } from './presence.js';

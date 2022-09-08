@@ -14,6 +14,7 @@ import {
 	createLowerBoundIndexValue,
 	StorageSchema,
 	HeartbeatMessage,
+	PresenceUpdateMessage,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import cuid from 'cuid';
@@ -570,6 +571,15 @@ export class Meta {
 			ops: operations,
 			// don't send empty baselines
 			baselines: baselines.filter(Boolean),
+			replicaId: localReplicaInfo.id,
+		};
+	};
+
+	getPresenceUpdate = async (presence: any): Promise<PresenceUpdateMessage> => {
+		const localReplicaInfo = await this.getLocalReplicaInfo();
+		return {
+			type: 'presence-update',
+			presence,
 			replicaId: localReplicaInfo.id,
 		};
 	};

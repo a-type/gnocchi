@@ -3,6 +3,7 @@ import {
 	ClientMessage,
 	HeartbeatMessage,
 	OperationMessage,
+	PresenceUpdateMessage,
 	ReplicaInfo,
 	SERVER_REPLICA_ID,
 	SyncMessage,
@@ -15,16 +16,20 @@ import { MessageSender } from './MessageSender.js';
 import { OperationHistory } from './OperationHistory.js';
 import { ServerCollectionManager } from './ServerCollection.js';
 import { Baselines } from './Baselines.js';
+import { Presence } from './Presence.js';
+import { UserProfileLoader } from './Profiles.js';
 
 export class ServerLibrary {
 	private collections = new ServerCollectionManager(this.db, this.id);
 	private replicas = new ReplicaInfos(this.db, this.id);
 	private operations = new OperationHistory(this.db, this.id);
 	private baselines = new Baselines(this.db, this.id);
+	private presences = new Presence();
 
 	constructor(
 		private db: Database,
 		private sender: MessageSender,
+		private profiles: UserProfileLoader<any>,
 		public readonly id: string,
 	) {
 		this.setupServerReplica();
@@ -42,6 +47,8 @@ export class ServerLibrary {
 				return this.handleAck(message, clientId);
 			case 'heartbeat':
 				return this.handleHeartbeat(message, clientId);
+			case 'presence-update':
+				return this.handlePresenceUpdate(message, clientId);
 			default:
 				console.log('Unknown message type', (message as any).type);
 				break;
@@ -113,6 +120,7 @@ export class ServerLibrary {
 			})),
 			provideChangesSince: clientReplicaInfo.ackedLogicalTime,
 			globalAckTimestamp: this.replicas.getGlobalAck(),
+			peerPresence: this.presences.all(),
 		});
 	};
 
@@ -229,16 +237,50 @@ export class ServerLibrary {
 			type: 'heartbeat-response',
 		});
 	};
+
+	private handlePresenceUpdate = async (
+		message: PresenceUpdateMessage,
+		clientId: string,
+	) => {
+		this.presences.set(clientId, {
+			presence: message.presence,
+			replicaId: message.replicaId,
+			profile: await this.profiles.get(clientId),
+			id: clientId,
+		});
+		this.sender.broadcast(
+			this.id,
+			{
+				type: 'presence-changed',
+				replicaId: message.replicaId,
+				userInfo: {
+					id: clientId,
+					presence: message.presence,
+					profile: await this.profiles.get(clientId),
+					replicaId: message.replicaId,
+				},
+			},
+			// mirror back to the replica which sent it so it has profile
+			[],
+		);
+	};
 }
 
 export class ServerLibraryManager {
 	private cache = new Map<string, ServerLibrary>();
 
-	constructor(private db: Database, private sender: MessageSender) {}
+	constructor(
+		private db: Database,
+		private sender: MessageSender,
+		private profiles: UserProfileLoader<any>,
+	) {}
 
 	open = (id: string) => {
 		if (!this.cache.has(id)) {
-			this.cache.set(id, new ServerLibrary(this.db, this.sender, id));
+			this.cache.set(
+				id,
+				new ServerLibrary(this.db, this.sender, this.profiles, id),
+			);
 		}
 
 		return this.cache.get(id)!;

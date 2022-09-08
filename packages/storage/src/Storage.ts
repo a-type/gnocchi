@@ -4,6 +4,7 @@ import {
 	StorageSchema,
 	SyncResponseMessage,
 	Migration,
+	BasePresence,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import { initializeDatabases } from './databaseManagement.js';
@@ -13,11 +14,13 @@ import { WebsocketSync } from './Sync.js';
 import { StorageCollectionSchema } from '@aglio/storage-common';
 import { TEST_API } from './constants.js';
 import { Heartbeat } from './Heartbeat.js';
+import { PresenceManager } from './PresenceManager.js';
 
 export interface StorageOptions<
 	Schema extends StorageSchema<{
 		[key: string]: StorageCollectionSchema<any, any, any>;
 	}>,
+	Presence extends BasePresence,
 > {
 	schema: Schema;
 	migrations?: Migration[];
@@ -26,6 +29,7 @@ export interface StorageOptions<
 	};
 	/** Provide an explicit IDBFactory for non-browser environments */
 	indexedDB?: IDBFactory;
+	initialPresence: Presence;
 }
 
 type SchemaToCollections<
@@ -42,30 +46,36 @@ export class Storage<
 	Schema extends StorageSchema<{
 		[key: string]: StorageCollectionSchema<any, any, any>;
 	}>,
+	Profile = any,
+	Presence extends BasePresence = BasePresence,
 > {
-	// TODO: mapped type so collection identities are preserved
 	private _collections: SchemaToCollections<Schema> = {} as any;
 	private schema: Schema;
 	private _sync: WebsocketSync;
 	private _heartbeat: Heartbeat;
 	private meta: Meta;
 	private indexedDB: IDBFactory;
+	private _presence: PresenceManager<Profile, Presence>;
 
 	private _database: Promise<IDBDatabase>;
 	private _initializedPromise: Promise<void>;
+	private initialPresence: Presence;
 
-	constructor(options: StorageOptions<Schema>) {
+	constructor(options: StorageOptions<Schema, Presence>) {
 		this.schema = options.schema;
 		this._sync = new WebsocketSync({
 			...options.syncOptions,
 		});
 		this.indexedDB = options.indexedDB || window.indexedDB;
+		this.initialPresence = options.initialPresence;
 
 		this._sync.subscribe('onlineChange', this.handleOnlineChange);
 		this._sync.subscribe('message', this.handleSyncMessage);
 
 		// centralized storage for all stored operations
 		this.meta = new Meta(this._sync, options.indexedDB);
+
+		this._presence = new PresenceManager(this._sync, this.meta);
 
 		this._heartbeat = new Heartbeat({
 			sync: this._sync,
@@ -99,6 +109,10 @@ export class Storage<
 
 	get sync() {
 		return this._sync;
+	}
+
+	get presence() {
+		return this._presence;
 	}
 
 	private initialize = async () => {
@@ -198,6 +212,7 @@ export class Storage<
 				...sync,
 				schemaVersion: this.schema.version,
 			});
+			this.sync.send(await this.meta.getPresenceUpdate(this.initialPresence));
 			this._heartbeat.start();
 		}
 	};
@@ -229,6 +244,7 @@ export function storage<
 	Schema extends StorageSchema<{
 		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
->(options: StorageOptions<Schema>) {
+	Presence extends BasePresence,
+>(options: StorageOptions<Schema, Presence>) {
 	return new Storage(options);
 }

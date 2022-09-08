@@ -293,7 +293,10 @@ export class StorageCollection<
 	) => {
 		const key = this.queryCache.getKey('getAll', index, filters);
 		if (this.queryCache.has(key)) {
-			return this.queryCache.get(key)!;
+			return this.queryCache.get(key)! as LiveQuery<
+				Collection,
+				LiveDocument<StorageDocument<Collection>>[]
+			>;
 		}
 		const filter = filters?.filter;
 		const sort = filters?.sort;
@@ -463,6 +466,7 @@ export class StorageCollection<
 		// sync to network
 		this.sync.send({
 			type: 'op',
+			replicaId: operation.replicaId,
 			op: {
 				collection: operation.collection,
 				documentId: operation.documentId,
