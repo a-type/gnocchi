@@ -286,12 +286,14 @@ importers:
       '@types/react': ^18.0.17
       jsdom: ^20.0.0
       react: ^18.2.0
+      suspend-react: ^0.0.8
       typescript: ^4.7.4
       vitest: ^0.22.1
     dependencies:
       '@aglio/storage': link:../storage
       '@aglio/storage-common': link:../storage-common
       '@aglio/tools': link:../tools
+      suspend-react: 0.0.8_react@18.2.0
     devDependencies:
       '@types/react': 18.0.17
       jsdom: 20.0.0

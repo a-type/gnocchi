@@ -14,7 +14,8 @@
 	"dependencies": {
 		"@aglio/storage-common": "workspace:*",
 		"@aglio/storage": "workspace:*",
-		"@aglio/tools": "workspace:*"
+		"@aglio/tools": "workspace:*",
+		"suspend-react": "^0.0.8"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.17",
