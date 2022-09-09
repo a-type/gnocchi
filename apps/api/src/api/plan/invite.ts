@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getLoginSession, setLoginSession } from 'src/auth/index.js';
+import { getLoginSession, setLoginSession } from '@aglio/auth';
 import { prisma } from 'src/data/prisma.js';
 
 export async function createPlanInviteHandler(req: Request, res: Response) {
@@ -25,6 +25,24 @@ export async function createPlanInviteHandler(req: Request, res: Response) {
 	return res.status(200).json({
 		inviteId: invite.id,
 		expiresAt: invite.expiresAt,
+	});
+}
+
+export async function planInviteDetailsHandler(req: Request, res: Response) {
+	const inviteId = req.params.inviteId;
+
+	const invite = await prisma.planInvitation.findUnique({
+		where: {
+			id: inviteId,
+		},
+	});
+
+	if (!invite) {
+		return res.status(404).send('Invite not found');
+	}
+
+	return res.status(200).json({
+		inviterName: invite.inviterName,
 	});
 }
 

@@ -19,7 +19,10 @@
 		"@aglio/storage-common": "workspace:*",
 		"@aglio/storage-server": "workspace:*",
 		"@aglio/tools": "workspace:*",
+		"@aglio/auth": "workspace:*",
+		"@aglio/trpc": "workspace:*",
 		"@prisma/client": "^4.0.0",
+		"@trpc/server": "^9.27.2",
 		"@types/cors": "^2.8.12",
 		"@types/express-requests-logger": "^3.0.1",
 		"better-sqlite3": "^7.6.2",
@@ -33,7 +36,8 @@
 		"prisma": "^4.0.0",
 		"stripe": "^10.7.0",
 		"utf-8-validate": "^5.0.9",
-		"ws": "^8.8.1"
+		"ws": "^8.8.1",
+		"zod": "^3.19.0"
 	},
 	"devDependencies": {
 		"@types/better-sqlite3": "^7.6.0",

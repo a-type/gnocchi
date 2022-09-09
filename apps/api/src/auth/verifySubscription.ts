@@ -1,5 +1,5 @@
 import { prisma } from 'src/data/prisma.js';
-import { Session } from './session.js';
+import { Session } from '@aglio/auth';
 import { SubscriptionError as Message } from '@aglio/tools';
 import Stripe from 'stripe';
 

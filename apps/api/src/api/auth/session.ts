@@ -1,8 +1,7 @@
 import { SubscriptionError } from '@aglio/tools';
 import { Request, Response } from 'express';
-import { removeTokenCookie } from 'src/auth/cookies.js';
 import { getSubscriptionStatusError } from 'src/auth/verifySubscription.js';
-import { getLoginSession } from '../../auth/index.js';
+import { getLoginSession, removeTokenCookie } from '@aglio/auth';
 
 export default async function sessionHandler(req: Request, res: Response) {
 	const session = await getLoginSession(req);

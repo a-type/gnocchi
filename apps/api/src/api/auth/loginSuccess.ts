@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UI_ORIGIN } from 'src/config/deployedContext.js';
 import { URL } from 'url';
-import { getReturnToCookie, removeReturnToCookie } from '../../auth/cookies.js';
+import { getReturnToCookie, removeReturnToCookie } from '@aglio/auth';
 
 export default async function loginSuccessHandler(req: Request, res: Response) {
 	// read returnTo cookie to see if we have a redirect,

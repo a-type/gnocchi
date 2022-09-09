@@ -1,10 +1,9 @@
 import { Profile } from '../../../.generated/prisma/index.js';
-import { setLoginSession } from '../../../auth/index.js';
+import { setLoginSession, getInviteIdCookie } from '@aglio/auth';
 import { googleOauth } from '../../../auth/googleOauth.js';
 import { prisma } from '../../../data/prisma.js';
 import { assert } from '@aglio/tools';
 import { Request, Response } from 'express';
-import { getInviteIdCookie } from 'src/auth/cookies.js';
 
 export default async function googleCallbackHandler(
 	req: Request,

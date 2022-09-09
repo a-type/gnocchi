@@ -1,0 +1,15 @@
+{
+	"name": "@aglio/trpc",
+	"version": "0.0.1",
+	"private": true,
+	"main": "src/index.ts",
+	"type": "module",
+	"scripts": {},
+	"dependencies": {
+		"@aglio/tools": "workspace:*",
+		"@aglio/auth": "workspace:*",
+		"@trpc/server": "^9.27.2",
+		"zod": "^3.19.0"
+	},
+	"devDependencies": {}
+}

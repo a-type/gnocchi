@@ -1,16 +1,9 @@
-import { AuthProvider } from '@/contexts/AuthContext.js';
-import { ClaimInvitePage } from '@/pages/ClaimInvitePage.js';
-import { GroceriesPage } from '@/pages/GroceriesPage.js';
-import { NevermindPage } from '@/pages/NevermindPage.js';
-import { NotFoundPage } from '@/pages/NotFoundPage.js';
+import { globalCss } from '@/stitches.config.js';
 import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { globalCss } from '@/stitches.config.js';
-import { PageContent, PageRoot } from './components/layouts/index.js';
+import { App } from './App.js';
 import { attachToPwaEvents } from './pwaEventListener.js';
 import { register } from './serviceWorkerRegistration.js';
-import { Toaster } from 'react-hot-toast';
 
 globalCss({
 	'html, body': {
@@ -46,21 +39,7 @@ function main() {
 	const root = createRoot(document.getElementById('root')!);
 	root.render(
 		<StrictMode>
-			<BrowserRouter>
-				<AuthProvider>
-					<PageRoot>
-						<PageContent fullHeight noPadding flex={1}>
-							<Routes>
-								<Route path="/" element={<GroceriesPage />} />
-								<Route path="/claim/:inviteId" element={<ClaimInvitePage />} />
-								<Route path="/nevermind" element={<NevermindPage />} />
-								<Route path="*" element={<NotFoundPage />} />
-							</Routes>
-							<Toaster />
-						</PageContent>
-					</PageRoot>
-				</AuthProvider>
-			</BrowserRouter>
+			<App />
 		</StrictMode>,
 	);
 

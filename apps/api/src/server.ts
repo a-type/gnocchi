@@ -4,6 +4,8 @@ import { attachSocketServer } from './socketServer.js';
 import { createServer } from 'http';
 import cors from 'cors';
 import apiRouter from './api/index.js';
+import * as trpcExpress from '@trpc/server/adapters/express/dist/trpc-server-adapters-express.cjs.js';
+import { middleware } from './rpc/index.js';
 
 const app = express();
 const server = createServer(app);
@@ -38,6 +40,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api', apiRouter);
+
+app.use('/trpc', middleware);
 
 server.listen(3001, () => {
 	console.log('http://localhost:3001');

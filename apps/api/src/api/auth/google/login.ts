@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { setInviteIdCookie, setReturnToCookie } from '../../../auth/cookies.js';
+import { setInviteIdCookie, setReturnToCookie } from '@aglio/auth';
 import { googleOauth } from '../../../auth/googleOauth.js';
 
 export default async function googleLoginHandler(req: Request, res: Response) {

@@ -38,7 +38,7 @@ model Account {
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
   profileId         String   @map("profile_id")
-  profile           Profile  @relation(fields: [profileId], references: [id])
+  profile           Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")

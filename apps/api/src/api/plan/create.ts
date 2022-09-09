@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getLoginSession, setLoginSession } from 'src/auth/index.js';
+import { getLoginSession, setLoginSession } from '@aglio/auth';
 import { prisma } from 'src/data/prisma.js';
 
 export async function createPlanHandler(req: Request, res: Response) {

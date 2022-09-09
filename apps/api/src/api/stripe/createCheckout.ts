@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getLoginSession } from 'src/auth/index.js';
+import { getLoginSession } from '@aglio/auth';
 import { UI_ORIGIN } from 'src/config/deployedContext.js';
 import { stripe } from 'src/data/stripe.js';
 

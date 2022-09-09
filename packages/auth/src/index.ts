@@ -5,6 +5,19 @@ import { Session } from './session.js';
 import jwt from 'jsonwebtoken';
 import { Response } from 'express';
 
+export type { Session } from './session.js';
+export {
+	getInviteIdCookie,
+	getReturnToCookie,
+	getTokenCookie,
+	setInviteIdCookie,
+	setReturnToCookie,
+	setTokenCookie,
+	removeInviteIdCookie,
+	removeReturnToCookie,
+	removeTokenCookie,
+} from './cookies.js';
+
 const SESSION_SECRET = process.env.SESSION_SECRET;
 assert(SESSION_SECRET, 'SESSION_SECRET environment variable must be set');
 
