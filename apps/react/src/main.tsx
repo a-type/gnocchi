@@ -10,6 +10,7 @@ import { globalCss } from '@/stitches.config.js';
 import { PageContent, PageRoot } from './components/layouts/index.js';
 import { attachToPwaEvents } from './pwaEventListener.js';
 import { register } from './serviceWorkerRegistration.js';
+import { Toaster } from 'react-hot-toast';
 
 globalCss({
 	'html, body': {
@@ -55,6 +56,7 @@ function main() {
 								<Route path="/nevermind" element={<NevermindPage />} />
 								<Route path="*" element={<NotFoundPage />} />
 							</Routes>
+							<Toaster />
 						</PageContent>
 					</PageRoot>
 				</AuthProvider>
