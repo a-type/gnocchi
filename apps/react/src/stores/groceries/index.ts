@@ -171,7 +171,7 @@ export const mutations = {
 					unit: parsed.unit,
 					food: parsed.food,
 					sortKey: generateKeyBetween(lastCategoryItem?.sortKey ?? null, null),
-					inputs: [],
+					inputs: [{ text: line }],
 				});
 			}
 			assert(itemId);

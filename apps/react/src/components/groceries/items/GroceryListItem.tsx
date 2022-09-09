@@ -307,7 +307,7 @@ function RecentPeople({ item }: { item: GroceryItem }) {
 	return (
 		<PeopleStack>
 			{people.map((person) => (
-				<PersonAvatar person={person} />
+				<PersonAvatar key={person.id} person={person} />
 			))}
 		</PeopleStack>
 	);

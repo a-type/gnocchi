@@ -258,6 +258,10 @@ function createLiveArray<T>({
 				return () => Object.getOwnPropertyNames(ref.updated ?? ref.current);
 			}
 
+			if (key === 'length') {
+				return (ref.updated ?? ref.current).length;
+			}
+
 			const value = ref.updated
 				? Reflect.get(ref.updated, name)
 				: Reflect.get(ref.current, name);
