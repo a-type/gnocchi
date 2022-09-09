@@ -15,7 +15,7 @@ export type {
 
 declare module '@aglio/storage' {
 	export interface Presence {
-		foo: string;
+		lastInteractedItem: string | null;
 	}
 
 	export interface Profile {
@@ -56,6 +56,9 @@ export const mutations = {
 		item.$update({
 			purchasedQuantity: quantity,
 		});
+		groceries.presence.update({
+			lastInteractedItem: item.id,
+		});
 	},
 	setItemPosition: (
 		item: GroceryItem,
@@ -73,26 +76,36 @@ export const mutations = {
 				categoryId,
 			});
 		}
+
+		groceries.presence.update({
+			lastInteractedItem: item.id,
+		});
 	},
-	toggleItemPurchased: (item: GroceryItem) => {
+	toggleItemPurchased: async (item: GroceryItem) => {
 		if (item.purchasedQuantity >= item.totalQuantity) {
-			return _groceries.get('items').update(item.id, {
+			await _groceries.get('items').update(item.id, {
 				purchasedQuantity: 0,
 			});
 		} else {
-			return _groceries.get('items').update(item.id, {
+			await _groceries.get('items').update(item.id, {
 				purchasedQuantity: item.totalQuantity,
 			});
 		}
+		groceries.presence.update({
+			lastInteractedItem: item.id,
+		});
 	},
 	updateItem: (
 		item: GroceryItem,
 		updates: Omit<Partial<GroceryItem>, 'inputs'>,
 	) => {
-		return _groceries.get('items').update(item.id, updates);
+		_groceries.get('items').update(item.id, updates);
+		groceries.presence.update({
+			lastInteractedItem: item.id,
+		});
 	},
-	setItemCategory: (item: GroceryItem, categoryId: string) => {
-		return Promise.all([
+	setItemCategory: async (item: GroceryItem, categoryId: string) => {
+		await Promise.all([
 			_groceries.get('items').update(item.id, {
 				categoryId,
 			}),
@@ -101,6 +114,9 @@ export const mutations = {
 				categoryId,
 			}),
 		]);
+		groceries.presence.update({
+			lastInteractedItem: item.id,
+		});
 	},
 	createCategory: (name: string) => {
 		return _groceries.get('categories').create({

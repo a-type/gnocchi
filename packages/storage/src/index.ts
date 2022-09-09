@@ -9,3 +9,7 @@ export type { LiveDocument } from './reactives/index.js';
 export interface Presence {}
 
 export interface Profile {}
+
+import type { UserInfo as BaseUserInfo } from '@aglio/storage-common';
+
+export type UserInfo = BaseUserInfo<Profile, Presence>;

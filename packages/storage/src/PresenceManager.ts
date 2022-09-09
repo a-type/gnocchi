@@ -24,6 +24,12 @@ export class PresenceManager<Profile, Presence> extends EventSubscriber<{
 		return this._peerIds;
 	}
 
+	get everyone() {
+		const everyone = { ...this._peers };
+		everyone[this.self.id] = this.self;
+		return everyone;
+	}
+
 	constructor(private sync: Sync, private meta: Meta) {
 		super();
 		this.sync.subscribe('message', this.onMessage);
@@ -63,11 +69,12 @@ export class PresenceManager<Profile, Presence> extends EventSubscriber<{
 		}
 	};
 
-	setPresence = (replicaId: string, presence: Presence) => {
-		this.sync.send({
-			type: 'presence-update',
-			presence,
-			replicaId,
-		});
+	update = async (presence: Partial<Presence>) => {
+		this.sync.send(
+			await this.meta.getPresenceUpdate({
+				...this.self.presence,
+				...presence,
+			}),
+		);
 	};
 }

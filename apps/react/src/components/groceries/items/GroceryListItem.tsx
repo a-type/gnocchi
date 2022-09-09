@@ -28,6 +28,9 @@ import { Checkbox } from '../../primitives/Checkbox.js';
 import { groceriesState } from '../state.js';
 import { ItemQuantityNumber } from './ItemQuantityNumber.js';
 import { groceries, hooks, GroceryItem } from '@/stores/groceries/index.js';
+import { UserInfo } from '@aglio/storage-common';
+import { Presence, Profile } from '@aglio/storage';
+import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -95,6 +98,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					{!showOnlyInput && <ItemQuantityNumber value={item.totalQuantity} />}
 					{displayString}
 				</Box>
+				<RecentPeople item={item} />
 				<GroceryListItemMenu item={item} {...menuProps} />
 			</ItemContainer>
 		);
@@ -292,3 +296,49 @@ const GroceryListItemMenu = memo(
 	),
 );
 GroceryListItemMenu.displayName = 'GroceryListItemMenu';
+
+function RecentPeople({ item }: { item: GroceryItem }) {
+	const people = usePeopleWhoLastEditedThis(item.id);
+
+	if (people.length === 0) {
+		return null;
+	}
+
+	return (
+		<PeopleStack>
+			{people.map((person) => (
+				<PersonAvatar person={person} />
+			))}
+		</PeopleStack>
+	);
+}
+
+const PeopleStack = styled('div', {
+	display: 'flex',
+	flexDirection: 'row',
+
+	'& > *': {
+		position: 'relative',
+		zIndex: 'var(--index)',
+		left: 'calc(var(--index) * -8px)',
+	},
+});
+
+function usePeopleWhoLastEditedThis(itemId: string) {
+	const [people, setPeople] = useState<UserInfo<Profile, Presence>[]>(() => {
+		return Object.values(groceries.presence.peers).filter(
+			(p) => p.presence.lastInteractedItem === itemId,
+		);
+	});
+	useEffect(() => {
+		return groceries.presence.subscribe('peersChanged', () => {
+			setPeople(
+				Object.values(groceries.presence.peers).filter(
+					(p) => p.presence.lastInteractedItem === itemId,
+				),
+			);
+		});
+	}, []);
+
+	return people;
+}
