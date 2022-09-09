@@ -1,9 +1,4 @@
-export interface BasePresence {}
-
-export interface UserInfo<
-	Profile,
-	Presence extends BasePresence = BasePresence,
-> {
+export interface UserInfo<Profile, Presence> {
 	/**
 	 * This is the ID representing the user who is utilizing a
 	 * replica client to connect to the storage network.

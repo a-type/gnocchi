@@ -2,7 +2,7 @@ import cuid from 'cuid';
 import { generateKeyBetween } from 'fractional-indexing';
 import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
-import { Storage } from '@aglio/storage';
+import { Presence, Storage } from '@aglio/storage';
 import { createHooks } from '@aglio/storage-react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
@@ -12,6 +12,18 @@ export type {
 	GroceryCategory,
 	FoodCategoryLookup,
 } from './schema/schema.js';
+
+declare module '@aglio/storage' {
+	export interface Presence {
+		foo: string;
+	}
+
+	export interface Profile {
+		id: string;
+		name: string;
+		imageUrl?: string;
+	}
+}
 
 const DEFAULT_CATEGORY = 'None';
 
@@ -23,7 +35,7 @@ const _groceries = new Storage({
 	},
 	schema,
 	migrations,
-	initialPresence: {},
+	initialPresence: {} as Presence,
 });
 
 (window as any).stats = () => {

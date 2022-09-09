@@ -5,3 +5,7 @@ export { collection, schema } from '@aglio/storage-common';
 export type { StorageDocument } from '@aglio/storage-common';
 export { subscribe, LiveQuery } from './reactives/index.js';
 export type { LiveDocument } from './reactives/index.js';
+
+export interface Presence {}
+
+export interface Profile {}

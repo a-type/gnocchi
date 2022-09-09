@@ -1,9 +1,9 @@
 import { UserInfo } from '@aglio/storage-common';
 import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.js';
-import { Tooltip } from '@/components/primitives/Tooltip.js';
 import React from 'react';
 import { styled } from '@/stitches.config.js';
 import { hooks } from '@/stores/groceries/index.js';
+import { Presence, Profile } from '@aglio/storage';
 
 export function People() {
 	const peerIds = hooks.usePeerIds();
@@ -87,7 +87,7 @@ const Initials = styled('div', {
 	borderRadius: '100%',
 });
 
-function AvatarContent({ user }: { user: UserInfo<any, any> }) {
+function AvatarContent({ user }: { user: UserInfo<Profile, Presence> }) {
 	if (user.profile?.imageUrl) {
 		return (
 			<AvatarImage

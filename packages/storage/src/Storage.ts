@@ -4,7 +4,6 @@ import {
 	StorageSchema,
 	SyncResponseMessage,
 	Migration,
-	BasePresence,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import { initializeDatabases } from './databaseManagement.js';
@@ -15,12 +14,13 @@ import { StorageCollectionSchema } from '@aglio/storage-common';
 import { TEST_API } from './constants.js';
 import { Heartbeat } from './Heartbeat.js';
 import { PresenceManager } from './PresenceManager.js';
+import type { Presence, Profile } from './index.js';
 
 export interface StorageOptions<
 	Schema extends StorageSchema<{
 		[key: string]: StorageCollectionSchema<any, any, any>;
 	}>,
-	Presence extends BasePresence,
+	TPresence extends Presence,
 > {
 	schema: Schema;
 	migrations?: Migration[];
@@ -29,7 +29,7 @@ export interface StorageOptions<
 	};
 	/** Provide an explicit IDBFactory for non-browser environments */
 	indexedDB?: IDBFactory;
-	initialPresence: Presence;
+	initialPresence: TPresence;
 }
 
 type SchemaToCollections<
@@ -46,8 +46,8 @@ export class Storage<
 	Schema extends StorageSchema<{
 		[key: string]: StorageCollectionSchema<any, any, any>;
 	}>,
-	Profile = any,
-	Presence extends BasePresence = BasePresence,
+	TProfile extends Profile = Profile,
+	TPresence extends Presence = Presence,
 > {
 	private _collections: SchemaToCollections<Schema> = {} as any;
 	private schema: Schema;
@@ -55,13 +55,13 @@ export class Storage<
 	private _heartbeat: Heartbeat;
 	private meta: Meta;
 	private indexedDB: IDBFactory;
-	private _presence: PresenceManager<Profile, Presence>;
+	private _presence: PresenceManager<TProfile, TPresence>;
 
 	private _database: Promise<IDBDatabase>;
 	private _initializedPromise: Promise<void>;
-	private initialPresence: Presence;
+	private initialPresence: TPresence;
 
-	constructor(options: StorageOptions<Schema, Presence>) {
+	constructor(options: StorageOptions<Schema, TPresence>) {
 		this.schema = options.schema;
 		this._sync = new WebsocketSync({
 			...options.syncOptions,
@@ -244,7 +244,7 @@ export function storage<
 	Schema extends StorageSchema<{
 		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
-	Presence extends BasePresence,
->(options: StorageOptions<Schema, Presence>) {
-	return new Storage(options);
+	TPresence extends Presence = Presence,
+>(options: StorageOptions<Schema, TPresence>) {
+	return new Storage<Schema, Profile, Presence>(options);
 }
