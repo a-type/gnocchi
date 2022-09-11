@@ -31,14 +31,14 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				gray90: '#42424a',
 				gray0: '#21212b',
 				grayBlend: 'rgba(0, 0, 20, 0.025)',
-				darkBlend: 'rgba(30, 0, 0, 0.5)',
+				darkBlend: 'rgba(30, 0, 0, 0.75)',
 				lightBlend: 'rgba(255, 250, 250, 0.5)',
 				overlay: 'rgba(0, 0, 0, 0.025)',
 			},
 			fonts: {
-				sans: '"Open Sans", sans-serif',
-				serif: '"Lora", serif',
-				title: '"Kufam", sans-serif',
+				sans: '"Inter", sans-serif',
+				serif: '"Domine", serif',
+				title: '"Domine", sans-serif',
 			},
 			fontSizes: {
 				xs: '0.75rem',
@@ -97,6 +97,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 			},
 			transitions: {
 				springy: 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+				default: 'ease',
 			},
 			zIndices: {
 				menu: 100,

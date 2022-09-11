@@ -80,7 +80,7 @@ export function GroceryListCategory({
 			{...rest}
 		>
 			<SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
-				<H2 size="micro" css={{ m: '$2' }}>
+				<H2 size="micro" css={{ m: '$2', fontFamily: '$sans' }}>
 					{category.name}
 				</H2>
 				{items?.map((item, index) => {

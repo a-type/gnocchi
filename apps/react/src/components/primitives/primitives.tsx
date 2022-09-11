@@ -264,6 +264,8 @@ export const Button = styled('button', {
 	cursor: 'pointer',
 	fontWeight: 'bold',
 	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
 
 	// expanding background
 	position: 'relative',
@@ -350,9 +352,14 @@ const headingCommonStyles = {
 };
 export const H1 = styled('h1', {
 	...headingCommonStyles,
+	fontFamily: '$title',
+	fontSize: '$3xl',
 });
 export const H2 = styled('h2', {
 	...headingCommonStyles,
+
+	fontSize: '$lg',
+	fontFamily: '$title',
 
 	variants: {
 		size: {
@@ -374,6 +381,28 @@ export const H5 = styled('h5', {
 });
 
 export const Span = styled('span', {
+	variants: {
+		size: {
+			xs: {
+				fontSize: '$xs',
+			},
+			small: {
+				fontSize: '$sm',
+			},
+			sm: {
+				fontSize: '$sm',
+			},
+			default: {
+				fontSize: '$md',
+			},
+		},
+	},
+	defaultVariants: {
+		size: 'default',
+	},
+});
+
+export const P = styled('p', {
 	variants: {
 		size: {
 			xs: {

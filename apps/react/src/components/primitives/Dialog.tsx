@@ -13,6 +13,11 @@ const contentShow = keyframes({
 	'100%': { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
 });
 
+const contentShowMobile = keyframes({
+	'0%': { opacity: 0, transform: 'translate(0, 2%) scale(.96)' },
+	'100%': { opacity: 1, transform: 'translate(0, 0) scale(1)' },
+});
+
 const StyledOverlay = styled(DialogPrimitive.Overlay, {
 	backgroundColor: '$overlay',
 	position: 'fixed',
@@ -66,15 +71,19 @@ const StyledContentContent = styled(DialogPrimitive.Content, {
 	padding: '$6',
 	border: '1px solid $black',
 	borderBottom: 'none',
+	overflowY: 'auto',
+	maxHeight: 'inherit',
+	position: 'relative',
+
+	'@media (prefers-reduced-motion: no-preference)': {
+		animation: `${contentShowMobile} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
+	},
 
 	'@sm': {
 		borderRadius: '$lg',
 		borderBottom: '1px solid $black',
 	},
 
-	'@media (prefers-reduced-motion: no-preference)': {
-		animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
-	},
 	// '&:focus': { outline: 'none' },
 });
 
@@ -95,9 +104,9 @@ function Content({
 
 const StyledTitle = styled(DialogPrimitive.Title, {
 	margin: 0,
-	fontWeight: 500,
+	fontFamily: '$title',
 	color: '$lemonDarker',
-	fontSize: 17,
+	fontSize: '$3xl',
 });
 
 const StyledDescription = styled(DialogPrimitive.Description, {

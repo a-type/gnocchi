@@ -5,6 +5,17 @@ import { App } from './App.js';
 import { attachToPwaEvents } from './pwaEventListener.js';
 
 globalCss({
+	'@font-face': [
+		{
+			fontFamily: 'Domine',
+			src: `url('/fonts/Domine-VariableFont_wght.ttf')`,
+		},
+		{
+			fontFamily: 'Inter',
+			src: `url('/fonts/Inter-VariableFont_slnt,wght.ttf')`,
+		},
+	],
+
 	'html, body': {
 		margin: 0,
 		padding: 0,
