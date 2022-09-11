@@ -20,7 +20,7 @@ async function generateLink() {
 		if (navigator.share) {
 			navigator.share({
 				title: 'Join my grocery list',
-				text: link,
+				text: 'Join my grocery list',
 				url: link,
 			});
 		} else {
