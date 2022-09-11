@@ -37,9 +37,6 @@ export function GroceriesPage() {
 						transform: 'translate(-50%, 50%)',
 					}}
 				/>
-				<Dialog defaultOpen>
-					<DialogContent>Test dialog</DialogContent>
-				</Dialog>
 			</Box>
 			<Suspense>
 				<GroceryList />
