@@ -3,7 +3,6 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.js';
 import { attachToPwaEvents } from './pwaEventListener.js';
-import { register } from './serviceWorkerRegistration.js';
 
 globalCss({
 	'html, body': {
@@ -42,10 +41,7 @@ function main() {
 			<App />
 		</StrictMode>,
 	);
-
-	attachToPwaEvents();
 }
 
 main();
-
-register();
+attachToPwaEvents();

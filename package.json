@@ -8,7 +8,7 @@
 	],
 	"scripts": {
 		"dev": "turbo run dev",
-		"build": "pnpm -r --if-present run build",
+		"build": "turbo run build",
 		"prisma": "pnpm --filter @aglio/api run prisma"
 	},
 	"repository": "https://github.com/a-type/aglio",
