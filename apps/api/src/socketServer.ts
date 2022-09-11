@@ -52,6 +52,24 @@ export function attachSocketServer(server: Server) {
 
 			storage.receive(identity.planId, data, identity.userId);
 		});
+
+		ws.on('close', () => {
+			const replicaId = connectionToReplicaIdMap.get(ws);
+			if (!replicaId) {
+				console.warn('Unknown replica disconnected');
+				return;
+			}
+
+			storage.remove(identity.planId, replicaId);
+
+			if (replicaToConnectionMap.has(replicaId)) {
+				replicaToConnectionMap.delete(replicaId);
+			}
+			const connections = libraryToConnectionMap.get(libraryId);
+			if (connections) {
+				connections.splice(connections.indexOf(ws), 1);
+			}
+		});
 	});
 
 	server.on('upgrade', async (req, socket, head) => {

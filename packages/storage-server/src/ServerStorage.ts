@@ -22,6 +22,9 @@ export class ServerStorage {
 		);
 	}
 
+	/**
+	 * Call with any message from any replica
+	 */
 	receive = (libraryId: string, message: ClientMessage, clientId: string) => {
 		// TODO: validate clientID access to replicaID on the message.
 
@@ -29,6 +32,14 @@ export class ServerStorage {
 
 		const library = this.libraries.open(libraryId);
 		library.receive(message, clientId);
+	};
+
+	/**
+	 * Call when a replica disconnects from the server
+	 */
+	remove = (libraryId: string, replicaId: string) => {
+		const library = this.libraries.open(libraryId);
+		library.remove(replicaId);
 	};
 
 	private createSchema = () => {

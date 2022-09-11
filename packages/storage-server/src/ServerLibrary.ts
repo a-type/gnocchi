@@ -33,6 +33,7 @@ export class ServerLibrary {
 		public readonly id: string,
 	) {
 		this.setupServerReplica();
+		this.presences.on('lost', this.onPresenceLost);
 	}
 
 	receive = (message: ClientMessage, clientId: string) => {
@@ -53,6 +54,10 @@ export class ServerLibrary {
 				console.log('Unknown message type', (message as any).type);
 				break;
 		}
+	};
+
+	remove = (replicaId: string) => {
+		this.presences.removeReplica(replicaId);
 	};
 
 	private handleOperation = (message: OperationMessage) => {
@@ -268,6 +273,15 @@ export class ServerLibrary {
 			// mirror back to the replica which sent it so it has profile
 			[],
 		);
+	};
+
+	private onPresenceLost = (replicaId: string, userId: string) => {
+		console.log('User disconnected from all replicas:', userId);
+		this.sender.broadcast(this.id, {
+			type: 'presence-offline',
+			replicaId,
+			userId,
+		});
 	};
 }
 

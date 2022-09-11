@@ -62,6 +62,10 @@ export class PresenceManager<Profile, Presence> extends EventSubscriber<{
 					this.emit('peerChanged', id, presence);
 				}
 			}
+		} else if (message.type === 'presence-offline') {
+			peerIdsSet.delete(message.userId);
+			delete this._peers[message.userId];
+			peersChanged = true;
 		}
 		if (peersChanged) {
 			this._peerIds = Array.from(peerIdsSet);
