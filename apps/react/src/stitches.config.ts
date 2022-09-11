@@ -33,6 +33,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				grayBlend: 'rgba(0, 0, 20, 0.025)',
 				darkBlend: 'rgba(30, 0, 0, 0.5)',
 				lightBlend: 'rgba(255, 250, 250, 0.5)',
+				overlay: 'rgba(0, 0, 0, 0.025)',
 			},
 			fonts: {
 				sans: '"Open Sans", sans-serif',

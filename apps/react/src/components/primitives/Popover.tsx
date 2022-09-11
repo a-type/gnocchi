@@ -1,7 +1,15 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover';
-import React, { ComponentPropsWithoutRef } from 'react';
+import React, {
+	Ref,
+	RefObject,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from 'react';
 
 import { keyframes, styled } from '@/stitches.config.js';
+import { createPortal } from 'react-dom';
+import { BlurLayer } from './BlurLayer.js';
 
 const slideUpAndFade = keyframes({
 	'0%': { opacity: 0, transform: 'translateY(2px)' },
@@ -30,6 +38,7 @@ const StyledContent = styled(PopoverPrimitive.Content, {
 	zIndex: '$menu',
 	boxShadow:
 		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
+	border: '1px solid $black',
 	'@media (prefers-reduced-motion: no-preference)': {
 		animationDuration: '400ms',
 		animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -49,6 +58,7 @@ const StyledContent = styled(PopoverPrimitive.Content, {
 
 const StyledArrow = styled(PopoverPrimitive.Arrow, {
 	fill: 'white',
+	stroke: '$black',
 });
 
 const StyledClose = styled(PopoverPrimitive.Close, {
@@ -71,16 +81,29 @@ const StyledClose = styled(PopoverPrimitive.Close, {
 
 // Exports
 export const Popover = PopoverPrimitive.Root;
-export const PopoverTrigger = PopoverPrimitive.Trigger;
+export const PopoverTrigger = styled(PopoverPrimitive.Trigger, {
+	'&[data-state="open"]': {
+		position: 'relative',
+		zIndex: 'calc($menu + 1)',
+	},
+});
 export const PopoverArrow = StyledArrow;
 export const PopoverClose = StyledClose;
 
-export const PopoverContent = (
-	props: ComponentPropsWithoutRef<typeof StyledContent>,
-) => {
+export const PopoverContent = ({
+	children,
+	...props
+}: PopoverPrimitive.PopperContentProps) => {
+	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
 	return (
 		<PopoverPrimitive.Portal>
-			<StyledContent {...props} />
+			<>
+				<StyledContent {...props} ref={contentRef}>
+					{children}
+				</StyledContent>
+				{contentElement &&
+					createPortal(<BlurLayer />, contentElement.parentElement!)}
+			</>
 		</PopoverPrimitive.Portal>
 	);
 };

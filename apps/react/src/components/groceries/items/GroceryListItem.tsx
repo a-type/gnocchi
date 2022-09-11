@@ -274,6 +274,10 @@ const GroceryListItemMenu = memo(
 									event.preventDefault();
 								}
 							}}
+							css={{
+								position: 'relative',
+								zIndex: menuOpen ? 'calc($menu + 1)' : 'initial',
+							}}
 							{...props}
 							ref={ref}
 						>

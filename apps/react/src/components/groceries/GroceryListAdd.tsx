@@ -37,6 +37,7 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 				initialValues={{ text: '' }}
 				onSubmit={async ({ text }, { resetForm }) => {
 					const lines = text.split('\n').filter(Boolean);
+					if (!lines.length) return;
 					await groceries.addItems(lines);
 					resetForm();
 

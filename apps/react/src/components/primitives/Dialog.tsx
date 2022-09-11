@@ -1,7 +1,7 @@
-import React, { ComponentPropsWithoutRef, ReactNode } from 'react';
+import React, { ComponentPropsWithoutRef, ReactNode, useState } from 'react';
 import { keyframes, styled } from '@/stitches.config.js';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { blackA, mauve } from '@radix-ui/colors';
+import { BlurLayer } from './BlurLayer.js';
 
 const overlayShow = keyframes({
 	'0%': { opacity: 0 },
@@ -14,33 +14,68 @@ const contentShow = keyframes({
 });
 
 const StyledOverlay = styled(DialogPrimitive.Overlay, {
-	backgroundColor: blackA.blackA9,
+	backgroundColor: '$overlay',
 	position: 'fixed',
 	inset: 0,
-	zIndex: 10000,
+	zIndex: 'calc($dialog - 1)',
 	'@media (prefers-reduced-motion: no-preference)': {
 		animation: `${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
 	},
 });
 
-const StyledContent = styled(DialogPrimitive.Content, {
+const StyledBlurLayer = styled(BlurLayer, {
+	$$spread: '60px',
+
+	'@sm': {
+		$$spread: '240px',
+	},
+});
+
+const StyledContent = styled('div', {
+	zIndex: '$dialog',
+	position: 'fixed',
+
+	'&:focus, &:focus-visible': {
+		outline: 'none',
+	},
+
+	bottom: 0,
+	left: 0,
+	right: 0,
+	height: 'min-content',
+	maxHeight: '85vh',
+
+	transform: 'translate(0, 0, 0)',
+
+	'@sm': {
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: '90vw',
+		maxWidth: '450px',
+		maxHeight: '85vh',
+	},
+});
+const StyledContentContent = styled(DialogPrimitive.Content, {
 	backgroundColor: 'white',
-	borderRadius: 6,
-	zIndex: 10001,
+	borderTopLeftRadius: '$lg',
+	borderTopRightRadius: '$lg',
+	zIndex: '$dialog',
 	boxShadow:
 		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
-	position: 'fixed',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: '90vw',
-	maxWidth: '450px',
-	maxHeight: '85vh',
-	padding: 25,
+	padding: '$6',
+	border: '1px solid $black',
+	borderBottom: 'none',
+
+	'@sm': {
+		borderRadius: '$lg',
+		borderBottom: '1px solid $black',
+	},
+
 	'@media (prefers-reduced-motion: no-preference)': {
 		animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
 	},
-	'&:focus': { outline: 'none' },
+	// '&:focus': { outline: 'none' },
 });
 
 function Content({
@@ -50,7 +85,10 @@ function Content({
 	return (
 		<DialogPrimitive.Portal>
 			<StyledOverlay />
-			<StyledContent {...props}>{children}</StyledContent>
+			<StyledContent {...props}>
+				<StyledBlurLayer />
+				<StyledContentContent>{children}</StyledContentContent>
+			</StyledContent>
 		</DialogPrimitive.Portal>
 	);
 }
@@ -58,13 +96,13 @@ function Content({
 const StyledTitle = styled(DialogPrimitive.Title, {
 	margin: 0,
 	fontWeight: 500,
-	color: mauve.mauve12,
+	color: '$lemonDarker',
 	fontSize: 17,
 });
 
 const StyledDescription = styled(DialogPrimitive.Description, {
 	margin: '10px 0 20px',
-	color: mauve.mauve11,
+	color: '$gray80',
 	fontSize: 15,
 	lineHeight: 1.5,
 });

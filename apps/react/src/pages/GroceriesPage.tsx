@@ -6,9 +6,7 @@ import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js'
 import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
 import { SyncMenu } from '@/components/sync/SyncMenu.js';
 import React, { Suspense } from 'react';
-import { css } from '@/stitches.config.js';
-
-const floatingButton = css();
+import { Dialog, DialogContent } from '@/components/primitives/Dialog.js';
 
 export function GroceriesPage() {
 	return (
@@ -39,6 +37,9 @@ export function GroceriesPage() {
 						transform: 'translate(-50%, 50%)',
 					}}
 				/>
+				<Dialog defaultOpen>
+					<DialogContent>Test dialog</DialogContent>
+				</Dialog>
 			</Box>
 			<Suspense>
 				<GroceryList />
