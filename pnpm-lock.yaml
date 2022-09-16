@@ -139,6 +139,7 @@ importers:
       '@types/pluralize': ^0.0.29
       '@types/react': ^18.0.14
       '@types/react-dom': ^18.0.5
+      '@use-gesture/react': ^10.2.20
       '@vitejs/plugin-react': ^2.1.0
       convert-units: ^3.0.0-beta.4
       copy-to-clipboard: ^3.3.2
@@ -193,6 +194,7 @@ importers:
       '@trpc/client': 9.27.2_@trpc+server@9.27.2
       '@trpc/react': 9.27.2_e7pohnznr4qdgpqc5x4q3pmfcu
       '@trpc/server': 9.27.2
+      '@use-gesture/react': 10.2.20_react@18.2.0
       convert-units: 3.0.0-beta.4
       copy-to-clipboard: 3.3.2
       csstype: 3.1.0
@@ -2544,6 +2546,19 @@ packages:
     resolution: {integrity: sha512-6YOoWjruKj1uLf3INHH7D3qTXwFfEsg1kf3c0uDdSBJwfa/llkwIjrAGV7j7mVgGNbzTQ3HiHKKDXl6bJPD97w==}
     dependencies:
       '@types/node': 18.7.13
+    dev: false
+
+  /@use-gesture/core/10.2.20:
+    resolution: {integrity: sha512-4lFhHc8so4yIHkBEs641DnEsBxPyhJ5GEjB4PURFDH4p/FcZriH6w99knZgI63zN/MBFfylMyb8+PDuj6RIXKQ==}
+    dev: false
+
+  /@use-gesture/react/10.2.20_react@18.2.0:
+    resolution: {integrity: sha512-KnJq9ZSqprWA6uNhWTUHZqTCh+rfa0j8ehTzqeBhktUPrmTj7yVOBvEQ/vSFU/7d72cGgWSsJ0f5T6GQCHXnvg==}
+    peerDependencies:
+      react: '>= 16.8.0'
+    dependencies:
+      '@use-gesture/core': 10.2.20
+      react: 18.2.0
     dev: false
 
   /@vitejs/plugin-react/2.1.0_vite@3.1.0:

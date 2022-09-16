@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { styled } from '@/stitches.config.js';
 
-const BaseBox = styled('div', {
+const BaseBox = styled('div' as const, {
 	display: 'flex',
 	variants: {
 		w: {
@@ -184,7 +184,7 @@ const BaseBox = styled('div', {
 });
 export const Box = BaseBox;
 
-export const Input = styled('input', {
+export const Input = styled('input' as const, {
 	px: '$3',
 	py: '$2',
 	fontSize: '$md',
@@ -245,13 +245,13 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 	},
 );
 
-const StyledTextArea = styled('textarea', {
+const StyledTextArea = styled('textarea' as const, {
 	fontFamily: 'inherit',
 	fontSize: 'inherit',
 	overflow: 'hidden',
 });
 
-export const Button = styled('button', {
+export const Button = styled('button' as const, {
 	$$bg: 'transparent',
 
 	background: '$$bg',
@@ -350,12 +350,12 @@ export type ButtonProps = ComponentProps<typeof Button>;
 const headingCommonStyles = {
 	mt: 0,
 };
-export const H1 = styled('h1', {
+export const H1 = styled('h1' as const, {
 	...headingCommonStyles,
 	fontFamily: '$title',
 	fontSize: '$3xl',
 });
-export const H2 = styled('h2', {
+export const H2 = styled('h2' as const, {
 	...headingCommonStyles,
 
 	fontSize: '$lg',
@@ -370,17 +370,17 @@ export const H2 = styled('h2', {
 		},
 	},
 });
-export const H3 = styled('h3', {
+export const H3 = styled('h3' as const, {
 	...headingCommonStyles,
 });
-export const H4 = styled('h4', {
+export const H4 = styled('h4' as const, {
 	...headingCommonStyles,
 });
 export const H5 = styled('h5', {
 	...headingCommonStyles,
 });
 
-export const Span = styled('span', {
+export const Span = styled('span' as const, {
 	variants: {
 		size: {
 			xs: {
@@ -402,7 +402,7 @@ export const Span = styled('span', {
 	},
 });
 
-export const P = styled('p', {
+export const P = styled('p' as const, {
 	variants: {
 		size: {
 			xs: {

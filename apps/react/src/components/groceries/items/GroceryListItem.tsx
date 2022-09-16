@@ -31,6 +31,7 @@ import { groceries, hooks, GroceryItem } from '@/stores/groceries/index.js';
 import { UserInfo } from '@aglio/storage-common';
 import { Presence, Profile } from '@aglio/storage';
 import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
+import { CategoryPicker } from './CategoryPicker.js';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -99,6 +100,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					{displayString}
 				</Box>
 				<RecentPeople item={item} />
+				<CategoryPicker item={item} />
 				<GroceryListItemMenu item={item} {...menuProps} />
 			</ItemContainer>
 		);
@@ -121,7 +123,7 @@ function useDidQuantityJustChange(item: GroceryItem) {
 	return didQuantityChange;
 }
 
-const ItemContainer = styled('div', {
+const ItemContainer = styled('div' as const, {
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'center',
