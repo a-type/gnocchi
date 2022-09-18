@@ -9,18 +9,56 @@ import {
 } from '../../primitives/Popover.js';
 import { PopoverAnchor } from '@radix-ui/react-popover';
 import { animated, SpringValue, useSpring } from '@react-spring/web';
-import { GroceryItem, hooks } from '@/stores/groceries/index.js';
+import {
+	GroceryCategory,
+	GroceryItem,
+	hooks,
+} from '@/stores/groceries/index.js';
 import { useAnimationFrame } from '@/hooks/useAnimationFrame.js';
+import { Dialog, DialogContent } from '@/components/primitives/Dialog.js';
+import { NewCategoryForm } from '../NewCategoryForm.js';
 
 const SCROLL_DEADZONE = 20;
 const SCROLL_MAX = 100;
 const SCROLL_MULTIPLIER = 0.5;
+const ITEM_HEIGHT = 32;
+
+function scrollPositionToCategory(
+	scrollPosition: number,
+	categories: GroceryCategory[],
+) {
+	const totalWrapHeight = (categories.length + 1) * ITEM_HEIGHT;
+	let adjustedScrollPosition = scrollPosition;
+	// add total list length to value until it's positive
+	while (adjustedScrollPosition < 0) {
+		adjustedScrollPosition += totalWrapHeight;
+	}
+	let rawIndex = Math.floor(adjustedScrollPosition / ITEM_HEIGHT);
+	// the item at categories.length is "New Category"
+	// after that it wraps around
+	const realIndex = rawIndex % (categories.length + 1);
+	if (realIndex >= categories.length) {
+		return 'new';
+	}
+	return categories[realIndex].id;
+}
 
 export function CategoryPicker({ item }: { item: GroceryItem }) {
 	hooks.useWatch(item);
-	const [open, setOpen] = useState(false);
+	const [state, setState] = useState<
+		'idle' | 'scrubbing' | 'picking' | 'create'
+	>('idle');
 
+	const viewRef = useRef<HTMLDivElement>(null);
 	const isScrubbingRef = useRef(false);
+
+	const categories = hooks.useAllCategories();
+	const itemCategoryIndex = categories.findIndex(
+		(category) => category.id === item.categoryId,
+	);
+	const startingOffset = itemCategoryIndex * ITEM_HEIGHT;
+	const totalWrapHeight = (categories.length + 1) * ITEM_HEIGHT;
+	const height = Math.min(100, Math.max(categories.length * ITEM_HEIGHT, 400));
 
 	const setCategory = useCallback(
 		(categoryId: string) => {
@@ -30,29 +68,77 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 	);
 
 	const [{ offset }, spring] = useSpring(() => ({
-		offset: 0,
+		offset: startingOffset,
 	}));
 
 	const gestureOffsetRef = useRef(0);
 
+	const [scrubbedSelection, setScrubbedSelection] = useState<string | null>(
+		null,
+	);
+
+	// scrolling of the viewport
 	useAnimationFrame(
 		(deltaTime) => {
-			if (gestureOffsetRef.current) {
-				console.log(gestureOffsetRef.current);
-				spring.start({ offset: offset.get() - gestureOffsetRef.current });
+			if (gestureOffsetRef.current && isScrubbingRef.current) {
+				const scrollPosition = offset.get();
+				spring.start({ offset: scrollPosition - gestureOffsetRef.current });
+				setScrubbedSelection(
+					scrollPositionToCategory(scrollPosition + height / 2, categories),
+				);
 			}
 		},
-		[spring],
+		[spring, offset, height],
 	);
+	// looping positions of items happens whenever the viewport is visible
+	useAnimationFrame(() => {
+		const container = viewRef.current;
+		if (!container) return;
+
+		const categoryElements = container.querySelectorAll(
+			'[data-category-index]',
+		);
+
+		if (isScrubbingRef.current) {
+			const scrollPosition = offset.get();
+			const windowStart = scrollPosition;
+			const windowEnd = scrollPosition + height;
+			// find any categories which are no longer visible and move them into view
+			for (let i = 0; i < categoryElements.length; i++) {
+				const categoryElement = categoryElements[i] as HTMLElement;
+				const visibleTop = categoryElement.offsetTop;
+				const topCssValue = parseInt(categoryElement.style.top) || 0;
+				if (visibleTop > windowEnd) {
+					categoryElement.style.setProperty(
+						'top',
+						`${topCssValue - totalWrapHeight}px`,
+					);
+				} else if (visibleTop + ITEM_HEIGHT < windowStart) {
+					categoryElement.style.setProperty(
+						'top',
+						`${topCssValue + totalWrapHeight}px`,
+					);
+				}
+			}
+		} else {
+			categoryElements.forEach((categoryElement) => {
+				(categoryElement as HTMLElement).style.removeProperty('top');
+			});
+		}
+	}, [height, offset, totalWrapHeight]);
 
 	const bind = g.useGesture({
 		onDragStart: () => {
-			setOpen(true);
+			setState('scrubbing');
+			spring.set({
+				offset: startingOffset + height / 2,
+			});
 		},
 		onDrag: (state: { offset: [number, number] }) => {
-			isScrubbingRef.current = true;
 			if (Math.abs(state.offset[1]) > SCROLL_DEADZONE) {
+				isScrubbingRef.current = true;
 				gestureOffsetRef.current =
+					-1 *
 					SCROLL_MULTIPLIER *
 					Math.max(-SCROLL_MAX, Math.min(state.offset[1], SCROLL_MAX));
 			} else {
@@ -62,33 +148,107 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 		onDragEnd: ({ tap }: { tap: boolean }) => {
 			isScrubbingRef.current = false;
 			gestureOffsetRef.current = 0;
-			spring.start({ offset: 0 });
 			if (!tap) {
-				setOpen(false);
+				// select highlighted value and close
+				if (scrubbedSelection === 'new') {
+					setState('create');
+				} else if (scrubbedSelection) {
+					setCategory(scrubbedSelection);
+					setState('idle');
+				} else {
+					setState('idle');
+				}
+			} else {
+				setState('picking');
 			}
+			setScrubbedSelection(null);
 		},
 	}) as () => any;
 
+	const onCreateCategory = ({ id }: { id: string }) => {
+		item.$update({ categoryId: id });
+		setState('idle');
+	};
+
 	return (
-		<Popover
-			open={open}
-			onOpenChange={(val) => {
-				if (isScrubbingRef.current) return;
-				setOpen(val);
-			}}
-		>
-			<PopoverAnchor asChild>
-				<Trigger {...bind()} />
-			</PopoverAnchor>
-			<PopoverContent side="left" sideOffset={2}>
-				<PopoverArrow />
-				<LoopingCategoryList
-					offset={offset}
-					value={item.categoryId}
-					onChange={setCategory}
-				/>
-			</PopoverContent>
-		</Popover>
+		<>
+			<Popover
+				open={state !== 'idle' && state !== 'create'}
+				onOpenChange={(val) => {
+					if (isScrubbingRef.current) return;
+					setState(val ? 'picking' : 'idle');
+				}}
+			>
+				<PopoverAnchor asChild>
+					<Trigger {...bind()} />
+				</PopoverAnchor>
+				<PopoverContent side="left" sideOffset={2}>
+					<PopoverArrow />
+					<LoopingWindow
+						css={{ height, overflowY: state === 'picking' ? 'auto' : 'hidden' }}
+					>
+						<LoopingView
+							ref={viewRef}
+							style={{
+								transform: offset.to((o) => {
+									if (isScrubbingRef.current) {
+										return `translateY(${-o}px)`;
+									}
+									return 'none';
+								}),
+							}}
+						>
+							{categories.map((category, index) => (
+								<CategoryItem
+									key={category.id}
+									data-category-index={index}
+									onClick={() => setCategory(category.id)}
+									selected={category.id === item.categoryId}
+									css={{
+										backgroundColor:
+											category.id === scrubbedSelection
+												? 'rgba(0,0,0,0.1)'
+												: 'transparent',
+										transform:
+											category.id === scrubbedSelection
+												? `scale(1)`
+												: `scale(0.9)`,
+									}}
+								>
+									{category.name}
+								</CategoryItem>
+							))}
+							<CategoryItem
+								key="new"
+								data-category-index={categories.length}
+								onClick={() => {
+									setState('create');
+								}}
+								selected={false}
+								css={{
+									backgroundColor:
+										'new' === scrubbedSelection
+											? 'rgba(0,0,0,0.1)'
+											: 'transparent',
+
+									transform:
+										'new' === scrubbedSelection ? `scale(1)` : `scale(0.9)`,
+								}}
+							>
+								Create new category
+							</CategoryItem>
+						</LoopingView>
+					</LoopingWindow>
+				</PopoverContent>
+			</Popover>
+			<CreateCategory
+				onCreate={onCreateCategory}
+				open={state === 'create'}
+				onOpenChange={(v) => {
+					if (!v) setState('idle');
+				}}
+			/>
+		</>
 	);
 }
 
@@ -96,54 +256,49 @@ const Trigger = styled(RowSpacingIcon, {
 	touchAction: 'none',
 });
 
-function LoopingCategoryList({
-	offset,
-	value,
-	onChange,
-}: {
-	offset: SpringValue<number>;
-	value: string;
-	onChange: (value: string) => void;
-}) {
-	const categories = hooks.useAllCategories();
-
-	const height = Math.min(600, Math.max(categories.length * 40, 200));
-
-	return (
-		<LoopingWindow css={{ height }}>
-			<LoopingView
-				style={{ transform: offset.to((o) => `translateY(${o}px)`) }}
-			>
-				{categories.map((category) => (
-					<CategoryItem
-						onClick={() => onChange(category.id)}
-						selected={category.id === value}
-					>
-						{category.name}
-					</CategoryItem>
-				))}
-			</LoopingView>
-		</LoopingWindow>
-	);
-}
-
 const LoopingWindow = styled('div' as const, {
 	overflow: 'hidden',
 });
 
-const LoopingView = styled(animated.div, {});
+const LoopingView = styled(animated.div, {
+	position: 'relative',
+});
 
 const CategoryItem = styled('div' as const, {
-	height: 40,
+	height: ITEM_HEIGHT,
 	display: 'flex',
 	flexDirection: 'column',
 	justifyContent: 'center',
+	position: 'relative',
+	borderRadius: '$sm',
+	padding: '$1 $2',
+
+	transition: 'transform 0.2s ease-out, background-color 0.2s ease-out',
 
 	variants: {
 		selected: {
 			true: {
-				backgroundColor: '$lemonLighter',
+				color: '$lemonDark',
 			},
 		},
 	},
 });
+
+const SelectorArrow = styled(PopoverArrow, {});
+
+function CreateCategory({
+	onCreate,
+	...rest
+}: {
+	onCreate: (category: { id: string }) => void;
+	open: boolean;
+	onOpenChange: (v: boolean) => void;
+}) {
+	return (
+		<Dialog {...rest}>
+			<DialogContent>
+				<NewCategoryForm onDone={onCreate} />
+			</DialogContent>
+		</Dialog>
+	);
+}
