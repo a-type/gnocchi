@@ -191,6 +191,7 @@ export class Storage<
 			type: 'sync-step2',
 			...sync2,
 		});
+		await this.meta.updateLastSynced();
 	};
 
 	private handleRebases = async (message: RebasesMessage) => {

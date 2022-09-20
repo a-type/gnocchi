@@ -27,6 +27,7 @@ type LocalReplicaInfo = {
 	type: 'localReplicaInfo';
 	id: string;
 	ackedLogicalTime: string | null;
+	lastSyncedLogicalTime: string | null;
 };
 type AckInfo = {
 	type: 'ack';
@@ -163,6 +164,7 @@ export class Meta {
 				type: 'localReplicaInfo',
 				id: replicaId,
 				ackedLogicalTime: null,
+				lastSyncedLogicalTime: null,
 			};
 			const transaction = db.transaction('info', 'readwrite');
 			const store = transaction.objectStore('info');
@@ -291,7 +293,17 @@ export class Meta {
 
 	getAllOperationsFromReplica = async (
 		replicaId: string,
-		{ from, to }: { from?: string | null; to?: string | null },
+		{
+			from,
+			to,
+			before,
+			after,
+		}: {
+			from?: string | null;
+			to?: string | null;
+			before?: string | null;
+			after?: string | null;
+		},
 	) => {
 		const db = await this.db;
 		const transaction = db.transaction('operations', 'readonly');
@@ -299,13 +311,15 @@ export class Meta {
 		const index = store.index('replicaId_timestamp');
 
 		// similar start/end range semantics to iterateOverAllOperationsForDocument
-		const start = from
-			? createCompoundIndexValue(replicaId, from)
+		const initiator = from || after;
+		const start = initiator
+			? createCompoundIndexValue(replicaId, initiator)
 			: createLowerBoundIndexValue(replicaId);
-		const end = to
-			? createCompoundIndexValue(replicaId, to)
+		const terminator = before || to;
+		const end = terminator
+			? createCompoundIndexValue(replicaId, terminator)
 			: createUpperBoundIndexValue(replicaId);
-		// range ends are open if a from/to was not specified
+		// range ends are open if a from/to was not specified. before/after are exclusive.
 		const range = IDBKeyRange.bound(start, end, !from, !to);
 
 		const request = index.openCursor(range, 'next');
@@ -372,7 +386,14 @@ export class Meta {
 
 	insertLocalOperation = async (item: SyncOperation) => {
 		this.insertOperation(item);
-		return this.addLocalHistoryItem(item.id, item.timestamp);
+		const oldestHistoryTimestamp = await this.addLocalHistoryItem(
+			item.id,
+			item.timestamp,
+		);
+
+		this.tryAutonomousRebase(oldestHistoryTimestamp);
+
+		return oldestHistoryTimestamp;
 	};
 
 	/**
@@ -527,9 +548,6 @@ export class Meta {
 		});
 	};
 
-	/**
-	 * Pulls all local operations the server has not seen.
-	 */
 	getSync = async (): Promise<Pick<SyncMessage, 'timestamp' | 'replicaId'>> => {
 		const localReplicaInfo = await this.getLocalReplicaInfo();
 		const schema = this.cachedSchema;
@@ -543,6 +561,9 @@ export class Meta {
 		};
 	};
 
+	/**
+	 * Pulls all local operations the server has not seen.
+	 */
 	getSyncStep2 = async (
 		provideChangesSince: SyncResponseMessage['provideChangesSince'],
 	): Promise<Omit<SyncStep2Message, 'type'>> => {
@@ -556,7 +577,7 @@ export class Meta {
 		const operations = await this.getAllOperationsFromReplica(
 			localReplicaInfo.id,
 			{
-				from: provideChangesSince,
+				after: provideChangesSince,
 			},
 		);
 		// for now we just send every baseline for every
@@ -575,6 +596,15 @@ export class Meta {
 		};
 	};
 
+	updateLastSynced = async () => {
+		if (!this.cachedSchema) {
+			throw new Error('Cannot update last synced time before schema is loaded');
+		}
+		return this.updateLocalReplicaInfo({
+			lastSyncedLogicalTime: this.sync.time.now(this.cachedSchema.version),
+		});
+	};
+
 	getPresenceUpdate = async (presence: any): Promise<PresenceUpdateMessage> => {
 		const localReplicaInfo = await this.getLocalReplicaInfo();
 		return {
@@ -589,6 +619,64 @@ export class Meta {
 		operation: SyncOperation,
 	): T | undefined => {
 		return applyPatch(doc, operation.patch);
+	};
+
+	/**
+	 * Determines if the local client can do independent rebases.
+	 * This is only the case if the client has never synced
+	 * with a server (entirely offline mode)
+	 *
+	 * TODO:
+	 * This might be able to be expanded in the future, I feel
+	 * like there's some combination of "history is all my changes"
+	 * plus global ack which could allow squashing operations for
+	 * single objects.
+	 */
+	private async canAutonomouslyRebase() {
+		return !(await this.getLocalReplicaInfo()).lastSyncedLogicalTime;
+	}
+
+	/**
+	 * Attempt to autonomously rebase local documents without server intervention.
+	 * This can currently only happen for a client who has never synced before.
+	 * The goal is to allow local-only clients to compress their history to exactly
+	 * their undo stack.
+	 */
+	private tryAutonomousRebase = async (oldestHistoryTimestamp: string) => {
+		if (!(await this.canAutonomouslyRebase())) {
+			return;
+		}
+
+		const localInfo = await this.getLocalReplicaInfo();
+
+		// find all operations before the oldest history timestamp
+		const priorOperations = await this.getAllOperationsFromReplica(
+			localInfo.id,
+			{
+				before: oldestHistoryTimestamp,
+			},
+		);
+
+		if (!priorOperations.length) {
+			return;
+		}
+
+		// gather all collection+documentId pairs affected
+		const toRebase: Record<string, Set<string>> = {};
+		for (const op of priorOperations) {
+			if (!toRebase[op.collection]) {
+				toRebase[op.collection] = new Set();
+			}
+			toRebase[op.collection].add(op.documentId);
+		}
+		const lastOperation = priorOperations[priorOperations.length - 1];
+
+		// rebase each affected document
+		for (const collection of Object.keys(toRebase)) {
+			for (const documentId of toRebase[collection]) {
+				await this.rebase(collection, documentId, lastOperation.timestamp);
+			}
+		}
 	};
 
 	rebase = async (collection: string, documentId: string, upTo: string) => {
