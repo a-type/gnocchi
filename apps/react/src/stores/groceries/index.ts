@@ -155,12 +155,14 @@ export const mutations = {
 				// TODO: findOne with a sort order applied to get just
 				// the last item
 				const categoryItems = await _groceries.get('items').getAll({
-					where: 'categoryId',
-					equals: categoryId,
+					where: 'categoryId_sortKey',
+					match: {
+						categoryId,
+					},
+					order: 'desc',
+					// TODO: when limits exist, limit to 1
 				}).resolved;
-				const lastCategoryItem = categoryItems?.sort((a, b) =>
-					a.sortKey < b.sortKey ? -1 : 1,
-				)[0];
+				const lastCategoryItem = categoryItems[0];
 
 				await _groceries.get('items').create({
 					id: cuid(),

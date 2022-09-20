@@ -33,6 +33,8 @@ import { Presence, Profile } from '@aglio/storage';
 import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
 import { CategoryPicker } from './CategoryPicker.js';
 
+const DEBUG_SORT = false;
+
 export interface GroceryListItemProps {
 	className?: string;
 	item: GroceryItem;
@@ -98,6 +100,9 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				<Box direction="row" gap={1} flex={1}>
 					{!showOnlyInput && <ItemQuantityNumber value={item.totalQuantity} />}
 					{displayString}
+					{DEBUG_SORT && (
+						<span style={{ marginLeft: '1ch' }}>{item.sortKey}</span>
+					)}
 				</Box>
 				<RecentPeople item={item} />
 				<CategoryPicker item={item} />
