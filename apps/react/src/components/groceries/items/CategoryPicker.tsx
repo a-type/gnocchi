@@ -297,7 +297,7 @@ function CreateCategory({
 	return (
 		<Dialog {...rest}>
 			<DialogContent>
-				<NewCategoryForm onDone={onCreate} />
+				<NewCategoryForm onDone={onCreate} autoFocus />
 			</DialogContent>
 		</Dialog>
 	);

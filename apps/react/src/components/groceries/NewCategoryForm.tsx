@@ -28,6 +28,7 @@ export function NewCategoryForm({
 							autoFocusDelay={autoFocus ? 100 : undefined}
 							name="name"
 							css={{ flex: 1 }}
+							autoComplete="off"
 						/>
 						<SubmitButton>Add</SubmitButton>
 					</Box>
