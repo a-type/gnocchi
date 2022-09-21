@@ -57,7 +57,10 @@ export function initializeDatabases<Schema extends StorageSchema<any>>({
 					// apply new indexes
 					for (const newIndex of migration.addedIndexes[collection] || []) {
 						const unique = newIndex.unique;
-						store.createIndex(newIndex.name, newIndex.name, { unique });
+						store.createIndex(newIndex.name, newIndex.name, {
+							unique,
+							multiEntry: newIndex.multiEntry,
+						});
 					}
 					// remove old indexes
 					for (const oldIndex of migration.removedIndexes[collection] || []) {
