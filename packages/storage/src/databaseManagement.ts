@@ -44,7 +44,7 @@ export function initializeDatabases<Schema extends StorageSchema<any>>({
 			for (const migration of toRun as Migration[]) {
 				for (const newCollection of migration.addedCollections) {
 					db.createObjectStore(newCollection, {
-						keyPath: collections[newCollection].primaryKey,
+						keyPath: migration.newSchema.collections[newCollection].primaryKey,
 						autoIncrement: false,
 					});
 				}

@@ -1,0 +1,22 @@
+{
+	"name": "@aglio/prisma",
+	"version": "0.0.1",
+	"private": true,
+	"main": "index.ts",
+	"type": "module",
+	"scripts": {
+		"prisma": "prisma",
+		"postinstall": "prisma generate",
+		"create-migration": "prisma migrate dev"
+	},
+	"prisma": {
+		"seed": "ts-node-esm prisma/seed.ts"
+	},
+	"dependencies": {
+		"@prisma/client": "^4.3.1",
+		"prisma": "^4.3.1"
+	},
+	"devDependencies": {
+		"ts-node": "^10.9.1"
+	}
+}

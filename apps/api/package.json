@@ -6,14 +6,10 @@
 	"type": "module",
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
-		"prestart": "prisma migrate deploy",
+		"prestart": "cd ../../packages/prisma && prisma migrate deploy",
 		"start": "pnpm prestart && tsx ./src/server.ts",
 		"start:local": "env-cmd pnpm start",
-		"build": "tsc --build tsconfig.json",
-		"gen": "prisma generate",
-		"postinstall": "prisma generate",
-		"create-migration": "prisma migrate dev",
-		"prisma": "prisma"
+		"build": "tsc --build tsconfig.json"
 	},
 	"dependencies": {
 		"@aglio/storage-common": "workspace:*",
@@ -21,6 +17,7 @@
 		"@aglio/tools": "workspace:*",
 		"@aglio/auth": "workspace:*",
 		"@aglio/trpc": "workspace:*",
+		"@aglio/prisma": "workspace:*",
 		"@prisma/client": "^4.0.0",
 		"@trpc/server": "^9.27.2",
 		"@types/cors": "^2.8.12",

@@ -618,6 +618,7 @@ export class Meta {
 		doc: T,
 		operation: SyncOperation,
 	): T | undefined => {
+		if (!doc) return doc;
 		return applyPatch(doc, operation.patch);
 	};
 

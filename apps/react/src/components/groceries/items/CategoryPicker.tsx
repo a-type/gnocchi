@@ -10,6 +10,7 @@ import {
 import { PopoverAnchor } from '@radix-ui/react-popover';
 import { animated, SpringValue, useSpring } from '@react-spring/web';
 import {
+	groceries,
 	GroceryCategory,
 	GroceryItem,
 	hooks,
@@ -62,7 +63,7 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 
 	const setCategory = useCallback(
 		(categoryId: string) => {
-			item.$update({ categoryId });
+			groceries.setItemCategory(item, categoryId);
 		},
 		[item],
 	);

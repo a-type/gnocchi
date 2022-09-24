@@ -16,7 +16,15 @@
 		"jsx": "react-jsx",
 		"downlevelIteration": true,
 		"experimentalDecorators": true,
-		"isolatedModules": true
+		"isolatedModules": true,
+		"declarationMap": true,
+		"declaration": true,
+		"preserveSymlinks": true,
+		"paths": {
+			"@trpc/server/*": [
+				"./node_modules/.pnpm/@trpc+server@9.27.2/node_modules/@trpc/server"
+			]
+		}
 	},
 	"exclude": ["node_modules", "**/*/dist"],
 	"references": [
@@ -43,6 +51,9 @@
 		},
 		{
 			"path": "./packages/trpc"
+		},
+		{
+			"path": "./packages/prisma"
 		}
 	]
 }

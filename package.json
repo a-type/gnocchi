@@ -9,7 +9,7 @@
 	"scripts": {
 		"dev": "turbo run dev",
 		"build": "turbo run build",
-		"prisma": "pnpm --filter @aglio/api run prisma"
+		"prisma": "pnpm --filter @aglio/prisma run prisma"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",

@@ -1,6 +1,6 @@
 import { createRouter } from './common.js';
 import * as z from 'zod';
-import { prisma } from 'src/data/prisma.js';
+import { prisma } from '@aglio/prisma';
 import { TRPCError } from '@trpc/server';
 
 export const invitesRouter = createRouter().query('details', {

@@ -216,6 +216,8 @@ export function migrate<
 		allCollections: Object.keys(newSchema.collections),
 		changedCollections,
 		addedCollections,
+		oldSchema,
+		newSchema,
 	};
 }
 
@@ -227,6 +229,8 @@ export interface MigrationIndexDescription {
 
 export interface Migration {
 	version: number;
+	oldSchema: StorageSchema<any>;
+	newSchema: StorageSchema<any>;
 	migrate: (engine: MigrationEngine) => Promise<void>;
 	addedCollections: string[];
 	removedCollections: string[];

@@ -4,8 +4,8 @@ import { attachSocketServer } from './socketServer.js';
 import { createServer } from 'http';
 import cors from 'cors';
 import apiRouter from './api/index.js';
-import * as trpcExpress from '@trpc/server/adapters/express/dist/trpc-server-adapters-express.cjs.js';
 import { middleware } from './rpc/index.js';
+import { productAdminSetup } from './tasks/productAdminSetup.js';
 
 const app = express();
 const server = createServer(app);
@@ -48,3 +48,5 @@ server.listen(3001, () => {
 });
 
 attachSocketServer(server);
+
+productAdminSetup();
