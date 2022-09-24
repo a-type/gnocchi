@@ -7,6 +7,8 @@ import { createHooks } from '@aglio/storage-react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
+import { TRPCClientError } from '@trpc/client';
+import { toast } from 'react-hot-toast';
 
 export type {
 	GroceryItem,
@@ -149,7 +151,10 @@ export const mutations = {
 			});
 		}
 	},
-	addItems: async (lines: string[]) => {
+	addItems: async (
+		lines: string[],
+		sourceInfo?: { url?: string; title: string },
+	) => {
 		if (!lines.length) return;
 		const defaultCategory = await _groceries.get('categories').upsert({
 			id: DEFAULT_CATEGORY,
@@ -208,10 +213,42 @@ export const mutations = {
 					unit: parsed.unit,
 					food: parsed.food,
 					sortKey: generateKeyBetween(lastCategoryItem?.sortKey ?? null, null),
-					inputs: [{ text: line }],
+					inputs: [
+						{
+							text: line,
+							url: sourceInfo?.url || null,
+							title: sourceInfo?.title || null,
+						},
+					],
 				});
 			}
 			assert(itemId);
+		}
+	},
+	addRecipe: async (url: string) => {
+		try {
+			const scanned = await trpcClient.query('scans.recipe', {
+				url,
+			});
+			if (scanned.rawIngredients) {
+				await groceries.addItems(scanned.rawIngredients, {
+					url,
+					title: scanned.title || 'Recipe',
+				});
+			} else if (scanned.detailedIngredients) {
+				await groceries.addItems(
+					scanned.detailedIngredients.map((i) => i.original),
+					{
+						url,
+						title: scanned.title || 'Recipe',
+					},
+				);
+			}
+		} catch (err) {
+			if (err instanceof TRPCClientError && err.message === 'FORBIDDEN') {
+				// TODO: pop subscription prompt
+				toast.error('You must subscribe to add recipe URLs');
+			}
 		}
 	},
 	deleteCategory: async (categoryId: string) => {

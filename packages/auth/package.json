@@ -7,6 +7,7 @@
 	"scripts": {},
 	"dependencies": {
 		"@aglio/tools": "workspace:*",
+		"@aglio/prisma": "workspace:*",
 		"cookie": "^0.5.0",
 		"jsonwebtoken": "^8.5.1"
 	},
