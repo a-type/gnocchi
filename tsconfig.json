@@ -18,13 +18,7 @@
 		"experimentalDecorators": true,
 		"isolatedModules": true,
 		"declarationMap": true,
-		"declaration": true,
-		"preserveSymlinks": true,
-		"paths": {
-			"@trpc/server/*": [
-				"./node_modules/.pnpm/@trpc+server@9.27.2/node_modules/@trpc/server"
-			]
-		}
+		"declaration": true
 	},
 	"exclude": ["node_modules", "**/*/dist"],
 	"references": [

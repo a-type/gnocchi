@@ -1,4 +1,4 @@
-import { Profile } from '../../../.generated/prisma/index.js';
+import { Profile } from '@aglio/prisma';
 import { setLoginSession, getInviteIdCookie } from '@aglio/auth';
 import { googleOauth } from '../../../auth/googleOauth.js';
 import { prisma } from '../../../data/prisma.js';
