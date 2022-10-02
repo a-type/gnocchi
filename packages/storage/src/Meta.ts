@@ -505,13 +505,19 @@ export class Meta {
 			subObjectsMappedByOid.set(baseline.oid, baseline.snapshot);
 		}
 
-		await this.iterateOverAllOperationsForDocument(documentOid, (op) => {
-			for (const patch of op.patches) {
-				let current = subObjectsMappedByOid.get(patch.oid) || ({} as any);
-				current = applyPatch(current, patch);
-				subObjectsMappedByOid.set(patch.oid, current);
-			}
-		});
+		await this.iterateOverAllOperationsForDocument(
+			documentOid,
+			(op) => {
+				for (const patch of op.patches) {
+					let current = subObjectsMappedByOid.get(patch.oid) || ({} as any);
+					current = applyPatch(current, patch);
+					subObjectsMappedByOid.set(patch.oid, current);
+				}
+			},
+			{
+				to: upToTimestamp,
+			},
+		);
 
 		// assemble the various sub-objects into the document by
 		// placing them where their ref is

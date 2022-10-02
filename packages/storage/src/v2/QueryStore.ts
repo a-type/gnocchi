@@ -1,5 +1,6 @@
 import { hashObject } from '@aglio/storage-common';
-import { Query } from './Query.js';
+import { storeRequestPromise } from '../idb.js';
+import { Query, UPDATE } from './Query.js';
 
 export class QueryStore {
 	private cache = new Map<string, Query<any>>();
@@ -14,38 +15,47 @@ export class QueryStore {
 
 	get = (config: {
 		collection: string;
-		range: IDBKeyRange;
+		range: IDBKeyRange | IDBValidKey | undefined;
 		index?: string;
 		direction?: IDBCursorDirection;
 		limit?: number;
+		single?: boolean;
 		write?: boolean;
 	}) => {
-		const { collection, range, index, direction, limit, write } = config;
+		const { collection, range, index, direction, limit, write, single } =
+			config;
 		const key = hashObject(config);
 		if (this.cache.has(key)) {
-			return this.cache.get(key);
+			return this.cache.get(key)!;
 		}
 		const store = this.getStore(collection, write);
 		const source = index ? store.index(index) : store;
-		const request = source.openCursor(range, direction);
-		const run = () =>
-			new Promise((resolve, reject) => {
-				const result: any[] = [];
-				request.onsuccess = () => {
-					const cursor = request.result;
-					if (cursor) {
-						result.push(cursor.value);
-						if (limit && result.length >= limit) {
-							resolve(result);
+		let run;
+		if (single) {
+			if (!range) throw new Error('Single object query requires a range value');
+			const request = source.get(range);
+			run = () => storeRequestPromise(request);
+		} else {
+			const request = source.openCursor(range, direction);
+			run = () =>
+				new Promise((resolve, reject) => {
+					const result: any[] = [];
+					request.onsuccess = () => {
+						const cursor = request.result;
+						if (cursor) {
+							result.push(cursor.value);
+							if (limit && result.length >= limit) {
+								resolve(result);
+							} else {
+								cursor.continue();
+							}
 						} else {
-							cursor.continue();
+							resolve(result);
 						}
-					} else {
-						resolve(result);
-					}
-				};
-				request.onerror = () => reject(request.error);
-			});
+					};
+					request.onerror = () => reject(request.error);
+				});
+		}
 		return new Query(
 			run,
 			(query) => {
@@ -62,5 +72,9 @@ export class QueryStore {
 				this.cache.delete(key);
 			},
 		);
+	};
+
+	update = (key: string) => {
+		this.cache.get(key)?.[UPDATE]();
 	};
 }

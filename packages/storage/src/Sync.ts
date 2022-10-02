@@ -11,7 +11,10 @@ export interface Sync {
 		event: 'message',
 		handler: (message: ServerMessage) => void,
 	): () => void;
-	subscribe(event: 'onlineChange', handler: () => void): () => void;
+	subscribe(
+		event: 'onlineChange',
+		handler: (online: boolean) => void,
+	): () => void;
 
 	send(message: ClientMessage): void;
 

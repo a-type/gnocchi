@@ -1,5 +1,3 @@
-import { EventSubscriber } from '../EventSubscriber.js';
-
 export const SUBSCRIBE = '@@subscribe';
 export const UPDATE = '@@update';
 
