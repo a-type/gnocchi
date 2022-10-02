@@ -4,6 +4,7 @@ import {
 	StorageSchema,
 	SyncResponseMessage,
 	Migration,
+	decomposeOid,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import { initializeDatabases } from './databaseManagement.js';
@@ -159,7 +160,8 @@ export class Storage<
 		switch (message.type) {
 			case 'op-re':
 				for (const op of message.ops) {
-					this.get(op.collection).applyRemoteOperation(op);
+					const { collection } = decomposeOid(op.rootOid);
+					this.get(collection).applyRemoteOperation(op);
 				}
 				break;
 			case 'sync-resp':
@@ -182,7 +184,8 @@ export class Storage<
 		);
 		// refresh all those documents
 		for (const doc of affectedDocuments) {
-			this.get(doc.collection).recomputeDocument(doc.documentId);
+			const { collection } = decomposeOid(doc);
+			this.get(collection).recomputeDocument(doc);
 		}
 
 		// respond to the server
@@ -196,10 +199,8 @@ export class Storage<
 
 	private handleRebases = async (message: RebasesMessage) => {
 		for (const rebase of message.rebases) {
-			this.collections[rebase.collection].rebaseDocument(
-				rebase.documentId,
-				rebase.upTo,
-			);
+			const { collection } = decomposeOid(rebase.oid);
+			this.collections[collection].rebaseDocument(rebase.oid, rebase.upTo);
 		}
 	};
 

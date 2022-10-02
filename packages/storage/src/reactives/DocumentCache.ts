@@ -1,17 +1,19 @@
 import {
+	OperationPatch,
 	StorageCollectionSchema,
 	StorageDocument,
 	SyncOperation,
-	SyncPatch,
 } from '@aglio/storage-common';
 import { assign, createLiveDocument, LiveDocument } from './LiveDocument.js';
 
 export interface DocumentMutations {
-	applyOperations(operations: { documentId: string; patch: SyncPatch }[]): void;
+	applyOperations(
+		operations: { rootOid: string; patches: OperationPatch[] }[],
+	): void;
 }
 
 export class DocumentCache<
-	Collection extends StorageCollectionSchema<any, any>,
+	Collection extends StorageCollectionSchema<any, any, any>,
 > {
 	private docs: Map<string, LiveDocument<StorageDocument<Collection>>> =
 		new Map();

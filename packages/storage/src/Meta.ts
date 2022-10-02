@@ -15,6 +15,9 @@ import {
 	StorageSchema,
 	HeartbeatMessage,
 	PresenceUpdateMessage,
+	ObjectIdentifier,
+	substituteRefsWithObjects,
+	createOid,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 import cuid from 'cuid';
@@ -42,9 +45,6 @@ type LocalHistoryItem = {
 type LocalHistory = {
 	type: 'localHistory';
 	items: LocalHistoryItem[];
-};
-type StoredBaseline = DocumentBaseline & {
-	collection_documentId: string;
 };
 type StoredSchema = {
 	type: 'schema';
@@ -80,11 +80,11 @@ export class Meta {
 						keyPath: 'id',
 					});
 					const baselinesStore = db.createObjectStore('baselines', {
-						keyPath: 'collection_documentId',
+						keyPath: 'oid',
 					});
 					const infoStore = db.createObjectStore('info', { keyPath: 'type' });
 					opsStore.createIndex('timestamp', 'timestamp');
-					opsStore.createIndex('documentId_timestamp', 'documentId_timestamp');
+					opsStore.createIndex('rootOid_timestamp', 'rootOid_timestamp');
 					opsStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
 					baselinesStore.createIndex('timestamp', 'timestamp');
 				}
@@ -190,7 +190,7 @@ export class Meta {
 	};
 
 	createOperation = async (
-		init: Pick<SyncOperation, 'collection' | 'documentId' | 'patch'> & {
+		init: Pick<SyncOperation, 'rootOid' | 'patches'> & {
 			timestamp?: string;
 		},
 	): Promise<SyncOperation> => {
@@ -211,7 +211,7 @@ export class Meta {
 	createMigrationOperation = async ({
 		targetVersion,
 		...init
-	}: Pick<SyncOperation, 'collection' | 'documentId' | 'patch'> & {
+	}: Pick<SyncOperation, 'rootOid' | 'patches'> & {
 		targetVersion: number;
 	}): Promise<SyncOperation> => {
 		const localInfo = await this.getLocalReplicaInfo();
@@ -224,7 +224,7 @@ export class Meta {
 	};
 
 	iterateOverAllOperationsForDocument = async (
-		documentId: string,
+		documentOid: ObjectIdentifier,
 		iterator: (op: SyncOperation, store: IDBObjectStore) => void,
 		{
 			to,
@@ -249,11 +249,11 @@ export class Meta {
 		// range.
 		const startValue = from || after;
 		const start = startValue
-			? createCompoundIndexValue(documentId, startValue)
-			: createLowerBoundIndexValue(documentId);
+			? createCompoundIndexValue(documentOid, startValue)
+			: createLowerBoundIndexValue(documentOid);
 		const end = to
-			? createCompoundIndexValue(documentId, to)
-			: createUpperBoundIndexValue(documentId);
+			? createCompoundIndexValue(documentOid, to)
+			: createUpperBoundIndexValue(documentOid);
 		const range = IDBKeyRange.bound(start, end, !from, !to);
 
 		// iterate over operations in timestamp order from oldest to newest
@@ -265,7 +265,7 @@ export class Meta {
 				if (cursor) {
 					// debug assertions to make sure we're iterating only on operations
 					// pertaining to this document. a failure means the index usage is wrong above.
-					assert(cursor.value.documentId === documentId);
+					assert(cursor.value.rootOid === documentOid);
 					// and also assert we're moving in the right order
 					assert(
 						previousTimestamp === undefined ||
@@ -341,20 +341,10 @@ export class Meta {
 		});
 	};
 
-	getBaselinesForDocuments = async (docIds: string[]) => {
-		const db = await this.db;
-		const transaction = db.transaction('operations', 'readonly');
-		const store = transaction.objectStore('operations');
-		const requests = docIds.map((docId) => {
-			return store.get(docId);
-		});
-		return Promise.all(requests.map(storeRequestPromise));
-	};
-
 	private getOperationCompoundIndices = (operation: SyncOperation) => {
 		return {
-			documentId_timestamp: createCompoundIndexValue(
-				operation.documentId,
+			rootOid_timestamp: createCompoundIndexValue(
+				operation.rootOid,
 				operation.timestamp,
 			),
 			replicaId_timestamp: createCompoundIndexValue(
@@ -366,11 +356,11 @@ export class Meta {
 
 	private stripOperationCompoundIndices = (
 		op: SyncOperation & {
-			documentId_timestamp: string;
+			rootOid_timestamp: string;
 			replicaId_timestamp: string;
 		},
 	): SyncOperation => {
-		return omit(op, ['documentId_timestamp', 'replicaId_timestamp']);
+		return omit(op, ['rootOid_timestamp', 'replicaId_timestamp']);
 	};
 
 	insertOperation = async (item: SyncOperation) => {
@@ -397,24 +387,20 @@ export class Meta {
 	};
 
 	/**
-	 * inserts all operations. returns a list of affected document ids (and their collections)
+	 * inserts all operations. returns a list of affected document oids
 	 * NOTE: operations added with this method are never added to local history!
 	 */
 	insertRemoteOperations = async (items: SyncOperation[]) => {
 		const db = await this.db;
 		const transaction = db.transaction('operations', 'readwrite');
 		const store = transaction.objectStore('operations');
-		const affected: Record<string, { documentId: string; collection: string }> =
-			{};
+		const affected = new Set<ObjectIdentifier>();
 		for (const item of items) {
 			store.put({
 				...item,
 				...this.getOperationCompoundIndices(item),
 			});
-			affected[item.documentId] = {
-				documentId: item.documentId,
-				collection: item.collection,
-			};
+			affected.add(item.rootOid);
 		}
 		await new Promise<void>((resolve, reject) => {
 			transaction.oncomplete = () => {
@@ -424,7 +410,7 @@ export class Meta {
 				reject();
 			};
 		});
-		return Object.values(affected);
+		return Array.from(affected);
 	};
 
 	private addLocalHistoryItem = async (
@@ -466,59 +452,83 @@ export class Meta {
 		return oldestHistoryTimestamp;
 	};
 
-	getBaseline = async (
-		collection: string,
-		documentId: string,
-	): Promise<DocumentBaseline> => {
+	getBaseline = async (oid: ObjectIdentifier): Promise<DocumentBaseline> => {
 		const db = await this.db;
 		const transaction = db.transaction('baselines', 'readonly');
 		const store = transaction.objectStore('baselines');
-		const request = store.get(createCompoundIndexValue(collection, documentId));
-		const result = await storeRequestPromise<StoredBaseline>(request);
+		const request = store.get(oid);
+		const result = await storeRequestPromise<DocumentBaseline>(request);
 		if (!result) {
 			return result;
 		}
-		return omit(result, ['collection_documentId']);
+		return result;
 	};
 
-	setBaseline = async <T>(
-		collection: string,
-		baseline: DocumentBaseline<T>,
-	) => {
+	/**
+	 * Fetches any baselines for all sub-objects
+	 * represented in a document
+	 */
+	getBaselinesForDocument = async (
+		documentOid: ObjectIdentifier,
+	): Promise<DocumentBaseline[]> => {
+		const db = await this.db;
+		const transaction = db.transaction('baselines', 'readonly');
+		const store = transaction.objectStore('baselines');
+		const request = store.getAll(IDBKeyRange.only(documentOid));
+		const results = await storeRequestPromise<DocumentBaseline[]>(request);
+		return results;
+	};
+
+	getBaselinesForDocuments = async (docOids: string[]) => {
+		return (
+			await Promise.all(docOids.map(this.getBaselinesForDocument))
+		).flat();
+	};
+
+	setBaseline = async <T>(baseline: DocumentBaseline<T>) => {
 		const db = await this.db;
 		const transaction = db.transaction('baselines', 'readwrite');
 		const store = transaction.objectStore('baselines');
-		const request = store.put({
-			...baseline,
-			collection_documentId: createCompoundIndexValue(
-				collection,
-				baseline.documentId,
-			),
-		});
+		const request = store.put(baseline);
 		await storeRequestPromise(request);
 	};
 
 	getComputedView = async <T = any>(
-		collection: string,
-		documentId: string,
+		documentOid: ObjectIdentifier,
 		upToTimestamp?: string,
 	): Promise<T> => {
-		// lookup baseline and get all operations
-		const baseline = await this.getBaseline(collection, documentId);
-		let computed: T | {} | undefined = baseline?.snapshot || {};
-		await this.iterateOverAllOperationsForDocument(
-			documentId,
-			(op) => {
-				computed = this.applyOperation(computed, op);
-			},
-			{
-				after: baseline?.timestamp,
-			},
+		// lookup baselines for all contained sub-objects and apply
+		// the patches to appropriate ones
+		const baselines = await this.getBaselinesForDocument(documentOid);
+		const subObjectsMappedByOid = new Map<ObjectIdentifier, any>();
+		for (const baseline of baselines) {
+			subObjectsMappedByOid.set(baseline.oid, baseline.snapshot);
+		}
+
+		await this.iterateOverAllOperationsForDocument(documentOid, (op) => {
+			for (const patch of op.patches) {
+				let current = subObjectsMappedByOid.get(patch.oid) || ({} as any);
+				current = applyPatch(current, patch);
+				subObjectsMappedByOid.set(patch.oid, current);
+			}
+		});
+
+		// assemble the various sub-objects into the document by
+		// placing them where their ref is
+		const rootBaseline = subObjectsMappedByOid.get(documentOid) ?? ({} as any);
+		// critical: attach metadata
+		rootBaseline['@@oid'] = documentOid;
+		const usedOids = substituteRefsWithObjects(
+			rootBaseline,
+			subObjectsMappedByOid,
 		);
+
+		// TODO: set difference of used OIDs versus stored baseline OIDs, clean up
+		// orphaned baselines.
 
 		// asserting T type - even if baseline is an empty object, applying
 		// operations should conform it to the final shape.
-		return computed as T;
+		return rootBaseline as T;
 	};
 
 	getAckInfo = async (): Promise<AckInfo> => {
@@ -582,7 +592,7 @@ export class Meta {
 		);
 		// for now we just send every baseline for every
 		// affected document... TODO: optimize this
-		const affectedDocs = new Set(operations.map((op) => op.documentId));
+		const affectedDocs = new Set(operations.map((op) => op.rootOid));
 		const baselines = await this.getBaselinesForDocuments(
 			Array.from(affectedDocs),
 		);
@@ -612,14 +622,6 @@ export class Meta {
 			presence,
 			replicaId: localReplicaInfo.id,
 		};
-	};
-
-	private applyOperation = <T>(
-		doc: T,
-		operation: SyncOperation,
-	): T | undefined => {
-		if (!doc) return doc;
-		return applyPatch(doc, operation.patch);
 	};
 
 	/**
@@ -662,50 +664,30 @@ export class Meta {
 			return;
 		}
 
-		// gather all collection+documentId pairs affected
-		const toRebase: Record<string, Set<string>> = {};
+		// gather all oids affected
+		const toRebase = new Set<ObjectIdentifier>();
 		for (const op of priorOperations) {
-			if (!toRebase[op.collection]) {
-				toRebase[op.collection] = new Set();
-			}
-			toRebase[op.collection].add(op.documentId);
+			toRebase.add(op.rootOid);
 		}
 		const lastOperation = priorOperations[priorOperations.length - 1];
 
 		// rebase each affected document
-		for (const collection of Object.keys(toRebase)) {
-			for (const documentId of toRebase[collection]) {
-				await this.rebase(collection, documentId, lastOperation.timestamp);
-			}
+		for (const oid of toRebase) {
+			await this.rebase(oid, lastOperation.timestamp);
 		}
 	};
 
-	rebase = async (collection: string, documentId: string, upTo: string) => {
-		let baseline = await this.getBaseline(collection, documentId);
-		if (!baseline) {
-			baseline = {
-				documentId,
-				snapshot: {},
-				timestamp: upTo,
-			};
-		}
-		console.debug(`rebase ${collection}/${documentId} up to ${upTo}`);
-		console.debug(`baseline: ${JSON.stringify(baseline)}`);
-		await this.iterateOverAllOperationsForDocument(
-			documentId,
-			(op) => {
-				console.debug(`applying op ${JSON.stringify(op)}`);
-				baseline.snapshot = this.applyOperation(baseline.snapshot, op);
-			},
-			{
-				to: upTo,
-			},
-		);
-		await this.setBaseline(collection, baseline);
+	rebase = async (oid: ObjectIdentifier, upTo: string) => {
+		const view = await this.getComputedView(oid, upTo);
+		await this.setBaseline({
+			oid,
+			snapshot: view,
+			timestamp: upTo,
+		});
 		// separate iteration to ensure the above has completed before destructive
 		// actions. TODO: use a transaction instead
 		await this.iterateOverAllOperationsForDocument(
-			documentId,
+			oid,
 			(op, store) => {
 				store.delete(op.id);
 			},
@@ -715,14 +697,7 @@ export class Meta {
 			},
 		);
 
-		console.log(
-			'successfully rebased',
-			collection,
-			':',
-			documentId,
-			'up to',
-			upTo,
-		);
+		console.log('successfully rebased', oid, 'up to', upTo);
 	};
 
 	createHeartbeat = async (): Promise<HeartbeatMessage> => {

@@ -25,7 +25,6 @@ export type AckMessage = {
 	timestamp: string;
 };
 
-// from connection metadata.
 export type OperationMessage = {
 	type: 'op';
 	replicaId: string;
@@ -89,7 +88,7 @@ export type RebasesMessage = {
 	 * for this document before this timestamp can
 	 * be applied and dropped.
 	 */
-	rebases: { collection: string; documentId: string; upTo: string }[];
+	rebases: { oid: string; upTo: string }[];
 };
 
 export type PresenceUpdateMessage = {

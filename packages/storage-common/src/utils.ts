@@ -60,3 +60,8 @@ export function stableStringify(obj: any) {
 export function cloneDeep<T>(obj: T): T {
 	return JSON.parse(JSON.stringify(obj));
 }
+
+// TODO: better hash
+export function hashObject(obj: any) {
+	return stableStringify(obj);
+}

@@ -14,7 +14,6 @@ import {
 	StorageCollectionSchema,
 	StorageDocument,
 	StorageDocumentWithComputedIndices,
-	SyncPatch,
 	createCompoundIndexValue,
 	CompoundIndexValue,
 	CollectionCompoundIndexFilter,
@@ -24,8 +23,13 @@ import {
 	createLowerBoundIndexValue,
 	createUpperBoundIndexValue,
 	CollectionCompoundIndex,
+	createOid,
+	getOid,
+	diffToPatches,
+	SyncOperation,
+	OperationPatch,
+	ObjectIdentifier,
 } from '@aglio/storage-common';
-import { createPatch, SyncOperation } from '@aglio/storage-common';
 import { Sync } from './Sync.js';
 import { Meta } from './Meta.js';
 import { cursorIterator, storeRequestPromise } from './idb.js';
@@ -35,6 +39,7 @@ import { getRaw, LiveDocument } from './reactives/LiveDocument.js';
 import { TEST_API } from './constants.js';
 import { LiveQuery } from './index.js';
 import { LIVE_QUERY_SUBSCRIBE } from './reactives/LiveQuery.js';
+import { assert } from '@aglio/tools';
 
 export type CollectionInMemoryFilters<
 	Collection extends StorageCollectionSchema<any, any, any>,
@@ -61,15 +66,14 @@ export class StorageCollection<
 	private queryCache = new QueryCache<Collection>();
 
 	private applyLocalDocumentCacheOperations = async (
-		ops: { documentId: string; patch: SyncPatch }[],
+		ops: { rootOid: string; patches: OperationPatch[] }[],
 	) => {
 		// TODO: apply multiple operations at once
-		for (const { documentId, patch } of ops) {
+		for (const { rootOid, patches } of ops) {
 			this.applyLocalOperation(
 				await this.meta.createOperation({
-					collection: this.name,
-					documentId,
-					patch,
+					rootOid,
+					patches,
 				}),
 			);
 		}
@@ -340,10 +344,11 @@ export class StorageCollection<
 	 * Diffs the two versions of the document, removes synthetics, and returns a patch.
 	 */
 	private createDiffPatch = (
-		from: Partial<StorageDocument<Collection>>,
+		from: StorageDocument<Collection>,
 		to: StorageDocument<Collection>,
-	): SyncPatch => {
-		return createPatch(
+	): OperationPatch[] => {
+		assert(from['@@oid'], 'must have oid');
+		return diffToPatches(
 			omit(from, this.syntheticIndexKeys),
 			omit(to, this.syntheticIndexKeys),
 		);
@@ -365,16 +370,15 @@ export class StorageCollection<
 			...data,
 		};
 
-		const patch = this.createDiffPatch(rawCurrent, updated);
+		const patches = this.createDiffPatch(rawCurrent, updated);
 
-		if (!patch.length) {
+		if (!patches.length) {
 			return current;
 		}
 
 		const op = await this.meta.createOperation({
-			collection: this.name,
-			documentId: id,
-			patch,
+			rootOid: getOid(updated),
+			patches,
 		});
 		const final = await this.applyLocalOperation(op);
 
@@ -382,10 +386,18 @@ export class StorageCollection<
 	};
 
 	create = async (data: ShapeFromFields<Collection['fields']>) => {
+		// TODO: DECISION: using a different, internal ID could allow for
+		// full logical replacement of the root document, but is this useful?
+		const oid = createOid(this.name, data[this.primaryKey] as string);
 		const op = await this.meta.createOperation({
-			collection: this.name,
-			documentId: data[this.primaryKey] as string,
-			patch: this.createDiffPatch({}, data),
+			rootOid: oid,
+			patches: diffToPatches(
+				{ '@@oid': oid },
+				{
+					'@@oid': oid,
+					...data,
+				},
+			),
 		});
 		const final = await this.applyLocalOperation(op);
 
@@ -404,10 +416,16 @@ export class StorageCollection<
 	};
 
 	delete = async (id: string) => {
+		const oid = createOid(this.name, id);
 		const op = await this.meta.createOperation({
-			collection: this.name,
-			documentId: id,
-			patch: 'DELETE',
+			rootOid: oid,
+			patches: [
+				{
+					op: 'delete',
+					oid,
+					name: '',
+				},
+			],
 		});
 		await this.applyLocalOperation(op);
 	};
@@ -461,17 +479,16 @@ export class StorageCollection<
 		);
 		// TODO: should local ops be acked?
 		await this.meta.ack(operation.timestamp);
-		const result = this.recomputeDocument(operation.documentId);
+		const result = this.recomputeDocument(operation.rootOid);
 
 		// sync to network
 		this.sync.send({
 			type: 'op',
 			replicaId: operation.replicaId,
 			op: {
-				collection: operation.collection,
-				documentId: operation.documentId,
+				rootOid: operation.rootOid,
 				id: operation.id,
-				patch: operation.patch,
+				patches: operation.patches,
 				replicaId: operation.replicaId,
 				timestamp: operation.timestamp,
 			},
@@ -488,7 +505,7 @@ export class StorageCollection<
 
 		await this.meta.insertOperation(operation);
 		await this.meta.ack(operation.timestamp);
-		return this.recomputeDocument(operation.documentId);
+		return this.recomputeDocument(operation.rootOid);
 	};
 
 	recomputeDocument = async (
@@ -527,8 +544,8 @@ export class StorageCollection<
 		}
 	};
 
-	rebaseDocument = async (id: string, upTo: string) => {
-		const squashed = await this.meta.rebase(this.name, id, upTo);
+	rebaseDocument = async (oid: ObjectIdentifier, upTo: string) => {
+		const squashed = await this.meta.rebase(oid, upTo);
 	};
 
 	stats = () => {

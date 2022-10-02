@@ -1,3 +1,4 @@
+import { WithNestedOids } from '../../operation.js';
 import {
 	CollectionSchemaComputedIndexes,
 	StorageCollectionSchema,
@@ -48,7 +49,7 @@ export type ShapeFromComputeds<T extends StorageSyntheticIndices<any>> = {
 
 export type StorageDocument<
 	Collection extends StorageCollectionSchema<any, any, any>,
-> = ShapeFromFields<Collection['fields']>;
+> = WithNestedOids<ShapeFromFields<Collection['fields']>>;
 
 export type StorageDocumentWithComputedIndices<
 	Collection extends StorageCollectionSchema<any, any, any>,
