@@ -30,6 +30,7 @@ import { GroceryListCategory } from './GroceryListCategory.js';
 import { GroceryListItem } from './items/GroceryListItem.js';
 import { groceriesState } from './state.js';
 import { useAuth } from '@/contexts/AuthContext.js';
+import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -47,6 +48,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 		const sensors = useGroceryDndSensors();
 
 		useGrocerySync();
+		useLoadDefaultCategories();
 
 		return (
 			<DndContext

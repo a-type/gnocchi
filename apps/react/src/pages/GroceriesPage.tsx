@@ -6,12 +6,13 @@ import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js'
 import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
 import { SyncMenu } from '@/components/sync/SyncMenu.js';
 import React, { Suspense } from 'react';
-import { Dialog, DialogContent } from '@/components/primitives/Dialog.js';
+import { MainMenu } from '@/components/menu/MainMenu.js';
 
 export function GroceriesPage() {
 	return (
 		<>
-			<Box w="full" p={4}>
+			<Box w="full" direction="row" align="center" gap={2} p={4}>
+				<MainMenu />
 				<SyncMenu />
 			</Box>
 			<Box

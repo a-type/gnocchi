@@ -16,7 +16,9 @@
 		"jsx": "react-jsx",
 		"downlevelIteration": true,
 		"experimentalDecorators": true,
-		"isolatedModules": true
+		"isolatedModules": true,
+		"declarationMap": true,
+		"declaration": true
 	},
 	"exclude": ["node_modules", "**/*/dist"],
 	"references": [
@@ -43,6 +45,12 @@
 		},
 		{
 			"path": "./packages/trpc"
+		},
+		{
+			"path": "./packages/prisma"
+		},
+		{
+			"path": "./packages/scanning"
 		}
 	]
 }

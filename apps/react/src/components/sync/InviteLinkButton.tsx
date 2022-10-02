@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Input } from '@/components/primitives/primitives.js';
+import {
+	Button,
+	ButtonProps,
+	Input,
+} from '@/components/primitives/primitives.js';
 import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
 import copy from 'copy-to-clipboard';
 
-export interface InviteLinkButtonProps {}
+export interface InviteLinkButtonProps extends ButtonProps {}
 
 async function generateLink() {
 	const res = await fetch(`${API_HOST_HTTP}/api/plan/invite`, {
@@ -35,5 +39,9 @@ async function generateLink() {
 }
 
 export function InviteLinkButton(props: InviteLinkButtonProps) {
-	return <Button onClick={generateLink}>Invite people</Button>;
+	return (
+		<Button {...props} onClick={generateLink}>
+			Invite people
+		</Button>
+	);
 }

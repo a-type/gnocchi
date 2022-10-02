@@ -6,6 +6,9 @@ import { Presence, Storage } from '@aglio/storage';
 import { createHooks } from '@aglio/storage-react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
+import { trpcClient } from '@/trpc.js';
+import { TRPCClientError } from '@trpc/client';
+import { toast } from 'react-hot-toast';
 
 export type {
 	GroceryItem,
@@ -71,9 +74,11 @@ export const mutations = {
 		});
 		// if category changed, update lookups
 		if (categoryId) {
-			_groceries.get('foodCategoryLookups').upsert({
+			_groceries.get('foodCategoryAssignments').upsert({
+				id: cuid(),
 				foodName: item.food,
 				categoryId,
+				remote: false,
 			});
 		}
 
@@ -109,13 +114,21 @@ export const mutations = {
 			_groceries.get('items').update(item.id, {
 				categoryId,
 			}),
-			_groceries.get('foodCategoryLookups').upsert({
+			_groceries.get('foodCategoryAssignments').upsert({
+				id: cuid(),
 				foodName: item.food,
 				categoryId,
+				remote: false,
 			}),
 		]);
 		groceries.presence.update({
 			lastInteractedItem: item.id,
+		});
+
+		// send the categorization to the server for research
+		await trpcClient.mutation('categories.assign', {
+			foodName: item.food,
+			categoryId,
 		});
 	},
 	createCategory: (name: string) => {
@@ -124,7 +137,24 @@ export const mutations = {
 			name,
 		});
 	},
-	addItems: async (lines: string[]) => {
+	resetCategoriesToDefault: async () => {
+		const defaultCategories = await trpcClient.query('categories.defaults');
+		const existingCategories = await _groceries.get('categories').getAll()
+			.resolved;
+		for (const cat of existingCategories) {
+			await groceries.deleteCategory(cat.id);
+		}
+		for (const cat of defaultCategories) {
+			await _groceries.get('categories').upsert({
+				id: cat.id,
+				name: cat.name,
+			});
+		}
+	},
+	addItems: async (
+		lines: string[],
+		sourceInfo?: { url?: string; title: string },
+	) => {
 		if (!lines.length) return;
 		const defaultCategory = await _groceries.get('categories').upsert({
 			id: DEFAULT_CATEGORY,
@@ -147,10 +177,20 @@ export const mutations = {
 			} else {
 				itemId = cuid();
 
-				const lookup = await _groceries
-					.get('foodCategoryLookups')
-					.get(parsed.food).resolved;
-				const categoryId = lookup?.categoryId ?? defaultCategory.id;
+				const lookups = await _groceries.get('foodCategoryAssignments').getAll({
+					where: 'foodName',
+					equals: parsed.food,
+				}).resolved;
+				// if there are local and remote lookups, use the local one
+				const lookup = lookups.find((l) => !l.remote) || lookups[0];
+				let categoryId = lookup?.categoryId ?? defaultCategory.id;
+
+				// verify the category exists locally
+				const category = await _groceries.get('categories').get(categoryId)
+					.resolved;
+				if (!category) {
+					categoryId = defaultCategory.id;
+				}
 
 				// TODO: findOne with a sort order applied to get just
 				// the last item
@@ -173,13 +213,86 @@ export const mutations = {
 					unit: parsed.unit,
 					food: parsed.food,
 					sortKey: generateKeyBetween(lastCategoryItem?.sortKey ?? null, null),
-					inputs: [{ text: line }],
+					inputs: [
+						{
+							text: line,
+							url: sourceInfo?.url || null,
+							title: sourceInfo?.title || null,
+						},
+					],
 				});
 			}
 			assert(itemId);
 		}
 	},
+	addRecipe: async (url: string) => {
+		try {
+			const scanned = await trpcClient.query('scans.recipe', {
+				url,
+			});
+			if (scanned.rawIngredients) {
+				await groceries.addItems(scanned.rawIngredients, {
+					url,
+					title: scanned.title || 'Recipe',
+				});
+			} else if (scanned.detailedIngredients) {
+				await groceries.addItems(
+					scanned.detailedIngredients.map((i) => i.original),
+					{
+						url,
+						title: scanned.title || 'Recipe',
+					},
+				);
+			}
+		} catch (err) {
+			if (err instanceof TRPCClientError && err.message === 'FORBIDDEN') {
+				// TODO: pop subscription prompt
+				toast.error('You must subscribe to add recipe URLs');
+			}
+		}
+	},
+	deleteCategory: async (categoryId: string) => {
+		if (categoryId === DEFAULT_CATEGORY) {
+			return;
+		}
+		const items = _groceries.get('items');
+		const matchingItems = await items.getAll({
+			where: 'categoryId',
+			equals: categoryId,
+		}).resolved;
+		// move all items to the default category
+		for (const item of matchingItems) {
+			items.update(item.id, {
+				categoryId: DEFAULT_CATEGORY,
+			});
+		}
+		// delete all lookups for this category locally
+		const lookups = await _groceries.get('foodCategoryAssignments').getAll({
+			where: 'categoryId',
+			equals: categoryId,
+		}).resolved;
+		for (const lookup of lookups) {
+			_groceries.get('foodCategoryAssignments').delete(lookup.foodName);
+		}
+
+		_groceries.get('categories').delete(categoryId);
+	},
+	syncDefaultFoodAssignments: async () => {
+		trpcClient.query('categories.assignments', null).then((assignments) => {
+			for (const assignment of assignments) {
+				groceries.get('foodCategoryAssignments').upsert({
+					id: assignment.id,
+					foodName: assignment.foodName,
+					categoryId: assignment.categoryId,
+					remote: true,
+				});
+			}
+		});
+	},
 };
 
 export const groceries = Object.assign(_groceries, mutations);
 // export const groceries = _groceries;
+
+// on startup, sync assignments
+groceries.syncDefaultFoodAssignments();

@@ -6,3 +6,7 @@ export function assert(
 		throw new Error(message);
 	}
 }
+
+export function isUrl(str: string) {
+	return /^https?:\/\//.test(str);
+}

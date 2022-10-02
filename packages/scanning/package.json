@@ -1,0 +1,14 @@
+{
+	"name": "@aglio/scanning",
+	"version": "0.0.1",
+	"private": true,
+	"main": "src/index.ts",
+	"type": "module",
+	"scripts": {},
+	"dependencies": {
+		"@aglio/tools": "workspace:*",
+		"cheerio": "^1.0.0-rc.12",
+		"iso8601-duration": "^2.1.1"
+	},
+	"devDependencies": {}
+}

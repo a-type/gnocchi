@@ -1,4 +1,5 @@
 import {
+	ArrowLeftIcon,
 	Cross1Icon,
 	ExclamationTriangleIcon,
 	HamburgerMenuIcon,
@@ -28,9 +29,10 @@ import {
 	DialogTrigger,
 } from '../primitives/Dialog.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
+import { StartSignupDialog } from './StartSignupDialog.js';
 
 export function SyncMenu() {
-	const { session, error, refetch, isSubscribed } = useAuth();
+	const { session, error, isSubscribed } = useAuth();
 
 	const [reconnecting, setReconnecting] = useState(false);
 
@@ -47,7 +49,6 @@ export function SyncMenu() {
 	if (error) {
 		return (
 			<Container>
-				<OfflineMenu refetch={refetch} />
 				<ExclamationTriangleIcon />
 			</Container>
 		);
@@ -69,7 +70,6 @@ export function SyncMenu() {
 	if (!isSubscribed) {
 		return (
 			<Container>
-				<ExpiredSyncMenu />
 				<ExclamationTriangleIcon />
 			</Container>
 		);
@@ -77,7 +77,6 @@ export function SyncMenu() {
 
 	return (
 		<Container>
-			<ActiveSyncMenu status="Sync active" />
 			<UpdateIcon />
 			<People />
 		</Container>
@@ -158,56 +157,35 @@ function AnonymousSyncMenu() {
 		'subscribe-dismissed',
 		false,
 	);
+	const [hasBeenCollapsed, setHasBeenCollapsed] = useState(!collapsed);
+	const queueHasBeenCollapsedTimer = collapsed && hasBeenCollapsed;
+	useEffect(() => {
+		if (queueHasBeenCollapsedTimer) {
+			const timer = setTimeout(() => {
+				setHasBeenCollapsed(false);
+			}, 5000);
+			return () => clearTimeout(timer);
+		}
+	}, [queueHasBeenCollapsedTimer]);
 
 	return (
 		<SubscribeBanner collapsed={collapsed}>
-			<Dialog>
-				<DialogTrigger asChild>
+			{!collapsed ? (
+				<StartSignupDialog>
 					<Button
 						color={collapsed ? 'ghost' : 'primary'}
 						size={collapsed ? 'small' : 'default'}
 						css={{ gridArea: 'cta', gap: '$2' }}
 					>
-						{collapsed ? <UpdateIcon /> : null}
-						{collapsed ? 'Sync' : 'Subscribe'}
+						Subscribe
 					</Button>
-				</DialogTrigger>
-				<DialogContent>
-					<Box direction="row" align="start" gap={2}>
-						<DialogTitle css={{ flex: 1 }}>
-							Subscribe for sync &amp; more
-						</DialogTitle>
-						<DialogClose asChild>
-							<Button size="small" color="ghost">
-								<Cross1Icon />
-							</Button>
-						</DialogClose>
-					</Box>
-					<P>Make Aglio your household's new grocery list.</P>
-					<H2>Sync with family or roommates so everyone's on the same page</H2>
-					<P>Everyone you invite can add items to the list.</P>
-					<H2>Team up at the store with live collaboration</H2>
-					<P>
-						See who's buying what, assign aisles, and easily tell fellow
-						shoppers where to meet up.
-					</P>
-					<H2>Coordinate with folks at home</H2>
-					<P>
-						Has the milk gone bad? Ask a question right in the app, and a friend
-						or partner will get a push notification to check the fridge for you
-						while you're at the store.
-					</P>
-
-					<Box gap={2} align="center" css={{ m: 'auto', mt: '$8' }}>
-						<LoginButton provider="google" returnTo="/">
-							Start your subscription
-						</LoginButton>
-						<Span size="xs">
-							14 days free. Unlimited devices and collaborators.
-						</Span>
-					</Box>
-				</DialogContent>
-			</Dialog>
+				</StartSignupDialog>
+			) : hasBeenCollapsed ? (
+				<Box direction="row" gap={3} align="center">
+					<ArrowLeftIcon />
+					<Span>You can sign up from here</Span>
+				</Box>
+			) : null}
 			{!collapsed && (
 				<>
 					<Box flex={1} css={{ color: '$darkBlend', gridArea: 'pitch' }}>

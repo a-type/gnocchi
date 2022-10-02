@@ -8,6 +8,7 @@ import {
 import { Formik, useFormikContext } from 'formik';
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
 import { groceries } from '@/stores/groceries/index.js';
+import { isUrl } from '@aglio/tools';
 
 export interface GroceryListAddProps {
 	className?: string;
@@ -38,7 +39,11 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 				onSubmit={async ({ text }, { resetForm }) => {
 					const lines = text.split('\n').filter(Boolean);
 					if (!lines.length) return;
-					await groceries.addItems(lines);
+					if (lines.length === 1 && isUrl(lines[0])) {
+						await groceries.addRecipe(lines[0]);
+					} else {
+						await groceries.addItems(lines);
+					}
 					resetForm();
 
 					// focus the input
