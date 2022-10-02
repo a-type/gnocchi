@@ -54,6 +54,14 @@ export function isObjectRefList(obj: any): obj is ObjectRefList {
 	return obj && typeof obj === 'object' && obj['@@type'] === 'ref-list';
 }
 
+export type Normalized<T> = {
+	[key in keyof T]: T[key] extends Array<any>
+		? ObjectRefList
+		: T[key] extends Object
+		? ObjectRefSingle
+		: T[key];
+};
+
 // patches v2
 
 export type PropertyName = string | number;
@@ -253,6 +261,10 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 	return patches;
 }
 
+export function initialToPatches(initial: ObjectWithIdentifier) {
+	return diffToPatches({ '@@oid': initial['@@oid'] }, initial);
+}
+
 export function groupPatchesByIdentifier(patches: OperationPatch[]) {
 	const grouped: Record<ObjectIdentifier, OperationPatch[]> = {};
 	for (const patch of patches) {
@@ -400,6 +412,56 @@ export function substituteRefsWithObjects(
 	}
 
 	return used;
+}
+
+export function substituteFirstLevelObjectsWithRefs<
+	Base extends { [key: string]: any } | any[],
+>(
+	base: Base,
+	refObjects: Map<ObjectIdentifier, any> = new Map(),
+): Map<ObjectIdentifier, any> {
+	if (Array.isArray(base)) {
+		for (let i = 0; i < base.length; i++) {
+			const item = base[i];
+			if (item && typeof item === 'object') {
+				if (Array.isArray(item)) {
+					// TODO... nested arrays
+				} else {
+					const oid = getOid(item);
+					base[i] = {
+						'@@type': 'ref',
+						id: oid,
+					};
+					refObjects.set(oid, item);
+				}
+			}
+		}
+	} else {
+		for (const [key, value] of Object.entries(base)) {
+			if (value && typeof value === 'object') {
+				if (Array.isArray(value)) {
+					const ids: ObjectIdentifier[] = [];
+					for (let i = 0; i < value.length; i++) {
+						const item = value[i];
+						if (item && typeof item === 'object') {
+							const id = item['@@oid'];
+							assert(id, `Object ${JSON.stringify(item)} must have an oid`);
+							ids.push(id);
+							refObjects.set(id, item);
+						}
+					}
+					(base as any)[key] = { '@@type': 'ref-list', ids };
+				} else {
+					const id = value['@@oid'];
+					assert(id, `Object ${JSON.stringify(value)} must have an oid`);
+					(base as any)[key] = { '@@type': 'ref', id };
+					refObjects.set(id, value);
+				}
+			}
+		}
+	}
+
+	return refObjects;
 }
 
 export function createOid(
