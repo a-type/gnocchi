@@ -1,11 +1,12 @@
 import { hashObject } from '@aglio/storage-common';
 import { storeRequestPromise } from '../idb.js';
+import { DocumentStore } from './DocumentStore.js';
 import { Query, UPDATE } from './Query.js';
 
 export class QueryStore {
 	private cache = new Map<string, Query<any>>();
 
-	constructor(private db: IDBDatabase) {}
+	constructor(private db: IDBDatabase, private documents: DocumentStore) {}
 
 	private getStore = (collection: string, write?: boolean) => {
 		return this.db
@@ -34,7 +35,10 @@ export class QueryStore {
 		if (single) {
 			if (!range) throw new Error('Single object query requires a range value');
 			const request = source.get(range);
-			run = () => storeRequestPromise(request);
+			run = async () => {
+				const view = await storeRequestPromise(request);
+				return view ? this.documents.take(view) : null;
+			};
 		} else {
 			const request = source.openCursor(range, direction);
 			run = () =>
@@ -43,7 +47,8 @@ export class QueryStore {
 					request.onsuccess = () => {
 						const cursor = request.result;
 						if (cursor) {
-							result.push(cursor.value);
+							const view = cursor.value;
+							result.push(this.documents.take(cursor.value));
 							if (limit && result.length >= limit) {
 								resolve(result);
 							} else {

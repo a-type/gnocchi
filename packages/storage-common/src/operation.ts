@@ -211,7 +211,6 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 					diffToPatches(
 						{
 							'@@oid': getOid(value),
-							items: [],
 						},
 						{
 							'@@oid': getOid(value),
@@ -228,42 +227,86 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 				// this could be left up to the client to determine
 				// which refs are orphaned after it applies patches.
 			} else {
-				// the object is the same, so diff the object
-				diffToPatches(from[key], value, patches);
+				if (Array.isArray(value)) {
+					// we must convert arrays to storable lists
+					diffToPatches(
+						{
+							'@@oid': getOid(value),
+							'@@type': 'list',
+							items: removeOid(oldValue),
+						},
+						{
+							'@@oid': getOid(value),
+							'@@type': 'list',
+							items: removeOid(value),
+						},
+						patches,
+					);
+				} else {
+					// the object is the same, so diff the object
+					diffToPatches(from[key], value, patches);
+				}
 			}
 		} else if (Array.isArray(value)) {
-			// we must replace the list
-			// since this is a naive diffing algorithm, we only
-			// really work with indexes.
-			for (let i = 0; i < value.length; i++) {
-				const item = value[i];
-				if (isObjectWithIdentifier(item)) {
-					if (getOid(item) !== getOid(from[key][i])) {
-						// push the set for the ref at this index
+			if (!oldValue) {
+				// the list didn't exist before, so we can just push the whole thing
+				patches.push({
+					oid,
+					op: 'set',
+					name: key,
+					value: removeOid(value),
+				});
+			} else {
+				// we must replace the list
+				// since this is a naive diffing algorithm, we only
+				// really work with indexes.
+				for (let i = 0; i < value.length; i++) {
+					const item = value[i];
+					const oldItem = oldValue?.[i];
+					if (isObjectWithIdentifier(item)) {
+						if (!oldItem || getOid(item) !== getOid(oldItem)) {
+							// push the set for the ref at this index
+							patches.push({
+								oid,
+								op: 'list-set',
+								index: i,
+								value: {
+									'@@type': 'ref',
+									id: getOid(item),
+								},
+							});
+							// create the sub-object too
+							diffToPatches(
+								{
+									'@@oid': getOid(item),
+								},
+								item,
+								patches,
+							);
+						} else {
+							// the object is the same, so diff the object
+							diffToPatches(oldItem, item, patches);
+						}
+					} else if (oldItem !== item) {
+						// push the set for the value at this index
 						patches.push({
 							oid,
 							op: 'list-set',
 							index: i,
-							value: {
-								'@@type': 'ref',
-								id: getOid(item),
-							},
+							value: item,
 						});
-					} else {
-						// the object is the same, so diff the object
-						diffToPatches(from[key][i], item, patches);
 					}
 				}
-			}
-			const deletedItemsAtEnd = from[key].length - value.length;
-			if (deletedItemsAtEnd > 0) {
-				// push the list-delete for the deleted items
-				patches.push({
-					oid,
-					op: 'list-delete',
-					index: value.length,
-					count: deletedItemsAtEnd,
-				});
+				const deletedItemsAtEnd = oldValue ? oldValue.length - value.length : 0;
+				if (deletedItemsAtEnd > 0) {
+					// push the list-delete for the deleted items
+					patches.push({
+						oid,
+						op: 'list-delete',
+						index: value.length,
+						count: deletedItemsAtEnd,
+					});
+				}
 			}
 		}
 		// reject nested objects without identifier metadata
@@ -369,9 +412,11 @@ function listCheck(obj: any): asserts obj is ListObject {
 	}
 }
 
-export interface NormalizedObject {
-	[key: PropertyName]: PropertyValue;
-}
+export type NormalizedObject =
+	| {
+			[key: PropertyName]: PropertyValue;
+	  }
+	| ListObject;
 /**
  * The incoming object should already be normalized!
  */

@@ -30,7 +30,7 @@ export class OperationsStore {
 		const db = await this.db;
 		const transaction = db.transaction('operations', mode);
 		const store = transaction.objectStore('operations');
-		const index = store.index('documentId_timestamp');
+		const index = store.index('rootOid_timestamp');
 
 		// we can get the whole range of operations for a document in order
 		// by iterating over the index from (documentId{LOWER_BOUND_SEPARATOR} to documentId{UPPER_BOUND_SEPARATOR}).

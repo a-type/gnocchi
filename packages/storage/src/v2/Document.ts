@@ -12,6 +12,7 @@ import {
 	SyncOperation,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
+import { EventSubscriber } from '../EventSubscriber.js';
 
 export const UPDATE = '@@update';
 
@@ -20,26 +21,39 @@ export interface LiveMutations {
 	createObject(): ObjectIdentifier;
 }
 
+export interface CacheEvents {
+	onSubscribed(self: LiveBase<any>): void;
+	onAllUnsubscribed(self: LiveBase<any>): void;
+}
+
 export function createDocument<T extends ObjectWithIdentifier>(
 	mutations: LiveMutations,
+	cacheEvents: CacheEvents,
 	initial: T,
 ): Document<T> {
+	assert(initial && typeof initial === 'object', 'initial must be an object');
 	assert(!Array.isArray(initial), 'Cannot create a document from a list');
 	const rawChildObjects = substituteFirstLevelObjectsWithRefs(initial);
-	return new Document(mutations, initial, rawChildObjects);
+	return new Document(mutations, cacheEvents, initial, rawChildObjects);
 }
 
 function createLiveObject<T extends ObjectWithIdentifier>(
 	mutations: LiveMutations,
+	cacheEvents: CacheEvents,
 	initial: T,
 ) {
 	if (Array.isArray(initial)) {
 		const rawChildObject = substituteFirstLevelObjectsWithRefs(initial);
-		const list = new LiveList(mutations, initial, rawChildObject);
+		const list = new LiveList(mutations, cacheEvents, initial, rawChildObject);
 		return list;
 	} else {
 		const rawChildObjects = substituteFirstLevelObjectsWithRefs(initial);
-		const obj = new LiveObject(mutations, initial, rawChildObjects);
+		const obj = new LiveObject(
+			mutations,
+			cacheEvents,
+			initial,
+			rawChildObjects,
+		);
 		return obj;
 	}
 }
@@ -50,17 +64,19 @@ export function updateLiveObject<T extends ObjectWithIdentifier>(
 ) {
 	if (Array.isArray(newValue)) {
 		const rawChildObject = substituteFirstLevelObjectsWithRefs(newValue);
-		(obj as any).replace(newValue, rawChildObject);
+		(obj as any)[UPDATE](newValue, rawChildObject);
 	} else {
 		const rawChildObjects = substituteFirstLevelObjectsWithRefs(newValue);
-		(obj as any).replace(newValue, rawChildObjects);
+		(obj as any)[UPDATE](newValue, rawChildObjects);
 	}
 }
 
 export abstract class LiveBase<
 	T extends ObjectWithIdentifier,
 	PublicValue = T,
-> {
+> extends EventSubscriber<{
+	change: (newValue: PublicValue) => void;
+}> {
 	protected _current: NormalizedObject | null = null;
 	protected _updated: NormalizedObject | null = null;
 	protected _activePatchLists: OperationPatch[][] = [];
@@ -82,9 +98,12 @@ export abstract class LiveBase<
 	}
 
 	constructor(
-		readonly mutations: LiveMutations,
+		protected readonly mutations: LiveMutations,
+		protected readonly cacheEvents: CacheEvents,
 		protected rawChildObjects: Map<ObjectIdentifier, any>,
-	) {}
+	) {
+		super();
+	}
 
 	protected abstract [UPDATE](
 		initial: T | undefined,
@@ -124,6 +143,24 @@ export abstract class LiveBase<
 	dispose = () => {
 		// TODO: implement
 	};
+
+	subscribe = (event: 'change', callback: (newValue: PublicValue) => void) => {
+		const unsubscribe = super.subscribe(event, callback);
+		if (this.subscribers.change.size === 1) {
+			this.cacheEvents.onSubscribed(this.oid);
+		}
+
+		return () => {
+			unsubscribe();
+			if (this.subscribers.change.size === 0) {
+				queueMicrotask(() => {
+					if (this.subscribers.change.size === 0) {
+						this.cacheEvents.onAllUnsubscribed(this.oid);
+					}
+				});
+			}
+		};
+	};
 }
 
 export class LiveObject<T extends ObjectWithIdentifier> extends LiveBase<T> {
@@ -131,10 +168,11 @@ export class LiveObject<T extends ObjectWithIdentifier> extends LiveBase<T> {
 
 	constructor(
 		mutations: LiveMutations,
+		cacheEvents: CacheEvents,
 		initial: T,
 		rawChildObjects: Map<ObjectIdentifier, any>,
 	) {
-		super(mutations, rawChildObjects);
+		super(mutations, cacheEvents, rawChildObjects);
 		this[UPDATE](initial, rawChildObjects);
 	}
 
@@ -142,16 +180,23 @@ export class LiveObject<T extends ObjectWithIdentifier> extends LiveBase<T> {
 		value: T | undefined,
 		rawChildObjects: Map<ObjectIdentifier, any>,
 	) => {
-		const base = {
-			...value,
-		};
 		this.rawChildObjects = rawChildObjects;
-		this._current = base ?? null;
+		this._current = value ?? null;
 		// update lists and objects
-		for (const key of Object.keys(base)) {
-			const child = this._children.get(key as keyof T);
-			if (child instanceof LiveBase) {
-				updateLiveObject(child, base[key]);
+		if (value) {
+			for (const key of Object.keys(value)) {
+				const child = this._children.get(key as keyof T);
+				if (child instanceof LiveBase) {
+					updateLiveObject(child, value[key]);
+				}
+			}
+			this.emit('change', value);
+		} else {
+			// dispose all children
+			for (const child of this._children.values()) {
+				if (child instanceof LiveBase) {
+					updateLiveObject(child, undefined);
+				}
 			}
 		}
 	};
@@ -170,12 +215,7 @@ export class LiveObject<T extends ObjectWithIdentifier> extends LiveBase<T> {
 				// sub-objects are created via diff patches applied to their oid
 				// but we also need to recursively create nested sub-objects...
 				const subObjectOid = this.mutations.createObject();
-				this.currentPatchList.push(
-					...initialToPatches({
-						'@@oid': subObjectOid,
-						...value,
-					}),
-				);
+				this.currentPatchList.push(...initialToPatches(value, subObjectOid));
 				this.currentPatchList.push({
 					op: 'set',
 					name: key.toString(),
@@ -185,13 +225,13 @@ export class LiveObject<T extends ObjectWithIdentifier> extends LiveBase<T> {
 						id: subObjectOid,
 					},
 				});
-				this._updated[key as any] = {
+				(this._updated as any)[key] = {
 					'@@type': 'ref',
 					id: subObjectOid,
 				};
 			}
 		} else {
-			this._updated[key as any] = value as PropertyValue;
+			(this._updated as any)[key] = value as PropertyValue;
 			this.currentPatchList.push({
 				op: 'set',
 				name: key.toString(),
@@ -220,7 +260,7 @@ export class LiveObject<T extends ObjectWithIdentifier> extends LiveBase<T> {
 			throw new Error('Cannot get property on null document');
 		}
 
-		const normalized = this.value![key as any];
+		const normalized = (this.value as any)[key];
 		if (normalized && typeof normalized === 'object') {
 			if (isObjectRef(normalized)) {
 				const oid = normalized.id;
@@ -236,6 +276,7 @@ export class LiveObject<T extends ObjectWithIdentifier> extends LiveBase<T> {
 				}
 				const child = createLiveObject(
 					this.mutations,
+					this.cacheEvents,
 					this.rawChildObjects.get(oid)!,
 				);
 				this._children.set(key, child);
@@ -264,19 +305,20 @@ class LiveList<
 
 	constructor(
 		mutations: LiveMutations,
+		cacheEvents: CacheEvents,
 		initial: T,
 		rawChildObjects: Map<ObjectIdentifier, any>,
 	) {
-		super(mutations, rawChildObjects);
+		super(mutations, cacheEvents, rawChildObjects);
 		this[UPDATE](initial, rawChildObjects);
 	}
 
 	get length() {
-		return this.value?.length || 0;
+		return (this.value as any)?.length || 0;
 	}
 
 	get = (index: number) => {
-		const value = this.value?.[index];
+		const value = (this.value as any)?.[index];
 		if (value && isObjectRef(value)) {
 			const id = value.id;
 			if (!id) {
@@ -291,6 +333,7 @@ class LiveList<
 			}
 			const newChild = createLiveObject(
 				this.mutations,
+				this.cacheEvents,
 				this.rawChildObjects.get(id)!,
 			);
 			this._children[index] = newChild;
@@ -325,6 +368,8 @@ class LiveList<
 				}
 			}
 		}
+
+		this.emit('change', init);
 	}
 
 	set = (index: number, value: T[number]) => {
@@ -337,12 +382,7 @@ class LiveList<
 				// sub-objects are created via diff patches applied to their oid
 				// but we also need to recursively create nested sub-objects...
 				const subObjectOid = this.mutations.createObject();
-				this.currentPatchList.push(
-					...initialToPatches({
-						'@@oid': subObjectOid,
-						...value,
-					}),
-				);
+				this.currentPatchList.push(...initialToPatches(value, subObjectOid));
 				this.currentPatchList.push({
 					op: 'list-set',
 					oid: getOid(this.value),
@@ -376,12 +416,7 @@ class LiveList<
 			// sub-objects are created via diff patches applied to their oid
 			// but we also need to recursively create nested sub-objects...
 			const subObjectOid = this.mutations.createObject();
-			this.currentPatchList.push(
-				...initialToPatches({
-					'@@oid': subObjectOid,
-					...value,
-				}),
-			);
+			this.currentPatchList.push(...initialToPatches(value, subObjectOid));
 			this.currentPatchList.push({
 				op: 'list-push',
 				oid: getOid(this.value),

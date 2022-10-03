@@ -8,7 +8,7 @@ import {
 	substituteRefsWithObjects,
 } from './operation.js';
 
-describe('patch operations', () => {
+describe('creating diff patch operations', () => {
 	describe('on flat objects', () => {
 		it('generates and applies set and remove operations', () => {
 			const from = { foo: 'bar', baz: 'qux', zing: 1, '@@oid': 'test/1:a' };
@@ -128,8 +128,29 @@ describe('patch operations', () => {
 			]);
 		});
 	});
-	describe.todo('on lists of primitives', () => {
-		it.todo('pushes items');
+	describe('on lists of primitives', () => {
+		it('pushes items', async () => {
+			expect(
+				applyPatches(
+					{
+						'@@type': 'list',
+						'@@oid': 'test/1:a',
+						items: ['foo', 'bar'],
+					},
+					[
+						{
+							oid: 'test/1:a',
+							op: 'list-push',
+							value: 'baz',
+						},
+					],
+				),
+			).toEqual({
+				'@@type': 'list',
+				'@@oid': 'test/1:a',
+				items: ['foo', 'bar', 'baz'],
+			});
+		});
 		it.todo('sets items');
 		it.todo('inserts items');
 		it.todo('removes items by index');
@@ -144,6 +165,116 @@ describe('patch operations', () => {
 	});
 	describe.todo('on lists of lists', () => {
 		it.todo('rejects operations by value or identity');
+	});
+	it('should work for complex nested arrays and objects', () => {
+		expect(
+			diffToPatches(
+				addOid(
+					{
+						foo: addOid(
+							{
+								bar: addOid([1, 2, 3], 'test/a:2'),
+							},
+							'test/a:1',
+						),
+						baz: addOid(
+							[
+								addOid(
+									{
+										corge: true,
+									},
+									'test/a:4',
+								),
+							],
+							'test/a:3',
+						),
+					},
+					'test/a',
+				),
+				addOid(
+					{
+						foo: addOid(
+							{
+								bar: addOid([1, 2], 'test/a:2'),
+								bop: addOid([0], 'test/a:6'),
+							},
+							'test/a:1',
+						),
+						baz: addOid(
+							[
+								addOid(
+									{
+										corge: false,
+									},
+									'test/a:4',
+								),
+								addOid(
+									{
+										corge: false,
+									},
+									'test/a:5',
+								),
+							],
+							'test/a:3',
+						),
+					},
+					'test/a',
+				),
+			),
+		).toMatchInlineSnapshot(`
+			[
+			  {
+			    "count": 1,
+			    "index": 2,
+			    "oid": "test/a:2",
+			    "op": "list-delete",
+			  },
+			  {
+			    "name": "bop",
+			    "oid": "test/a:1",
+			    "op": "set",
+			    "value": {
+			      "@@type": "ref",
+			      "id": "test/a:6",
+			    },
+			  },
+			  {
+			    "name": "@@type",
+			    "oid": "test/a:6",
+			    "op": "set",
+			    "value": "list",
+			  },
+			  {
+			    "name": "items",
+			    "oid": "test/a:6",
+			    "op": "set",
+			    "value": [
+			      0,
+			    ],
+			  },
+			  {
+			    "name": "corge",
+			    "oid": "test/a:4",
+			    "op": "set",
+			    "value": false,
+			  },
+			  {
+			    "index": 1,
+			    "oid": "test/a:3",
+			    "op": "list-set",
+			    "value": {
+			      "@@type": "ref",
+			      "id": "test/a:5",
+			    },
+			  },
+			  {
+			    "name": "corge",
+			    "oid": "test/a:5",
+			    "op": "set",
+			    "value": false,
+			  },
+			]
+		`);
 	});
 });
 
@@ -320,7 +451,58 @@ describe('creating patches from initial state', () => {
 				'test/a',
 				createSubId,
 			),
-		).toMatchInlineSnapshot();
+		).toMatchInlineSnapshot(`
+			[
+			  {
+			    "name": "foo",
+			    "oid": "test/a",
+			    "op": "set",
+			    "value": {
+			      "@@type": "ref",
+			      "id": "test/a:0",
+			    },
+			  },
+			  {
+			    "name": "bar",
+			    "oid": "test/a:0",
+			    "op": "set",
+			    "value": "baz",
+			  },
+			  {
+			    "name": "qux",
+			    "oid": "test/a",
+			    "op": "set",
+			    "value": {
+			      "@@type": "ref",
+			      "id": "test/a:1",
+			    },
+			  },
+			  {
+			    "name": "@@type",
+			    "oid": "test/a:1",
+			    "op": "set",
+			    "value": "list",
+			  },
+			  {
+			    "name": "items",
+			    "oid": "test/a:1",
+			    "op": "set",
+			    "value": [
+			      {
+			        "@@oid": "test/a:2",
+			        "corge": "grault",
+			      },
+			      {
+			        "@@oid": "test/a:3",
+			        "bin": {
+			          "@@oid": "test/a:4",
+			          "oof": 1,
+			        },
+			      },
+			    ],
+			  },
+			]
+		`);
 	});
 });
 

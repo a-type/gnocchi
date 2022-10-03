@@ -1,4 +1,5 @@
 import {
+	addOid,
 	applyPatch,
 	HeartbeatMessage,
 	ObjectIdentifier,
@@ -16,6 +17,7 @@ import { storeRequestPromise } from '../idb.js';
 import type { Sync } from '../Sync.js';
 import { AckInfoStore } from './AckInfoStore.js';
 import { BaselinesStore } from './BaselinesStore.js';
+import { DocumentStore } from './DocumentStore.js';
 import { LocalHistoryStore } from './LocalHistoryStore.js';
 import { LocalReplicaStore } from './LocalReplicaStore.js';
 import { MessageCreator } from './MessageCreator.js';
@@ -73,7 +75,7 @@ export class Metadata {
 		// placing them where their ref is
 		const rootBaseline = subObjectsMappedByOid.get(oid) ?? ({} as any);
 		// critical: attach metadata
-		rootBaseline['@@oid'] = oid;
+		addOid(rootBaseline, oid);
 		const usedOids = substituteRefsWithObjects(
 			rootBaseline,
 			subObjectsMappedByOid,
@@ -113,19 +115,23 @@ export class Metadata {
 
 	/**
 	 * Applies a patch to the document and stores it in the database.
+	 * @returns the oldest local history timestamp
 	 */
 	insertLocalOperation = async (item: SyncOperation) => {
 		await this.operations.insertOperation(item);
+
 		const oldestHistoryTimestamp = await this.localHistory.add({
 			operationId: item.id,
 			timestamp: item.timestamp,
 		});
 
 		this.tryAutonomousRebase(oldestHistoryTimestamp);
-
-		return oldestHistoryTimestamp;
 	};
 
+	/**
+	 * Inserts remote operations. This does not affect local history.
+	 * @returns a list of affected document OIDs
+	 */
 	insertRemoteOperations = async (items: SyncOperation[]) => {
 		return this.operations.insertOperations(items);
 	};

@@ -53,17 +53,13 @@ export class SyncHarness {
 	};
 
 	private handleMessage = async (message: ServerMessage) => {
-		let affectedOids: ObjectIdentifier[] = [];
 		switch (message.type) {
 			case 'op-re':
 				// rebroadcasted operations
-				this.meta.insertRemoteOperations(message.ops);
-				affectedOids = Array.from(new Set(message.ops.map((op) => op.rootOid)));
+				this.documents.applyRemoteOperations(message.ops);
 				break;
 			case 'sync-resp':
 				await this.meta.ackInfo.setGlobalAck(message.globalAckTimestamp);
-				// add all ops to our local storage and recompute affected docs
-				affectedOids = await this.meta.insertRemoteOperations(message.ops);
 
 				// respond to the server
 				this.sync.send(
@@ -74,17 +70,10 @@ export class SyncHarness {
 				await this.meta.updateLastSynced();
 				break;
 			case 'rebases':
-				const affectedSet = new Set<ObjectIdentifier>();
 				for (const rebase of message.rebases) {
 					await this.meta.rebase(rebase.oid, rebase.upTo);
-					affectedSet.add(rebase.oid);
 				}
-				affectedOids = Array.from(affectedSet);
 				break;
-		}
-
-		for (const oid of affectedOids) {
-			this.documents.refresh(oid);
 		}
 	};
 }

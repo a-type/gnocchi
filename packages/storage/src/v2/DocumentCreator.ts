@@ -4,10 +4,13 @@ import {
 	initialToPatches,
 	SchemaCollection,
 	SchemaCollectionName,
+	ShapeFromFields,
 	StorageDocument,
+	StorageDocumentInit,
 	StorageSchema,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
+import { DocumentStore } from './DocumentStore.js';
 import { Metadata } from './Metadata.js';
 
 /**
@@ -16,11 +19,15 @@ import { Metadata } from './Metadata.js';
  * point in the storage system.
  */
 export class DocumentCreator<Schema extends StorageSchema<any>> {
-	constructor(private meta: Metadata, private schema: Schema) {}
+	constructor(
+		private meta: Metadata,
+		private schema: Schema,
+		private documents: DocumentStore,
+	) {}
 
 	create = async <Collection extends SchemaCollectionName<Schema>>(
 		collection: Collection,
-		init: StorageDocument<SchemaCollection<Schema, Collection>>,
+		init: StorageDocumentInit<SchemaCollection<Schema, Collection>>,
 	) => {
 		const primaryKeyName = this.schema.collections[collection]
 			.primaryKey as keyof StorageDocument<
@@ -33,12 +40,10 @@ export class DocumentCreator<Schema extends StorageSchema<any>> {
 		);
 		const oid = createOid(collection as string, primaryKey);
 
-		const withOid = addOid(init, oid);
-
-		await this.meta.insertLocalOperation(
+		return this.documents.applyLocalOperation(
 			await this.meta.messageCreator.createOperation({
 				rootOid: oid,
-				patches: initialToPatches(withOid),
+				patches: initialToPatches(init, oid),
 			}),
 		);
 	};

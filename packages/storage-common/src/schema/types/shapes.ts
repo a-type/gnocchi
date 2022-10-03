@@ -51,6 +51,10 @@ export type StorageDocument<
 	Collection extends StorageCollectionSchema<any, any, any>,
 > = WithNestedOids<ShapeFromFields<Collection['fields']>>;
 
+export type StorageDocumentInit<
+	Collection extends StorageCollectionSchema<any, any, any>,
+> = ShapeFromFields<Collection['fields']>;
+
 export type StorageDocumentWithComputedIndices<
 	Collection extends StorageCollectionSchema<any, any, any>,
 > = StorageDocument<Collection> &

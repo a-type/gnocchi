@@ -19,20 +19,18 @@ async function waitForStoragePropagation(mock: MockedFunction<any>) {
 	});
 }
 
-describe.skip('storage documents', () => {
-	it('should have a stable identity across different queries', async () => {
+describe('storage documents', () => {
+	it('should have a stable identity across different queries when subscribed', async () => {
 		const storage = await createTestStorage();
 
-		const todos = storage.get('todo');
-
-		const item1 = await todos.create({
+		const item1 = await storage.documentCreator.create('todo', {
 			id: cuid(),
 			content: 'item 1',
 			done: false,
 			tags: [],
 			category: 'general',
 		});
-		const item2 = await todos.create({
+		const item2 = await storage.documentCreator.create('todo', {
 			id: cuid(),
 			content: 'item 2',
 			done: true,
@@ -40,18 +38,18 @@ describe.skip('storage documents', () => {
 			category: 'general',
 		});
 
-		const singleItemQuery = todos.get(item1.id);
-		const allItemsQuery = todos.getAll();
+		const singleItemQuery = storage.queryMaker.get('todo', item1.get('id'));
+		const allItemsQuery = storage.queryMaker.findAll('todo');
 
 		const singleItemResult = await singleItemQuery.resolved;
 		const allItemsResult = await allItemsQuery.resolved;
 		const allItemsReferenceToItem1 = allItemsResult.find(
-			(item) => item.id === item1.id,
+			(item) => item.get('id') === item1.get('id'),
 		);
-		expect(singleItemResult).toEqual(allItemsReferenceToItem1);
+		expect(singleItemResult).toBe(allItemsReferenceToItem1);
 	});
 
-	it('should notify about changes', async () => {
+	it.skip('should notify about changes', async () => {
 		const storage = await createTestStorage();
 
 		const todos = storage.get('todo');
@@ -83,7 +81,7 @@ describe.skip('storage documents', () => {
 		});
 	});
 
-	it('should expose a mutator to update properties', async () => {
+	it.skip('should expose a mutator to update properties', async () => {
 		const storage = await createTestStorage();
 
 		const todos = storage.get('todo');
@@ -121,7 +119,7 @@ describe.skip('storage documents', () => {
 		});
 	});
 
-	it('should expose array mutators on nested arrays', async () => {
+	it.skip('should expose array mutators on nested arrays', async () => {
 		const storage = await createTestStorage();
 
 		const todos = storage.get('todo');
@@ -160,7 +158,7 @@ describe.skip('storage documents', () => {
 		});
 	});
 
-	it('should allow assignment for mutation on objects', async () => {
+	it.skip('should allow assignment for mutation on objects', async () => {
 		const storage = await createTestStorage();
 
 		const todos = storage.get('todo');

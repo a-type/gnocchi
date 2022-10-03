@@ -36,14 +36,14 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 		Index extends CollectionIndexName<Schema['collections'][Collection]>,
 	>(
 		collection: Collection,
-		query: CollectionFilter<Schema['collections'][Collection], Index>,
+		query?: CollectionFilter<Schema['collections'][Collection], Index>,
 	) => {
 		return this.queryStore.get({
 			collection: collection as string,
 			range: this.getRange(collection as string, query),
 			single: true,
-			index: query.where,
-			direction: query.order === 'desc' ? 'prev' : 'next',
+			index: query?.where,
+			direction: query?.order === 'desc' ? 'prev' : 'next',
 		});
 	};
 
@@ -52,13 +52,13 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 		Index extends CollectionIndexName<Schema['collections'][Collection]>,
 	>(
 		collection: Collection,
-		query: CollectionFilter<Schema['collections'][Collection], Index>,
+		query?: CollectionFilter<Schema['collections'][Collection], Index>,
 	) => {
 		return this.queryStore.get({
 			collection: collection as string,
 			range: this.getRange(collection as string, query),
-			index: query.where,
-			direction: query.order === 'desc' ? 'prev' : 'next',
+			index: query?.where,
+			direction: query?.order === 'desc' ? 'prev' : 'next',
 		});
 	};
 
