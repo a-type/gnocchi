@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
+	addOid,
+	addOidsAtAllLevels,
 	applyPatches,
 	diffToPatches,
+	initialToPatches,
 	substituteRefsWithObjects,
 } from './operation.js';
 
 describe('patch operations', () => {
 	describe('on flat objects', () => {
-		it('generates and applies set and delete operations', () => {
+		it('generates and applies set and remove operations', () => {
 			const from = { foo: 'bar', baz: 'qux', zing: 1, '@@oid': 'test/1:a' };
 			const to = { foo: 'bar', baz: 'pop', '@@oid': 'test/1:a' };
 			const patches = diffToPatches(from, to);
@@ -20,7 +23,7 @@ describe('patch operations', () => {
 				},
 				{
 					oid: 'test/1:a',
-					op: 'delete',
+					op: 'remove',
 					name: 'zing',
 				},
 			]);
@@ -228,14 +231,31 @@ describe('substituting refs with objects', () => {
 	it('substitutes arrays of objects', () => {
 		const root = {
 			foo: {
-				'@@type': 'ref-list',
-				ids: ['test/1:a', 'test/1:b'],
+				'@@type': 'ref',
+				id: 'test/1:c',
 			},
 			'@@oid': 'test/1',
 		};
 		const substituted = substituteRefsWithObjects(
 			root,
 			new Map([
+				[
+					'test/1:c',
+					{
+						'@@oid': 'test/1:c',
+						'@@type': 'list',
+						items: [
+							{
+								'@@type': 'ref',
+								id: 'test/1:a',
+							},
+							{
+								'@@type': 'ref',
+								id: 'test/1:b',
+							},
+						],
+					},
+				],
 				[
 					'test/1:a',
 					{
@@ -253,20 +273,103 @@ describe('substituting refs with objects', () => {
 			]),
 		);
 		expect(root).toEqual({
-			foo: [
-				{
-					foo: 'bar',
-					'@@oid': 'test/1:a',
-				},
-				{
-					qux: 'corge',
-					'@@oid': 'test/1:b',
-				},
-			],
+			foo: addOid(
+				[
+					{
+						foo: 'bar',
+						'@@oid': 'test/1:a',
+					},
+					{
+						qux: 'corge',
+						'@@oid': 'test/1:b',
+					},
+				],
+				'test/1:c',
+			),
 			'@@oid': 'test/1',
 		});
-		expect(substituted).toEqual(['test/1:a', 'test/1:b']);
+		expect(substituted).toEqual(['test/1:c', 'test/1:a', 'test/1:b']);
 	});
 
 	it.todo('substitutes arrays of arrays of objects');
+});
+
+describe('creating patches from initial state', () => {
+	it('adds oids to all sub-objects', async () => {
+		let i = 0;
+		function createSubId() {
+			return (i++).toString();
+		}
+		expect(
+			initialToPatches(
+				{
+					foo: {
+						bar: 'baz',
+					},
+					qux: [
+						{
+							corge: 'grault',
+						},
+						{
+							bin: {
+								oof: 1,
+							},
+						},
+					],
+				},
+				'test/a',
+				createSubId,
+			),
+		).toMatchInlineSnapshot();
+	});
+});
+
+describe('adding oids to all sub-level objects', () => {
+	it('should add oids to all kinds of sub-objects', () => {
+		let i = 0;
+		function createSubId() {
+			return (i++).toString();
+		}
+
+		const result = addOidsAtAllLevels(
+			addOid(
+				{
+					foo: {
+						bar: 1,
+					},
+					baz: [
+						{
+							qux: 2,
+						},
+						{
+							corge: [],
+						},
+					],
+				},
+				'test/a',
+			),
+			createSubId,
+		);
+		expect(result).toMatchInlineSnapshot(`
+			{
+			  "@@oid": "test/a",
+			  "baz": [
+			    {
+			      "@@oid": "test/a:2",
+			      "qux": 2,
+			    },
+			    {
+			      "@@oid": "test/a:3",
+			      "corge": [],
+			    },
+			  ],
+			  "foo": {
+			    "@@oid": "test/a:0",
+			    "bar": 1,
+			  },
+			}
+		`);
+		// snapshot doesn't capture the oid assigned to the array directly
+		expect(result.baz['@@oid']).toBe('test/a:1');
+	});
 });

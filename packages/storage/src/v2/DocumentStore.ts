@@ -1,11 +1,13 @@
 import {
+	createOid,
 	decomposeOid,
 	getOid,
 	ObjectIdentifier,
 	ObjectWithIdentifier,
 } from '@aglio/storage-common';
+import cuid from 'cuid';
 import { storeRequestPromise } from '../idb.js';
-import { Document, UPDATE } from './Document.js';
+import { createDocument, Document, updateLiveObject } from './Document.js';
 import { Metadata } from './Metadata.js';
 
 export class DocumentStore {
@@ -29,24 +31,42 @@ export class DocumentStore {
 		const result = await storeRequestPromise(request);
 
 		const doc = this.cache.get(oid)!;
-		doc[UPDATE](result);
+		updateLiveObject(doc, result);
 	};
 
 	take = (source: ObjectWithIdentifier) => {
 		const oid = getOid(source);
+		const { collection, id } = decomposeOid(oid);
 
 		let doc = this.cache.get(oid);
 		if (!doc) {
-			doc = new Document();
+			doc = createDocument(
+				{
+					applyOperation: async (op) =>
+						this.meta.insertLocalOperation(
+							await this.meta.messageCreator.createOperation({
+								patches: op.patches,
+								rootOid: oid,
+							}),
+						),
+					createObject: () => createOid(collection, id, cuid().slice(0, 7)),
+				},
+				source,
+			);
 			this.cache.set(oid, doc);
 		}
 
-		doc[UPDATE](source);
+		updateLiveObject(doc, source);
 
 		return doc;
 	};
 
 	dispose = (oid: ObjectIdentifier) => {
+		const doc = this.cache.get(oid);
+		if (!doc) {
+			return;
+		}
+		doc.dispose();
 		this.cache.delete(oid);
 	};
 }

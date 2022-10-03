@@ -1,4 +1,5 @@
 import { assert } from '@aglio/tools';
+import { v4 } from 'uuid';
 
 export interface SyncOperation {
 	id: string;
@@ -35,36 +36,42 @@ export interface SyncOperation {
 // 	| `${CollectionName}/${DocumentId}:${DocumentOid}#${string}`;
 export type ObjectIdentifier = string;
 
-export type ObjectRefSingle = {
+export type ObjectRef = {
 	'@@type': 'ref';
 	id: ObjectIdentifier;
 };
 
-export type ObjectRefList = {
-	'@@type': 'ref-list';
-	ids: ObjectIdentifier[];
-};
+/**
+ * A special known type of object which represents
+ * an array.
+ */
+export interface ListObject<T = any> {
+	'@@oid': ObjectIdentifier;
+	'@@type': 'list';
+	items: T[];
+}
 
-export type ObjectRef = ObjectRefSingle | ObjectRefList;
-
-export function isObjectRefSingle(obj: any): obj is ObjectRefSingle {
+export function isObjectRef(obj: any): obj is ObjectRef {
 	return obj && typeof obj === 'object' && obj['@@type'] === 'ref';
 }
-export function isObjectRefList(obj: any): obj is ObjectRefList {
-	return obj && typeof obj === 'object' && obj['@@type'] === 'ref-list';
+
+export function isListObject(obj: any): obj is ListObject {
+	return obj?.['@@type'] === 'list';
 }
 
 export type Normalized<T> = {
-	[key in keyof T]: T[key] extends Array<any>
-		? ObjectRefList
-		: T[key] extends Object
-		? ObjectRefSingle
-		: T[key];
+	[key in keyof T]: T[key] extends Object ? ObjectRef : T[key];
 };
 
 // patches v2
 
 export type PropertyName = string | number;
+/**
+ * List patches can target a particular child list or
+ * nested lists. The first path item is the property path
+ * of the first child list, any subsequent values are nested
+ * list indices.
+ */
 export type PropertyValue =
 	| string
 	| number
@@ -75,14 +82,15 @@ export type PropertyValue =
 // all patches refer to a specific sub-object.
 interface BaseOperationPatch {
 	oid: ObjectIdentifier;
-	name: PropertyName;
 }
 export interface OperationPatchSet extends BaseOperationPatch {
 	op: 'set';
+	name: PropertyName;
 	value: PropertyValue;
 }
 export interface OperationPatchRemove extends BaseOperationPatch {
-	op: 'delete';
+	op: 'remove';
+	name: PropertyName;
 }
 export interface OperationPatchListPush extends BaseOperationPatch {
 	op: 'list-push';
@@ -169,7 +177,12 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 	to: T,
 	patches: OperationPatch[] = [],
 ): OperationPatch[] {
-	const oid = from['@@oid'];
+	assert(
+		isObjectWithIdentifier(from),
+		"All levels of a diff'd object must have OIDs",
+	);
+
+	const oid = getOid(from);
 	const oldKeys = new Set(Object.keys(from));
 	for (const [key, value] of Object.entries(to)) {
 		oldKeys.delete(key);
@@ -177,8 +190,10 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 			continue;
 		}
 
+		const oldValue = from[key];
+
 		if (isObjectWithIdentifier(value)) {
-			if (value['@@oid'] !== from[key]['@@oid']) {
+			if (!oldValue || getOid(value) !== getOid(oldValue)) {
 				// push the set for the ref at this property
 				patches.push({
 					oid,
@@ -186,12 +201,29 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 					name: key,
 					value: {
 						'@@type': 'ref',
-						id: value['@@oid'],
+						id: getOid(value),
 					},
 				});
 				// do this by recursively adding patches for the difference
 				// between the old object and nothing (since the oid has changed)
-				diffToPatches({ '@@oid': value['@@oid'] }, value, patches);
+				if (Array.isArray(value)) {
+					// we must convert arrays to storable lists
+					diffToPatches(
+						{
+							'@@oid': getOid(value),
+							items: [],
+						},
+						{
+							'@@oid': getOid(value),
+							'@@type': 'list',
+							items: removeOid(value),
+						},
+						patches,
+					);
+				} else {
+					// for non-arrays we can just diff the value itself
+					diffToPatches({ '@@oid': getOid(value) }, value, patches);
+				}
 				// TODO: how to delete the prior ref'd object?
 				// this could be left up to the client to determine
 				// which refs are orphaned after it applies patches.
@@ -200,21 +232,21 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 				diffToPatches(from[key], value, patches);
 			}
 		} else if (Array.isArray(value)) {
+			// we must replace the list
 			// since this is a naive diffing algorithm, we only
 			// really work with indexes.
 			for (let i = 0; i < value.length; i++) {
 				const item = value[i];
 				if (isObjectWithIdentifier(item)) {
-					if (item['@@oid'] !== from[key][i]['@@oid']) {
+					if (getOid(item) !== getOid(from[key][i])) {
 						// push the set for the ref at this index
 						patches.push({
 							oid,
 							op: 'list-set',
-							name: key,
 							index: i,
 							value: {
 								'@@type': 'ref',
-								id: item['@@oid'],
+								id: getOid(item),
 							},
 						});
 					} else {
@@ -229,7 +261,6 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 				patches.push({
 					oid,
 					op: 'list-delete',
-					name: key,
 					index: value.length,
 					count: deletedItemsAtEnd,
 				});
@@ -253,7 +284,7 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 		// push the delete for the property
 		patches.push({
 			oid,
-			op: 'delete',
+			op: 'remove',
 			name: key,
 		});
 	}
@@ -261,8 +292,63 @@ export function diffToPatches<T extends ObjectWithIdentifier>(
 	return patches;
 }
 
-export function initialToPatches(initial: ObjectWithIdentifier) {
-	return diffToPatches({ '@@oid': initial['@@oid'] }, initial);
+/**
+ * Takes a basic object and constructs a patch list to create it and
+ * all of its nested objects.
+ */
+export function initialToPatches(
+	initial: any,
+	rootOid: ObjectIdentifier,
+	createSubId = createOidSubId,
+) {
+	return diffToPatches(
+		{ '@@oid': rootOid },
+		addOidsAtAllLevels(addOid(initial, rootOid), createSubId),
+	);
+}
+
+export function addOidsAtAllLevels(
+	obj: ObjectWithIdentifier,
+	createSubId = createOidSubId,
+) {
+	if (!!obj && typeof obj === 'object') {
+		const { collection, id } = decomposeOid(getOid(obj));
+		if (Array.isArray(obj)) {
+			for (const item of obj) {
+				internalAddOidsAtNestedLevels(item, collection, id, createSubId);
+			}
+		} else {
+			for (const [key, value] of Object.entries(obj)) {
+				if (key === '@@oid') {
+					continue;
+				}
+				internalAddOidsAtNestedLevels(value, collection, id, createSubId);
+			}
+		}
+	}
+	return obj;
+}
+function internalAddOidsAtNestedLevels(
+	level: ObjectWithIdentifier,
+	collection: string,
+	rootId: string,
+	createSubId = createOidSubId,
+) {
+	if (!!level && typeof level === 'object') {
+		addOid(level, createOid(collection, rootId, createSubId()));
+		if (Array.isArray(level)) {
+			for (const item of level) {
+				internalAddOidsAtNestedLevels(item, collection, rootId, createSubId);
+			}
+		} else {
+			for (const [key, value] of Object.entries(level)) {
+				if (key !== '@@oid') {
+					internalAddOidsAtNestedLevels(value, collection, rootId, createSubId);
+				}
+			}
+		}
+	}
+	return level;
 }
 
 export function groupPatchesByIdentifier(patches: OperationPatch[]) {
@@ -277,9 +363,9 @@ export function groupPatchesByIdentifier(patches: OperationPatch[]) {
 	return grouped;
 }
 
-function listCheck(obj: any) {
-	if (!Array.isArray(obj)) {
-		throw new Error('Expected an array');
+function listCheck(obj: any): asserts obj is ListObject {
+	if (obj?.['@@type'] !== 'list') {
+		throw new Error('Expected a list');
 	}
 }
 
@@ -297,47 +383,49 @@ export function applyPatch<T extends NormalizedObject>(
 	const baseAsAny = base as any;
 	let index;
 	let spliceResult: any[];
-	const value = baseAsAny[patch.name];
+
 	switch (patch.op) {
 		case 'set':
 			baseAsAny[patch.name] = patch.value;
 			break;
-		case 'delete':
+		case 'remove':
 			delete baseAsAny[patch.name];
 			break;
 		case 'list-push':
-			listCheck(value);
-			value.push(patch.value);
+			listCheck(base);
+			base.items.push(patch.value);
 			break;
 		case 'list-set':
-			listCheck(value);
-			value[patch.index] = patch.value;
+			listCheck(base);
+			base.items[patch.index] = patch.value;
 			break;
 		case 'list-delete':
-			listCheck(value);
-			value.splice(patch.index, patch.count);
+			listCheck(base);
+			base.items.splice(patch.index, patch.count);
 			break;
 		case 'list-move-by-index':
-			listCheck(value);
-			spliceResult = value.splice(patch.from, 1);
-			value.splice(patch.to, 0, spliceResult[0]);
+			listCheck(base);
+			spliceResult = base.items.splice(patch.from, 1);
+			base.items.splice(patch.to, 0, spliceResult[0]);
 			break;
 		case 'list-remove':
+			listCheck(base);
 			do {
-				index = value.indexOf(patch.value);
+				index = base.items.indexOf(patch.value);
 				if (index !== -1) {
-					value.splice(index, 1);
+					base.items.splice(index, 1);
 				}
 			} while (index !== -1);
 			break;
 		case 'list-move-by-ref':
-			index = value.indexOf(patch.value);
-			spliceResult = value.splice(index, 1);
-			value.splice(patch.index, 0, spliceResult[0]);
+			listCheck(base);
+			index = base.items.indexOf(patch.value);
+			spliceResult = base.items.splice(index, 1);
+			base.items.splice(patch.index, 0, spliceResult[0]);
 			break;
 		case 'list-insert':
-			listCheck(value);
-			value.splice(patch.index, 0, patch.value);
+			listCheck(base);
+			base.items.splice(patch.index, 0, patch.value);
 			break;
 		case 'delete':
 			return undefined;
@@ -385,24 +473,7 @@ export function substituteRefsWithObjects(
 		// sure all nested objects include an OID
 		assert(base['@@oid'], `Object ${JSON.stringify(base)} must have an oid`);
 		for (const key of Object.keys(base)) {
-			const normalizedValue = base[key];
-			if (isObjectRefSingle(normalizedValue)) {
-				used.push(normalizedValue.id);
-				base[key] = refs.get(normalizedValue.id);
-				assert(
-					!!base[key],
-					`No value was found in object map for ${normalizedValue.id}`,
-				);
-				base[key]['@@oid'] = normalizedValue.id;
-			} else if (isObjectRefList(normalizedValue)) {
-				base[key] = normalizedValue.ids.map((id) => {
-					used.push(id);
-					const obj = refs.get(id);
-					assert(!!obj, `No value was found in object map for ${id}`);
-					obj['@@oid'] = id;
-					return obj;
-				});
-			}
+			base[key] = dereference(base[key], refs, used);
 
 			// now that objects are in place, recursively substitute
 			if (typeof base[key] === 'object') {
@@ -412,6 +483,30 @@ export function substituteRefsWithObjects(
 	}
 
 	return used;
+}
+
+function dereference(
+	input: any,
+	refs: Map<ObjectIdentifier, any>,
+	used: ObjectIdentifier[],
+): any {
+	if (isObjectRef(input)) {
+		used.push(input.id);
+		const resolved = refs.get(input.id);
+		assert(!!resolved, `No value was found in object map for ${input.id}`);
+		// if the referenced object is a ListObject, we need to
+		// compress it down into an array.
+		if (isListObject(resolved)) {
+			return addOid(
+				resolved.items.map((item: any) => dereference(item, refs, used)),
+				input.id,
+			);
+		} else {
+			return addOid(resolved, input.id);
+		}
+	} else {
+		return input;
+	}
 }
 
 export function substituteFirstLevelObjectsWithRefs<
@@ -439,23 +534,16 @@ export function substituteFirstLevelObjectsWithRefs<
 	} else {
 		for (const [key, value] of Object.entries(base)) {
 			if (value && typeof value === 'object') {
-				if (Array.isArray(value)) {
-					const ids: ObjectIdentifier[] = [];
-					for (let i = 0; i < value.length; i++) {
-						const item = value[i];
-						if (item && typeof item === 'object') {
-							const id = item['@@oid'];
-							assert(id, `Object ${JSON.stringify(item)} must have an oid`);
-							ids.push(id);
-							refObjects.set(id, item);
-						}
+				if (isObjectWithIdentifier(value)) {
+					base[key] = {
+						'@@type': 'ref',
+						id: getOid(value),
+					};
+					if (Array.isArray(value)) {
+						refObjects.set(getOid(value), value);
+					} else {
+						refObjects.set(getOid(value), value);
 					}
-					(base as any)[key] = { '@@type': 'ref-list', ids };
-				} else {
-					const id = value['@@oid'];
-					assert(id, `Object ${JSON.stringify(value)} must have an oid`);
-					(base as any)[key] = { '@@type': 'ref', id };
-					refObjects.set(id, value);
 				}
 			}
 		}
@@ -486,8 +574,12 @@ export function decomposeOid(oid: ObjectIdentifier): {
 }
 
 export function getOid<T extends Record<string, any>>(obj: T) {
+	assert(
+		!!obj && typeof obj === 'object',
+		`Object with OID must be an object, got ${JSON.stringify(obj)}`,
+	);
 	const oid = obj['@@oid'];
-	assert(oid, 'Object does not have an oid');
+	assert(oid, `Object does not have an oid: ${JSON.stringify(obj)}`);
 	return oid;
 }
 
@@ -513,4 +605,17 @@ export function assertAllLevelsHaveOids(obj: any, root?: any) {
 			assertAllLevelsHaveOids(obj[key], root || obj);
 		}
 	}
+}
+
+export function addOid(value: any, oid: ObjectIdentifier) {
+	return Object.assign(value, { '@@oid': oid });
+}
+
+export function removeOid(value: any) {
+	delete value['@@oid'];
+	return value;
+}
+
+export function createOidSubId() {
+	return v4().slice(0, 8);
 }
