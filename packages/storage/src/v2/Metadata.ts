@@ -1,43 +1,42 @@
 import {
-	addOid,
 	applyPatch,
-	HeartbeatMessage,
 	ObjectIdentifier,
-	PresenceUpdateMessage,
+	PatchCreator,
 	StorageSchema,
 	substituteRefsWithObjects,
-	SyncMessage,
 	SyncOperation,
-	SyncResponseMessage,
-	SyncStep2Message,
 } from '@aglio/storage-common';
-import cuid from 'cuid';
-import { TEST_API } from '../constants.js';
+import { assignOid, getOidRoot } from '@aglio/storage-common/src/oids.js';
+import { EventSubscriber } from '../EventSubscriber.js';
 import { storeRequestPromise } from '../idb.js';
 import type { Sync } from '../Sync.js';
 import { AckInfoStore } from './AckInfoStore.js';
 import { BaselinesStore } from './BaselinesStore.js';
-import { DocumentStore } from './DocumentStore.js';
 import { LocalHistoryStore } from './LocalHistoryStore.js';
 import { LocalReplicaStore } from './LocalReplicaStore.js';
 import { MessageCreator } from './MessageCreator.js';
-import { OperationsStore } from './OperationsStore.js';
+import { PatchesStore } from './PatchesStore.js';
 import { SchemaStore } from './SchemaStore.js';
 
-export class Metadata {
-	readonly operations = new OperationsStore(this.db);
+export class Metadata extends EventSubscriber<{
+	documentsChanged: (oids: ObjectIdentifier[]) => void;
+}> {
+	readonly patches = new PatchesStore(this.db);
 	readonly baselines = new BaselinesStore(this.db);
 	readonly localReplica = new LocalReplicaStore(this.db);
 	readonly ackInfo = new AckInfoStore(this.db);
 	readonly schema = new SchemaStore(this.db, this.schemaDefinition.version);
 	readonly localHistory = new LocalHistoryStore(this.db);
 	readonly messageCreator = new MessageCreator(this);
+	readonly patchCreator = new PatchCreator(() => this.now);
 
 	constructor(
 		private readonly db: IDBDatabase,
 		readonly sync: Sync,
 		private readonly schemaDefinition: StorageSchema<any>,
-	) {}
+	) {
+		super();
+	}
 
 	get now() {
 		return this.sync.time.now(this.schema.currentVersion);
@@ -47,24 +46,25 @@ export class Metadata {
 	 * Methods for accessing data
 	 */
 
+	/**
+	 * Recomputes an entire document from stored patches and baselines.
+	 */
 	getComputedView = async <T = any>(
 		oid: ObjectIdentifier,
 		upToTimestamp?: string,
 	): Promise<T | undefined> => {
-		const baselines = await this.baselines.getAll(oid);
+		const baselines = await this.baselines.getAllForDocument(oid);
 		const subObjectsMappedByOid = new Map<ObjectIdentifier, any>();
 		for (const baseline of baselines) {
 			subObjectsMappedByOid.set(baseline.oid, baseline.snapshot);
 		}
 
-		await this.operations.iterateOverAllOperationsForDocument(
+		await this.patches.iterateOverAllPatchesForDocument(
 			oid,
-			(op) => {
-				for (const patch of op.patches) {
-					let current = subObjectsMappedByOid.get(patch.oid) || ({} as any);
-					current = applyPatch(current, patch);
-					subObjectsMappedByOid.set(patch.oid, current);
-				}
+			(patch) => {
+				let current = subObjectsMappedByOid.get(patch.oid) || ({} as any);
+				current = applyPatch(current, patch);
+				subObjectsMappedByOid.set(patch.oid, current);
 			},
 			{
 				to: upToTimestamp,
@@ -75,7 +75,7 @@ export class Metadata {
 		// placing them where their ref is
 		const rootBaseline = subObjectsMappedByOid.get(oid) ?? ({} as any);
 		// critical: attach metadata
-		addOid(rootBaseline, oid);
+		assignOid(rootBaseline, oid);
 		const usedOids = substituteRefsWithObjects(
 			rootBaseline,
 			subObjectsMappedByOid,
@@ -114,11 +114,27 @@ export class Metadata {
 	};
 
 	/**
+	 * Returns a list of the root document OIDs for all entities
+	 * modified in a set of patches
+	 */
+	private rootOidsFromList(source: ObjectIdentifier[]) {
+		return Array.from(
+			new Set<ObjectIdentifier>(source.map((oid) => getOidRoot(oid))),
+		);
+	}
+
+	/**
 	 * Applies a patch to the document and stores it in the database.
 	 * @returns the oldest local history timestamp
 	 */
 	insertLocalOperation = async (item: SyncOperation) => {
-		await this.operations.insertOperation(item);
+		await this.patches.addPatches(
+			item.patches.map((patch) => ({
+				...patch,
+				replicaId: item.replicaId,
+				operationId: item.id,
+			})),
+		);
 
 		const oldestHistoryTimestamp = await this.localHistory.add({
 			operationId: item.id,
@@ -126,6 +142,13 @@ export class Metadata {
 		});
 
 		this.tryAutonomousRebase(oldestHistoryTimestamp);
+
+		this.emit(
+			'documentsChanged',
+			this.rootOidsFromList(item.patches.map((p) => p.oid)),
+		);
+
+		return oldestHistoryTimestamp;
 	};
 
 	/**
@@ -133,7 +156,16 @@ export class Metadata {
 	 * @returns a list of affected document OIDs
 	 */
 	insertRemoteOperations = async (items: SyncOperation[]) => {
-		return this.operations.insertOperations(items);
+		const affectedOids = await this.patches.addPatches(
+			items.flatMap((operation) =>
+				operation.patches.map((patch) => ({
+					...patch,
+					replicaId: operation.replicaId,
+					operationId: operation.id,
+				})),
+			),
+		);
+		this.emit('documentsChanged', this.rootOidsFromList(affectedOids));
 	};
 
 	updateLastSynced = async () => {
@@ -171,7 +203,7 @@ export class Metadata {
 		const localInfo = await this.localReplica.get();
 
 		// find all operations before the oldest history timestamp
-		const priorOperations = await this.operations.getAllOperationsFromReplica(
+		const priorOperations = await this.patches.getAllOperationsFromReplica(
 			localInfo.id,
 			{
 				before: oldestHistoryTimestamp,
@@ -250,11 +282,15 @@ export function openMetadataDatabase(indexedDB: IDBFactory) {
 				const baselinesStore = db.createObjectStore('baselines', {
 					keyPath: 'oid',
 				});
+				const patchesStore = db.createObjectStore('patches', {
+					keyPath: 'oid_timestamp',
+				});
 				const infoStore = db.createObjectStore('info', { keyPath: 'type' });
 				opsStore.createIndex('timestamp', 'timestamp');
 				opsStore.createIndex('rootOid_timestamp', 'rootOid_timestamp');
 				opsStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
 				baselinesStore.createIndex('timestamp', 'timestamp');
+				patchesStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
 			}
 		};
 		request.onerror = () => {

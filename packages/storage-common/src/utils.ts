@@ -65,3 +65,7 @@ export function cloneDeep<T>(obj: T): T {
 export function hashObject(obj: any) {
 	return stableStringify(obj);
 }
+
+export function isObject(obj: any) {
+	return obj && typeof obj === 'object';
+}

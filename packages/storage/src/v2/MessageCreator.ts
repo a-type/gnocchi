@@ -7,6 +7,7 @@ import {
 	SyncStep2Message,
 	TimestampProvider,
 } from '@aglio/storage-common';
+import { getOidRoot } from '@aglio/storage-common/src/oids.js';
 import cuid from 'cuid';
 import { LocalReplicaStore } from './LocalReplicaStore.js';
 import { Metadata } from './Metadata.js';
@@ -15,7 +16,7 @@ export class MessageCreator {
 	constructor(private meta: Metadata) {}
 
 	createOperation = async (
-		init: Pick<SyncOperation, 'rootOid' | 'patches'> & {
+		init: Pick<SyncOperation, 'patches'> & {
 			timestamp?: string;
 		},
 	): Promise<SyncOperation> => {
@@ -31,7 +32,7 @@ export class MessageCreator {
 	createMigrationOperation = async ({
 		targetVersion,
 		...init
-	}: Pick<SyncOperation, 'rootOid' | 'patches'> & {
+	}: Pick<SyncOperation, 'patches'> & {
 		targetVersion: number;
 	}): Promise<SyncOperation> => {
 		const localInfo = await this.meta.localReplica.get();
@@ -71,7 +72,11 @@ export class MessageCreator {
 		);
 		// for now we just send every baseline for every
 		// affected document... TODO: optimize this
-		const affectedDocs = new Set(operations.map((op) => op.rootOid));
+		const affectedDocs = new Set(
+			operations
+				.flatMap((op) => op.patches)
+				.map((patch) => getOidRoot(patch.oid)),
+		);
 		const baselines = await this.meta.baselines.getAllForMultipleDocuments(
 			Array.from(affectedDocs),
 		);

@@ -1,5 +1,4 @@
 import {
-	addOid,
 	createOid,
 	initialToPatches,
 	SchemaCollection,
@@ -10,7 +9,7 @@ import {
 	StorageSchema,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
-import { DocumentStore } from './DocumentStore.js';
+import { EntityStore } from './EntityStore.js';
 import { Metadata } from './Metadata.js';
 
 /**
@@ -22,7 +21,7 @@ export class DocumentCreator<Schema extends StorageSchema<any>> {
 	constructor(
 		private meta: Metadata,
 		private schema: Schema,
-		private documents: DocumentStore,
+		private entities: EntityStore,
 	) {}
 
 	create = async <Collection extends SchemaCollectionName<Schema>>(
@@ -30,8 +29,9 @@ export class DocumentCreator<Schema extends StorageSchema<any>> {
 		init: StorageDocumentInit<SchemaCollection<Schema, Collection>>,
 	) => {
 		const primaryKeyName = this.schema.collections[collection]
-			.primaryKey as keyof StorageDocument<
-			SchemaCollection<Schema, Collection>
+			.primaryKey as Exclude<
+			keyof StorageDocument<SchemaCollection<Schema, Collection>>,
+			symbol
 		>;
 		const primaryKey = init[primaryKeyName] as string;
 		assert(
@@ -39,12 +39,6 @@ export class DocumentCreator<Schema extends StorageSchema<any>> {
 			`Document must have a primary key: ${primaryKeyName.toString()}`,
 		);
 		const oid = createOid(collection as string, primaryKey);
-
-		return this.documents.applyLocalOperation(
-			await this.meta.messageCreator.createOperation({
-				rootOid: oid,
-				patches: initialToPatches(init, oid),
-			}),
-		);
+		return this.entities.create(init, oid);
 	};
 }

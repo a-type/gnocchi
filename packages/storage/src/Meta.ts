@@ -19,6 +19,7 @@ import {
 	substituteRefsWithObjects,
 	createOid,
 } from '@aglio/storage-common';
+import { assignOid } from '@aglio/storage-common/src/oids.js';
 import { assert } from '@aglio/tools';
 import cuid from 'cuid';
 import { TEST_API } from './constants.js';
@@ -523,7 +524,7 @@ export class Meta {
 		// placing them where their ref is
 		const rootBaseline = subObjectsMappedByOid.get(documentOid) ?? ({} as any);
 		// critical: attach metadata
-		rootBaseline['@@oid'] = documentOid;
+		assignOid(rootBaseline, documentOid);
 		const usedOids = substituteRefsWithObjects(
 			rootBaseline,
 			subObjectsMappedByOid,

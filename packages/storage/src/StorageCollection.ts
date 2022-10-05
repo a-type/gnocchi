@@ -40,6 +40,7 @@ import { TEST_API } from './constants.js';
 import { LiveQuery } from './index.js';
 import { LIVE_QUERY_SUBSCRIBE } from './reactives/LiveQuery.js';
 import { assert } from '@aglio/tools';
+import { maybeGetOid } from '@aglio/storage-common/src/oids.js';
 
 export type CollectionInMemoryFilters<
 	Collection extends StorageCollectionSchema<any, any, any>,
@@ -347,7 +348,7 @@ export class StorageCollection<
 		from: StorageDocument<Collection>,
 		to: StorageDocument<Collection>,
 	): OperationPatch[] => {
-		assert(from['@@oid'], 'must have oid');
+		assert(maybeGetOid(from), 'must have oid');
 		return diffToPatches(
 			omit(from, this.syntheticIndexKeys),
 			omit(to, this.syntheticIndexKeys),

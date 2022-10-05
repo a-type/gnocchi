@@ -5,15 +5,15 @@ import { QueryMaker } from './QueryMaker.js';
 import { QueryStore } from './QueryStore.js';
 import { PresenceManager } from './PresenceManager.js';
 import { openDocumentDatabase } from './openDocumentDatabase.js';
-import { DocumentStore } from './DocumentStore.js';
 import { DocumentCreator } from './DocumentCreator.js';
+import { EntityStore } from './EntityStore.js';
 
 export class Storage<Schema extends StorageSchema<any>> {
-	private documents = new DocumentStore(this.documentDb, this.meta);
-	private queryStore = new QueryStore(this.documentDb, this.documents);
+	private entities = new EntityStore(this.documentDb, this.meta, this.sync);
+	private queryStore = new QueryStore(this.documentDb, this.entities);
 	queryMaker = new QueryMaker(this.queryStore, this.schema);
 	presence = new PresenceManager(this.sync, this.meta);
-	documentCreator = new DocumentCreator(this.meta, this.schema, this.documents);
+	documentCreator = new DocumentCreator(this.meta, this.schema, this.entities);
 
 	constructor(
 		private meta: Metadata,

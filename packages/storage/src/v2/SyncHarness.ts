@@ -1,7 +1,11 @@
-import { ObjectIdentifier, ServerMessage } from '@aglio/storage-common';
+import {
+	ClientMessage,
+	ObjectIdentifier,
+	ServerMessage,
+} from '@aglio/storage-common';
 import { EventSubscriber } from '../EventSubscriber.js';
 import type { Sync } from '../Sync.js';
-import { DocumentStore } from './DocumentStore.js';
+import { EntityStore } from './EntityStore.js';
 import { Metadata } from './Metadata.js';
 
 /**
@@ -13,18 +17,16 @@ export class SyncHarness {
 	private meta;
 	private initialPresence: any;
 	private heartbeat;
-	private documents;
 
 	constructor({
 		sync,
 		meta,
 		initialPresence,
-		documents,
 	}: {
 		sync: Sync;
+		entities: EntityStore;
 		meta: Metadata;
 		initialPresence: any;
-		documents: DocumentStore;
 	}) {
 		this.sync = sync;
 		this.meta = meta;
@@ -33,7 +35,6 @@ export class SyncHarness {
 			sync: this.sync,
 			meta: this.meta,
 		});
-		this.documents = documents;
 		sync.subscribe('onlineChange', this.handleOnlineChange);
 		sync.subscribe('message', this.handleMessage);
 	}
@@ -56,7 +57,7 @@ export class SyncHarness {
 		switch (message.type) {
 			case 'op-re':
 				// rebroadcasted operations
-				this.documents.applyRemoteOperations(message.ops);
+				this.meta.insertRemoteOperations(message.ops);
 				break;
 			case 'sync-resp':
 				await this.meta.ackInfo.setGlobalAck(message.globalAckTimestamp);
@@ -75,6 +76,10 @@ export class SyncHarness {
 				}
 				break;
 		}
+	};
+
+	send = async (message: ClientMessage) => {
+		this.sync.send(message);
 	};
 }
 
