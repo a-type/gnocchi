@@ -15,3 +15,4 @@ export type { Migration } from './migration.js';
 export type { UserInfo } from './presence.js';
 export * from './patch.js';
 export * from './oids.js';
+export * from './EventSubscriber.js';

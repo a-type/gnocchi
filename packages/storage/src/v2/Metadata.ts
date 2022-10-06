@@ -7,6 +7,7 @@ import {
 	SyncOperation,
 	assignOid,
 	getOidRoot,
+	omit,
 } from '@aglio/storage-common';
 import { EventSubscriber } from '../EventSubscriber.js';
 import { storeRequestPromise } from '../idb.js';
@@ -19,9 +20,7 @@ import { MessageCreator } from './MessageCreator.js';
 import { ClientPatch, PatchesStore } from './PatchesStore.js';
 import { SchemaStore } from './SchemaStore.js';
 
-export class Metadata extends EventSubscriber<{
-	documentsChanged: (oids: ObjectIdentifier[]) => void;
-}> {
+export class Metadata {
 	readonly patches = new PatchesStore(this.db);
 	readonly baselines = new BaselinesStore(this.db);
 	readonly localReplica = new LocalReplicaStore(this.db);
@@ -35,9 +34,7 @@ export class Metadata extends EventSubscriber<{
 		private readonly db: IDBDatabase,
 		readonly sync: Sync,
 		private readonly schemaDefinition: StorageSchema<any>,
-	) {
-		super();
-	}
+	) {}
 
 	get now() {
 		return this.sync.time.now(this.schema.currentVersion);
@@ -50,7 +47,7 @@ export class Metadata extends EventSubscriber<{
 	/**
 	 * Recomputes an entire document from stored patches and baselines.
 	 */
-	getComputedView = async <T = any>(
+	getComputedDocument = async <T = any>(
 		oid: ObjectIdentifier,
 		upToTimestamp?: string,
 	): Promise<T | undefined> => {
@@ -64,7 +61,16 @@ export class Metadata extends EventSubscriber<{
 		await this.patches.iterateOverAllPatchesForDocument(
 			oid,
 			(patch) => {
-				console.debug('Applying patch', patch);
+				console.debug(
+					'Applying patch',
+					omit(patch, [
+						'replicaId',
+						'documentOid_timestamp',
+						'oid_timestamp',
+						'operationId',
+						'replicaId_timestamp',
+					]),
+				);
 				let current = subObjectsMappedByOid.get(patch.oid);
 				current = applyPatch(current, patch);
 				subObjectsMappedByOid.set(patch.oid, current);
@@ -93,6 +99,17 @@ export class Metadata extends EventSubscriber<{
 	};
 
 	/**
+	 * Recomputes a normalized view of a single entity object from stored patches
+	 * and baseline.
+	 */
+	getComputedEntity = async <T = any>(
+		oid: ObjectIdentifier,
+		upToTimestamp?: string,
+	): Promise<T | undefined> => {
+		throw new Error('TODO');
+	};
+
+	/**
 	 * Methods for writing data
 	 */
 
@@ -117,16 +134,6 @@ export class Metadata extends EventSubscriber<{
 	};
 
 	/**
-	 * Returns a list of the root document OIDs for all entities
-	 * modified in a set of patches
-	 */
-	private rootOidsFromList(source: ObjectIdentifier[]): ObjectIdentifier[] {
-		return Array.from(
-			new Set<ObjectIdentifier>(source.map((oid) => getOidRoot(oid))),
-		);
-	}
-
-	/**
 	 * Applies a patch to the document and stores it in the database.
 	 * @returns the oldest local history timestamp
 	 */
@@ -144,12 +151,7 @@ export class Metadata extends EventSubscriber<{
 			timestamp: item.timestamp,
 		});
 
-		this.tryAutonomousRebase(oldestHistoryTimestamp);
-
-		this.emit(
-			'documentsChanged',
-			this.rootOidsFromList(item.patches.map((p) => p.oid)),
-		);
+		// this.tryAutonomousRebase(oldestHistoryTimestamp);
 
 		return oldestHistoryTimestamp;
 	};
@@ -168,7 +170,7 @@ export class Metadata extends EventSubscriber<{
 				})),
 			),
 		);
-		this.emit('documentsChanged', this.rootOidsFromList(affectedOids));
+		return affectedOids;
 	};
 
 	updateLastSynced = async () => {
@@ -234,8 +236,11 @@ export class Metadata extends EventSubscriber<{
 		}
 	};
 
+	/**
+	 * TODO: FIX REBASING: should be Entity/OID based, not document based?
+	 */
 	rebase = async (oid: ObjectIdentifier, upTo: string) => {
-		const view = await this.getComputedView(oid, upTo);
+		const view = await this.getComputedDocument(oid, upTo);
 		await this.baselines.set({
 			oid,
 			snapshot: view,
@@ -255,6 +260,7 @@ export class Metadata extends EventSubscriber<{
 		);
 
 		console.log('successfully rebased', oid, 'up to', upTo);
+		console.log('latest baseline of', oid, 'is', view);
 	};
 
 	stats = async () => {

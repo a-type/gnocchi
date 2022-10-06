@@ -11,16 +11,13 @@ import { storeRequestPromise } from '../idb.js';
 import { SyncHarness } from './SyncHarness.js';
 
 export class Storage<Schema extends StorageSchema<any>> {
+	private entities = new EntityStore(this.documentDb, this.meta, this.sync);
 	private syncHarness = new SyncHarness({
 		sync: this.sync,
 		meta: this.meta,
+		entities: this.entities,
 		initialPresence: {},
 	});
-	private entities = new EntityStore(
-		this.documentDb,
-		this.meta,
-		this.syncHarness,
-	);
 	private queryStore = new QueryStore(this.documentDb, this.entities);
 	queryMaker = new QueryMaker(this.queryStore, this.schema);
 	presence = new PresenceManager(this.sync, this.meta);

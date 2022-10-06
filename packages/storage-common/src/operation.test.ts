@@ -56,26 +56,28 @@ describe('creating diff patch operations', () => {
 				'test/a',
 			);
 			const patches = diffToPatches(from, to, createClock());
-			expect(patches).toEqual([
-				{
-					oid: 'test/a:1',
-					op: 'initialize',
-					value: {
-						qux: 'grault',
-					},
-					timestamp: '0',
-				},
-				{
-					oid: 'test/a',
-					op: 'set',
-					name: 'baz',
-					value: {
-						'@@type': 'ref',
-						id: 'test/a:1',
-					},
-					timestamp: '1',
-				},
-			]);
+			expect(patches).toMatchInlineSnapshot(`
+				[
+				  {
+				    "oid": "test/a:1",
+				    "op": "initialize",
+				    "timestamp": "0",
+				    "value": {
+				      "qux": "grault",
+				    },
+				  },
+				  {
+				    "name": "baz",
+				    "oid": "test/a",
+				    "op": "set",
+				    "timestamp": "1",
+				    "value": {
+				      "@@type": "ref",
+				      "id": "test/a:1",
+				    },
+				  },
+				]
+			`);
 		});
 		it('replaces whole nested objects with different ids even if fields are the same', () => {
 			const from = {
@@ -144,15 +146,17 @@ describe('creating diff patch operations', () => {
 			assignOid(to, 'test/a');
 			assignOid(to.baz, 'test/a:0');
 			const patches = diffToPatches(from, to, createClock());
-			expect(patches).toEqual([
-				{
-					oid: 'test/a:0',
-					op: 'set',
-					name: 'qux',
-					value: 'fig',
-					timestamp: '0',
-				},
-			]);
+			expect(patches).toMatchInlineSnapshot(`
+				[
+				  {
+				    "name": "qux",
+				    "oid": "test/a:0",
+				    "op": "set",
+				    "timestamp": "0",
+				    "value": "fig",
+				  },
+				]
+			`);
 		});
 	});
 	describe('on lists of primitives', () => {
@@ -166,7 +170,7 @@ describe('creating diff patch operations', () => {
 						timestamp: '0',
 					},
 				]),
-			).toEqual(['foo', 'bar', 'baz']);
+			).toEqual(assignOid(['foo', 'bar', 'baz'], 'test/a'));
 		});
 		it.todo('sets items');
 		it.todo('inserts items');
@@ -285,9 +289,14 @@ describe('substituting refs with objects', () => {
 		};
 		assignOid(root, 'test/a');
 		const substituted = substituteRefsWithObjects(root, new Map());
-		expect(root).toEqual({
-			foo: 'bar',
-		});
+		expect(root).toEqual(
+			assignOid(
+				{
+					foo: 'bar',
+				},
+				'test/a',
+			),
+		);
 		expect(substituted).toEqual([]);
 	});
 
@@ -305,12 +314,20 @@ describe('substituting refs with objects', () => {
 			root,
 			new Map([['test/1:a', { foo: 'bar' }]]),
 		);
-		expect(root).toEqual({
-			foo: {
-				foo: 'bar',
-			},
-			qux: 1,
-		});
+		expect(root).toEqual(
+			assignOid(
+				{
+					foo: assignOid(
+						{
+							foo: 'bar',
+						},
+						'test/1:a',
+					),
+					qux: 1,
+				},
+				'test/1',
+			),
+		);
 		expect(substituted).toEqual(['test/1:a']);
 		expect(getOid(root)).toEqual('test/1');
 		expect(getOid(root.foo)).toEqual('test/1:a');
@@ -346,9 +363,12 @@ describe('substituting refs with objects', () => {
 			]),
 		);
 		expect(root).toEqual({
+			'__@@oid_do_not_use': 'test/1',
 			foo: {
+				'__@@oid_do_not_use': 'test/1:a',
 				foo: 'bar',
 				baz: {
+					'__@@oid_do_not_use': 'test/1:b',
 					qux: 'corge',
 				},
 			},
@@ -399,14 +419,20 @@ describe('substituting refs with objects', () => {
 			]),
 		);
 		expect(root).toEqual({
-			foo: [
-				{
-					foo: 'bar',
-				},
-				{
-					qux: 'corge',
-				},
-			],
+			'__@@oid_do_not_use': 'test/1',
+			foo: assignOid(
+				[
+					{
+						'__@@oid_do_not_use': 'test/1:a',
+						foo: 'bar',
+					},
+					{
+						'__@@oid_do_not_use': 'test/1:b',
+						qux: 'corge',
+					},
+				],
+				'test/1:c',
+			),
 		});
 		expect(substituted).toEqual(['test/1:c', 'test/1:a', 'test/1:b']);
 		expect(getOid(root)).toEqual('test/1');
@@ -424,56 +450,70 @@ describe('creating patches from initial state', () => {
 		function createSubId() {
 			return (i++).toString();
 		}
-		expect(
-			initialToPatches(
-				{
-					foo: {
-						bar: 'baz',
-					},
-					qux: [
-						{
-							corge: 'grault',
-						},
-						{
-							bin: {
-								oof: 1,
-							},
-						},
-					],
+		const result = initialToPatches(
+			{
+				foo: {
+					bar: 'baz',
 				},
-				'test/a',
-				createClock(),
-				createSubId,
-			),
-		).toMatchInlineSnapshot(`
+				qux: [
+					{
+						corge: 'grault',
+					},
+					{
+						bin: {
+							oof: 1,
+						},
+					},
+				],
+			},
+			'test/a',
+			createClock(),
+			createSubId,
+		);
+		/**
+		 * Patches should not include assigned OID property
+		 */
+		expect(result).toMatchInlineSnapshot(`
 			[
-			  {
-			    "oid": "test/a",
-			    "op": "initialize",
-			    "timestamp": "0",
-			    "value": {
-			      "foo": {
-			        "@@type": "ref",
-			        "id": "test/a:0",
-			      },
-			      "qux": {
-			        "@@type": "ref",
-			        "id": "test/a:1",
-			      },
-			    },
-			  },
 			  {
 			    "oid": "test/a:0",
 			    "op": "initialize",
-			    "timestamp": "1",
+			    "timestamp": "0",
 			    "value": {
 			      "bar": "baz",
 			    },
 			  },
 			  {
-			    "oid": "test/a:1",
+			    "oid": "test/a:2",
+			    "op": "initialize",
+			    "timestamp": "1",
+			    "value": {
+			      "corge": "grault",
+			    },
+			  },
+			  {
+			    "oid": "test/a:4",
 			    "op": "initialize",
 			    "timestamp": "2",
+			    "value": {
+			      "oof": 1,
+			    },
+			  },
+			  {
+			    "oid": "test/a:3",
+			    "op": "initialize",
+			    "timestamp": "3",
+			    "value": {
+			      "bin": {
+			        "@@type": "ref",
+			        "id": "test/a:4",
+			      },
+			    },
+			  },
+			  {
+			    "oid": "test/a:1",
+			    "op": "initialize",
+			    "timestamp": "4",
 			    "value": [
 			      {
 			        "@@type": "ref",
@@ -486,30 +526,18 @@ describe('creating patches from initial state', () => {
 			    ],
 			  },
 			  {
-			    "oid": "test/a:2",
-			    "op": "initialize",
-			    "timestamp": "3",
-			    "value": {
-			      "corge": "grault",
-			    },
-			  },
-			  {
-			    "oid": "test/a:3",
-			    "op": "initialize",
-			    "timestamp": "4",
-			    "value": {
-			      "bin": {
-			        "@@type": "ref",
-			        "id": "test/a:4",
-			      },
-			    },
-			  },
-			  {
-			    "oid": "test/a:4",
+			    "oid": "test/a",
 			    "op": "initialize",
 			    "timestamp": "5",
 			    "value": {
-			      "oof": 1,
+			      "foo": {
+			        "@@type": "ref",
+			        "id": "test/a:0",
+			      },
+			      "qux": {
+			        "@@type": "ref",
+			        "id": "test/a:1",
+			      },
 			    },
 			  },
 			]

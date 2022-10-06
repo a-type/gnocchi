@@ -17,19 +17,23 @@ export class SyncHarness {
 	private meta;
 	private initialPresence: any;
 	private heartbeat;
+	private entities;
 
 	constructor({
 		sync,
 		meta,
 		initialPresence,
+		entities,
 	}: {
 		sync: Sync;
 		meta: Metadata;
+		entities: EntityStore;
 		initialPresence: any;
 	}) {
 		this.sync = sync;
 		this.meta = meta;
 		this.initialPresence = initialPresence;
+		this.entities = entities;
 		this.heartbeat = new Heartbeat({
 			sync: this.sync,
 			meta: this.meta,
@@ -53,10 +57,11 @@ export class SyncHarness {
 	};
 
 	private handleMessage = async (message: ServerMessage) => {
+		let affectedOids: ObjectIdentifier[] = [];
 		switch (message.type) {
 			case 'op-re':
 				// rebroadcasted operations
-				this.meta.insertRemoteOperations(message.ops);
+				affectedOids = await this.meta.insertRemoteOperations(message.ops);
 				break;
 			case 'sync-resp':
 				await this.meta.ackInfo.setGlobalAck(message.globalAckTimestamp);
@@ -72,8 +77,13 @@ export class SyncHarness {
 			case 'rebases':
 				for (const rebase of message.rebases) {
 					await this.meta.rebase(rebase.oid, rebase.upTo);
+					affectedOids.push(rebase.oid);
 				}
 				break;
+		}
+
+		for (const oid of affectedOids) {
+			this.entities.refresh(oid);
 		}
 	};
 

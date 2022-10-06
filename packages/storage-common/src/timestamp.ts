@@ -13,10 +13,15 @@ function encodeVersion(version: number | string): string {
 }
 
 export class NaiveTimestampProvider implements TimestampProvider {
+	counter = 0;
 	now = (version: number | string) => {
-		return encodeVersion(version) + Date.now().toString();
+		return (
+			encodeVersion(version) + Date.now().toString() + '|' + this.counter++
+		);
 	};
-	update = () => {};
+	update = () => {
+		this.counter = 0;
+	};
 	zero = (version: number | string) => {
 		return encodeVersion(version) + '0';
 	};
@@ -30,9 +35,8 @@ export class HybridLogicalClockTimestampProvider implements TimestampProvider {
 	};
 
 	now = (version: string | number) => {
-		return (
-			encodeVersion(version) + serializeHlcTimestamp(getHlcNow(this.latest))
-		);
+		this.latest = getHlcNow(this.latest);
+		return encodeVersion(version) + serializeHlcTimestamp(this.latest);
 	};
 	update = (remoteTimestamp: string) => {
 		// strip version from remote timestamp

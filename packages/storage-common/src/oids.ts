@@ -1,14 +1,14 @@
 import { assert } from '@aglio/tools';
 import { v4 } from 'uuid';
 import { ObjectRef } from './operation.js';
-import { cloneDeep, isObject } from './utils.js';
+import { isObject } from './utils.js';
 
 export type ObjectIdentifier = string;
 
-const globalOids = new WeakMap<any, ObjectIdentifier>();
+const OID_KEY = '__@@oid_do_not_use';
 
 export function getOid(obj: any) {
-	const oid = globalOids.get(obj);
+	const oid = maybeGetOid(obj);
 	assert(
 		!!oid,
 		`Object ${JSON.stringify(obj)} does not have an OID assigned to it`,
@@ -16,8 +16,11 @@ export function getOid(obj: any) {
 	return oid;
 }
 
-export function maybeGetOid(obj: any) {
-	return globalOids.get(obj);
+export function maybeGetOid(obj: any): ObjectIdentifier | undefined {
+	if (!isObject(obj)) {
+		return undefined;
+	}
+	return obj[OID_KEY];
 }
 
 export function assignOid(obj: any, oid: ObjectIdentifier) {
@@ -25,12 +28,17 @@ export function assignOid(obj: any, oid: ObjectIdentifier) {
 		isObject(obj),
 		`Only objects can be assigned OIDs, received ${JSON.stringify(obj)}`,
 	);
-	globalOids.set(obj, oid);
+	obj[OID_KEY] = oid;
 	return obj;
 }
 
 export function hasOid(obj: any) {
-	return globalOids.has(obj);
+	return !!maybeGetOid(obj);
+}
+
+export function removeOid(obj: any) {
+	delete obj[OID_KEY];
+	return obj;
 }
 
 /**
@@ -137,7 +145,7 @@ export function normalize(
 ): Map<ObjectIdentifier, any> {
 	if (Array.isArray(obj)) {
 		const oid = getOid(obj);
-		const copy = [];
+		const copy = assignOid([], oid);
 		for (let i = 0; i < obj.length; i++) {
 			const value = obj[i];
 			if (isObject(value)) {
@@ -151,7 +159,7 @@ export function normalize(
 		refs.set(oid, copy);
 	} else if (isObject(obj)) {
 		const oid = getOid(obj);
-		const copy = {} as Record<string, any>;
+		const copy = assignOid({} as Record<string, any>, oid);
 		for (const key of Object.keys(obj)) {
 			const value = obj[key];
 			if (isObject(value)) {
@@ -177,24 +185,32 @@ export function normalizeFirstLevel(
 ): Map<ObjectIdentifier, any> {
 	if (Array.isArray(obj)) {
 		const oid = getOid(obj);
-		refs.set(oid, obj);
+		const copy = assignOid([], oid);
 		for (let i = 0; i < obj.length; i++) {
 			const value = obj[i];
 			if (isObject(value)) {
 				const itemOid = getOid(value);
-				obj[i] = createRef(itemOid);
+				copy[i] = createRef(itemOid);
+				refs.set(itemOid, value);
+			} else {
+				copy[i] = value;
 			}
 		}
+		refs.set(oid, copy);
 	} else if (isObject(obj)) {
 		const oid = getOid(obj);
-		refs.set(oid, obj);
+		const copy = assignOid({} as Record<string, any>, oid);
 		for (const key of Object.keys(obj)) {
 			const value = obj[key];
 			if (isObject(value)) {
 				const itemOid = getOid(value);
-				obj[key] = createRef(itemOid);
+				copy[key] = createRef(itemOid);
+				refs.set(itemOid, value);
+			} else {
+				copy[key] = value;
 			}
 		}
+		refs.set(oid, copy);
 	}
 	return refs;
 }
@@ -211,4 +227,12 @@ export function getOidRoot(oid: ObjectIdentifier) {
 export function getOidRange(oid: ObjectIdentifier) {
 	const root = getOidRoot(oid);
 	return [root, `${root}:\uffff`];
+}
+
+export function getRoots(oids: ObjectIdentifier[]) {
+	const set = new Set<ObjectIdentifier>();
+	for (const oid of oids) {
+		set.add(getOidRoot(oid));
+	}
+	return Array.from(set);
 }

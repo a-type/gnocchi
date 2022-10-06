@@ -30,7 +30,7 @@ describe('storage documents', () => {
 			tags: [],
 			category: 'general',
 		});
-		const item2 = await storage.documentCreator.create('todo', {
+		await storage.documentCreator.create('todo', {
 			id: cuid(),
 			content: 'item 2',
 			done: true,
@@ -38,12 +38,12 @@ describe('storage documents', () => {
 			category: 'general',
 		});
 
-		console.log(await storage.stats());
-
 		const singleItemQuery = storage.queryMaker.get('todo', item1.get('id'));
-		const allItemsQuery = storage.queryMaker.findAll('todo');
-
 		const singleItemResult = await singleItemQuery.resolved;
+		expect(singleItemResult).toBeTruthy();
+		singleItemResult.subscribe('change', vi.fn());
+
+		const allItemsQuery = storage.queryMaker.findAll('todo');
 		const allItemsResult = await allItemsQuery.resolved;
 		const allItemsReferenceToItem1 = allItemsResult.find(
 			(item) => item.get('id') === item1.get('id'),
@@ -51,12 +51,10 @@ describe('storage documents', () => {
 		expect(singleItemResult).toBe(allItemsReferenceToItem1);
 	});
 
-	it.skip('should notify about changes', async () => {
+	it('should immediately reflect mutations', async () => {
 		const storage = await createTestStorage();
 
-		const todos = storage.get('todo');
-
-		const item1 = await todos.create({
+		const item1 = await storage.documentCreator.create('todo', {
 			id: cuid(),
 			content: 'item 1',
 			done: false,
@@ -64,31 +62,14 @@ describe('storage documents', () => {
 			category: 'general',
 		});
 
-		const liveItem1 = await todos.get(item1.id).resolved;
-		const callback = vi.fn();
-		subscribe(liveItem1!, callback);
-
-		await todos.update(item1.id, {
-			content: 'item 1 updated',
-			done: true,
-		});
-
-		expect(callback).toBeCalledTimes(1);
-		expect(callback).toBeCalledWith({
-			id: item1.id,
-			content: 'item 1 updated',
-			done: true,
-			tags: [],
-			category: 'general',
-		});
+		item1.set('done', true);
+		expect(item1.get('done')).toBe(true);
 	});
 
-	it.skip('should expose a mutator to update properties', async () => {
+	it('should notify about changes', async () => {
 		const storage = await createTestStorage();
 
-		const todos = storage.get('todo');
-
-		const item1 = await todos.create({
+		const item1 = await storage.documentCreator.create('todo', {
 			id: cuid(),
 			content: 'item 1',
 			done: false,
@@ -96,100 +77,66 @@ describe('storage documents', () => {
 			category: 'general',
 		});
 
-		const liveItem1 = await todos.get(item1.id).resolved;
+		const liveItem1 = await storage.queryMaker.get('todo', item1.get('id'))
+			.resolved;
+		expect(liveItem1).toBeTruthy();
 		const callback = vi.fn();
-		subscribe(liveItem1!, callback);
+		liveItem1.subscribe('change', callback);
 
-		liveItem1!.$update({
-			content: 'item 1 updated',
-			done: true,
+		liveItem1.set('done', true);
+		console.log('HERE');
+		liveItem1.set('content', 'item 1 updated');
+
+		await waitForStoragePropagation(callback);
+
+		// only 1 callback - changes are batched.
+		expect(callback).toBeCalledTimes(1);
+		expect(callback).toHaveBeenCalledWith(
+			expect.objectContaining({
+				id: item1.get('id'),
+				content: 'item 1 updated',
+				done: true,
+				tags: expect.any(Array),
+				category: 'general',
+			}),
+		);
+	});
+
+	it('should expose array mutators on nested arrays', async () => {
+		const storage = await createTestStorage();
+
+		const item1 = await storage.documentCreator.create('todo', {
+			id: cuid(),
+			content: 'item 1',
+			done: false,
+			tags: [],
+			category: 'general',
 		});
+
+		const callback = vi.fn();
+		item1.subscribe('change', callback);
+
+		item1.get('tags').push('tag 1');
+		item1.get('tags').push('tag 2');
+		item1.get('tags').push('tag 3');
+		item1.get('tags').move(1, 2);
 
 		// fields are immediately updated
-		expect(liveItem1!.done).toBe(true);
-		expect(liveItem1!.content).toBe('item 1 updated');
+		expect(item1.get('tags').get(0)).toEqual('tag 1');
+		expect(item1.get('tags').get(1)).toEqual('tag 3');
+		expect(item1.get('tags').get(2)).toEqual('tag 2');
 
 		await waitForStoragePropagation(callback);
 
 		expect(callback).toBeCalledTimes(1);
-		expect(callback).toBeCalledWith({
-			id: item1.id,
-			content: 'item 1 updated',
-			done: true,
-			tags: [],
-			category: 'general',
-		});
-	});
-
-	it.skip('should expose array mutators on nested arrays', async () => {
-		const storage = await createTestStorage();
-
-		const todos = storage.get('todo');
-
-		const item1 = await todos.create({
-			id: cuid(),
-			content: 'item 1',
-			done: false,
-			tags: [],
-			category: 'general',
-		});
-
-		const liveItem1 = await todos.get(item1.id).resolved;
-		const callback = vi.fn();
-		subscribe(liveItem1!, callback);
-
-		liveItem1!.tags.$push('tag 1');
-		liveItem1!.tags.$push('tag 2');
-		liveItem1!.tags.$push('tag 3');
-		liveItem1!.tags.$move(1, 2);
-
-		// fields are immediately updated
-		expect(liveItem1!.tags[0]).toEqual('tag 1');
-		expect(liveItem1!.tags[1]).toEqual('tag 3');
-		expect(liveItem1!.tags[2]).toEqual('tag 2');
-
-		await waitForStoragePropagation(callback);
-
-		expect(callback).toBeCalledTimes(1);
-		expect(callback).toBeCalledWith({
-			id: item1.id,
-			content: 'item 1',
-			done: false,
-			tags: ['tag 1', 'tag 3', 'tag 2'],
-			category: 'general',
-		});
-	});
-
-	it.skip('should allow assignment for mutation on objects', async () => {
-		const storage = await createTestStorage();
-
-		const todos = storage.get('todo');
-
-		const item1 = await todos.create({
-			id: cuid(),
-			content: 'item 1',
-			done: false,
-			tags: [],
-			category: 'general',
-		});
-
-		const liveItem1 = await todos.get(item1.id).resolved;
-		const callback = vi.fn();
-		subscribe(liveItem1!, callback);
-
-		liveItem1!.done = true;
-
-		expect(liveItem1!.done).toBe(true);
-
-		await waitForStoragePropagation(callback);
-
-		expect(callback).toBeCalledTimes(1);
-		expect(callback).toBeCalledWith({
-			id: item1.id,
-			content: 'item 1',
-			done: true,
-			tags: [],
-			category: 'general',
-		});
+		expect(callback).toBeCalledWith(
+			expect.objectContaining({
+				id: item1.get('id'),
+				content: 'item 1',
+				done: false,
+				tags: expect.arrayContaining(['tag 1', 'tag 3', 'tag 2']),
+				category: 'general',
+			}),
+		);
 	});
 });

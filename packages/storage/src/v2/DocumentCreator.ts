@@ -9,6 +9,7 @@ import {
 	StorageSchema,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
+import { ObjectEntity } from './Entity.js';
 import { EntityStore } from './EntityStore.js';
 import { Metadata } from './Metadata.js';
 
@@ -39,6 +40,7 @@ export class DocumentCreator<Schema extends StorageSchema<any>> {
 			`Document must have a primary key: ${primaryKeyName.toString()}`,
 		);
 		const oid = createOid(collection as string, primaryKey);
-		return this.entities.create(init, oid);
+		// documents are always objects at the root
+		return this.entities.create(init, oid) as Promise<ObjectEntity<any>>;
 	};
 }

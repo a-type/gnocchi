@@ -1,9 +1,14 @@
-import { assignOid, decomposeOid, OperationPatch } from '@aglio/storage-common';
+import {
+	assignOid,
+	decomposeOid,
+	getRoots,
+	OperationPatch,
+} from '@aglio/storage-common';
 import { getOid, ObjectIdentifier } from '@aglio/storage-common';
 import { storeRequestPromise } from '../idb.js';
+import { Sync } from '../Sync.js';
 import { EntityBase, ObjectEntity, updateEntity } from './Entity.js';
 import { Metadata } from './Metadata.js';
-import { SyncHarness } from './SyncHarness.js';
 
 export class EntityStore {
 	private cache = new Map<string, EntityBase<any>>();
@@ -11,10 +16,8 @@ export class EntityStore {
 	constructor(
 		private readonly db: IDBDatabase,
 		public readonly meta: Metadata,
-		private readonly sync: SyncHarness,
-	) {
-		this.meta.subscribe('documentsChanged', this.handleDocumentsChanged);
-	}
+		private readonly sync: Sync,
+	) {}
 
 	onSubscribed = (self: EntityBase<any>) => {
 		this.cache.set(self.oid, self);
@@ -58,6 +61,7 @@ export class EntityStore {
 	};
 
 	private flushPatches = async () => {
+		console.log('Flushing patches', this.pendingPatches.length);
 		await this.submitOperation(this.pendingPatches);
 		this.pendingPatches = [];
 	};
@@ -66,6 +70,7 @@ export class EntityStore {
 		const operation = await this.meta.messageCreator.createOperation({
 			patches,
 		});
+		console.log(operation);
 		const oldestHistoryTimestamp = await this.meta.insertLocalOperation(
 			operation,
 		);
@@ -75,19 +80,17 @@ export class EntityStore {
 			op: operation,
 			replicaId: operation.replicaId,
 		});
+		const affectedDocuments = getRoots(patches.map((p) => p.oid));
+		await Promise.all(affectedDocuments.map(this.refresh));
 	};
 
-	private handleDocumentsChanged = async (oids: ObjectIdentifier[]) => {
-		console.log('Documents changed', oids);
-		for (const oid of oids) {
-			const view = await this.meta.getComputedView(oid);
-			// store the view in the database
-			await this.storeView(oid, view);
-
-			const entity = this.cache.get(oid);
-			if (entity) {
-				updateEntity(entity, view);
-			}
+	refresh = async (oid: ObjectIdentifier) => {
+		console.log('Refreshing', oid);
+		const view = await this.meta.getComputedDocument(oid);
+		await this.storeView(oid, view);
+		const entity = this.cache.get(oid);
+		if (entity) {
+			updateEntity(entity, view);
 		}
 	};
 

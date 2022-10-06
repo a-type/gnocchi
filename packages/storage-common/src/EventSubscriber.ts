@@ -4,10 +4,6 @@ export class EventSubscriber<
 	protected subscribers: Record<keyof Events, Set<(...args: any[]) => void>> =
 		{} as any;
 
-	subscriberCount = (event: keyof Events) => {
-		return this.subscribers[event]?.size ?? 0;
-	};
-
 	subscribe = <K extends keyof Events>(event: K, callback: Events[K]) => {
 		if (!this.subscribers[event]) {
 			this.subscribers[event] = new Set();

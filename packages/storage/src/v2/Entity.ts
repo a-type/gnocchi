@@ -1,4 +1,9 @@
-import { applyPatch, isObjectRef, OperationPatch } from '@aglio/storage-common';
+import {
+	applyPatch,
+	cloneDeep,
+	isObjectRef,
+	OperationPatch,
+} from '@aglio/storage-common';
 import {
 	createRef,
 	getOid,
@@ -27,9 +32,7 @@ export function updateEntity(entity: EntityBase<any>, newValue: any) {
 	entity[UPDATE](newValue);
 }
 
-export abstract class EntityBase<T> extends EventSubscriber<{
-	change: (newValue: T) => void;
-}> {
+export abstract class EntityBase<T> {
 	// if current is null, the entity was deleted.
 	protected _current: any | null = null;
 	// while changes are propagating, realtime alterations are set on this
@@ -37,6 +40,10 @@ export abstract class EntityBase<T> extends EventSubscriber<{
 	protected _override: any | null = null;
 
 	protected subObjectCache: Map<ObjectIdentifier, EntityBase<any>> = new Map();
+
+	protected events = new EventSubscriber<{
+		change: (newValue: T | null) => void;
+	}>();
 
 	protected get value() {
 		return this._override || this._current;
@@ -48,12 +55,12 @@ export abstract class EntityBase<T> extends EventSubscriber<{
 		protected readonly store: EntityStore,
 		protected readonly cacheEvents: CacheEvents,
 	) {
-		super();
 		this[UPDATE](initial);
 	}
 
 	protected [UPDATE] = (initial: T | undefined) => {
 		const normalized = normalizeFirstLevel(initial);
+		console.log(normalized);
 		this._current = normalized.get(this.oid);
 		// update any existing sub-object values
 		const droppedKeys = new Set<ObjectIdentifier>();
@@ -87,6 +94,17 @@ export abstract class EntityBase<T> extends EventSubscriber<{
 
 		// clear overrides
 		this._override = null;
+
+		this.events.emit('change', initial || null);
+		console.debug(
+			'Object',
+			this.oid,
+			'updated,',
+			newKeys.size,
+			'new sub-objects',
+			droppedKeys.size,
+			'dropped sub-objects',
+		);
 	};
 
 	protected createSubObject = (
@@ -104,17 +122,17 @@ export abstract class EntityBase<T> extends EventSubscriber<{
 		// TODO: implement
 	};
 
-	subscribe = (event: 'change', callback: (newValue: T) => void) => {
-		const unsubscribe = super.subscribe(event, callback);
-		if (this.subscribers.change.size === 1) {
+	subscribe = (event: 'change', callback: (newValue: T | null) => void) => {
+		const unsubscribe = this.events.subscribe(event, callback);
+		if (this.events.subscriberCount('change') === 1) {
 			this.cacheEvents.onSubscribed();
 		}
 
 		return () => {
 			unsubscribe();
-			if (this.subscribers.change.size === 0) {
+			if (this.events.subscriberCount('change') === 0) {
 				queueMicrotask(() => {
-					if (this.subscribers.change.size === 0) {
+					if (this.events.subscriberCount('change') === 0) {
 						this.cacheEvents.onAllUnsubscribed();
 					}
 				});
@@ -138,7 +156,7 @@ export abstract class EntityBase<T> extends EventSubscriber<{
 		for (const patch of patches) {
 			if (patch.oid === this.oid) {
 				// apply it to _override
-				this._override = this._override || { ...this._current };
+				this._override = this._override || cloneDeep(this._current);
 				applyPatch(this._override, patch);
 			}
 		}
@@ -155,7 +173,9 @@ export abstract class EntityBase<T> extends EventSubscriber<{
 		const value = this.value[key];
 		if (value === undefined) {
 			throw new Error(
-				`Property ${key.toString()} does not exist on ${this.oid}`,
+				`Property ${key.toString()} does not exist on ${JSON.stringify(
+					this.value,
+				)}`,
 			);
 		}
 		if (isObjectRef(value)) {

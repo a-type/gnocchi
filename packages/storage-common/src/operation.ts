@@ -10,6 +10,7 @@ import {
 	maybeGetOid,
 	normalize,
 	ObjectIdentifier,
+	removeOid,
 } from './oids.js';
 import { isObject } from './utils.js';
 
@@ -260,7 +261,7 @@ export function initialToPatches(
 		patches.push({
 			op: 'initialize',
 			oid: key,
-			value: value,
+			value: removeOid(value),
 			timestamp: getNow(),
 		});
 	}
@@ -287,7 +288,11 @@ export type NormalizedObject =
 
 function listCheck(obj: any): asserts obj is Array<unknown> {
 	if (!Array.isArray(obj)) {
-		throw new Error('Expected array');
+		throw new Error(
+			`Cannot apply list patch; expected array, received ${JSON.stringify(
+				obj,
+			)}`,
+		);
 	}
 }
 
