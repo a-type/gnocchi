@@ -24,7 +24,6 @@ export class SyncHarness {
 		initialPresence,
 	}: {
 		sync: Sync;
-		entities: EntityStore;
 		meta: Metadata;
 		initialPresence: any;
 	}) {

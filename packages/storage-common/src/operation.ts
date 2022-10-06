@@ -295,9 +295,14 @@ function listCheck(obj: any): asserts obj is Array<unknown> {
  * The incoming object should already be normalized!
  */
 export function applyPatch<T extends NormalizedObject>(
-	base: T,
+	base: T | undefined,
 	patch: OperationPatch,
 ): T | undefined {
+	// deleted objects are represented by undefined
+	// and remain deleted unless re-initialized
+	if (base === undefined && patch.op !== 'initialize') {
+		return base;
+	}
 	// ditch typing internally.
 	const baseAsAny = base as any;
 	let index;
@@ -344,6 +349,8 @@ export function applyPatch<T extends NormalizedObject>(
 			break;
 		case 'delete':
 			return undefined;
+		case 'initialize':
+			return patch.value;
 		default:
 			throw new Error(`Unsupported patch operation: ${(patch as any).op}`);
 	}

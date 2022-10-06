@@ -38,6 +38,8 @@ describe('storage documents', () => {
 			category: 'general',
 		});
 
+		console.log(await storage.stats());
+
 		const singleItemQuery = storage.queryMaker.get('todo', item1.get('id'));
 		const allItemsQuery = storage.queryMaker.findAll('todo');
 

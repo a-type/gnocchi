@@ -9,14 +9,15 @@ import {
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 
-type ClientPatch = OperationPatch & {
+export type ClientPatch = OperationPatch & {
 	replicaId: string;
 	operationId: string;
 };
 
-type StoredPatch = ClientPatch & {
+export type StoredPatch = ClientPatch & {
 	oid_timestamp: string;
 	replicaId_timestamp: string;
+	documentOid_timestamp: string;
 };
 
 export class PatchesStore {
@@ -28,7 +29,7 @@ export class PatchesStore {
 	 */
 	iterateOverAllPatchesForDocument = async (
 		oid: ObjectIdentifier,
-		iterator: (patch: OperationPatch, store: IDBObjectStore) => void,
+		iterator: (patch: StoredPatch, store: IDBObjectStore) => void,
 		{
 			to,
 			from,
@@ -43,18 +44,17 @@ export class PatchesStore {
 	): Promise<void> => {
 		const transaction = this.db.transaction('patches', mode);
 		const store = transaction.objectStore('patches');
-		const index = store.index('oid_timestamp');
+		const index = store.index('documentOid_timestamp');
 
-		const [startOid, endOid] = getOidRange(oid);
 		const startTimestamp = from || after;
 		const start = startTimestamp
-			? createCompoundIndexValue(startOid, startTimestamp)
-			: createLowerBoundIndexValue(startOid);
+			? createCompoundIndexValue(oid, startTimestamp)
+			: createLowerBoundIndexValue(oid);
 		const end = to
-			? createCompoundIndexValue(endOid, to)
-			: createUpperBoundIndexValue(endOid);
+			? createCompoundIndexValue(oid, to)
+			: createUpperBoundIndexValue(oid);
 
-		const range = IDBKeyRange.bound(start, end, !from, !to);
+		const range = IDBKeyRange.bound(start, end, !!after, false);
 
 		const request = index.openCursor(range, 'next');
 		return new Promise<void>((resolve, reject) => {
@@ -149,14 +149,18 @@ export class PatchesStore {
 				patch.replicaId,
 				patch.timestamp,
 			) as string,
+			documentOid_timestamp: createCompoundIndexValue(
+				getOidRoot(patch.oid),
+				patch.timestamp,
+			) as string,
 		};
 	};
 
 	private insertPatches = async (
 		patches: StoredPatch[],
 	): Promise<ObjectIdentifier[]> => {
-		const transaction = this.db.transaction('operations', 'readwrite');
-		const store = transaction.objectStore('operations');
+		const transaction = this.db.transaction('patches', 'readwrite');
+		const store = transaction.objectStore('patches');
 		const affected = new Set<ObjectIdentifier>();
 		for (const patch of patches) {
 			store.put(patch);

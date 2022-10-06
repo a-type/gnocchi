@@ -1,12 +1,12 @@
 import { hashObject } from '@aglio/storage-common';
 import { storeRequestPromise } from '../idb.js';
-import { DocumentStore } from './DocumentStore.js';
+import { EntityStore } from './EntityStore.js';
 import { Query, UPDATE } from './Query.js';
 
 export class QueryStore {
 	private cache = new Map<string, Query<any>>();
 
-	constructor(private db: IDBDatabase, private documents: DocumentStore) {}
+	constructor(private db: IDBDatabase, private entities: EntityStore) {}
 
 	private getStore = (collection: string, write?: boolean) => {
 		return this.db
@@ -37,7 +37,7 @@ export class QueryStore {
 			const request = source.get(range);
 			run = async () => {
 				const view = await storeRequestPromise(request);
-				return view ? this.documents.take(view) : null;
+				return view ? this.entities.get(view) : null;
 			};
 		} else {
 			const request = source.openCursor(range, direction);
@@ -48,7 +48,7 @@ export class QueryStore {
 						const cursor = request.result;
 						if (cursor) {
 							const view = cursor.value;
-							result.push(this.documents.take(cursor.value));
+							result.push(this.entities.get(cursor.value));
 							if (limit && result.length >= limit) {
 								resolve(result);
 							} else {

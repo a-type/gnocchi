@@ -7,9 +7,20 @@ import { PresenceManager } from './PresenceManager.js';
 import { openDocumentDatabase } from './openDocumentDatabase.js';
 import { DocumentCreator } from './DocumentCreator.js';
 import { EntityStore } from './EntityStore.js';
+import { storeRequestPromise } from '../idb.js';
+import { SyncHarness } from './SyncHarness.js';
 
 export class Storage<Schema extends StorageSchema<any>> {
-	private entities = new EntityStore(this.documentDb, this.meta, this.sync);
+	private syncHarness = new SyncHarness({
+		sync: this.sync,
+		meta: this.meta,
+		initialPresence: {},
+	});
+	private entities = new EntityStore(
+		this.documentDb,
+		this.meta,
+		this.syncHarness,
+	);
 	private queryStore = new QueryStore(this.documentDb, this.entities);
 	queryMaker = new QueryMaker(this.queryStore, this.schema);
 	presence = new PresenceManager(this.sync, this.meta);
@@ -21,6 +32,26 @@ export class Storage<Schema extends StorageSchema<any>> {
 		private documentDb: IDBDatabase,
 		public sync: Sync,
 	) {}
+
+	stats = async () => {
+		const collectionNames = Object.keys(this.schema.collections);
+		const collectionStats = await Promise.all(
+			collectionNames.map(async (collection) => {
+				const tx = this.documentDb.transaction(collection, 'readonly');
+				const store = tx.objectStore(collection);
+				const countReq = store.count();
+				const count = await storeRequestPromise<number>(countReq);
+				return { collection, count };
+			}),
+		);
+		return collectionNames.reduce((acc, collection) => {
+			const stat = collectionStats.find((s) => s.collection === collection);
+			if (stat) {
+				acc[collection] = stat.count;
+			}
+			return acc;
+		}, {} as Record<string, number>);
+	};
 }
 
 export async function openStorage<Schema extends StorageSchema<any>>({

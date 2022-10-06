@@ -1,7 +1,7 @@
 import { assert } from '@aglio/tools';
 import { v4 } from 'uuid';
 import { ObjectRef } from './operation.js';
-import { isObject } from './utils.js';
+import { cloneDeep, isObject } from './utils.js';
 
 export type ObjectIdentifier = string;
 
@@ -137,26 +137,32 @@ export function normalize(
 ): Map<ObjectIdentifier, any> {
 	if (Array.isArray(obj)) {
 		const oid = getOid(obj);
-		refs.set(oid, obj);
+		const copy = [];
 		for (let i = 0; i < obj.length; i++) {
 			const value = obj[i];
 			if (isObject(value)) {
 				const itemOid = getOid(value);
-				obj[i] = createRef(itemOid);
+				copy[i] = createRef(itemOid);
 				normalize(value, refs);
+			} else {
+				copy[i] = value;
 			}
 		}
+		refs.set(oid, copy);
 	} else if (isObject(obj)) {
 		const oid = getOid(obj);
-		refs.set(oid, obj);
+		const copy = {} as Record<string, any>;
 		for (const key of Object.keys(obj)) {
 			const value = obj[key];
 			if (isObject(value)) {
 				const itemOid = getOid(value);
-				obj[key] = createRef(itemOid);
+				copy[key] = createRef(itemOid);
 				normalize(value, refs);
+			} else {
+				copy[key] = value;
 			}
 		}
+		refs.set(oid, copy);
 	}
 	return refs;
 }

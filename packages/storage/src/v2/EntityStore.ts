@@ -1,5 +1,6 @@
-import { assignOid, OperationPatch } from '@aglio/storage-common';
+import { assignOid, decomposeOid, OperationPatch } from '@aglio/storage-common';
 import { getOid, ObjectIdentifier } from '@aglio/storage-common';
+import { storeRequestPromise } from '../idb.js';
 import { EntityBase, ObjectEntity, updateEntity } from './Entity.js';
 import { Metadata } from './Metadata.js';
 import { SyncHarness } from './SyncHarness.js';
@@ -37,10 +38,12 @@ export class EntityStore {
 		return entity;
 	};
 
-	create = (initial: any, oid: ObjectIdentifier) => {
+	create = async (initial: any, oid: ObjectIdentifier) => {
 		assignOid(initial, oid);
 		const patches = this.meta.patchCreator.createInitialize(initial, oid);
-		this.enqueuePatches(patches);
+		console.debug('Creating', oid, 'with patches', patches);
+		// don't enqueue these, submit as distinct operation
+		await this.submitOperation(patches);
 		return this.get(initial);
 	};
 
@@ -55,8 +58,13 @@ export class EntityStore {
 	};
 
 	private flushPatches = async () => {
+		await this.submitOperation(this.pendingPatches);
+		this.pendingPatches = [];
+	};
+
+	private submitOperation = async (patches: OperationPatch[]) => {
 		const operation = await this.meta.messageCreator.createOperation({
-			patches: this.pendingPatches,
+			patches,
 		});
 		const oldestHistoryTimestamp = await this.meta.insertLocalOperation(
 			operation,
@@ -67,15 +75,31 @@ export class EntityStore {
 			op: operation,
 			replicaId: operation.replicaId,
 		});
-		this.pendingPatches = [];
 	};
 
 	private handleDocumentsChanged = async (oids: ObjectIdentifier[]) => {
+		console.log('Documents changed', oids);
 		for (const oid of oids) {
+			const view = await this.meta.getComputedView(oid);
+			// store the view in the database
+			await this.storeView(oid, view);
+
 			const entity = this.cache.get(oid);
 			if (entity) {
-				updateEntity(entity, await this.meta.getComputedView(oid));
+				updateEntity(entity, view);
 			}
+		}
+	};
+
+	private storeView = async (oid: ObjectIdentifier, view: any) => {
+		console.log('Storing view', oid, view);
+		if (!view) {
+			// TODO: delete from database
+		} else {
+			const { collection, id } = decomposeOid(oid);
+			const tx = this.db.transaction(collection, 'readwrite');
+			const store = tx.objectStore(collection);
+			await storeRequestPromise(store.put(view));
 		}
 	};
 }

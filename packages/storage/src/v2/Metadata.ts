@@ -5,8 +5,9 @@ import {
 	StorageSchema,
 	substituteRefsWithObjects,
 	SyncOperation,
+	assignOid,
+	getOidRoot,
 } from '@aglio/storage-common';
-import { assignOid, getOidRoot } from '@aglio/storage-common/src/oids.js';
 import { EventSubscriber } from '../EventSubscriber.js';
 import { storeRequestPromise } from '../idb.js';
 import type { Sync } from '../Sync.js';
@@ -15,7 +16,7 @@ import { BaselinesStore } from './BaselinesStore.js';
 import { LocalHistoryStore } from './LocalHistoryStore.js';
 import { LocalReplicaStore } from './LocalReplicaStore.js';
 import { MessageCreator } from './MessageCreator.js';
-import { PatchesStore } from './PatchesStore.js';
+import { ClientPatch, PatchesStore } from './PatchesStore.js';
 import { SchemaStore } from './SchemaStore.js';
 
 export class Metadata extends EventSubscriber<{
@@ -53,6 +54,7 @@ export class Metadata extends EventSubscriber<{
 		oid: ObjectIdentifier,
 		upToTimestamp?: string,
 	): Promise<T | undefined> => {
+		console.debug('Computing view of', oid);
 		const baselines = await this.baselines.getAllForDocument(oid);
 		const subObjectsMappedByOid = new Map<ObjectIdentifier, any>();
 		for (const baseline of baselines) {
@@ -62,7 +64,8 @@ export class Metadata extends EventSubscriber<{
 		await this.patches.iterateOverAllPatchesForDocument(
 			oid,
 			(patch) => {
-				let current = subObjectsMappedByOid.get(patch.oid) || ({} as any);
+				console.debug('Applying patch', patch);
+				let current = subObjectsMappedByOid.get(patch.oid);
 				current = applyPatch(current, patch);
 				subObjectsMappedByOid.set(patch.oid, current);
 			},
@@ -117,7 +120,7 @@ export class Metadata extends EventSubscriber<{
 	 * Returns a list of the root document OIDs for all entities
 	 * modified in a set of patches
 	 */
-	private rootOidsFromList(source: ObjectIdentifier[]) {
+	private rootOidsFromList(source: ObjectIdentifier[]): ObjectIdentifier[] {
 		return Array.from(
 			new Set<ObjectIdentifier>(source.map((oid) => getOidRoot(oid))),
 		);
@@ -203,8 +206,12 @@ export class Metadata extends EventSubscriber<{
 		const localInfo = await this.localReplica.get();
 
 		// find all operations before the oldest history timestamp
-		const priorOperations = await this.patches.getAllOperationsFromReplica(
+		const priorOperations = new Array<ClientPatch>();
+		await this.patches.iterateOverAllPatchesForReplica(
 			localInfo.id,
+			(patch) => {
+				priorOperations.push(patch);
+			},
 			{
 				before: oldestHistoryTimestamp,
 			},
@@ -217,7 +224,7 @@ export class Metadata extends EventSubscriber<{
 		// gather all oids affected
 		const toRebase = new Set<ObjectIdentifier>();
 		for (const op of priorOperations) {
-			toRebase.add(op.rootOid);
+			toRebase.add(getOidRoot(op.oid));
 		}
 		const lastOperation = priorOperations[priorOperations.length - 1];
 
@@ -236,10 +243,10 @@ export class Metadata extends EventSubscriber<{
 		});
 		// separate iteration to ensure the above has completed before destructive
 		// actions. TODO: use a transaction instead
-		await this.operations.iterateOverAllOperationsForDocument(
+		await this.patches.iterateOverAllPatchesForDocument(
 			oid,
 			(op, store) => {
-				store.delete(op.id);
+				store.delete(op.oid_timestamp);
 			},
 			{
 				to: upTo,
@@ -276,9 +283,6 @@ export function openMetadataDatabase(indexedDB: IDBFactory) {
 			const db = request.result;
 			// version 1: operations list, baselines, and local info
 			if (!event.oldVersion) {
-				const opsStore = db.createObjectStore('operations', {
-					keyPath: 'id',
-				});
 				const baselinesStore = db.createObjectStore('baselines', {
 					keyPath: 'oid',
 				});
@@ -286,11 +290,12 @@ export function openMetadataDatabase(indexedDB: IDBFactory) {
 					keyPath: 'oid_timestamp',
 				});
 				const infoStore = db.createObjectStore('info', { keyPath: 'type' });
-				opsStore.createIndex('timestamp', 'timestamp');
-				opsStore.createIndex('rootOid_timestamp', 'rootOid_timestamp');
-				opsStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
 				baselinesStore.createIndex('timestamp', 'timestamp');
 				patchesStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
+				patchesStore.createIndex(
+					'documentOid_timestamp',
+					'documentOid_timestamp',
+				);
 			}
 		};
 		request.onerror = () => {
