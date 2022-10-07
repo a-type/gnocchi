@@ -29,6 +29,22 @@ type AccessibleEntityProperty<T> = T extends Array<any>
 	? keyof T
 	: never;
 
+type EntityPropertyValue<T, K extends keyof T | number> = T extends Array<any>
+	? T[K] extends Array<any>
+		? ListEntity<T[K]>
+		: T[K] extends object
+		? ObjectEntity<T[K]>
+		: T[K]
+	: T extends object
+	? K extends keyof T
+		? T[K] extends Array<any>
+			? ListEntity<T[K]>
+			: T[K] extends object
+			? ObjectEntity<T[K]>
+			: T[K]
+		: never
+	: never;
+
 export function updateEntity(entity: EntityBase<any>, newValue: any) {
 	entity[UPDATE](newValue);
 }
@@ -160,7 +176,9 @@ export abstract class EntityBase<T> {
 		return this.subObjectCache.get(oid);
 	};
 
-	get = <Key extends AccessibleEntityProperty<T>>(key: Key) => {
+	get = <Key extends AccessibleEntityProperty<T>>(
+		key: Key,
+	): EntityPropertyValue<T, Key> => {
 		const value = this.value[key];
 		if (value === undefined) {
 			throw new Error(
@@ -173,7 +191,7 @@ export abstract class EntityBase<T> {
 			const oid = value.id;
 			const subObject = this.getSubObject(oid);
 			if (subObject) {
-				return subObject;
+				return subObject as EntityPropertyValue<T, Key>;
 			}
 			throw new Error(
 				`CACHE MISS: Subobject ${oid} does not exist on ${this.oid}`,

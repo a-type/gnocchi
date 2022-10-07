@@ -19,9 +19,13 @@ export class Storage<Schema extends StorageSchema<any>> {
 		initialPresence: {},
 	});
 	private queryStore = new QueryStore(this.documentDb, this.entities);
-	queryMaker = new QueryMaker(this.queryStore, this.schema);
+	queryMaker = new QueryMaker<Schema>(this.queryStore, this.schema);
 	presence = new PresenceManager(this.sync, this.meta);
-	documentCreator = new DocumentCreator(this.meta, this.schema, this.entities);
+	documentCreator = new DocumentCreator<Schema>(
+		this.meta,
+		this.schema,
+		this.entities,
+	);
 
 	constructor(
 		private meta: Metadata,

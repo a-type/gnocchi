@@ -10,7 +10,12 @@ import {
 	createUpperBoundIndexValue,
 	isRangeIndexFilter,
 	isMatchIndexFilter,
+	StorageDocument,
+	StorageDocumentInit,
+	SchemaCollection,
+	SchemaCollectionName,
 } from '@aglio/storage-common';
+import { ObjectEntity } from './Entity.js';
 import { Query } from './Query.js';
 import { QueryStore } from './QueryStore.js';
 
@@ -20,10 +25,12 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 		private readonly schema: StorageSchema<any>,
 	) {}
 
-	get = (
-		collection: keyof Schema['collections'],
+	get = <Collection extends SchemaCollectionName<Schema>>(
+		collection: Collection,
 		primaryKey: string,
-	): Query<any> => {
+	): Query<
+		ObjectEntity<StorageDocumentInit<SchemaCollection<Schema, Collection>>>
+	> => {
 		return this.queryStore.get({
 			collection: collection as string,
 			range: primaryKey,
@@ -32,12 +39,14 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 	};
 
 	findOne = <
-		Collection extends keyof Schema['collections'],
+		Collection extends SchemaCollectionName<Schema>,
 		Index extends CollectionIndexName<Schema['collections'][Collection]>,
 	>(
 		collection: Collection,
 		query?: CollectionFilter<Schema['collections'][Collection], Index>,
-	) => {
+	): Query<
+		ObjectEntity<StorageDocumentInit<SchemaCollection<Schema, Collection>>>[]
+	> => {
 		return this.queryStore.get({
 			collection: collection as string,
 			range: this.getRange(collection as string, query),
@@ -48,12 +57,14 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 	};
 
 	findAll = <
-		Collection extends keyof Schema['collections'],
+		Collection extends SchemaCollectionName<Schema>,
 		Index extends CollectionIndexName<Schema['collections'][Collection]>,
 	>(
 		collection: Collection,
 		query?: CollectionFilter<Schema['collections'][Collection], Index>,
-	) => {
+	): Query<
+		ObjectEntity<StorageDocumentInit<SchemaCollection<Schema, Collection>>>[]
+	> => {
 		return this.queryStore.get({
 			collection: collection as string,
 			range: this.getRange(collection as string, query),
