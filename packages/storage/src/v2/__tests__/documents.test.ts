@@ -84,22 +84,19 @@ describe('storage documents', () => {
 		liveItem1.subscribe('change', callback);
 
 		liveItem1.set('done', true);
-		console.log('HERE');
 		liveItem1.set('content', 'item 1 updated');
 
 		await waitForStoragePropagation(callback);
 
 		// only 1 callback - changes are batched.
 		expect(callback).toBeCalledTimes(1);
-		expect(callback).toHaveBeenCalledWith(
-			expect.objectContaining({
-				id: item1.get('id'),
-				content: 'item 1 updated',
-				done: true,
-				tags: expect.any(Array),
-				category: 'general',
-			}),
-		);
+		expect(liveItem1.getSnapshot()).toEqual({
+			id: liveItem1.get('id'),
+			content: 'item 1 updated',
+			done: true,
+			tags: [],
+			category: 'general',
+		});
 	});
 
 	it('should expose array mutators on nested arrays', async () => {
@@ -129,14 +126,12 @@ describe('storage documents', () => {
 		await waitForStoragePropagation(callback);
 
 		expect(callback).toBeCalledTimes(1);
-		expect(callback).toBeCalledWith(
-			expect.objectContaining({
-				id: item1.get('id'),
-				content: 'item 1',
-				done: false,
-				tags: expect.arrayContaining(['tag 1', 'tag 3', 'tag 2']),
-				category: 'general',
-			}),
-		);
+		expect(item1.getSnapshot()).toEqual({
+			id: item1.get('id'),
+			content: 'item 1',
+			done: false,
+			tags: ['tag 1', 'tag 3', 'tag 2'],
+			category: 'general',
+		});
 	});
 });

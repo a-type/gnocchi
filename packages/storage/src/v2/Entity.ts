@@ -3,6 +3,7 @@ import {
 	cloneDeep,
 	isObjectRef,
 	OperationPatch,
+	removeOid,
 } from '@aglio/storage-common';
 import {
 	createRef,
@@ -42,7 +43,7 @@ export abstract class EntityBase<T> {
 	protected subObjectCache: Map<ObjectIdentifier, EntityBase<any>> = new Map();
 
 	protected events = new EventSubscriber<{
-		change: (newValue: T | null) => void;
+		change: () => void;
 	}>();
 
 	protected get value() {
@@ -60,8 +61,7 @@ export abstract class EntityBase<T> {
 
 	protected [UPDATE] = (initial: T | undefined) => {
 		const normalized = normalizeFirstLevel(initial);
-		console.log(normalized);
-		this._current = normalized.get(this.oid);
+		this._current = removeOid(normalized.get(this.oid));
 		// update any existing sub-object values
 		const droppedKeys = new Set<ObjectIdentifier>();
 		const newKeys = new Set<ObjectIdentifier>(normalized.keys());
@@ -95,16 +95,7 @@ export abstract class EntityBase<T> {
 		// clear overrides
 		this._override = null;
 
-		this.events.emit('change', initial || null);
-		console.debug(
-			'Object',
-			this.oid,
-			'updated,',
-			newKeys.size,
-			'new sub-objects',
-			droppedKeys.size,
-			'dropped sub-objects',
-		);
+		this.events.emit('change');
 	};
 
 	protected createSubObject = (
@@ -122,7 +113,7 @@ export abstract class EntityBase<T> {
 		// TODO: implement
 	};
 
-	subscribe = (event: 'change', callback: (newValue: T | null) => void) => {
+	subscribe = (event: 'change', callback: () => void) => {
 		const unsubscribe = this.events.subscribe(event, callback);
 		if (this.events.subscriberCount('change') === 1) {
 			this.cacheEvents.onSubscribed();
@@ -189,6 +180,32 @@ export abstract class EntityBase<T> {
 			);
 		}
 		return value;
+	};
+
+	/**
+	 * Returns a copy of the entity and all sub-objects as
+	 * a plain object or array.
+	 */
+	getSnapshot = (): T | null => {
+		if (!this.value) {
+			return null;
+		}
+		if (Array.isArray(this.value)) {
+			return this.value.map((item) => {
+				if (isObjectRef(item)) {
+					return this.getSubObject(item.id)?.getSnapshot();
+				}
+				return item;
+			}) as T;
+		} else {
+			const snapshot = { ...this.value };
+			for (const [key, value] of Object.entries(snapshot)) {
+				if (isObjectRef(value)) {
+					snapshot[key] = this.getSubObject(value.id)?.getSnapshot();
+				}
+			}
+			return snapshot as T;
+		}
 	};
 }
 
