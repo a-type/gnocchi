@@ -1,5 +1,5 @@
 import { hashObject } from '@aglio/storage-common';
-import { storeRequestPromise } from '../idb.js';
+import { storeRequestPromise } from './idb.js';
 import { EntityStore } from './EntityStore.js';
 import { Query, UPDATE } from './Query.js';
 

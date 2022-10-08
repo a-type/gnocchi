@@ -15,15 +15,13 @@ function encodeVersion(version: number | string): string {
 export class NaiveTimestampProvider implements TimestampProvider {
 	counter = 0;
 	now = (version: number | string) => {
-		return (
-			encodeVersion(version) + Date.now().toString() + '|' + this.counter++
-		);
+		return encodeVersion(version) + Date.now().toString() + this.counter++;
 	};
 	update = () => {
 		this.counter = 0;
 	};
 	zero = (version: number | string) => {
-		return encodeVersion(version) + '0';
+		return encodeVersion(version) + '0' + this.counter++;
 	};
 }
 
@@ -33,6 +31,7 @@ export class HybridLogicalClockTimestampProvider implements TimestampProvider {
 		counter: 0,
 		node: generateNodeId(),
 	};
+	private zeroCounter = 0;
 
 	now = (version: string | number) => {
 		this.latest = getHlcNow(this.latest);
@@ -48,7 +47,8 @@ export class HybridLogicalClockTimestampProvider implements TimestampProvider {
 			encodeVersion(version) +
 			serializeHlcTimestamp({
 				time: 0,
-				counter: 0,
+				// to keep zero timestamps unique, we use a counter here as well
+				counter: this.zeroCounter++,
 				node: this.latest.node,
 			})
 		);

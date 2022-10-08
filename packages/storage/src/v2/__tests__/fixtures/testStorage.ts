@@ -5,8 +5,8 @@ import {
 } from '@aglio/storage-common';
 // @ts-ignore
 import { IDBFactory } from 'fake-indexeddb';
-import { WebsocketSync } from '../../../Sync.js';
-import { openStorage, Storage } from '../../index.js';
+import { WebsocketSync } from '../../Sync.js';
+import { openStorage } from '../../index.js';
 
 export const todoCollection = collection({
 	name: 'todo',

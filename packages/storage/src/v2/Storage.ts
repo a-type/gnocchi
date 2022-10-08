@@ -1,5 +1,5 @@
 import { Migration, StorageSchema } from '@aglio/storage-common';
-import { Sync } from '../Sync.js';
+import { Sync } from './Sync.js';
 import { Metadata, openMetadataDatabase } from './Metadata.js';
 import { QueryMaker } from './QueryMaker.js';
 import { QueryStore } from './QueryStore.js';
@@ -7,11 +7,16 @@ import { PresenceManager } from './PresenceManager.js';
 import { openDocumentDatabase } from './openDocumentDatabase.js';
 import { DocumentCreator } from './DocumentCreator.js';
 import { EntityStore } from './EntityStore.js';
-import { storeRequestPromise } from '../idb.js';
+import { storeRequestPromise } from './idb.js';
 import { SyncHarness } from './SyncHarness.js';
 
 export class Storage<Schema extends StorageSchema<any>> {
-	private entities = new EntityStore(this.documentDb, this.meta, this.sync);
+	private entities = new EntityStore(
+		this.documentDb,
+		this.schema,
+		this.meta,
+		this.sync,
+	);
 	private syncHarness = new SyncHarness({
 		sync: this.sync,
 		meta: this.meta,

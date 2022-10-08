@@ -1,7 +1,10 @@
-import { ServerMessage, UserInfo } from '@aglio/storage-common';
-import { EventSubscriber } from '../EventSubscriber.js';
+import {
+	ServerMessage,
+	UserInfo,
+	EventSubscriber,
+} from '@aglio/storage-common';
 import { Metadata } from './Metadata.js';
-import { Sync } from '../Sync.js';
+import { Sync } from './Sync.js';
 
 export class PresenceManager<Profile, Presence> extends EventSubscriber<{
 	peerChanged: (userId: string, presence: any) => void;

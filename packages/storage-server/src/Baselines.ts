@@ -1,23 +1,19 @@
-import {
-	applyPatch,
-	DocumentBaseline,
-	SyncOperation,
-} from '@aglio/storage-common';
+import { applyPatch, DocumentBaseline, Operation } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
 import { DocumentBaselineSpec } from './types.js';
 
 export class Baselines {
 	constructor(private db: Database, private libraryId: string) {}
 
-	get = (documentId: string): DocumentBaseline<any> | null => {
+	get = (oid: string): DocumentBaseline<any> | null => {
 		const row = this.db
 			.prepare(
 				`
       SELECT * FROM DocumentBaseline
-      WHERE libraryId = ? AND documentId = ?
+      WHERE libraryId = ? AND oid = ?
     `,
 			)
-			.get(this.libraryId, documentId);
+			.get(this.libraryId, oid);
 
 		if (!row) {
 			return null;
@@ -30,13 +26,13 @@ export class Baselines {
 		return this.db
 			.prepare(
 				`
-      INSERT OR REPLACE INTO DocumentBaseline (libraryId, documentId, snapshot, timestamp)
+      INSERT OR REPLACE INTO DocumentBaseline (libraryId, oid, snapshot, timestamp)
       VALUES (?, ?, ?, ?)
     `,
 			)
 			.run(
 				this.libraryId,
-				baseline.documentId,
+				baseline.oid,
 				JSON.stringify(baseline.snapshot),
 				baseline.timestamp,
 			);
@@ -48,11 +44,11 @@ export class Baselines {
 				this.db
 					.prepare(
 						`
-				INSERT OR REPLACE INTO DocumentBaseline (libraryId, documentId, snapshot)
+				INSERT OR REPLACE INTO DocumentBaseline (libraryId, oid, snapshot)
 				VALUES (?, ?, ?)
 			`,
 					)
-					.run(this.libraryId, baseline.documentId, baseline.snapshot);
+					.run(this.libraryId, baseline.oid, baseline.snapshot);
 			}
 		});
 		tx();
@@ -93,19 +89,19 @@ export class Baselines {
 			.map(this.hydrateSnapshot);
 	};
 
-	applyOperations = (documentId: string, operations: SyncOperation[]) => {
+	applyOperations = (oid: string, operations: Operation[]) => {
 		if (operations.length === 0) return;
 
-		let baseline = this.get(documentId);
+		let baseline = this.get(oid);
 		if (!baseline) {
 			baseline = {
-				documentId,
+				oid,
 				snapshot: {},
 				timestamp: operations[0].timestamp,
 			};
 		}
 		for (const operation of operations) {
-			baseline.snapshot = applyPatch(baseline.snapshot, operation.patch);
+			baseline.snapshot = applyPatch(baseline.snapshot, operation.data);
 		}
 		baseline.timestamp = operations[operations.length - 1].timestamp;
 		this.set(baseline);

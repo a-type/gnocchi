@@ -1,26 +1,26 @@
 import {
 	AckMessage,
+	applyPatch,
 	ClientMessage,
 	HeartbeatMessage,
+	Operation,
 	OperationMessage,
 	PresenceUpdateMessage,
 	ReplicaInfo,
 	SERVER_REPLICA_ID,
 	SyncMessage,
-	SyncOperation,
 	SyncStep2Message,
 } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
 import { ReplicaInfos } from './Replicas.js';
 import { MessageSender } from './MessageSender.js';
-import { OperationHistory } from './OperationHistory.js';
-import { ServerCollectionManager } from './ServerCollection.js';
+import { OperationHistory, OperationHistoryItem } from './OperationHistory.js';
 import { Baselines } from './Baselines.js';
 import { Presence } from './Presence.js';
 import { UserProfileLoader } from './Profiles.js';
+import { PatchHistoryItemSpec } from './types.js';
 
 export class ServerLibrary {
-	private collections = new ServerCollectionManager(this.db, this.id);
 	private replicas = new ReplicaInfos(this.db, this.id);
 	private operations = new OperationHistory(this.db, this.id);
 	private baselines = new Baselines(this.db, this.id);
@@ -61,45 +61,37 @@ export class ServerLibrary {
 	};
 
 	private handleOperation = (message: OperationMessage) => {
-		const collection = this.collections.open(message.op.collection);
-
 		const run = this.db.transaction(() => {
-			// apply the operation to the document
-			collection.receive(message);
+			// insert patches into history
+			this.operations.insertAll(message.replicaId, message.patches);
 
 			// update client's oldest timestamp
-			this.replicas.updateOldestOperationTimestamp(
-				message.op.replicaId,
-				message.op.timestamp,
-			);
+			if (message.oldestHistoryTimestamp) {
+				this.replicas.updateOldestOperationTimestamp(
+					message.replicaId,
+					message.oldestHistoryTimestamp,
+				);
+			}
 		});
 
 		run();
 
-		// update replica's oldest operation
-		this.replicas.updateOldestOperationTimestamp(
-			message.op.replicaId,
-			message.oldestHistoryTimestamp,
-		);
-
 		this.enqueueRebase();
 
 		// rebroadcast to whole library except the sender
-		this.rebroadcastOperations([message.op], [message.op.replicaId]);
+		this.rebroadcastOperations(message.replicaId, message.patches);
 	};
 
-	private rebroadcastOperations = (
-		ops: SyncOperation[],
-		ignoreReplicas: string[],
-	) => {
+	private rebroadcastOperations = (replicaId: string, ops: Operation[]) => {
 		this.sender.broadcast(
 			this.id,
 			{
 				type: 'op-re',
-				ops,
+				patches: ops,
+				replicaId,
 				globalAckTimestamp: this.replicas.getGlobalAck(),
 			},
-			ignoreReplicas,
+			[replicaId],
 		);
 	};
 
@@ -117,9 +109,9 @@ export class ServerLibrary {
 
 		this.sender.send(this.id, replicaId, {
 			type: 'sync-resp',
-			ops,
+			patches: ops,
 			baselines: baselines.map((baseline) => ({
-				documentId: baseline.documentId,
+				oid: baseline.oid,
 				snapshot: baseline.snapshot,
 				timestamp: baseline.timestamp,
 			})),
@@ -133,12 +125,12 @@ export class ServerLibrary {
 		// store all incoming operations and baselines
 		this.baselines.insertAll(message.baselines);
 
-		console.debug('Storing', message.ops.length, 'operations');
-		this.operations.insertAll(message.ops);
-		this.rebroadcastOperations(message.ops, [message.replicaId]);
+		console.debug('Storing', message.patches.length, 'operations');
+		this.operations.insertAll(message.replicaId, message.patches);
+		this.rebroadcastOperations(message.replicaId, message.patches);
 
 		// update the client's ackedLogicalTime
-		const lastOperation = message.ops[message.ops.length - 1];
+		const lastOperation = message.patches[message.patches.length - 1];
 		if (lastOperation) {
 			this.replicas.updateAcknowledged(
 				message.replicaId,
@@ -198,7 +190,7 @@ export class ServerLibrary {
 		// these are in forward chronological order
 		const ops = this.operations.getBefore(newestOldestTimestamp);
 
-		const opsToApply: Record<string, SyncOperation[]> = {};
+		const opsToApply: Record<string, OperationHistoryItem[]> = {};
 		// if we encounter a sequential operation in history which does
 		// not meet our conditions, we must ignore subsequent operations
 		// applied to that document.
@@ -211,14 +203,14 @@ export class ServerLibrary {
 				creator.oldestOperationLogicalTime > op.timestamp;
 			const isBeforeGlobalAck = globalAck > op.timestamp;
 			if (
-				!hardStops[op.documentId] &&
+				!hardStops[op.oid] &&
 				isBeforeCreatorsOldestHistory &&
 				isBeforeGlobalAck
 			) {
-				opsToApply[op.documentId] = opsToApply[op.documentId] || [];
-				opsToApply[op.documentId].push(op);
+				opsToApply[op.oid] = opsToApply[op.oid] || [];
+				opsToApply[op.oid].push(op);
 			} else {
-				hardStops[op.documentId] = true;
+				hardStops[op.oid] = true;
 			}
 		}
 
@@ -233,7 +225,7 @@ export class ServerLibrary {
 		// do this work!
 		const rebases = Object.entries(opsToApply).map(([documentId, ops]) => ({
 			documentId,
-			collection: ops[0].collection,
+			oid: ops[0].oid,
 			upTo: ops[ops.length - 1].timestamp,
 		}));
 		this.sender.broadcast(this.id, {
@@ -282,6 +274,17 @@ export class ServerLibrary {
 			replicaId,
 			userId,
 		});
+	};
+
+	private applyOperations = (baseline: any, operations: Operation[]) => {
+		for (const op of operations) {
+			baseline = this.applyOperation(baseline, op);
+		}
+		return baseline;
+	};
+
+	private applyOperation = (baseline: any, operation: Operation) => {
+		return applyPatch(baseline, operation.data);
 	};
 }
 

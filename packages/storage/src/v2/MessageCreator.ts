@@ -2,45 +2,52 @@ import {
 	HeartbeatMessage,
 	PresenceUpdateMessage,
 	SyncMessage,
-	SyncOperation,
 	SyncResponseMessage,
 	SyncStep2Message,
 	TimestampProvider,
+	getOidRoot,
+	OperationPatch,
+	OperationMessage,
+	Operation,
 } from '@aglio/storage-common';
-import { getOidRoot } from '@aglio/storage-common/src/oids.js';
 import cuid from 'cuid';
-import { LocalReplicaStore } from './LocalReplicaStore.js';
+
 import { Metadata } from './Metadata.js';
 
 export class MessageCreator {
 	constructor(private meta: Metadata) {}
 
 	createOperation = async (
-		init: Pick<SyncOperation, 'patches'> & {
+		init: Pick<OperationMessage, 'patches' | 'oldestHistoryTimestamp'> & {
 			timestamp?: string;
 		},
-	): Promise<SyncOperation> => {
+	): Promise<OperationMessage> => {
 		const localInfo = await this.meta.localReplica.get();
+		const opId = cuid();
 		return {
+			type: 'op',
 			timestamp: this.meta.now,
-			...init,
 			replicaId: localInfo.id,
-			id: cuid(),
+			patches: init.patches,
+			oldestHistoryTimestamp: init.oldestHistoryTimestamp,
 		};
 	};
 
 	createMigrationOperation = async ({
 		targetVersion,
 		...init
-	}: Pick<SyncOperation, 'patches'> & {
+	}: Pick<OperationMessage, 'patches' | 'oldestHistoryTimestamp'> & {
 		targetVersion: number;
-	}): Promise<SyncOperation> => {
+	}): Promise<OperationMessage> => {
 		const localInfo = await this.meta.localReplica.get();
 		return {
-			...init,
+			type: 'op',
+			patches: init.patches.map((patch) => ({
+				...patch,
+				timestamp: this.meta.sync.time.zero(targetVersion),
+			})),
 			timestamp: this.meta.sync.time.zero(targetVersion),
 			replicaId: localInfo.id,
-			id: cuid(),
 		};
 	};
 
@@ -64,19 +71,19 @@ export class MessageCreator {
 		const localReplicaInfo = await this.meta.localReplica.get();
 		// collect all of our operations that are newer than the server's last operation
 		// if server replica isn't stored, we're syncing for the first time.
-		const operations = await this.meta.operations.getAllOperationsFromReplica(
+		const patches: Operation[] = [];
+		await this.meta.patches.iterateOverAllPatchesForReplica(
 			localReplicaInfo.id,
+			(patch) => {
+				patches.push(patch);
+			},
 			{
 				after: provideChangesSince,
 			},
 		);
 		// for now we just send every baseline for every
 		// affected document... TODO: optimize this
-		const affectedDocs = new Set(
-			operations
-				.flatMap((op) => op.patches)
-				.map((patch) => getOidRoot(patch.oid)),
-		);
+		const affectedDocs = new Set(patches.map((patch) => getOidRoot(patch.oid)));
 		const baselines = await this.meta.baselines.getAllForMultipleDocuments(
 			Array.from(affectedDocs),
 		);
@@ -84,7 +91,7 @@ export class MessageCreator {
 		return {
 			type: 'sync-step2',
 			timestamp: this.meta.now,
-			ops: operations,
+			patches,
 			// don't send empty baselines
 			baselines: baselines.filter(Boolean),
 			replicaId: localReplicaInfo.id,

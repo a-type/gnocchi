@@ -1,4 +1,4 @@
-import { storeRequestPromise } from '../idb.js';
+import { storeRequestPromise } from './idb.js';
 
 type AckInfo = {
 	type: 'ack';

@@ -56,8 +56,10 @@ export function openDocumentDatabase<Schema extends StorageSchema<any>>({
 					const store = transaction.objectStore(collection);
 					// apply new indexes
 					for (const newIndex of migration.addedIndexes[collection] || []) {
-						const unique = newIndex.unique;
-						store.createIndex(newIndex.name, newIndex.name, { unique });
+						store.createIndex(newIndex.name, newIndex.name, {
+							unique: newIndex.unique,
+							multiEntry: newIndex.multiEntry,
+						});
 					}
 					// remove old indexes
 					for (const oldIndex of migration.removedIndexes[collection] || []) {
@@ -71,6 +73,9 @@ export function openDocumentDatabase<Schema extends StorageSchema<any>>({
 						return new Promise((resolve, reject) => {
 							const store = transaction.objectStore(collection);
 							const cursorReq = store.openCursor();
+							function getMigrationNow() {
+								return meta.sync.time.zero(migration.version);
+							}
 							cursorReq.onsuccess = (event) => {
 								const cursor = cursorReq.result;
 								if (cursor) {
@@ -80,17 +85,13 @@ export function openDocumentDatabase<Schema extends StorageSchema<any>>({
 										// the migration has altered the shape of our document. we need
 										// to create the operation from the diff and write it to meta
 										// then recompute the document.
-										const patches = diffToPatches(original, newValue);
+										const patches = diffToPatches(
+											original,
+											newValue,
+											getMigrationNow,
+										);
 										if (patches.length > 0) {
-											meta.messageCreator
-												.createMigrationOperation({
-													targetVersion: migration.version,
-													rootOid: getOid(original),
-													patches,
-												})
-												.then((operation) => {
-													meta.insertLocalOperation(operation);
-												});
+											meta.insertLocalOperation(patches);
 										}
 									}
 									cursor.continue();

@@ -3,7 +3,7 @@ import {
 	getOidRange,
 	ObjectIdentifier,
 } from '@aglio/storage-common';
-import { storeRequestPromise } from '../idb.js';
+import { storeRequestPromise } from './idb.js';
 
 export class BaselinesStore {
 	constructor(private readonly db: IDBDatabase) {}
@@ -20,6 +20,15 @@ export class BaselinesStore {
 
 	getAllForMultipleDocuments = async (docOids: string[]) => {
 		return (await Promise.all(docOids.map(this.getAllForDocument))).flat();
+	};
+
+	get = async (oid: ObjectIdentifier) => {
+		const db = this.db;
+		const transaction = db.transaction('baselines', 'readonly');
+		const store = transaction.objectStore('baselines');
+		const request = store.get(oid);
+		const result = await storeRequestPromise<DocumentBaseline>(request);
+		return result;
 	};
 
 	set = async <T>(baseline: DocumentBaseline<T>) => {

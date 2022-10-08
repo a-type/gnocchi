@@ -4,14 +4,14 @@ import {
 	PatchCreator,
 	StorageSchema,
 	substituteRefsWithObjects,
-	SyncOperation,
 	assignOid,
 	getOidRoot,
 	omit,
+	OperationPatch,
+	Operation,
 } from '@aglio/storage-common';
-import { EventSubscriber } from '../EventSubscriber.js';
-import { storeRequestPromise } from '../idb.js';
-import type { Sync } from '../Sync.js';
+import { storeRequestPromise } from './idb.js';
+import type { Sync } from './Sync.js';
 import { AckInfoStore } from './AckInfoStore.js';
 import { BaselinesStore } from './BaselinesStore.js';
 import { LocalHistoryStore } from './LocalHistoryStore.js';
@@ -67,12 +67,11 @@ export class Metadata {
 						'replicaId',
 						'documentOid_timestamp',
 						'oid_timestamp',
-						'operationId',
 						'replicaId_timestamp',
 					]),
 				);
 				let current = subObjectsMappedByOid.get(patch.oid);
-				current = applyPatch(current, patch);
+				current = applyPatch(current, patch.data);
 				subObjectsMappedByOid.set(patch.oid, current);
 			},
 			{
@@ -106,7 +105,22 @@ export class Metadata {
 		oid: ObjectIdentifier,
 		upToTimestamp?: string,
 	): Promise<T | undefined> => {
-		throw new Error('TODO');
+		const baseline = await this.baselines.get(oid);
+		let current: any = baseline || undefined;
+		let patchesApplied = 0;
+		this.patches.iterateOverAllPatchesForEntity(
+			oid,
+			(patch) => {
+				current = applyPatch(current, patch.data);
+				patchesApplied++;
+			},
+			{
+				to: upToTimestamp,
+				mode: 'readonly',
+			},
+		);
+		console.log('Computed', oid, 'from', patchesApplied, 'patches:', current);
+		return current as T | undefined;
 	};
 
 	/**
@@ -137,21 +151,20 @@ export class Metadata {
 	 * Applies a patch to the document and stores it in the database.
 	 * @returns the oldest local history timestamp
 	 */
-	insertLocalOperation = async (item: SyncOperation) => {
+	insertLocalOperation = async (patches: Operation[]) => {
+		const localReplicaInfo = await this.localReplica.get();
 		await this.patches.addPatches(
-			item.patches.map((patch) => ({
+			patches.map((patch) => ({
 				...patch,
-				replicaId: item.replicaId,
-				operationId: item.id,
+				replicaId: localReplicaInfo.id,
 			})),
 		);
 
 		const oldestHistoryTimestamp = await this.localHistory.add({
-			operationId: item.id,
-			timestamp: item.timestamp,
+			timestamp: patches[patches.length - 1].timestamp,
 		});
 
-		// this.tryAutonomousRebase(oldestHistoryTimestamp);
+		this.tryAutonomousRebase(oldestHistoryTimestamp);
 
 		return oldestHistoryTimestamp;
 	};
@@ -160,15 +173,12 @@ export class Metadata {
 	 * Inserts remote operations. This does not affect local history.
 	 * @returns a list of affected document OIDs
 	 */
-	insertRemoteOperations = async (items: SyncOperation[]) => {
+	insertRemoteOperations = async (replicaId: string, patches: Operation[]) => {
 		const affectedOids = await this.patches.addPatches(
-			items.flatMap((operation) =>
-				operation.patches.map((patch) => ({
-					...patch,
-					replicaId: operation.replicaId,
-					operationId: operation.id,
-				})),
-			),
+			patches.map((patch) => ({
+				...patch,
+				replicaId,
+			})),
 		);
 		return affectedOids;
 	};
@@ -226,7 +236,7 @@ export class Metadata {
 		// gather all oids affected
 		const toRebase = new Set<ObjectIdentifier>();
 		for (const op of priorOperations) {
-			toRebase.add(getOidRoot(op.oid));
+			toRebase.add(op.oid);
 		}
 		const lastOperation = priorOperations[priorOperations.length - 1];
 
@@ -240,7 +250,7 @@ export class Metadata {
 	 * TODO: FIX REBASING: should be Entity/OID based, not document based?
 	 */
 	rebase = async (oid: ObjectIdentifier, upTo: string) => {
-		const view = await this.getComputedDocument(oid, upTo);
+		const view = await this.getComputedEntity(oid, upTo);
 		await this.baselines.set({
 			oid,
 			snapshot: view,

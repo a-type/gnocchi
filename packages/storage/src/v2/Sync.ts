@@ -3,8 +3,8 @@ import {
 	HybridLogicalClockTimestampProvider,
 	ServerMessage,
 	TimestampProvider,
+	EventSubscriber,
 } from '@aglio/storage-common';
-import { EventSubscriber } from './EventSubscriber.js';
 
 export interface Sync {
 	subscribe(

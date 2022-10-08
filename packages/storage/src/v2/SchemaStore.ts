@@ -1,5 +1,5 @@
 import { StorageSchema } from '@aglio/storage-common';
-import { storeRequestPromise } from '../idb.js';
+import { storeRequestPromise } from './idb.js';
 
 type StoredSchema = {
 	type: 'schema';

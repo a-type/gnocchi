@@ -5,13 +5,13 @@ import {
 	getOidRange,
 	getOidRoot,
 	ObjectIdentifier,
+	Operation,
 	OperationPatch,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 
-export type ClientPatch = OperationPatch & {
+export type ClientPatch = Operation & {
 	replicaId: string;
-	operationId: string;
 };
 
 export type StoredPatch = ClientPatch & {
@@ -83,25 +83,77 @@ export class PatchesStore {
 		});
 	};
 
+	iterateOverAllPatchesForEntity = async (
+		oid: ObjectIdentifier,
+		iterator: (patch: StoredPatch, store: IDBObjectStore) => void,
+		{
+			to,
+			mode,
+		}: {
+			to?: string;
+			mode?: 'readwrite' | 'readonly';
+		},
+	): Promise<void> => {
+		const transaction = this.db.transaction('patches', mode);
+		const store = transaction.objectStore('patches');
+
+		const start = createLowerBoundIndexValue(oid);
+		const end = to
+			? createCompoundIndexValue(oid, to)
+			: createUpperBoundIndexValue(oid);
+
+		const range = IDBKeyRange.bound(start, end, false, false);
+
+		const request = store.openCursor(range, 'next');
+		return new Promise<void>((resolve, reject) => {
+			let previousTimestamp: string | undefined;
+			request.onsuccess = (event) => {
+				const cursor = request.result;
+				if (cursor) {
+					const value = cursor.value as StoredPatch;
+					assert(value.oid.startsWith(oid));
+					assert(
+						previousTimestamp === undefined ||
+							previousTimestamp <= value.timestamp,
+						`expected ${previousTimestamp} <= ${value.timestamp}`,
+					);
+
+					iterator(value, store);
+					previousTimestamp = value.timestamp;
+					cursor.continue();
+				} else {
+					resolve();
+				}
+			};
+			request.onerror = (event) => {
+				reject(event);
+			};
+		});
+	};
+
 	iterateOverAllPatchesForReplica = async (
 		replicaId: string,
 		iterator: (patch: ClientPatch, store: IDBObjectStore) => void,
 		{
 			before,
+			after,
 		}: {
-			before?: string;
+			before?: string | null;
+			after?: string | null;
 		},
 	): Promise<void> => {
 		const transaction = this.db.transaction('patches', 'readonly');
 		const store = transaction.objectStore('patches');
 		const index = store.index('replicaId_timestamp');
 
-		const start = createLowerBoundIndexValue(replicaId);
+		const start = after
+			? createCompoundIndexValue(replicaId, after)
+			: createLowerBoundIndexValue(replicaId);
 		const end = before
 			? createCompoundIndexValue(replicaId, before)
 			: createUpperBoundIndexValue(replicaId);
 
-		const range = IDBKeyRange.bound(start, end, false, true);
+		const range = IDBKeyRange.bound(start, end, !!after, true);
 
 		const request = index.openCursor(range, 'next');
 		return new Promise<void>((resolve, reject) => {

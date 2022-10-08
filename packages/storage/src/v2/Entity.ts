@@ -1,19 +1,16 @@
 import {
 	applyPatch,
 	cloneDeep,
+	createRef,
+	EventSubscriber,
 	isObjectRef,
+	maybeGetOid,
+	normalizeFirstLevel,
+	ObjectIdentifier,
+	Operation,
 	OperationPatch,
 	removeOid,
 } from '@aglio/storage-common';
-import {
-	createRef,
-	getOid,
-	maybeGetOid,
-	normalize,
-	normalizeFirstLevel,
-	ObjectIdentifier,
-} from '@aglio/storage-common';
-import { EventSubscriber } from '../EventSubscriber.js';
 import { EntityStore } from './EntityStore.js';
 
 export const UPDATE = '@@update';
@@ -147,7 +144,7 @@ export abstract class EntityBase<T> {
 		};
 	};
 
-	protected addPatches = (patches: OperationPatch[]) => {
+	protected addPatches = (patches: Operation[]) => {
 		this.store.enqueuePatches(patches);
 		// immediately apply patches to _override
 		this.propagateImmediatePatches(patches);
@@ -159,12 +156,12 @@ export abstract class EntityBase<T> {
 	 * root object. So entities propagate patches downwards to their
 	 * sub-objects for in-memory application.
 	 */
-	protected propagateImmediatePatches = (patches: OperationPatch[]) => {
+	protected propagateImmediatePatches = (patches: Operation[]) => {
 		for (const patch of patches) {
 			if (patch.oid === this.oid) {
 				// apply it to _override
 				this._override = this._override || cloneDeep(this._current);
-				applyPatch(this._override, patch);
+				applyPatch(this._override, patch.data);
 			}
 		}
 		for (const entity of this.subObjectCache.values()) {

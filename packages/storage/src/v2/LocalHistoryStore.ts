@@ -1,7 +1,6 @@
-import { storeRequestPromise } from '../idb.js';
+import { storeRequestPromise } from './idb.js';
 
 type LocalHistoryItem = {
-	operationId: string;
 	timestamp: string;
 };
 type LocalHistory = {
@@ -46,15 +45,12 @@ export class LocalHistoryStore {
 		}
 
 		// TODO: PERF: find a better way to avoid duplicate items
-		const existing = history.items.find(
-			(item) => item.operationId === item.operationId,
-		);
+		const existing = history.items.find((i) => i.timestamp === item.timestamp);
 		if (existing) {
 			return history.items[0].timestamp;
 		}
 
 		history.items.push({
-			operationId: item.operationId,
 			timestamp: item.timestamp,
 		});
 		// drop old items

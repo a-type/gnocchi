@@ -2,9 +2,9 @@ import {
 	ClientMessage,
 	ObjectIdentifier,
 	ServerMessage,
+	EventSubscriber,
 } from '@aglio/storage-common';
-import { EventSubscriber } from '../EventSubscriber.js';
-import type { Sync } from '../Sync.js';
+import type { Sync } from './Sync.js';
 import { EntityStore } from './EntityStore.js';
 import { Metadata } from './Metadata.js';
 
@@ -61,7 +61,10 @@ export class SyncHarness {
 		switch (message.type) {
 			case 'op-re':
 				// rebroadcasted operations
-				affectedOids = await this.meta.insertRemoteOperations(message.ops);
+				affectedOids = await this.meta.insertRemoteOperations(
+					message.replicaId,
+					message.patches,
+				);
 				break;
 			case 'sync-resp':
 				await this.meta.ackInfo.setGlobalAck(message.globalAckTimestamp);

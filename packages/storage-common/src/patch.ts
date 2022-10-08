@@ -7,7 +7,7 @@ import {
 	diffToPatches,
 	initialToPatches,
 	ObjectRef,
-	OperationPatch,
+	Operation,
 	OperationPatchListInsert,
 	OperationPatchListPush,
 	OperationPatchListRemove,
@@ -35,17 +35,19 @@ export class PatchCreator {
 		oid: ObjectIdentifier,
 		key: PropertyName,
 		value: any,
-	): OperationPatch[] => {
+	): Operation[] => {
 		// incoming value must be normalized. if it's not a primitive, it and all sub-objects
 		// must be created
 		if (!isObject(value)) {
 			return [
 				{
-					op: 'set',
 					oid,
-					name: key,
-					value,
 					timestamp: this.getNow(),
+					data: {
+						op: 'set',
+						name: key,
+						value,
+					},
 				},
 			];
 		} else {
@@ -56,38 +58,41 @@ export class PatchCreator {
 				...initialToPatches(value, itemOid, this.getNow),
 				// then set the reference to the object
 				{
-					op: 'set',
 					oid,
-					name: key,
-					value: createRef(itemOid),
 					timestamp: this.getNow(),
+					data: {
+						op: 'set',
+						value: createRef(itemOid),
+						name: key,
+					},
 				},
 			];
 		}
 	};
 
-	createRemove = (
-		oid: ObjectIdentifier,
-		key: PropertyName,
-	): OperationPatch[] => {
+	createRemove = (oid: ObjectIdentifier, key: PropertyName): Operation[] => {
 		return [
 			{
-				op: 'remove',
 				oid,
-				name: key,
 				timestamp: this.getNow(),
+				data: {
+					op: 'remove',
+					name: key,
+				},
 			},
 		];
 	};
 
-	createListPush = (oid: ObjectIdentifier, value: any): OperationPatch[] => {
+	createListPush = (oid: ObjectIdentifier, value: any): Operation[] => {
 		if (!isObject(value)) {
 			return [
 				{
-					op: 'list-push',
-					value,
 					oid,
 					timestamp: this.getNow(),
+					data: {
+						op: 'list-push',
+						value,
+					},
 				},
 			];
 		} else {
@@ -95,10 +100,12 @@ export class PatchCreator {
 			return [
 				...initialToPatches(value, itemOid, this.getNow),
 				{
-					op: 'list-push',
-					value: createRef(itemOid),
 					oid,
 					timestamp: this.getNow(),
+					data: {
+						op: 'list-push',
+						value: createRef(itemOid),
+					},
 				},
 			];
 		}
@@ -108,15 +115,17 @@ export class PatchCreator {
 		oid: ObjectIdentifier,
 		index: number,
 		value: any,
-	): OperationPatch[] => {
+	): Operation[] => {
 		if (!isObject(value)) {
 			return [
 				{
-					op: 'list-insert',
-					value,
 					oid,
-					index,
 					timestamp: this.getNow(),
+					data: {
+						op: 'list-insert',
+						value,
+						index,
+					},
 				},
 			];
 		} else {
@@ -124,23 +133,27 @@ export class PatchCreator {
 			return [
 				...initialToPatches(value, itemOid, this.getNow),
 				{
-					op: 'list-insert',
-					value: createRef(itemOid),
 					oid,
-					index,
 					timestamp: this.getNow(),
+					data: {
+						op: 'list-insert',
+						value: createRef(itemOid),
+						index,
+					},
 				},
 			];
 		}
 	};
 
-	createListRemove = (oid: ObjectIdentifier, value: any): OperationPatch[] => {
+	createListRemove = (oid: ObjectIdentifier, value: any): Operation[] => {
 		return [
 			{
-				op: 'list-remove',
 				oid,
-				value,
 				timestamp: this.getNow(),
+				data: {
+					op: 'list-remove',
+					value,
+				},
 			},
 		];
 	};
@@ -149,14 +162,16 @@ export class PatchCreator {
 		oid: ObjectIdentifier,
 		index: number,
 		count: number = 1,
-	): OperationPatch[] => {
+	): Operation[] => {
 		return [
 			{
-				op: 'list-delete',
 				oid,
-				index,
-				count,
 				timestamp: this.getNow(),
+				data: {
+					op: 'list-delete',
+					index,
+					count,
+				},
 			},
 		];
 	};
@@ -165,14 +180,16 @@ export class PatchCreator {
 		oid: ObjectIdentifier,
 		value: ObjectRef,
 		index: number,
-	): OperationPatch[] => {
+	): Operation[] => {
 		return [
 			{
-				op: 'list-move-by-ref',
 				oid,
-				value,
-				index,
 				timestamp: this.getNow(),
+				data: {
+					op: 'list-move-by-ref',
+					value,
+					index,
+				},
 			},
 		];
 	};
@@ -181,24 +198,28 @@ export class PatchCreator {
 		oid: ObjectIdentifier,
 		fromIndex: number,
 		toIndex: number,
-	): OperationPatch[] => {
+	): Operation[] => {
 		return [
 			{
-				op: 'list-move-by-index',
 				oid,
-				from: fromIndex,
-				to: toIndex,
 				timestamp: this.getNow(),
+				data: {
+					op: 'list-move-by-index',
+					from: fromIndex,
+					to: toIndex,
+				},
 			},
 		];
 	};
 
-	createDelete = (oid: ObjectIdentifier): OperationPatch[] => {
+	createDelete = (oid: ObjectIdentifier): Operation[] => {
 		return [
 			{
-				op: 'delete',
 				oid,
 				timestamp: this.getNow(),
+				data: {
+					op: 'delete',
+				},
 			},
 		];
 	};

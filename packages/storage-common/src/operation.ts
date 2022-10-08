@@ -14,24 +14,6 @@ import {
 } from './oids.js';
 import { isObject } from './utils.js';
 
-export interface SyncOperation {
-	id: string;
-	/**
-	 * Which replica created the operation.
-	 * Remember that 1 client can have multiple replicas
-	 * (i.e. multiple devices associated with their account).
-	 */
-	replicaId: string;
-	/**
-	 * The changes applied to the document
-	 */
-	patches: OperationPatch[];
-	/**
-	 * The logical timestamp the operation was created at.
-	 */
-	timestamp: string;
-}
-
 // export type ObjectIdentifier<
 // 	CollectionName extends string = string,
 // 	DocumentId extends string = string,
@@ -70,10 +52,7 @@ export type PropertyValue =
 	| undefined
 	| ObjectRef;
 // all patches refer to a specific sub-object.
-interface BaseOperationPatch {
-	oid: ObjectIdentifier;
-	timestamp: string;
-}
+interface BaseOperationPatch {}
 export interface OperationPatchInitialize extends BaseOperationPatch {
 	op: 'initialize';
 	value: any;
@@ -147,13 +126,19 @@ export type OperationPatch =
 	| OperationPatchListRemove
 	| OperationPatchDelete;
 
+export type Operation = {
+	oid: ObjectIdentifier;
+	timestamp: string;
+	data: OperationPatch;
+};
+
 export function diffToPatches<T extends { [key: string]: any } | any[]>(
 	from: T,
 	to: T,
 	getNow: () => string,
 	createSubId?: () => string,
-	patches: OperationPatch[] = [],
-): OperationPatch[] {
+	patches: Operation[] = [],
+): Operation[] {
 	const oid = getOid(from);
 
 	function diffItems(key: string | number, value: any, oldValue: any) {
@@ -162,11 +147,14 @@ export function diffToPatches<T extends { [key: string]: any } | any[]>(
 			// do not need to recurse, of course
 			if (value !== oldValue) {
 				patches.push({
-					op: 'set',
 					oid,
-					name: key,
-					value,
 					timestamp: getNow(),
+					data: {
+						op: 'set',
+
+						name: key,
+						value,
+					},
 				});
 			}
 		} else {
@@ -180,11 +168,13 @@ export function diffToPatches<T extends { [key: string]: any } | any[]>(
 				// key of the parent to point to the new object
 				initialToPatches(value, valueOid, getNow, createSubId, patches);
 				patches.push({
-					op: 'set',
 					oid,
-					name: key,
-					value: createRef(valueOid),
 					timestamp: getNow(),
+					data: {
+						op: 'set',
+						name: key,
+						value: createRef(valueOid),
+					},
 				});
 			} else {
 				// third case: OIDs are the same, meaning the identity is the same,
@@ -209,10 +199,12 @@ export function diffToPatches<T extends { [key: string]: any } | any[]>(
 			// push the list-delete for the deleted items
 			patches.push({
 				oid,
-				op: 'list-delete',
-				index: to.length,
-				count: deletedItemsAtEnd,
 				timestamp: getNow(),
+				data: {
+					op: 'list-delete',
+					index: to.length,
+					count: deletedItemsAtEnd,
+				},
 			});
 		}
 	} else if (Array.isArray(from) || Array.isArray(to)) {
@@ -232,9 +224,11 @@ export function diffToPatches<T extends { [key: string]: any } | any[]>(
 			// push the delete for the property
 			patches.push({
 				oid,
-				op: 'remove',
-				name: key,
 				timestamp: getNow(),
+				data: {
+					op: 'remove',
+					name: key,
+				},
 			});
 		}
 	}
@@ -251,7 +245,7 @@ export function initialToPatches(
 	rootOid: ObjectIdentifier,
 	getNow: () => string,
 	createSubId?: () => string,
-	patches: OperationPatch[] = [],
+	patches: Operation[] = [],
 ) {
 	assignOid(initial, rootOid);
 	assignOidsToAllSubObjects(initial, createSubId);
@@ -259,17 +253,19 @@ export function initialToPatches(
 	for (const key of normalized.keys()) {
 		const value = normalized.get(key);
 		patches.push({
-			op: 'initialize',
 			oid: key,
-			value: removeOid(value),
 			timestamp: getNow(),
+			data: {
+				op: 'initialize',
+				value: removeOid(value),
+			},
 		});
 	}
 	return patches;
 }
 
-export function groupPatchesByIdentifier(patches: OperationPatch[]) {
-	const grouped: Record<ObjectIdentifier, OperationPatch[]> = {};
+export function groupPatchesByIdentifier(patches: Operation[]) {
+	const grouped: Record<ObjectIdentifier, Operation[]> = {};
 	for (const patch of patches) {
 		if (patch.oid in grouped) {
 			grouped[patch.oid].push(patch);
@@ -371,14 +367,6 @@ export function applyPatches<T extends NormalizedObject>(
 		cur = applyPatch(base, patch);
 	}
 	return cur;
-}
-
-export function getOperationAffectedOids(op: SyncOperation) {
-	const oids = new Set<ObjectIdentifier>();
-	for (const patch of op.patches) {
-		oids.add(patch.oid);
-	}
-	return oids;
 }
 
 /**

@@ -1,7 +1,7 @@
 // client ID, and therefore library ID, is inferred
 
 import { DocumentBaseline } from './baseline.js';
-import { SyncOperation } from './operation.js';
+import { Operation, OperationPatch } from './operation.js';
 import { UserInfo } from './presence.js';
 
 export type HeartbeatMessage = {
@@ -28,13 +28,15 @@ export type AckMessage = {
 export type OperationMessage = {
 	type: 'op';
 	replicaId: string;
-	op: SyncOperation;
-	oldestHistoryTimestamp: string;
+	patches: Operation[];
+	timestamp: string;
+	oldestHistoryTimestamp?: string;
 };
 
 export type OperationRebroadcastMessage = {
 	type: 'op-re';
-	ops: SyncOperation[];
+	patches: Operation[];
+	replicaId: string;
 	globalAckTimestamp: string;
 };
 
@@ -51,7 +53,7 @@ export type SyncMessage = {
 export type SyncResponseMessage = {
 	type: 'sync-resp';
 	// operations this client should apply
-	ops: SyncOperation[];
+	patches: Operation[];
 	// baselines this client should apply
 	baselines: DocumentBaseline[];
 	/**
@@ -74,7 +76,7 @@ export type SyncStep2Message = {
 	type: 'sync-step2';
 	replicaId: string;
 	/** Any new operations created since the requested time */
-	ops: SyncOperation[];
+	patches: Operation[];
 	/** Any new baselines created since the requested time */
 	baselines: DocumentBaseline[];
 	/** The time this message was sent. Can be used for ack. */

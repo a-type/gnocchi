@@ -15,6 +15,7 @@ import {
 	SchemaCollection,
 	SchemaCollectionName,
 } from '@aglio/storage-common';
+import { assert } from '@aglio/tools';
 import { ObjectEntity } from './Entity.js';
 import { Query } from './Query.js';
 import { QueryStore } from './QueryStore.js';
@@ -108,7 +109,12 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 	) => {
 		// validate the usage of the compound index:
 		// - all match fields must be contiguous at the start of the compound order
-		const indexDefinition = this.schema.collections[collection][filter.where];
+		const indexDefinition =
+			this.schema.collections[collection].compounds[filter.where];
+		assert(
+			indexDefinition,
+			`Index ${filter.where} does not exist on collection ${collection}`,
+		);
 		const matchedKeys = Object.keys(filter.match).sort(
 			(a, b) => indexDefinition.of.indexOf(a) - indexDefinition.of.indexOf(b),
 		);

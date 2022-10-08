@@ -1,5 +1,5 @@
 import cuid from 'cuid';
-import { storeRequestPromise } from '../idb.js';
+import { storeRequestPromise } from './idb.js';
 
 type LocalReplicaInfo = {
 	type: 'localReplicaInfo';

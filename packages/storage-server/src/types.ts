@@ -1,26 +1,19 @@
 import {
 	DocumentBaseline,
+	Operation,
 	ReplicaInfo,
-	SyncOperation,
 } from '@aglio/storage-common';
 
-export type OperationHistoryItemSpec = Omit<SyncOperation, 'patch'> & {
+export type PatchHistoryItemSpec = Omit<Operation, 'data'> & {
 	libraryId: string;
-	patch: string;
+	data: string;
+	replicaId: string;
 };
 
 export interface DocumentBaselineSpec
 	extends Omit<DocumentBaseline<any>, 'snapshot'> {
 	snapshot: string;
 	libraryId: string;
-}
-
-export interface DocumentSpec {
-	id: string;
-	libraryId: string;
-	collection: string;
-	snapshot: any;
-	timestamp: string;
 }
 
 export interface ReplicaInfoSpec extends ReplicaInfo {

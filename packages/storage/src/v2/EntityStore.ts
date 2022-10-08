@@ -1,20 +1,26 @@
 import {
 	assignOid,
 	decomposeOid,
+	getOid,
 	getRoots,
+	ObjectIdentifier,
+	Operation,
 	OperationPatch,
+	StorageCollectionSchema,
+	StorageSchema,
 } from '@aglio/storage-common';
-import { getOid, ObjectIdentifier } from '@aglio/storage-common';
-import { storeRequestPromise } from '../idb.js';
-import { Sync } from '../Sync.js';
+import { Sync } from './Sync.js';
 import { EntityBase, ObjectEntity, updateEntity } from './Entity.js';
+import { storeRequestPromise } from './idb.js';
 import { Metadata } from './Metadata.js';
+import { computeCompoundIndices, computeSynthetics } from './indexes.js';
 
 export class EntityStore {
 	private cache = new Map<string, EntityBase<any>>();
 
 	constructor(
 		private readonly db: IDBDatabase,
+		private readonly schema: StorageSchema<any>,
 		public readonly meta: Metadata,
 		private readonly sync: Sync,
 	) {}
@@ -33,6 +39,9 @@ export class EntityStore {
 			return existing;
 		}
 
+		const { collection } = decomposeOid(oid);
+		this.stripIndexes(collection, initial);
+
 		const entity: ObjectEntity<any> = new ObjectEntity(oid, initial, this, {
 			onSubscribed: () => this.onSubscribed(entity),
 			onAllUnsubscribed: () => this.onAllUnsubscribed(entity),
@@ -44,15 +53,14 @@ export class EntityStore {
 	create = async (initial: any, oid: ObjectIdentifier) => {
 		assignOid(initial, oid);
 		const patches = this.meta.patchCreator.createInitialize(initial, oid);
-		console.debug('Creating', oid, 'with patches', patches);
 		// don't enqueue these, submit as distinct operation
 		await this.submitOperation(patches);
 		return this.get(initial);
 	};
 
-	private pendingPatches: OperationPatch[] = [];
+	private pendingPatches: Operation[] = [];
 	private isOperationEnqueued = false;
-	enqueuePatches = (patches: OperationPatch[]) => {
+	enqueuePatches = (patches: Operation[]) => {
 		this.pendingPatches.push(...patches);
 		if (!this.isOperationEnqueued) {
 			queueMicrotask(this.flushPatches);
@@ -66,20 +74,15 @@ export class EntityStore {
 		this.pendingPatches = [];
 	};
 
-	private submitOperation = async (patches: OperationPatch[]) => {
+	private submitOperation = async (patches: Operation[]) => {
+		const oldestHistoryTimestamp = await this.meta.insertLocalOperation(
+			patches,
+		);
 		const operation = await this.meta.messageCreator.createOperation({
 			patches,
-		});
-		console.log(operation);
-		const oldestHistoryTimestamp = await this.meta.insertLocalOperation(
-			operation,
-		);
-		this.sync.send({
-			type: 'op',
 			oldestHistoryTimestamp,
-			op: operation,
-			replicaId: operation.replicaId,
 		});
+		this.sync.send(operation);
 		const affectedDocuments = getRoots(patches.map((p) => p.oid));
 		await Promise.all(affectedDocuments.map(this.refresh));
 	};
@@ -95,14 +98,36 @@ export class EntityStore {
 	};
 
 	private storeView = async (oid: ObjectIdentifier, view: any) => {
-		console.log('Storing view', oid, view);
 		if (!view) {
 			// TODO: delete from database
 		} else {
 			const { collection, id } = decomposeOid(oid);
+			const stored = { ...view };
+			// apply synthetic and compound index values before storing
+			Object.assign(
+				stored,
+				computeSynthetics(this.schema.collections[collection], stored),
+			);
+			Object.assign(
+				stored,
+				computeCompoundIndices(this.schema.collections[collection], stored),
+			);
+
 			const tx = this.db.transaction(collection, 'readwrite');
 			const store = tx.objectStore(collection);
-			await storeRequestPromise(store.put(view));
+			await storeRequestPromise(store.put(stored));
+		}
+	};
+
+	private stripIndexes = (collection: string, view: any) => {
+		const { synthetics, compounds } = this.schema.collections[
+			collection
+		] as StorageCollectionSchema<any, any, any>;
+		for (const synthetic of Object.keys(synthetics)) {
+			delete view[synthetic];
+		}
+		for (const compoundIndex of Object.keys(compounds)) {
+			delete view[compoundIndex];
 		}
 	};
 }
