@@ -4,7 +4,7 @@ import { GroceriesPage } from '@/pages/GroceriesPage.js';
 import { NevermindPage } from '@/pages/NevermindPage.js';
 import { NotFoundPage } from '@/pages/NotFoundPage.js';
 import { trpc } from '@/trpc.js';
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -20,27 +20,29 @@ export function App() {
 	);
 
 	return (
-		<trpc.Provider client={trpcClient} queryClient={queryClient}>
-			<QueryClientProvider client={queryClient}>
-				<BrowserRouter>
-					<AuthProvider>
-						<PageRoot>
-							<PageContent fullHeight noPadding flex={1}>
-								<Routes>
-									<Route path="/" element={<GroceriesPage />} />
-									<Route
-										path="/claim/:inviteId"
-										element={<ClaimInvitePage />}
-									/>
-									<Route path="/nevermind" element={<NevermindPage />} />
-									<Route path="*" element={<NotFoundPage />} />
-								</Routes>
-								<Toaster />
-							</PageContent>
-						</PageRoot>
-					</AuthProvider>
-				</BrowserRouter>
-			</QueryClientProvider>
-		</trpc.Provider>
+		<Suspense fallback="Loading...">
+			<trpc.Provider client={trpcClient} queryClient={queryClient}>
+				<QueryClientProvider client={queryClient}>
+					<BrowserRouter>
+						<AuthProvider>
+							<PageRoot>
+								<PageContent fullHeight noPadding flex={1}>
+									<Routes>
+										<Route path="/" element={<GroceriesPage />} />
+										<Route
+											path="/claim/:inviteId"
+											element={<ClaimInvitePage />}
+										/>
+										<Route path="/nevermind" element={<NevermindPage />} />
+										<Route path="*" element={<NotFoundPage />} />
+									</Routes>
+									<Toaster />
+								</PageContent>
+							</PageRoot>
+						</AuthProvider>
+					</BrowserRouter>
+				</QueryClientProvider>
+			</trpc.Provider>
+		</Suspense>
 	);
 }

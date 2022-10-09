@@ -1,18 +1,15 @@
-import {
-	ServerMessage,
-	UserInfo,
-	EventSubscriber,
-} from '@aglio/storage-common';
+import { ServerMessage, EventSubscriber } from '@aglio/storage-common';
 import { Metadata } from './Metadata.js';
 import { Sync } from './Sync.js';
+import type { Presence, Profile, UserInfo } from '../index.js';
 
 export class PresenceManager<Profile, Presence> extends EventSubscriber<{
 	peerChanged: (userId: string, presence: any) => void;
 	selfChanged: (presence: any) => void;
 	peersChanged: (peers: Record<string, any>) => void;
 }> {
-	private _peers = {} as Record<string, UserInfo<Profile, Presence>>;
-	private _self = { profile: {} } as UserInfo<Profile, Presence>;
+	private _peers = {} as Record<string, UserInfo>;
+	private _self = { profile: {} } as UserInfo;
 	private _peerIds = new Array<string>();
 
 	get self() {

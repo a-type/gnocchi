@@ -58,21 +58,15 @@ export class Metadata {
 			subObjectsMappedByOid.set(baseline.oid, baseline.snapshot);
 		}
 
+		let lastPatchWasDelete = false;
+
 		await this.patches.iterateOverAllPatchesForDocument(
 			oid,
 			(patch) => {
-				console.debug(
-					'Applying patch',
-					omit(patch, [
-						'replicaId',
-						'documentOid_timestamp',
-						'oid_timestamp',
-						'replicaId_timestamp',
-					]),
-				);
 				let current = subObjectsMappedByOid.get(patch.oid);
 				current = applyPatch(current, patch.data);
 				subObjectsMappedByOid.set(patch.oid, current);
+				lastPatchWasDelete = patch.data.op === 'delete';
 			},
 			{
 				to: upToTimestamp,
@@ -94,7 +88,13 @@ export class Metadata {
 
 		// asserting T type - even if baseline is an empty object, applying
 		// operations should conform it to the final shape.
-		return rootBaseline as T | undefined;
+
+		// FIXME: this is a fragile check for deleted
+		if (lastPatchWasDelete) {
+			return undefined;
+		}
+
+		return rootBaseline as T;
 	};
 
 	/**
@@ -106,7 +106,7 @@ export class Metadata {
 		upToTimestamp?: string,
 	): Promise<T | undefined> => {
 		const baseline = await this.baselines.get(oid);
-		let current: any = baseline || undefined;
+		let current: any = baseline?.snapshot || undefined;
 		let patchesApplied = 0;
 		this.patches.iterateOverAllPatchesForEntity(
 			oid,
@@ -152,6 +152,8 @@ export class Metadata {
 	 * @returns the oldest local history timestamp
 	 */
 	insertLocalOperation = async (patches: Operation[]) => {
+		if (patches.length === 0) return;
+
 		const localReplicaInfo = await this.localReplica.get();
 		await this.patches.addPatches(
 			patches.map((patch) => ({
@@ -174,6 +176,8 @@ export class Metadata {
 	 * @returns a list of affected document OIDs
 	 */
 	insertRemoteOperations = async (replicaId: string, patches: Operation[]) => {
+		if (patches.length === 0) return;
+
 		const affectedOids = await this.patches.addPatches(
 			patches.map((patch) => ({
 				...patch,
@@ -292,7 +296,7 @@ export class Metadata {
 	};
 }
 
-export function openMetadataDatabase(indexedDB: IDBFactory) {
+export function openMetadataDatabase(indexedDB: IDBFactory = window.indexedDB) {
 	return new Promise<IDBDatabase>((resolve, reject) => {
 		const request = indexedDB.open('meta', 1);
 		request.onupgradeneeded = (event) => {

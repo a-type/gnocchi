@@ -1,11 +1,4 @@
-import {
-	ArrowLeftIcon,
-	Cross1Icon,
-	ExclamationTriangleIcon,
-	HamburgerMenuIcon,
-	UpdateIcon,
-} from '@radix-ui/react-icons';
-import { Box, Button, H1, H2, P, Span } from '@/components/primitives/index.js';
+import { Box, Button, Span } from '@/components/primitives/index.js';
 import {
 	Popover,
 	PopoverArrow,
@@ -13,34 +6,28 @@ import {
 	PopoverTrigger,
 } from '@/components/primitives/Popover.js';
 import { useAuth } from '@/contexts/AuthContext.js';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { styled } from '@/stitches.config.js';
-import { groceries } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
+import {
+	ArrowLeftIcon,
+	Cross1Icon,
+	ExclamationTriangleIcon,
+	HamburgerMenuIcon,
+	UpdateIcon,
+} from '@radix-ui/react-icons';
+import React, { useEffect, useState } from 'react';
 import { InviteLinkButton } from './InviteLinkButton.js';
-import { LoginButton } from './LoginButton.js';
 import { LogoutButton } from './LogoutButton.js';
 import { ManageSubscriptionButton } from './ManageSubscriptionButton.js';
 import { People } from './People.js';
-import {
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-} from '../primitives/Dialog.js';
-import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { StartSignupDialog } from './StartSignupDialog.js';
 
 export function SyncMenu() {
 	const { session, error, isSubscribed } = useAuth();
 
-	const [reconnecting, setReconnecting] = useState(false);
-
-	useEffect(() => {
-		return groceries.sync.subscribe('onlineChange', (online) => {
-			setReconnecting(!online);
-		});
-	}, []);
+	const online = hooks.useSyncStatus();
+	const reconnecting = !online;
 
 	if (session === undefined) {
 		return null;

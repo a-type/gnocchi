@@ -2,7 +2,12 @@ import cuid from 'cuid';
 import { generateKeyBetween } from 'fractional-indexing';
 import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
-import { Presence, Storage } from '@aglio/storage';
+import {
+	EntityShape,
+	Presence,
+	StorageDescriptor,
+	WebsocketSync,
+} from '@aglio/storage';
 import { createHooks } from '@aglio/storage-react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
@@ -32,120 +37,117 @@ const DEFAULT_CATEGORY = 'None';
 
 const syncOrigin = API_ORIGIN || 'localhost:3001';
 
-const _groceries = new Storage({
-	syncOptions: {
+const _groceriesDesc = new StorageDescriptor({
+	sync: new WebsocketSync({
 		host: `ws${SECURE ? 's' : ''}://${syncOrigin}`,
-	},
+	}),
 	schema,
 	migrations,
 	initialPresence: {} as Presence,
 });
+const _groceries = _groceriesDesc.open();
 
-(window as any).stats = () => {
-	_groceries.stats().then(console.info);
+(window as any).stats = async () => {
+	(await _groceries).stats().then(console.info);
 };
 (window as any).groceries = _groceries;
 
-export const hooks = createHooks(_groceries);
+export const hooks = createHooks(_groceriesDesc);
 
-export const mutations = {
-	deleteItem: (item: GroceryItem) => {
-		return _groceries.get('items').delete(item.id);
+export const groceries = {
+	deleteItem: async (item: GroceryItem) => {
+		return (await _groceries).delete('items', item.get('id'));
 	},
-	deleteItems: (ids: string[]) => {
-		return _groceries.get('items').deleteAll(ids);
+	deleteItems: async (ids: string[]) => {
+		const storage = await _groceries;
+		for (const id of ids) {
+			return storage.delete('items', id);
+		}
 	},
-	setItemPurchasedQuantity: (item: GroceryItem, quantity: number) => {
-		item.$update({
-			purchasedQuantity: quantity,
+	setItemPurchasedQuantity: async (item: GroceryItem, quantity: number) => {
+		item.set('purchasedQuantity', quantity);
+		(await _groceries).presence.update({
+			lastInteractedItem: item.get('id'),
 		});
-		groceries.presence.update({
-			lastInteractedItem: item.id,
-		});
 	},
-	setItemPosition: (
+	setItemPosition: async (
 		item: GroceryItem,
 		sortKey: string,
 		categoryId?: string,
 	) => {
-		item.$update({
-			sortKey,
-			categoryId,
-		});
+		const storage = await _groceries;
+		item.set('sortKey', sortKey);
+		item.set('categoryId', categoryId);
 		// if category changed, update lookups
 		if (categoryId) {
-			_groceries.get('foodCategoryAssignments').upsert({
-				id: cuid(),
-				foodName: item.food,
-				categoryId,
-				remote: false,
-			});
+			// FIXME: upserting assignments
+			// (await _groceries).create('foodCategoryAssignments', {
+			// 	id: cuid(),
+			// 	foodName: item.food,
+			// 	categoryId,
+			// 	remote: false,
+			// });
 		}
 
-		groceries.presence.update({
-			lastInteractedItem: item.id,
+		storage.presence.update({
+			lastInteractedItem: item.get('id'),
 		});
 	},
 	toggleItemPurchased: async (item: GroceryItem) => {
-		if (item.purchasedQuantity >= item.totalQuantity) {
-			await _groceries.get('items').update(item.id, {
-				purchasedQuantity: 0,
-			});
+		const storage = await _groceries;
+		if (item.get('purchasedQuantity') >= item.get('totalQuantity')) {
+			item.set('purchasedQuantity', 0);
 		} else {
-			await _groceries.get('items').update(item.id, {
-				purchasedQuantity: item.totalQuantity,
-			});
+			item.set('purchasedQuantity', item.get('totalQuantity'));
 		}
-		groceries.presence.update({
-			lastInteractedItem: item.id,
+		storage.presence.update({
+			lastInteractedItem: item.get('id'),
 		});
 	},
-	updateItem: (
+	updateItem: async (
 		item: GroceryItem,
-		updates: Omit<Partial<GroceryItem>, 'inputs'>,
+		updates: Omit<Partial<EntityShape<GroceryItem>>, 'inputs'>,
 	) => {
-		_groceries.get('items').update(item.id, updates);
-		groceries.presence.update({
-			lastInteractedItem: item.id,
+		item.update(updates);
+		(await _groceries).presence.update({
+			lastInteractedItem: item.get('id'),
 		});
 	},
 	setItemCategory: async (item: GroceryItem, categoryId: string) => {
-		await Promise.all([
-			_groceries.get('items').update(item.id, {
-				categoryId,
-			}),
-			_groceries.get('foodCategoryAssignments').upsert({
-				id: cuid(),
-				foodName: item.food,
-				categoryId,
-				remote: false,
-			}),
-		]);
-		groceries.presence.update({
-			lastInteractedItem: item.id,
+		const storage = await _groceries;
+		item.set('categoryId', categoryId);
+		// FIXME: upserting assignments
+		// storage.create('foodCategoryAssignments', {
+		// 	id: cuid(),
+		// 	foodName: item.food,
+		// 	categoryId,
+		// 	remote: false,
+		// })
+		storage.presence.update({
+			lastInteractedItem: item.get('id'),
 		});
 
 		// send the categorization to the server for research
 		await trpcClient.mutation('categories.assign', {
-			foodName: item.food,
+			foodName: item.get('food'),
 			categoryId,
 		});
 	},
-	createCategory: (name: string) => {
-		return _groceries.get('categories').create({
+	createCategory: async (name: string) => {
+		return (await _groceries).create('categories', {
 			id: cuid(),
 			name,
 		});
 	},
 	resetCategoriesToDefault: async () => {
+		const storage = await _groceries;
 		const defaultCategories = await trpcClient.query('categories.defaults');
-		const existingCategories = await _groceries.get('categories').getAll()
-			.resolved;
+		const existingCategories = await storage.findAll('categories').resolved;
 		for (const cat of existingCategories) {
-			await groceries.deleteCategory(cat.id);
+			await groceries.deleteCategory(cat.get('id'));
 		}
 		for (const cat of defaultCategories) {
-			await _groceries.get('categories').upsert({
+			await storage.upsert('categories', {
 				id: cat.id,
 				name: cat.name,
 			});
@@ -155,8 +157,9 @@ export const mutations = {
 		lines: string[],
 		sourceInfo?: { url?: string; title: string },
 	) => {
+		const storage = await _groceries;
 		if (!lines.length) return;
-		const defaultCategory = await _groceries.get('categories').upsert({
+		const defaultCategory = await storage.upsert('categories', {
 			id: DEFAULT_CATEGORY,
 			name: DEFAULT_CATEGORY,
 		});
@@ -164,37 +167,34 @@ export const mutations = {
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
 			let itemId: string;
-			const firstMatch = await _groceries.get('items').findOne({
+			const firstMatch = await storage.findOne('items', {
 				where: 'food',
 				equals: parsed.food,
 			}).resolved;
 			if (firstMatch) {
-				itemId = firstMatch.id;
-				const totalQuantity = firstMatch.totalQuantity + parsed.quantity;
-				await _groceries.get('items').update(firstMatch.id, {
-					totalQuantity,
-				});
+				itemId = firstMatch.get('id');
+				const totalQuantity = firstMatch.get('totalQuantity') + parsed.quantity;
+				firstMatch.set('totalQuantity', totalQuantity);
 			} else {
 				itemId = cuid();
 
-				const lookups = await _groceries.get('foodCategoryAssignments').getAll({
+				const lookups = await storage.findAll('foodCategoryAssignments', {
 					where: 'foodName',
 					equals: parsed.food,
 				}).resolved;
 				// if there are local and remote lookups, use the local one
-				const lookup = lookups.find((l) => !l.remote) || lookups[0];
-				let categoryId = lookup?.categoryId ?? defaultCategory.id;
+				const lookup = lookups.find((l) => !l.get('remote')) || lookups[0];
+				let categoryId = lookup?.get('categoryId') ?? defaultCategory.get('id');
 
 				// verify the category exists locally
-				const category = await _groceries.get('categories').get(categoryId)
-					.resolved;
+				const category = await storage.get('categories', categoryId).resolved;
 				if (!category) {
-					categoryId = defaultCategory.id;
+					categoryId = defaultCategory.get('id');
 				}
 
 				// TODO: findOne with a sort order applied to get just
 				// the last item
-				const categoryItems = await _groceries.get('items').getAll({
+				const categoryItems = await storage.findAll('items', {
 					where: 'categoryId_sortKey',
 					match: {
 						categoryId,
@@ -204,7 +204,7 @@ export const mutations = {
 				}).resolved;
 				const lastCategoryItem = categoryItems[0];
 
-				await _groceries.get('items').create({
+				await storage.create('items', {
 					id: cuid(),
 					categoryId,
 					createdAt: Date.now(),
@@ -212,7 +212,10 @@ export const mutations = {
 					purchasedQuantity: 0,
 					unit: parsed.unit,
 					food: parsed.food,
-					sortKey: generateKeyBetween(lastCategoryItem?.sortKey ?? null, null),
+					sortKey: generateKeyBetween(
+						lastCategoryItem?.get('sortKey') ?? null,
+						null,
+					),
 					inputs: [
 						{
 							text: line,
@@ -255,32 +258,31 @@ export const mutations = {
 		if (categoryId === DEFAULT_CATEGORY) {
 			return;
 		}
-		const items = _groceries.get('items');
-		const matchingItems = await items.getAll({
+		const storage = await _groceries;
+		const matchingItems = await storage.findAll('items', {
 			where: 'categoryId',
 			equals: categoryId,
 		}).resolved;
 		// move all items to the default category
 		for (const item of matchingItems) {
-			items.update(item.id, {
-				categoryId: DEFAULT_CATEGORY,
-			});
+			item.set('categoryId', DEFAULT_CATEGORY);
 		}
 		// delete all lookups for this category locally
-		const lookups = await _groceries.get('foodCategoryAssignments').getAll({
+		const lookups = await storage.findAll('foodCategoryAssignments', {
 			where: 'categoryId',
 			equals: categoryId,
 		}).resolved;
 		for (const lookup of lookups) {
-			_groceries.get('foodCategoryAssignments').delete(lookup.foodName);
+			storage.delete('foodCategoryAssignments', lookup.get('id'));
 		}
 
-		_groceries.get('categories').delete(categoryId);
+		storage.delete('categories', categoryId);
 	},
 	syncDefaultFoodAssignments: async () => {
+		const storage = await _groceries;
 		trpcClient.query('categories.assignments', null).then((assignments) => {
 			for (const assignment of assignments) {
-				groceries.get('foodCategoryAssignments').upsert({
+				storage.upsert('foodCategoryAssignments', {
 					id: assignment.id,
 					foodName: assignment.foodName,
 					categoryId: assignment.categoryId,
@@ -290,9 +292,6 @@ export const mutations = {
 		});
 	},
 };
-
-export const groceries = Object.assign(_groceries, mutations);
-// export const groceries = _groceries;
 
 // on startup, sync assignments
 groceries.syncDefaultFoodAssignments();

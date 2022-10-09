@@ -20,7 +20,9 @@ export type StorageSchema<
 > = { version: number; collections: Collections };
 
 export type SchemaCollectionName<Schema extends StorageSchema<any>> =
-	Schema extends StorageSchema<infer Cs> ? keyof Cs : never;
+	Schema extends StorageSchema<infer Cs>
+		? Exclude<keyof Cs, number | symbol>
+		: never;
 
 export type SchemaCollection<
 	Schema extends StorageSchema<any>,

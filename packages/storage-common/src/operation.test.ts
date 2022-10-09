@@ -19,23 +19,32 @@ describe('creating diff patch operations', () => {
 			assignOid(from, 'test/a');
 			const to = { foo: 'bar', baz: 'pop' };
 			assignOid(to, 'test/a');
-			const patches = diffToPatches(from, to, createClock());
-			expect(patches).toEqual([
-				{
-					oid: 'test/a',
-					op: 'set',
-					name: 'baz',
-					value: 'pop',
-					timestamp: '0',
-				},
-				{
-					oid: 'test/a',
-					op: 'remove',
-					name: 'zing',
-					timestamp: '1',
-				},
-			]);
-			const result = applyPatches(from, patches);
+			const ops = diffToPatches(from, to, createClock());
+			expect(ops).toMatchInlineSnapshot(`
+				[
+				  {
+				    "data": {
+				      "name": "baz",
+				      "op": "set",
+				      "value": "pop",
+				    },
+				    "oid": "test/a",
+				    "timestamp": "0",
+				  },
+				  {
+				    "data": {
+				      "name": "zing",
+				      "op": "remove",
+				    },
+				    "oid": "test/a",
+				    "timestamp": "1",
+				  },
+				]
+			`);
+			const result = applyPatches(
+				from,
+				ops.map((op) => op.data),
+			);
 			expect(result).toEqual(to);
 		});
 	});
@@ -59,22 +68,26 @@ describe('creating diff patch operations', () => {
 			expect(patches).toMatchInlineSnapshot(`
 				[
 				  {
-				    "oid": "test/a:1",
-				    "op": "initialize",
-				    "timestamp": "0",
-				    "value": {
-				      "qux": "grault",
+				    "data": {
+				      "op": "initialize",
+				      "value": {
+				        "qux": "grault",
+				      },
 				    },
+				    "oid": "test/a:1",
+				    "timestamp": "0",
 				  },
 				  {
-				    "name": "baz",
-				    "oid": "test/a",
-				    "op": "set",
-				    "timestamp": "1",
-				    "value": {
-				      "@@type": "ref",
-				      "id": "test/a:1",
+				    "data": {
+				      "name": "baz",
+				      "op": "set",
+				      "value": {
+				        "@@type": "ref",
+				        "id": "test/a:1",
+				      },
 				    },
+				    "oid": "test/a",
+				    "timestamp": "1",
 				  },
 				]
 			`);
@@ -96,22 +109,26 @@ describe('creating diff patch operations', () => {
 			expect(patches).toMatchInlineSnapshot(`
 				[
 				  {
-				    "oid": "test/a:1",
-				    "op": "initialize",
-				    "timestamp": "0",
-				    "value": {
-				      "qux": "corge",
+				    "data": {
+				      "op": "initialize",
+				      "value": {
+				        "qux": "corge",
+				      },
 				    },
+				    "oid": "test/a:1",
+				    "timestamp": "0",
 				  },
 				  {
-				    "name": "baz",
-				    "oid": "test/a",
-				    "op": "set",
-				    "timestamp": "1",
-				    "value": {
-				      "@@type": "ref",
-				      "id": "test/a:1",
+				    "data": {
+				      "name": "baz",
+				      "op": "set",
+				      "value": {
+				        "@@type": "ref",
+				        "id": "test/a:1",
+				      },
 				    },
+				    "oid": "test/a",
+				    "timestamp": "1",
 				  },
 				]
 			`);
@@ -149,11 +166,13 @@ describe('creating diff patch operations', () => {
 			expect(patches).toMatchInlineSnapshot(`
 				[
 				  {
-				    "name": "qux",
+				    "data": {
+				      "name": "qux",
+				      "op": "set",
+				      "value": "fig",
+				    },
 				    "oid": "test/a:0",
-				    "op": "set",
 				    "timestamp": "0",
-				    "value": "fig",
 				  },
 				]
 			`);
@@ -228,54 +247,66 @@ describe('creating diff patch operations', () => {
 		expect(diffToPatches(from, to, createClock())).toMatchInlineSnapshot(`
 			[
 			  {
-			    "count": 1,
-			    "index": 2,
+			    "data": {
+			      "count": 1,
+			      "index": 2,
+			      "op": "list-delete",
+			    },
 			    "oid": "test/a:2",
-			    "op": "list-delete",
 			    "timestamp": "0",
 			  },
 			  {
+			    "data": {
+			      "op": "initialize",
+			      "value": [
+			        0,
+			      ],
+			    },
 			    "oid": "test/a:6",
-			    "op": "initialize",
 			    "timestamp": "1",
-			    "value": [
-			      0,
-			    ],
 			  },
 			  {
-			    "name": "bop",
+			    "data": {
+			      "name": "bop",
+			      "op": "set",
+			      "value": {
+			        "@@type": "ref",
+			        "id": "test/a:6",
+			      },
+			    },
 			    "oid": "test/a:1",
-			    "op": "set",
 			    "timestamp": "2",
-			    "value": {
-			      "@@type": "ref",
-			      "id": "test/a:6",
-			    },
 			  },
 			  {
-			    "name": "corge",
+			    "data": {
+			      "name": "corge",
+			      "op": "set",
+			      "value": false,
+			    },
 			    "oid": "test/a:4",
-			    "op": "set",
 			    "timestamp": "3",
-			    "value": false,
 			  },
 			  {
+			    "data": {
+			      "op": "initialize",
+			      "value": {
+			        "corge": false,
+			      },
+			    },
 			    "oid": "test/a:5",
-			    "op": "initialize",
 			    "timestamp": "4",
-			    "value": {
-			      "corge": false,
-			    },
 			  },
 			  {
-			    "name": 1,
-			    "oid": "test/a:3",
-			    "op": "set",
-			    "timestamp": "5",
-			    "value": {
-			      "@@type": "ref",
-			      "id": "test/a:5",
+			    "data": {
+			      "name": 1,
+			      "op": "set",
+			      "value": {
+			        "@@type": "ref",
+			        "id": "test/a:5",
+			      },
 			    },
+			    "oid": "test/a:3",
+			    "timestamp": "5",
 			  },
 			]
 		`);
@@ -476,69 +507,81 @@ describe('creating patches from initial state', () => {
 		expect(result).toMatchInlineSnapshot(`
 			[
 			  {
+			    "data": {
+			      "op": "initialize",
+			      "value": {
+			        "bar": "baz",
+			      },
+			    },
 			    "oid": "test/a:0",
-			    "op": "initialize",
 			    "timestamp": "0",
-			    "value": {
-			      "bar": "baz",
-			    },
 			  },
 			  {
+			    "data": {
+			      "op": "initialize",
+			      "value": {
+			        "corge": "grault",
+			      },
+			    },
 			    "oid": "test/a:2",
-			    "op": "initialize",
 			    "timestamp": "1",
-			    "value": {
-			      "corge": "grault",
-			    },
 			  },
 			  {
+			    "data": {
+			      "op": "initialize",
+			      "value": {
+			        "oof": 1,
+			      },
+			    },
 			    "oid": "test/a:4",
-			    "op": "initialize",
 			    "timestamp": "2",
-			    "value": {
-			      "oof": 1,
-			    },
 			  },
 			  {
+			    "data": {
+			      "op": "initialize",
+			      "value": {
+			        "bin": {
+			          "@@type": "ref",
+			          "id": "test/a:4",
+			        },
+			      },
+			    },
 			    "oid": "test/a:3",
-			    "op": "initialize",
 			    "timestamp": "3",
-			    "value": {
-			      "bin": {
-			        "@@type": "ref",
-			        "id": "test/a:4",
-			      },
-			    },
 			  },
 			  {
+			    "data": {
+			      "op": "initialize",
+			      "value": [
+			        {
+			          "@@type": "ref",
+			          "id": "test/a:2",
+			        },
+			        {
+			          "@@type": "ref",
+			          "id": "test/a:3",
+			        },
+			      ],
+			    },
 			    "oid": "test/a:1",
-			    "op": "initialize",
 			    "timestamp": "4",
-			    "value": [
-			      {
-			        "@@type": "ref",
-			        "id": "test/a:2",
-			      },
-			      {
-			        "@@type": "ref",
-			        "id": "test/a:3",
-			      },
-			    ],
 			  },
 			  {
-			    "oid": "test/a",
-			    "op": "initialize",
-			    "timestamp": "5",
-			    "value": {
-			      "foo": {
-			        "@@type": "ref",
-			        "id": "test/a:0",
-			      },
-			      "qux": {
-			        "@@type": "ref",
-			        "id": "test/a:1",
+			    "data": {
+			      "op": "initialize",
+			      "value": {
+			        "foo": {
+			          "@@type": "ref",
+			          "id": "test/a:0",
+			        },
+			        "qux": {
+			          "@@type": "ref",
+			          "id": "test/a:1",
+			        },
 			      },
 			    },
+			    "oid": "test/a",
+			    "timestamp": "5",
 			  },
 			]
 		`);

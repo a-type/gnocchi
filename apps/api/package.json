@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
-		"prestart": "cd ../../packages/prisma && prisma migrate deploy",
+		"prestart": "cd ../../packages/prisma && prisma migrate deploy && prisma db seed",
 		"start": "pnpm prestart && tsx ./src/server.ts",
 		"start:local": "env-cmd pnpm start",
 		"build": "tsc --build tsconfig.json"

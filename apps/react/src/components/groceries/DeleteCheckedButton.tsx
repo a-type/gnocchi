@@ -19,7 +19,7 @@ export const DeleteCheckedButton = forwardRef<
 
 	const deleteCompleted = async () => {
 		if (items?.length) {
-			await groceries.deleteItems(items.map((i) => i.id));
+			await groceries.deleteItems(items.map((i) => i.get('id')));
 		}
 	};
 

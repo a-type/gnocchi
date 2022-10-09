@@ -21,13 +21,13 @@ export function GroceryListCategory({
 	hooks.useWatch(category);
 
 	const stateSnap = useSnapshot(groceriesState);
-	const animateIn = stateSnap.justCreatedCategoryId === category.id;
+	const animateIn = stateSnap.justCreatedCategoryId === category.get('id');
 
 	const items = hooks.useAllItems({
 		index: {
 			where: 'categoryId_sortKey',
 			match: {
-				categoryId: category.id,
+				categoryId: category.get('id'),
 			},
 			order: 'asc',
 		},
@@ -50,9 +50,9 @@ export function GroceryListCategory({
 			}
 			const data = over.data.current as GroceryDnDDrop;
 			if (data.type === 'category') {
-				setIsDraggingOver(data.value === category.id);
+				setIsDraggingOver(data.value === category.get('id'));
 			} else if (data.type === 'item') {
-				setIsDraggingOver(data.value.categoryId === category.id);
+				setIsDraggingOver(data.value.get('categoryId') === category.get('id'));
 			} else {
 				setIsDraggingOver(false);
 			}
@@ -64,9 +64,12 @@ export function GroceryListCategory({
 
 	const empty = items?.length === 0;
 	const snap = useSnapshot(groceriesState);
-	const forceShow = snap.draggedItemOriginalCategory === category.id;
+	const forceShow = snap.draggedItemOriginalCategory === category.get('id');
 
-	const sortedIds = useMemo(() => items?.map((i) => i.id) || [], [items]);
+	const sortedIds = useMemo(
+		() => items?.map((i) => i.get('id')) || [],
+		[items],
+	);
 
 	if (empty && !forceShow) return null;
 
@@ -81,17 +84,17 @@ export function GroceryListCategory({
 		>
 			<SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
 				<H2 size="micro" css={{ m: '$2', fontFamily: '$sans' }}>
-					{category.name}
+					{category.get('name')}
 				</H2>
 				{items?.map((item, index) => {
 					const prevItem = items[index - 1];
 					const nextItem = items[index + 1];
 					return (
 						<MemoizedDraggableItem
-							key={item.id}
+							key={item.get('id')}
 							item={item}
-							nextSortKey={nextItem?.sortKey || null}
-							prevSortKey={prevItem?.sortKey || null}
+							nextSortKey={nextItem?.get('sortKey') || null}
+							prevSortKey={prevItem?.get('sortKey') || null}
 						/>
 					);
 				})}

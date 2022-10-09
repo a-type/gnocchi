@@ -10,7 +10,6 @@ import {
 	createUpperBoundIndexValue,
 	isRangeIndexFilter,
 	isMatchIndexFilter,
-	StorageDocument,
 	StorageDocumentInit,
 	SchemaCollection,
 	SchemaCollectionName,
@@ -46,7 +45,7 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 		collection: Collection,
 		query?: CollectionFilter<Schema['collections'][Collection], Index>,
 	): Query<
-		ObjectEntity<StorageDocumentInit<SchemaCollection<Schema, Collection>>>[]
+		ObjectEntity<StorageDocumentInit<SchemaCollection<Schema, Collection>>>
 	> => {
 		return this.queryStore.get({
 			collection: collection as string,
@@ -82,6 +81,9 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 	) => {
 		const lower = filter.gte || filter.gt;
 		const upper = filter.lte || filter.lt;
+		if (lower === upper) {
+			return IDBKeyRange.only(lower);
+		}
 		if (!lower) {
 			return IDBKeyRange.upperBound(upper, !!filter.lt);
 		} else if (!upper) {
@@ -134,6 +136,9 @@ export class QueryMaker<Schema extends StorageSchema<any>> {
 		// create our bounds for the matched values
 		const lower = createLowerBoundIndexValue(...matchedValues);
 		const upper = createUpperBoundIndexValue(...matchedValues);
+		if (lower === upper) {
+			return IDBKeyRange.only(lower);
+		}
 		return IDBKeyRange.bound(lower, upper);
 	};
 

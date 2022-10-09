@@ -1,5 +1,6 @@
 import {
 	applyPatch,
+	assignOid,
 	cloneDeep,
 	createRef,
 	EventSubscriber,
@@ -55,12 +56,22 @@ export abstract class EntityBase<T> {
 
 	protected subObjectCache: Map<ObjectIdentifier, EntityBase<any>> = new Map();
 
+	private cachedSnapshot: any | null = null;
+
+	protected _deleted = false;
+
 	protected events = new EventSubscriber<{
 		change: () => void;
+		delete: () => void;
+		restore: () => void;
 	}>();
 
 	protected get value() {
 		return this._override || this._current;
+	}
+
+	get deleted() {
+		return this._deleted;
 	}
 
 	constructor(
@@ -73,6 +84,17 @@ export abstract class EntityBase<T> {
 	}
 
 	protected [UPDATE] = (initial: T | undefined) => {
+		if (!initial) {
+			// entity was deleted
+			this._current = null;
+			this._override = null;
+			this.cachedSnapshot = null;
+			this.subObjectCache.clear();
+			this._deleted = true;
+			this.events.emit('delete');
+			return;
+		}
+
 		const normalized = normalizeFirstLevel(initial);
 		this._current = removeOid(normalized.get(this.oid));
 		// update any existing sub-object values
@@ -107,6 +129,13 @@ export abstract class EntityBase<T> {
 
 		// clear overrides
 		this._override = null;
+		// reset snapshot dirty state
+		this.cachedSnapshot = null;
+
+		if (this._deleted) {
+			this._deleted = false;
+			this.events.emit('restore');
+		}
 
 		this.events.emit('change');
 	};
@@ -126,7 +155,10 @@ export abstract class EntityBase<T> {
 		// TODO: implement
 	};
 
-	subscribe = (event: 'change', callback: () => void) => {
+	subscribe = (
+		event: 'change' | 'delete' | 'restore',
+		callback: () => void,
+	) => {
 		const unsubscribe = this.events.subscribe(event, callback);
 		if (this.events.subscriberCount('change') === 1) {
 			this.cacheEvents.onSubscribed();
@@ -164,9 +196,15 @@ export abstract class EntityBase<T> {
 				applyPatch(this._override, patch.data);
 			}
 		}
+
 		for (const entity of this.subObjectCache.values()) {
 			entity.propagateImmediatePatches(patches);
 		}
+
+		// invalidate snapshot
+		this.cachedSnapshot = null;
+		// inform subscribers of change
+		this.events.emit('change');
 	};
 
 	protected getSubObject = (oid: ObjectIdentifier) => {
@@ -176,6 +214,10 @@ export abstract class EntityBase<T> {
 	get = <Key extends AccessibleEntityProperty<T>>(
 		key: Key,
 	): EntityPropertyValue<T, Key> => {
+		if (this._deleted) {
+			throw new Error('Cannot access deleted entity');
+		}
+
 		const value = this.value[key];
 		if (value === undefined) {
 			throw new Error(
@@ -205,22 +247,25 @@ export abstract class EntityBase<T> {
 		if (!this.value) {
 			return null;
 		}
-		if (Array.isArray(this.value)) {
-			return this.value.map((item) => {
-				if (isObjectRef(item)) {
-					return this.getSubObject(item.id)?.getSnapshot();
+		if (!this.cachedSnapshot) {
+			if (Array.isArray(this.value)) {
+				this.cachedSnapshot = this.value.map((item) => {
+					if (isObjectRef(item)) {
+						return this.getSubObject(item.id)?.getSnapshot();
+					}
+					return item;
+				}) as T;
+			} else {
+				const snapshot = { ...this.value };
+				for (const [key, value] of Object.entries(snapshot)) {
+					if (isObjectRef(value)) {
+						snapshot[key] = this.getSubObject(value.id)?.getSnapshot();
+					}
 				}
-				return item;
-			}) as T;
-		} else {
-			const snapshot = { ...this.value };
-			for (const [key, value] of Object.entries(snapshot)) {
-				if (isObjectRef(value)) {
-					snapshot[key] = this.getSubObject(value.id)?.getSnapshot();
-				}
+				this.cachedSnapshot = snapshot as T;
 			}
-			return snapshot as T;
 		}
+		return this.cachedSnapshot;
 	};
 }
 
@@ -236,6 +281,10 @@ export class ListEntity<T> extends EntityBase<T[]> {
 		}
 		return itemOid;
 	};
+
+	get length() {
+		return this.value.length;
+	}
 
 	set = (index: number, value: T) => {
 		this.addPatches(
@@ -290,4 +339,22 @@ export class ObjectEntity<T> extends EntityBase<T> {
 	remove = (key: string) => {
 		this.addPatches(this.store.meta.patchCreator.createRemove(this.oid, key));
 	};
+	update = (value: Partial<T>) => {
+		this.addPatches(
+			this.store.meta.patchCreator.createDiff(
+				this.value,
+				assignOid(value, this.oid),
+			),
+		);
+	};
 }
+
+export type Entity = ListEntity<any> | ObjectEntity<any>;
+
+export type EntityShape<E extends EntityBase<any>> = E extends ListEntity<
+	infer T
+>
+	? T[]
+	: E extends ObjectEntity<infer T>
+	? T
+	: never;

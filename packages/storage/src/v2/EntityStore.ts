@@ -1,7 +1,9 @@
 import {
 	assignOid,
 	decomposeOid,
+	EventSubscriber,
 	getOid,
+	getOidRoot,
 	getRoots,
 	ObjectIdentifier,
 	Operation,
@@ -14,8 +16,11 @@ import { EntityBase, ObjectEntity, updateEntity } from './Entity.js';
 import { storeRequestPromise } from './idb.js';
 import { Metadata } from './Metadata.js';
 import { computeCompoundIndices, computeSynthetics } from './indexes.js';
+import { assert } from '@aglio/tools';
 
-export class EntityStore {
+export class EntityStore extends EventSubscriber<{
+	collectionsChanged: (collections: string[]) => void;
+}> {
 	private cache = new Map<string, EntityBase<any>>();
 
 	constructor(
@@ -23,7 +28,9 @@ export class EntityStore {
 		private readonly schema: StorageSchema<any>,
 		public readonly meta: Metadata,
 		private readonly sync: Sync,
-	) {}
+	) {
+		super();
+	}
 
 	onSubscribed = (self: EntityBase<any>) => {
 		this.cache.set(self.oid, self);
@@ -50,6 +57,28 @@ export class EntityStore {
 		return entity;
 	};
 
+	/**
+	 * TODO: disambiguate retrieving documents and live objects.
+	 * Find a place for this.
+	 */
+	getFromOid = async (oid: ObjectIdentifier) => {
+		const existing = this.cache.get(oid);
+		if (existing) {
+			return existing;
+		}
+
+		const { collection } = decomposeOid(oid);
+		const store = this.db
+			.transaction(collection, 'readonly')
+			.objectStore(collection);
+		const result = await storeRequestPromise(store.get(oid));
+		if (result) {
+			return this.get(result);
+		} else {
+			return null;
+		}
+	};
+
 	create = async (initial: any, oid: ObjectIdentifier) => {
 		assignOid(initial, oid);
 		const patches = this.meta.patchCreator.createInitialize(initial, oid);
@@ -72,6 +101,7 @@ export class EntityStore {
 		console.log('Flushing patches', this.pendingPatches.length);
 		await this.submitOperation(this.pendingPatches);
 		this.pendingPatches = [];
+		this.isOperationEnqueued = false;
 	};
 
 	private submitOperation = async (patches: Operation[]) => {
@@ -85,6 +115,12 @@ export class EntityStore {
 		this.sync.send(operation);
 		const affectedDocuments = getRoots(patches.map((p) => p.oid));
 		await Promise.all(affectedDocuments.map(this.refresh));
+		// TODO: find a more efficient and straightforward way to update affected
+		// queries
+		const affectedCollections = new Set(
+			affectedDocuments.map((oid) => decomposeOid(oid).collection),
+		);
+		this.emit('collectionsChanged', Array.from(affectedCollections));
 	};
 
 	refresh = async (oid: ObjectIdentifier) => {
@@ -97,9 +133,27 @@ export class EntityStore {
 		}
 	};
 
+	delete = async (oid: ObjectIdentifier) => {
+		assert(
+			oid === getOidRoot(oid),
+			'Only root documents may be deleted via Storage methods',
+		);
+		const patches = this.meta.patchCreator.createDelete(oid);
+		// don't enqueue these, submit as distinct operation
+		await this.submitOperation(patches);
+	};
+
 	private storeView = async (oid: ObjectIdentifier, view: any) => {
-		if (!view) {
-			// TODO: delete from database
+		console.debug('Storing view', oid, view);
+		const isDeleted = !view;
+		if (isDeleted) {
+			// delete from database
+			const { collection } = decomposeOid(oid);
+			const store = this.db
+				.transaction(collection, 'readwrite')
+				.objectStore(collection);
+			const { id } = decomposeOid(oid);
+			await storeRequestPromise(store.delete(id));
 		} else {
 			const { collection, id } = decomposeOid(oid);
 			const stored = { ...view };

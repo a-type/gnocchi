@@ -1,22 +1,14 @@
 import { useMemo, useRef, useSyncExternalStore } from 'react';
 import { suspend } from 'suspend-react';
+import { Document, Storage, Query, UserInfo, Entity } from '@aglio/storage';
 import {
-	Storage,
-	LiveQuery,
-	subscribe,
-	CollectionInMemoryFilters,
-	LiveDocument,
-	StorageCollection,
-} from '@aglio/storage';
-import {
-	BasePresence,
 	CollectionIndexFilter,
 	CollectionIndexName,
+	SchemaCollectionName,
 	StorageCollectionSchema,
-	StorageDocument,
 	StorageSchema,
-	UserInfo,
 } from '@aglio/storage-common';
+import { StorageDescriptor } from '@aglio/storage/src/v2/Storage.js';
 
 type QueryHookResult<T> = T;
 
@@ -26,14 +18,13 @@ type CollectionHooks<
 > = {
 	[key in Name as `use${Capitalize<Name>}`]: (
 		id: string,
-	) => QueryHookResult<LiveDocument<StorageDocument<Collection>>>;
+	) => QueryHookResult<Document<Collection>>;
 } & {
 	[key in Name as `useAll${Capitalize<Name>}`]: <
 		IndexName extends CollectionIndexName<Collection>,
 	>(config?: {
 		index?: CollectionIndexFilter<Collection, IndexName>;
-		filter?: CollectionInMemoryFilters<Collection>;
-	}) => QueryHookResult<LiveDocument<StorageDocument<Collection>>[]>;
+	}) => QueryHookResult<Document<Collection>[]>;
 };
 
 type UnionToIntersection<T> = (T extends any ? (k: T) => void : never) extends (
@@ -56,17 +47,11 @@ type GeneratedHooks<
 	>]: CollectionHooks<CollectionName, Schema['collections'][CollectionName]>;
 }>;
 
-function useLiveQuery<
-	CollectionSchema extends StorageCollectionSchema<any, any, any>,
-	T,
->(
-	collection: StorageCollection<CollectionSchema>,
-	liveQuery: LiveQuery<CollectionSchema, T>,
-) {
+function useLiveQuery<T>(liveQuery: Query<T>) {
 	suspend(() => liveQuery.resolved, [liveQuery.key]);
 	return useSyncExternalStore(
 		(callback) => {
-			return collection.subscribe(liveQuery, callback);
+			return liveQuery.subscribe(callback);
 		},
 		() => liveQuery.current,
 	);
@@ -86,33 +71,33 @@ type CreatedHooks<
 	Schema extends StorageSchema<{
 		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
-	Profile,
-	Presence extends BasePresence,
 > = GeneratedHooks<Schema> & {
 	useWatch<T>(liveObject: T): T;
-	useSelf(): UserInfo<Profile, Presence>;
+	useSelf(): UserInfo;
 	usePeerIds(): string[];
-	usePeer(peerId: string): UserInfo<Profile, Presence>;
+	usePeer(peerId: string): UserInfo;
 	useSyncStatus(): boolean;
+	useStorage(): Storage<Schema>;
 };
 
 export function createHooks<
 	Schema extends StorageSchema<{
 		[k: string]: StorageCollectionSchema<any, any, any>;
 	}>,
-	Profile,
-	Presence extends BasePresence,
->(
-	storage: Storage<Schema, Profile, Presence>,
-): CreatedHooks<Schema, Profile, Presence> {
-	function useWatch(liveObject: any) {
+>(storageDesc: StorageDescriptor<Schema>): CreatedHooks<Schema> {
+	function useStorage() {
+		return suspend(() => storageDesc.readyPromise, ['rootStorage']);
+	}
+
+	function useWatch(liveObject: Entity) {
 		return useSyncExternalStore(
-			(handler) => subscribe(liveObject, handler),
-			() => liveObject,
+			(handler) => liveObject.subscribe('change', handler),
+			() => liveObject.getSnapshot(),
 		);
 	}
 
 	function useSelf() {
+		const storage = useStorage();
 		return useSyncExternalStore(
 			(callback) => storage.presence.subscribe('selfChanged', callback),
 			() => storage.presence.self,
@@ -120,6 +105,7 @@ export function createHooks<
 	}
 
 	function usePeerIds() {
+		const storage = useStorage();
 		return useSyncExternalStore(
 			(callback) => storage.presence.subscribe('peersChanged', callback),
 			() => storage.presence.peerIds,
@@ -127,6 +113,7 @@ export function createHooks<
 	}
 
 	function usePeer(peerId: string) {
+		const storage = useStorage();
 		return useSyncExternalStore(
 			(callback) =>
 				storage.presence.subscribe('peerChanged', (id, user) => {
@@ -139,6 +126,7 @@ export function createHooks<
 	}
 
 	function useSyncStatus() {
+		const storage = useStorage();
 		return useSyncExternalStore(
 			(callback) => storage.sync.subscribe('onlineChange', callback),
 			() => storage.sync.active,
@@ -146,6 +134,7 @@ export function createHooks<
 	}
 
 	const hooks: Record<string, any> = {
+		useStorage,
 		useWatch,
 		useSelf,
 		usePeerIds,
@@ -153,17 +142,19 @@ export function createHooks<
 		useSyncStatus,
 	};
 
-	for (const name of Object.keys(storage.collections)) {
-		const collection = storage.collections[name];
+	const collectionNames = Object.keys(
+		storageDesc.schema.collections,
+	) as SchemaCollectionName<Schema>[];
+	for (const name of collectionNames) {
 		const getOneHookName = `use${capitalize(
 			name,
 		)}` as `use${CapitalizedCollectionName<Schema>}`;
 		hooks[getOneHookName] = function useOne(id: string) {
-			suspend(() => collection.initialized, [name]);
+			const storage = useStorage();
 			const liveQuery = useMemo(() => {
-				return collection.get(id);
+				return storage.get(name, id);
 			}, [id]);
-			const data = useLiveQuery(collection, liveQuery);
+			const data = useLiveQuery(liveQuery);
 
 			return data;
 		};
@@ -174,14 +165,13 @@ export function createHooks<
 		hooks[getAllHookName] = function useAll(
 			config: {
 				index?: CollectionIndexFilter<any, any>;
-				filter?: CollectionInMemoryFilters<any>;
 			} = {},
 		) {
-			suspend(() => collection.initialized, [name]);
+			const storage = useStorage();
 			// assumptions: this query getter is fast and returns the same
 			// query identity for subsequent calls.
-			const liveQuery = collection.getAll(config.index, config.filter);
-			const data = useLiveQuery(collection, liveQuery);
+			const liveQuery = storage.findAll(name, config.index);
+			const data = useLiveQuery(liveQuery);
 			return data;
 		};
 	}

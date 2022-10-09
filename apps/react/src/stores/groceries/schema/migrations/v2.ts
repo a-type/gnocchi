@@ -1,4 +1,3 @@
-import { LiveDocument } from '@aglio/storage';
 import {
 	collection,
 	migrate,
@@ -25,9 +24,6 @@ export const categoryCollection = collection({
 	synthetics: {},
 	compounds: {},
 });
-export type GroceryCategory = LiveDocument<
-	StorageDocument<typeof categoryCollection>
->;
 
 export const foodCategoryLookupCollection = collection({
 	name: 'foodCategoryLookups',
@@ -47,9 +43,6 @@ export const foodCategoryLookupCollection = collection({
 	synthetics: {},
 	compounds: {},
 });
-export type FoodCategoryLookup = LiveDocument<
-	StorageDocument<typeof foodCategoryLookupCollection>
->;
 
 export const itemCollection = collection({
 	name: 'items',
@@ -122,7 +115,6 @@ export const itemCollection = collection({
 		},
 	},
 });
-export type GroceryItem = LiveDocument<StorageDocument<typeof itemCollection>>;
 
 export const v2Schema = schema({
 	version: 2,
