@@ -166,8 +166,8 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 		},
 	}) as () => any;
 
-	const onCreateCategory = ({ id }: { id: string }) => {
-		item.set('categoryId', id);
+	const onCreateCategory = (category: GroceryCategory) => {
+		item.set('categoryId', category.get('id'));
 		setState('idle');
 	};
 
@@ -291,7 +291,7 @@ function CreateCategory({
 	onCreate,
 	...rest
 }: {
-	onCreate: (category: { id: string }) => void;
+	onCreate: (category: GroceryCategory) => void;
 	open: boolean;
 	onOpenChange: (v: boolean) => void;
 }) {

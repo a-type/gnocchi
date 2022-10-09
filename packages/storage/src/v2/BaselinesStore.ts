@@ -13,7 +13,7 @@ export class BaselinesStore {
 		const transaction = db.transaction('baselines', 'readonly');
 		const store = transaction.objectStore('baselines');
 		const [start, end] = getOidRange(oid);
-		const request = store.getAll(IDBKeyRange.bound(start, end, true, true));
+		const request = store.getAll(IDBKeyRange.bound(start, end, false, false));
 		const results = await storeRequestPromise<DocumentBaseline[]>(request);
 		return results;
 	};

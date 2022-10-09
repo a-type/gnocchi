@@ -89,6 +89,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				highlighted={quantityJustChanged}
 				dragging={isDragActive}
 				data-item-id={item.get('id')}
+				data-oid={item.oid}
 			>
 				<Checkbox
 					checked={

@@ -72,8 +72,7 @@ export class MessageCreator {
 		// collect all of our operations that are newer than the server's last operation
 		// if server replica isn't stored, we're syncing for the first time.
 		const patches: Operation[] = [];
-		await this.meta.patches.iterateOverAllPatchesForReplica(
-			localReplicaInfo.id,
+		await this.meta.patches.iterateOverAllLocalPatches(
 			(patch) => {
 				patches.push(patch);
 			},

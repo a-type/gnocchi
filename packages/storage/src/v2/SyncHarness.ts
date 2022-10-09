@@ -3,6 +3,7 @@ import {
 	ObjectIdentifier,
 	ServerMessage,
 	EventSubscriber,
+	getOidRoot,
 } from '@aglio/storage-common';
 import type { Sync } from './Sync.js';
 import { EntityStore } from './EntityStore.js';
@@ -57,16 +58,15 @@ export class SyncHarness {
 	};
 
 	private handleMessage = async (message: ServerMessage) => {
-		let affectedOids: ObjectIdentifier[] = [];
+		let affectedOids: ObjectIdentifier[] | undefined = undefined;
 		switch (message.type) {
 			case 'op-re':
 				// rebroadcasted operations
-				affectedOids = await this.meta.insertRemoteOperations(
-					message.replicaId,
-					message.patches,
-				);
+				affectedOids = await this.meta.insertRemoteOperations(message.patches);
 				break;
 			case 'sync-resp':
+				affectedOids = await this.meta.insertRemoteOperations(message.patches);
+
 				await this.meta.ackInfo.setGlobalAck(message.globalAckTimestamp);
 
 				// respond to the server
@@ -78,15 +78,17 @@ export class SyncHarness {
 				await this.meta.updateLastSynced();
 				break;
 			case 'rebases':
+				const affectedSet = new Set<ObjectIdentifier>();
 				for (const rebase of message.rebases) {
 					await this.meta.rebase(rebase.oid, rebase.upTo);
-					affectedOids.push(rebase.oid);
+					affectedSet.add(getOidRoot(rebase.oid));
 				}
+				affectedOids = Array.from(affectedSet);
 				break;
 		}
 
-		for (const oid of affectedOids) {
-			this.entities.refresh(oid);
+		if (affectedOids?.length) {
+			this.entities.refreshAll(affectedOids);
 		}
 	};
 

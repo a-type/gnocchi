@@ -89,6 +89,13 @@ describe('creating diff patch operations', () => {
 				    "oid": "test/a",
 				    "timestamp": "1",
 				  },
+				  {
+				    "data": {
+				      "op": "delete",
+				    },
+				    "oid": "test/a:0",
+				    "timestamp": "2",
+				  },
 				]
 			`);
 		});
@@ -129,6 +136,13 @@ describe('creating diff patch operations', () => {
 				    },
 				    "oid": "test/a",
 				    "timestamp": "1",
+				  },
+				  {
+				    "data": {
+				      "op": "delete",
+				    },
+				    "oid": "test/a:0",
+				    "timestamp": "2",
 				  },
 				]
 			`);

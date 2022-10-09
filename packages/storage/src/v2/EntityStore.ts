@@ -88,20 +88,22 @@ export class EntityStore extends EventSubscriber<{
 	};
 
 	private pendingPatches: Operation[] = [];
-	private isOperationEnqueued = false;
 	enqueuePatches = (patches: Operation[]) => {
+		const isFirstSet = this.pendingPatches.length === 0;
 		this.pendingPatches.push(...patches);
-		if (!this.isOperationEnqueued) {
+		if (isFirstSet) {
 			queueMicrotask(this.flushPatches);
-			this.isOperationEnqueued = true;
 		}
 	};
 
 	private flushPatches = async () => {
+		if (!this.pendingPatches.length) {
+			return;
+		}
+
 		console.log('Flushing patches', this.pendingPatches.length);
 		await this.submitOperation(this.pendingPatches);
 		this.pendingPatches = [];
-		this.isOperationEnqueued = false;
 	};
 
 	private submitOperation = async (patches: Operation[]) => {
@@ -123,14 +125,31 @@ export class EntityStore extends EventSubscriber<{
 		this.emit('collectionsChanged', Array.from(affectedCollections));
 	};
 
-	refresh = async (oid: ObjectIdentifier) => {
-		console.log('Refreshing', oid);
+	/**
+	 * Internal implementation which doesn't emit events.
+	 */
+	private doRefresh = async (oid: ObjectIdentifier) => {
 		const view = await this.meta.getComputedDocument(oid);
 		await this.storeView(oid, view);
 		const entity = this.cache.get(oid);
 		if (entity) {
 			updateEntity(entity, view);
 		}
+	};
+
+	refresh = async (oid: ObjectIdentifier) => {
+		console.log('Refreshing', oid);
+		await this.doRefresh(oid);
+		this.emit('collectionsChanged', [decomposeOid(oid).collection]);
+	};
+
+	refreshAll = async (oids: ObjectIdentifier[]) => {
+		const affectedCollections = new Set<string>();
+		for (const oid of oids) {
+			await this.doRefresh(oid);
+			affectedCollections.add(decomposeOid(oid).collection);
+		}
+		this.emit('collectionsChanged', Array.from(affectedCollections));
 	};
 
 	delete = async (oid: ObjectIdentifier) => {

@@ -176,6 +176,16 @@ export function diffToPatches<T extends { [key: string]: any } | any[]>(
 						value: createRef(valueOid),
 					},
 				});
+				// if there was an old value, we need to delete it altogether.
+				if (oldValueOid !== undefined) {
+					patches.push({
+						oid: oldValueOid,
+						timestamp: getNow(),
+						data: {
+							op: 'delete',
+						},
+					});
+				}
 			} else {
 				// third case: OIDs are the same, meaning the identity is the same,
 				// and we must diff the objects

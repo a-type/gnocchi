@@ -47,7 +47,7 @@ type GeneratedHooks<
 	>]: CollectionHooks<CollectionName, Schema['collections'][CollectionName]>;
 }>;
 
-function useLiveQuery<T>(liveQuery: Query<T>) {
+function useLiveQuery(liveQuery: Query<any>) {
 	suspend(() => liveQuery.resolved, [liveQuery.key]);
 	return useSyncExternalStore(
 		(callback) => {

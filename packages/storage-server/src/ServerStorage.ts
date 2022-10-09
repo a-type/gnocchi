@@ -66,7 +66,7 @@ export class ServerStorage {
           libraryId TEXT NOT NULL,
 					replicaId TEXT NOT NULL,
           oid TEXT NOT NULL,
-          patch TEXT NOT NULL,
+          data TEXT NOT NULL,
           timestamp INTEGER NOT NULL,
 					PRIMARY KEY (libraryId, replicaId, oid, timestamp)
         );

@@ -14,6 +14,7 @@ import { assert } from '@aglio/tools';
 import { ObjectEntity } from './Entity.js';
 import { EntityStore } from './EntityStore.js';
 import { Metadata } from './Metadata.js';
+import { Document } from './types.js';
 
 /**
  * Exposes functionality for creating documents,
@@ -47,7 +48,9 @@ export class DocumentManager<Schema extends StorageSchema<any>> {
 	) => {
 		const oid = this.getOid(collection, init);
 		// documents are always objects at the root
-		return this.entities.create(init, oid) as Promise<ObjectEntity<any>>;
+		return this.entities.create(init, oid) as Promise<
+			Document<SchemaCollection<Schema, Collection>>
+		>;
 	};
 
 	upsert = async <Collection extends SchemaCollectionName<Schema>>(

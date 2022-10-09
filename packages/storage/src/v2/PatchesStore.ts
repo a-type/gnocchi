@@ -11,12 +11,12 @@ import {
 import { assert } from '@aglio/tools';
 
 export type ClientPatch = Operation & {
-	replicaId: string;
+	isLocal: boolean;
 };
 
 export type StoredPatch = ClientPatch & {
 	oid_timestamp: string;
-	replicaId_timestamp: string;
+	isLocal_timestamp: string;
 	documentOid_timestamp: string;
 };
 
@@ -131,8 +131,7 @@ export class PatchesStore {
 		});
 	};
 
-	iterateOverAllPatchesForReplica = async (
-		replicaId: string,
+	iterateOverAllLocalPatches = async (
 		iterator: (patch: ClientPatch, store: IDBObjectStore) => void,
 		{
 			before,
@@ -144,14 +143,14 @@ export class PatchesStore {
 	): Promise<void> => {
 		const transaction = this.db.transaction('patches', 'readonly');
 		const store = transaction.objectStore('patches');
-		const index = store.index('replicaId_timestamp');
+		const index = store.index('isLocal_timestamp');
 
 		const start = after
-			? createCompoundIndexValue(replicaId, after)
-			: createLowerBoundIndexValue(replicaId);
+			? createCompoundIndexValue(true, after)
+			: createLowerBoundIndexValue(true);
 		const end = before
-			? createCompoundIndexValue(replicaId, before)
-			: createUpperBoundIndexValue(replicaId);
+			? createCompoundIndexValue(true, before)
+			: createUpperBoundIndexValue(true);
 
 		const range = IDBKeyRange.bound(start, end, !!after, true);
 
@@ -162,7 +161,6 @@ export class PatchesStore {
 				const cursor = request.result;
 				if (cursor) {
 					const value = cursor.value as StoredPatch;
-					assert(value.replicaId === replicaId);
 					assert(
 						previousTimestamp === undefined ||
 							previousTimestamp <= value.timestamp,
@@ -197,8 +195,8 @@ export class PatchesStore {
 				patch.oid,
 				patch.timestamp,
 			) as string,
-			replicaId_timestamp: createCompoundIndexValue(
-				patch.replicaId,
+			isLocal_timestamp: createCompoundIndexValue(
+				patch.isLocal,
 				patch.timestamp,
 			) as string,
 			documentOid_timestamp: createCompoundIndexValue(
@@ -229,3 +227,6 @@ export class PatchesStore {
 		return Array.from(affected);
 	};
 }
+
+//@ts-ignore
+window.createCompoundIndexValue = createCompoundIndexValue;

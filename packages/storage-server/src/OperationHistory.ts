@@ -99,8 +99,8 @@ export class OperationHistory {
 		return this.db
 			.prepare(
 				`
-      INSERT OR REPLACE INTO OperationHistory (libraryId, oid, patch, timestamp, replicaId)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT OR REPLACE INTO OperationHistory (libraryId, oid, data, timestamp, replicaId)
+      VALUES (?, ?, ?, ?, ?)
     `,
 			)
 			.run(
@@ -115,8 +115,8 @@ export class OperationHistory {
 	insertAll = async (replicaId: string, items: Operation[]) => {
 		const insertStatement = this.db.prepare(
 			`
-			INSERT OR REPLACE INTO OperationHistory (libraryId, oid, patch, timestamp, replicaId)
-			VALUES (?, ?, ?, ?, ?, ?, ?)
+			INSERT OR REPLACE INTO OperationHistory (libraryId, oid, data, timestamp, replicaId)
+			VALUES (?, ?, ?, ?, ?)
 			`,
 		);
 

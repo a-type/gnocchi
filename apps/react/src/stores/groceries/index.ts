@@ -50,7 +50,9 @@ const _groceries = _groceriesDesc.open();
 (window as any).stats = async () => {
 	(await _groceries).stats().then(console.info);
 };
-(window as any).groceries = _groceries;
+_groceries.then((g) => {
+	(window as any).groceries = g;
+});
 
 export const hooks = createHooks(_groceriesDesc);
 
@@ -294,4 +296,4 @@ export const groceries = {
 };
 
 // on startup, sync assignments
-groceries.syncDefaultFoodAssignments();
+// groceries.syncDefaultFoodAssignments();

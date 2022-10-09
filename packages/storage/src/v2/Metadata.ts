@@ -53,6 +53,7 @@ export class Metadata {
 	): Promise<T | undefined> => {
 		console.debug('Computing view of', oid);
 		const baselines = await this.baselines.getAllForDocument(oid);
+		console.debug('Baselines:', baselines);
 		const subObjectsMappedByOid = new Map<ObjectIdentifier, any>();
 		for (const baseline of baselines) {
 			subObjectsMappedByOid.set(baseline.oid, baseline.snapshot);
@@ -75,13 +76,15 @@ export class Metadata {
 
 		// assemble the various sub-objects into the document by
 		// placing them where their ref is
-		const rootBaseline = subObjectsMappedByOid.get(oid) ?? ({} as any);
+		const rootBaseline = subObjectsMappedByOid.get(oid);
 		// critical: attach metadata
-		assignOid(rootBaseline, oid);
-		const usedOids = substituteRefsWithObjects(
-			rootBaseline,
-			subObjectsMappedByOid,
-		);
+		if (rootBaseline) {
+			assignOid(rootBaseline, oid);
+			const usedOids = substituteRefsWithObjects(
+				rootBaseline,
+				subObjectsMappedByOid,
+			);
+		}
 
 		// TODO: set difference of used OIDs versus stored baseline OIDs, clean up
 		// orphaned baselines.
@@ -90,7 +93,7 @@ export class Metadata {
 		// operations should conform it to the final shape.
 
 		// FIXME: this is a fragile check for deleted
-		if (lastPatchWasDelete) {
+		if (lastPatchWasDelete || !rootBaseline) {
 			return undefined;
 		}
 
@@ -108,7 +111,7 @@ export class Metadata {
 		const baseline = await this.baselines.get(oid);
 		let current: any = baseline?.snapshot || undefined;
 		let patchesApplied = 0;
-		this.patches.iterateOverAllPatchesForEntity(
+		await this.patches.iterateOverAllPatchesForEntity(
 			oid,
 			(patch) => {
 				current = applyPatch(current, patch.data);
@@ -116,7 +119,6 @@ export class Metadata {
 			},
 			{
 				to: upToTimestamp,
-				mode: 'readonly',
 			},
 		);
 		console.log('Computed', oid, 'from', patchesApplied, 'patches:', current);
@@ -158,7 +160,7 @@ export class Metadata {
 		await this.patches.addPatches(
 			patches.map((patch) => ({
 				...patch,
-				replicaId: localReplicaInfo.id,
+				isLocal: true,
 			})),
 		);
 
@@ -175,15 +177,18 @@ export class Metadata {
 	 * Inserts remote operations. This does not affect local history.
 	 * @returns a list of affected document OIDs
 	 */
-	insertRemoteOperations = async (replicaId: string, patches: Operation[]) => {
-		if (patches.length === 0) return;
+	insertRemoteOperations = async (patches: Operation[]) => {
+		if (patches.length === 0) return [];
 
 		const affectedOids = await this.patches.addPatches(
 			patches.map((patch) => ({
 				...patch,
-				replicaId,
+				isLocal: false,
 			})),
 		);
+
+		this.ack(patches[patches.length - 1].timestamp);
+
 		return affectedOids;
 	};
 
@@ -223,8 +228,7 @@ export class Metadata {
 
 		// find all operations before the oldest history timestamp
 		const priorOperations = new Array<ClientPatch>();
-		await this.patches.iterateOverAllPatchesForReplica(
-			localInfo.id,
+		await this.patches.iterateOverAllLocalPatches(
 			(patch) => {
 				priorOperations.push(patch);
 			},
@@ -250,10 +254,8 @@ export class Metadata {
 		}
 	};
 
-	/**
-	 * TODO: FIX REBASING: should be Entity/OID based, not document based?
-	 */
 	rebase = async (oid: ObjectIdentifier, upTo: string) => {
+		console.log('Rebasing', oid, 'up to', upTo);
 		const view = await this.getComputedEntity(oid, upTo);
 		await this.baselines.set({
 			oid,
@@ -262,7 +264,7 @@ export class Metadata {
 		});
 		// separate iteration to ensure the above has completed before destructive
 		// actions. TODO: use a transaction instead
-		await this.patches.iterateOverAllPatchesForDocument(
+		await this.patches.iterateOverAllPatchesForEntity(
 			oid,
 			(op, store) => {
 				store.delete(op.oid_timestamp);
@@ -311,7 +313,7 @@ export function openMetadataDatabase(indexedDB: IDBFactory = window.indexedDB) {
 				});
 				const infoStore = db.createObjectStore('info', { keyPath: 'type' });
 				baselinesStore.createIndex('timestamp', 'timestamp');
-				patchesStore.createIndex('replicaId_timestamp', 'replicaId_timestamp');
+				patchesStore.createIndex('isLocal_timestamp', 'isLocal_timestamp');
 				patchesStore.createIndex(
 					'documentOid_timestamp',
 					'documentOid_timestamp',

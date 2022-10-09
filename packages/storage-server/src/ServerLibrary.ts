@@ -3,6 +3,7 @@ import {
 	applyPatch,
 	ClientMessage,
 	HeartbeatMessage,
+	omit,
 	Operation,
 	OperationMessage,
 	PresenceUpdateMessage,
@@ -82,6 +83,12 @@ export class ServerLibrary {
 		this.rebroadcastOperations(message.replicaId, message.patches);
 	};
 
+	private removeExtraOperationData = (
+		operation: OperationHistoryItem,
+	): Operation => {
+		return omit(operation, ['replicaId']);
+	};
+
 	private rebroadcastOperations = (replicaId: string, ops: Operation[]) => {
 		this.sender.broadcast(
 			this.id,
@@ -109,7 +116,7 @@ export class ServerLibrary {
 
 		this.sender.send(this.id, replicaId, {
 			type: 'sync-resp',
-			patches: ops,
+			patches: ops.map(this.removeExtraOperationData),
 			baselines: baselines.map((baseline) => ({
 				oid: baseline.oid,
 				snapshot: baseline.snapshot,
@@ -184,6 +191,9 @@ export class ServerLibrary {
 			.reduce((a, b) => (a && b && a > b ? a : b), '');
 
 		if (!newestOldestTimestamp) {
+			console.debug(
+				'Cannot rebase; some replicas do not have oldest history timestamp',
+			);
 			return;
 		}
 
@@ -223,15 +233,16 @@ export class ServerLibrary {
 		// now that we know exactly which operations can be squashed,
 		// we can summarize that for the clients so they don't have to
 		// do this work!
-		const rebases = Object.entries(opsToApply).map(([documentId, ops]) => ({
-			documentId,
-			oid: ops[0].oid,
+		const rebases = Object.entries(opsToApply).map(([oid, ops]) => ({
+			oid,
 			upTo: ops[ops.length - 1].timestamp,
 		}));
-		this.sender.broadcast(this.id, {
-			type: 'rebases',
-			rebases,
-		});
+		if (rebases.length) {
+			this.sender.broadcast(this.id, {
+				type: 'rebases',
+				rebases,
+			});
+		}
 	};
 
 	private handleHeartbeat = (message: HeartbeatMessage, clientId: string) => {

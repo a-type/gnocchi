@@ -44,11 +44,16 @@ export class Baselines {
 				this.db
 					.prepare(
 						`
-				INSERT OR REPLACE INTO DocumentBaseline (libraryId, oid, snapshot)
-				VALUES (?, ?, ?)
+				INSERT OR REPLACE INTO DocumentBaseline (libraryId, oid, snapshot, timestamp)
+				VALUES (?, ?, ?, ?)
 			`,
 					)
-					.run(this.libraryId, baseline.oid, baseline.snapshot);
+					.run(
+						this.libraryId,
+						baseline.oid,
+						baseline.snapshot,
+						baseline.timestamp,
+					);
 			}
 		});
 		tx();
