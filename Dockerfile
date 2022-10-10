@@ -10,6 +10,8 @@ RUN pnpm fetch
 
 COPY . .
 
+RUN pnpm add --global ts-node
+
 RUN pnpm install --filter . --frozen-lockfile
 RUN pnpm install --filter "@aglio/api..." --frozen-lockfile --unsafe-perm
 RUN pnpm --filter "@aglio/api" run build
