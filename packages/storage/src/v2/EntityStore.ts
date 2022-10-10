@@ -81,32 +81,31 @@ export class EntityStore extends EventSubscriber<{
 
 	create = async (initial: any, oid: ObjectIdentifier) => {
 		assignOid(initial, oid);
-		const patches = this.meta.patchCreator.createInitialize(initial, oid);
+		const operations = this.meta.patchCreator.createInitialize(initial, oid);
 		// don't enqueue these, submit as distinct operation
-		await this.submitOperation(patches);
+		await this.submitOperations(operations);
 		return this.get(initial);
 	};
 
-	private pendingPatches: Operation[] = [];
-	enqueuePatches = (patches: Operation[]) => {
-		const isFirstSet = this.pendingPatches.length === 0;
-		this.pendingPatches.push(...patches);
+	private pendingOperations: Operation[] = [];
+	enqueueOperations = (operations: Operation[]) => {
+		const isFirstSet = this.pendingOperations.length === 0;
+		this.pendingOperations.push(...operations);
 		if (isFirstSet) {
 			queueMicrotask(this.flushPatches);
 		}
 	};
 
 	private flushPatches = async () => {
-		if (!this.pendingPatches.length) {
+		if (!this.pendingOperations.length) {
 			return;
 		}
 
-		console.log('Flushing patches', this.pendingPatches.length);
-		await this.submitOperation(this.pendingPatches);
-		this.pendingPatches = [];
+		await this.submitOperations(this.pendingOperations);
+		this.pendingOperations = [];
 	};
 
-	private submitOperation = async (patches: Operation[]) => {
+	private submitOperations = async (patches: Operation[]) => {
 		const oldestHistoryTimestamp = await this.meta.insertLocalOperation(
 			patches,
 		);
@@ -159,7 +158,7 @@ export class EntityStore extends EventSubscriber<{
 		);
 		const patches = this.meta.patchCreator.createDelete(oid);
 		// don't enqueue these, submit as distinct operation
-		await this.submitOperation(patches);
+		await this.submitOperations(patches);
 	};
 
 	private storeView = async (oid: ObjectIdentifier, view: any) => {

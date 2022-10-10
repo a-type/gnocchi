@@ -19,7 +19,6 @@ import { OperationHistory, OperationHistoryItem } from './OperationHistory.js';
 import { Baselines } from './Baselines.js';
 import { Presence } from './Presence.js';
 import { UserProfileLoader } from './Profiles.js';
-import { PatchHistoryItemSpec } from './types.js';
 
 export class ServerLibrary {
 	private replicas = new ReplicaInfos(this.db, this.id);

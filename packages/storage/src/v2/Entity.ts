@@ -177,9 +177,9 @@ export abstract class EntityBase<T> {
 	};
 
 	protected addPatches = (patches: Operation[]) => {
-		this.store.enqueuePatches(patches);
+		this.store.enqueueOperations(patches);
 		// immediately apply patches to _override
-		this.propagateImmediatePatches(patches);
+		this.propagateImmediateOperations(patches);
 	};
 
 	/**
@@ -188,8 +188,8 @@ export abstract class EntityBase<T> {
 	 * root object. So entities propagate patches downwards to their
 	 * sub-objects for in-memory application.
 	 */
-	protected propagateImmediatePatches = (patches: Operation[]) => {
-		for (const patch of patches) {
+	protected propagateImmediateOperations = (operations: Operation[]) => {
+		for (const patch of operations) {
 			if (patch.oid === this.oid) {
 				// apply it to _override
 				this._override = this._override || cloneDeep(this._current);
@@ -198,7 +198,7 @@ export abstract class EntityBase<T> {
 		}
 
 		for (const entity of this.subObjectCache.values()) {
-			entity.propagateImmediatePatches(patches);
+			entity.propagateImmediateOperations(operations);
 		}
 
 		// invalidate snapshot

@@ -1,9 +1,7 @@
 import { assert } from '@aglio/tools';
-import { DocumentBaseline } from './baseline.js';
 import {
 	assignOid,
 	assignOidsToAllSubObjects,
-	createOidSubId,
 	createRef,
 	ensureOid,
 	getOid,

@@ -1,27 +1,24 @@
 import {
 	applyPatch,
+	assignOid,
 	ObjectIdentifier,
+	Operation,
 	PatchCreator,
 	StorageSchema,
 	substituteRefsWithObjects,
-	assignOid,
-	getOidRoot,
-	omit,
-	OperationPatch,
-	Operation,
 } from '@aglio/storage-common';
-import { getSizeOfObjectStore, storeRequestPromise } from './idb.js';
-import type { Sync } from './Sync.js';
 import { AckInfoStore } from './AckInfoStore.js';
 import { BaselinesStore } from './BaselinesStore.js';
+import { getSizeOfObjectStore } from './idb.js';
 import { LocalHistoryStore } from './LocalHistoryStore.js';
 import { LocalReplicaStore } from './LocalReplicaStore.js';
 import { MessageCreator } from './MessageCreator.js';
-import { ClientPatch, PatchesStore } from './PatchesStore.js';
+import { ClientOperation, OperationsStore } from './OperationsStore.js';
 import { SchemaStore } from './SchemaStore.js';
+import type { Sync } from './Sync.js';
 
 export class Metadata {
-	readonly patches = new PatchesStore(this.db);
+	readonly operations = new OperationsStore(this.db);
 	readonly baselines = new BaselinesStore(this.db);
 	readonly localReplica = new LocalReplicaStore(this.db);
 	readonly ackInfo = new AckInfoStore(this.db);
@@ -45,7 +42,7 @@ export class Metadata {
 	 */
 
 	/**
-	 * Recomputes an entire document from stored patches and baselines.
+	 * Recomputes an entire document from stored operations and baselines.
 	 */
 	getComputedDocument = async <T = any>(
 		oid: ObjectIdentifier,
@@ -59,7 +56,7 @@ export class Metadata {
 
 		let lastPatchWasDelete = false;
 
-		await this.patches.iterateOverAllPatchesForDocument(
+		await this.operations.iterateOverAllOperationsForDocument(
 			oid,
 			(patch) => {
 				let current = subObjectsMappedByOid.get(patch.oid);
@@ -96,7 +93,7 @@ export class Metadata {
 	};
 
 	/**
-	 * Recomputes a normalized view of a single entity object from stored patches
+	 * Recomputes a normalized view of a single entity object from stored operations
 	 * and baseline.
 	 */
 	getComputedEntity = async <T = any>(
@@ -105,12 +102,12 @@ export class Metadata {
 	): Promise<T | undefined> => {
 		const baseline = await this.baselines.get(oid);
 		let current: any = baseline?.snapshot || undefined;
-		let patchesApplied = 0;
-		await this.patches.iterateOverAllPatchesForEntity(
+		let operationsApplied = 0;
+		await this.operations.iterateOverAllOperationsForEntity(
 			oid,
 			(patch) => {
 				current = applyPatch(current, patch.data);
-				patchesApplied++;
+				operationsApplied++;
 			},
 			{
 				to: upToTimestamp,
@@ -147,19 +144,19 @@ export class Metadata {
 	 * Applies a patch to the document and stores it in the database.
 	 * @returns the oldest local history timestamp
 	 */
-	insertLocalOperation = async (patches: Operation[]) => {
-		if (patches.length === 0) return;
+	insertLocalOperation = async (operations: Operation[]) => {
+		if (operations.length === 0) return;
 
 		const localReplicaInfo = await this.localReplica.get();
-		await this.patches.addPatches(
-			patches.map((patch) => ({
+		await this.operations.addOperations(
+			operations.map((patch) => ({
 				...patch,
 				isLocal: true,
 			})),
 		);
 
 		const oldestHistoryTimestamp = await this.localHistory.add({
-			timestamp: patches[patches.length - 1].timestamp,
+			timestamp: operations[operations.length - 1].timestamp,
 		});
 
 		this.tryAutonomousRebase(oldestHistoryTimestamp);
@@ -171,17 +168,17 @@ export class Metadata {
 	 * Inserts remote operations. This does not affect local history.
 	 * @returns a list of affected document OIDs
 	 */
-	insertRemoteOperations = async (patches: Operation[]) => {
-		if (patches.length === 0) return [];
+	insertRemoteOperations = async (operations: Operation[]) => {
+		if (operations.length === 0) return [];
 
-		const affectedOids = await this.patches.addPatches(
-			patches.map((patch) => ({
+		const affectedOids = await this.operations.addOperations(
+			operations.map((patch) => ({
 				...patch,
 				isLocal: false,
 			})),
 		);
 
-		this.ack(patches[patches.length - 1].timestamp);
+		this.ack(operations[operations.length - 1].timestamp);
 
 		return affectedOids;
 	};
@@ -221,8 +218,8 @@ export class Metadata {
 		const localInfo = await this.localReplica.get();
 
 		// find all operations before the oldest history timestamp
-		const priorOperations = new Array<ClientPatch>();
-		await this.patches.iterateOverAllLocalPatches(
+		const priorOperations = new Array<ClientOperation>();
+		await this.operations.iterateOverAllLocalOperations(
 			(patch) => {
 				priorOperations.push(patch);
 			},
@@ -258,7 +255,7 @@ export class Metadata {
 		});
 		// separate iteration to ensure the above has completed before destructive
 		// actions. TODO: use a transaction instead
-		await this.patches.iterateOverAllPatchesForEntity(
+		await this.operations.iterateOverAllOperationsForEntity(
 			oid,
 			(op, store) => {
 				store.delete(op.oid_timestamp);
@@ -275,7 +272,7 @@ export class Metadata {
 	stats = async () => {
 		const db = this.db;
 		const history = await this.localHistory.get();
-		const operationsSize = await getSizeOfObjectStore(db, 'patches');
+		const operationsSize = await getSizeOfObjectStore(db, 'operations');
 		const baselinesSize = await getSizeOfObjectStore(db, 'baselines');
 
 		return {
@@ -296,13 +293,13 @@ export function openMetadataDatabase(indexedDB: IDBFactory = window.indexedDB) {
 				const baselinesStore = db.createObjectStore('baselines', {
 					keyPath: 'oid',
 				});
-				const patchesStore = db.createObjectStore('patches', {
+				const operationsStore = db.createObjectStore('operations', {
 					keyPath: 'oid_timestamp',
 				});
 				const infoStore = db.createObjectStore('info', { keyPath: 'type' });
 				baselinesStore.createIndex('timestamp', 'timestamp');
-				patchesStore.createIndex('isLocal_timestamp', 'isLocal_timestamp');
-				patchesStore.createIndex(
+				operationsStore.createIndex('isLocal_timestamp', 'isLocal_timestamp');
+				operationsStore.createIndex(
 					'documentOid_timestamp',
 					'documentOid_timestamp',
 				);

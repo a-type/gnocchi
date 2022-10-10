@@ -8,12 +8,7 @@ import {
 	initialToPatches,
 	ObjectRef,
 	Operation,
-	OperationPatchListInsert,
-	OperationPatchListPush,
-	OperationPatchListRemove,
-	OperationPatchSet,
 	PropertyName,
-	PropertyValue,
 } from './operation.js';
 import { isObject } from './utils.js';
 

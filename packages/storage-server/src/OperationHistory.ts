@@ -1,6 +1,5 @@
 import { Operation } from '@aglio/storage-common';
 import { Database } from 'better-sqlite3';
-import { PatchHistoryItemSpec as PatchHistoryItemSpec } from './types.js';
 
 type StoredOperationHistoryItem = Omit<Operation, 'data'> & {
 	data: string;

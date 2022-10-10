@@ -2,34 +2,32 @@ import {
 	createCompoundIndexValue,
 	createLowerBoundIndexValue,
 	createUpperBoundIndexValue,
-	getOidRange,
 	getOidRoot,
 	ObjectIdentifier,
 	Operation,
-	OperationPatch,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
 
-export type ClientPatch = Operation & {
+export type ClientOperation = Operation & {
 	isLocal: boolean;
 };
 
-export type StoredPatch = ClientPatch & {
+export type StoredClientOperation = ClientOperation & {
 	oid_timestamp: string;
 	isLocal_timestamp: string;
 	documentOid_timestamp: string;
 };
 
-export class PatchesStore {
+export class OperationsStore {
 	constructor(private readonly db: IDBDatabase) {}
 
 	/**
 	 * Iterates over every patch for the root and every sub-object
 	 * of a given document. Optionally limit by timestamp.
 	 */
-	iterateOverAllPatchesForDocument = async (
+	iterateOverAllOperationsForDocument = async (
 		oid: ObjectIdentifier,
-		iterator: (patch: StoredPatch, store: IDBObjectStore) => void,
+		iterator: (patch: StoredClientOperation, store: IDBObjectStore) => void,
 		{
 			to,
 			from,
@@ -42,8 +40,8 @@ export class PatchesStore {
 			mode?: 'readwrite' | 'readonly';
 		} = {},
 	): Promise<void> => {
-		const transaction = this.db.transaction('patches', mode);
-		const store = transaction.objectStore('patches');
+		const transaction = this.db.transaction('operations', mode);
+		const store = transaction.objectStore('operations');
 		const index = store.index('documentOid_timestamp');
 
 		const startTimestamp = from || after;
@@ -62,7 +60,7 @@ export class PatchesStore {
 			request.onsuccess = (event) => {
 				const cursor = request.result;
 				if (cursor) {
-					const value = cursor.value as StoredPatch;
+					const value = cursor.value as StoredClientOperation;
 					assert(value.oid.startsWith(oid));
 					assert(
 						previousTimestamp === undefined ||
@@ -83,9 +81,9 @@ export class PatchesStore {
 		});
 	};
 
-	iterateOverAllPatchesForEntity = async (
+	iterateOverAllOperationsForEntity = async (
 		oid: ObjectIdentifier,
-		iterator: (patch: StoredPatch, store: IDBObjectStore) => void,
+		iterator: (patch: StoredClientOperation, store: IDBObjectStore) => void,
 		{
 			to,
 			mode,
@@ -94,8 +92,8 @@ export class PatchesStore {
 			mode?: 'readwrite' | 'readonly';
 		},
 	): Promise<void> => {
-		const transaction = this.db.transaction('patches', mode);
-		const store = transaction.objectStore('patches');
+		const transaction = this.db.transaction('operations', mode);
+		const store = transaction.objectStore('operations');
 
 		const start = createLowerBoundIndexValue(oid);
 		const end = to
@@ -110,7 +108,7 @@ export class PatchesStore {
 			request.onsuccess = (event) => {
 				const cursor = request.result;
 				if (cursor) {
-					const value = cursor.value as StoredPatch;
+					const value = cursor.value as StoredClientOperation;
 					assert(value.oid.startsWith(oid));
 					assert(
 						previousTimestamp === undefined ||
@@ -131,8 +129,8 @@ export class PatchesStore {
 		});
 	};
 
-	iterateOverAllLocalPatches = async (
-		iterator: (patch: ClientPatch, store: IDBObjectStore) => void,
+	iterateOverAllLocalOperations = async (
+		iterator: (patch: ClientOperation, store: IDBObjectStore) => void,
 		{
 			before,
 			after,
@@ -141,8 +139,8 @@ export class PatchesStore {
 			after?: string | null;
 		},
 	): Promise<void> => {
-		const transaction = this.db.transaction('patches', 'readonly');
-		const store = transaction.objectStore('patches');
+		const transaction = this.db.transaction('operations', 'readonly');
+		const store = transaction.objectStore('operations');
 		const index = store.index('isLocal_timestamp');
 
 		const start = after
@@ -160,7 +158,7 @@ export class PatchesStore {
 			request.onsuccess = (event) => {
 				const cursor = request.result;
 				if (cursor) {
-					const value = cursor.value as StoredPatch;
+					const value = cursor.value as StoredClientOperation;
 					assert(
 						previousTimestamp === undefined ||
 							previousTimestamp <= value.timestamp,
@@ -184,11 +182,15 @@ export class PatchesStore {
 	 * Adds a set of patches to the database.
 	 * @returns a list of affected root document OIDs.
 	 */
-	addPatches = async (patches: ClientPatch[]): Promise<ObjectIdentifier[]> => {
-		return this.insertPatches(patches.map(this.addCompoundIndexes));
+	addOperations = async (
+		patches: ClientOperation[],
+	): Promise<ObjectIdentifier[]> => {
+		return this.insert(patches.map(this.addCompoundIndexes));
 	};
 
-	private addCompoundIndexes = (patch: ClientPatch): StoredPatch => {
+	private addCompoundIndexes = (
+		patch: ClientOperation,
+	): StoredClientOperation => {
 		return {
 			...patch,
 			oid_timestamp: createCompoundIndexValue(
@@ -206,13 +208,13 @@ export class PatchesStore {
 		};
 	};
 
-	private insertPatches = async (
-		patches: StoredPatch[],
+	private insert = async (
+		operations: StoredClientOperation[],
 	): Promise<ObjectIdentifier[]> => {
-		const transaction = this.db.transaction('patches', 'readwrite');
-		const store = transaction.objectStore('patches');
+		const transaction = this.db.transaction('operations', 'readwrite');
+		const store = transaction.objectStore('operations');
 		const affected = new Set<ObjectIdentifier>();
-		for (const patch of patches) {
+		for (const patch of operations) {
 			store.put(patch);
 			affected.add(getOidRoot(patch.oid));
 		}
@@ -227,6 +229,3 @@ export class PatchesStore {
 		return Array.from(affected);
 	};
 }
-
-//@ts-ignore
-window.createCompoundIndexValue = createCompoundIndexValue;

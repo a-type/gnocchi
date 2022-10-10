@@ -65,7 +65,7 @@ export class DocumentManager<Schema extends StorageSchema<any>> {
 				assignOid(init, oid),
 				() => this.meta.now,
 			);
-			this.entities.enqueuePatches(patches);
+			this.entities.enqueueOperations(patches);
 			return existing;
 		} else {
 			// documents are always objects at the root
