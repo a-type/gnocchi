@@ -64,6 +64,7 @@ export function createTestStorage() {
 		sync: new WebsocketSync({
 			host: 'none',
 		}),
+		initialPresence: {},
 	}).open();
 	return storage;
 }

@@ -197,10 +197,8 @@ describe('creating diff patch operations', () => {
 			expect(
 				applyPatches(assignOid(['foo', 'bar'], 'test/a'), [
 					{
-						oid: 'test/a',
 						op: 'list-push',
 						value: 'baz',
-						timestamp: '0',
 					},
 				]),
 			).toEqual(assignOid(['foo', 'bar', 'baz'], 'test/a'));
