@@ -51,9 +51,7 @@ export class Metadata {
 		oid: ObjectIdentifier,
 		upToTimestamp?: string,
 	): Promise<T | undefined> => {
-		console.debug('Computing view of', oid);
 		const baselines = await this.baselines.getAllForDocument(oid);
-		console.debug('Baselines:', baselines);
 		const subObjectsMappedByOid = new Map<ObjectIdentifier, any>();
 		for (const baseline of baselines) {
 			subObjectsMappedByOid.set(baseline.oid, baseline.snapshot);
@@ -68,6 +66,9 @@ export class Metadata {
 				current = applyPatch(current, patch.data);
 				subObjectsMappedByOid.set(patch.oid, current);
 				lastPatchWasDelete = patch.data.op === 'delete';
+				// TODO: user-configurable delete-wins or delete-loses behavior?
+				// one way to do that would be to ignore delete ops until the end,
+				// and only return nothing if the last op was a delete.
 			},
 			{
 				to: upToTimestamp,
@@ -85,12 +86,6 @@ export class Metadata {
 				subObjectsMappedByOid,
 			);
 		}
-
-		// TODO: set difference of used OIDs versus stored baseline OIDs, clean up
-		// orphaned baselines.
-
-		// asserting T type - even if baseline is an empty object, applying
-		// operations should conform it to the final shape.
 
 		// FIXME: this is a fragile check for deleted
 		if (lastPatchWasDelete || !rootBaseline) {
@@ -121,7 +116,6 @@ export class Metadata {
 				to: upToTimestamp,
 			},
 		);
-		console.log('Computed', oid, 'from', patchesApplied, 'patches:', current);
 		return current as T | undefined;
 	};
 
@@ -275,8 +269,7 @@ export class Metadata {
 			},
 		);
 
-		console.log('successfully rebased', oid, 'up to', upTo);
-		console.log('latest baseline of', oid, 'is', view);
+		console.log('successfully rebased', oid, 'up to', upTo, ':', view);
 	};
 
 	stats = async () => {
