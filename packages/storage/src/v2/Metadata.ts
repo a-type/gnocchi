@@ -10,7 +10,7 @@ import {
 	OperationPatch,
 	Operation,
 } from '@aglio/storage-common';
-import { storeRequestPromise } from './idb.js';
+import { getSizeOfObjectStore, storeRequestPromise } from './idb.js';
 import type { Sync } from './Sync.js';
 import { AckInfoStore } from './AckInfoStore.js';
 import { BaselinesStore } from './BaselinesStore.js';
@@ -280,20 +280,15 @@ export class Metadata {
 	};
 
 	stats = async () => {
-		const db = await this.db;
-		// total number of operations
-		const transaction = db.transaction(['operations', 'info'], 'readonly');
-		const opsStore = transaction.objectStore('operations');
-		const request = opsStore.count();
-		const count = await storeRequestPromise<number>(request);
-
-		const infoStore = transaction.objectStore('info');
-		const localHistoryRequest = infoStore.get('localHistory');
+		const db = this.db;
 		const history = await this.localHistory.get();
+		const operationsSize = await getSizeOfObjectStore(db, 'patches');
+		const baselinesSize = await getSizeOfObjectStore(db, 'baselines');
 
 		return {
-			operationCount: count,
 			localHistoryLength: history?.items.length || 0,
+			operationsSize,
+			baselinesSize,
 		};
 	};
 }

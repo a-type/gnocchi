@@ -59,7 +59,7 @@ export class QueryStore {
 			return this.cache.get(key)!;
 		}
 
-		let run;
+		let run: () => Promise<any>;
 		if (single) {
 			if (!range) throw new Error('Single object query requires a range value');
 			run = async () => {
@@ -138,14 +138,14 @@ export class QueryStore {
 
 	private onCollectionsChanged = (collections: string[]) => {
 		console.log('Collections changed', collections);
+		let updated = 0;
 		// FIXME: This is a naive implementation, improve beyond O(n)
 		for (const [key, query] of this.cache) {
 			if (collections.includes(query.collection)) {
 				query[UPDATE]();
-				console.log('Updated query', key);
-			} else {
-				console.log(key, 'not in', collections, 'is in', query.collection);
+				updated++;
 			}
 		}
+		console.log('Updated', updated, 'queries');
 	};
 }

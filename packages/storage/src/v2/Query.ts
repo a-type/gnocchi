@@ -31,7 +31,6 @@ export class Query<T extends (ObjectEntity<any> | null) | ObjectEntity<any>[]> {
 		this._rawEntities = await this.query();
 		this.subscribeToDeleteAndRestore(this._rawEntities);
 		this._resultEntities = this.filterDeleted(this._rawEntities);
-		console.log('Query.execute', this.key, this._resultEntities);
 		this._subscribers.forEach((subscriber) => subscriber(this._resultEntities));
 		return this._resultEntities as any;
 	};

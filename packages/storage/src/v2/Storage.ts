@@ -11,7 +11,7 @@ import { PresenceManager } from './PresenceManager.js';
 import { openDocumentDatabase } from './openDocumentDatabase.js';
 import { DocumentManager } from './DocumentManager.js';
 import { EntityStore } from './EntityStore.js';
-import { storeRequestPromise } from './idb.js';
+import { getSizeOfObjectStore, storeRequestPromise } from './idb.js';
 import { SyncHarness } from './SyncHarness.js';
 import type { Presence } from '../index.js';
 
@@ -78,22 +78,39 @@ export class Storage<Schema extends StorageSchema<any>> {
 
 	stats = async () => {
 		const collectionNames = Object.keys(this.schema.collections);
-		const collectionStats = await Promise.all(
-			collectionNames.map(async (collection) => {
-				const tx = this.documentDb.transaction(collection, 'readonly');
-				const store = tx.objectStore(collection);
-				const countReq = store.count();
-				const count = await storeRequestPromise<number>(countReq);
-				return { collection, count };
-			}),
+		let collections = {} as Record<string, { count: number; size: number }>;
+		for (const collectionName of collectionNames) {
+			collections[collectionName] = await getSizeOfObjectStore(
+				this.documentDb,
+				collectionName,
+			);
+		}
+		const meta = await this.meta.stats();
+		const storage =
+			'estimate' in navigator.storage
+				? await navigator.storage.estimate()
+				: undefined;
+
+		// determine data:metadata ratio for total size of all collections vs metadata
+		const totalCollectionsSize = Object.values(collections).reduce(
+			(acc, { size }) => acc + size,
+			0,
 		);
-		return collectionNames.reduce((acc, collection) => {
-			const stat = collectionStats.find((s) => s.collection === collection);
-			if (stat) {
-				acc[collection] = stat.count;
-			}
-			return acc;
-		}, {} as Record<string, number>);
+		const totalMetaSize = meta.baselinesSize.size + meta.operationsSize.size;
+		const metaToDataRatio = totalMetaSize / totalCollectionsSize;
+
+		return {
+			collections,
+			meta,
+			storage,
+			totalMetaSize,
+			totalCollectionsSize,
+			metaToDataRatio,
+			quotaUsage:
+				storage?.usage && storage?.quota
+					? storage.usage / storage.quota
+					: undefined,
+		};
 	};
 }
 
