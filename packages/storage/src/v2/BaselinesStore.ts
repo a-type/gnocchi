@@ -3,39 +3,46 @@ import {
 	getOidRange,
 	ObjectIdentifier,
 } from '@aglio/storage-common';
-import { storeRequestPromise } from './idb.js';
+import { IDBService } from './IDBService.js';
 
-export class BaselinesStore {
-	constructor(private readonly db: IDBDatabase) {}
+export class BaselinesStore extends IDBService {
+	constructor(db: IDBDatabase) {
+		super(db);
+	}
 
 	getAllForDocument = async (oid: ObjectIdentifier) => {
-		const db = this.db;
-		const transaction = db.transaction('baselines', 'readonly');
-		const store = transaction.objectStore('baselines');
-		const [start, end] = getOidRange(oid);
-		const request = store.getAll(IDBKeyRange.bound(start, end, false, false));
-		const results = await storeRequestPromise<DocumentBaseline[]>(request);
-		return results;
+		return this.run<DocumentBaseline[]>(
+			'baselines',
+			(store) => {
+				const [start, end] = getOidRange(oid);
+				return store.getAll(IDBKeyRange.bound(start, end, false, false));
+			},
+			'readonly',
+		);
 	};
 
 	getAllForMultipleDocuments = async (docOids: string[]) => {
-		return (await Promise.all(docOids.map(this.getAllForDocument))).flat();
+		const result = await this.runAll<DocumentBaseline[]>(
+			'baselines',
+			(store) => {
+				return docOids.map((oid) => {
+					const [start, end] = getOidRange(oid);
+					return store.getAll(IDBKeyRange.bound(start, end, false, false));
+				});
+			},
+		);
+		return result.flat();
 	};
 
 	get = async (oid: ObjectIdentifier) => {
-		const db = this.db;
-		const transaction = db.transaction('baselines', 'readonly');
-		const store = transaction.objectStore('baselines');
-		const request = store.get(oid);
-		const result = await storeRequestPromise<DocumentBaseline>(request);
-		return result;
+		return this.run('baselines', (store) => store.get(oid), 'readonly');
 	};
 
 	set = async <T>(baseline: DocumentBaseline<T>) => {
-		const db = this.db;
-		const transaction = db.transaction('baselines', 'readwrite');
-		const store = transaction.objectStore('baselines');
-		const request = store.put(baseline);
-		await storeRequestPromise(request);
+		await this.run('baselines', (store) => store.put(baseline), 'readwrite');
+	};
+
+	reset = () => {
+		return this.clear('baselines');
 	};
 }

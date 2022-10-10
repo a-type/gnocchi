@@ -1,5 +1,5 @@
 import cuid from 'cuid';
-import { storeRequestPromise } from './idb.js';
+import { IDBService } from './IDBService.js';
 
 type LocalReplicaInfo = {
 	type: 'localReplicaInfo';
@@ -8,10 +8,8 @@ type LocalReplicaInfo = {
 	lastSyncedLogicalTime: string | null;
 };
 
-export class LocalReplicaStore {
+export class LocalReplicaStore extends IDBService {
 	private cached: LocalReplicaInfo | undefined;
-
-	constructor(private readonly db: IDBDatabase) {}
 
 	get = async () => {
 		if (this.cached) {
@@ -19,11 +17,9 @@ export class LocalReplicaStore {
 		}
 
 		const db = this.db;
-		const transaction = db.transaction('info', 'readonly');
-		const store = transaction.objectStore('info');
-
-		const request = store.get('localReplicaInfo');
-		const lookup = await storeRequestPromise(request);
+		const lookup = await this.run<LocalReplicaInfo>('info', (store) =>
+			store.get('localReplicaInfo'),
+		);
 
 		if (!lookup) {
 			// create our own replica info now
@@ -34,10 +30,7 @@ export class LocalReplicaStore {
 				ackedLogicalTime: null,
 				lastSyncedLogicalTime: null,
 			};
-			const transaction = db.transaction('info', 'readwrite');
-			const store = transaction.objectStore('info');
-			const request = store.add(replicaInfo);
-			await storeRequestPromise(request);
+			await this.run('info', (store) => store.add(replicaInfo), 'readwrite');
 			this.cached = replicaInfo;
 			return replicaInfo;
 		}
@@ -49,11 +42,14 @@ export class LocalReplicaStore {
 	update = async (data: Partial<LocalReplicaInfo>) => {
 		const localReplicaInfo = await this.get();
 		Object.assign(localReplicaInfo, data);
-		const db = await this.db;
-		const transaction = db.transaction('info', 'readwrite');
-		const store = transaction.objectStore('info');
-		const request = store.put(localReplicaInfo);
-		await storeRequestPromise(request);
+		await this.run('info', (store) => store.put(localReplicaInfo), 'readwrite');
 		this.cached = localReplicaInfo;
+	};
+
+	reset = async () => {
+		const localInfo = await this.get();
+		localInfo.ackedLogicalTime = null;
+		localInfo.lastSyncedLogicalTime = null;
+		await this.run('info', (store) => store.put(localInfo), 'readwrite');
 	};
 }

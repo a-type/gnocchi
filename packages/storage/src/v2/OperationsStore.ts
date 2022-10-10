@@ -7,6 +7,7 @@ import {
 	Operation,
 } from '@aglio/storage-common';
 import { assert } from '@aglio/tools';
+import { IDBService } from './IDBService.js';
 
 export type ClientOperation = Operation & {
 	isLocal: boolean;
@@ -18,9 +19,7 @@ export type StoredClientOperation = ClientOperation & {
 	documentOid_timestamp: string;
 };
 
-export class OperationsStore {
-	constructor(private readonly db: IDBDatabase) {}
-
+export class OperationsStore extends IDBService {
 	/**
 	 * Iterates over every patch for the root and every sub-object
 	 * of a given document. Optionally limit by timestamp.
@@ -227,5 +226,9 @@ export class OperationsStore {
 			};
 		});
 		return Array.from(affected);
+	};
+
+	reset = () => {
+		return this.clear('operations');
 	};
 }

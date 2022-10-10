@@ -1,4 +1,5 @@
 import { storeRequestPromise } from './idb.js';
+import { IDBService } from './IDBService.js';
 
 type LocalHistoryItem = {
 	timestamp: string;
@@ -8,17 +9,14 @@ type LocalHistory = {
 	items: LocalHistoryItem[];
 };
 
-export class LocalHistoryStore {
+export class LocalHistoryStore extends IDBService {
 	localHistoryLength = 10;
 
-	constructor(private readonly db: IDBDatabase) {}
-
 	get = async (): Promise<LocalHistory> => {
-		const db = this.db;
-		const transaction = db.transaction('info', 'readonly');
-		const store = transaction.objectStore('info');
-		const request = store.get('localHistory');
-		const result = await storeRequestPromise<LocalHistory>(request);
+		const result = await this.run<LocalHistory>('info', (store) =>
+			store.get('localHistory'),
+		);
+
 		if (result) {
 			return result;
 		} else {
@@ -31,11 +29,12 @@ export class LocalHistoryStore {
 
 	add = async (item: LocalHistoryItem) => {
 		// TODO: PERF: cache this in memory
-		const db = this.db;
-		const transaction = db.transaction('info', 'readwrite');
-		const store = transaction.objectStore('info');
-		let history = await storeRequestPromise<LocalHistory>(
-			store.get('localHistory'),
+		const transaction = this.db.transaction('info', 'readwrite');
+		let history = await this.run<LocalHistory>(
+			'info',
+			(store) => store.get('localHistory'),
+			'readonly',
+			transaction,
 		);
 		if (!history) {
 			history = {
@@ -58,7 +57,20 @@ export class LocalHistoryStore {
 			history.items.shift();
 		}
 		const oldestHistoryTimestamp = history.items[0].timestamp;
-		await storeRequestPromise(store.put(history));
+		await this.run(
+			'info',
+			(store) => store.put(history),
+			'readwrite',
+			transaction,
+		);
 		return oldestHistoryTimestamp;
+	};
+
+	reset = async () => {
+		await this.run(
+			'info',
+			(store) => store.delete('localHistory'),
+			'readwrite',
+		);
 	};
 }

@@ -47,7 +47,10 @@ export class SyncHarness {
 		if (!online) {
 			this.heartbeat.stop();
 		} else {
-			this.sync.send(await this.meta.messageCreator.createSyncStep1());
+			const lastSyncTimestamp = await this.meta.lastSyncedTimestamp();
+			this.sync.send(
+				await this.meta.messageCreator.createSyncStep1(!lastSyncTimestamp),
+			);
 			this.sync.send(
 				await this.meta.messageCreator.createPresenceUpdate(
 					this.initialPresence,
@@ -62,10 +65,19 @@ export class SyncHarness {
 		switch (message.type) {
 			case 'op-re':
 				// rebroadcasted operations
-				affectedOids = await this.meta.insertRemoteOperations(message.patches);
+				affectedOids = await this.meta.insertRemoteOperations(
+					message.operations,
+				);
 				break;
 			case 'sync-resp':
-				affectedOids = await this.meta.insertRemoteOperations(message.patches);
+				if (message.overwriteLocalData) {
+					await this.meta.reset();
+					await this.entities.reset();
+				}
+
+				affectedOids = await this.meta.insertRemoteOperations(
+					message.operations,
+				);
 
 				await this.meta.ackInfo.setGlobalAck(message.globalAckTimestamp);
 

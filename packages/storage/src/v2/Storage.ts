@@ -37,6 +37,7 @@ export class Storage<Schema extends StorageSchema<any>> {
 	constructor(
 		private meta: Metadata,
 		private schema: Schema,
+		private metaDb: IDBDatabase,
 		private documentDb: IDBDatabase,
 		public sync: Sync,
 		initialPresence: Presence,
@@ -112,6 +113,23 @@ export class Storage<Schema extends StorageSchema<any>> {
 					: undefined,
 		};
 	};
+
+	__dangerous__resetLocal = async () => {
+		this.sync.stop();
+		const req1 = indexedDB.deleteDatabase('meta');
+		const req2 = indexedDB.deleteDatabase('collections');
+		await Promise.all([
+			new Promise((resolve, reject) => {
+				req1.onsuccess = resolve;
+				req1.onerror = reject;
+			}),
+			new Promise((resolve, reject) => {
+				req2.onsuccess = resolve;
+				req2.onerror = reject;
+			}),
+		]);
+		window.location.reload();
+	};
 }
 
 export interface StorageInitOptions<Schema extends StorageSchema<any>> {
@@ -162,6 +180,7 @@ export class StorageDescriptor<Schema extends StorageSchema<any>> {
 			const storage = new Storage<Schema>(
 				meta,
 				init.schema,
+				metaDb,
 				documentDb,
 				init.sync,
 				init.initialPresence,

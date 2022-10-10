@@ -105,16 +105,16 @@ export class EntityStore extends EventSubscriber<{
 		this.pendingOperations = [];
 	};
 
-	private submitOperations = async (patches: Operation[]) => {
+	private submitOperations = async (operations: Operation[]) => {
 		const oldestHistoryTimestamp = await this.meta.insertLocalOperation(
-			patches,
+			operations,
 		);
 		const operation = await this.meta.messageCreator.createOperation({
-			patches,
+			operations,
 			oldestHistoryTimestamp,
 		});
 		this.sync.send(operation);
-		const affectedDocuments = getRoots(patches.map((p) => p.oid));
+		const affectedDocuments = getRoots(operations.map((p) => p.oid));
 		await Promise.all(affectedDocuments.map(this.refresh));
 		// TODO: find a more efficient and straightforward way to update affected
 		// queries
@@ -200,6 +200,17 @@ export class EntityStore extends EventSubscriber<{
 		}
 		for (const compoundIndex of Object.keys(compounds)) {
 			delete view[compoundIndex];
+		}
+	};
+
+	reset = async () => {
+		const tx = this.db.transaction(
+			Object.keys(this.schema.collections),
+			'readwrite',
+		);
+		for (const collection of Object.keys(this.schema.collections)) {
+			const store = tx.objectStore(collection);
+			await storeRequestPromise(store.clear());
 		}
 	};
 }

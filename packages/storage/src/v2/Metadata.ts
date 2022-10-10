@@ -189,6 +189,11 @@ export class Metadata {
 		});
 	};
 
+	lastSyncedTimestamp = async () => {
+		const localReplicaInfo = await this.localReplica.get();
+		return localReplicaInfo.lastSyncedLogicalTime;
+	};
+
 	/**
 	 * Determines if the local client can do independent rebases.
 	 * This is only the case if the client has never synced
@@ -267,6 +272,13 @@ export class Metadata {
 		);
 
 		console.log('successfully rebased', oid, 'up to', upTo, ':', view);
+	};
+
+	reset = async () => {
+		await this.operations.reset();
+		await this.baselines.reset();
+		await this.localHistory.reset();
+		await this.localReplica.reset();
 	};
 
 	stats = async () => {

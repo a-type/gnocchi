@@ -28,14 +28,14 @@ export type AckMessage = {
 export type OperationMessage = {
 	type: 'op';
 	replicaId: string;
-	patches: Operation[];
+	operations: Operation[];
 	timestamp: string;
 	oldestHistoryTimestamp?: string;
 };
 
 export type OperationRebroadcastMessage = {
 	type: 'op-re';
-	patches: Operation[];
+	operations: Operation[];
 	replicaId: string;
 	globalAckTimestamp: string;
 };
@@ -48,12 +48,18 @@ export type SyncMessage = {
 	timestamp: string;
 	/** the schema version known by this client */
 	schemaVersion: number;
+	/**
+	 * the client may have lost its local data, in which
+	 * case it may set this flag to be treated as a new client
+	 * and receive a full baseline
+	 */
+	resyncAll?: boolean;
 };
 
 export type SyncResponseMessage = {
 	type: 'sync-resp';
 	// operations this client should apply
-	patches: Operation[];
+	operations: Operation[];
 	// baselines this client should apply
 	baselines: DocumentBaseline[];
 	/**
@@ -61,6 +67,14 @@ export type SyncResponseMessage = {
 	 * Null means all changes.
 	 */
 	provideChangesSince: string | null;
+	/**
+	 * If this flag is set, the client should discard local data
+	 * and reset to incoming data only. Used when a client requested
+	 * resyncAll in its sync message, or for clients which have been
+	 * offline for too long. When specified true, provideChangesSince
+	 * should be ignored.
+	 */
+	overwriteLocalData: boolean;
 	/**
 	 * Update client on the global ack
 	 */
@@ -76,7 +90,7 @@ export type SyncStep2Message = {
 	type: 'sync-step2';
 	replicaId: string;
 	/** Any new operations created since the requested time */
-	patches: Operation[];
+	operations: Operation[];
 	/** Any new baselines created since the requested time */
 	baselines: DocumentBaseline[];
 	/** The time this message was sent. Can be used for ack. */

@@ -1,4 +1,4 @@
-import { storeRequestPromise } from './idb.js';
+import { IDBService } from './IDBService.js';
 
 type AckInfo = {
 	type: 'ack';
@@ -7,15 +7,9 @@ type AckInfo = {
 	globalAckTimestamp: string | null;
 };
 
-export class AckInfoStore {
-	constructor(private readonly db: IDBDatabase) {}
-
+export class AckInfoStore extends IDBService {
 	getAckInfo = async (): Promise<AckInfo> => {
-		const db = this.db;
-		const transaction = db.transaction('info', 'readonly');
-		const store = transaction.objectStore('info');
-		const request = store.get('ack');
-		const result = await storeRequestPromise<AckInfo>(request);
+		const result = await this.run<AckInfo>('info', (store) => store.get('ack'));
 		if (result) {
 			return result;
 		} else {
@@ -27,13 +21,10 @@ export class AckInfoStore {
 	};
 
 	setGlobalAck = async (ack: string) => {
-		const ackInfo = await this.getAckInfo();
-		const db = this.db;
-		const transaction = db.transaction('info', 'readwrite');
-		const store = transaction.objectStore('info');
-		const request = store.put({
-			...ackInfo,
-			globalAckTimestamp: ack,
-		});
+		await this.run(
+			'info',
+			(store) => store.put({ type: 'ack', globalAckTimestamp: ack }),
+			'readwrite',
+		);
 	};
 }

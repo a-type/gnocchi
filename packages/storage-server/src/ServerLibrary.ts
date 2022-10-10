@@ -32,7 +32,6 @@ export class ServerLibrary {
 		private profiles: UserProfileLoader<any>,
 		public readonly id: string,
 	) {
-		this.setupServerReplica();
 		this.presences.on('lost', this.onPresenceLost);
 	}
 
@@ -63,7 +62,7 @@ export class ServerLibrary {
 	private handleOperation = (message: OperationMessage) => {
 		const run = this.db.transaction(() => {
 			// insert patches into history
-			this.operations.insertAll(message.replicaId, message.patches);
+			this.operations.insertAll(message.replicaId, message.operations);
 
 			// update client's oldest timestamp
 			if (message.oldestHistoryTimestamp) {
@@ -79,7 +78,7 @@ export class ServerLibrary {
 		this.enqueueRebase();
 
 		// rebroadcast to whole library except the sender
-		this.rebroadcastOperations(message.replicaId, message.patches);
+		this.rebroadcastOperations(message.replicaId, message.operations);
 	};
 
 	private removeExtraOperationData = (
@@ -93,7 +92,7 @@ export class ServerLibrary {
 			this.id,
 			{
 				type: 'op-re',
-				patches: ops,
+				operations: ops,
 				replicaId,
 				globalAckTimestamp: this.replicas.getGlobalAck(),
 			},
@@ -103,7 +102,14 @@ export class ServerLibrary {
 
 	private handleSync = (message: SyncMessage, clientId: string) => {
 		const replicaId = message.replicaId;
-		const clientReplicaInfo = this.replicas.getOrCreate(replicaId, clientId);
+
+		if (message.resyncAll) {
+			// forget our local understanding of the replica and reset it
+			this.replicas.delete(replicaId);
+		}
+
+		const { created: isNewReplica, replicaInfo: clientReplicaInfo } =
+			this.replicas.getOrCreate(replicaId, clientId);
 
 		// respond to client
 
@@ -115,7 +121,7 @@ export class ServerLibrary {
 
 		this.sender.send(this.id, replicaId, {
 			type: 'sync-resp',
-			patches: ops.map(this.removeExtraOperationData),
+			operations: ops.map(this.removeExtraOperationData),
 			baselines: baselines.map((baseline) => ({
 				oid: baseline.oid,
 				snapshot: baseline.snapshot,
@@ -124,6 +130,7 @@ export class ServerLibrary {
 			provideChangesSince: clientReplicaInfo.ackedLogicalTime,
 			globalAckTimestamp: this.replicas.getGlobalAck(),
 			peerPresence: this.presences.all(),
+			overwriteLocalData: !!message.resyncAll || isNewReplica,
 		});
 	};
 
@@ -131,22 +138,18 @@ export class ServerLibrary {
 		// store all incoming operations and baselines
 		this.baselines.insertAll(message.baselines);
 
-		console.debug('Storing', message.patches.length, 'operations');
-		this.operations.insertAll(message.replicaId, message.patches);
-		this.rebroadcastOperations(message.replicaId, message.patches);
+		console.debug('Storing', message.operations.length, 'operations');
+		this.operations.insertAll(message.replicaId, message.operations);
+		this.rebroadcastOperations(message.replicaId, message.operations);
 
 		// update the client's ackedLogicalTime
-		const lastOperation = message.patches[message.patches.length - 1];
+		const lastOperation = message.operations[message.operations.length - 1];
 		if (lastOperation) {
 			this.replicas.updateAcknowledged(
 				message.replicaId,
 				lastOperation.timestamp,
 			);
 		}
-	};
-
-	private setupServerReplica = () => {
-		this.replicas.getOrCreate(SERVER_REPLICA_ID, null);
 	};
 
 	private handleAck = (message: AckMessage, clientId: string) => {

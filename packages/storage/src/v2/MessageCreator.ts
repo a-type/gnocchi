@@ -18,7 +18,7 @@ export class MessageCreator {
 	constructor(private meta: Metadata) {}
 
 	createOperation = async (
-		init: Pick<OperationMessage, 'patches' | 'oldestHistoryTimestamp'> & {
+		init: Pick<OperationMessage, 'operations' | 'oldestHistoryTimestamp'> & {
 			timestamp?: string;
 		},
 	): Promise<OperationMessage> => {
@@ -28,7 +28,7 @@ export class MessageCreator {
 			type: 'op',
 			timestamp: this.meta.now,
 			replicaId: localInfo.id,
-			patches: init.patches,
+			operations: init.operations,
 			oldestHistoryTimestamp: init.oldestHistoryTimestamp,
 		};
 	};
@@ -36,14 +36,14 @@ export class MessageCreator {
 	createMigrationOperation = async ({
 		targetVersion,
 		...init
-	}: Pick<OperationMessage, 'patches' | 'oldestHistoryTimestamp'> & {
+	}: Pick<OperationMessage, 'operations' | 'oldestHistoryTimestamp'> & {
 		targetVersion: number;
 	}): Promise<OperationMessage> => {
 		const localInfo = await this.meta.localReplica.get();
 		return {
 			type: 'op',
-			patches: init.patches.map((patch) => ({
-				...patch,
+			operations: init.operations.map((op) => ({
+				...op,
 				timestamp: this.meta.sync.time.zero(targetVersion),
 			})),
 			timestamp: this.meta.sync.time.zero(targetVersion),
@@ -51,7 +51,7 @@ export class MessageCreator {
 		};
 	};
 
-	createSyncStep1 = async (): Promise<SyncMessage> => {
+	createSyncStep1 = async (resyncAll?: boolean): Promise<SyncMessage> => {
 		const localReplicaInfo = await this.meta.localReplica.get();
 
 		return {
@@ -59,6 +59,7 @@ export class MessageCreator {
 			schemaVersion: this.meta.schema.currentVersion,
 			timestamp: this.meta.now,
 			replicaId: localReplicaInfo.id,
+			resyncAll,
 		};
 	};
 
@@ -71,10 +72,10 @@ export class MessageCreator {
 		const localReplicaInfo = await this.meta.localReplica.get();
 		// collect all of our operations that are newer than the server's last operation
 		// if server replica isn't stored, we're syncing for the first time.
-		const patches: Operation[] = [];
-		await this.meta.patches.iterateOverAllLocalPatches(
+		const operations: Operation[] = [];
+		await this.meta.operations.iterateOverAllLocalOperations(
 			(patch) => {
-				patches.push(patch);
+				operations.push(patch);
 			},
 			{
 				after: provideChangesSince,
@@ -82,7 +83,9 @@ export class MessageCreator {
 		);
 		// for now we just send every baseline for every
 		// affected document... TODO: optimize this
-		const affectedDocs = new Set(patches.map((patch) => getOidRoot(patch.oid)));
+		const affectedDocs = new Set(
+			operations.map((patch) => getOidRoot(patch.oid)),
+		);
 		const baselines = await this.meta.baselines.getAllForMultipleDocuments(
 			Array.from(affectedDocs),
 		);
@@ -90,7 +93,7 @@ export class MessageCreator {
 		return {
 			type: 'sync-step2',
 			timestamp: this.meta.now,
-			patches,
+			operations,
 			// don't send empty baselines
 			baselines: baselines.filter(Boolean),
 			replicaId: localReplicaInfo.id,
