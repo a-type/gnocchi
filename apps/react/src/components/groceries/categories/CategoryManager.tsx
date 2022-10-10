@@ -11,7 +11,7 @@ export function CategoryManager({}: CategoryManagerProps) {
 	return (
 		<Box direction="column" gap={3}>
 			{categories.map((category) => (
-				<CategoryManagerItem key={category.id} category={category} />
+				<CategoryManagerItem key={category.get('id')} category={category} />
 			))}
 		</Box>
 	);
@@ -22,11 +22,11 @@ function CategoryManagerItem({ category }: { category: GroceryCategory }) {
 
 	return (
 		<Box direction="row" gap={3}>
-			<Box flex={1}>{category.name}</Box>
+			<Box flex={1}>{category.get('name')}</Box>
 			<Button
 				color="ghost"
 				onClick={() => {
-					groceries.deleteCategory(category.id);
+					groceries.deleteCategory(category.get('id'));
 				}}
 			>
 				<TrashIcon />

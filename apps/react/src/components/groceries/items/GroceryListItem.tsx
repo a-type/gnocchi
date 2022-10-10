@@ -54,20 +54,23 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		hooks.useWatch(item);
 
 		const sectionStateSnap = useSnapshot(groceriesState);
-		const inputs = item.inputs;
+		const inputs = item.get('inputs');
 
-		const isPurchased = item.purchasedQuantity >= item.totalQuantity;
-		const isPartiallyPurchased = item.purchasedQuantity > 0;
-		const pluralizedUnit = item.unit
-			? item.totalQuantity === 1
-				? item.unit
-				: pluralize(item.unit)
+		const isPurchased =
+			item.get('purchasedQuantity') >= item.get('totalQuantity');
+		const isPartiallyPurchased = item.get('purchasedQuantity') > 0;
+		const pluralizedUnit = item.get('unit')
+			? item.get('totalQuantity') === 1
+				? item.get('unit')
+				: pluralize(item.get('unit'))
 			: '';
 		const pluralizedName =
-			item.totalQuantity === 1 ? item.food : pluralize(item.food);
+			item.get('totalQuantity') === 1
+				? item.get('food')
+				: pluralize(item.get('food'));
 		const showOnlyInput = inputs.length === 1;
 		const displayString = showOnlyInput
-			? inputs[0].text
+			? inputs.get(0).get('text')
 			: `${pluralizedUnit && `${pluralizedUnit} `}${pluralizedName}`;
 
 		const togglePurchased = useCallback(() => {
@@ -78,12 +81,15 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 
 		return (
 			<ItemContainer
-				hidden={sectionStateSnap.newCategoryPendingItem?.id === item.id}
+				hidden={
+					sectionStateSnap.newCategoryPendingItem?.get('id') === item.get('id')
+				}
 				{...rest}
 				ref={ref}
 				highlighted={quantityJustChanged}
 				dragging={isDragActive}
-				data-item-id={item.id}
+				data-item-id={item.get('id')}
+				data-oid={item.oid}
 			>
 				<Checkbox
 					checked={
@@ -98,10 +104,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					onPointerUp={stopPropagation}
 				/>
 				<Box direction="row" gap={1} flex={1}>
-					{!showOnlyInput && <ItemQuantityNumber value={item.totalQuantity} />}
+					{!showOnlyInput && (
+						<ItemQuantityNumber value={item.get('totalQuantity')} />
+					)}
 					{displayString}
 					{DEBUG_SORT && (
-						<span style={{ marginLeft: '1ch' }}>{item.sortKey}</span>
+						<span style={{ marginLeft: '1ch' }}>{item.get('sortKey')}</span>
 					)}
 				</Box>
 				<RecentPeople item={item} />
@@ -123,7 +131,7 @@ function useDidQuantityJustChange(item: GroceryItem) {
 			const timeout = setTimeout(() => setDidQuantityChange(false), 1000);
 			return () => clearTimeout(timeout);
 		}
-	}, [item.totalQuantity, isFirstRenderRef]);
+	}, [item.get('totalQuantity'), isFirstRenderRef]);
 
 	return didQuantityChange;
 }
@@ -187,7 +195,7 @@ export function GroceryListItemDraggable({
 		isDragging,
 		setActivatorNodeRef,
 	} = useSortable({
-		id: item.id,
+		id: item.get('id'),
 		data: {
 			type: 'item',
 			value: item,
@@ -239,7 +247,7 @@ const GroceryListItemMenu = memo(
 
 			const [menuOpen, setMenuOpen] = useState(false);
 
-			const menuId = `grocery-list-item-menu-${item.id}`;
+			const menuId = `grocery-list-item-menu-${item.get('id')}`;
 
 			return (
 				<Popover
@@ -309,7 +317,7 @@ const GroceryListItemMenu = memo(
 GroceryListItemMenu.displayName = 'GroceryListItemMenu';
 
 function RecentPeople({ item }: { item: GroceryItem }) {
-	const people = usePeopleWhoLastEditedThis(item.id);
+	const people = usePeopleWhoLastEditedThis(item.get('id'));
 
 	if (people.length === 0) {
 		return null;
@@ -336,6 +344,7 @@ const PeopleStack = styled('div', {
 });
 
 function usePeopleWhoLastEditedThis(itemId: string) {
+	const groceries = hooks.useStorage();
 	const [people, setPeople] = useState<UserInfo<Profile, Presence>[]>(() => {
 		return Object.values(groceries.presence.peers).filter(
 			(p) => p.presence.lastInteractedItem === itemId,

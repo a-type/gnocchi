@@ -5,9 +5,7 @@
 	"main": "src/index.ts",
 	"module": "src/index.ts",
 	"type": "module",
-	"scripts": {
-		"test": "vitest"
-	},
+	"scripts": {},
 	"peerDependencies": {
 		"react": "^18.2.0"
 	},

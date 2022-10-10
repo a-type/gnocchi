@@ -41,7 +41,7 @@ function scrollPositionToCategory(
 	if (realIndex >= categories.length) {
 		return 'new';
 	}
-	return categories[realIndex].id;
+	return categories[realIndex].get('id');
 }
 
 export function CategoryPicker({ item }: { item: GroceryItem }) {
@@ -55,7 +55,7 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 
 	const categories = hooks.useAllCategories();
 	const itemCategoryIndex = categories.findIndex(
-		(category) => category.id === item.categoryId,
+		(category) => category.get('id') === item.get('categoryId'),
 	);
 	const startingOffset = itemCategoryIndex * ITEM_HEIGHT;
 	const totalWrapHeight = (categories.length + 1) * ITEM_HEIGHT;
@@ -166,8 +166,8 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 		},
 	}) as () => any;
 
-	const onCreateCategory = ({ id }: { id: string }) => {
-		item.$update({ categoryId: id });
+	const onCreateCategory = (category: GroceryCategory) => {
+		item.set('categoryId', category.get('id'));
 		setState('idle');
 	};
 
@@ -201,22 +201,22 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 						>
 							{categories.map((category, index) => (
 								<CategoryItem
-									key={category.id}
+									key={category.get('id')}
 									data-category-index={index}
-									onClick={() => setCategory(category.id)}
-									selected={category.id === item.categoryId}
+									onClick={() => setCategory(category.get('id'))}
+									selected={category.get('id') === item.get('categoryId')}
 									css={{
 										backgroundColor:
-											category.id === scrubbedSelection
+											category.get('id') === scrubbedSelection
 												? 'rgba(0,0,0,0.1)'
 												: 'transparent',
 										transform:
-											category.id === scrubbedSelection
+											category.get('id') === scrubbedSelection
 												? `scale(1)`
 												: `scale(0.9)`,
 									}}
 								>
-									{category.name}
+									{category.get('name')}
 								</CategoryItem>
 							))}
 							<CategoryItem
@@ -291,7 +291,7 @@ function CreateCategory({
 	onCreate,
 	...rest
 }: {
-	onCreate: (category: { id: string }) => void;
+	onCreate: (category: GroceryCategory) => void;
 	open: boolean;
 	onOpenChange: (v: boolean) => void;
 }) {

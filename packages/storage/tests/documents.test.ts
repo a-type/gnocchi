@@ -20,7 +20,7 @@ async function waitForStoragePropagation(mock: MockedFunction<any>) {
 	});
 }
 
-describe('storage documents', () => {
+describe.skip('storage documents', () => {
 	it('should have a stable identity across different queries', async () => {
 		const storage = createTestStorage();
 

@@ -6,7 +6,7 @@ export type {
 	GroceryCategory,
 	FoodCategoryLookup,
 	GroceryItem,
-} from './migrations/v3.js';
+} from './migrations/v4.js';
 
 export const schema = v4Schema;
 

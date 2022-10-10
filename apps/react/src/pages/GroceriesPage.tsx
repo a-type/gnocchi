@@ -12,8 +12,10 @@ export function GroceriesPage() {
 	return (
 		<>
 			<Box w="full" direction="row" align="center" gap={2} p={4}>
-				<MainMenu />
-				<SyncMenu />
+				<Suspense fallback={null}>
+					<MainMenu />
+					<SyncMenu />
+				</Suspense>
 			</Box>
 			<Box
 				w="full"
@@ -39,7 +41,7 @@ export function GroceriesPage() {
 					}}
 				/>
 			</Box>
-			<Suspense>
+			<Suspense fallback={<div>Loading...</div>}>
 				<GroceryList />
 			</Suspense>
 			<SubscriptionExpiredDialog />

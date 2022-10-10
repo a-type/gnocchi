@@ -1,5 +1,5 @@
 import React from 'react';
-import { groceries } from '@/stores/groceries/index.js';
+import { groceries, GroceryCategory } from '@/stores/groceries/index.js';
 import { Formik } from 'formik';
 import { Form, SubmitButton, TextField } from '../primitives/forms.js';
 import { Box } from '../primitives/primitives.js';
@@ -8,7 +8,7 @@ export function NewCategoryForm({
 	onDone,
 	autoFocus,
 }: {
-	onDone: (category: { id: string; name: string }) => void;
+	onDone: (category: GroceryCategory) => void;
 	autoFocus?: boolean;
 }) {
 	return (

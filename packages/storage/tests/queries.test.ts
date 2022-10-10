@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { StorageCollection } from '../src/StorageCollection.js';
 import { createTestStorage, todoCollection } from './fixtures/testStorage.js';
 
-describe('storage queries', () => {
+describe.skip('storage queries', () => {
 	async function addTestingItems(
 		todos: StorageCollection<typeof todoCollection>,
 	) {

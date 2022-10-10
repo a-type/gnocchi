@@ -70,6 +70,7 @@ export default GroceryList;
 function useGrocerySync() {
 	const { session, isSubscribed } = useAuth();
 	const syncEnabled = session && isSubscribed;
+	const groceries = hooks.useStorage();
 	useEffect(() => {
 		if (syncEnabled) {
 			groceries.sync.start();
@@ -88,7 +89,9 @@ const GroceryListCategories = forwardRef<
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
 			{categories?.map((category) => {
-				return <MemoizedCategory key={category.id} category={category} />;
+				return (
+					<MemoizedCategory key={category.get('id')} category={category} />
+				);
 			})}
 		</Box>
 	);
@@ -154,8 +157,8 @@ function useGroceryDndSensors() {
 function useOnDragStart() {
 	return useCallback(({ active }: DragStartEvent) => {
 		const item = (active.data.current as GroceryDnDDrag).value;
-		groceriesState.draggedItemOriginalCategory = item.categoryId;
-		groceriesState.draggedItemOriginalSortKey = item.sortKey;
+		groceriesState.draggedItemOriginalCategory = item.get('categoryId');
+		groceriesState.draggedItemOriginalSortKey = item.get('sortKey');
 		groceriesState.isAnyItemDragged = true;
 	}, []);
 }
@@ -166,14 +169,12 @@ function useOnDragEnd() {
 
 		if (!over) {
 			// they dropped on nothing... cancel any movement
-			item.$update({
-				categoryId: groceriesState.draggedItemOriginalCategory,
-				sortKey: groceriesState.draggedItemOriginalSortKey,
-			});
+			item.set('categoryId', groceriesState.draggedItemOriginalCategory);
+			item.set('sortKey', groceriesState.draggedItemOriginalSortKey);
 		} else {
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
-				if (item.categoryId !== dropZone.value) {
+				if (item.get('categoryId') !== dropZone.value) {
 					await groceries.setItemCategory(item, dropZone.value);
 				}
 			} else if (dropZone.type === 'new') {
@@ -198,11 +199,11 @@ function useOnDragOver() {
 		const dropZone = over.data.current as GroceryDnDDrop;
 		if (dropZone.type === 'item') {
 			console.info(
-				item.food,
-				item.sortKey,
+				item.get('food'),
+				item.get('sortKey'),
 				'over',
-				dropZone.value.food,
-				dropZone.value.sortKey,
+				dropZone.value.get('food'),
+				dropZone.value.get('sortKey'),
 			);
 			reorderItem(item, dropZone);
 		}
@@ -210,27 +211,33 @@ function useOnDragOver() {
 }
 
 function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
-	if (draggedItem.id === dropZone.value.id) return;
+	if (draggedItem.get('id') === dropZone.value.get('id')) return;
 
 	let sortKey: string;
 
-	if (dropZone.value.sortKey < draggedItem.sortKey) {
-		sortKey = generateKeyBetween(dropZone.prevSortKey, dropZone.value.sortKey);
+	if (dropZone.value.get('sortKey') < draggedItem.get('sortKey')) {
+		sortKey = generateKeyBetween(
+			dropZone.prevSortKey,
+			dropZone.value.get('sortKey'),
+		);
 		console.debug(
 			'dragged > droppped',
 			sortKey,
 			'generated between',
 			dropZone.prevSortKey,
-			dropZone.value.sortKey,
+			dropZone.value.get('sortKey'),
 		);
-	} else if (dropZone.value.sortKey > draggedItem.sortKey) {
+	} else if (dropZone.value.get('sortKey') > draggedItem.get('sortKey')) {
 		// generate a key between them
-		sortKey = generateKeyBetween(dropZone.value.sortKey, dropZone.nextSortKey);
+		sortKey = generateKeyBetween(
+			dropZone.value.get('sortKey'),
+			dropZone.nextSortKey,
+		);
 		console.debug(
 			'dragged < dropped',
 			sortKey,
 			'generated between',
-			dropZone.value.sortKey,
+			dropZone.value.get('sortKey'),
 			dropZone.nextSortKey,
 		);
 	} else {
@@ -238,23 +245,28 @@ function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
 		// this should never happen in theory but could :/
 		console.warn(
 			'identical sortKeys',
-			draggedItem.sortKey,
-			dropZone.value.sortKey,
+			draggedItem.get('sortKey'),
+			dropZone.value.get('sortKey'),
 		);
-		sortKey = generateKeyBetween(null, dropZone.value.sortKey);
+		sortKey = generateKeyBetween(null, dropZone.value.get('sortKey'));
 	}
 
-	groceries.setItemPosition(draggedItem, sortKey, dropZone.value.categoryId);
+	groceries.setItemPosition(
+		draggedItem,
+		sortKey,
+		dropZone.value.get('categoryId'),
+	);
 }
 
 function useOnDragCancel() {
 	return useCallback(({ active }: DragCancelEvent) => {
 		if (active) {
 			const dragged = active.data.current as GroceryDnDDrag;
-			dragged.value.$update({
-				categoryId: groceriesState.draggedItemOriginalCategory,
-				sortKey: groceriesState.draggedItemOriginalSortKey,
-			});
+			dragged.value.set(
+				'categoryId',
+				groceriesState.draggedItemOriginalCategory,
+			);
+			dragged.value.set('sortKey', groceriesState.draggedItemOriginalSortKey);
 		}
 	}, []);
 }
