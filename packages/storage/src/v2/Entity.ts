@@ -29,14 +29,14 @@ type AccessibleEntityProperty<T> = T extends Array<any>
 
 type EntityPropertyValue<T, K extends keyof T | number> = T extends Array<any>
 	? T[K] extends Array<any>
-		? ListEntity<T[K]>
+		? ListEntity<T[K][number]>
 		: T[K] extends object
 		? ObjectEntity<T[K]>
 		: T[K]
 	: T extends object
 	? K extends keyof T
 		? T[K] extends Array<any>
-			? ListEntity<T[K]>
+			? ListEntity<T[K][number]>
 			: T[K] extends object
 			? ObjectEntity<T[K]>
 			: T[K]

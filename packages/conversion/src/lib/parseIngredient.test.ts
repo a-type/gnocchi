@@ -1,4 +1,4 @@
-import { parseIngredient } from './parseIngredient';
+import { parseIngredient } from './parseIngredient.js';
 import { describe, it, expect } from 'vitest';
 
 describe('ingredient parsing', () => {
@@ -10,15 +10,15 @@ describe('ingredient parsing', () => {
 		['¼ cup of sugar', 0.25, 'cup', 'sugar', []],
 		['2 cloves garlic', 2, 'clove', 'garlic', []],
 		['2 cloves of garlic', 2, 'clove', 'garlic', []],
-		['salt and pepper to taste', 1, null, 'salt and pepper', ['to taste']],
+		['salt and pepper to taste', 1, '', 'salt and pepper', ['to taste']],
 		['1 tbsp capers', 1, 'tablespoon', 'caper', []],
 		['4 tbsps butter', 4, 'tablespoon', 'butter', []],
-		['2 zucchini', 2, null, 'zucchini', []],
+		['2 zucchini', 2, '', 'zucchini', []],
 		['3/4 lb fettuccine pasta', 0.75, 'pound', 'fettuccine pasta', []],
 		[
 			'4 boneless, skinless chicken breasts',
 			4,
-			null,
+			'',
 			'boneless, skinless chicken breast',
 			[],
 		],
@@ -27,16 +27,16 @@ describe('ingredient parsing', () => {
 		[
 			'1 (12oz) can cream of mushroom soup',
 			1,
-			null,
+			'',
 			'(12oz) can cream of mushroom soup',
 			[],
 		],
-		['eggs', 1, null, 'egg', []],
+		['eggs', 1, '', 'egg', []],
 		['half a can of black beans', 0.5, 'can', 'black bean', []],
-		['a dozen eggs', 12, null, 'egg', []],
-		['dozen eggs', 12, null, 'egg', []],
-		["a baker's dozen eggs", 13, null, 'egg', []],
-		["baker's dozen eggs", 13, null, 'egg', []],
+		['a dozen eggs', 12, '', 'egg', []],
+		['dozen eggs', 12, '', 'egg', []],
+		["a baker's dozen eggs", 13, '', 'egg', []],
+		["baker's dozen eggs", 13, '', 'egg', []],
 		[
 			'1/3 cup salt (divided) (or more to taste) (I prefer kosher sea salt)',
 			1 / 3,
