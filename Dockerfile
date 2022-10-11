@@ -4,6 +4,9 @@ ENV CI=true
 RUN npm install -g pnpm
 WORKDIR /root/monorepo
 
+ENV PNPM_HOME=/usr/local/share/pnpm
+ENV PATH="$PNPM_HOME:$PATH"
+
 FROM base as dev
 COPY ./pnpm-lock.yaml .
 RUN pnpm fetch

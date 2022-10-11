@@ -13,7 +13,7 @@ class Profiles implements UserProfiles<any> {
 		return prisma.profile.findUnique({ where: { id: userId } });
 	};
 }
-async function authorize(req: IncomingMessage): Promise<Session> {
+async function authorize(req: IncomingMessage) {
 	const session = await getLoginSession(req);
 	if (!session) {
 		throw new Error('Not authenticated');
@@ -21,13 +21,16 @@ async function authorize(req: IncomingMessage): Promise<Session> {
 
 	await verifySubscription(session);
 
-	return session;
+	return {
+		libraryId: session.planId,
+		userId: session.userId,
+	};
 }
 
 export function attachSocketServer(httpServer: HttpServer) {
 	const server = new Server({
 		httpServer,
-		databaseFile: storageDbFile,
+		databaseFile: storageDbFile!,
 		authorize,
 		profiles: new Profiles(),
 	});
