@@ -1,8 +1,4 @@
-import {
-	collection,
-	createDefaultMigration,
-	schema,
-} from '@aglio/storage-common';
+import { collection, createDefaultMigration, schema } from '@lofi-db/web';
 
 export const categoryCollection = collection({
 	name: 'categories',

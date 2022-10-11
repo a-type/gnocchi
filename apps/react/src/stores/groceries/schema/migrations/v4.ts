@@ -1,10 +1,4 @@
-import { Document } from '@aglio/storage';
-import {
-	collection,
-	migrate,
-	schema,
-	StorageDocument,
-} from '@aglio/storage-common';
+import { collection, migrate, schema, Document } from '@lofi-db/web';
 import { v3Schema } from './v3.js';
 
 export const categoryCollection = collection({

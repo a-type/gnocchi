@@ -1,4 +1,4 @@
-import { ClientMessage, ServerMessage } from '@aglio/storage-common';
+import { ClientMessage, ServerMessage } from '@lofi-db/server';
 import { IncomingMessage, Server } from 'http';
 import { WebSocketServer, WebSocket } from 'ws';
 import { getLoginSession, Session } from '@aglio/auth';

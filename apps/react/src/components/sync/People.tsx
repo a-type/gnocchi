@@ -1,9 +1,7 @@
-import { UserInfo } from '@aglio/storage-common';
 import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.js';
 import React from 'react';
 import { styled } from '@/stitches.config.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { Presence, Profile } from '@aglio/storage';
 import { PersonAvatar } from './PersonAvatar.js';
 
 export function People() {

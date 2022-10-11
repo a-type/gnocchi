@@ -28,8 +28,7 @@ import { Checkbox } from '../../primitives/Checkbox.js';
 import { groceriesState } from '../state.js';
 import { ItemQuantityNumber } from './ItemQuantityNumber.js';
 import { groceries, hooks, GroceryItem } from '@/stores/groceries/index.js';
-import { UserInfo } from '@aglio/storage-common';
-import { Presence, Profile } from '@aglio/storage';
+import { UserInfo, Presence, Profile } from '@lofi-db/web';
 import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
 import { CategoryPicker } from './CategoryPicker.js';
 
@@ -345,7 +344,7 @@ const PeopleStack = styled('div', {
 
 function usePeopleWhoLastEditedThis(itemId: string) {
 	const groceries = hooks.useStorage();
-	const [people, setPeople] = useState<UserInfo<Profile, Presence>[]>(() => {
+	const [people, setPeople] = useState<UserInfo[]>(() => {
 		return Object.values(groceries.presence.peers).filter(
 			(p) => p.presence.lastInteractedItem === itemId,
 		);

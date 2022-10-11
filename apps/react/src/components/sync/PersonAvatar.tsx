@@ -1,13 +1,8 @@
 import React from 'react';
 import { styled } from '@/stitches.config.js';
-import { Presence, Profile } from '@aglio/storage';
-import { UserInfo } from '@aglio/storage-common';
+import { UserInfo } from '@lofi-db/web';
 
-export function PersonAvatar({
-	person,
-}: {
-	person: UserInfo<Profile, Presence>;
-}) {
+export function PersonAvatar({ person }: { person: UserInfo }) {
 	return (
 		<Avatar>
 			<AvatarContent user={person} />
@@ -44,7 +39,7 @@ const Initials = styled('div', {
 	borderRadius: '100%',
 });
 
-function AvatarContent({ user }: { user: UserInfo<Profile, Presence> }) {
+function AvatarContent({ user }: { user: UserInfo }) {
 	if (user.profile?.imageUrl) {
 		return (
 			<AvatarImage

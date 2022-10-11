@@ -7,8 +7,8 @@ import {
 	Presence,
 	StorageDescriptor,
 	WebsocketSync,
-} from '@aglio/storage';
-import { createHooks } from '@aglio/storage-react';
+} from '@lofi-db/web';
+import { createHooks } from '@lofi-db/react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
@@ -21,7 +21,7 @@ export type {
 	FoodCategoryLookup,
 } from './schema/schema.js';
 
-declare module '@aglio/storage' {
+declare module '@lofi-db/web' {
 	export interface Presence {
 		lastInteractedItem: string | null;
 	}

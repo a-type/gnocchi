@@ -1,4 +1,4 @@
-import { ServerStorage, UserProfiles } from '@aglio/storage-server';
+import { ServerStorage, UserProfiles } from '@lofi-db/server';
 import { assert } from '@aglio/tools';
 import create from 'better-sqlite3';
 import { prisma } from '../prisma.js';
