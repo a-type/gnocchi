@@ -26,18 +26,6 @@
 			"path": "./packages/conversion"
 		},
 		{
-			"path": "./packages/storage"
-		},
-		{
-			"path": "./packages/storage-common"
-		},
-		{
-			"path": "./packages/storage-server"
-		},
-		{
-			"path": "./packages/storage-react"
-		},
-		{
 			"path": "./packages/tools"
 		},
 		{

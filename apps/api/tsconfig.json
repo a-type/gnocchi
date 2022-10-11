@@ -7,12 +7,6 @@
 	"include": ["src"],
 	"references": [
 		{
-			"path": "../../packages/storage-common/tsconfig.json"
-		},
-		{
-			"path": "../../packages/storage-server/tsconfig.json"
-		},
-		{
 			"path": "../../packages/tools/tsconfig.json"
 		}
 	]

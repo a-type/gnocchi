@@ -13,15 +13,6 @@
 	"include": ["src"],
 	"references": [
 		{
-			"path": "../../packages/storage-common/tsconfig.json"
-		},
-		{
-			"path": "../../packages/storage/tsconfig.json"
-		},
-		{
-			"path": "../../packages/storage-react/tsconfig.json"
-		},
-		{
 			"path": "../../packages/conversion/tsconfig.json"
 		},
 		{
