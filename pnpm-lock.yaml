@@ -16,7 +16,7 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
-      '@lofi-db/server': ^0.1.0-rc.4
+      '@lofi-db/server': ^0.1.0-rc.5
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -54,7 +54,7 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
-      '@lofi-db/server': 0.1.0-rc.4_utf-8-validate@5.0.9
+      '@lofi-db/server': 0.1.0-rc.5_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
       '@types/better-sqlite3': 7.6.0
@@ -97,8 +97,8 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lofi-db/react': ^0.1.0-rc.4
-      '@lofi-db/web': ^0.1.0-rc.4
+      '@lofi-db/react': ^0.1.0-rc.5
+      '@lofi-db/web': ^0.1.0-rc.5
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -154,8 +154,8 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lofi-db/react': 0.1.0-rc.4_hsvqn6jmbakslwqzvvrp4haqfi
-      '@lofi-db/web': 0.1.0-rc.4
+      '@lofi-db/react': 0.1.0-rc.5_fwug4dddg52qpwnmggsa7ujgta
+      '@lofi-db/web': 0.1.0-rc.5
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1683,29 +1683,29 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lofi-db/common/0.1.0-rc.4:
-    resolution: {integrity: sha512-6vIT2hL5JUp7jXOQyFNFnSazzN0TlaYo4yWT3nDeX8zWjWcWrZqEeJ76LWrtb6q1yh3cX6UCIFT1/XGIGvMddA==}
+  /@lofi-db/common/0.1.0-rc.5:
+    resolution: {integrity: sha512-ba61lmDF7phcvYzPi5dPDJhixxQgscBJO7VKmnJV/2OveuT7QcopTV3VX2IJrKYcULwUkVeq/sHRd6qty04dCg==}
     dependencies:
       fast-json-patch: 3.1.1
       uuid: 8.3.2
     dev: false
 
-  /@lofi-db/react/0.1.0-rc.4_hsvqn6jmbakslwqzvvrp4haqfi:
-    resolution: {integrity: sha512-l6HmjaAOPHjmF+brZHePyPkDBjq/SyXdddnZDi3yotNbxMD0MLL/YXTko+euLZmdHndfhbiMyOZRg7j/UhF7oA==}
+  /@lofi-db/react/0.1.0-rc.5_fwug4dddg52qpwnmggsa7ujgta:
+    resolution: {integrity: sha512-mQKRLcn2DjJG+1u57i6bQYPln+tDt5OYRHGtzQvK//rQBoVFHL3+9Ob1MzMwNzRgfckxhimbATc+t08GIaCjMw==}
     peerDependencies:
-      '@lofi-db/web': ^0.1.0-rc.4
+      '@lofi-db/web': ^0.1.0-rc.5
       react: ^18.2.0
     dependencies:
-      '@lofi-db/common': 0.1.0-rc.4
-      '@lofi-db/web': 0.1.0-rc.4
+      '@lofi-db/common': 0.1.0-rc.5
+      '@lofi-db/web': 0.1.0-rc.5
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lofi-db/server/0.1.0-rc.4_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-i1DIz3L0YAI8PVaA5jCCpdI//quh4ZLIivjDQt9+0uaFI6HgosYouIBdEdgdGXeG3KdyNrdEeXjmRYpYAOJxbg==}
+  /@lofi-db/server/0.1.0-rc.5_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-Fcsosa9CYr3cal/qsQ5CWrpUA4LEjhbSSfLeJmBYpgIIgvxIW+9hUd7V2KS+3VW+sbQXXLkaLDlUthFq0Zo7uw==}
     dependencies:
-      '@lofi-db/common': 0.1.0-rc.4
+      '@lofi-db/common': 0.1.0-rc.5
       better-sqlite3: 7.6.2
       ws: 8.9.0_utf-8-validate@5.0.9
     transitivePeerDependencies:
@@ -1713,10 +1713,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lofi-db/web/0.1.0-rc.4:
-    resolution: {integrity: sha512-QKMRUpK4qsCmkbCpaaBtR/+corueT9UFhqSz8ttSg2dA2YeeZytBLm214k1bKoqF7CaZcwPPnADZxbFoEhgmtQ==}
+  /@lofi-db/web/0.1.0-rc.5:
+    resolution: {integrity: sha512-Uw+qfRFvidL876PEhSjf+KnGaiwlbk2fTcTSKvobPaT5jD0UqhIqrs0YymjmnuBVoJRQM4heFYOtTZP/PCgc2g==}
     dependencies:
-      '@lofi-db/common': 0.1.0-rc.4
+      '@lofi-db/common': 0.1.0-rc.5
       cuid: 2.1.8
     dev: false
 
