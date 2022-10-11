@@ -1,5 +1,4 @@
-import { ServerMessage } from '@aglio/storage-common';
-import { MessageSender } from '@aglio/storage-server';
+import { MessageSender, ServerMessage } from '@lofi-db/server';
 import EventEmitter from 'events';
 
 class OutgoingMessages extends EventEmitter implements MessageSender {
