@@ -16,7 +16,7 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
-      '@lofi-db/server': ^0.1.0-rc.2
+      '@lofi-db/server': ^0.1.0-rc.4
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -54,7 +54,7 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
-      '@lofi-db/server': 0.1.0-rc.2
+      '@lofi-db/server': 0.1.0-rc.4_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
       '@types/better-sqlite3': 7.6.0
@@ -97,8 +97,8 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lofi-db/react': ^0.1.0-rc.2
-      '@lofi-db/web': ^0.1.0-rc.2
+      '@lofi-db/react': ^0.1.0-rc.4
+      '@lofi-db/web': ^0.1.0-rc.4
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -154,8 +154,8 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lofi-db/react': 0.1.0-rc.2_z6lyk2oc5uyrase7vpsxro2rkm
-      '@lofi-db/web': 0.1.0-rc.2
+      '@lofi-db/react': 0.1.0-rc.4_hsvqn6jmbakslwqzvvrp4haqfi
+      '@lofi-db/web': 0.1.0-rc.4
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1683,36 +1683,40 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lofi-db/common/0.1.0-rc.2:
-    resolution: {integrity: sha512-pq1+iuYbY8XUHf6x8N3gx2I6ggkNCwTBlBcRGqk/DxmZBbYhOpfx5J4zkoZkjkPcJ92JebJpbvOInng2o34eFw==}
+  /@lofi-db/common/0.1.0-rc.4:
+    resolution: {integrity: sha512-6vIT2hL5JUp7jXOQyFNFnSazzN0TlaYo4yWT3nDeX8zWjWcWrZqEeJ76LWrtb6q1yh3cX6UCIFT1/XGIGvMddA==}
     dependencies:
       fast-json-patch: 3.1.1
       uuid: 8.3.2
     dev: false
 
-  /@lofi-db/react/0.1.0-rc.2_z6lyk2oc5uyrase7vpsxro2rkm:
-    resolution: {integrity: sha512-032VrdWhwLOOTETFOhSH54l3MzcehClfCjj/OD2MO4yZuvx318u13lQs3Bo+WkiGLYvXvFB57WV7zYgNr+gDcw==}
+  /@lofi-db/react/0.1.0-rc.4_hsvqn6jmbakslwqzvvrp4haqfi:
+    resolution: {integrity: sha512-l6HmjaAOPHjmF+brZHePyPkDBjq/SyXdddnZDi3yotNbxMD0MLL/YXTko+euLZmdHndfhbiMyOZRg7j/UhF7oA==}
     peerDependencies:
-      '@lofi-db/web': ^0.1.0-rc.2
+      '@lofi-db/web': ^0.1.0-rc.4
       react: ^18.2.0
     dependencies:
-      '@lofi-db/common': 0.1.0-rc.2
-      '@lofi-db/web': 0.1.0-rc.2
+      '@lofi-db/common': 0.1.0-rc.4
+      '@lofi-db/web': 0.1.0-rc.4
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lofi-db/server/0.1.0-rc.2:
-    resolution: {integrity: sha512-HlJdgZTLuDNEHmuDg/A0BqztEG026Bn9kwfmBnPm6RIW0OlYR6IXGojNPeuihcXaKmKh/PPi2p3C5ERua6HNnA==}
+  /@lofi-db/server/0.1.0-rc.4_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-i1DIz3L0YAI8PVaA5jCCpdI//quh4ZLIivjDQt9+0uaFI6HgosYouIBdEdgdGXeG3KdyNrdEeXjmRYpYAOJxbg==}
     dependencies:
-      '@lofi-db/common': 0.1.0-rc.2
+      '@lofi-db/common': 0.1.0-rc.4
       better-sqlite3: 7.6.2
+      ws: 8.9.0_utf-8-validate@5.0.9
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
-  /@lofi-db/web/0.1.0-rc.2:
-    resolution: {integrity: sha512-IXl1iGY67JdWUKSreapV+noxUL8zwpSwHzakwYvvA0pcS1rrSIkgGqMAzq1NX74DoJ4l8iSQ6Vi4juA2HtpGTQ==}
+  /@lofi-db/web/0.1.0-rc.4:
+    resolution: {integrity: sha512-QKMRUpK4qsCmkbCpaaBtR/+corueT9UFhqSz8ttSg2dA2YeeZytBLm214k1bKoqF7CaZcwPPnADZxbFoEhgmtQ==}
     dependencies:
-      '@lofi-db/common': 0.1.0-rc.2
+      '@lofi-db/common': 0.1.0-rc.4
       cuid: 2.1.8
     dev: false
 
@@ -6559,6 +6563,21 @@ packages:
 
   /ws/8.8.1_utf-8-validate@5.0.9:
     resolution: {integrity: sha512-bGy2JzvzkPowEJV++hF07hAD6niYSr0JzBNo/J29WsB57A2r7Wlc1UFcTR9IzrPvuNVO4B8LGqF8qcpsVOhJCA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: ^5.0.2
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+    dependencies:
+      utf-8-validate: 5.0.9
+    dev: false
+
+  /ws/8.9.0_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-Ja7nszREasGaYUYCI2k4lCKIRTt+y7XuqVoHR44YpI49TtryyqbqvDMn5eqfW7e6HzTukDRIsXqzVHScqRcafg==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1

@@ -1,12 +1,19 @@
-import { ClientMessage, ServerMessage } from '@lofi-db/server';
-import { IncomingMessage, Server } from 'http';
-import { WebSocketServer, WebSocket } from 'ws';
 import { getLoginSession, Session } from '@aglio/auth';
+import { prisma } from '@aglio/prisma';
+import { assert } from '@aglio/tools';
+import { Server, UserProfiles } from '@lofi-db/server';
+import { IncomingMessage, Server as HttpServer } from 'http';
 import { verifySubscription } from './auth/verifySubscription.js';
-import { outgoingMessages } from './data/storage/outgoingMessages.js';
-import { storage } from './data/storage/storage.js';
 
-async function authenticate(req: IncomingMessage): Promise<Session> {
+const storageDbFile = process.env.STORAGE_DATABASE_URL;
+assert(!!storageDbFile, 'STORAGE_DATABASE_URL is not set');
+
+class Profiles implements UserProfiles<any> {
+	get = (userId: string) => {
+		return prisma.profile.findUnique({ where: { id: userId } });
+	};
+}
+async function authorize(req: IncomingMessage): Promise<Session> {
 	const session = await getLoginSession(req);
 	if (!session) {
 		throw new Error('Not authenticated');
@@ -17,93 +24,13 @@ async function authenticate(req: IncomingMessage): Promise<Session> {
 	return session;
 }
 
-/**
- * Once a connection identifies its replicaId (via the
- * initial sync message), we associate them so we can deliver
- * replica-specific messages to the right client.
- */
-const replicaToConnectionMap = new Map<string, WebSocket>();
-/**
- * Likewise we group clients by libraryId so we can broadcast
- * to all clients in a library.
- */
-const libraryToConnectionMap = new Map<string, WebSocket[]>();
-const connectionToReplicaIdMap = new WeakMap<WebSocket, string>();
-
-export function attachSocketServer(server: Server) {
-	const wss = new WebSocketServer({
-		noServer: true,
+export function attachSocketServer(httpServer: HttpServer) {
+	const server = new Server({
+		httpServer,
+		databaseFile: storageDbFile,
+		authorize,
+		profiles: new Profiles(),
 	});
 
-	wss.on('connection', (ws: WebSocket, request: Request, identity: Session) => {
-		// add the client to its library group
-		const libraryId = identity.planId;
-		const connections = libraryToConnectionMap.get(libraryId) || [];
-		connections.push(ws);
-		libraryToConnectionMap.set(libraryId, connections);
-
-		ws.on('message', (message) => {
-			const data = JSON.parse(message.toString()) as ClientMessage;
-
-			if (data.type === 'sync') {
-				replicaToConnectionMap.set(data.replicaId, ws);
-				connectionToReplicaIdMap.set(ws, data.replicaId);
-			}
-
-			storage.receive(identity.planId, data, identity.userId);
-		});
-
-		ws.on('close', () => {
-			const replicaId = connectionToReplicaIdMap.get(ws);
-			if (!replicaId) {
-				console.warn('Unknown replica disconnected');
-				return;
-			}
-
-			storage.remove(identity.planId, replicaId);
-
-			if (replicaToConnectionMap.has(replicaId)) {
-				replicaToConnectionMap.delete(replicaId);
-			}
-			const connections = libraryToConnectionMap.get(libraryId);
-			if (connections) {
-				connections.splice(connections.indexOf(ws), 1);
-			}
-		});
-	});
-
-	server.on('upgrade', async (req, socket, head) => {
-		try {
-			const identity = await authenticate(req);
-
-			wss.handleUpgrade(req, socket, head, (ws) => {
-				wss.emit('connection', ws, req, identity);
-			});
-		} catch (e) {
-			console.error(e);
-			socket.destroy();
-		}
-	});
-
-	// listen for outgoing messages on our bus and
-	// forward them to the appropriate clients
-	outgoingMessages.on(
-		'broadcast',
-		(libraryId: string, message: ServerMessage, omitReplicas: string[]) => {
-			const connections = libraryToConnectionMap.get(libraryId) || [];
-			connections.forEach((connection) => {
-				const replicaId = connectionToReplicaIdMap.get(connection);
-				if (replicaId && !omitReplicas.includes(replicaId)) {
-					connection.send(JSON.stringify(message));
-				}
-			});
-		},
-	);
-
-	outgoingMessages.on('send', (replicaId: string, message: ServerMessage) => {
-		const connection = replicaToConnectionMap.get(replicaId);
-		if (connection) {
-			connection.send(JSON.stringify(message));
-		}
-	});
+	return server;
 }

@@ -44,6 +44,7 @@ const _groceriesDesc = new StorageDescriptor({
 	schema,
 	migrations,
 	initialPresence: {} as Presence,
+	namespace: 'groceries',
 });
 const _groceries = _groceriesDesc.open();
 
