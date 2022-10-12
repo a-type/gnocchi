@@ -1,7 +1,7 @@
 import { getLoginSession, Session } from '@aglio/auth';
 import { prisma } from '@aglio/prisma';
 import { assert } from '@aglio/tools';
-import { Server, UserProfiles } from '@lofi-db/server';
+import { Server, UserProfiles } from '@lo-fi/server';
 import { IncomingMessage, Server as HttpServer } from 'http';
 import { verifySubscription } from './auth/verifySubscription.js';
 

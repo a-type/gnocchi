@@ -1,4 +1,4 @@
-import { collection, migrate, schema } from '@lofi-db/web';
+import { collection, migrate, schema } from '@lo-fi/web';
 import { v2Schema } from './v2.js';
 
 export const categoryCollection = collection({

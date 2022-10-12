@@ -1,4 +1,4 @@
-import { collection, createDefaultMigration, schema } from '@lofi-db/web';
+import { collection, createDefaultMigration, schema } from '@lo-fi/web';
 
 export const categoryCollection = collection({
 	name: 'categories',

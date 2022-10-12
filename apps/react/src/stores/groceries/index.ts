@@ -7,8 +7,8 @@ import {
 	Presence,
 	StorageDescriptor,
 	WebsocketSync,
-} from '@lofi-db/web';
-import { createHooks } from '@lofi-db/react';
+} from '@lo-fi/web';
+import { createHooks } from '@lo-fi/react';
 import { schema, GroceryItem, migrations } from './schema/schema.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
@@ -21,7 +21,7 @@ export type {
 	FoodCategoryLookup,
 } from './schema/schema.js';
 
-declare module '@lofi-db/web' {
+declare module '@lo-fi/web' {
 	export interface Presence {
 		lastInteractedItem: string | null;
 	}
