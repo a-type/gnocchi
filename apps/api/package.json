@@ -7,7 +7,7 @@
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
 		"prestart": "cd ../../packages/prisma && prisma migrate deploy && prisma db seed",
-		"start": "pnpm prestart && tsx ./src/server.ts",
+		"start": "pnpm prestart && tsx --tsconfig ./tsconfig.json ./src/server.ts",
 		"start:local": "env-cmd pnpm start",
 		"build": "tsc --build tsconfig.json"
 	},
@@ -16,7 +16,7 @@
 		"@aglio/prisma": "workspace:*",
 		"@aglio/tools": "workspace:*",
 		"@aglio/trpc": "workspace:*",
-		"@lofi-db/server": "^0.1.0-rc.5",
+		"@lofi-db/server": "^0.1.0-rc.6",
 		"@prisma/client": "^4.0.0",
 		"@trpc/server": "^9.27.2",
 		"@types/better-sqlite3": "^7.6.0",
