@@ -78,7 +78,7 @@ const regularDirname = hasDirname && fs.existsSync(path.join(__dirname, 'schema.
 
 // if the client has been bundled, we need to look for the folders
 const foundDirname = !regularDirname && findSync(process.cwd(), [
-    ".generated\\prisma",
+    ".generated/prisma",
     "prisma",
 ], ['d'], ['d'], 1)[0]
 
@@ -185,7 +185,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\aglio\\packages\\prisma\\.generated\\prisma",
+      "value": "/Users/grant/git/personal/aglio/packages/prisma/.generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -196,10 +196,10 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "..\\..\\.env",
-    "schemaEnvPath": "..\\..\\.env"
+    "rootEnvPath": "../../.env",
+    "schemaEnvPath": "../../.env"
   },
-  "relativePath": "..\\..\\prisma",
+  "relativePath": "../../prisma",
   "clientVersion": "4.3.1",
   "engineVersion": "c875e43600dfe042452e0b868f7a48b817b9640b",
   "datasourceNames": [
@@ -225,7 +225,7 @@ const PrismaClient = getPrismaClient(config)
 exports.PrismaClient = PrismaClient
 Object.assign(exports, Prisma)
 
-path.join(__dirname, "query_engine-windows.dll.node");
-path.join(process.cwd(), ".generated\\prisma\\query_engine-windows.dll.node")
+path.join(__dirname, "libquery_engine-darwin.dylib.node");
+path.join(process.cwd(), ".generated/prisma/libquery_engine-darwin.dylib.node")
 path.join(__dirname, "schema.prisma");
-path.join(process.cwd(), ".generated\\prisma\\schema.prisma")
+path.join(process.cwd(), ".generated/prisma/schema.prisma")

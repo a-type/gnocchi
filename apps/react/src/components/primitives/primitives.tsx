@@ -290,7 +290,7 @@ export const Button = styled('button' as const, {
 		color: {
 			default: {
 				color: '$black',
-				$$bg: '$colors$lemonLighter',
+				$$bg: '$colors$white',
 				border: '1px solid currentColor',
 			},
 			primary: {
@@ -337,6 +337,8 @@ export const Button = styled('button' as const, {
 			small: {
 				fontSize: '$sm',
 				borderRadius: '$lg',
+				px: '$3',
+				py: '$1',
 			},
 		},
 	},

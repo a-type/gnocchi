@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PageContent, PageRoot } from './components/layouts/index.js';
 import { API_HOST_HTTP } from './config.js';
+import { PlanPage } from './pages/PlanPage.js';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -29,6 +30,7 @@ export function App() {
 								<PageContent fullHeight noPadding flex={1}>
 									<Routes>
 										<Route path="/" element={<GroceriesPage />} />
+										<Route path="/plan" element={<PlanPage />} />
 										<Route
 											path="/claim/:inviteId"
 											element={<ClaimInvitePage />}

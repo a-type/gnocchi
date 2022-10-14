@@ -8,11 +8,18 @@ import React from 'react';
 
 export interface ManageSubscriptionButtonProps extends ButtonProps {}
 
-export function ManageSubscriptionButton(props: ManageSubscriptionButtonProps) {
+export function ManageSubscriptionButton({
+	className,
+	...props
+}: ManageSubscriptionButtonProps) {
 	return (
-		<form action={`${API_HOST_HTTP}/api/stripe/create-portal`} method="POST">
+		<form
+			className={className}
+			action={`${API_HOST_HTTP}/api/stripe/create-portal`}
+			method="POST"
+		>
 			<Button type="submit" {...props}>
-				Manage your subscription
+				Change your subscription
 			</Button>
 			<Span size="xs">Update your card or unsubscribe</Span>
 		</form>
