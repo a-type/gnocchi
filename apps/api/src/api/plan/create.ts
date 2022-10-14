@@ -23,7 +23,7 @@ export async function createPlanHandler(req: Request, res: Response) {
 		},
 	});
 
-	setLoginSession(res, {
+	await setLoginSession(res, {
 		...session,
 		planId: plan.id,
 	});
