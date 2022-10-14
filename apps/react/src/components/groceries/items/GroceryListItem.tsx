@@ -2,7 +2,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { HamburgerMenuIcon, TrashIcon } from '@radix-ui/react-icons';
 import { PopoverAnchor } from '@radix-ui/react-popover';
-import { Box, Button } from '@/components/primitives/index.js';
+import { Box, Button, ButtonProps } from '@/components/primitives/index.js';
 import {
 	Popover,
 	PopoverArrow,
@@ -46,7 +46,7 @@ export interface GroceryListItemProps {
 	item: GroceryItem;
 	isDragActive?: boolean;
 	style?: CSSProperties;
-	menuProps?: Omit<GroceryListItemMenuProps, 'item'> & {
+	menuProps?: Omit<ButtonProps, 'item'> & {
 		ref?: Ref<HTMLButtonElement>;
 	};
 }
@@ -100,7 +100,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				data-oid={item.oid}
 				menuOpen={menuOpen}
 			>
-				<CollapsibleRoot open={menuOpen}>
+				<CollapsibleRoot open={menuOpen} onOpenChange={setMenuOpen}>
 					<ItemMainContent>
 						<Checkbox
 							checked={
@@ -128,44 +128,14 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							)}
 						</Box>
 						<RecentPeople item={item} />
-						{/* <CategoryPicker item={item} /> */}
 						<CollapsibleTrigger asChild>
-							{/* <GroceryListItemMenu item={item} {...menuProps} /> */}
 							<Button
-								aria-haspopup="menu"
-								aria-expanded={menuOpen ? true : undefined}
-								data-state={menuOpen ? 'open' : undefined}
-								// aria-controls={menuId}
 								color="ghost"
-								onPointerUp={(event) => {
-									// don't activate the menu if an item was dragged during this gesture
-									if (groceriesState.isAnyItemDragged) {
-										return;
-									}
-
-									if (event.button === 0 && event.ctrlKey === false) {
-										setMenuOpen((v) => !v);
-										event.preventDefault();
-									}
-								}}
-								onKeyDown={(event) => {
-									if (['Enter', ' '].includes(event.key)) {
-										setMenuOpen((v) => !v);
-									}
-									if (event.key === 'ArrowDown') {
-										setMenuOpen((v) => !v);
-									}
-									// prevent scrolling
-									if ([' ', 'ArrowDown'].includes(event.key)) {
-										event.preventDefault();
-									}
-								}}
 								css={{
 									position: 'relative',
 									zIndex: menuOpen ? 'calc($menu + 1)' : 'initial',
 								}}
 								{...menuProps}
-								ref={ref}
 							>
 								<HamburgerMenuIcon />
 							</Button>
