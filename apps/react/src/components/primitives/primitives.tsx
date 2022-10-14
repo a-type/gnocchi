@@ -192,6 +192,7 @@ export const Input = styled('input' as const, {
 	borderRadius: '$md',
 	backgroundColor: '$grayBlend',
 	userSelect: 'auto',
+	minWidth: 120,
 
 	border: '1px solid currentColor',
 

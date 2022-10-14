@@ -16,6 +16,7 @@ export const FieldGroup = styled('div', {
 	flexDirection: 'column',
 	alignItems: 'stretch',
 	gap: '$1',
+	minWidth: 120,
 });
 
 export const FieldLabel = styled('label', {
