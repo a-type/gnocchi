@@ -34,7 +34,7 @@ const StyledContent = styled(PopoverPrimitive.Content, {
 	borderRadius: '$xl',
 	padding: '$5',
 	minWidth: 120,
-	backgroundColor: 'white',
+	backgroundColor: '$white',
 	zIndex: '$menu',
 	boxShadow:
 		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
@@ -52,7 +52,7 @@ const StyledContent = styled(PopoverPrimitive.Content, {
 		},
 	},
 	'&:focus': {
-		boxShadow: `hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px, 0 0 0 2px $colors$lemon`,
+		// boxShadow: `hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px, 0 0 0 2px $colors$lemon`,
 	},
 });
 

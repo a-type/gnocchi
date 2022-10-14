@@ -1,6 +1,9 @@
+import React, { useState } from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import * as MenuPrimitive from '@radix-ui/react-menu';
 import { keyframes, styled } from '@/stitches.config.js';
+import { createPortal } from 'react-dom';
+import { BlurLayer } from './BlurLayer.js';
 
 const slideUpAndFade = keyframes({
 	'0%': { opacity: 0, transform: 'translateY(2px)' },
@@ -24,11 +27,13 @@ const slideLeftAndFade = keyframes({
 
 const StyledContent = styled(DropdownMenuPrimitive.Content, {
 	minWidth: 220,
-	backgroundColor: 'white',
-	borderRadius: 6,
-	padding: 5,
+	backgroundColor: '$white',
+	zIndex: '$menu',
 	boxShadow:
-		'0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2)',
+		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
+	border: '1px solid $black',
+	borderRadius: '$xl',
+	padding: '$5',
 	'@media (prefers-reduced-motion: no-preference)': {
 		animationDuration: '400ms',
 		animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
@@ -107,6 +112,7 @@ const StyledItemIndicator = styled(DropdownMenuPrimitive.ItemIndicator, {
 
 const StyledArrow = styled(DropdownMenuPrimitive.Arrow, {
 	fill: 'white',
+	stroke: '$black',
 });
 
 const StyledTrigger = styled(DropdownMenuPrimitive.Trigger, {
@@ -116,7 +122,6 @@ const StyledTrigger = styled(DropdownMenuPrimitive.Trigger, {
 // Exports
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = StyledTrigger;
-export const DropdownMenuContent = StyledContent;
 export const DropdownMenuItem = StyledItem;
 export const DropdownMenuCheckboxItem = StyledCheckboxItem;
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
@@ -127,3 +132,21 @@ export const DropdownMenuLabel = StyledLabel;
 export const DropdownMenuSeparator = StyledSeparator;
 export const DropdownMenuArrow = StyledArrow;
 export const DropdownMenuAnchor = styled(MenuPrimitive.Anchor, {});
+
+export const DropdownMenuContent = ({
+	children,
+	...props
+}: DropdownMenuPrimitive.DropdownMenuContentProps) => {
+	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
+	return (
+		<DropdownMenuPrimitive.Portal>
+			<>
+				<StyledContent {...props} ref={contentRef}>
+					{children}
+				</StyledContent>
+				{contentElement &&
+					createPortal(<BlurLayer />, contentElement.parentElement)}
+			</>
+		</DropdownMenuPrimitive.Portal>
+	);
+};

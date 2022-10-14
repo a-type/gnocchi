@@ -178,6 +178,13 @@ export const groceries = {
 				itemId = firstMatch.get('id');
 				const totalQuantity = firstMatch.get('totalQuantity') + parsed.quantity;
 				firstMatch.set('totalQuantity', totalQuantity);
+				// add the source, too
+				const inputs = firstMatch.get('inputs');
+				inputs.push({
+					text: line,
+					url: sourceInfo?.url || null,
+					title: sourceInfo?.title || null,
+				});
 			} else {
 				itemId = cuid();
 

@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { HamburgerMenuIcon, TrashIcon } from '@radix-ui/react-icons';
 import { PopoverAnchor } from '@radix-ui/react-popover';
 import { Box, Button } from '@/components/primitives/index.js';
 import {
@@ -28,9 +28,16 @@ import { Checkbox } from '../../primitives/Checkbox.js';
 import { groceriesState } from '../state.js';
 import { ItemQuantityNumber } from './ItemQuantityNumber.js';
 import { groceries, hooks, GroceryItem } from '@/stores/groceries/index.js';
-import { UserInfo, Presence, Profile } from '@lofi-db/web';
+import { UserInfo, Presence, Profile } from '@lo-fi/web';
 import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
 import { CategoryPicker } from './CategoryPicker.js';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+	CollapsibleTrigger,
+} from '@/components/primitives/Collapsible.js';
+import { ItemDeleteButton } from './ItemDeleteButton.js';
+import { ItemSources } from './ItemSources.js';
 
 const DEBUG_SORT = false;
 
@@ -51,6 +58,8 @@ function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
 		hooks.useWatch(item);
+
+		const [menuOpen, setMenuOpen] = useState(false);
 
 		const sectionStateSnap = useSnapshot(groceriesState);
 		const inputs = item.get('inputs');
@@ -89,31 +98,92 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				dragging={isDragActive}
 				data-item-id={item.get('id')}
 				data-oid={item.oid}
+				menuOpen={menuOpen}
 			>
-				<Checkbox
-					checked={
-						isPurchased ? true : isPartiallyPurchased ? 'indeterminate' : false
-					}
-					onCheckedChange={togglePurchased}
-					// prevent click/tap from reaching draggable container -
-					// don't disrupt a check action
-					onMouseDown={stopPropagation}
-					onMouseUp={stopPropagation}
-					onPointerDown={stopPropagation}
-					onPointerUp={stopPropagation}
-				/>
-				<Box direction="row" gap={1} flex={1}>
-					{!showOnlyInput && (
-						<ItemQuantityNumber value={item.get('totalQuantity')} />
-					)}
-					{displayString}
-					{DEBUG_SORT && (
-						<span style={{ marginLeft: '1ch' }}>{item.get('sortKey')}</span>
-					)}
-				</Box>
-				<RecentPeople item={item} />
-				<CategoryPicker item={item} />
-				<GroceryListItemMenu item={item} {...menuProps} />
+				<CollapsibleRoot open={menuOpen}>
+					<ItemMainContent>
+						<Checkbox
+							checked={
+								isPurchased
+									? true
+									: isPartiallyPurchased
+									? 'indeterminate'
+									: false
+							}
+							onCheckedChange={togglePurchased}
+							// prevent click/tap from reaching draggable container -
+							// don't disrupt a check action
+							onMouseDown={stopPropagation}
+							onMouseUp={stopPropagation}
+							onPointerDown={stopPropagation}
+							onPointerUp={stopPropagation}
+						/>
+						<Box direction="row" gap={1} flex={1}>
+							{!showOnlyInput && (
+								<ItemQuantityNumber value={item.get('totalQuantity')} />
+							)}
+							{displayString}
+							{DEBUG_SORT && (
+								<span style={{ marginLeft: '1ch' }}>{item.get('sortKey')}</span>
+							)}
+						</Box>
+						<RecentPeople item={item} />
+						{/* <CategoryPicker item={item} /> */}
+						<CollapsibleTrigger asChild>
+							{/* <GroceryListItemMenu item={item} {...menuProps} /> */}
+							<Button
+								aria-haspopup="menu"
+								aria-expanded={menuOpen ? true : undefined}
+								data-state={menuOpen ? 'open' : undefined}
+								// aria-controls={menuId}
+								color="ghost"
+								onPointerUp={(event) => {
+									// don't activate the menu if an item was dragged during this gesture
+									if (groceriesState.isAnyItemDragged) {
+										return;
+									}
+
+									if (event.button === 0 && event.ctrlKey === false) {
+										setMenuOpen((v) => !v);
+										event.preventDefault();
+									}
+								}}
+								onKeyDown={(event) => {
+									if (['Enter', ' '].includes(event.key)) {
+										setMenuOpen((v) => !v);
+									}
+									if (event.key === 'ArrowDown') {
+										setMenuOpen((v) => !v);
+									}
+									// prevent scrolling
+									if ([' ', 'ArrowDown'].includes(event.key)) {
+										event.preventDefault();
+									}
+								}}
+								css={{
+									position: 'relative',
+									zIndex: menuOpen ? 'calc($menu + 1)' : 'initial',
+								}}
+								{...menuProps}
+								ref={ref}
+							>
+								<HamburgerMenuIcon />
+							</Button>
+						</CollapsibleTrigger>
+					</ItemMainContent>
+					<CollapsibleContent>
+						<Box direction="row" gap="2" justify="end" css={{ p: '$3' }}>
+							<ItemSources
+								item={item}
+								css={{ marginRight: 'auto', mt: '$2', ml: '$2' }}
+							/>
+							<CategoryPicker item={item} />
+							<ItemDeleteButton color="ghost" item={item}>
+								<TrashIcon />
+							</ItemDeleteButton>
+						</Box>
+					</CollapsibleContent>
+				</CollapsibleRoot>
 			</ItemContainer>
 		);
 	},
@@ -137,12 +207,12 @@ function useDidQuantityJustChange(item: GroceryItem) {
 
 const ItemContainer = styled('div' as const, {
 	display: 'flex',
-	flexDirection: 'row',
-	alignItems: 'center',
+	flexDirection: 'column',
+	alignItems: 'stretch',
+	width: '100%',
 	gap: '$2',
 	backgroundColor: '$light',
 	borderRadius: '$md',
-	padding: '$3',
 	position: 'relative',
 	animation: 'none',
 	userSelect: 'none',
@@ -170,7 +240,21 @@ const ItemContainer = styled('div' as const, {
 				backgroundColor: '$lemonLighter',
 			},
 		},
+		menuOpen: {
+			true: {
+				backgroundColor: '$white',
+				border: '1px solid $colors$gray50',
+			},
+		},
 	},
+});
+
+const ItemMainContent = styled('div' as const, {
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	gap: '$2',
+	padding: '$3',
 });
 
 const touchActionNoneStyle = { touchAction: 'none' };
@@ -232,88 +316,6 @@ export function GroceryListItemDraggable({
 		/>
 	);
 }
-
-interface GroceryListItemMenuProps
-	extends ComponentPropsWithoutRef<typeof Button> {
-	item: GroceryItem;
-}
-const GroceryListItemMenu = memo(
-	forwardRef<HTMLButtonElement, GroceryListItemMenuProps>(
-		function GroceryListItemMenu({ item, ...props }, ref) {
-			const deleteItem = () => {
-				groceries.deleteItem(item);
-			};
-
-			const [menuOpen, setMenuOpen] = useState(false);
-
-			const menuId = `grocery-list-item-menu-${item.get('id')}`;
-
-			return (
-				<Popover
-					modal
-					open={menuOpen}
-					onOpenChange={(isOpen) => {
-						console.log('onOpenChange', isOpen);
-						if (!isOpen) setMenuOpen(false);
-						// ignore open true
-					}}
-				>
-					<PopoverAnchor asChild>
-						<Button
-							aria-haspopup="menu"
-							aria-expanded={menuOpen ? true : undefined}
-							data-state={menuOpen ? 'open' : undefined}
-							aria-controls={menuId}
-							color="ghost"
-							onPointerUp={(event) => {
-								// don't activate the menu if an item was dragged during this gesture
-								if (groceriesState.isAnyItemDragged) {
-									return;
-								}
-
-								if (event.button === 0 && event.ctrlKey === false) {
-									setMenuOpen(true);
-									event.preventDefault();
-								}
-							}}
-							onKeyDown={(event) => {
-								if (['Enter', ' '].includes(event.key)) {
-									setMenuOpen((v) => !v);
-								}
-								if (event.key === 'ArrowDown') {
-									setMenuOpen(true);
-								}
-								// prevent scrolling
-								if ([' ', 'ArrowDown'].includes(event.key)) {
-									event.preventDefault();
-								}
-							}}
-							css={{
-								position: 'relative',
-								zIndex: menuOpen ? 'calc($menu + 1)' : 'initial',
-							}}
-							{...props}
-							ref={ref}
-						>
-							<HamburgerMenuIcon />
-						</Button>
-					</PopoverAnchor>
-					<PopoverContent id={menuId}>
-						<PopoverArrow />
-						<Button
-							css={{ width: '$full' }}
-							color="ghostDestructive"
-							onClick={deleteItem}
-						>
-							Delete
-						</Button>
-					</PopoverContent>
-				</Popover>
-			);
-		},
-	),
-);
-GroceryListItemMenu.displayName = 'GroceryListItemMenu';
 
 function RecentPeople({ item }: { item: GroceryItem }) {
 	const people = usePeopleWhoLastEditedThis(item.get('id'));
