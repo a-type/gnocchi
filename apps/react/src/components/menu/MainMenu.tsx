@@ -15,6 +15,7 @@ import { LoginButton } from '../sync/LoginButton.js';
 import { ManagePlanButton } from '../sync/ManagePlanButton.js';
 import { InviteLinkButton } from '../sync/InviteLinkButton.js';
 import { LogoutButton } from '../sync/LogoutButton.js';
+import { BugButton } from './BugButton.js';
 
 export function MainMenu() {
 	const { session, isSubscribed, error } = useAuth();
@@ -92,6 +93,8 @@ function OfflineContents() {
 					Manage categories
 				</Button>
 			</ManageCategoriesDialog>
+			<MenuDivider />
+			<BugButton />
 		</MenuList>
 	);
 }
@@ -110,6 +113,8 @@ function AnonymousContents() {
 					Manage categories
 				</Button>
 			</ManageCategoriesDialog>
+			<MenuDivider />
+			<BugButton />
 		</MenuList>
 	);
 }
@@ -129,6 +134,8 @@ function OnlineContents() {
 					Manage categories
 				</Button>
 			</ManageCategoriesDialog>
+			<MenuDivider />
+			<BugButton />
 		</MenuList>
 	);
 }
@@ -150,6 +157,8 @@ function UnsubscribedContents() {
 					Manage categories
 				</Button>
 			</ManageCategoriesDialog>
+			<MenuDivider />
+			<BugButton />
 		</MenuList>
 	);
 }
