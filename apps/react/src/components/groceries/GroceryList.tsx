@@ -31,6 +31,10 @@ import { GroceryListItem } from './items/GroceryListItem.js';
 import { groceriesState } from './state.js';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
+import {
+	DESKTOP_DRAG_ACTIVATION_DELAY,
+	MOBILE_DRAG_ACTIVATION_DELAY,
+} from './constants.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -140,17 +144,21 @@ function useGroceryDndSensors() {
 	const mobile = isMobile();
 	const mouseSensor = useSensor(MouseSensor, {
 		activationConstraint: {
-			distance: 20,
+			delay: mobile
+				? MOBILE_DRAG_ACTIVATION_DELAY
+				: DESKTOP_DRAG_ACTIVATION_DELAY,
+			tolerance: 5,
 		},
 	});
 	const touchSensor = useSensor(TouchSensor, {
 		activationConstraint: {
-			distance: 20,
+			delay: mobile
+				? MOBILE_DRAG_ACTIVATION_DELAY
+				: DESKTOP_DRAG_ACTIVATION_DELAY,
+			tolerance: 5,
 		},
 	});
-	const keyboardSensor = useSensor(KeyboardSensor, {
-		coordinateGetter: sortableKeyboardCoordinates,
-	});
+	const keyboardSensor = useSensor(KeyboardSensor);
 	return useSensors(mouseSensor, touchSensor, keyboardSensor);
 }
 
