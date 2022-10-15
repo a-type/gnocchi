@@ -19,9 +19,6 @@ export function useLoadDefaultCategories() {
 					});
 				}
 			});
-
-			// also load default assignments
-			groceries.syncDefaultFoodAssignments();
 		}
 	}, [hasNoCategories]);
 }

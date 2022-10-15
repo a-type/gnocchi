@@ -73,6 +73,34 @@ export const groceries = {
 			lastInteractedItem: item.get('id'),
 		});
 	},
+	// TODO: incorporate this kind of advanced upsert into lofi
+	upsertFoodCategoryAssignment: async (food: string, categoryId: string) => {
+		const allExisting = await (
+			await _groceries
+		).findAll('foodCategoryAssignments', {
+			where: 'foodName',
+			equals: food,
+		}).resolved;
+		const existing = allExisting?.find((a) => a.get('remote') === false);
+		if (existing) {
+			existing.set('categoryId', categoryId);
+		} else {
+			await (
+				await _groceries
+			).create('foodCategoryAssignments', {
+				id: cuid(),
+				foodName: food,
+				categoryId,
+				remote: false,
+			});
+		}
+
+		// send the categorization to the server for research
+		await trpcClient.mutation('categories.assign', {
+			foodName: food,
+			categoryId,
+		});
+	},
 	setItemPosition: async (
 		item: GroceryItem,
 		sortKey: string,
@@ -83,13 +111,10 @@ export const groceries = {
 		item.set('categoryId', categoryId);
 		// if category changed, update lookups
 		if (categoryId) {
-			// FIXME: upserting assignments
-			// (await _groceries).create('foodCategoryAssignments', {
-			// 	id: cuid(),
-			// 	foodName: item.food,
-			// 	categoryId,
-			// 	remote: false,
-			// });
+			await groceries.upsertFoodCategoryAssignment(
+				item.get('food'),
+				categoryId,
+			);
 		}
 
 		storage.presence.update({
@@ -119,21 +144,9 @@ export const groceries = {
 	setItemCategory: async (item: GroceryItem, categoryId: string) => {
 		const storage = await _groceries;
 		item.set('categoryId', categoryId);
-		// FIXME: upserting assignments
-		// storage.create('foodCategoryAssignments', {
-		// 	id: cuid(),
-		// 	foodName: item.food,
-		// 	categoryId,
-		// 	remote: false,
-		// })
+		await groceries.upsertFoodCategoryAssignment(item.get('food'), categoryId);
 		storage.presence.update({
 			lastInteractedItem: item.get('id'),
-		});
-
-		// send the categorization to the server for research
-		await trpcClient.mutation('categories.assign', {
-			foodName: item.get('food'),
-			categoryId,
 		});
 	},
 	createCategory: async (name: string) => {
@@ -194,7 +207,21 @@ export const groceries = {
 				}).resolved;
 				// if there are local and remote lookups, use the local one
 				const lookup = lookups.find((l) => !l.get('remote')) || lookups[0];
-				let categoryId = lookup?.get('categoryId') ?? defaultCategory.get('id');
+				let categoryId = lookup?.get('categoryId');
+
+				if (!categoryId) {
+					try {
+						const remoteLookup = await trpcClient.query(
+							'categories.assignment',
+							parsed.food,
+						);
+						if (remoteLookup) {
+							categoryId = remoteLookup;
+						}
+					} catch (err) {
+						console.error(err);
+					}
+				}
 
 				// verify the category exists locally
 				const category = await storage.get('categories', categoryId).resolved;
@@ -288,20 +315,4 @@ export const groceries = {
 
 		storage.delete('categories', categoryId);
 	},
-	syncDefaultFoodAssignments: async () => {
-		const storage = await _groceries;
-		trpcClient.query('categories.assignments', null).then((assignments) => {
-			for (const assignment of assignments) {
-				storage.upsert('foodCategoryAssignments', {
-					id: assignment.id,
-					foodName: assignment.foodName,
-					categoryId: assignment.categoryId,
-					remote: true,
-				});
-			}
-		});
-	},
 };
-
-// on startup, sync assignments
-// groceries.syncDefaultFoodAssignments();
