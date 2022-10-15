@@ -22,7 +22,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
-import { styled } from '@/stitches.config.js';
+import { keyframes, styled } from '@/stitches.config.js';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox.js';
 import { groceriesState } from '../state.js';
@@ -86,6 +86,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		}, [item]);
 
 		const quantityJustChanged = useDidQuantityJustChange(item);
+		const justMoved = useDidJustMove(item);
 
 		return (
 			<ItemContainer
@@ -99,6 +100,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				data-item-id={item.get('id')}
 				data-oid={item.oid}
 				menuOpen={menuOpen}
+				justMoved={justMoved}
 			>
 				<CollapsibleRoot open={menuOpen} onOpenChange={setMenuOpen}>
 					<ItemMainContent>
@@ -159,6 +161,11 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	},
 );
 
+function useDidJustMove(item: GroceryItem) {
+	const { justMovedItemId } = useSnapshot(groceriesState);
+	return justMovedItemId === item.get('id');
+}
+
 function useDidQuantityJustChange(item: GroceryItem) {
 	const [didQuantityChange, setDidQuantityChange] = useState(false);
 	const isFirstRenderRef = useIsFirstRender();
@@ -174,6 +181,17 @@ function useDidQuantityJustChange(item: GroceryItem) {
 
 	return didQuantityChange;
 }
+
+const popUp = keyframes({
+	from: {
+		opacity: 0,
+		transform: 'translateY(30px) scale(0.95)',
+	},
+	to: {
+		opacity: 1,
+		transform: 'translateY(0) scale(1)',
+	},
+});
 
 const ItemContainer = styled('div' as const, {
 	display: 'flex',
@@ -214,6 +232,11 @@ const ItemContainer = styled('div' as const, {
 			true: {
 				backgroundColor: '$white',
 				border: '1px solid $colors$gray50',
+			},
+		},
+		justMoved: {
+			true: {
+				animation: `${popUp} 0.4s $transitions$springy`,
 			},
 		},
 	},

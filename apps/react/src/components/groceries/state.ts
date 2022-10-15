@@ -7,4 +7,5 @@ export const groceriesState = proxy({
 	draggedItemOriginalCategory: null as any | null,
 	draggedItemOriginalSortKey: null as any | null,
 	isAnyItemDragged: false,
+	justMovedItemId: null as string | null,
 });

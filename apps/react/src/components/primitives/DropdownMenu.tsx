@@ -59,8 +59,10 @@ const itemStyles = {
 	height: 25,
 	padding: '0 5px',
 	position: 'relative',
-	paddingLeft: 25,
+	paddingLeft: '$4',
+	textAlign: 'left',
 	userSelect: 'none',
+	cursor: 'pointer',
 
 	'&[data-disabled]': {
 		color: '$gray90',
@@ -68,8 +70,8 @@ const itemStyles = {
 	},
 
 	'&:focus': {
-		backgroundColor: '$lemon',
-		color: '$lemonDarker',
+		backgroundColor: '$gray20',
+		color: '$gray90',
 	},
 };
 
@@ -82,8 +84,7 @@ const StyledRadioItem = styled(DropdownMenuPrimitive.RadioItem, {
 });
 const StyledTriggerItem = styled(DropdownMenuPrimitive.TriggerItem, {
 	'&[data-state="open"]': {
-		backgroundColor: '$lemon',
-		color: '$lemonDarker',
+		zIndex: '$modal',
 	},
 	...itemStyles,
 });
@@ -117,6 +118,10 @@ const StyledArrow = styled(DropdownMenuPrimitive.Arrow, {
 
 const StyledTrigger = styled(DropdownMenuPrimitive.Trigger, {
 	userSelect: 'none',
+	'&[data-state="open"]': {
+		position: 'relative',
+		zIndex: 'calc($menu + 1)',
+	},
 });
 
 // Exports
