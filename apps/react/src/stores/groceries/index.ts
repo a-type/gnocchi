@@ -64,7 +64,7 @@ export const groceries = {
 	deleteItems: async (ids: string[]) => {
 		const storage = await _groceries;
 		for (const id of ids) {
-			return storage.delete('items', id);
+			storage.delete('items', id);
 		}
 	},
 	setItemPurchasedQuantity: async (item: GroceryItem, quantity: number) => {
