@@ -33,6 +33,7 @@ export function attachSocketServer(httpServer: HttpServer) {
 		databaseFile: storageDbFile!,
 		authorize,
 		profiles: new Profiles(),
+		replicaTruancyMinutes: 5,
 	});
 
 	return server;

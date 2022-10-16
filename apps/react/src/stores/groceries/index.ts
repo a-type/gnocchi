@@ -224,7 +224,9 @@ export const groceries = {
 				}
 
 				// verify the category exists locally
-				const category = await storage.get('categories', categoryId).resolved;
+				const category = categoryId
+					? await storage.get('categories', categoryId).resolved
+					: null;
 				if (!category) {
 					categoryId = defaultCategory.get('id');
 				}

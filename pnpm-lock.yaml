@@ -16,7 +16,7 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
-      '@lo-fi/server': ^0.1.0-rc.10
+      '@lo-fi/server': ^0.1.0-rc.11
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -54,7 +54,7 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
-      '@lo-fi/server': 0.1.0-rc.10_utf-8-validate@5.0.9
+      '@lo-fi/server': 0.1.0-rc.11_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
       '@types/better-sqlite3': 7.6.0
@@ -97,8 +97,8 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lo-fi/react': ^0.1.0-rc.10
-      '@lo-fi/web': ^0.1.0-rc.10
+      '@lo-fi/react': ^0.1.0-rc.11
+      '@lo-fi/web': ^0.1.0-rc.11
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -155,8 +155,8 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lo-fi/react': 0.1.0-rc.10_ofl5z3v2tgn3muaohb2muldurq
-      '@lo-fi/web': 0.1.0-rc.10
+      '@lo-fi/react': 0.1.0-rc.11_5jvzg4wwouo6s6navu7lixnzse
+      '@lo-fi/web': 0.1.0-rc.11
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1685,29 +1685,29 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lo-fi/common/0.1.0-rc.10:
-    resolution: {integrity: sha512-o9skDr1vx5009QPhudMzrXduVW7SocrBywpcPQFyLX9EI3352g9HRkyTkX0mY4a39pp74XmyTzAd23wd6AmTqA==}
+  /@lo-fi/common/0.1.0-rc.11:
+    resolution: {integrity: sha512-AEUJYn8i8ySPUFQyq/6sTaCeQ6tTLBlFPGMTbj76nghHHBT/kN+V6SwJHLnPV0fRHumjmrSvECNYXDa0U7j59A==}
     dependencies:
       fast-json-patch: 3.1.1
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/0.1.0-rc.10_ofl5z3v2tgn3muaohb2muldurq:
-    resolution: {integrity: sha512-GKNo8q/7pMY/Wjn3xzTTwnBrfCGN4+MD9FD6bi9XHaumA69yw/d+eCCvDXPGNt/0KAeUeN/VKe8pmeR6JuPL3g==}
+  /@lo-fi/react/0.1.0-rc.11_5jvzg4wwouo6s6navu7lixnzse:
+    resolution: {integrity: sha512-mevlVT7h+sEb1ECqJItmmmgQwS4tJCh4fwrwLQQiM/oeclQ/cBbMxNQLbNrlneBrzGlBTKsLbcJqBHoEB7rq/Q==}
     peerDependencies:
-      '@lo-fi/web': ^0.1.0-rc.10
+      '@lo-fi/web': ^0.1.0-rc.11
       react: ^18.2.0
     dependencies:
-      '@lo-fi/common': 0.1.0-rc.10
-      '@lo-fi/web': 0.1.0-rc.10
+      '@lo-fi/common': 0.1.0-rc.11
+      '@lo-fi/web': 0.1.0-rc.11
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lo-fi/server/0.1.0-rc.10_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-9fhGHj8mnL2W46ERoCN+KtAFIYyYN/ik4IGtS4ikvIG2TntTQhwTZKfMeXldo0EbUY8b12PKkRfvLyfCJp34Vw==}
+  /@lo-fi/server/0.1.0-rc.11_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-3aMu6UtumfMMiWYRO2gFRefvNYCRxDsnchN2DfTWllT9zrFf0W3f4QiogBd2l5tntksfC7/BGYffNPKZfCOowg==}
     dependencies:
-      '@lo-fi/common': 0.1.0-rc.10
+      '@lo-fi/common': 0.1.0-rc.11
       better-sqlite3: 7.6.2
       ws: 8.9.0_utf-8-validate@5.0.9
     transitivePeerDependencies:
@@ -1715,10 +1715,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/0.1.0-rc.10:
-    resolution: {integrity: sha512-otf2mYqr83c8EHAIDe8YXPFHKdeHrgtlDXQlnEACOLeihkw9AoVOD6Rbst6Zb9Lae9KRcy6j1LvThhE66/BAQg==}
+  /@lo-fi/web/0.1.0-rc.11:
+    resolution: {integrity: sha512-k7PZDyRPnRr7ER6VIXn1QAnP2BKl9yv+BfvDtlOmx6nxOwcpWh6goP5eSh969Ov+3TTdkK/VtriFC2Y8A2N4xQ==}
     dependencies:
-      '@lo-fi/common': 0.1.0-rc.10
+      '@lo-fi/common': 0.1.0-rc.11
       cuid: 2.1.8
     dev: false
 
