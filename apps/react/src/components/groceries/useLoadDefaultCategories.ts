@@ -13,7 +13,7 @@ export function useLoadDefaultCategories() {
 		if (hasNoCategories) {
 			trpcClient.query('categories.defaults', null).then((categories) => {
 				for (const category of categories) {
-					storage.upsert('categories', {
+					storage.categories.upsert({
 						id: category.id,
 						name: category.name,
 					});

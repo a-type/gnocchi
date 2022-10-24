@@ -1,49 +1,40 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { HamburgerMenuIcon, TrashIcon } from '@radix-ui/react-icons';
-import { PopoverAnchor } from '@radix-ui/react-popover';
-import { Box, Button, ButtonProps } from '@/components/primitives/index.js';
-import {
-	Popover,
-	PopoverArrow,
-	PopoverContent,
-} from '@/components/primitives/Popover.js';
-import { useIsFirstRender } from '@/hooks/usePrevious.js';
-import pluralize from 'pluralize';
-import React, {
-	ComponentPropsWithoutRef,
-	CSSProperties,
-	forwardRef,
-	memo,
-	Ref,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import { keyframes, styled } from '@/stitches.config.js';
-import { useSnapshot } from 'valtio';
-import { Checkbox } from '../../primitives/Checkbox.js';
-import { groceriesState } from '../state.js';
-import { ItemQuantityNumber } from './ItemQuantityNumber.js';
-import { groceries, hooks, GroceryItem } from '@/stores/groceries/index.js';
-import { UserInfo, Presence, Profile } from '@lo-fi/web';
-import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
-import { CategoryPicker } from './CategoryPicker.js';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
 } from '@/components/primitives/Collapsible.js';
+import { Box, Button, ButtonProps } from '@/components/primitives/index.js';
+import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
+import { useIsFirstRender } from '@/hooks/usePrevious.js';
+import { keyframes, styled } from '@/stitches.config.js';
+import { groceries, hooks, Item } from '@/stores/groceries/index.js';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { UserInfo } from '@lo-fi/web';
+import { HamburgerMenuIcon, TrashIcon } from '@radix-ui/react-icons';
+import pluralize from 'pluralize';
+import React, {
+	CSSProperties,
+	forwardRef,
+	Ref,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
+import { useSnapshot } from 'valtio';
+import { Checkbox } from '../../primitives/Checkbox.js';
+import { groceriesState } from '../state.js';
+import { CategoryPicker } from './CategoryPicker.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
+import { ItemQuantityNumber } from './ItemQuantityNumber.js';
 import { ItemSources } from './ItemSources.js';
 
 const DEBUG_SORT = false;
 
 export interface GroceryListItemProps {
 	className?: string;
-	item: GroceryItem;
+	item: Item;
 	isDragActive?: boolean;
 	style?: CSSProperties;
 	menuProps?: Omit<ButtonProps, 'item'> & {
@@ -161,12 +152,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	},
 );
 
-function useDidJustMove(item: GroceryItem) {
+function useDidJustMove(item: Item) {
 	const { justMovedItemId } = useSnapshot(groceriesState);
 	return justMovedItemId === item.get('id');
 }
 
-function useDidQuantityJustChange(item: GroceryItem) {
+function useDidQuantityJustChange(item: Item) {
 	const [didQuantityChange, setDidQuantityChange] = useState(false);
 	const isFirstRenderRef = useIsFirstRender();
 	useEffect(() => {
@@ -258,7 +249,7 @@ export function GroceryListItemDraggable({
 	prevSortKey,
 	...rest
 }: {
-	item: GroceryItem;
+	item: Item;
 	nextSortKey: string | null;
 	prevSortKey: string | null;
 }) {
@@ -310,7 +301,7 @@ export function GroceryListItemDraggable({
 	);
 }
 
-function RecentPeople({ item }: { item: GroceryItem }) {
+function RecentPeople({ item }: { item: Item }) {
 	const people = usePeopleWhoLastEditedThis(item.get('id'));
 
 	if (people.length === 0) {

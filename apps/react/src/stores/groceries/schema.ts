@@ -1,8 +1,8 @@
-import { collection, migrate, schema, Document } from '@lo-fi/web';
-import { v3Schema } from './v3.js';
+import { collection, migrate, schema } from '@lo-fi/web';
 
-export const categoryCollection = collection({
-	name: 'categories',
+const categories = collection({
+	name: 'category',
+	pluralName: 'categories',
 	primaryKey: 'id',
 	fields: {
 		id: {
@@ -19,10 +19,9 @@ export const categoryCollection = collection({
 	synthetics: {},
 	compounds: {},
 });
-export type GroceryCategory = Document<typeof categoryCollection>;
 
-export const foodCategoryAssignment = collection({
-	name: 'foodCategoryAssignments',
+const foodCategoryAssignments = collection({
+	name: 'foodCategoryAssignment',
 	primaryKey: 'id',
 	fields: {
 		id: {
@@ -47,10 +46,9 @@ export const foodCategoryAssignment = collection({
 	synthetics: {},
 	compounds: {},
 });
-export type FoodCategoryLookup = Document<typeof foodCategoryAssignment>;
 
-export const itemCollection = collection({
-	name: 'items',
+const items = collection({
+	name: 'item',
 	primaryKey: 'id',
 	fields: {
 		id: {
@@ -128,21 +126,12 @@ export const itemCollection = collection({
 		},
 	},
 });
-export type GroceryItem = Document<typeof itemCollection>;
 
-export const v4Schema = schema({
+export default schema({
 	version: 4,
 	collections: {
-		categories: categoryCollection,
-		items: itemCollection,
-		foodCategoryAssignments: foodCategoryAssignment,
+		categories: categories,
+		items: items,
+		foodCategoryAssignments: foodCategoryAssignments,
 	},
-});
-
-export default migrate(v3Schema, v4Schema, async ({ identity, migrate }) => {
-	await Promise.all([
-		migrate('items', identity),
-		migrate('categories', identity),
-		migrate('foodCategoryAssignments', identity),
-	]);
 });

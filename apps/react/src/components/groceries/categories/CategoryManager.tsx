@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button } from '@/components/primitives/primitives.js';
-import { groceries, GroceryCategory, hooks } from '@/stores/groceries/index.js';
+import { groceries, Category, hooks } from '@/stores/groceries/index.js';
 import { TrashIcon } from '@radix-ui/react-icons';
 
 export interface CategoryManagerProps {}
@@ -17,7 +17,7 @@ export function CategoryManager({}: CategoryManagerProps) {
 	);
 }
 
-function CategoryManagerItem({ category }: { category: GroceryCategory }) {
+function CategoryManagerItem({ category }: { category: Category }) {
 	hooks.useWatch(category);
 
 	return (

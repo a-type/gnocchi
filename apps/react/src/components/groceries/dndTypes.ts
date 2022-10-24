@@ -1,4 +1,4 @@
-import { GroceryItem } from '@/stores/groceries/index.js';
+import { Item } from '@/stores/groceries/index.js';
 
 export type GroceryDnDDrop =
 	| {
@@ -15,7 +15,7 @@ export type GroceryDnDDrop =
 
 export type GroceryDnDDrag = {
 	type: 'item';
-	value: GroceryItem;
+	value: Item;
 	nextSortKey: string | null;
 	prevSortKey: string | null;
 };

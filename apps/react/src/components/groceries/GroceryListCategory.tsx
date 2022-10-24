@@ -10,13 +10,13 @@ import { H2 } from '../primitives/index.js';
 import { GroceryDnDDrop } from './dndTypes.js';
 import { GroceryListItemDraggable } from './items/GroceryListItem.js';
 import { groceriesState } from './state.js';
-import { hooks, GroceryCategory } from '@/stores/groceries/index.js';
+import { hooks, Category } from '@/stores/groceries/index.js';
 
 export function GroceryListCategory({
 	category,
 	...rest
 }: {
-	category: GroceryCategory;
+	category: Category;
 }) {
 	hooks.useWatch(category);
 

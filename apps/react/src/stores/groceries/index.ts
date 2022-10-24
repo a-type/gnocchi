@@ -5,21 +5,19 @@ import { parseIngredient } from '@aglio/conversion';
 import {
 	EntityShape,
 	Presence,
-	StorageDescriptor,
+	ClientDescriptor,
 	WebsocketSync,
-} from '@lo-fi/web';
-import { createHooks } from '@lo-fi/react';
-import { schema, GroceryItem, migrations } from './schema/schema.js';
+	Item,
+} from './client/index.js';
+import { createHooks } from './client/react.js';
+import { migrations } from './migrations.js';
+import schema from './schema.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { TRPCClientError } from '@trpc/client';
 import { toast } from 'react-hot-toast';
 
-export type {
-	GroceryItem,
-	GroceryCategory,
-	FoodCategoryLookup,
-} from './schema/schema.js';
+export type { Item, Category, FoodCategoryAssignment } from './client/index.js';
 
 declare module '@lo-fi/web' {
 	export interface Presence {
@@ -37,7 +35,7 @@ const DEFAULT_CATEGORY = 'None';
 
 const syncOrigin = API_ORIGIN || 'localhost:3001';
 
-const _groceriesDesc = new StorageDescriptor({
+const _groceriesDesc = new ClientDescriptor({
 	sync: new WebsocketSync({
 		host: `ws${SECURE ? 's' : ''}://${syncOrigin}`,
 	}),
@@ -58,16 +56,16 @@ _groceries.then((g) => {
 export const hooks = createHooks(_groceriesDesc);
 
 export const groceries = {
-	deleteItem: async (item: GroceryItem) => {
-		return (await _groceries).delete('items', item.get('id'));
+	deleteItem: async (item: Item) => {
+		return (await _groceries).items.delete(item.get('id'));
 	},
 	deleteItems: async (ids: string[]) => {
 		const storage = await _groceries;
 		for (const id of ids) {
-			storage.delete('items', id);
+			storage.items.delete(id);
 		}
 	},
-	setItemPurchasedQuantity: async (item: GroceryItem, quantity: number) => {
+	setItemPurchasedQuantity: async (item: Item, quantity: number) => {
 		item.set('purchasedQuantity', quantity);
 		(await _groceries).presence.update({
 			lastInteractedItem: item.get('id'),
@@ -77,7 +75,7 @@ export const groceries = {
 	upsertFoodCategoryAssignment: async (food: string, categoryId: string) => {
 		const allExisting = await (
 			await _groceries
-		).findAll('foodCategoryAssignments', {
+		).foodCategoryAssignments.findAll({
 			where: 'foodName',
 			equals: food,
 		}).resolved;
@@ -87,7 +85,7 @@ export const groceries = {
 		} else {
 			await (
 				await _groceries
-			).create('foodCategoryAssignments', {
+			).foodCategoryAssignments.create({
 				id: cuid(),
 				foodName: food,
 				categoryId,
@@ -101,11 +99,7 @@ export const groceries = {
 			categoryId,
 		});
 	},
-	setItemPosition: async (
-		item: GroceryItem,
-		sortKey: string,
-		categoryId?: string,
-	) => {
+	setItemPosition: async (item: Item, sortKey: string, categoryId?: string) => {
 		const storage = await _groceries;
 		item.set('sortKey', sortKey);
 		item.set('categoryId', categoryId);
@@ -121,7 +115,7 @@ export const groceries = {
 			lastInteractedItem: item.get('id'),
 		});
 	},
-	toggleItemPurchased: async (item: GroceryItem) => {
+	toggleItemPurchased: async (item: Item) => {
 		const storage = await _groceries;
 		if (item.get('purchasedQuantity') >= item.get('totalQuantity')) {
 			item.set('purchasedQuantity', 0);
@@ -133,15 +127,15 @@ export const groceries = {
 		});
 	},
 	updateItem: async (
-		item: GroceryItem,
-		updates: Omit<Partial<EntityShape<GroceryItem>>, 'inputs'>,
+		item: Item,
+		updates: Omit<Partial<EntityShape<Item>>, 'inputs'>,
 	) => {
 		item.update(updates);
 		(await _groceries).presence.update({
 			lastInteractedItem: item.get('id'),
 		});
 	},
-	setItemCategory: async (item: GroceryItem, categoryId: string) => {
+	setItemCategory: async (item: Item, categoryId: string) => {
 		const storage = await _groceries;
 		item.set('categoryId', categoryId);
 		await groceries.upsertFoodCategoryAssignment(item.get('food'), categoryId);
@@ -150,7 +144,7 @@ export const groceries = {
 		});
 	},
 	createCategory: async (name: string) => {
-		return (await _groceries).create('categories', {
+		return (await _groceries).categories.create({
 			id: cuid(),
 			name,
 		});
@@ -158,12 +152,12 @@ export const groceries = {
 	resetCategoriesToDefault: async () => {
 		const storage = await _groceries;
 		const defaultCategories = await trpcClient.query('categories.defaults');
-		const existingCategories = await storage.findAll('categories').resolved;
+		const existingCategories = await storage.categories.findAll().resolved;
 		for (const cat of existingCategories) {
 			await groceries.deleteCategory(cat.get('id'));
 		}
 		for (const cat of defaultCategories) {
-			await storage.upsert('categories', {
+			await storage.categories.upsert({
 				id: cat.id,
 				name: cat.name,
 			});
@@ -175,7 +169,7 @@ export const groceries = {
 	) => {
 		const storage = await _groceries;
 		if (!lines.length) return;
-		const defaultCategory = await storage.upsert('categories', {
+		const defaultCategory = await storage.categories.upsert({
 			id: DEFAULT_CATEGORY,
 			name: DEFAULT_CATEGORY,
 		});
@@ -183,7 +177,7 @@ export const groceries = {
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
 			let itemId: string;
-			const firstMatch = await storage.findOne('items', {
+			const firstMatch = await storage.items.findOne({
 				where: 'food',
 				equals: parsed.food,
 			}).resolved;
@@ -201,7 +195,7 @@ export const groceries = {
 			} else {
 				itemId = cuid();
 
-				const lookups = await storage.findAll('foodCategoryAssignments', {
+				const lookups = await storage.foodCategoryAssignments.findAll({
 					where: 'foodName',
 					equals: parsed.food,
 				}).resolved;
@@ -225,7 +219,7 @@ export const groceries = {
 
 				// verify the category exists locally
 				const category = categoryId
-					? await storage.get('categories', categoryId).resolved
+					? await storage.categories.get(categoryId).resolved
 					: null;
 				if (!category) {
 					categoryId = defaultCategory.get('id');
@@ -233,7 +227,7 @@ export const groceries = {
 
 				// TODO: findOne with a sort order applied to get just
 				// the last item
-				const categoryItems = await storage.findAll('items', {
+				const categoryItems = await storage.items.findAll({
 					where: 'categoryId_sortKey',
 					match: {
 						categoryId,
@@ -243,7 +237,7 @@ export const groceries = {
 				}).resolved;
 				const lastCategoryItem = categoryItems[0];
 
-				await storage.create('items', {
+				await storage.items.create({
 					id: cuid(),
 					categoryId,
 					createdAt: Date.now(),
@@ -298,7 +292,7 @@ export const groceries = {
 			return;
 		}
 		const storage = await _groceries;
-		const matchingItems = await storage.findAll('items', {
+		const matchingItems = await storage.items.findAll({
 			where: 'categoryId',
 			equals: categoryId,
 		}).resolved;
@@ -307,14 +301,14 @@ export const groceries = {
 			item.set('categoryId', DEFAULT_CATEGORY);
 		}
 		// delete all lookups for this category locally
-		const lookups = await storage.findAll('foodCategoryAssignments', {
+		const lookups = await storage.foodCategoryAssignments.findAll({
 			where: 'categoryId',
 			equals: categoryId,
 		}).resolved;
 		for (const lookup of lookups) {
-			storage.delete('foodCategoryAssignments', lookup.get('id'));
+			storage.foodCategoryAssignments.delete(lookup.get('id'));
 		}
 
-		storage.delete('categories', categoryId);
+		storage.categories.delete(categoryId);
 	},
 };

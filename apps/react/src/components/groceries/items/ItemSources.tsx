@@ -1,11 +1,11 @@
 import React, { ComponentPropsWithoutRef } from 'react';
-import { GroceryItem, hooks } from '@/stores/groceries/index.js';
+import { Item, hooks } from '@/stores/groceries/index.js';
 import { styled } from '@/stitches.config.js';
 import { ObjectEntity } from '@lo-fi/web';
 
 export interface ItemSourcesProps
 	extends ComponentPropsWithoutRef<typeof ItemSourcesRoot> {
-	item: GroceryItem;
+	item: Item;
 }
 
 export function ItemSources({ item, ...rest }: ItemSourcesProps) {

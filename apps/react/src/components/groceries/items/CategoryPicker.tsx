@@ -8,12 +8,7 @@ import {
 } from '@/components/primitives/DropdownMenu.js';
 import { Button } from '@/components/primitives/primitives.js';
 import { styled } from '@/stitches.config.js';
-import {
-	groceries,
-	GroceryCategory,
-	GroceryItem,
-	hooks,
-} from '@/stores/groceries/index.js';
+import { groceries, Category, Item, hooks } from '@/stores/groceries/index.js';
 import { RowSpacingIcon } from '@radix-ui/react-icons';
 import React, { useCallback, useState } from 'react';
 import { NewCategoryForm } from '../NewCategoryForm.js';
@@ -21,7 +16,7 @@ import { groceriesState } from '../state.js';
 
 const ITEM_HEIGHT = 32;
 
-export function CategoryPicker({ item }: { item: GroceryItem }) {
+export function CategoryPicker({ item }: { item: Item }) {
 	hooks.useWatch(item);
 	const [state, setState] = useState<
 		'idle' | 'scrubbing' | 'picking' | 'create'
@@ -37,7 +32,7 @@ export function CategoryPicker({ item }: { item: GroceryItem }) {
 		[item],
 	);
 
-	const onCreateCategory = (category: GroceryCategory) => {
+	const onCreateCategory = (category: Category) => {
 		item.set('categoryId', category.get('id'));
 		setState('idle');
 	};
@@ -113,7 +108,7 @@ function CreateCategory({
 	onCreate,
 	...rest
 }: {
-	onCreate: (category: GroceryCategory) => void;
+	onCreate: (category: Category) => void;
 	open: boolean;
 	onOpenChange: (v: boolean) => void;
 }) {

@@ -1,3 +1,5 @@
+import { useAuth } from '@/contexts/AuthContext.js';
+import { groceries, hooks, Item } from '@/stores/groceries/index.js';
 import {
 	DndContext,
 	DragCancelEvent,
@@ -12,7 +14,6 @@ import {
 	useSensor,
 	useSensors,
 } from '@dnd-kit/core';
-import { sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { generateKeyBetween } from 'fractional-indexing';
 import React, {
 	forwardRef,
@@ -22,19 +23,17 @@ import React, {
 	useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { groceries, hooks, GroceryItem } from '@/stores/groceries/index.js';
 import { ref as valtioRef } from 'valtio';
 import { Box } from '../primitives/index.js';
-import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
-import { GroceryListCategory } from './GroceryListCategory.js';
-import { GroceryListItem } from './items/GroceryListItem.js';
-import { groceriesState } from './state.js';
-import { useAuth } from '@/contexts/AuthContext.js';
-import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
 import {
 	DESKTOP_DRAG_ACTIVATION_DELAY,
 	MOBILE_DRAG_ACTIVATION_DELAY,
 } from './constants.js';
+import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
+import { GroceryListCategory } from './GroceryListCategory.js';
+import { GroceryListItem } from './items/GroceryListItem.js';
+import { groceriesState } from './state.js';
+import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -102,7 +101,7 @@ const GroceryListCategories = forwardRef<
 });
 
 function GroceryListDragOverlay() {
-	const [draggingItem, setDraggingItem] = useState<GroceryItem | null>(null);
+	const [draggingItem, setDraggingItem] = useState<Item | null>(null);
 	useDndMonitor({
 		onDragStart: ({ active }) => {
 			const item = (active.data.current as GroceryDnDDrag).value;
@@ -218,7 +217,7 @@ function useOnDragOver() {
 	}, []);
 }
 
-function reorderItem(draggedItem: GroceryItem, dropZone: GroceryDnDDrag) {
+function reorderItem(draggedItem: Item, dropZone: GroceryDnDDrag) {
 	if (draggedItem.get('id') === dropZone.value.get('id')) return;
 
 	let sortKey: string;
