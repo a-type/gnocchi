@@ -26,6 +26,10 @@ jobs:
             **/apps/api/src/**/*.tsx
             **/packages/**/src/**/*.ts
             **/packages/**/src/**/*.tsx
+            ./Dockerfile
+            ./fly.toml
+            **/apps/api/package.json
+            ./pnpm-lock.yaml
 
   deploy:
     needs: [changed_files]
