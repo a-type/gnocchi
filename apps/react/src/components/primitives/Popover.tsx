@@ -1,5 +1,6 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import React, {
+	ComponentPropsWithoutRef,
 	Ref,
 	RefObject,
 	useLayoutEffect,
@@ -93,7 +94,7 @@ export const PopoverClose = StyledClose;
 export const PopoverContent = ({
 	children,
 	...props
-}: PopoverPrimitive.PopperContentProps) => {
+}: ComponentPropsWithoutRef<typeof StyledContent>) => {
 	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
 	return (
 		<PopoverPrimitive.Portal>

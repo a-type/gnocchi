@@ -17,7 +17,7 @@ importers:
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
       '@lo-fi/common': ^0.2.1
-      '@lo-fi/server': ^0.2.1
+      '@lo-fi/server': ^0.2.2
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -56,7 +56,7 @@ importers:
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
       '@lo-fi/common': 0.2.1
-      '@lo-fi/server': 0.2.1_utf-8-validate@5.0.9
+      '@lo-fi/server': 0.2.2_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
       '@types/better-sqlite3': 7.6.0
@@ -102,7 +102,7 @@ importers:
       '@lo-fi/cli': ^0.1.4
       '@lo-fi/common': ^0.2.1
       '@lo-fi/react': ^0.2.1
-      '@lo-fi/web': ^0.2.1
+      '@lo-fi/web': ^0.2.2
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -161,8 +161,8 @@ importers:
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
       '@lo-fi/cli': 0.1.4
       '@lo-fi/common': 0.2.1
-      '@lo-fi/react': 0.2.1_5wxm7wbzobbge7fozwm7fy7h5e
-      '@lo-fi/web': 0.2.1
+      '@lo-fi/react': 0.2.1_zeuuiwqjne74mf52blec473vke
+      '@lo-fi/web': 0.2.2
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1711,20 +1711,20 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/0.2.1_5wxm7wbzobbge7fozwm7fy7h5e:
+  /@lo-fi/react/0.2.1_zeuuiwqjne74mf52blec473vke:
     resolution: {integrity: sha512-na8rfPqKtjGVLsjl6fRUXcJWaXy9LQ9KCOG8y0V5ksJLLAzIavzqum494xL9827WhEuP7jWYwZshCJcVpc2w0Q==}
     peerDependencies:
       '@lo-fi/web': ^0.2.1
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 0.2.1
-      '@lo-fi/web': 0.2.1
+      '@lo-fi/web': 0.2.2
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lo-fi/server/0.2.1_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-h2ZTgo3HW/o02IOmh8C4sGSqCJBoB2t4n1em+lrS3r7FupU7XDQy9u9LqyN61gm78LKi8509Vu0YHYkGxUrw6g==}
+  /@lo-fi/server/0.2.2_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-RL1d8kCP50C4O0mv5VlpFLnBt/y3y4zBbmVSkDJWsfJVDyAkWLqZhvDqE6eGbpRQOkirvr4TZg8HsfKzlOuy8g==}
     dependencies:
       '@lo-fi/common': 0.2.1
       better-sqlite3: 7.6.2
@@ -1734,8 +1734,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/0.2.1:
-    resolution: {integrity: sha512-XGyW++UqRS9G4ZpkR2sIBV3yglpn2utlBSuYLwwwVEhZJ0LzW+WlyG0D0K70gandqrdCHlb3G4yYwo8uw8qnoA==}
+  /@lo-fi/web/0.2.2:
+    resolution: {integrity: sha512-tCjA9hHc+LthqewCgDD4N8Uu43V1LL4BikwBCKMlMZaNWY2Q+A3F86vvss6NZqfONenJAIdGTwGysjYGj+kHxA==}
     dependencies:
       '@lo-fi/common': 0.2.1
       cuid: 2.1.8

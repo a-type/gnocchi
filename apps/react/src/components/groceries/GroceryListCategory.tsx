@@ -62,7 +62,7 @@ export function GroceryListCategory({
 		},
 	});
 
-	const empty = items?.length === 0;
+	const empty = !items || items?.length === 0;
 	const snap = useSnapshot(groceriesState);
 	const forceShow = snap.draggedItemOriginalCategory === category.get('id');
 

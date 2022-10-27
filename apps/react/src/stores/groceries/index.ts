@@ -174,15 +174,16 @@ export const groceries = {
 			name: DEFAULT_CATEGORY,
 		});
 
+		let lastItemId: string | null = null;
+
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
-			let itemId: string;
 			const firstMatch = await storage.items.findOne({
 				where: 'food',
 				equals: parsed.food,
 			}).resolved;
 			if (firstMatch) {
-				itemId = firstMatch.get('id');
+				const itemId = firstMatch.get('id');
 				const totalQuantity = firstMatch.get('totalQuantity') + parsed.quantity;
 				firstMatch.set('totalQuantity', totalQuantity);
 				// add the source, too
@@ -192,9 +193,8 @@ export const groceries = {
 					url: sourceInfo?.url || null,
 					title: sourceInfo?.title || null,
 				});
+				lastItemId = itemId;
 			} else {
-				itemId = cuid();
-
 				const lookups = await storage.foodCategoryAssignments.findAll({
 					where: 'foodName',
 					equals: parsed.food,
@@ -237,7 +237,7 @@ export const groceries = {
 				}).resolved;
 				const lastCategoryItem = categoryItems[0];
 
-				await storage.items.create({
+				const item = await storage.items.create({
 					categoryId,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
@@ -255,8 +255,14 @@ export const groceries = {
 						},
 					],
 				});
+				lastItemId = item.get('id');
 			}
-			assert(itemId);
+		}
+
+		if (lastItemId) {
+			storage.presence.update({
+				lastInteractedItem: lastItemId,
+			});
 		}
 	},
 	addRecipe: async (url: string) => {
