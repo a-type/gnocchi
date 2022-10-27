@@ -1,4 +1,5 @@
 import { collection, migrate, schema } from '@lo-fi/web';
+import cuid from 'cuid';
 
 const categories = collection({
 	name: 'category',
@@ -9,6 +10,7 @@ const categories = collection({
 			type: 'string',
 			indexed: true,
 			unique: true,
+			default: () => cuid(),
 		},
 		name: {
 			type: 'string',
@@ -16,8 +18,6 @@ const categories = collection({
 			unique: false,
 		},
 	},
-	synthetics: {},
-	compounds: {},
 });
 
 const foodCategoryAssignments = collection({
@@ -28,6 +28,7 @@ const foodCategoryAssignments = collection({
 			type: 'string',
 			indexed: true,
 			unique: true,
+			default: () => cuid(),
 		},
 		foodName: {
 			type: 'string',
@@ -43,8 +44,6 @@ const foodCategoryAssignments = collection({
 			type: 'boolean',
 		},
 	},
-	synthetics: {},
-	compounds: {},
 });
 
 const items = collection({
@@ -55,6 +54,7 @@ const items = collection({
 			type: 'string',
 			indexed: true,
 			unique: true,
+			default: () => cuid(),
 		},
 		categoryId: {
 			type: 'string',
@@ -65,6 +65,7 @@ const items = collection({
 			type: 'number',
 			indexed: false,
 			unique: false,
+			default: () => Date.now(),
 		},
 		totalQuantity: {
 			type: 'number',
@@ -75,6 +76,7 @@ const items = collection({
 			type: 'number',
 			indexed: false,
 			unique: false,
+			default: 0,
 		},
 		unit: {
 			type: 'string',

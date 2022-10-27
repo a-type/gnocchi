@@ -13,10 +13,10 @@ export interface CategorySnapshot {
 }
 
 export interface CategoryInit {
-  id: string;
+  id?: string;
   name: string;
 }
-export type Category = ObjectEntity<CategorySnapshot>;
+export type Category = ObjectEntity<CategoryInit>;
 
 export interface CategoryIdMatchFilter {
   where: "id";
@@ -52,21 +52,21 @@ export interface ItemSnapshot {
 }
 
 export interface ItemInit {
-  id: string;
+  id?: string;
   categoryId: string;
-  createdAt: number;
+  createdAt?: number;
   totalQuantity: number;
-  purchasedQuantity: number;
+  purchasedQuantity?: number;
   unit: string;
   food: string;
   sortKey: string;
-  inputs: Array<{
+  inputs?: Array<{
     text: string;
-    url: string | null;
-    title: string | null;
+    url?: string | null;
+    title?: string | null;
   }>;
 }
-export type Item = ObjectEntity<ItemSnapshot>;
+export type Item = ObjectEntity<ItemInit>;
 
 export interface ItemIdMatchFilter {
   where: "id";
@@ -156,13 +156,12 @@ export interface FoodCategoryAssignmentSnapshot {
 }
 
 export interface FoodCategoryAssignmentInit {
-  id: string;
+  id?: string;
   foodName: string;
   categoryId: string;
   remote: boolean;
 }
-export type FoodCategoryAssignment =
-  ObjectEntity<FoodCategoryAssignmentSnapshot>;
+export type FoodCategoryAssignment = ObjectEntity<FoodCategoryAssignmentInit>;
 
 export interface FoodCategoryAssignmentIdMatchFilter {
   where: "id";
@@ -248,16 +247,16 @@ export class Client {
     FoodCategoryAssignmentFilter
   >;
 
-  presence: Storage["presence"];
+  presence: Storage["sync"]["presence"];
   sync: Storage["sync"];
 
   stats: () => Promise<any>;
 }
 
-export class ClientDescriptor<Schema extends StorageSchema<any>> {
-  constructor(init: StorageInitOptions<Schema>);
+export class ClientDescriptor {
+  constructor(init: StorageInitOptions<any>);
   open: () => Promise<Client>;
   readonly current: Client | null;
   readonly readyPromise: Promise<Client>;
-  readonly schema: Schema;
+  readonly schema: StorageSchema;
 }

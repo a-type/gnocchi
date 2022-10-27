@@ -6,7 +6,6 @@ import {
 	EntityShape,
 	Presence,
 	ClientDescriptor,
-	WebsocketSync,
 	Item,
 } from './client/index.js';
 import { createHooks } from './client/react.js';
@@ -36,12 +35,12 @@ const DEFAULT_CATEGORY = 'None';
 const syncOrigin = API_ORIGIN || 'localhost:3001';
 
 const _groceriesDesc = new ClientDescriptor({
-	sync: new WebsocketSync({
-		host: `ws${SECURE ? 's' : ''}://${syncOrigin}`,
-	}),
+	sync: {
+		host: `ws${SECURE ? 's' : ''}://${syncOrigin}/lofi`,
+		initialPresence: {} as Presence,
+	},
 	schema,
 	migrations,
-	initialPresence: {} as Presence,
 	namespace: 'groceries',
 });
 const _groceries = _groceriesDesc.open();
@@ -102,7 +101,9 @@ export const groceries = {
 	setItemPosition: async (item: Item, sortKey: string, categoryId?: string) => {
 		const storage = await _groceries;
 		item.set('sortKey', sortKey);
-		item.set('categoryId', categoryId);
+		if (categoryId) {
+			item.set('categoryId', categoryId);
+		}
 		// if category changed, update lookups
 		if (categoryId) {
 			await groceries.upsertFoodCategoryAssignment(
@@ -145,7 +146,6 @@ export const groceries = {
 	},
 	createCategory: async (name: string) => {
 		return (await _groceries).categories.create({
-			id: cuid(),
 			name,
 		});
 	},
@@ -238,11 +238,9 @@ export const groceries = {
 				const lastCategoryItem = categoryItems[0];
 
 				await storage.items.create({
-					id: cuid(),
 					categoryId,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
-					purchasedQuantity: 0,
 					unit: parsed.unit,
 					food: parsed.food,
 					sortKey: generateKeyBetween(

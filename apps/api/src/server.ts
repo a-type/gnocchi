@@ -43,10 +43,11 @@ app.use('/api', apiRouter);
 
 app.use('/trpc', middleware);
 
+const lofiServer = attachSocketServer(server);
+app.use('/lofi', lofiServer.handleRequest);
+
 server.listen(3001, () => {
 	console.log('http://localhost:3001');
 });
-
-attachSocketServer(server);
 
 productAdminSetup();
