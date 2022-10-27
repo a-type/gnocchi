@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-	res.send('Hello World!');
+	res.send("Hello World! You shouldn't be here!");
 });
 
 app.use('/api', apiRouter);
