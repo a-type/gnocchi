@@ -7,16 +7,17 @@ import {
 } from '@/components/primitives/Popover.js';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { styled } from '@/stitches.config.js';
+import { css, styled } from '@/stitches.config.js';
 import { hooks } from '@/stores/groceries/index.js';
 import {
 	ArrowLeftIcon,
 	Cross1Icon,
 	ExclamationTriangleIcon,
 	HamburgerMenuIcon,
-	UpdateIcon,
+	GlobeIcon,
 } from '@radix-ui/react-icons';
 import React, { useEffect, useState } from 'react';
+import { Tooltip } from '../primitives/Tooltip.js';
 import { InviteLinkButton } from './InviteLinkButton.js';
 import { LogoutButton } from './LogoutButton.js';
 import { ManageSubscriptionButton } from './ManageSubscriptionButton.js';
@@ -36,7 +37,7 @@ export function SyncMenu() {
 	if (error) {
 		return (
 			<Container>
-				<ExclamationTriangleIcon />
+				<ExclamationTriangleIcon className={statusIconClass()} />
 			</Container>
 		);
 	}
@@ -48,8 +49,9 @@ export function SyncMenu() {
 	if (reconnecting) {
 		return (
 			<Container>
-				<ExclamationTriangleIcon />
-				<Span size="small">Reconnecting...</Span>
+				<Tooltip content="Sync reconnecting...">
+					<ExclamationTriangleIcon className={statusIconClass()} />
+				</Tooltip>
 			</Container>
 		);
 	}
@@ -57,18 +59,22 @@ export function SyncMenu() {
 	if (!isSubscribed) {
 		return (
 			<Container>
-				<ExclamationTriangleIcon />
+				<ExclamationTriangleIcon className={statusIconClass()} />
 			</Container>
 		);
 	}
 
 	return (
 		<Container>
-			<UpdateIcon />
+			<GlobeIcon className={statusIconClass()} />
 			<People />
 		</Container>
 	);
 }
+
+const statusIconClass = css({
+	color: '$gray70',
+});
 
 const Container = styled('div', {
 	display: 'flex',
@@ -76,68 +82,6 @@ const Container = styled('div', {
 	alignItems: 'center',
 	gap: '$2',
 });
-
-function ActiveSyncMenu({ status }: { status: string }) {
-	return (
-		<Popover>
-			<PopoverTrigger asChild>
-				<Button size="small" color="ghost">
-					<HamburgerMenuIcon />
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent>
-				<PopoverArrow />
-				<Box direction="column" gap="2">
-					<Span size="small">{status}</Span>
-					<ManageSubscriptionButton />
-					<InviteLinkButton />
-					<LogoutButton>Log out</LogoutButton>
-				</Box>
-			</PopoverContent>
-		</Popover>
-	);
-}
-
-function ExpiredSyncMenu() {
-	return (
-		<Popover>
-			<PopoverTrigger asChild>
-				<Button size="small" color="ghost">
-					<HamburgerMenuIcon />
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent>
-				<PopoverArrow />
-				<Box direction="column" gap="2">
-					<Span size="small">Subscription expired</Span>
-					<ManageSubscriptionButton />
-					<LogoutButton>Log out</LogoutButton>
-				</Box>
-			</PopoverContent>
-		</Popover>
-	);
-}
-
-function OfflineMenu({ refetch }: { refetch: () => void }) {
-	return (
-		<Popover>
-			<PopoverTrigger asChild>
-				<Button size="small" color="ghost">
-					<HamburgerMenuIcon />
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent>
-				<PopoverArrow />
-				<Box direction="column" gap="2">
-					<Span size="small">Offline</Span>
-					<Button color="default" onClick={refetch}>
-						Retry connection
-					</Button>
-				</Box>
-			</PopoverContent>
-		</Popover>
-	);
-}
 
 function AnonymousSyncMenu() {
 	const [collapsed, setCollapsed] = useLocalStorage(

@@ -69,6 +69,7 @@ const MenuBanner = styled('div' as const, {
 	width: '100%',
 	textAlign: 'center',
 	backgroundColor: '$lemonLighter',
+	p: '$2',
 });
 
 const MenuSection = styled('div' as const, {
