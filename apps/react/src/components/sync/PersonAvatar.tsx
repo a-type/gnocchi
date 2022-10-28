@@ -1,14 +1,25 @@
 import React from 'react';
-import { styled } from '@/stitches.config.js';
-import { UserInfo } from '@lofi-db/web';
+import { keyframes, styled } from '@/stitches.config.js';
+import { UserInfo } from '@lo-fi/web';
 
-export function PersonAvatar({ person }: { person: UserInfo }) {
+export function PersonAvatar({
+	person,
+	...rest
+}: {
+	person: UserInfo;
+	popIn?: boolean;
+}) {
 	return (
-		<Avatar>
+		<Avatar popIn {...rest}>
 			<AvatarContent user={person} />
 		</Avatar>
 	);
 }
+
+const popIn = keyframes({
+	'0%': { opacity: 0, transform: 'scale(0.5)' },
+	'100%': { opacity: 1, transform: 'scale(1)' },
+});
 
 const Avatar = styled('div', {
 	display: 'flex',
@@ -19,6 +30,15 @@ const Avatar = styled('div', {
 	border: '1px solid $black',
 	padding: '2px',
 	overflow: 'hidden',
+
+	variants: {
+		popIn: {
+			true: {
+				animation: `${popIn} 0.2s $transitions$springy`,
+			},
+			false: {},
+		},
+	},
 });
 
 const AvatarImage = styled('img', {
