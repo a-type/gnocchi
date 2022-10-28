@@ -227,23 +227,9 @@ function reorderItem(draggedItem: Item, dropZone: GroceryDnDDrag) {
 			dropZone.prevSortKey,
 			dropZone.value.get('sortKey'),
 		);
-		console.debug(
-			'dragged > droppped',
-			sortKey,
-			'generated between',
-			dropZone.prevSortKey,
-			dropZone.value.get('sortKey'),
-		);
 	} else if (dropZone.value.get('sortKey') > draggedItem.get('sortKey')) {
 		// generate a key between them
 		sortKey = generateKeyBetween(
-			dropZone.value.get('sortKey'),
-			dropZone.nextSortKey,
-		);
-		console.debug(
-			'dragged < dropped',
-			sortKey,
-			'generated between',
 			dropZone.value.get('sortKey'),
 			dropZone.nextSortKey,
 		);

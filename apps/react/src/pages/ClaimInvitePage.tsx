@@ -1,4 +1,4 @@
-import { Box, Button } from '@/components/primitives/primitives.js';
+import { Box, Button, H1, P } from '@/components/primitives/primitives.js';
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/contexts/AuthContext.js';
@@ -36,29 +36,39 @@ export function ClaimInvitePage() {
 	if (session) {
 		if (session.planId) {
 			return (
-				<Box>
-					<div>You already have a subscription.</div>
-					<div>
+				<Box p={8} align="start">
+					<P>You already have a subscription.</P>
+					<P>
 						By claiming this invite you will cancel your current subscription
 						and join {inviterName}'s grocery list
-					</div>
-					<Button onClick={claim}>Claim Invite</Button>
+					</P>
+					<Button color="primary" onClick={claim}>
+						Claim Invite
+					</Button>
 				</Box>
 			);
 		} else {
 			return (
-				<Box>
-					<h1>Join {inviterName}'s grocery list</h1>
-					<Button onClick={claim}>Claim Invite</Button>
+				<Box p={8} align="start">
+					<H1>Join {inviterName}'s grocery list</H1>
+					<Button color="primary" onClick={claim}>
+						Claim Invite
+					</Button>
 				</Box>
 			);
 		}
 	}
 
 	return (
-		<Box>
-			<h1>Sign up to join {inviterName}'s grocery list</h1>
-			<LoginButton provider="google" returnTo={`/claim/${inviteId}`}>
+		<Box p={8}>
+			<H1>Sign up to join {inviterName}'s grocery list</H1>
+			<P>Collaborate on shopping together in the store or during the week.</P>
+			<LoginButton
+				color="primary"
+				provider="google"
+				returnTo={`/claim/${inviteId}`}
+				inviteId={inviteId}
+			>
 				Sign up with Google
 			</LoginButton>
 		</Box>

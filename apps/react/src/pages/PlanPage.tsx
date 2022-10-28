@@ -17,6 +17,7 @@ export function PlanPage() {
 			direction="column"
 			css={{
 				mt: '$6',
+				p: '$4',
 			}}
 			gap={4}
 			align="start"
@@ -24,8 +25,11 @@ export function PlanPage() {
 			<a href="/">
 				<ArrowLeftIcon /> Home
 			</a>
+			<div>
+				<InviteLinkButton color="primary" />
+				<Span size="xs">Get a link to invite others to your list</Span>
+			</div>
 			<ManageSubscriptionButton />
-			<InviteLinkButton />
 			<LogoutButton>Log out</LogoutButton>
 		</Box>
 	);
@@ -35,7 +39,7 @@ function ManageSubscriptionButton(props: ButtonProps) {
 	return (
 		<form action={`${API_HOST_HTTP}/api/stripe/create-portal`} method="POST">
 			<Button type="submit" {...props}>
-				Manage your plan
+				Manage your payment
 			</Button>
 			<Span size="xs">Update your card or unsubscribe</Span>
 		</form>

@@ -104,7 +104,7 @@ function Content({
 
 const StyledTitle = styled(DialogPrimitive.Title, {
 	fontFamily: '$title',
-	color: '$lemonDarker',
+	color: '$black',
 	fontSize: '$3xl',
 	marginBottom: '$4',
 	marginTop: 0,

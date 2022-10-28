@@ -19,7 +19,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				lemonLight: '#f9e794',
 				lemon: '#f9f083',
 				lemonDark: '#f7d352',
-				lemonDarker: '#b38507',
+				lemonDarker: '#996505',
 				gray10: '#fafafa',
 				gray20: '#f5f5f5',
 				gray30: '#eeeef0',
@@ -38,7 +38,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 			fonts: {
 				sans: '"Inter", sans-serif',
 				serif: '"Domine", serif',
-				title: '"Domine", sans-serif',
+				title: '"Inter", sans-serif',
 			},
 			fontSizes: {
 				xs: '0.75rem',

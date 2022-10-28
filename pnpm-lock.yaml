@@ -102,7 +102,7 @@ importers:
       '@lo-fi/cli': ^0.2.0
       '@lo-fi/common': ^0.3.0
       '@lo-fi/react': ^1.0.0
-      '@lo-fi/web': ^0.3.0
+      '@lo-fi/web': ^0.3.1
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -161,8 +161,8 @@ importers:
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
       '@lo-fi/cli': 0.2.0
       '@lo-fi/common': 0.3.0
-      '@lo-fi/react': 1.0.0_nylds3bjpo2i57z7ywbpyepf5q
-      '@lo-fi/web': 0.3.0
+      '@lo-fi/react': 1.0.0_rwt6ox3zjg4dlqo5cbnwdlqt2u
+      '@lo-fi/web': 0.3.1
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1711,14 +1711,14 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/1.0.0_nylds3bjpo2i57z7ywbpyepf5q:
+  /@lo-fi/react/1.0.0_rwt6ox3zjg4dlqo5cbnwdlqt2u:
     resolution: {integrity: sha512-Dj2VTxR64uzW94PnsLxF3WQNIfKfy+tdWqdiTWyQqJ6+RYLHEguprWS63zUlCe5lJ4qvfaXNUEw8jxzFZBM9rw==}
     peerDependencies:
       '@lo-fi/web': ^0.3.0
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 0.3.0
-      '@lo-fi/web': 0.3.0
+      '@lo-fi/web': 0.3.1
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
@@ -1735,8 +1735,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/0.3.0:
-    resolution: {integrity: sha512-S1GMI35HIobLPpRqr2X7D4Rde1d7hUe+LVK7npUss/9x7QV3ldW+FH2rFZ4npjNV7MpILiS7fvNJCQGNXKyMRw==}
+  /@lo-fi/web/0.3.1:
+    resolution: {integrity: sha512-LW6Id05M+IqEuoTNad5PDN4B9H46VwiNWsfblNv/1boAVbok69KwyMzZaN9nT6GFKTti1noYK8l7HmywQ/4HRQ==}
     dependencies:
       '@lo-fi/common': 0.3.0
       cuid: 2.1.8

@@ -363,6 +363,9 @@ export const H2 = styled('h2' as const, {
 
 	fontSize: '$lg',
 	fontFamily: '$title',
+	fontWeight: 'normal',
+	fontStyle: 'italic',
+	color: '$gray90',
 
 	variants: {
 		size: {
@@ -406,6 +409,7 @@ export const Span = styled('span' as const, {
 });
 
 export const P = styled('p' as const, {
+	lineHeight: 1.5,
 	variants: {
 		size: {
 			xs: {

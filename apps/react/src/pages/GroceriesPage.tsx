@@ -7,6 +7,7 @@ import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpired
 import { SyncMenu } from '@/components/sync/SyncMenu.js';
 import React, { Suspense } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
+import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
 
 export function GroceriesPage() {
 	return (
@@ -41,11 +42,12 @@ export function GroceriesPage() {
 					}}
 				/>
 			</Box>
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={null}>
 				<GroceryList />
 			</Suspense>
 			<SubscriptionExpiredDialog />
 			<CompleteSignupDialog />
+			<SignupSuccessBanner />
 		</>
 	);
 }
