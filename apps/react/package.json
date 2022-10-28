@@ -7,7 +7,8 @@
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview",
-		"generate": "lo-fi -s src/stores/groceries/schema.ts -o src/stores/groceries/client -r"
+		"generate": "lo-fi -s src/stores/groceries/schema.ts -o src/stores/groceries/client -r",
+		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react && pnpm link --global @lo-fi/cli"
 	},
 	"dependencies": {
 		"@aglio/conversion": "workspace:*",
@@ -17,10 +18,10 @@
 		"@dnd-kit/modifiers": "^6.0.0",
 		"@dnd-kit/sortable": "^7.0.1",
 		"@dnd-kit/utilities": "^3.2.0",
-		"@lo-fi/cli": "^0.1.4",
-		"@lo-fi/common": "^0.2.1",
-		"@lo-fi/react": "^0.2.1",
-		"@lo-fi/web": "^0.2.2",
+		"@lo-fi/cli": "^0.2.0",
+		"@lo-fi/common": "^0.3.0",
+		"@lo-fi/react": "^1.0.0",
+		"@lo-fi/web": "^0.3.0",
 		"@radix-ui/colors": "^0.1.8",
 		"@radix-ui/react-accordion": "^1.0.0",
 		"@radix-ui/react-checkbox": "^1.0.0",

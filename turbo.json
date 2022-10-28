@@ -19,6 +19,9 @@
 		},
 		"preview": {
 			"cache": false
+		},
+		"link-lofi": {
+			"cache": false
 		}
 	}
 }

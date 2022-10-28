@@ -11,7 +11,7 @@ import {
 import { createHooks } from './client/react.js';
 import { migrations } from './migrations.js';
 import schema from './schema.js';
-import { API_ORIGIN, SECURE } from '@/config.js';
+import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { TRPCClientError } from '@trpc/client';
 import { toast } from 'react-hot-toast';
@@ -36,7 +36,7 @@ const syncOrigin = API_ORIGIN || 'localhost:3001';
 
 const _groceriesDesc = new ClientDescriptor({
 	sync: {
-		host: `ws${SECURE ? 's' : ''}://${syncOrigin}/lofi`,
+		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
 		initialPresence: {} as Presence,
 	},
 	schema,

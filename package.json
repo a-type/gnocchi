@@ -10,7 +10,8 @@
 		"dev": "turbo run dev",
 		"build": "turbo run build",
 		"test": "turbo run test",
-		"prisma": "pnpm --filter @aglio/prisma run prisma"
+		"prisma": "pnpm --filter @aglio/prisma run prisma",
+		"link-lofi": "turbo run link-lofi"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",

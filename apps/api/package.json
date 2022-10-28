@@ -9,15 +9,16 @@
 		"prestart": "cd ../../packages/prisma && prisma migrate deploy && prisma db seed",
 		"start": "pnpm prestart && tsx --tsconfig ./tsconfig.json ./src/server.ts",
 		"start:local": "env-cmd pnpm start",
-		"build": "tsc --build tsconfig.json"
+		"build": "tsc --build tsconfig.json",
+		"link-lofi": "pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/server"
 	},
 	"dependencies": {
 		"@aglio/auth": "workspace:*",
 		"@aglio/prisma": "workspace:*",
 		"@aglio/tools": "workspace:*",
 		"@aglio/trpc": "workspace:*",
-		"@lo-fi/common": "^0.2.1",
-		"@lo-fi/server": "^0.2.2",
+		"@lo-fi/common": "^0.3.0",
+		"@lo-fi/server": "^0.3.0",
 		"@prisma/client": "^4.0.0",
 		"@trpc/server": "^9.27.2",
 		"@types/better-sqlite3": "^7.6.0",
