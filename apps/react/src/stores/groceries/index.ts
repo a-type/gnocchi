@@ -32,8 +32,6 @@ declare module '@lo-fi/web' {
 
 const DEFAULT_CATEGORY = 'None';
 
-const syncOrigin = API_ORIGIN || 'localhost:3001';
-
 const _groceriesDesc = new ClientDescriptor({
 	sync: {
 		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
@@ -316,3 +314,24 @@ export const groceries = {
 		storage.categories.delete(categoryId);
 	},
 };
+
+// hook up undo to ctrl+z
+document.addEventListener('keydown', async (e) => {
+	if (e.key === 'z' && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+		e.preventDefault();
+		const result = await (await _groceries).undoHistory.undo();
+		if (!result) {
+			console.log('Nothing to undo');
+		}
+	}
+	if (
+		(e.key === 'y' && (e.ctrlKey || e.metaKey)) ||
+		(e.key === 'z' && e.shiftKey && (e.ctrlKey || e.metaKey))
+	) {
+		e.preventDefault();
+		const result = await (await _groceries).undoHistory.redo();
+		if (!result) {
+			console.log('Nothing to redo');
+		}
+	}
+});
