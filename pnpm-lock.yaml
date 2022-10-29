@@ -99,10 +99,10 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lo-fi/cli': ^1.0.0
+      '@lo-fi/cli': ^1.0.1
       '@lo-fi/common': ^1.0.0
       '@lo-fi/react': ^1.0.1
-      '@lo-fi/web': ^1.0.0
+      '@lo-fi/web': ^1.0.3
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -159,10 +159,10 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lo-fi/cli': 1.0.0
+      '@lo-fi/cli': 1.0.1
       '@lo-fi/common': 1.0.0
-      '@lo-fi/react': 1.0.1_g6dcphrer7wqtjhthnlkur75f4
-      '@lo-fi/web': 1.0.0
+      '@lo-fi/react': 1.0.1_gwaayqzrdksmufwnausueyl6cy
+      '@lo-fi/web': 1.0.3
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1694,8 +1694,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lo-fi/cli/1.0.0:
-    resolution: {integrity: sha512-rtx0UVR6irPBevHLznJpdy/CNC2zvHFducsR5DuLMCFPQXQRqYcrhHfDQpPlgPTuGyK85nO5jDOEiTlVw5q00A==}
+  /@lo-fi/cli/1.0.1:
+    resolution: {integrity: sha512-lKwDVUZ6GAzFEXRY49Yy6IrDILMj//VymcGWv8FqzbQlAuPPza1q0aa621wxYiBbjQvA6FfwUWbkStydS0/H5A==}
     hasBin: true
     dependencies:
       '@swc/core': 1.3.10
@@ -1711,14 +1711,21 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/1.0.1_g6dcphrer7wqtjhthnlkur75f4:
+  /@lo-fi/common/1.0.1:
+    resolution: {integrity: sha512-jls9SNJJS6pHr7fjNJD9RTi/hOmLOG/FdUG+OPdqB3rFGWUv9sI7ixR6iddKjqiuckJfd9MlurhEv3peFsKfWA==}
+    dependencies:
+      fast-json-patch: 3.1.1
+      uuid: 8.3.2
+    dev: false
+
+  /@lo-fi/react/1.0.1_gwaayqzrdksmufwnausueyl6cy:
     resolution: {integrity: sha512-Fg/5xYgZu6+HUP46jdpex6HDbVJVz+xv8/fQBZiLd8FL2xFInkO1d9wM7z6OMTFj9hLrmmQxoYP1QVlG78LQow==}
     peerDependencies:
       '@lo-fi/web': ^1.0.0
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 1.0.0
-      '@lo-fi/web': 1.0.0
+      '@lo-fi/web': 1.0.3
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
@@ -1735,10 +1742,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.0.0:
-    resolution: {integrity: sha512-mhzjGWmTgM08Z9EESnUbBGLWJ0SH42SLV3hA3rJdrIFXA0627WdDoYLIfSUwjR7aX91InsIqSHmjhfiZu64HgQ==}
+  /@lo-fi/web/1.0.3:
+    resolution: {integrity: sha512-3LyOuYaNhzgsUZ6J4uwHKPfNBYFlei2Ohb+cun2m2ZB4i9vkmRjvfNLtiEeuV/bCWJm9UlKpcDUI2KrXF+tphg==}
     dependencies:
-      '@lo-fi/common': 1.0.0
+      '@lo-fi/common': 1.0.1
       cuid: 2.1.8
     dev: false
 

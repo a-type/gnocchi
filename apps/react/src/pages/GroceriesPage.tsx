@@ -8,6 +8,7 @@ import { SyncMenu } from '@/components/sync/SyncMenu.js';
 import React, { Suspense } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
+import { styled } from '@/stitches.config.js';
 
 export function GroceriesPage() {
 	return (
@@ -33,14 +34,7 @@ export function GroceriesPage() {
 				}}
 			>
 				<GroceryListAdd />
-				<DeleteCheckedButton
-					css={{
-						position: 'absolute !important',
-						left: '50%',
-						bottom: '-20px',
-						transform: 'translate(-50%, 50%)',
-					}}
-				/>
+				<PositionedDeleteChecked />
 			</Box>
 			<Suspense fallback={null}>
 				<GroceryList />
@@ -51,3 +45,10 @@ export function GroceriesPage() {
 		</>
 	);
 }
+
+const PositionedDeleteChecked = styled(DeleteCheckedButton, {
+	position: 'absolute !important',
+	left: '50%',
+	bottom: '-20px',
+	transform: 'translate(-50%, 50%)',
+});

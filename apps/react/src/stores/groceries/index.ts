@@ -53,14 +53,19 @@ _groceries.then((g) => {
 export const hooks = createHooks(_groceriesDesc);
 
 export const groceries = {
+	undo: async () => {
+		(await _groceries).undoHistory.undo();
+	},
+	redo: async () => {
+		(await _groceries).undoHistory.redo();
+	},
+
 	deleteItem: async (item: Item) => {
 		return (await _groceries).items.delete(item.get('id'));
 	},
 	deleteItems: async (ids: string[]) => {
 		const storage = await _groceries;
-		for (const id of ids) {
-			storage.items.delete(id);
-		}
+		return storage.items.deleteAll(ids);
 	},
 	setItemPurchasedQuantity: async (item: Item, quantity: number) => {
 		item.set('purchasedQuantity', quantity);

@@ -225,6 +225,7 @@ interface Collection<
   create: (init: Init) => Promise<Document>;
   upsert: (init: Init) => Promise<Document>;
   delete: (id: string) => Promise<void>;
+  deleteAll: (ids: string[]) => Promise<void>;
   get: (id: string) => Query<Document>;
   findOne: (filter: Filter) => Query<Document>;
   findAll: (filter?: Filter) => Query<Document[]>;
