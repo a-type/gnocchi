@@ -17,8 +17,8 @@ export default defineConfig({
 				name: 'Aglio',
 				short_name: 'Aglio',
 				description: 'Your grocery list, done better',
-				theme_color: '#ffffff',
-				background_color: '#ffffff',
+				theme_color: '#fdfdff',
+				background_color: '#fdfdff',
 				icons: [
 					{
 						src: 'pwa-192x192.png',
