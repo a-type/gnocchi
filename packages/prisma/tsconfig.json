@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"composite": true,
 		"outDir": "./dist",
-		"rootDir": "./src",
+		"rootDir": ".",
 		"baseUrl": "."
 	},
 	"include": ["*.ts", "*.mts", "prisma/*.ts", "./typings"]
