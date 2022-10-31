@@ -9,10 +9,11 @@ import React, { Suspense } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
 import { styled } from '@/stitches.config.js';
+import { groceriesDescriptor, hooks } from '@/stores/groceries/index.js';
 
 export function GroceriesPage() {
 	return (
-		<>
+		<hooks.Provider value={groceriesDescriptor}>
 			<Box w="full" direction="row" align="center" gap={2} p={4}>
 				<Suspense fallback={null}>
 					<MainMenu />
@@ -42,7 +43,7 @@ export function GroceriesPage() {
 			<SubscriptionExpiredDialog />
 			<CompleteSignupDialog />
 			<SignupSuccessBanner />
-		</>
+		</hooks.Provider>
 	);
 }
 

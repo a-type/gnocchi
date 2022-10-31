@@ -7,6 +7,8 @@ import type {
 } from "@lo-fi/web";
 export * from "@lo-fi/web";
 
+import type schema from "./schema.js";
+export type Schema = typeof schema;
 export interface CategorySnapshot {
   id: string;
   name: string;
@@ -256,7 +258,7 @@ export class Client {
 }
 
 export class ClientDescriptor {
-  constructor(init: StorageInitOptions<any>);
+  constructor(init: Omit<StorageInitOptions<Schema>, "schema">);
   open: () => Promise<Client>;
   readonly current: Client | null;
   readonly readyPromise: Promise<Client>;

@@ -1,6 +1,5 @@
 import cuid from 'cuid';
 import { generateKeyBetween } from 'fractional-indexing';
-import { assert } from '@aglio/tools';
 import { parseIngredient } from '@aglio/conversion';
 import {
 	EntityShape,
@@ -8,9 +7,8 @@ import {
 	ClientDescriptor,
 	Item,
 } from './client/index.js';
-import { createHooks } from './client/react.js';
+export { hooks } from './client/react.js';
 import { migrations } from './migrations.js';
-import schema from './schema.js';
 import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { TRPCClientError } from '@trpc/client';
@@ -32,16 +30,15 @@ declare module '@lo-fi/web' {
 
 const DEFAULT_CATEGORY = 'None';
 
-const _groceriesDesc = new ClientDescriptor({
+export const groceriesDescriptor = new ClientDescriptor({
 	sync: {
 		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
 		initialPresence: {} as Presence,
 	},
-	schema,
 	migrations,
 	namespace: 'groceries',
 });
-const _groceries = _groceriesDesc.open();
+const _groceries = groceriesDescriptor.open();
 
 (window as any).stats = async () => {
 	(await _groceries).stats().then(console.info);
@@ -49,8 +46,6 @@ const _groceries = _groceriesDesc.open();
 _groceries.then((g) => {
 	(window as any).groceries = g;
 });
-
-export const hooks = createHooks(_groceriesDesc);
 
 export const groceries = {
 	undo: async () => {

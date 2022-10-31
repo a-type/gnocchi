@@ -1,5 +1,10 @@
-import { Storage, StorageDescriptor } from "@lo-fi/web";
-export * from "@lo-fi/web";
+import { default as schema } from './schema.js';
+import { Storage, StorageDescriptor } from '@lo-fi/web';
+export * from '@lo-fi/web';
 
 export const Client = Storage;
-export const ClientDescriptor = StorageDescriptor;
+export class ClientDescriptor extends StorageDescriptor {
+	constructor(init) {
+		super({ ...init, schema });
+	}
+}

@@ -1,6 +1,8 @@
+import { Provider } from "react";
 import type {
   Client,
   ClientDescriptor,
+  Schema,
   Category,
   CategoryFilter,
   Item,
@@ -11,6 +13,7 @@ import type {
 import type { UserInfo, ObjectEntity, ListEntity } from "@lo-fi/web";
 
 export interface GeneratedHooks {
+  Provider: Provider<ClientDescriptor<Schema>>;
   useStorage: () => Client;
   useSelf: () => UserInfo;
   usePeerIds: () => string[];
@@ -35,4 +38,4 @@ export interface GeneratedHooks {
   }) => FoodCategoryAssignment[];
 }
 
-export const createHooks: (client: ClientDescriptor) => GeneratedHooks;
+export const hooks: GeneratedHooks;
