@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { TokenProvider } from '@lo-fi/server';
+import { ReplicaType, TokenProvider } from '@lo-fi/server';
 import { assert } from '@aglio/tools';
 import { getLoginSession } from '@aglio/auth';
 import { DEPLOYED_HOST } from '../../config/deployedContext.js';
@@ -21,10 +21,11 @@ export default async function lofiHandler(req: Request, res: Response) {
 	const token = tokenProvider.getToken({
 		userId: session.userId,
 		libraryId: session.planId,
+		syncEndpoint: `${DEPLOYED_HOST}/lofi`,
+		type: ReplicaType.Realtime,
 	});
 
 	res.status(200).json({
 		accessToken: token,
-		syncEndpoint: `${DEPLOYED_HOST}/lofi`,
 	});
 }

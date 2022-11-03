@@ -3,6 +3,7 @@ import type {
   Storage,
   StorageInitOptions,
   ObjectEntity,
+  ListEntity,
   Query,
 } from "@lo-fi/web";
 export * from "@lo-fi/web";
@@ -69,6 +70,18 @@ export interface ItemInit {
   }>;
 }
 export type Item = ObjectEntity<ItemInit>;
+
+export type ItemInputs = ListEntity<{
+  text: string;
+  url: string | null;
+  title: string | null;
+}>;
+
+export type ItemInputsItem = ObjectEntity<{
+  text: string;
+  url: string | null;
+  title: string | null;
+}>;
 
 export interface ItemIdMatchFilter {
   where: "id";
@@ -253,6 +266,9 @@ export class Client {
   presence: Storage["sync"]["presence"];
   sync: Storage["sync"];
   undoHistory: Storage["undoHistory"];
+  namespace: Storage["namespace"];
+
+  close: Storage["close"];
 
   stats: () => Promise<any>;
 }
@@ -263,4 +279,6 @@ export class ClientDescriptor {
   readonly current: Client | null;
   readonly readyPromise: Promise<Client>;
   readonly schema: StorageSchema;
+  readonly namespace: string;
+  close: () => Promise<void>;
 }
