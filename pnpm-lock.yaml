@@ -16,8 +16,8 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
-      '@lo-fi/common': ^1.0.3
-      '@lo-fi/server': ^1.0.3
+      '@lo-fi/common': ^1.1.0
+      '@lo-fi/server': ^1.0.4
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -55,7 +55,7 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
-      '@lo-fi/common': 1.0.3
+      '@lo-fi/common': 1.1.0
       '@lo-fi/server': 1.0.4_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
@@ -100,9 +100,9 @@ importers:
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
       '@lo-fi/cli': ^1.1.4
-      '@lo-fi/common': ^1.0.3
+      '@lo-fi/common': ^1.1.0
       '@lo-fi/react': ^1.1.2
-      '@lo-fi/web': ^1.0.7
+      '@lo-fi/web': ^1.1.0
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -160,9 +160,9 @@ importers:
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
       '@lo-fi/cli': 1.1.4
-      '@lo-fi/common': 1.0.3
-      '@lo-fi/react': 1.1.2_ntfnod66vl5fmrz3mxgpjgd73q
-      '@lo-fi/web': 1.0.7
+      '@lo-fi/common': 1.1.0
+      '@lo-fi/react': 1.1.2_bipnkxrtcyo2gdcktgupl4oxqy
+      '@lo-fi/web': 1.1.0
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1711,14 +1711,21 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/1.1.2_ntfnod66vl5fmrz3mxgpjgd73q:
+  /@lo-fi/common/1.1.0:
+    resolution: {integrity: sha512-hUBLgoEuK7HrNIzZmSRXpVbdJqr3csbUxXTaD+No79dKJsiBw9DufLE8qCZsOsXe4dXMDGcNkL1PCQDW+UVHlA==}
+    dependencies:
+      fast-json-patch: 3.1.1
+      uuid: 8.3.2
+    dev: false
+
+  /@lo-fi/react/1.1.2_bipnkxrtcyo2gdcktgupl4oxqy:
     resolution: {integrity: sha512-q3c6EDowhVSZ39GgQkF6tGujT5f7CrQE8N7Fquk9/bC26XK4QioW0UoiItEGVAJupBiLDpbgW5UhxRADjDlpiw==}
     peerDependencies:
       '@lo-fi/web': ^1.0.6
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 1.0.3
-      '@lo-fi/web': 1.0.7
+      '@lo-fi/web': 1.1.0
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
@@ -1736,10 +1743,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.0.7:
-    resolution: {integrity: sha512-+OYOp55YYEPZBcPNT3p5Zy68ImXCbP1XwtK3BmoUrYDbHnpi/ZuPRCCc70/Q9YxBj3puSzvHfI2CwZ5imBtvxA==}
+  /@lo-fi/web/1.1.0:
+    resolution: {integrity: sha512-tK1KY629gGNEdk8jnjVDl5LtXX3eBcoBRMjOoG65vvSUK9WljLGd0KFulYV84wcn28t7UtU6Xq6c/+9m5gu2mw==}
     dependencies:
-      '@lo-fi/common': 1.0.3
+      '@lo-fi/common': 1.1.0
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false
