@@ -7,10 +7,12 @@ export function PageContent({
 	css,
 	fullHeight,
 	noPadding,
+	innerProps,
 	...rest
 }: ComponentPropsWithoutRef<typeof Box> & {
 	fullHeight?: boolean;
 	noPadding?: boolean;
+	innerProps?: ComponentPropsWithoutRef<typeof Box>;
 }) {
 	return (
 		<Box
@@ -30,19 +32,26 @@ export function PageContent({
 			}
 			{...rest}
 		>
-			<Box
-				direction="column"
-				css={{
-					width: '$full',
-					maxWidth: '$content',
-					flex: fullHeight ? 1 : 'initial',
-				}}
-			>
+			<InnerContent fullHeight={fullHeight} {...innerProps}>
 				{children}
-			</Box>
+			</InnerContent>
 		</Box>
 	);
 }
+
+const InnerContent = styled(Box, {
+	width: '100%',
+	maxWidth: '$content',
+	flexDirection: 'column',
+	variants: {
+		fullHeight: {
+			true: {
+				flex: 1,
+			},
+			false: {},
+		},
+	},
+});
 
 export const PageRoot = styled('div', {
 	display: 'grid',
@@ -55,6 +64,19 @@ export const PageRoot = styled('div', {
 		gridTemplateAreas: '"navBar content" "navBar nowPlaying"',
 		gridTemplateRows: '1fr',
 		gridTemplateColumns: 'auto 1fr',
+	},
+
+	variants: {
+		color: {
+			default: {},
+			lemon: {
+				backgroundColor: '$lemon',
+			},
+		},
+	},
+
+	defaultVariants: {
+		color: 'default',
 	},
 });
 

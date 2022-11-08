@@ -1,3 +1,4 @@
+import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import { Box, Button, H1, P } from '@/components/primitives/primitives.js';
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
@@ -36,41 +37,55 @@ export function ClaimInvitePage() {
 	if (session) {
 		if (session.planId) {
 			return (
-				<Box p={8} align="start">
-					<P>You already have a subscription.</P>
-					<P>
-						By claiming this invite you will cancel your current subscription
-						and join {inviterName}'s grocery list
-					</P>
-					<Button color="primary" onClick={claim}>
-						Claim Invite
-					</Button>
-				</Box>
+				<PageRoot>
+					<PageContent>
+						<Box p={2} align="start">
+							<P>You already have a subscription.</P>
+							<P>
+								By claiming this invite you will cancel your current
+								subscription and join {inviterName}'s grocery list
+							</P>
+							<Button color="primary" onClick={claim}>
+								Claim Invite
+							</Button>
+						</Box>
+					</PageContent>
+				</PageRoot>
 			);
 		} else {
 			return (
-				<Box p={8} align="start">
-					<H1>Join {inviterName}'s grocery list</H1>
-					<Button color="primary" onClick={claim}>
-						Claim Invite
-					</Button>
-				</Box>
+				<PageRoot>
+					<PageContent>
+						<Box p={2} align="start">
+							<H1>Join {inviterName}'s grocery list</H1>
+							<Button color="primary" onClick={claim}>
+								Claim Invite
+							</Button>
+						</Box>
+					</PageContent>
+				</PageRoot>
 			);
 		}
 	}
 
 	return (
-		<Box p={8}>
-			<H1>Sign up to join {inviterName}'s grocery list</H1>
-			<P>Collaborate on shopping together in the store or during the week.</P>
-			<LoginButton
-				color="primary"
-				provider="google"
-				returnTo={`/claim/${inviteId}`}
-				inviteId={inviteId}
-			>
-				Sign up with Google
-			</LoginButton>
-		</Box>
+		<PageRoot>
+			<PageContent>
+				<Box p={2}>
+					<H1>Sign up to join {inviterName}'s grocery list</H1>
+					<P>
+						Collaborate on shopping together in the store or during the week.
+					</P>
+					<LoginButton
+						color="primary"
+						provider="google"
+						returnTo={`/claim/${inviteId}`}
+						inviteId={inviteId}
+					>
+						Sign up with Google
+					</LoginButton>
+				</Box>
+			</PageContent>
+		</PageRoot>
 	);
 }

@@ -14,6 +14,10 @@ globalCss({
 			fontFamily: 'Inter',
 			src: `url('/fonts/Inter-VariableFont_slnt,wght.ttf')`,
 		},
+		{
+			fontFamily: 'Londrina Outline',
+			src: `url('/fonts/LondrinaOutline-Regular.ttf')`,
+		},
 	],
 
 	'html, body': {

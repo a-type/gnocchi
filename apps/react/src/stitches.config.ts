@@ -17,7 +17,7 @@ export const { getCssText, styled, css, keyframes, globalCss, theme, reset } =
 				wood: '#ebab5c',
 				lemonLighter: '#fff1ba',
 				lemonLight: '#f9e794',
-				lemon: '#f9f083',
+				lemon: '#f9e794',
 				lemonDark: '#f7d352',
 				lemonDarker: '#996505',
 				gray10: '#fafafa',

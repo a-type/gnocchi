@@ -1,3 +1,4 @@
+import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import {
 	Box,
 	Button,
@@ -12,26 +13,30 @@ import React from 'react';
 
 export function PlanPage() {
 	return (
-		<Box
-			w="full"
-			direction="column"
-			css={{
-				mt: '$6',
-				p: '$4',
-			}}
-			gap={4}
-			align="start"
-		>
-			<a href="/">
-				<ArrowLeftIcon /> Home
-			</a>
-			<div>
-				<InviteLinkButton color="primary" />
-				<Span size="xs">Get a link to invite others to your list</Span>
-			</div>
-			<ManageSubscriptionButton />
-			<LogoutButton>Log out</LogoutButton>
-		</Box>
+		<PageRoot>
+			<PageContent fullHeight noPadding flex={1}>
+				<Box
+					w="full"
+					direction="column"
+					css={{
+						mt: '$6',
+						p: '$4',
+					}}
+					gap={4}
+					align="start"
+				>
+					<a href="/">
+						<ArrowLeftIcon /> Home
+					</a>
+					<div>
+						<InviteLinkButton color="primary" />
+						<Span size="xs">Get a link to invite others to your list</Span>
+					</div>
+					<ManageSubscriptionButton />
+					<LogoutButton>Log out</LogoutButton>
+				</Box>
+			</PageContent>
+		</PageRoot>
 	);
 }
 
