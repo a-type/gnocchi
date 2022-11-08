@@ -18,21 +18,6 @@ export const GroceryListAdd = forwardRef<HTMLFormElement, GroceryListAddProps>(
 	function GroceryListAdd({ ...rest }, ref) {
 		const inputRef = useRef<HTMLInputElement>(null);
 
-		// prevent immediate input focus on touch so the keyboard has
-		// time to appear
-		const handleInputTouch = useCallback((ev: TouchEvent) => {
-			ev.preventDefault();
-			setTimeout(() => {
-				inputRef.current?.focus();
-			}, 300);
-		}, []);
-
-		useEffect(() => {
-			const input = inputRef.current;
-			if (!input) return;
-			input.addEventListener('touchstart', handleInputTouch, true);
-		}, [handleInputTouch]);
-
 		return (
 			<Formik
 				initialValues={{ text: '' }}
