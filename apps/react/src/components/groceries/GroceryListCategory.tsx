@@ -1,22 +1,11 @@
-import { useDndMonitor, useDroppable } from '@dnd-kit/core';
-import React, {
-	memo,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
-import { keyframes, styled } from '@/stitches.config.js';
-import { useSnapshot } from 'valtio';
-import { Box, H2 } from '../primitives/index.js';
-import { GroceryListItemDraggable } from './items/GroceryListItem.js';
-import { groceriesState } from './state.js';
-import { hooks, Category, Item } from '@/stores/groceries/index.js';
-import { useDragDistance, useIsDragging } from './dndHooks.js';
-import { animated, useSpring } from '@react-spring/web';
 import useMergedRef from '@/hooks/useMergedRef.js';
-import { lerp } from 'three/src/math/MathUtils.js';
+import { keyframes, styled } from '@/stitches.config.js';
+import { Category, Item } from '@/stores/groceries/index.js';
+import { useDndMonitor, useDroppable } from '@dnd-kit/core';
+import { memo, useRef } from 'react';
+import { H2 } from '../primitives/index.js';
+import { useIsDragging } from './dndHooks.js';
+import { GroceryListItemDraggable } from './items/GroceryListItem.js';
 
 const EMPTY_DROPPABLE_SIZE = 100;
 
@@ -33,71 +22,7 @@ export function GroceryListCategory({
 	const isDragging = useIsDragging();
 	const internalRef = useRef<HTMLDivElement>(null);
 
-	// remeasure natural height whenever items change
-	const [height, setHeight] = useState(0);
-	useEffect(() => {
-		requestAnimationFrame(() => {
-			if (internalRef.current) {
-				const naturalHeight = internalRef.current.clientHeight;
-				setHeight(naturalHeight);
-				internalRef.current.style.setProperty(
-					'--natural-height',
-					`${naturalHeight}px`,
-				);
-			}
-		});
-	}, [items.length]);
-	useDragDistance(
-		50,
-		(val) => {
-			const element = internalRef.current;
-			if (!element) return;
-			if (val === 0) {
-			} else {
-				// compute the interpolated value from natural height to size based
-				// on val
-				const fromHeight = empty ? 0 : height;
-				element.style.setProperty(
-					'height',
-					`${lerp(fromHeight, EMPTY_DROPPABLE_SIZE, val)}px`,
-				);
-				if (empty) {
-					element.style.setProperty(
-						'opacity',
-						`${lerp(empty ? 0 : 1, 1, val)}`,
-					);
-					element.style.setProperty('margin-bottom', `${lerp(0, 16, val)}px`);
-				}
-			}
-		},
-		(finalVal) => {
-			const element = internalRef.current;
-			if (!element) return;
-			element.style.removeProperty('height');
-			element.style.removeProperty('opacity');
-			element.style.removeProperty('margin-bottom');
-
-			const fromHeight = empty ? 0 : height;
-			element.animate(
-				[
-					{
-						opacity: 1,
-						height: `${lerp(fromHeight, EMPTY_DROPPABLE_SIZE, finalVal)}px`,
-					},
-					{
-						opacity: empty ? 0 : 1,
-						height: `${height}px`,
-					},
-				],
-				{
-					duration: 200,
-					iterations: 1,
-					easing: 'ease-in-out',
-					fill: 'auto',
-				},
-			);
-		},
-	);
+	useDragExpansion({ internalRef, empty });
 
 	const { setNodeRef, isOver } = useDroppable({
 		id: category?.get('id') || 'null',
@@ -137,6 +62,103 @@ export function GroceryListCategory({
 			</CategoryItems>
 		</CategoryContainer>
 	);
+}
+
+/**
+ * Controls the animation of expanding and collapsing hidden categories
+ * while the user is dragging
+ */
+function useDragExpansion({
+	internalRef,
+	empty,
+}: {
+	internalRef: React.RefObject<HTMLDivElement>;
+	empty: boolean;
+}) {
+	const heightPriorToDragRef = useRef(0);
+	useDndMonitor({
+		onDragStart: () => {
+			const element = internalRef.current;
+			if (!element) return;
+
+			heightPriorToDragRef.current = element.clientHeight;
+
+			element.animate(
+				[
+					{
+						height: `${element.clientHeight}px`,
+						opacity: empty ? 0 : 1,
+						marginBottom: empty ? 0 : 'var(--ag-space-4)',
+					},
+					{
+						height: `${EMPTY_DROPPABLE_SIZE}px`,
+						opacity: 1,
+						marginBottom: 'var(--ag-space-4)',
+					},
+				],
+				{
+					duration: 200,
+					iterations: 1,
+					easing: 'ease-in-out',
+					fill: 'forwards',
+				},
+			);
+		},
+		onDragEnd: () => {
+			const element = internalRef.current;
+			if (!element) return;
+
+			element.getAnimations().forEach((animation) => {
+				animation.cancel();
+			});
+
+			element.animate(
+				[
+					{
+						opacity: 1,
+						height: `${EMPTY_DROPPABLE_SIZE}px`,
+					},
+					{
+						opacity: empty ? 0 : 1,
+						height: `${heightPriorToDragRef.current}px`,
+					},
+				],
+				{
+					duration: 200,
+					iterations: 1,
+					easing: 'ease-in-out',
+					fill: 'auto',
+				},
+			);
+		},
+		onDragCancel: () => {
+			const element = internalRef.current;
+			if (!element) return;
+
+			element.getAnimations().forEach((animation) => {
+				animation.cancel();
+			});
+
+			element.animate(
+				[
+					{
+						opacity: 1,
+						height: `${EMPTY_DROPPABLE_SIZE}px`,
+					},
+					{
+						opacity: empty ? 0 : 1,
+						height: `${heightPriorToDragRef.current}px`,
+					},
+				],
+				{
+					duration: 200,
+					iterations: 1,
+					easing: 'ease-in-out',
+					fill: 'auto',
+				},
+			);
+		},
+	});
 }
 
 const MemoizedDraggableItem = memo(GroceryListItemDraggable);
