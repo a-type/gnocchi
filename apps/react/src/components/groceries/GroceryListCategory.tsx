@@ -1,91 +1,127 @@
-import { useDndMonitor } from '@dnd-kit/core';
-import {
-	SortableContext,
-	verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import React, { memo, useMemo, useState } from 'react';
+import { useDndMonitor, useDroppable } from '@dnd-kit/core';
+import React, {
+	memo,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { keyframes, styled } from '@/stitches.config.js';
 import { useSnapshot } from 'valtio';
-import { H2 } from '../primitives/index.js';
-import { GroceryDnDDrop } from './dndTypes.js';
+import { Box, H2 } from '../primitives/index.js';
 import { GroceryListItemDraggable } from './items/GroceryListItem.js';
 import { groceriesState } from './state.js';
-import { hooks, Category } from '@/stores/groceries/index.js';
+import { hooks, Category, Item } from '@/stores/groceries/index.js';
+import { useDragDistance, useIsDragging } from './dndHooks.js';
+import { animated, useSpring } from '@react-spring/web';
+import useMergedRef from '@/hooks/useMergedRef.js';
+import { lerp } from 'three/src/math/MathUtils.js';
+
+const EMPTY_DROPPABLE_SIZE = 100;
 
 export function GroceryListCategory({
 	category,
+	items,
 	...rest
 }: {
-	category: Category;
+	category: Category | null;
+	items: Item[];
 }) {
-	hooks.useWatch(category);
-
-	const stateSnap = useSnapshot(groceriesState);
-	const animateIn = stateSnap.justCreatedCategoryId === category.get('id');
-
-	const items = hooks.useAllItems({
-		index: {
-			where: 'categoryId_sortKey',
-			match: {
-				categoryId: category.get('id'),
-			},
-			order: 'asc',
-		},
-	});
-
-	const [isDragging, setIsDragging] = useState(false);
-	const [isDraggingOver, setIsDraggingOver] = useState(false);
-	useDndMonitor({
-		onDragStart: () => {
-			setIsDragging(true);
-		},
-		onDragEnd: () => {
-			setIsDragging(false);
-			setIsDraggingOver(false);
-		},
-		onDragOver: ({ over }) => {
-			if (!over) {
-				setIsDraggingOver(false);
-				return;
-			}
-			const data = over.data.current as GroceryDnDDrop;
-			if (data.type === 'category') {
-				setIsDraggingOver(data.value === category.get('id'));
-			} else if (data.type === 'item') {
-				setIsDraggingOver(data.value.get('categoryId') === category.get('id'));
-			} else {
-				setIsDraggingOver(false);
-			}
-		},
-		onDragCancel: () => {
-			setIsDraggingOver(false);
-		},
-	});
-
 	const empty = !items || items?.length === 0;
-	const snap = useSnapshot(groceriesState);
-	const forceShow = snap.draggedItemOriginalCategory === category.get('id');
 
-	const sortedIds = useMemo(
-		() => items?.map((i) => i.get('id')) || [],
-		[items],
+	const isDragging = useIsDragging();
+	const internalRef = useRef<HTMLDivElement>(null);
+
+	// remeasure natural height whenever items change
+	const [height, setHeight] = useState(0);
+	useEffect(() => {
+		requestAnimationFrame(() => {
+			if (internalRef.current) {
+				const naturalHeight = internalRef.current.clientHeight;
+				setHeight(naturalHeight);
+				internalRef.current.style.setProperty(
+					'--natural-height',
+					`${naturalHeight}px`,
+				);
+			}
+		});
+	}, [items.length]);
+	useDragDistance(
+		50,
+		(val) => {
+			const element = internalRef.current;
+			if (!element) return;
+			if (val === 0) {
+			} else {
+				// compute the interpolated value from natural height to size based
+				// on val
+				const fromHeight = empty ? 0 : height;
+				element.style.setProperty(
+					'height',
+					`${lerp(fromHeight, EMPTY_DROPPABLE_SIZE, val)}px`,
+				);
+				if (empty) {
+					element.style.setProperty(
+						'opacity',
+						`${lerp(empty ? 0 : 1, 1, val)}`,
+					);
+					element.style.setProperty('margin-bottom', `${lerp(0, 16, val)}px`);
+				}
+			}
+		},
+		(finalVal) => {
+			const element = internalRef.current;
+			if (!element) return;
+			element.style.removeProperty('height');
+			element.style.removeProperty('opacity');
+			element.style.removeProperty('margin-bottom');
+
+			const fromHeight = empty ? 0 : height;
+			element.animate(
+				[
+					{
+						opacity: 1,
+						height: `${lerp(fromHeight, EMPTY_DROPPABLE_SIZE, finalVal)}px`,
+					},
+					{
+						opacity: empty ? 0 : 1,
+						height: `${height}px`,
+					},
+				],
+				{
+					duration: 200,
+					iterations: 1,
+					easing: 'ease-in-out',
+					fill: 'auto',
+				},
+			);
+		},
 	);
 
-	if (empty && !forceShow) return null;
+	const { setNodeRef, isOver } = useDroppable({
+		id: category?.get('id') || 'null',
+		data: {
+			type: 'category',
+			value: category?.get('id'),
+		},
+	});
+
+	const finalRef = useMergedRef(internalRef, setNodeRef);
 
 	return (
 		<CategoryContainer
 			className="groceryCategory"
-			draggedOver={isDraggingOver}
+			draggedOver={isOver}
 			isItemDragging={isDragging}
 			empty={empty}
-			animateIn={animateIn}
+			ref={finalRef}
 			{...rest}
 		>
-			<SortableContext items={sortedIds} strategy={verticalListSortingStrategy}>
-				<H2 size="micro" css={{ m: '$2', fontFamily: '$sans' }}>
-					{category.get('name')}
-				</H2>
+			<H2 size="micro" css={{ m: '$2', fontFamily: '$sans' }}>
+				{category?.get('name') ?? 'Uncategorized'}
+			</H2>
+			<CategoryItems isItemDragging={isDragging}>
 				{items?.map((item, index) => {
 					const prevItem = items[index - 1];
 					const nextItem = items[index + 1];
@@ -98,7 +134,7 @@ export function GroceryListCategory({
 						/>
 					);
 				})}
-			</SortableContext>
+			</CategoryItems>
 		</CategoryContainer>
 	);
 }
@@ -119,12 +155,12 @@ const popIn = keyframes({
 const CategoryContainer = styled('div', {
 	display: 'flex',
 	flexDirection: 'column',
-	// p: '$2',
 	gap: '$1',
 	borderRadius: '$md',
 	backgroundColor: '$light',
-	transition: 'all 0.2s $springy',
-	mb: '$4',
+	overflow: 'hidden',
+	transition: 'box-shadow 0.2s $transitions$springy',
+	'$$natural-height': '0px',
 
 	variants: {
 		draggedOver: {
@@ -145,18 +181,9 @@ const CategoryContainer = styled('div', {
 			true: {
 				height: 0,
 				opacity: 0,
-				mb: 0,
-				p: 0,
-				transitionDelay: '0.2s',
 			},
 			false: {
-				opacity: 1,
-				height: 'auto',
-				// p: '$2',
-			},
-		},
-		animateIn: {
-			true: {
+				mb: '$4',
 				animation: `${popIn} 0.2s $transitions$springy`,
 			},
 		},
@@ -165,19 +192,29 @@ const CategoryContainer = styled('div', {
 	compoundVariants: [
 		{
 			isItemDragging: true,
-			empty: true,
-			css: {
-				height: 80,
-				opacity: 1,
-				mb: '$4',
-			},
-		},
-		{
-			isItemDragging: true,
 			draggedOver: false,
 			css: {
 				transform: 'scale(0.95)',
 			},
 		},
 	],
+});
+
+const CategoryItems = styled('div', {
+	display: 'flex',
+	flexDirection: 'column',
+	gap: '$1',
+
+	transition: 'opacity 0.2s $transitions$springy',
+
+	variants: {
+		isItemDragging: {
+			true: {
+				opacity: 0,
+			},
+			false: {
+				opacity: 1,
+			},
+		},
+	},
 });

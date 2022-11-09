@@ -255,6 +255,8 @@ const StyledTextArea = styled('textarea' as const, {
 export const Button = styled('button' as const, {
 	$$bg: 'transparent',
 
+	'-webkit-tap-highlight-color': 'transparent',
+
 	background: '$$bg',
 	px: '$3',
 	py: '$2',
@@ -272,18 +274,28 @@ export const Button = styled('button' as const, {
 	position: 'relative',
 	overflow: 'visible',
 
+	userSelect: 'none',
+
 	transition: 'box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out',
 
-	'&:hover': {
+	'&:hover:not(:disabled)': {
 		boxShadow: '0 0 0 6px $$bg',
 	},
 
 	'&:focus': {
 		outline: 'none',
 	},
-	'&:focus-visible': {
+	'&:focus-visible:not(:disabled)': {
 		outline: 'none',
 		boxShadow: '$focus',
+	},
+
+	'&:disabled': {
+		opacity: 0.5,
+	},
+
+	'&:active:not(:disabled)': {
+		boxShadow: '0 0 0 6px $$bg',
 	},
 
 	variants: {
@@ -298,11 +310,11 @@ export const Button = styled('button' as const, {
 				$$bg: '$colors$lemonLighter',
 				border: '1px solid currentColor',
 
-				'&:hover': {
+				'&:hover:not(:disabled)': {
 					$$bg: '$colors$lemonLight',
 				},
 
-				'&:focus': {
+				'&:focus:not(:disabled)': {
 					$$bg: '$colors$lemonLight',
 				},
 			},
@@ -310,7 +322,7 @@ export const Button = styled('button' as const, {
 				color: '$darkBlend',
 				$$bg: 'transparent',
 
-				'&:hover': {
+				'&:hover:not(:disabled)': {
 					$$bg: '$colors$grayBlend',
 				},
 			},
@@ -319,7 +331,7 @@ export const Button = styled('button' as const, {
 				$$bg: '$colors$tomatoLight',
 				border: '1px solid currentColor',
 
-				'&:hover': {
+				'&:hover:not(:disabled)': {
 					$$bg: '$colors$tomato',
 				},
 			},
@@ -327,7 +339,7 @@ export const Button = styled('button' as const, {
 				color: '$tomatoDark',
 				$$bg: 'transparent',
 
-				'&:hover': {
+				'&:hover:not(:disabled)': {
 					$$bg: '$colors$tomatoLight',
 				},
 			},

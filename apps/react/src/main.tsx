@@ -26,6 +26,7 @@ globalCss({
 		fontFamily: '$sans',
 		fontSize: '18px',
 		height: '100%',
+		'-webkit-font-smoothing': 'antialiased',
 	},
 
 	body: {
@@ -46,6 +47,7 @@ globalCss({
 
 	'*': {
 		boxSizing: 'border-box',
+		'-webkit-tap-highlight-color': 'transparent',
 	},
 })();
 

@@ -15,6 +15,11 @@ const categories = collection({
             type: 'string',
             indexed: false,
             unique: false
+        },
+        sortKey: {
+            type: 'string',
+            indexed: true,
+            default: 'a0'
         }
     }
 });
@@ -56,7 +61,8 @@ const items = collection({
         categoryId: {
             type: 'string',
             indexed: true,
-            unique: false
+            unique: false,
+            nullable: true
         },
         createdAt: {
             type: 'number',
@@ -126,7 +132,7 @@ const items = collection({
     }
 });
 export default schema({
-    version: 4,
+    version: 5,
     collections: {
         categories: categories,
         items: items,

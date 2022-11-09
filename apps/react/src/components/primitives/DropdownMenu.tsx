@@ -124,6 +124,8 @@ const StyledTrigger = styled(DropdownMenuPrimitive.Trigger, {
 	},
 });
 
+const StyledPortal = styled(DropdownMenuPrimitive.Portal, {});
+
 // Exports
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = StyledTrigger;
@@ -144,14 +146,14 @@ export const DropdownMenuContent = ({
 }: DropdownMenuPrimitive.DropdownMenuContentProps) => {
 	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
 	return (
-		<DropdownMenuPrimitive.Portal>
+		<StyledPortal>
 			<>
 				<StyledContent {...props} ref={contentRef}>
 					{children}
 				</StyledContent>
-				{contentElement &&
+				{contentElement?.parentElement &&
 					createPortal(<BlurLayer />, contentElement.parentElement)}
 			</>
-		</DropdownMenuPrimitive.Portal>
+		</StyledPortal>
 	);
 };

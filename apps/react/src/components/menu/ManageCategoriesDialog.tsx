@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../primitives/Dialog.js';
-import { Button } from '../primitives/primitives.js';
+import { Box, Button } from '../primitives/primitives.js';
 
 export function ManageCategoriesDialog({ children }: { children: ReactNode }) {
 	const resetToDefaults = async () => {
@@ -20,12 +20,20 @@ export function ManageCategoriesDialog({ children }: { children: ReactNode }) {
 			<DialogContent>
 				<DialogTitle>Categories</DialogTitle>
 				<CategoryManager />
-				<DialogClose asChild>
-					<Button>Done</Button>
-				</DialogClose>
-				<Button color="ghost" onClick={resetToDefaults}>
-					Reset to defaults
-				</Button>
+				<Box
+					direction="row"
+					justify="spaceBetween"
+					align="center"
+					gap={3}
+					css={{ pt: '$3' }}
+				>
+					<Button color="ghost" onClick={resetToDefaults}>
+						Reset to defaults
+					</Button>
+					<DialogClose asChild>
+						<Button>Done</Button>
+					</DialogClose>
+				</Box>
 			</DialogContent>
 		</Dialog>
 	);

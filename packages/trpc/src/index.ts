@@ -1,4 +1,5 @@
 import * as z from 'zod';
+import { authRouter } from './auth.js';
 import { categoriesRouter } from './categories.js';
 import { createRouter } from './common.js';
 import { invitesRouter } from './invites.js';
@@ -13,7 +14,8 @@ export const appRouter = createRouter()
 	})
 	.merge('invites.', invitesRouter)
 	.merge('categories.', categoriesRouter)
-	.merge('scans.', scansRouter);
+	.merge('scans.', scansRouter)
+	.merge('auth.', authRouter);
 
 export type AppRouter = typeof appRouter;
 

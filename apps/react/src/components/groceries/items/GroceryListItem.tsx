@@ -8,6 +8,7 @@ import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
 import { useIsFirstRender } from '@/hooks/usePrevious.js';
 import { keyframes, styled } from '@/stitches.config.js';
 import { groceries, hooks, Item } from '@/stores/groceries/index.js';
+import { useDraggable } from '@dnd-kit/core';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';
@@ -258,10 +259,9 @@ export function GroceryListItemDraggable({
 		listeners,
 		setNodeRef,
 		transform,
-		transition,
 		isDragging,
 		setActivatorNodeRef,
-	} = useSortable({
+	} = useDraggable({
 		id: item.get('id'),
 		data: {
 			type: 'item',
@@ -284,7 +284,7 @@ export function GroceryListItemDraggable({
 	const transformString = CSS.Transform.toString(transform);
 	const style = useMemo(
 		() => ({
-			transform: transformString,
+			// transform: transformString,
 			opacity: isDragging ? 0.2 : 1,
 		}),
 		[isDragging, transformString],

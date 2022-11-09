@@ -6,4 +6,10 @@ export const trpc = createReactQueryHooks<AppRouter>();
 
 export const trpcClient = trpc.createClient({
 	url: `${API_HOST_HTTP}/trpc`,
+	fetch(url, options) {
+		return fetch(url, {
+			...options,
+			credentials: 'include',
+		});
+	},
 });

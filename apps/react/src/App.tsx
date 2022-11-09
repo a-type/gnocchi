@@ -3,26 +3,20 @@ import { ClaimInvitePage } from '@/pages/ClaimInvitePage.js';
 import { GroceriesPage } from '@/pages/GroceriesPage.js';
 import { NevermindPage } from '@/pages/NevermindPage.js';
 import { NotFoundPage } from '@/pages/NotFoundPage.js';
-import { trpc } from '@/trpc.js';
-import React, { Suspense, useState } from 'react';
+import { trpc, trpcClient } from '@/trpc.js';
+import { Suspense, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { PageContent, PageRoot } from './components/layouts/index.js';
 import { ErrorBoundary } from './components/primitives/ErrorBoundary.js';
-import { API_HOST_HTTP } from './config.js';
 import { PlanPage } from './pages/PlanPage.js';
 import { Box, Button, H1, P } from './components/primitives/primitives.js';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { SplashPage } from './pages/SplashPage.jsx';
+import { AdminPage } from './pages/AdminPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
-	const [trpcClient] = useState(() =>
-		trpc.createClient({
-			url: `${API_HOST_HTTP}/trpc`,
-		}),
-	);
 
 	return (
 		<ErrorBoundary fallback={<ErrorFallback />}>
@@ -41,6 +35,7 @@ export function App() {
 										/>
 										<Route path="/nevermind" element={<NevermindPage />} />
 										<Route path="/welcome" element={<SplashPage />} />
+										<Route path="/admin" element={<AdminPage />} />
 										<Route path="*" element={<NotFoundPage />} />
 									</Routes>
 									<Toaster />

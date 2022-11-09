@@ -5,7 +5,11 @@ import { prisma } from '@aglio/prisma';
 export const categoriesRouter = createRouter()
 	.query('defaults', {
 		resolve: async ({ ctx }) => {
-			const categories = await prisma.defaultCategory.findMany();
+			const categories = await prisma.defaultCategory.findMany({
+				orderBy: {
+					sortKey: 'asc',
+				},
+			});
 			return categories;
 		},
 	})
@@ -78,5 +82,46 @@ export const categoriesRouter = createRouter()
 				GROUP BY foodName, categoryId
 			`;
 			return assignments.map(({ votes, ...a }) => a);
+		},
+	})
+	.mutation('updateDefault', {
+		input: z.object({
+			id: z.string(),
+			name: z.string().optional(),
+			sortKey: z.string().optional(),
+		}),
+		resolve: async ({ input }) => {
+			const category = await prisma.defaultCategory.update({
+				where: { id: input.id },
+				data: {
+					name: input.name,
+					sortKey: input.sortKey,
+				},
+			});
+			return category;
+		},
+	})
+	.mutation('createDefault', {
+		input: z.object({
+			name: z.string(),
+			sortKey: z.string(),
+		}),
+		resolve: async ({ input }) => {
+			const category = await prisma.defaultCategory.create({
+				data: {
+					name: input.name,
+					sortKey: input.sortKey,
+				},
+			});
+			return category;
+		},
+	})
+	.mutation('deleteDefault', {
+		input: z.string(),
+		resolve: async ({ input }) => {
+			const category = await prisma.defaultCategory.delete({
+				where: { id: input },
+			});
+			return category;
 		},
 	});

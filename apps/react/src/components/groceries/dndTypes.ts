@@ -3,7 +3,7 @@ import { Item } from '@/stores/groceries/index.js';
 export type GroceryDnDDrop =
 	| {
 			type: 'category';
-			value: any;
+			value: string | null;
 	  }
 	| {
 			type: 'new';

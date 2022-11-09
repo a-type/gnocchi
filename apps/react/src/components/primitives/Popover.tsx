@@ -42,7 +42,7 @@ const StyledContent = styled(PopoverPrimitive.Content, {
 	border: '1px solid $black',
 	'@media (prefers-reduced-motion: no-preference)': {
 		animationDuration: '400ms',
-		animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+		animationTimingFunction: '$transitions$springy',
 		animationFillMode: 'forwards',
 		willChange: 'transform, opacity',
 		'&[data-state="open"]': {

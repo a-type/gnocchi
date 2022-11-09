@@ -79,8 +79,9 @@ model PlanInvitation {
 }
 
 model DefaultCategory {
-  id   String @id @default(cuid())
-  name String
+  id      String @id @default(cuid())
+  name    String
+  sortKey String @default("a0") @map("sort_key")
 
   foodAssignments DefaultFoodCategoryAssignment[]
 
@@ -90,7 +91,7 @@ model DefaultCategory {
 model DefaultFoodCategoryAssignment {
   id         String          @id @default(cuid())
   categoryId String          @map("category_id")
-  category   DefaultCategory @relation(fields: [categoryId], references: [id])
+  category   DefaultCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   foodName   String          @map("food_name")
   votes      Int             @default(1)
 

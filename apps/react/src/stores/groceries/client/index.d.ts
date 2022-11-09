@@ -13,11 +13,13 @@ export type Schema = typeof schema;
 export interface CategorySnapshot {
   id: string;
   name: string;
+  sortKey: string;
 }
 
 export interface CategoryInit {
   id?: string;
   name: string;
+  sortKey?: string;
 }
 export type Category = ObjectEntity<CategoryInit>;
 
@@ -36,11 +38,30 @@ export interface CategoryIdRangeFilter {
   order?: "asc" | "desc";
 }
 
-export type CategoryFilter = CategoryIdMatchFilter | CategoryIdRangeFilter;
+export interface CategorySortKeyMatchFilter {
+  where: "sortKey";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface CategorySortKeyRangeFilter {
+  where: "sortKey";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
+export type CategoryFilter =
+  | CategoryIdMatchFilter
+  | CategoryIdRangeFilter
+  | CategorySortKeyMatchFilter
+  | CategorySortKeyRangeFilter;
 
 export interface ItemSnapshot {
   id: string;
-  categoryId: string;
+  categoryId: string | null;
   createdAt: number;
   totalQuantity: number;
   purchasedQuantity: number;
@@ -56,7 +77,7 @@ export interface ItemSnapshot {
 
 export interface ItemInit {
   id?: string;
-  categoryId: string;
+  categoryId?: string | null;
   createdAt?: number;
   totalQuantity: number;
   purchasedQuantity?: number;
@@ -100,16 +121,16 @@ export interface ItemIdRangeFilter {
 
 export interface ItemCategoryIdMatchFilter {
   where: "categoryId";
-  equals: string;
+  equals: string | null;
   order?: "asc" | "desc";
 }
 
 export interface ItemCategoryIdRangeFilter {
   where: "categoryId";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
+  gte?: string | null;
+  gt?: string | null;
+  lte?: string | null;
+  lt?: string | null;
   order?: "asc" | "desc";
 }
 
@@ -131,7 +152,7 @@ export interface ItemFoodRangeFilter {
 export interface ItemCategoryIdSortKeyCompoundFilter {
   where: "categoryId_sortKey";
   match: {
-    categoryId?: string;
+    categoryId?: string | null;
     sortKey?: string;
   };
   order: "asc" | "desc";

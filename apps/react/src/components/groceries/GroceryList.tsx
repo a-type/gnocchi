@@ -31,9 +31,11 @@ import {
 } from './constants.js';
 import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
 import { GroceryListCategory } from './GroceryListCategory.js';
+import { useItemsGroupedAndSorted } from './hooks.js';
 import { GroceryListItem } from './items/GroceryListItem.js';
 import { groceriesState } from './state.js';
 import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
+import { restrictToVerticalAxis, snapCenterToCursor } from '@dnd-kit/modifiers';
 
 export interface GroceryListProps {
 	className?: string;
@@ -60,6 +62,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				onDragOver={handleDragOver}
 				onDragCancel={handleDragCancel}
 				sensors={sensors}
+				modifiers={[snapCenterToCursor, restrictToVerticalAxis]}
 			>
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />
@@ -87,13 +90,17 @@ const GroceryListCategories = forwardRef<
 	HTMLDivElement,
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
-	const categories = hooks.useAllCategories();
+	const groupedItems = useItemsGroupedAndSorted();
 
 	return (
 		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
-			{categories?.map((category) => {
+			{groupedItems.map(({ category, items }) => {
 				return (
-					<MemoizedCategory key={category.get('id')} category={category} />
+					<MemoizedCategory
+						key={category?.get('id')}
+						items={items}
+						category={category}
+					/>
 				);
 			})}
 		</Box>

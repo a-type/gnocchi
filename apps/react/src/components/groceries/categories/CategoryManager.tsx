@@ -24,9 +24,12 @@ function CategoryManagerItem({ category }: { category: Category }) {
 		<Box direction="row" gap={3}>
 			<Box flex={1}>{category.get('name')}</Box>
 			<Button
-				color="ghost"
+				color="ghostDestructive"
 				onClick={() => {
-					groceries.deleteCategory(category.get('id'));
+					const ok = confirm('Delete category ' + category.get('name') + '?');
+					if (ok) {
+						groceries.deleteCategory(category.get('id'));
+					}
 				}}
 			>
 				<TrashIcon />

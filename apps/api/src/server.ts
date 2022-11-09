@@ -25,7 +25,7 @@ app.use(
 );
 app.use((req, res, next) => {
 	// log the request details
-	console.log(new Date().toISOString(), req.method, req.url);
+	console.log(new Date().toISOString(), req.method, req.url.split('?')[0]);
 	next();
 });
 app.use((req, res, next) => {

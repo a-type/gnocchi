@@ -28,8 +28,6 @@ declare module '@lo-fi/web' {
 	}
 }
 
-const DEFAULT_CATEGORY = 'None';
-
 export const groceriesDescriptor = new ClientDescriptor({
 	sync: {
 		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
@@ -69,7 +67,10 @@ export const groceries = {
 		});
 	},
 	// TODO: incorporate this kind of advanced upsert into lofi
-	upsertFoodCategoryAssignment: async (food: string, categoryId: string) => {
+	upsertFoodCategoryAssignment: async (
+		food: string,
+		categoryId: string | null,
+	) => {
 		const allExisting = await (
 			await _groceries
 		).foodCategoryAssignments.findAll({
@@ -78,8 +79,10 @@ export const groceries = {
 		}).resolved;
 		const existing = allExisting?.find((a) => a.get('remote') === false);
 		if (existing) {
-			existing.set('categoryId', categoryId);
-		} else {
+			if (categoryId) {
+				existing.set('categoryId', categoryId);
+			}
+		} else if (categoryId) {
 			await (
 				await _groceries
 			).foodCategoryAssignments.create({
@@ -91,17 +94,21 @@ export const groceries = {
 		}
 
 		// send the categorization to the server for research
-		await trpcClient.mutation('categories.assign', {
-			foodName: food,
-			categoryId,
-		});
+		if (categoryId) {
+			await trpcClient.mutation('categories.assign', {
+				foodName: food,
+				categoryId,
+			});
+		}
 	},
-	setItemPosition: async (item: Item, sortKey: string, categoryId?: string) => {
+	setItemPosition: async (
+		item: Item,
+		sortKey: string,
+		categoryId: string | null,
+	) => {
 		const storage = await _groceries;
 		item.set('sortKey', sortKey);
-		if (categoryId) {
-			item.set('categoryId', categoryId);
-		}
+		item.set('categoryId', categoryId);
 		// if category changed, update lookups
 		if (categoryId) {
 			await groceries.upsertFoodCategoryAssignment(
@@ -134,7 +141,7 @@ export const groceries = {
 			lastInteractedItem: item.get('id'),
 		});
 	},
-	setItemCategory: async (item: Item, categoryId: string) => {
+	setItemCategory: async (item: Item, categoryId: string | null) => {
 		const storage = await _groceries;
 		item.set('categoryId', categoryId);
 		await groceries.upsertFoodCategoryAssignment(item.get('food'), categoryId);
@@ -151,13 +158,15 @@ export const groceries = {
 		const storage = await _groceries;
 		const defaultCategories = await trpcClient.query('categories.defaults');
 		const existingCategories = await storage.categories.findAll().resolved;
-		for (const cat of existingCategories) {
-			await groceries.deleteCategory(cat.get('id'));
-		}
+		const existingIdsToDelete = existingCategories
+			.map((cat) => cat.get('id'))
+			.filter((id) => !defaultCategories.find((cat) => cat.id === id));
+		await storage.categories.deleteAll(existingIdsToDelete);
 		for (const cat of defaultCategories) {
 			await storage.categories.upsert({
 				id: cat.id,
 				name: cat.name,
+				sortKey: cat.sortKey,
 			});
 		}
 	},
@@ -167,10 +176,6 @@ export const groceries = {
 	) => {
 		const storage = await _groceries;
 		if (!lines.length) return;
-		const defaultCategory = await storage.categories.upsert({
-			id: DEFAULT_CATEGORY,
-			name: DEFAULT_CATEGORY,
-		});
 
 		let lastItemId: string | null = null;
 
@@ -199,7 +204,7 @@ export const groceries = {
 				}).resolved;
 				// if there are local and remote lookups, use the local one
 				const lookup = lookups.find((l) => !l.get('remote')) || lookups[0];
-				let categoryId = lookup?.get('categoryId');
+				let categoryId: string | null = lookup?.get('categoryId') ?? null;
 
 				if (!categoryId) {
 					try {
@@ -220,7 +225,7 @@ export const groceries = {
 					? await storage.categories.get(categoryId).resolved
 					: null;
 				if (!category) {
-					categoryId = defaultCategory.get('id');
+					categoryId = null;
 				}
 
 				// TODO: findOne with a sort order applied to get just
@@ -290,9 +295,6 @@ export const groceries = {
 		}
 	},
 	deleteCategory: async (categoryId: string) => {
-		if (categoryId === DEFAULT_CATEGORY) {
-			return;
-		}
 		const storage = await _groceries;
 		const matchingItems = await storage.items.findAll({
 			where: 'categoryId',
@@ -300,7 +302,7 @@ export const groceries = {
 		}).resolved;
 		// move all items to the default category
 		for (const item of matchingItems) {
-			item.set('categoryId', DEFAULT_CATEGORY);
+			item.set('categoryId', null);
 		}
 		// delete all lookups for this category locally
 		const lookups = await storage.foodCategoryAssignments.findAll({
