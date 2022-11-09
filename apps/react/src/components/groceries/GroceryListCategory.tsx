@@ -120,7 +120,7 @@ function useDragExpansion({
 					},
 					{
 						opacity: empty ? 0 : 1,
-						height: `${heightPriorToDragRef.current}px`,
+						height: `${empty ? heightPriorToDragRef.current : 0}px`,
 					},
 				],
 				{
