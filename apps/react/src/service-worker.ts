@@ -102,13 +102,16 @@ self.addEventListener('message', (event) => {
 	}
 });
 
+console.log('Service worker test');
+
 // Any other custom service worker logic can go here.
 
 self.addEventListener('fetch', (event) => {
 	const url = new URL(event.request.url);
 
 	// detect a share event from the PWA
-	if (event.request.method === 'POST' && url.pathname === '/share') {
+	if (url.pathname === '/share') {
+		console.log('SHARE', event);
 		event.respondWith(
 			(async () => {
 				const formData = await event.request.formData();
