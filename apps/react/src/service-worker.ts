@@ -69,17 +69,29 @@ self.addEventListener('fetch', (event) => {
 		console.log('SHARE', event);
 		event.respondWith(
 			(async () => {
+				if (!event.clientId) return Response.redirect('/', 303);
+
 				const formData = await event.request.formData();
 				const text = formData.get('text');
 				if (text && typeof text === 'string') {
 					// check if text is a URL
 					try {
 						const url = new URL(text);
-						postMessage({ type: 'pwa-share', url });
+						// post message to the client
+						const client = await self.clients.get(event.clientId);
+
+						if (client) {
+							client.postMessage({ type: 'pwa-share', url });
+						}
 					} catch (e) {
 						// not a URL, could be ingredients list
 						const items = text.split('\n');
-						postMessage({ type: 'pwa-share', items });
+
+						const client = await self.clients.get(event.clientId);
+
+						if (client) {
+							client.postMessage({ type: 'pwa-share', items });
+						}
 					}
 				}
 

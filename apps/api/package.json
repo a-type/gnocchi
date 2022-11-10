@@ -18,7 +18,7 @@
 		"@aglio/tools": "workspace:*",
 		"@aglio/trpc": "workspace:*",
 		"@lo-fi/common": "^1.1.1",
-		"@lo-fi/server": "^1.0.6",
+		"@lo-fi/server": "^1.0.7",
 		"@prisma/client": "^4.0.0",
 		"@trpc/server": "^9.27.2",
 		"@types/better-sqlite3": "^7.6.0",
