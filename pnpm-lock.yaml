@@ -17,7 +17,7 @@ importers:
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
       '@lo-fi/common': ^1.1.1
-      '@lo-fi/server': ^1.0.6
+      '@lo-fi/server': ^1.0.7
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -56,7 +56,7 @@ importers:
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
       '@lo-fi/common': 1.1.1
-      '@lo-fi/server': 1.0.6_utf-8-validate@5.0.9
+      '@lo-fi/server': 1.0.7_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
       '@types/better-sqlite3': 7.6.0
@@ -1783,8 +1783,8 @@ packages:
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lo-fi/server/1.0.6_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-DNNBsLU17tBYbbrmqkNlbib6FrndVS7y+DwXAMXpSDwqLHfCfMi0LiWf9IMO8r2y9vvy26v2Fu23+EtV7fsRlw==}
+  /@lo-fi/server/1.0.7_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-X1fMA6MRYtyN0KdfpJLFlape+RKhreyIOoaJjz33CcOmyLeCuW37HqKXpGGHvewI6K3dmhw4kjlnkvIKm9YT0w==}
     dependencies:
       '@lo-fi/common': 1.1.1
       async-lock: 1.4.0
