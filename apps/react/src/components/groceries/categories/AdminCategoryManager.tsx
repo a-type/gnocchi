@@ -12,6 +12,21 @@ import { Formik } from 'formik';
 import { generateKeyBetween } from 'fractional-indexing';
 import { useEffect, useMemo, useState } from 'react';
 
+function getNextAndPrevSortKeys(
+	sortKeys: string[],
+	reversedSortKeys: string[],
+	currentSortKey: string,
+) {
+	const prev = reversedSortKeys.find((key) => key < currentSortKey);
+	const prevPrev = prev ? reversedSortKeys.find((key) => key < prev) : null;
+	const next = sortKeys.find((key) => key > currentSortKey);
+	const nextNext = next ? sortKeys.find((key) => key > next) : null;
+	return {
+		prev: generateKeyBetween(prevPrev ?? null, prev ?? null),
+		next: generateKeyBetween(next ?? null, nextNext ?? null),
+	};
+}
+
 export function AdminCategoryManager() {
 	const {
 		data: categories,
@@ -26,41 +41,32 @@ export function AdminCategoryManager() {
 		return <div>Loading...</div>;
 	}
 
-	const reversedCategories = categories?.slice().reverse() ?? [];
+	const categoryKeys = useMemo(
+		() => (categories ? categories.map((cat) => cat.sortKey) : []),
+		[categories],
+	);
+	const reversedCategoryKeys = useMemo(
+		() => [...categoryKeys].reverse(),
+		[categoryKeys],
+	);
 
 	return (
 		<Box gap={10}>
 			<H1>Default Categories</H1>
 			<Box gap={6}>
 				{categories?.map((cat, i) => {
-					const prev = reversedCategories.find(
-						(other) => other.sortKey < cat.sortKey,
-					);
-					const prevPrev = prev
-						? reversedCategories.find(
-								(other) => other.sortKey < prev.sortKey,
-						  ) ?? null
-						: null;
-					const next = categories.find((other) => other.sortKey > cat.sortKey);
-					const nextNext = next
-						? categories.find((other) => other.sortKey > next.sortKey) ?? null
-						: null;
-
-					const prevSortKey = generateKeyBetween(
-						prevPrev?.sortKey ?? null,
-						prev?.sortKey ?? null,
-					);
-					const nextSortKey = generateKeyBetween(
-						next?.sortKey ?? null,
-						nextNext?.sortKey ?? null,
+					const { prev, next } = getNextAndPrevSortKeys(
+						categoryKeys,
+						reversedCategoryKeys,
+						cat.sortKey,
 					);
 
 					return (
 						<AdminCategoryItem
 							category={cat}
 							key={cat.id}
-							prevSortKey={prevSortKey}
-							nextSortKey={nextSortKey}
+							prevSortKey={prev}
+							nextSortKey={next}
 							onChange={refetch}
 						/>
 					);

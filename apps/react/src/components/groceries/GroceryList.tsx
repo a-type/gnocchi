@@ -98,7 +98,7 @@ const GroceryListCategories = forwardRef<
 			{groupedItems.map(({ category, items }) => {
 				return (
 					<MemoizedCategory
-						key={category?.get('id')}
+						key={category?.get('id') || 'null'}
 						items={items}
 						category={category}
 					/>
@@ -189,9 +189,7 @@ function useOnDragEnd() {
 		} else {
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
-				if (item.get('categoryId') !== dropZone.value) {
-					await groceries.setItemCategory(item, dropZone.value);
-				}
+				await groceries.setItemCategory(item, dropZone.value, true);
 			} else if (dropZone.type === 'new') {
 				groceriesState.newCategoryPendingItem = valtioRef(item);
 			} else if (dropZone.type === 'delete') {
@@ -212,7 +210,11 @@ function useOnDragOver() {
 
 		const item = (active.data.current as GroceryDnDDrag).value;
 		const dropZone = over.data.current as GroceryDnDDrop;
-		if (dropZone.type === 'item') {
+		if (dropZone.type === 'category') {
+			if (item.get('categoryId') !== dropZone.value) {
+				await groceries.setItemCategory(item, dropZone.value);
+			}
+		} else if (dropZone.type === 'item') {
 			console.info(
 				item.get('food'),
 				item.get('sortKey'),

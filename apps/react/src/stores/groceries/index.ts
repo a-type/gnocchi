@@ -141,10 +141,19 @@ export const groceries = {
 			lastInteractedItem: item.get('id'),
 		});
 	},
-	setItemCategory: async (item: Item, categoryId: string | null) => {
+	setItemCategory: async (
+		item: Item,
+		categoryId: string | null,
+		updateAssignment = false,
+	) => {
 		const storage = await _groceries;
 		item.set('categoryId', categoryId);
-		await groceries.upsertFoodCategoryAssignment(item.get('food'), categoryId);
+		if (updateAssignment) {
+			await groceries.upsertFoodCategoryAssignment(
+				item.get('food'),
+				categoryId,
+			);
+		}
 		storage.presence.update({
 			lastInteractedItem: item.get('id'),
 		});

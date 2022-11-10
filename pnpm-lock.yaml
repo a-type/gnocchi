@@ -16,8 +16,8 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
-      '@lo-fi/common': ^1.1.0
-      '@lo-fi/server': ^1.0.4
+      '@lo-fi/common': ^1.1.1
+      '@lo-fi/server': ^1.0.6
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -55,8 +55,8 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
-      '@lo-fi/common': 1.1.0
-      '@lo-fi/server': 1.0.4_utf-8-validate@5.0.9
+      '@lo-fi/common': 1.1.1
+      '@lo-fi/server': 1.0.6_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
       '@types/better-sqlite3': 7.6.0
@@ -100,9 +100,9 @@ importers:
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
       '@lo-fi/cli': ^1.1.4
-      '@lo-fi/common': ^1.1.0
-      '@lo-fi/react': ^1.1.2
-      '@lo-fi/web': ^1.1.0
+      '@lo-fi/common': ^1.1.1
+      '@lo-fi/react': ^2.0.1
+      '@lo-fi/web': ^1.1.1
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -171,9 +171,9 @@ importers:
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
       '@lo-fi/cli': 1.1.4
-      '@lo-fi/common': 1.1.0
-      '@lo-fi/react': 1.1.2_bipnkxrtcyo2gdcktgupl4oxqy
-      '@lo-fi/web': 1.1.0
+      '@lo-fi/common': 1.1.1
+      '@lo-fi/react': 2.0.1_dmcvcucgis35nw6s5foomldpie
+      '@lo-fi/web': 1.1.1
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1762,36 +1762,29 @@ packages:
       yargs: 17.6.0
     dev: false
 
-  /@lo-fi/common/1.0.3:
-    resolution: {integrity: sha512-fC8s+rmTxxNqFTjHSeiKv64W56OhN1RR2j90L/nNw9vKUNm3OZtkH2Rp7Nslk4PbZuacS70A2eBOeS8rOy1MSA==}
+  /@lo-fi/common/1.1.1:
+    resolution: {integrity: sha512-TeVRxzXpmYFN7SomsZxbD16LDvDVcXGpTL2P7fSbzvsGFs2Qw6gexLvjqHEtUiINPnRJgt6PspTmwUlNrQoaAQ==}
     dependencies:
       fast-json-patch: 3.1.1
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/common/1.1.0:
-    resolution: {integrity: sha512-hUBLgoEuK7HrNIzZmSRXpVbdJqr3csbUxXTaD+No79dKJsiBw9DufLE8qCZsOsXe4dXMDGcNkL1PCQDW+UVHlA==}
-    dependencies:
-      fast-json-patch: 3.1.1
-      uuid: 8.3.2
-    dev: false
-
-  /@lo-fi/react/1.1.2_bipnkxrtcyo2gdcktgupl4oxqy:
-    resolution: {integrity: sha512-q3c6EDowhVSZ39GgQkF6tGujT5f7CrQE8N7Fquk9/bC26XK4QioW0UoiItEGVAJupBiLDpbgW5UhxRADjDlpiw==}
+  /@lo-fi/react/2.0.1_dmcvcucgis35nw6s5foomldpie:
+    resolution: {integrity: sha512-CslqOzMMt1U1bQzz88p/rQHke50Uyu7aI+jbIVVKz24ZTxuQjZKGVYafL2/ltS6khIqg0mLdu5vynRerwa2MLA==}
     peerDependencies:
-      '@lo-fi/web': ^1.0.6
+      '@lo-fi/web': ^1.1.1
       react: ^18.2.0
     dependencies:
-      '@lo-fi/common': 1.0.3
-      '@lo-fi/web': 1.1.0
+      '@lo-fi/common': 1.1.1
+      '@lo-fi/web': 1.1.1
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lo-fi/server/1.0.4_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-++7nHVPP20uYLmxED0JEiS+wDQND3jm114o2VSgivqHbydXmbkIeYOgAYTI24Q1jBSbL+41K6/0Y8HgLZibB9Q==}
+  /@lo-fi/server/1.0.6_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-DNNBsLU17tBYbbrmqkNlbib6FrndVS7y+DwXAMXpSDwqLHfCfMi0LiWf9IMO8r2y9vvy26v2Fu23+EtV7fsRlw==}
     dependencies:
-      '@lo-fi/common': 1.0.3
+      '@lo-fi/common': 1.1.1
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       jsonwebtoken: 8.5.1
@@ -1801,10 +1794,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.1.0:
-    resolution: {integrity: sha512-tK1KY629gGNEdk8jnjVDl5LtXX3eBcoBRMjOoG65vvSUK9WljLGd0KFulYV84wcn28t7UtU6Xq6c/+9m5gu2mw==}
+  /@lo-fi/web/1.1.1:
+    resolution: {integrity: sha512-48olmAmrXkEukfScl2KXzKp52W7dfiTTn0kXgdeBy7z27CE6VzjFINSHZaeIaup2NXlfILHa7MuupRre/QyJCA==}
     dependencies:
-      '@lo-fi/common': 1.1.0
+      '@lo-fi/common': 1.1.1
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false

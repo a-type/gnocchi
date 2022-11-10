@@ -2,7 +2,7 @@ import useMergedRef from '@/hooks/useMergedRef.js';
 import { keyframes, styled } from '@/stitches.config.js';
 import { Category, Item } from '@/stores/groceries/index.js';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
-import { memo, useRef } from 'react';
+import { memo, useCallback, useRef } from 'react';
 import { H2 } from '../primitives/index.js';
 import { useIsDragging } from './dndHooks.js';
 import { GroceryListItemDraggable } from './items/GroceryListItem.js';
@@ -64,6 +64,14 @@ export function GroceryListCategory({
 	);
 }
 
+function waitForAnimationCancel(animation: Animation) {
+	return new Promise((resolve) => {
+		animation.cancel();
+		animation.addEventListener('cancel', resolve);
+	});
+}
+
+const animationTiming = 200;
 /**
  * Controls the animation of expanding and collapsing hidden categories
  * while the user is dragging
@@ -76,6 +84,37 @@ function useDragExpansion({
 	empty: boolean;
 }) {
 	const heightPriorToDragRef = useRef(0);
+	const priorAnimationRef = useRef<Animation>();
+
+	const collapse = useCallback(async () => {
+		const element = internalRef.current;
+		if (!element) return;
+
+		priorAnimationRef.current?.cancel();
+
+		for (const animation of element.getAnimations()) {
+			await waitForAnimationCancel(animation);
+		}
+
+		element.animate(
+			[
+				{
+					opacity: 1,
+					height: `${EMPTY_DROPPABLE_SIZE}px`,
+				},
+				{
+					opacity: empty ? 0 : 1,
+					height: `${empty ? 0 : heightPriorToDragRef.current}px`,
+				},
+			],
+			{
+				duration: animationTiming,
+				iterations: 1,
+				easing: 'ease-in-out',
+				fill: 'auto',
+			},
+		);
+	}, [empty, internalRef]);
 
 	useDndMonitor({
 		onDragStart: () => {
@@ -84,7 +123,7 @@ function useDragExpansion({
 
 			heightPriorToDragRef.current = element.clientHeight;
 
-			element.animate(
+			priorAnimationRef.current = element.animate(
 				[
 					{
 						height: `${element.clientHeight}px`,
@@ -98,67 +137,15 @@ function useDragExpansion({
 					},
 				],
 				{
-					duration: 200,
+					duration: animationTiming,
 					iterations: 1,
 					easing: 'ease-in-out',
 					fill: 'forwards',
 				},
 			);
 		},
-		onDragEnd: () => {
-			const element = internalRef.current;
-			if (!element) return;
-
-			element.getAnimations().forEach((animation) => {
-				animation.cancel();
-			});
-
-			element.animate(
-				[
-					{
-						opacity: 1,
-						height: `${EMPTY_DROPPABLE_SIZE}px`,
-					},
-					{
-						opacity: empty ? 0 : 1,
-						height: `${empty ? heightPriorToDragRef.current : 0}px`,
-					},
-				],
-				{
-					duration: 200,
-					iterations: 1,
-					easing: 'ease-in-out',
-					fill: 'auto',
-				},
-			);
-		},
-		onDragCancel: () => {
-			const element = internalRef.current;
-			if (!element) return;
-
-			element.getAnimations().forEach((animation) => {
-				animation.cancel();
-			});
-
-			element.animate(
-				[
-					{
-						opacity: 1,
-						height: `${EMPTY_DROPPABLE_SIZE}px`,
-					},
-					{
-						opacity: empty ? 0 : 1,
-						height: `${empty ? heightPriorToDragRef.current : 0}px`,
-					},
-				],
-				{
-					duration: 200,
-					iterations: 1,
-					easing: 'ease-in-out',
-					fill: 'auto',
-				},
-			);
-		},
+		onDragEnd: collapse,
+		onDragCancel: collapse,
 	});
 }
 
@@ -182,13 +169,14 @@ const CategoryContainer = styled('div', {
 	borderRadius: '$md',
 	backgroundColor: '$light',
 	overflow: 'hidden',
-	transition: 'box-shadow 0.2s $transitions$springy',
-	'$$natural-height': '0px',
+	transition:
+		'box-shadow 0.2s $transitions$springy, transform 0.2s $transitions$springy, background-color 0.5s linear',
 
 	variants: {
 		draggedOver: {
 			true: {
-				backgroundColor: '$gray10',
+				backgroundColor: '$lemonLighter',
+				borderColor: '$lemonDark',
 			},
 			false: {
 				backgroundColor: '$light',
@@ -207,7 +195,6 @@ const CategoryContainer = styled('div', {
 			},
 			false: {
 				mb: '$4',
-				animation: `${popIn} 0.2s $transitions$springy`,
 			},
 		},
 	},
@@ -218,6 +205,16 @@ const CategoryContainer = styled('div', {
 			draggedOver: false,
 			css: {
 				transform: 'scale(0.95)',
+			},
+		},
+		{
+			empty: false,
+			draggedOver: false,
+			isItemDragging: false,
+			css: {
+				animationName: `${popIn}`,
+				animationDuration: `0.2s`,
+				animationTimingFunction: `$transitions$springy`,
 			},
 		},
 	],
