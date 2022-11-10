@@ -7,7 +7,7 @@ import { H2 } from '../primitives/index.js';
 import { useIsDragging } from './dndHooks.js';
 import { GroceryListItemDraggable } from './items/GroceryListItem.js';
 
-const EMPTY_DROPPABLE_SIZE = 100;
+const EMPTY_DROPPABLE_SIZE = 48;
 
 export function GroceryListCategory({
 	category,
@@ -76,6 +76,7 @@ function useDragExpansion({
 	empty: boolean;
 }) {
 	const heightPriorToDragRef = useRef(0);
+
 	useDndMonitor({
 		onDragStart: () => {
 			const element = internalRef.current;
@@ -147,7 +148,7 @@ function useDragExpansion({
 					},
 					{
 						opacity: empty ? 0 : 1,
-						height: `${heightPriorToDragRef.current}px`,
+						height: `${empty ? heightPriorToDragRef.current : 0}px`,
 					},
 				],
 				{

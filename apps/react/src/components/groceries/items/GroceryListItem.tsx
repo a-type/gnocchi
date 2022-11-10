@@ -27,6 +27,7 @@ import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox.js';
 import { groceriesState } from '../state.js';
 import { CategoryPicker } from './CategoryPicker.js';
+import { useItemDisplayText } from './hooks.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemQuantityNumber } from './ItemQuantityNumber.js';
 import { ItemSources } from './ItemSources.js';
@@ -54,24 +55,11 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		const [menuOpen, setMenuOpen] = useState(false);
 
 		const sectionStateSnap = useSnapshot(groceriesState);
-		const inputs = item.get('inputs');
 
 		const isPurchased =
 			item.get('purchasedQuantity') >= item.get('totalQuantity');
 		const isPartiallyPurchased = item.get('purchasedQuantity') > 0;
-		const pluralizedUnit = item.get('unit')
-			? item.get('totalQuantity') === 1
-				? item.get('unit')
-				: pluralize(item.get('unit'))
-			: '';
-		const pluralizedName =
-			item.get('totalQuantity') === 1
-				? item.get('food')
-				: pluralize(item.get('food'));
-		const showOnlyInput = inputs.length === 1;
-		const displayString = showOnlyInput
-			? inputs.get(0).get('text')
-			: `${pluralizedUnit && `${pluralizedUnit} `}${pluralizedName}`;
+		const displayString = useItemDisplayText(item);
 
 		const togglePurchased = useCallback(() => {
 			return groceries.toggleItemPurchased(item);
@@ -113,7 +101,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							onPointerUp={stopPropagation}
 						/>
 						<Box direction="row" gap={1} flex={1}>
-							{!showOnlyInput && (
+							{item.get('inputs').length > 1 && (
 								<ItemQuantityNumber value={item.get('totalQuantity')} />
 							)}
 							{displayString}

@@ -3,8 +3,8 @@ import { assert } from '@aglio/tools';
 import { useMemo } from 'react';
 
 export function useItemsGroupedAndSorted() {
-	const items = hooks.useAllItems();
-	const categories = hooks.useAllCategories();
+	const items = hooks.useAllItems() || [];
+	const categories = hooks.useAllCategories() || [];
 	return useMemo(() => {
 		const categoryGroups: { category: Category | null; items: Item[] }[] = [];
 		const sortedCategories: (Category | null)[] = categories

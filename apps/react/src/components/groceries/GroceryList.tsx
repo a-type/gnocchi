@@ -36,6 +36,7 @@ import { GroceryListItem } from './items/GroceryListItem.js';
 import { groceriesState } from './state.js';
 import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
 import { restrictToVerticalAxis, snapCenterToCursor } from '@dnd-kit/modifiers';
+import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 
 export interface GroceryListProps {
 	className?: string;
@@ -62,7 +63,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				onDragOver={handleDragOver}
 				onDragCancel={handleDragCancel}
 				sensors={sensors}
-				modifiers={[snapCenterToCursor, restrictToVerticalAxis]}
+				modifiers={[snapCenterToCursor]}
 			>
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />
@@ -124,7 +125,7 @@ function GroceryListDragOverlay() {
 
 	return createPortal(
 		<DragOverlay dropAnimation={null}>
-			{draggingItem && <GroceryListItem isDragActive item={draggingItem} />}
+			{draggingItem && <GroceryItemDragPreview item={draggingItem} />}
 		</DragOverlay>,
 		document.body,
 	);
