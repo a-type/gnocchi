@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
@@ -13,13 +13,16 @@ import { styled } from '@/stitches.config.js';
 import { ManageCategoriesDialog } from './ManageCategoriesDialog.js';
 import { LoginButton } from '../sync/LoginButton.js';
 import { ManagePlanButton } from '../sync/ManagePlanButton.js';
-import { InviteLinkButton } from '../sync/InviteLinkButton.js';
 import { LogoutButton } from '../sync/LogoutButton.js';
 import { BugButton } from './BugButton.js';
+import { useSnapshot } from 'valtio';
+import { menuState } from './state.js';
 
 export function MainMenu() {
 	const { session, isSubscribed, error } = useAuth();
 	const isSyncing = hooks.useSyncStatus();
+
+	const snap = useSnapshot(menuState);
 
 	let state: keyof typeof contents = 'online';
 	if (error) {
@@ -35,7 +38,10 @@ export function MainMenu() {
 	const Contents = contents[state];
 
 	return (
-		<Popover>
+		<Popover
+			open={snap.open}
+			onOpenChange={(isOpen) => (menuState.open = isOpen)}
+		>
 			<PopoverTrigger asChild>
 				<Button size="small" color="ghost">
 					<HamburgerMenuIcon />

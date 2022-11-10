@@ -1,5 +1,5 @@
 import { groceries } from '@/stores/groceries/index.js';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, Suspense } from 'react';
 import { CategoryManager } from '../groceries/categories/CategoryManager.js';
 import {
 	Dialog,
@@ -9,17 +9,26 @@ import {
 	DialogTrigger,
 } from '../primitives/Dialog.js';
 import { Box, Button } from '../primitives/primitives.js';
+import { menuState } from './state.js';
 
 export function ManageCategoriesDialog({ children }: { children: ReactNode }) {
 	const resetToDefaults = async () => {
 		await groceries.resetCategoriesToDefault();
 	};
 	return (
-		<Dialog>
+		<Dialog
+			onOpenChange={(isOpen) => {
+				if (!isOpen) {
+					menuState.open = false;
+				}
+			}}
+		>
 			<DialogTrigger asChild>{children}</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Categories</DialogTitle>
-				<CategoryManager />
+				<Suspense fallback={null}>
+					<CategoryManager />
+				</Suspense>
 				<Box
 					direction="row"
 					justify="spaceBetween"
