@@ -70,6 +70,11 @@ self.addEventListener('fetch', (event) => {
 		event.respondWith(
 			(async () => {
 				if (!event.clientId) return Response.redirect('/', 303);
+				const client = await self.clients.get(event.clientId);
+				if (!client) {
+					console.warn('No client found');
+					return Response.redirect('/', 303);
+				}
 
 				const formData = await event.request.formData();
 				const text = formData.get('text');
@@ -78,25 +83,16 @@ self.addEventListener('fetch', (event) => {
 					try {
 						const url = new URL(text);
 						// post message to the client
-						const client = await self.clients.get(event.clientId);
 
-						if (client) {
-							client.postMessage({ type: 'pwa-share', url });
-						} else {
-							console.warn('No client found');
-						}
+						client.postMessage({ type: 'pwa-share', url });
 					} catch (e) {
 						// not a URL, could be ingredients list
 						const items = text.split('\n');
 
-						const client = await self.clients.get(event.clientId);
-
-						if (client) {
-							client.postMessage({ type: 'pwa-share', items });
-						} else {
-							console.warn('No client found');
-						}
+						client.postMessage({ type: 'pwa-share', items });
 					}
+				} else {
+					console.warn('No text found in share');
 				}
 
 				return Response.redirect('/', 303);
