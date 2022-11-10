@@ -2,7 +2,9 @@ import { groceries } from '@/stores/groceries/index.js';
 
 export function attachToPwaEvents() {
 	if (typeof window === 'undefined') return;
-	window.addEventListener('message', async (event) => {
+	if (typeof navigator === 'undefined') return;
+	if (!navigator.serviceWorker) return;
+	navigator.serviceWorker.addEventListener('message', async (event) => {
 		if (event.data.type === 'pwa-share') {
 			const items = event.data.items as string[] | undefined;
 			if (items) {
@@ -14,4 +16,5 @@ export function attachToPwaEvents() {
 			}
 		}
 	});
+	navigator.serviceWorker.controller?.postMessage({ type: 'share-ready' });
 }

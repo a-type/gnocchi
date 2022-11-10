@@ -67,10 +67,17 @@ self.addEventListener('fetch', (event) => {
 	// detect a share event from the PWA
 	if (event.request.method === 'POST' && url.pathname === '/share') {
 		console.log('SHARE', event);
-		event.respondWith(
-			(async () => {
-				if (!event.clientId) return Response.redirect('/', 303);
-				const client = await self.clients.get(event.clientId);
+
+		// redirect so the user can refresh without resending data
+		event.respondWith(Response.redirect('/'));
+
+		// wait for ready message from main thread
+		event.waitUntil(
+			(async function () {
+				await nextMessage('share-ready');
+
+				if (!event.resultingClientId) return Response.redirect('/', 303);
+				const client = await self.clients.get(event.resultingClientId);
 				if (!client) {
 					console.warn('No client found');
 					return Response.redirect('/', 303);
@@ -94,9 +101,30 @@ self.addEventListener('fetch', (event) => {
 				} else {
 					console.warn('No text found in share');
 				}
-
-				return Response.redirect('/', 303);
 			})(),
 		);
 	}
+});
+
+const nextMessageResolveMap = new Map<string, (() => void)[]>();
+
+/**
+ * Wait on a message with a particular event.data value.
+ *
+ * @param dataVal The event.data value.
+ */
+function nextMessage(dataVal: string): Promise<void> {
+	return new Promise((resolve) => {
+		if (!nextMessageResolveMap.has(dataVal)) {
+			nextMessageResolveMap.set(dataVal, []);
+		}
+		nextMessageResolveMap.get(dataVal)!.push(resolve);
+	});
+}
+
+self.addEventListener('message', (event) => {
+	const resolvers = nextMessageResolveMap.get(event.data);
+	if (!resolvers) return;
+	nextMessageResolveMap.delete(event.data);
+	for (const resolve of resolvers) resolve();
 });
