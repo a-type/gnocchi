@@ -82,6 +82,8 @@ self.addEventListener('fetch', (event) => {
 
 						if (client) {
 							client.postMessage({ type: 'pwa-share', url });
+						} else {
+							console.warn('No client found');
 						}
 					} catch (e) {
 						// not a URL, could be ingredients list
@@ -91,6 +93,8 @@ self.addEventListener('fetch', (event) => {
 
 						if (client) {
 							client.postMessage({ type: 'pwa-share', items });
+						} else {
+							console.warn('No client found');
 						}
 					}
 				}
