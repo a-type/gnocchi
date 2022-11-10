@@ -3,6 +3,8 @@ import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.js';
 import { attachToPwaEvents } from './pwaEventListener.js';
+// @ts-ignore
+import { registerSW } from 'virtual:pwa-register';
 
 globalCss({
 	'@font-face': [
@@ -61,4 +63,20 @@ function main() {
 }
 
 main();
+
+registerSW({
+	onNeedRefresh() {
+		alert('New content is available; please refresh.');
+	},
+	onOfflineReady() {
+		console.log('Offline ready');
+	},
+	onRegistered(r: any) {
+		r &&
+			setInterval(() => {
+				r.update();
+			}, 60 * 60 * 1000);
+	},
+});
+
 attachToPwaEvents();

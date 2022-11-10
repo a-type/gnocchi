@@ -68,7 +68,8 @@
 		"workbox-expiration": "^6.5.3",
 		"workbox-precaching": "^6.5.3",
 		"workbox-routing": "^6.5.3",
-		"workbox-strategies": "^6.5.3"
+		"workbox-strategies": "^6.5.3",
+		"workbox-window": "^6.5.4"
 	},
 	"devDependencies": {
 		"@types/convert-units": "^2.3.5",

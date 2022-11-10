@@ -46,11 +46,21 @@ export default defineConfig({
 					},
 				},
 			} as any,
-			injectManifest: {
-				globPatterns: [
-					'**/*.{js,css,html,png,jpg,jpeg,gif,svg,eot,ttf,woff,woff,woff2}',
-				],
+			// injectManifest: {
+			// 	globPatterns: [
+			// 		'**/*.{js,css,html,png,jpg,jpeg,gif,svg,eot,ttf,woff,woff,woff2}',
+			// 	],
+			// },
+
+			workbox: {
+				sourcemap: true,
 			},
+
+			// devOptions: {
+			// 	enabled: true,
+			// 	type: 'module',
+			// 	navigateFallback: 'index.html',
+			// },
 		}),
 	],
 	optimizeDeps: {
