@@ -254,6 +254,7 @@ const StyledTextArea = styled('textarea' as const, {
 
 export const Button = styled('button' as const, {
 	$$bg: 'transparent',
+	$$active: '$colors$grayDarkBlend',
 
 	'-webkit-tap-highlight-color': 'transparent',
 
@@ -295,7 +296,8 @@ export const Button = styled('button' as const, {
 	},
 
 	'&:active:not(:disabled)': {
-		boxShadow: '0 0 0 6px $$bg',
+		boxShadow: '0 0 0 6px $$active',
+		backgroundColor: '$$active',
 	},
 
 	variants: {
@@ -308,6 +310,7 @@ export const Button = styled('button' as const, {
 			primary: {
 				color: '$lemonDarker',
 				$$bg: '$colors$lemonLighter',
+				$$active: '$colors$lemonLight',
 				border: '1px solid currentColor',
 
 				'&:hover:not(:disabled)': {
@@ -329,6 +332,7 @@ export const Button = styled('button' as const, {
 			destructive: {
 				color: '$black',
 				$$bg: '$colors$tomatoLight',
+				$$active: '$colors$tomatoLight',
 				border: '1px solid currentColor',
 
 				'&:hover:not(:disabled)': {
@@ -338,6 +342,7 @@ export const Button = styled('button' as const, {
 			ghostDestructive: {
 				color: '$tomatoDark',
 				$$bg: 'transparent',
+				$$active: '$tomatoLight',
 
 				'&:hover:not(:disabled)': {
 					$$bg: '$colors$tomatoLight',

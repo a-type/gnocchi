@@ -30,6 +30,7 @@ const tools = createStitches({
 			gray90: '#42424a',
 			gray0: '#21212b',
 			grayBlend: 'rgba(0, 0, 20, 0.025)',
+			grayDarkBlend: 'rgba(0, 0, 20, 0.05)',
 			darkBlend: 'rgba(30, 0, 0, 0.75)',
 			lightBlend: 'rgba(255, 250, 250, 0.5)',
 			overlay: 'rgba(0, 0, 0, 0.025)',
