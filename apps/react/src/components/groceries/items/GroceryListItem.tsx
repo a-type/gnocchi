@@ -47,6 +47,9 @@ export interface GroceryListItemProps {
 function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
 	e.stopPropagation();
 }
+function preventDefault(e: React.MouseEvent | React.PointerEvent) {
+	e.preventDefault();
+}
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
@@ -117,6 +120,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									position: 'relative',
 									zIndex: menuOpen ? 'calc($menu + 1)' : 'initial',
 								}}
+								onContextMenu={preventDefault}
 								{...menuProps}
 							>
 								<HamburgerMenuIcon />

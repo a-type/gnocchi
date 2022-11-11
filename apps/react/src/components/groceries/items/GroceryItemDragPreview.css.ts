@@ -22,4 +22,6 @@ export const container = style({
 	border: `1px solid ${vars.colors.gray80}`,
 	whiteSpace: 'nowrap',
 	boxShadow: vars.shadows.lg,
+	userSelect: 'none',
+	pointerEvents: 'none',
 });
