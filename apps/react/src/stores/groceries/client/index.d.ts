@@ -23,21 +23,6 @@ export interface CategoryInit {
 }
 export type Category = ObjectEntity<CategoryInit>;
 
-export interface CategoryIdMatchFilter {
-  where: "id";
-  equals: string;
-  order?: "asc" | "desc";
-}
-
-export interface CategoryIdRangeFilter {
-  where: "id";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-
 export interface CategorySortKeyMatchFilter {
   where: "sortKey";
   equals: string;
@@ -54,8 +39,6 @@ export interface CategorySortKeyRangeFilter {
 }
 
 export type CategoryFilter =
-  | CategoryIdMatchFilter
-  | CategoryIdRangeFilter
   | CategorySortKeyMatchFilter
   | CategorySortKeyRangeFilter;
 
@@ -103,21 +86,6 @@ export type ItemInputsItem = ObjectEntity<{
   url: string | null;
   title: string | null;
 }>;
-
-export interface ItemIdMatchFilter {
-  where: "id";
-  equals: string;
-  order?: "asc" | "desc";
-}
-
-export interface ItemIdRangeFilter {
-  where: "id";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
 
 export interface ItemCategoryIdMatchFilter {
   where: "categoryId";
@@ -174,8 +142,6 @@ export interface ItemPurchasedRangeFilter {
 }
 
 export type ItemFilter =
-  | ItemIdMatchFilter
-  | ItemIdRangeFilter
   | ItemCategoryIdMatchFilter
   | ItemCategoryIdRangeFilter
   | ItemFoodMatchFilter
@@ -198,21 +164,6 @@ export interface FoodCategoryAssignmentInit {
   remote: boolean;
 }
 export type FoodCategoryAssignment = ObjectEntity<FoodCategoryAssignmentInit>;
-
-export interface FoodCategoryAssignmentIdMatchFilter {
-  where: "id";
-  equals: string;
-  order?: "asc" | "desc";
-}
-
-export interface FoodCategoryAssignmentIdRangeFilter {
-  where: "id";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
 
 export interface FoodCategoryAssignmentFoodNameMatchFilter {
   where: "foodName";
@@ -245,8 +196,6 @@ export interface FoodCategoryAssignmentCategoryIdRangeFilter {
 }
 
 export type FoodCategoryAssignmentFilter =
-  | FoodCategoryAssignmentIdMatchFilter
-  | FoodCategoryAssignmentIdRangeFilter
   | FoodCategoryAssignmentFoodNameMatchFilter
   | FoodCategoryAssignmentFoodNameRangeFilter
   | FoodCategoryAssignmentCategoryIdMatchFilter
