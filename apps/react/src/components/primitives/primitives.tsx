@@ -1,6 +1,7 @@
 import useMergedRef from '@/hooks/useMergedRef.js';
 import React, {
 	ComponentProps,
+	ComponentPropsWithRef,
 	forwardRef,
 	HTMLProps,
 	useLayoutEffect,
@@ -205,6 +206,7 @@ export const Input = styled('input' as const, {
 		boxShadow: '$focus',
 	},
 });
+export type InputProps = ComponentPropsWithRef<typeof Input>;
 
 export interface TextAreaProps
 	extends Omit<HTMLProps<HTMLTextAreaElement>, 'ref'> {

@@ -37,10 +37,6 @@ export function AdminCategoryManager() {
 		'categories.createDefault',
 	]);
 
-	if (isLoading) {
-		return <div>Loading...</div>;
-	}
-
 	const categoryKeys = useMemo(
 		() => (categories ? categories.map((cat) => cat.sortKey) : []),
 		[categories],
@@ -49,6 +45,10 @@ export function AdminCategoryManager() {
 		() => [...categoryKeys].reverse(),
 		[categoryKeys],
 	);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<Box gap={10}>

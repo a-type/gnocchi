@@ -8,6 +8,7 @@ const categories = collection({
 	fields: {
 		id: {
 			type: 'string',
+			indexed: true,
 			default: () => cuid(),
 		},
 		name: {
@@ -27,6 +28,7 @@ const foodCategoryAssignments = collection({
 	fields: {
 		id: {
 			type: 'string',
+			indexed: true,
 			default: () => cuid(),
 		},
 		foodName: {
@@ -49,6 +51,7 @@ const items = collection({
 	fields: {
 		id: {
 			type: 'string',
+			indexed: true,
 			default: () => cuid(),
 		},
 		categoryId: {
@@ -114,7 +117,7 @@ const items = collection({
 });
 
 export default schema({
-	version: 6,
+	version: 5,
 	collections: {
 		categories: categories,
 		items: items,

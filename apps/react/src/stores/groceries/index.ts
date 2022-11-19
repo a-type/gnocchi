@@ -8,7 +8,7 @@ import {
 	Item,
 } from './client/index.js';
 export { hooks } from './client/react.js';
-import { migrations } from './migrations.js';
+import migrations from './migrations/index.js';
 import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { TRPCClientError } from '@trpc/client';

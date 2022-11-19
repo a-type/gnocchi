@@ -14,6 +14,8 @@ import { Box, Button, H1, P } from './components/primitives/primitives.js';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { SplashPage } from './pages/SplashPage.jsx';
 import { AdminPage } from './pages/AdminPage.jsx';
+import { RecipesPage } from './pages/RecipesPage.jsx';
+import { RecipeEditPage } from './pages/RecipeEditPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -33,6 +35,8 @@ export function App() {
 											path="/claim/:inviteId"
 											element={<ClaimInvitePage />}
 										/>
+										<Route path="/recipes/:slug" element={<RecipeEditPage />} />
+										<Route path="/recipes" element={<RecipesPage />} />
 										<Route path="/nevermind" element={<NevermindPage />} />
 										<Route path="/welcome" element={<SplashPage />} />
 										<Route path="/admin" element={<AdminPage />} />
