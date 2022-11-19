@@ -9,16 +9,16 @@ export function useLoadDefaultCategories() {
 	const storage = hooks.useStorage();
 	const categories = hooks.useAllCategories();
 	const hasNoCategories = categories?.length === 0;
-	useEffect(() => {
-		if (hasNoCategories) {
-			trpcClient.query('categories.defaults', null).then((categories) => {
-				for (const category of categories) {
-					storage.categories.upsert({
-						id: category.id,
-						name: category.name,
-					});
-				}
-			});
-		}
-	}, [hasNoCategories]);
+	// useEffect(() => {
+	// 	if (hasNoCategories) {
+	// 		trpcClient.query('categories.defaults', null).then((categories) => {
+	// 			for (const category of categories) {
+	// 				storage.categories.create({
+	// 					id: category.id,
+	// 					name: category.name,
+	// 				});
+	// 			}
+	// 		});
+	// 	}
+	// }, [hasNoCategories]);
 }

@@ -53,15 +53,16 @@ function preventDefault(e: React.MouseEvent | React.PointerEvent) {
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
-		hooks.useWatch(item);
+		const { purchasedQuantity, totalQuantity, sortKey, id } =
+			hooks.useWatch(item);
+		const inputs = hooks.useWatch(item.get('inputs'));
 
 		const [menuOpen, setMenuOpen] = useState(false);
 
 		const sectionStateSnap = useSnapshot(groceriesState);
 
-		const isPurchased =
-			item.get('purchasedQuantity') >= item.get('totalQuantity');
-		const isPartiallyPurchased = item.get('purchasedQuantity') > 0;
+		const isPurchased = purchasedQuantity >= totalQuantity;
+		const isPartiallyPurchased = purchasedQuantity > 0;
 		const displayString = useItemDisplayText(item);
 
 		const togglePurchased = useCallback(() => {
@@ -73,14 +74,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 
 		return (
 			<ItemContainer
-				hidden={
-					sectionStateSnap.newCategoryPendingItem?.get('id') === item.get('id')
-				}
+				hidden={sectionStateSnap.newCategoryPendingItem?.get('id') === id}
 				{...rest}
 				ref={ref}
 				highlighted={quantityJustChanged}
 				dragging={isDragActive}
-				data-item-id={item.get('id')}
+				data-item-id={id}
 				data-oid={item.oid}
 				menuOpen={menuOpen}
 				justMoved={justMoved}
@@ -104,12 +103,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							onPointerUp={stopPropagation}
 						/>
 						<Box direction="row" gap={1} flex={1}>
-							{item.get('inputs').length > 1 && (
-								<ItemQuantityNumber value={item.get('totalQuantity')} />
+							{inputs.length > 1 && (
+								<ItemQuantityNumber value={totalQuantity} />
 							)}
 							{displayString}
 							{DEBUG_SORT && (
-								<span style={{ marginLeft: '1ch' }}>{item.get('sortKey')}</span>
+								<span style={{ marginLeft: '1ch' }}>{sortKey}</span>
 							)}
 						</Box>
 						<RecentPeople item={item} />
@@ -151,6 +150,7 @@ function useDidJustMove(item: Item) {
 }
 
 function useDidQuantityJustChange(item: Item) {
+	const totalQuantity = hooks.useWatch(item, 'totalQuantity');
 	const [didQuantityChange, setDidQuantityChange] = useState(false);
 	const isFirstRenderRef = useIsFirstRender();
 	useEffect(() => {
@@ -161,7 +161,7 @@ function useDidQuantityJustChange(item: Item) {
 			const timeout = setTimeout(() => setDidQuantityChange(false), 1000);
 			return () => clearTimeout(timeout);
 		}
-	}, [item.get('totalQuantity'), isFirstRenderRef]);
+	}, [totalQuantity, isFirstRenderRef]);
 
 	return didQuantityChange;
 }

@@ -35,6 +35,16 @@ export const groceriesDescriptor = new ClientDescriptor({
 	},
 	migrations,
 	namespace: 'groceries',
+	loadInitialData: async (client) => {
+		const defaultCategories = await trpcClient.query('categories.defaults');
+		for (const defaultCategory of defaultCategories) {
+			await client.categories.put({
+				id: defaultCategory.id,
+				name: defaultCategory.name,
+				sortKey: defaultCategory.sortKey,
+			});
+		}
+	},
 });
 const _groceries = groceriesDescriptor.open();
 
@@ -85,7 +95,7 @@ export const groceries = {
 		} else if (categoryId) {
 			await (
 				await _groceries
-			).foodCategoryAssignments.create({
+			).foodCategoryAssignments.put({
 				id: cuid(),
 				foodName: food,
 				categoryId,
@@ -159,7 +169,7 @@ export const groceries = {
 		});
 	},
 	createCategory: async (name: string) => {
-		return (await _groceries).categories.create({
+		return (await _groceries).categories.put({
 			name,
 		});
 	},
@@ -172,7 +182,7 @@ export const groceries = {
 			.filter((id) => !defaultCategories.find((cat) => cat.id === id));
 		await storage.categories.deleteAll(existingIdsToDelete);
 		for (const cat of defaultCategories) {
-			await storage.categories.upsert({
+			await storage.categories.put({
 				id: cat.id,
 				name: cat.name,
 				sortKey: cat.sortKey,
