@@ -49,7 +49,9 @@ export function GroceriesPage() {
 						}}
 					>
 						<GroceryListAdd />
-						<PositionedDeleteChecked />
+						<Suspense fallback={null}>
+							<PositionedDeleteChecked />
+						</Suspense>
 					</Box>
 					<Suspense fallback={null}>
 						<GroceryList />
