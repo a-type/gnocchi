@@ -8,14 +8,10 @@ const categories = collection({
 	fields: {
 		id: {
 			type: 'string',
-			indexed: true,
-			unique: true,
 			default: () => cuid(),
 		},
 		name: {
 			type: 'string',
-			indexed: false,
-			unique: false,
 		},
 		sortKey: {
 			type: 'string',
@@ -31,19 +27,15 @@ const foodCategoryAssignments = collection({
 	fields: {
 		id: {
 			type: 'string',
-			indexed: true,
-			unique: true,
 			default: () => cuid(),
 		},
 		foodName: {
 			type: 'string',
 			indexed: true,
-			unique: false,
 		},
 		categoryId: {
 			type: 'string',
 			indexed: true,
-			unique: false,
 		},
 		remote: {
 			type: 'boolean',
@@ -57,47 +49,33 @@ const items = collection({
 	fields: {
 		id: {
 			type: 'string',
-			indexed: true,
-			unique: true,
 			default: () => cuid(),
 		},
 		categoryId: {
 			type: 'string',
 			indexed: true,
-			unique: false,
 			nullable: true,
 		},
 		createdAt: {
 			type: 'number',
-			indexed: false,
-			unique: false,
 			default: () => Date.now(),
 		},
 		totalQuantity: {
 			type: 'number',
-			indexed: false,
-			unique: false,
 		},
 		purchasedQuantity: {
 			type: 'number',
-			indexed: false,
-			unique: false,
 			default: 0,
 		},
 		unit: {
 			type: 'string',
-			indexed: false,
-			unique: false,
 		},
 		food: {
 			type: 'string',
 			indexed: true,
-			unique: false,
 		},
 		sortKey: {
 			type: 'string',
-			indexed: false,
-			unique: false,
 		},
 		inputs: {
 			type: 'array',
@@ -136,7 +114,7 @@ const items = collection({
 });
 
 export default schema({
-	version: 5,
+	version: 6,
 	collections: {
 		categories: categories,
 		items: items,
