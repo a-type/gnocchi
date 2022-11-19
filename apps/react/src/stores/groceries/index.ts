@@ -76,7 +76,7 @@ export const groceries = {
 			lastInteractedItem: item.get('id'),
 		});
 	},
-	// TODO: incorporate this kind of advanced upsert into lofi
+	// TODO: incorporate this kind of advanced upsert into lofi?
 	upsertFoodCategoryAssignment: async (
 		food: string,
 		categoryId: string | null,

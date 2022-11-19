@@ -26,14 +26,14 @@ export function CategoryPicker({ item }: { item: Item }) {
 
 	const setCategory = useCallback(
 		(categoryId: string) => {
-			groceries.setItemCategory(item, categoryId);
+			groceries.setItemCategory(item, categoryId, true);
 			groceriesState.justMovedItemId = item.get('id');
 		},
 		[item],
 	);
 
 	const onCreateCategory = (category: Category) => {
-		item.set('categoryId', category.get('id'));
+		groceries.setItemCategory(item, category?.get('id'));
 		setState('idle');
 	};
 
