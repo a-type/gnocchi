@@ -279,6 +279,21 @@ export const groceries = {
 				});
 				lastItemId = item.get('id');
 			}
+
+			// increment usage count for this food
+			const matchingSuggestion = await storage.suggestions.get(parsed.food)
+				.resolved;
+			if (matchingSuggestion) {
+				matchingSuggestion.set(
+					'usageCount',
+					matchingSuggestion.get('usageCount') + 1,
+				);
+			} else {
+				await storage.suggestions.put({
+					text: parsed.food,
+					usageCount: 1,
+				});
+			}
 		}
 
 		if (lastItemId) {
@@ -292,12 +307,12 @@ export const groceries = {
 			const scanned = await trpcClient.query('scans.recipe', {
 				url,
 			});
-			if (scanned.rawIngredients) {
+			if (scanned.rawIngredients?.length) {
 				await groceries.addItems(scanned.rawIngredients, {
 					url,
 					title: scanned.title || 'Recipe',
 				});
-			} else if (scanned.detailedIngredients) {
+			} else if (scanned.detailedIngredients?.length) {
 				await groceries.addItems(
 					scanned.detailedIngredients.map((i) => i.original),
 					{
@@ -305,11 +320,19 @@ export const groceries = {
 						title: scanned.title || 'Recipe',
 					},
 				);
+			} else {
+				toast.error(
+					"Bummer, we couldn't detect the ingredients in this recipe.",
+				);
 			}
 		} catch (err) {
 			if (err instanceof TRPCClientError && err.message === 'FORBIDDEN') {
 				// TODO: pop subscription prompt
 				toast.error('You must subscribe to add recipe URLs');
+			} else {
+				toast.error(
+					"Bummer, we couldn't detect the ingredients in this recipe.",
+				);
 			}
 		}
 	},

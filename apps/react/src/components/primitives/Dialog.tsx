@@ -60,6 +60,19 @@ const StyledContent = styled('div', {
 		maxWidth: '450px',
 		maxHeight: '85vh',
 	},
+
+	variants: {
+		width: {
+			lg: {
+				'@md': {
+					maxWidth: '800px',
+				},
+			},
+			md: {
+				maxWidth: '600px',
+			},
+		},
+	},
 });
 const StyledContentContent = styled(DialogPrimitive.Content, {
 	backgroundColor: 'white',

@@ -6,5 +6,8 @@ export async function isSubscribed(session: Session | null) {
 	const plan = await prisma.plan.findUnique({
 		where: { id: session.planId },
 	});
-	return plan?.subscriptionStatus === 'active';
+	return (
+		plan?.subscriptionStatus === 'active' ||
+		plan?.subscriptionStatus === 'trialing'
+	);
 }

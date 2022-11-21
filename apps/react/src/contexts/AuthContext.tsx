@@ -119,3 +119,8 @@ export function AuthProvider(props: { children: ReactNode }) {
 export function useAuth() {
 	return React.useContext(AuthContext);
 }
+
+export function useIsSubscribed() {
+	const { isSubscribed } = React.useContext(AuthContext);
+	return isSubscribed;
+}

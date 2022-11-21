@@ -1,10 +1,4 @@
 import { Box, Button, Span } from '@/components/primitives/index.js';
-import {
-	Popover,
-	PopoverArrow,
-	PopoverContent,
-	PopoverTrigger,
-} from '@/components/primitives/Popover.js';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { css, styled } from '@/stitches.config.js';
@@ -13,16 +7,12 @@ import {
 	ArrowLeftIcon,
 	Cross1Icon,
 	ExclamationTriangleIcon,
-	HamburgerMenuIcon,
 	GlobeIcon,
 } from '@radix-ui/react-icons';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Tooltip } from '../primitives/Tooltip.js';
-import { InviteLinkButton } from './InviteLinkButton.js';
-import { LogoutButton } from './LogoutButton.js';
-import { ManageSubscriptionButton } from './ManageSubscriptionButton.js';
 import { People } from './People.js';
-import { StartSignupDialog } from './StartSignupDialog.js';
+import { state as signupState } from './StartSignupDialog.js';
 
 export function SyncMenu() {
 	const { session, error, isSubscribed } = useAuth();
@@ -102,15 +92,16 @@ function AnonymousSyncMenu() {
 	return (
 		<SubscribeBanner collapsed={collapsed}>
 			{!collapsed ? (
-				<StartSignupDialog>
-					<Button
-						color={collapsed ? 'ghost' : 'primary'}
-						size={collapsed ? 'small' : 'default'}
-						css={{ gridArea: 'cta', gap: '$2' }}
-					>
-						Subscribe
-					</Button>
-				</StartSignupDialog>
+				<Button
+					onClick={() => {
+						signupState.status = 'open';
+					}}
+					color={collapsed ? 'ghost' : 'primary'}
+					size={collapsed ? 'small' : 'default'}
+					css={{ gridArea: 'cta', gap: '$2' }}
+				>
+					Subscribe
+				</Button>
 			) : hasBeenCollapsed ? (
 				<Box direction="row" gap={3} align="center">
 					<ArrowLeftIcon />

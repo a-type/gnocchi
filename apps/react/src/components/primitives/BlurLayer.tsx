@@ -19,11 +19,17 @@ export const BlurLayer = styled('div', {
 	right: '-$$spread',
 	bottom: '-$$spread',
 	zIndex: '-1',
-	'@media (prefers-reduced-motion: no-preference)': {
-		animationDuration: '400ms',
-		animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-		animationFillMode: 'forwards',
-		animationName: fadeIn,
-		willChange: 'opacity',
+	display: 'none',
+
+	'*[data-state="open"] + &': {
+		display: 'block',
+
+		'@media (prefers-reduced-motion: no-preference)': {
+			animationDuration: '400ms',
+			animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+			animationFillMode: 'forwards',
+			animationName: fadeIn,
+			willChange: 'opacity',
+		},
 	},
 });

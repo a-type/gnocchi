@@ -100,10 +100,10 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lo-fi/cli': ^1.4.0
-      '@lo-fi/common': ^1.3.0
+      '@lo-fi/cli': ^1.4.1
+      '@lo-fi/common': ^1.3.1
       '@lo-fi/react': ^4.0.0
-      '@lo-fi/web': ^1.3.1
+      '@lo-fi/web': ^1.3.2
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -142,6 +142,7 @@ importers:
       csstype: ^3.1.0
       cuid: ^2.1.8
       dotenv: ^16.0.1
+      downshift: ^7.0.1
       express: ^4.18.1
       formik: ^2.2.9
       fractional-indexing: ^3.0.1
@@ -175,10 +176,10 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lo-fi/cli': 1.4.0
-      '@lo-fi/common': 1.3.0
-      '@lo-fi/react': 4.0.0_qnn6zpycxysoxq2xyxsm64r3mq
-      '@lo-fi/web': 1.3.1
+      '@lo-fi/cli': 1.4.1
+      '@lo-fi/common': 1.3.1
+      '@lo-fi/react': 4.0.0_kzv3gxygvvimdewgqt7sg242yu
+      '@lo-fi/web': 1.3.2
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -208,6 +209,7 @@ importers:
       copy-to-clipboard: 3.3.2
       csstype: 3.1.0
       cuid: 2.1.8
+      downshift: 7.0.1_react@18.2.0
       formik: 2.2.9_react@18.2.0
       fractional-indexing: 3.0.1
       parse-fraction: 1.2.1
@@ -1767,8 +1769,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lo-fi/cli/1.4.0:
-    resolution: {integrity: sha512-WvbYPXYY0COYmfxD2hUK0n9LHlxVJMKEys2G7HioqBv/DVNLQFI1eKXTmI2c/u2lF3xCpLWAbhDg3Zzqp/e+NA==}
+  /@lo-fi/cli/1.4.1:
+    resolution: {integrity: sha512-NgFSVzIvuL+jGMXXZgdALF2Om2HT2UMcm1YsyoktSDxVeRyV3TAWAjM2YcRoy2KQT6XkaAix+Wn35KVTsTR4Qw==}
     hasBin: true
     dependencies:
       '@swc/core': 1.3.10
@@ -1784,14 +1786,21 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/4.0.0_qnn6zpycxysoxq2xyxsm64r3mq:
+  /@lo-fi/common/1.3.1:
+    resolution: {integrity: sha512-CAexzXMpTdYw7UTktdaTt7XzP9TbSFfV87Dlv2qGhjIlimU84BiHRyWXzaEGEStVXrA0FjHxaTUNdpKGGYadkA==}
+    dependencies:
+      fast-json-patch: 3.1.1
+      uuid: 8.3.2
+    dev: false
+
+  /@lo-fi/react/4.0.0_kzv3gxygvvimdewgqt7sg242yu:
     resolution: {integrity: sha512-SbYkX78oRLbcThYzE07DpJlENBlRLvaWRKuxB2sgx1el9dKW5+/oIfxWAa32WBfgWYjIKjgf25mAYQjIsbJX+g==}
     peerDependencies:
       '@lo-fi/web': ^1.3.0
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 1.3.0
-      '@lo-fi/web': 1.3.1
+      '@lo-fi/web': 1.3.2
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
@@ -1809,10 +1818,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.3.1:
-    resolution: {integrity: sha512-EqgLUPMyCuhasS6laH7FaJH3C+/9q6Nj6FerTg4pPc0wodqp3xv71ByBUvwh77aBeWIwjghDw7knfIbZ1Zw+Jg==}
+  /@lo-fi/web/1.3.2:
+    resolution: {integrity: sha512-a7LOPo5eiMBxP+gCA4QqlRIuzjOOBplRIvsv4pcydypm1r7UflKbJludkcPfj8gHERPJA2amJ8cbzJOff1rKvw==}
     dependencies:
-      '@lo-fi/common': 1.3.0
+      '@lo-fi/common': 1.3.1
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false
@@ -3620,6 +3629,10 @@ packages:
     engines: {node: '>=4.0.0'}
     dev: true
 
+  /compute-scroll-into-view/1.0.17:
+    resolution: {integrity: sha512-j4dx+Fb0URmzbwwMUrhqWM2BEWHdFGx+qZ9qqASHRPqvTYdqvWnHg0H1hIbcyLnvgnoNAVMlwkepyqM3DaIFUg==}
+    dev: false
+
   /concat-map/0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
@@ -3895,6 +3908,19 @@ packages:
     resolution: {integrity: sha512-1K6hR6wtk2FviQ4kEiSjFiH5rpzEVi8WW0x96aztHVMhEspNpc4DVOUTEHtEva5VThQ8IaBX1Pe4gSzpVVUsKQ==}
     engines: {node: '>=12'}
     dev: true
+
+  /downshift/7.0.1_react@18.2.0:
+    resolution: {integrity: sha512-AdFU8qJjUg9WZaLKzh7xAPfEwAB0dSqDGb7/Gnx/teldUXcNlaZrxhymOWedzDV+62xphMVustttAngmG33pXw==}
+    peerDependencies:
+      react: '>=16.12.0'
+    dependencies:
+      '@babel/runtime': 7.18.9
+      compute-scroll-into-view: 1.0.17
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-is: 17.0.2
+      tslib: 2.4.0
+    dev: false
 
   /draco3d/1.5.5:
     resolution: {integrity: sha512-JVuNV0EJzD3LBYhGyIXJLeBID/EVtmFO1ZNhAYflTgiMiAJlbhXQmRRda/azjc8MRVMHh0gqGhiqHUo5dIXM8Q==}
@@ -6120,6 +6146,10 @@ packages:
 
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+    dev: false
+
+  /react-is/17.0.2:
+    resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
     dev: false
 
   /react-merge-refs/1.1.0:

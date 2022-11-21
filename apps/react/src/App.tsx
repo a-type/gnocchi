@@ -16,6 +16,7 @@ import { SplashPage } from './pages/SplashPage.jsx';
 import { AdminPage } from './pages/AdminPage.jsx';
 import { RecipesPage } from './pages/RecipesPage.jsx';
 import { RecipeEditPage } from './pages/RecipeEditPage.jsx';
+import { StartSignupDialog } from './components/sync/StartSignupDialog.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -42,7 +43,8 @@ export function App() {
 										<Route path="/admin" element={<AdminPage />} />
 										<Route path="*" element={<NotFoundPage />} />
 									</Routes>
-									<Toaster />
+									<Toaster position="bottom-center" />
+									<StartSignupDialog />
 								</AuthProvider>
 							</BrowserRouter>
 						</QueryClientProvider>

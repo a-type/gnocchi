@@ -78,6 +78,12 @@ export interface RecipeCollectionIdRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipeCollectionIdStartsWithFilter {
+  where: "collectionId";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
 export interface RecipeSlugMatchFilter {
   where: "slug";
   equals: string;
@@ -90,6 +96,12 @@ export interface RecipeSlugRangeFilter {
   gt?: string;
   lte?: string;
   lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeSlugStartsWithFilter {
+  where: "slug";
+  startsWith: string;
   order?: "asc" | "desc";
 }
 
@@ -111,8 +123,10 @@ export interface RecipeUpdatedAtRangeFilter {
 export type RecipeFilter =
   | RecipeCollectionIdMatchFilter
   | RecipeCollectionIdRangeFilter
+  | RecipeCollectionIdStartsWithFilter
   | RecipeSlugMatchFilter
   | RecipeSlugRangeFilter
+  | RecipeSlugStartsWithFilter
   | RecipeUpdatedAtMatchFilter
   | RecipeUpdatedAtRangeFilter;
 

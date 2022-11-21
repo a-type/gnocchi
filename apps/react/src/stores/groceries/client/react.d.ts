@@ -9,6 +9,8 @@ import type {
   ItemFilter,
   FoodCategoryAssignment,
   FoodCategoryAssignmentFilter,
+  Suggestion,
+  SuggestionFilter,
 } from "./index.js";
 import type {
   UserInfo,
@@ -53,6 +55,10 @@ export interface GeneratedHooks {
   useAllFoodCategoryAssignments: (config?: {
     index: FoodCategoryAssignmentFilter;
   }) => FoodCategoryAssignment[];
+
+  useSuggestion: (id: string) => Suggestion;
+  useOneSuggestion: (config: { index: SuggestionFilter }) => Suggestion;
+  useAllSuggestions: (config?: { index: SuggestionFilter }) => Suggestion[];
 }
 
 export const hooks: GeneratedHooks;

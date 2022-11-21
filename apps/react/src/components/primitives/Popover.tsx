@@ -1,6 +1,7 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import React, {
 	ComponentPropsWithoutRef,
+	forwardRef,
 	Ref,
 	RefObject,
 	useLayoutEffect,
@@ -11,6 +12,7 @@ import React, {
 import { keyframes, styled } from '@/stitches.config.js';
 import { createPortal } from 'react-dom';
 import { BlurLayer } from './BlurLayer.js';
+import useMergedRef from '@/hooks/useMergedRef.js';
 
 const slideUpAndFade = keyframes({
 	'0%': { opacity: 0, transform: 'translateY(2px)' },
@@ -40,6 +42,8 @@ const StyledContent = styled(PopoverPrimitive.Content, {
 	boxShadow:
 		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
 	border: '1px solid $black',
+	opacity: 0,
+	display: 'none',
 	'@media (prefers-reduced-motion: no-preference)': {
 		animationDuration: '400ms',
 		animationTimingFunction: '$transitions$springy',
@@ -52,8 +56,24 @@ const StyledContent = styled(PopoverPrimitive.Content, {
 			'&[data-side="left"]': { animationName: slideRightAndFade },
 		},
 	},
+	'&[data-state="open"]': {
+		opacity: 1,
+		display: 'block',
+	},
 	'&:focus': {
 		// boxShadow: `hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px, 0 0 0 2px $colors$lemon`,
+	},
+
+	variants: {
+		padding: {
+			none: { padding: 0 },
+			default: { padding: '$5' },
+		},
+		radius: {
+			none: { borderRadius: 0 },
+			default: { borderRadius: '$xl' },
+			md: { borderRadius: '$md' },
+		},
 	},
 });
 
@@ -90,21 +110,32 @@ export const PopoverTrigger = styled(PopoverPrimitive.Trigger, {
 });
 export const PopoverArrow = StyledArrow;
 export const PopoverClose = StyledClose;
+export const PopoverAnchor = styled(PopoverPrimitive.Anchor, {
+	'&[data-state="open"]': {
+		position: 'relative',
+		zIndex: 'calc($menu + 1)',
+	},
+});
 
-export const PopoverContent = ({
-	children,
-	...props
-}: ComponentPropsWithoutRef<typeof StyledContent>) => {
+export const PopoverContent = forwardRef<
+	HTMLDivElement,
+	ComponentPropsWithoutRef<typeof StyledContent> & { disableBlur?: boolean }
+>(function PopoverContent(
+	{ children, forceMount, disableBlur, ...props },
+	ref,
+) {
 	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
+	const mergedRef = useMergedRef(ref, contentRef);
 	return (
-		<PopoverPrimitive.Portal>
+		<PopoverPrimitive.Portal forceMount={forceMount}>
 			<>
-				<StyledContent {...props} ref={contentRef}>
+				<StyledContent {...props} forceMount={forceMount} ref={mergedRef}>
 					{children}
 				</StyledContent>
-				{contentElement &&
+				{!disableBlur &&
+					contentElement &&
 					createPortal(<BlurLayer />, contentElement.parentElement!)}
 			</>
 		</PopoverPrimitive.Portal>
 	);
-};
+});

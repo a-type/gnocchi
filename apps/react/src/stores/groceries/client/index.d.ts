@@ -38,9 +38,15 @@ export interface CategorySortKeyRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface CategorySortKeyStartsWithFilter {
+  where: "sortKey";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
 export type CategoryFilter =
   | CategorySortKeyMatchFilter
-  | CategorySortKeyRangeFilter;
+  | CategorySortKeyRangeFilter
+  | CategorySortKeyStartsWithFilter;
 
 export interface ItemSnapshot {
   id: string;
@@ -102,6 +108,12 @@ export interface ItemCategoryIdRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface ItemCategoryIdStartsWithFilter {
+  where: "categoryId";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
 export interface ItemFoodMatchFilter {
   where: "food";
   equals: string;
@@ -114,6 +126,12 @@ export interface ItemFoodRangeFilter {
   gt?: string;
   lte?: string;
   lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface ItemFoodStartsWithFilter {
+  where: "food";
+  startsWith: string;
   order?: "asc" | "desc";
 }
 
@@ -141,14 +159,22 @@ export interface ItemPurchasedRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface ItemPurchasedStartsWithFilter {
+  where: "purchased";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
 export type ItemFilter =
   | ItemCategoryIdMatchFilter
   | ItemCategoryIdRangeFilter
+  | ItemCategoryIdStartsWithFilter
   | ItemFoodMatchFilter
   | ItemFoodRangeFilter
+  | ItemFoodStartsWithFilter
   | ItemCategoryIdSortKeyCompoundFilter
   | ItemPurchasedMatchFilter
-  | ItemPurchasedRangeFilter;
+  | ItemPurchasedRangeFilter
+  | ItemPurchasedStartsWithFilter;
 
 export interface FoodCategoryAssignmentSnapshot {
   id: string;
@@ -180,6 +206,12 @@ export interface FoodCategoryAssignmentFoodNameRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface FoodCategoryAssignmentFoodNameStartsWithFilter {
+  where: "foodName";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
 export interface FoodCategoryAssignmentCategoryIdMatchFilter {
   where: "categoryId";
   equals: string;
@@ -195,11 +227,48 @@ export interface FoodCategoryAssignmentCategoryIdRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface FoodCategoryAssignmentCategoryIdStartsWithFilter {
+  where: "categoryId";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
 export type FoodCategoryAssignmentFilter =
   | FoodCategoryAssignmentFoodNameMatchFilter
   | FoodCategoryAssignmentFoodNameRangeFilter
+  | FoodCategoryAssignmentFoodNameStartsWithFilter
   | FoodCategoryAssignmentCategoryIdMatchFilter
-  | FoodCategoryAssignmentCategoryIdRangeFilter;
+  | FoodCategoryAssignmentCategoryIdRangeFilter
+  | FoodCategoryAssignmentCategoryIdStartsWithFilter;
+
+export interface SuggestionSnapshot {
+  text: string;
+  usageCount: number;
+}
+
+export interface SuggestionInit {
+  text: string;
+  usageCount?: number;
+}
+export type Suggestion = ObjectEntity<SuggestionInit>;
+
+export interface SuggestionUsageCountMatchFilter {
+  where: "usageCount";
+  equals: number;
+  order?: "asc" | "desc";
+}
+
+export interface SuggestionUsageCountRangeFilter {
+  where: "usageCount";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
+}
+
+export type SuggestionFilter =
+  | SuggestionUsageCountMatchFilter
+  | SuggestionUsageCountRangeFilter;
 
 interface Collection<
   Document extends ObjectEntity<any>,
@@ -234,6 +303,13 @@ export class Client {
     FoodCategoryAssignmentSnapshot,
     FoodCategoryAssignmentInit,
     FoodCategoryAssignmentFilter
+  >;
+
+  readonly suggestions: Collection<
+    Suggestion,
+    SuggestionSnapshot,
+    SuggestionInit,
+    SuggestionFilter
   >;
 
   presence: Storage["sync"]["presence"];

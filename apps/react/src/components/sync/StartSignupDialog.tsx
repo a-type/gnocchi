@@ -1,5 +1,6 @@
 import { Cross1Icon } from '@radix-ui/react-icons';
 import React, { ReactNode } from 'react';
+import { proxy, useSnapshot } from 'valtio';
 import {
 	Dialog,
 	DialogClose,
@@ -10,15 +11,18 @@ import {
 import { Box, Button, H2, P, Span } from '../primitives/primitives.js';
 import { LoginButton } from './LoginButton.js';
 
-export interface StartSignupDialogProps {
-	children: ReactNode;
-}
+export interface StartSignupDialogProps {}
 
-export function StartSignupDialog({ children }: StartSignupDialogProps) {
+export const state = proxy({
+	status: 'closed' as 'closed' | 'open',
+});
+
+export function StartSignupDialog({}: StartSignupDialogProps) {
+	const { status } = useSnapshot(state);
+
 	return (
-		<Dialog>
-			<DialogTrigger asChild>{children}</DialogTrigger>
-			<DialogContent>
+		<Dialog open={status !== 'closed'}>
+			<DialogContent width="md">
 				<Box direction="row" align="start" gap={2}>
 					<DialogTitle css={{ flex: 1 }}>
 						Subscribe for sync &amp; more

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import * as MenuPrimitive from '@radix-ui/react-menu';
 import { keyframes, styled } from '@/stitches.config.js';
 import { createPortal } from 'react-dom';
 import { BlurLayer } from './BlurLayer.js';
@@ -82,12 +81,6 @@ const StyledCheckboxItem = styled(DropdownMenuPrimitive.CheckboxItem, {
 const StyledRadioItem = styled(DropdownMenuPrimitive.RadioItem, {
 	...itemStyles,
 });
-const StyledTriggerItem = styled(DropdownMenuPrimitive.TriggerItem, {
-	'&[data-state="open"]': {
-		zIndex: '$modal',
-	},
-	...itemStyles,
-});
 
 const StyledLabel = styled(DropdownMenuPrimitive.Label, {
 	paddingLeft: 25,
@@ -134,19 +127,20 @@ export const DropdownMenuCheckboxItem = StyledCheckboxItem;
 export const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 export const DropdownMenuRadioItem = StyledRadioItem;
 export const DropdownMenuItemIndicator = StyledItemIndicator;
-export const DropdownMenuTriggerItem = StyledTriggerItem;
 export const DropdownMenuLabel = StyledLabel;
 export const DropdownMenuSeparator = StyledSeparator;
 export const DropdownMenuArrow = StyledArrow;
-export const DropdownMenuAnchor = styled(MenuPrimitive.Anchor, {});
 
 export const DropdownMenuContent = ({
 	children,
+	forceMount,
 	...props
-}: DropdownMenuPrimitive.DropdownMenuContentProps) => {
+}: DropdownMenuPrimitive.DropdownMenuContentProps & {
+	forceMount?: boolean;
+}) => {
 	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
 	return (
-		<StyledPortal>
+		<StyledPortal forceMount={forceMount}>
 			<>
 				<StyledContent {...props} ref={contentRef}>
 					{children}

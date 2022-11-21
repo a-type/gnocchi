@@ -109,11 +109,26 @@ const items = collection({
         }
     }
 });
+const suggestions = collection({
+    name: 'suggestion',
+    primaryKey: 'text',
+    fields: {
+        text: {
+            type: 'string'
+        },
+        usageCount: {
+            type: 'number',
+            default: 0,
+            indexed: true
+        }
+    }
+});
 export default schema({
-    version: 6,
+    version: 7,
     collections: {
         categories: categories,
         items: items,
-        foodCategoryAssignments: foodCategoryAssignments
+        foodCategoryAssignments: foodCategoryAssignments,
+        suggestions
     }
 });

@@ -1,6 +1,6 @@
 import DeleteCheckedButton from '@/components/groceries/DeleteCheckedButton.js';
 import GroceryList from '@/components/groceries/GroceryList.js';
-import { GroceryListAdd } from '@/components/groceries/GroceryListAdd.js';
+import { GroceryListAdd } from '@/components/groceries/addBar/GroceryListAdd.js';
 import { Box } from '@/components/primitives/primitives.js';
 import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js';
 import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';

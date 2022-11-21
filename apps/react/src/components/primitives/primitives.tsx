@@ -382,8 +382,7 @@ export const H2 = styled('h2' as const, {
 
 	fontSize: '$lg',
 	fontFamily: '$title',
-	fontWeight: 'normal',
-	fontStyle: 'italic',
+	fontWeight: 'bold',
 	color: '$gray90',
 
 	variants: {

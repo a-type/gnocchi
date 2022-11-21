@@ -6,6 +6,7 @@ import React, {
 	useEffect,
 	useRef,
 	Ref,
+	forwardRef,
 } from 'react';
 import { Button, Input, TextArea, TextAreaProps } from './primitives.js';
 import { Form as FormikForm } from 'formik';
@@ -50,39 +51,52 @@ export type TextFieldProps = {
 	inputRef?: Ref<HTMLInputElement>;
 } & ComponentProps<typeof Input>;
 
-export function TextField({
-	name,
-	label,
-	css,
-	className,
-	autoFocusDelay,
-	autoFocus,
-	inputRef,
-	...rest
-}: TextFieldProps) {
-	const [props] = useField(name);
-	const innerInputRef = useRef<HTMLInputElement>(null);
+export const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
+	function TextField(
+		{
+			name,
+			label,
+			css,
+			className,
+			autoFocusDelay,
+			autoFocus,
+			inputRef,
+			onChange,
+			onFocus,
+			onBlur,
+			...rest
+		},
+		ref,
+	) {
+		const [props] = useField({
+			name,
+			onChange,
+			onFocus,
+			onBlur,
+		});
+		const innerInputRef = useRef<HTMLInputElement>(null);
 
-	useEffect(() => {
-		if (autoFocusDelay) {
-			setTimeout(() => {
-				if (innerInputRef.current) innerInputRef.current.focus();
-			}, autoFocusDelay);
-		}
-	}, [autoFocusDelay]);
+		useEffect(() => {
+			if (autoFocusDelay) {
+				setTimeout(() => {
+					if (innerInputRef.current) innerInputRef.current.focus();
+				}, autoFocusDelay);
+			}
+		}, [autoFocusDelay]);
 
-	return (
-		<FieldGroup className={className} css={css}>
-			{label && <FieldLabel css={{ mb: '$1' }}>{label}</FieldLabel>}
-			<Input
-				{...props}
-				{...rest}
-				autoFocus={autoFocus}
-				ref={useMergedRef(inputRef || emptyRef, innerInputRef)}
-			/>
-		</FieldGroup>
-	);
-}
+		return (
+			<FieldGroup className={className} css={css} ref={ref}>
+				{label && <FieldLabel css={{ mb: '$1' }}>{label}</FieldLabel>}
+				<Input
+					{...props}
+					{...rest}
+					autoFocus={autoFocus}
+					ref={useMergedRef(inputRef || emptyRef, innerInputRef)}
+				/>
+			</FieldGroup>
+		);
+	},
+);
 
 export type TextAreaFieldProps = {
 	name: string;

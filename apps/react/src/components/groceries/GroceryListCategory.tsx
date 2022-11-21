@@ -6,6 +6,7 @@ import { memo, useCallback, useRef } from 'react';
 import { H2 } from '../primitives/index.js';
 import { useIsDragging } from './dndHooks.js';
 import { GroceryListItemDraggable } from './items/GroceryListItem.js';
+import * as classes from './GroceryListCategory.css.js';
 
 const EMPTY_DROPPABLE_SIZE = 48;
 
@@ -43,9 +44,9 @@ export function GroceryListCategory({
 			ref={finalRef}
 			{...rest}
 		>
-			<H2 size="micro" css={{ m: '$2', fontFamily: '$sans' }}>
+			<h2 className={classes.title}>
 				{category?.get('name') ?? 'Uncategorized'}
-			</H2>
+			</h2>
 			<CategoryItems isItemDragging={isDragging}>
 				{items?.map((item, index) => {
 					const prevItem = items[index - 1];
