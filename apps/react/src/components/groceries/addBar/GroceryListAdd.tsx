@@ -14,7 +14,8 @@ import {
 	PopoverAnchor,
 	PopoverContent,
 } from '@/components/primitives/Popover.jsx';
-import Downshift, {
+import {
+	default as Downshift,
 	useCombobox,
 	UseComboboxState,
 	UseComboboxStateChangeOptions,
@@ -35,7 +36,10 @@ function stateReducer(
 	state: UseComboboxState<string>,
 	{ type, changes }: UseComboboxStateChangeOptions<string>,
 ) {
-	if (type === '__input_keydown_enter__' && !changes.selectedItem) {
+	if (
+		type === useCombobox.stateChangeTypes.InputKeyDownEnter &&
+		!changes.selectedItem
+	) {
 		return {
 			...changes,
 			selectedItem: changes.inputValue,
@@ -131,7 +135,6 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 				return item ?? '';
 			},
 			async onSelectedItemChange({ selectedItem }) {
-				console.debug('Selected item', selectedItem);
 				if (selectedItem) {
 					if (isUrl(selectedItem)) {
 						if (isSubscribed) {
