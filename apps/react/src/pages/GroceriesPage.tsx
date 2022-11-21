@@ -48,7 +48,9 @@ export function GroceriesPage() {
 							mb: '$6',
 						}}
 					>
-						<GroceryListAdd />
+						<Suspense fallback={null}>
+							<GroceryListAdd />
+						</Suspense>
 						<Suspense fallback={null}>
 							<PositionedDeleteChecked />
 						</Suspense>
