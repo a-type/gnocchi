@@ -48,6 +48,10 @@ function stateReducer(
 	return changes;
 }
 
+function preventDefault(ev: any) {
+	ev.preventDefault();
+}
+
 const randomPlaceholders = [
 	'Add an item...',
 	'Add an item...',
@@ -203,8 +207,7 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 					radius="md"
 					align="start"
 					sideOffset={12}
-					onOpenAutoFocus={false}
-					onCloseAutoFocus={false}
+					onOpenAutoFocus={preventDefault}
 					padding="none"
 					{...getMenuProps({
 						ref: contentRef,

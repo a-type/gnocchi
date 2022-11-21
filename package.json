@@ -11,7 +11,8 @@
 		"build": "turbo run build",
 		"test": "turbo run test",
 		"prisma": "pnpm --filter @aglio/prisma run prisma",
-		"link-lofi": "turbo run link-lofi"
+		"link-lofi": "turbo run link-lofi",
+		"up-lofi": "pnpm --recursive update \"@lo-fi/*\" --latest"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",
