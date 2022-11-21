@@ -100,7 +100,10 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 			} else {
 				return suggestions
 					.filter((suggestion) =>
-						suggestion.get('text').startsWith(suggestionPrompt),
+						suggestion
+							.get('text')
+							.toLocaleLowerCase()
+							.startsWith(suggestionPrompt.toLocaleLowerCase()),
 					)
 					.slice(0, 10)
 					.map((suggestion) => suggestion.get('text'));
@@ -128,6 +131,7 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 				return item ?? '';
 			},
 			async onSelectedItemChange({ selectedItem }) {
+				console.debug('Selected item', selectedItem);
 				if (selectedItem) {
 					if (isUrl(selectedItem)) {
 						if (isSubscribed) {

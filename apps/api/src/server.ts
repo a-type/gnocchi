@@ -19,7 +19,8 @@ app.use(
 			'https://aglio.gfor.rest',
 			'https://aglio.app',
 			'https://www.aglio.app',
-		],
+			process.env.CORS_ALLOW_ORIGIN,
+		].filter((o): o is string => !!o),
 		credentials: true,
 	}),
 );
