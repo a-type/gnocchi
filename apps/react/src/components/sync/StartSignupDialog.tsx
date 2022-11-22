@@ -21,7 +21,14 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 	const { status } = useSnapshot(state);
 
 	return (
-		<Dialog open={status !== 'closed'}>
+		<Dialog
+			open={status !== 'closed'}
+			onOpenChange={(open) => {
+				if (!open) {
+					state.status = 'closed';
+				}
+			}}
+		>
 			<DialogContent width="md">
 				<Box direction="row" align="start" gap={2}>
 					<DialogTitle css={{ flex: 1 }}>

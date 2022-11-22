@@ -13,6 +13,7 @@ import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { TRPCClientError } from '@trpc/client';
 import { toast } from 'react-hot-toast';
+import { groceriesState } from '@/components/groceries/state.js';
 
 export type { Item, Category, FoodCategoryAssignment } from './client/index.js';
 
@@ -69,12 +70,6 @@ export const groceries = {
 	deleteItems: async (ids: string[]) => {
 		const storage = await _groceries;
 		return storage.items.deleteAll(ids);
-	},
-	setItemPurchasedQuantity: async (item: Item, quantity: number) => {
-		item.set('purchasedQuantity', quantity);
-		(await _groceries).presence.update({
-			lastInteractedItem: item.get('id'),
-		});
 	},
 	// TODO: incorporate this kind of advanced upsert into lofi?
 	upsertFoodCategoryAssignment: async (
@@ -133,14 +128,33 @@ export const groceries = {
 	},
 	toggleItemPurchased: async (item: Item) => {
 		const storage = await _groceries;
-		if (item.get('purchasedQuantity') >= item.get('totalQuantity')) {
-			item.set('purchasedQuantity', 0);
+		if (item.get('purchasedAt')) {
+			item.set('purchasedAt', null);
 		} else {
-			item.set('purchasedQuantity', item.get('totalQuantity'));
+			await groceries.purchaseItem(item);
 		}
 		storage.presence.update({
 			lastInteractedItem: item.get('id'),
 		});
+	},
+	purchaseItem: async (item: Item) => {
+		const storage = await _groceries;
+		// also set expiration based on food category
+		const categoryId = item.get('categoryId');
+		const category = categoryId
+			? await storage.categories.get(categoryId).resolved
+			: null;
+		const expirationDays = category?.get('expirationDays');
+		item.set('purchasedAt', Date.now());
+		if (expirationDays) {
+			item.set('expiredAt', Date.now() + expirationDays * 24 * 60 * 60 * 1000);
+		}
+		groceriesState.recentlyPurchasedItems.add(item.get('id'));
+	},
+	purchaseItems: async (items: Item[]) => {
+		for (const item of items) {
+			await groceries.purchaseItem(item);
+		}
 	},
 	updateItem: async (
 		item: Item,
@@ -201,8 +215,12 @@ export const groceries = {
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
 			const firstMatch = await storage.items.findOne({
-				where: 'food',
-				equals: parsed.food,
+				where: 'purchased_food',
+				match: {
+					purchased: 'no',
+					food: parsed.food,
+				},
+				order: 'asc',
 			}).resolved;
 			if (firstMatch) {
 				const itemId = firstMatch.get('id');

@@ -14,12 +14,14 @@ export interface CategorySnapshot {
   id: string;
   name: string;
   sortKey: string;
+  expirationDays: number | null;
 }
 
 export interface CategoryInit {
   id?: string;
   name: string;
   sortKey?: string;
+  expirationDays?: number | null;
 }
 export type Category = ObjectEntity<CategoryInit>;
 
@@ -53,7 +55,6 @@ export interface ItemSnapshot {
   categoryId: string | null;
   createdAt: number;
   totalQuantity: number;
-  purchasedQuantity: number;
   unit: string;
   food: string;
   sortKey: string;
@@ -61,7 +62,10 @@ export interface ItemSnapshot {
     text: string;
     url: string | null;
     title: string | null;
+    quantity: number | null;
   }>;
+  purchasedAt: number | null;
+  expiredAt: number | null;
 }
 
 export interface ItemInit {
@@ -69,7 +73,6 @@ export interface ItemInit {
   categoryId?: string | null;
   createdAt?: number;
   totalQuantity: number;
-  purchasedQuantity?: number;
   unit: string;
   food: string;
   sortKey: string;
@@ -77,7 +80,10 @@ export interface ItemInit {
     text: string;
     url?: string | null;
     title?: string | null;
+    quantity?: number | null;
   }>;
+  purchasedAt?: number | null;
+  expiredAt?: number | null;
 }
 export type Item = ObjectEntity<ItemInit>;
 
@@ -85,12 +91,14 @@ export type ItemInputs = ListEntity<{
   text: string;
   url: string | null;
   title: string | null;
+  quantity: number | null;
 }>;
 
 export type ItemInputsItem = ObjectEntity<{
   text: string;
   url: string | null;
   title: string | null;
+  quantity: number | null;
 }>;
 
 export interface ItemCategoryIdMatchFilter {
@@ -144,6 +152,15 @@ export interface ItemCategoryIdSortKeyCompoundFilter {
   order: "asc" | "desc";
 }
 
+export interface ItemPurchasedFoodCompoundFilter {
+  where: "purchased_food";
+  match: {
+    purchased?: string;
+    food?: string;
+  };
+  order: "asc" | "desc";
+}
+
 export interface ItemPurchasedMatchFilter {
   where: "purchased";
   equals: string;
@@ -172,6 +189,7 @@ export type ItemFilter =
   | ItemFoodRangeFilter
   | ItemFoodStartsWithFilter
   | ItemCategoryIdSortKeyCompoundFilter
+  | ItemPurchasedFoodCompoundFilter
   | ItemPurchasedMatchFilter
   | ItemPurchasedRangeFilter
   | ItemPurchasedStartsWithFilter;

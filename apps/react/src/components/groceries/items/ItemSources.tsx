@@ -1,23 +1,21 @@
-import React, { ComponentPropsWithoutRef } from 'react';
-import { Item, hooks } from '@/stores/groceries/index.js';
-import { styled } from '@/stitches.config.js';
+import { hooks, Item } from '@/stores/groceries/index.js';
 import { ObjectEntity } from '@lo-fi/web';
+import * as classes from './ItemSources.css.js';
 
-export interface ItemSourcesProps
-	extends ComponentPropsWithoutRef<typeof ItemSourcesRoot> {
+export interface ItemSourcesProps {
 	item: Item;
 }
 
 export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 	hooks.useWatch(item.get('inputs'));
 	return (
-		<ItemSourcesRoot {...rest}>
+		<ul className={classes.root} {...rest}>
 			{item.get('inputs').map((input) => (
-				<Li key={input.oid}>
+				<li className={classes.item} key={input.oid}>
 					<InputRenderer input={input} />
-				</Li>
+				</li>
 			))}
-		</ItemSourcesRoot>
+		</ul>
 	);
 }
 
@@ -51,21 +49,3 @@ function truncate(str: string, max = 20) {
 	}
 	return str;
 }
-
-const ItemSourcesRoot = styled('ul', {
-	listStyle: 'none',
-	padding: 0,
-	margin: 0,
-	fontSize: '$xs',
-	color: '$gray70',
-});
-
-const Li = styled('li', {
-	color: 'inherit',
-	fontSize: 'inherit',
-	display: 'inline',
-
-	'&:not(:last-child)::after': {
-		content: '", "',
-	},
-});

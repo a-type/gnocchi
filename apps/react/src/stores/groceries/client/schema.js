@@ -16,6 +16,14 @@ const categories = collection({
             type: 'string',
             indexed: true,
             default: 'a0'
+        },
+        /**
+		 * An estimate of how long items in this category
+		 * take to expire. If not specified, items will not
+		 * auto-expire.
+		 */ expirationDays: {
+            type: 'number',
+            nullable: true
         }
     }
 });
@@ -60,10 +68,6 @@ const items = collection({
         totalQuantity: {
             type: 'number'
         },
-        purchasedQuantity: {
-            type: 'number',
-            default: 0
-        },
         unit: {
             type: 'string'
         },
@@ -89,15 +93,32 @@ const items = collection({
                     title: {
                         type: 'string',
                         nullable: true
+                    },
+                    quantity: {
+                        type: 'number',
+                        nullable: true
                     }
                 }
             }
+        },
+        /**
+		 * Mark this when the item is purchased. It moves to the pantry.
+		 */ purchasedAt: {
+            type: 'number',
+            nullable: true
+        },
+        /**
+		 * This can be, and is, set in the future at the time of purchase
+		 * based on category expiration settings.
+		 */ expiredAt: {
+            type: 'number',
+            nullable: true
         }
     },
     synthetics: {
         purchased: {
             type: 'string',
-            compute: (doc)=>doc.totalQuantity > 0 && doc.purchasedQuantity >= doc.totalQuantity ? 'yes' : 'no'
+            compute: (doc)=>!!doc.purchasedAt ? 'yes' : 'no'
         }
     },
     compounds: {
@@ -105,6 +126,12 @@ const items = collection({
             of: [
                 'categoryId',
                 'sortKey'
+            ]
+        },
+        purchased_food: {
+            of: [
+                'purchased',
+                'food'
             ]
         }
     }
@@ -124,7 +151,7 @@ const suggestions = collection({
     }
 });
 export default schema({
-    version: 7,
+    version: 9,
     collections: {
         categories: categories,
         items: items,

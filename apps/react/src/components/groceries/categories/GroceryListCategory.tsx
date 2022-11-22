@@ -1,12 +1,14 @@
 import useMergedRef from '@/hooks/useMergedRef.js';
-import { keyframes, styled } from '@/stitches.config.js';
 import { Category, Item } from '@/stores/groceries/index.js';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { memo, useCallback, useRef } from 'react';
-import { H2 } from '../primitives/index.js';
-import { useIsDragging } from './dndHooks.js';
-import { GroceryListItemDraggable } from './items/GroceryListItem.js';
+import { useIsDragging } from '../dndHooks.js';
+import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
+import { clsx } from 'clsx';
 import * as classes from './GroceryListCategory.css.js';
+import { vars } from '@/theme.css.js';
+import { useSnapshot } from 'valtio';
+import { groceriesState } from '../state.js';
 
 const EMPTY_DROPPABLE_SIZE = 48;
 
@@ -18,7 +20,11 @@ export function GroceryListCategory({
 	category: Category | null;
 	items: Item[];
 }) {
-	const empty = !items || items?.length === 0;
+	const recentlyPurchased = useSnapshot(groceriesState.recentlyPurchasedItems);
+	const visibleItems = items.filter((item) => {
+		return !item.get('purchasedAt') || recentlyPurchased.has(item.get('id'));
+	});
+	const empty = visibleItems.length === 0;
 
 	const isDragging = useIsDragging();
 	const internalRef = useRef<HTMLDivElement>(null);
@@ -36,21 +42,21 @@ export function GroceryListCategory({
 	const finalRef = useMergedRef(internalRef, setNodeRef);
 
 	return (
-		<CategoryContainer
-			className="groceryCategory"
-			draggedOver={isOver}
-			isItemDragging={isDragging}
-			empty={empty}
+		<div
+			className={clsx('groceryCategory', classes.root)}
+			data-dragged-over={isOver}
+			data-is-item-dragging={isDragging}
+			data-is-empty={empty}
 			ref={finalRef}
 			{...rest}
 		>
 			<h2 className={classes.title}>
 				{category?.get('name') ?? 'Uncategorized'}
 			</h2>
-			<CategoryItems isItemDragging={isDragging}>
-				{items?.map((item, index) => {
-					const prevItem = items[index - 1];
-					const nextItem = items[index + 1];
+			<div className={classes.items} data-is-item-dragging={isDragging}>
+				{visibleItems.map((item, index) => {
+					const prevItem = visibleItems[index - 1];
+					const nextItem = visibleItems[index + 1];
 					return (
 						<MemoizedDraggableItem
 							key={item.get('id')}
@@ -60,8 +66,8 @@ export function GroceryListCategory({
 						/>
 					);
 				})}
-			</CategoryItems>
-		</CategoryContainer>
+			</div>
+		</div>
 	);
 }
 
@@ -129,12 +135,12 @@ function useDragExpansion({
 					{
 						height: `${element.clientHeight}px`,
 						opacity: empty ? 0 : 1,
-						marginBottom: empty ? 0 : 'var(--ag-space-4)',
+						marginBottom: empty ? 0 : vars.space[4],
 					},
 					{
 						height: `${EMPTY_DROPPABLE_SIZE}px`,
 						opacity: 1,
-						marginBottom: 'var(--ag-space-4)',
+						marginBottom: vars.space[4],
 					},
 				],
 				{
@@ -151,91 +157,3 @@ function useDragExpansion({
 }
 
 const MemoizedDraggableItem = memo(GroceryListItemDraggable);
-
-const popIn = keyframes({
-	'0%': {
-		opacity: 0,
-		transform: 'translateY(20px)',
-	},
-	'100%': {
-		opacity: 1,
-		transform: 'translateY(0px)',
-	},
-});
-
-const CategoryContainer = styled('div', {
-	display: 'flex',
-	flexDirection: 'column',
-	gap: '$1',
-	borderRadius: '$md',
-	backgroundColor: '$light',
-	overflow: 'hidden',
-	transition:
-		'box-shadow 0.2s $transitions$springy, transform 0.2s $transitions$springy, background-color 0.5s linear',
-
-	variants: {
-		draggedOver: {
-			true: {
-				backgroundColor: '$lemonLighter',
-				borderColor: '$lemonDark',
-			},
-			false: {
-				backgroundColor: '$light',
-			},
-		},
-		isItemDragging: {
-			true: {
-				boxShadow: '0 0 0 1px $colors$gray30',
-			},
-			false: {},
-		},
-		empty: {
-			true: {
-				height: 0,
-				opacity: 0,
-			},
-			false: {
-				mb: '$4',
-			},
-		},
-	},
-
-	compoundVariants: [
-		{
-			isItemDragging: true,
-			draggedOver: false,
-			css: {
-				transform: 'scale(0.95)',
-			},
-		},
-		{
-			empty: false,
-			draggedOver: false,
-			isItemDragging: false,
-			css: {
-				animationName: `${popIn}`,
-				animationDuration: `0.2s`,
-				animationTimingFunction: `$transitions$springy`,
-			},
-		},
-	],
-});
-
-const CategoryItems = styled('div', {
-	display: 'flex',
-	flexDirection: 'column',
-	gap: '$1',
-
-	transition: 'opacity 0.2s $transitions$springy',
-
-	variants: {
-		isItemDragging: {
-			true: {
-				opacity: 0,
-			},
-			false: {
-				opacity: 1,
-			},
-		},
-	},
-});

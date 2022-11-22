@@ -35,7 +35,7 @@ export const vars = createGlobalTheme(':root', {
 	fonts: {
 		sans: '"Inter", sans-serif',
 		serif: '"Domine", serif',
-		title: '"Inter", sans-serif',
+		title: '"Libre Baskerville", serif',
 	},
 	fontSizes: {
 		xs: '0.75rem',
@@ -98,6 +98,7 @@ export const vars = createGlobalTheme(':root', {
 	},
 	zIndices: {
 		menu: '100',
+		nav: '500',
 		dialog: '1000',
 		dialogBackdrop: '900',
 	},

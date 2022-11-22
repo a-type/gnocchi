@@ -5,15 +5,16 @@ import {
 } from '@/components/primitives/Collapsible.js';
 import { Box, Button, ButtonProps } from '@/components/primitives/index.js';
 import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
+import useMergedRef from '@/hooks/useMergedRef.js';
 import { useIsFirstRender } from '@/hooks/usePrevious.js';
+import { useSize, useSizeCssVars } from '@/hooks/useSize.js';
 import { keyframes, styled } from '@/stitches.config.js';
 import { groceries, hooks, Item } from '@/stores/groceries/index.js';
 import { useDraggable } from '@dnd-kit/core';
-import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';
 import { HamburgerMenuIcon, TrashIcon } from '@radix-ui/react-icons';
-import pluralize from 'pluralize';
+import { clsx } from 'clsx';
 import React, {
 	CSSProperties,
 	forwardRef,
@@ -21,12 +22,14 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox.js';
 import { groceriesState } from '../state.js';
 import { CategoryPicker } from './CategoryPicker.js';
+import * as classes from './GroceryListItem.css.js';
 import { useItemDisplayText } from './hooks.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemQuantityNumber } from './ItemQuantityNumber.js';
@@ -52,40 +55,70 @@ function preventDefault(e: React.MouseEvent | React.PointerEvent) {
 }
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
-	function GroceryListItem({ item, isDragActive, menuProps, ...rest }, ref) {
-		const { purchasedQuantity, totalQuantity, sortKey, id } =
-			hooks.useWatch(item);
+	function GroceryListItem(
+		{ item, isDragActive, menuProps, className, ...rest },
+		ref,
+	) {
+		const { purchasedAt, totalQuantity, sortKey, id } = hooks.useWatch(item);
 		const inputs = hooks.useWatch(item.get('inputs'));
+
+		const [purchasedHiddenState, setHiddenState] = useState<
+			'hidden' | 'hiding' | 'visible'
+		>(() => {
+			return purchasedAt ? 'hidden' : 'visible';
+		});
+		useEffect(() => {
+			if (purchasedAt) {
+				setHiddenState('hiding');
+				const timeout = setTimeout(() => {
+					setHiddenState('hidden');
+					groceriesState.recentlyPurchasedItems.delete(id);
+				}, 3000);
+				return () => {
+					clearTimeout(timeout);
+					setHiddenState('visible');
+					groceriesState.recentlyPurchasedItems.delete(id);
+				};
+			} else {
+				setHiddenState('visible');
+			}
+		}, [purchasedAt, id]);
 
 		const [menuOpen, setMenuOpen] = useState(false);
 
 		const sectionStateSnap = useSnapshot(groceriesState);
 
-		const isPurchased = purchasedQuantity >= totalQuantity;
-		const isPartiallyPurchased = purchasedQuantity > 0;
+		const isPurchased = !!purchasedAt;
+		const isPartiallyPurchased = false;
 		const displayString = useItemDisplayText(item);
 
-		const togglePurchased = useCallback(() => {
-			return groceries.toggleItemPurchased(item);
+		const togglePurchased = useCallback(async () => {
+			await groceries.toggleItemPurchased(item);
 		}, [item]);
 
 		const quantityJustChanged = useDidQuantityJustChange(item);
 		const justMoved = useDidJustMove(item);
 
+		const sizeRef = useSizeCssVars();
+
+		const finalRef = useMergedRef(ref, sizeRef);
+
 		return (
-			<ItemContainer
+			<div
+				className={clsx('item', classes.root, className)}
 				hidden={sectionStateSnap.newCategoryPendingItem?.get('id') === id}
 				{...rest}
-				ref={ref}
-				highlighted={quantityJustChanged}
-				dragging={isDragActive}
+				ref={finalRef}
+				data-highlighted={quantityJustChanged}
+				data-dragging={isDragActive}
 				data-item-id={id}
 				data-oid={item.oid}
-				menuOpen={menuOpen}
-				justMoved={justMoved}
+				data-menu-open={menuOpen}
+				data-just-moved={justMoved}
+				data-hidden-state={purchasedHiddenState}
 			>
 				<CollapsibleRoot open={menuOpen} onOpenChange={setMenuOpen}>
-					<ItemMainContent>
+					<div className={classes.mainContent}>
 						<Checkbox
 							checked={
 								isPurchased
@@ -102,7 +135,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							onPointerDown={stopPropagation}
 							onPointerUp={stopPropagation}
 						/>
-						<Box direction="row" gap={1} flex={1}>
+						<div className={classes.textContent}>
 							{inputs.length > 1 && (
 								<ItemQuantityNumber value={totalQuantity} />
 							)}
@@ -110,7 +143,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							{DEBUG_SORT && (
 								<span style={{ marginLeft: '1ch' }}>{sortKey}</span>
 							)}
-						</Box>
+						</div>
 						<RecentPeople item={item} />
 						<CollapsibleTrigger asChild>
 							<Button
@@ -125,21 +158,19 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 								<HamburgerMenuIcon />
 							</Button>
 						</CollapsibleTrigger>
-					</ItemMainContent>
+					</div>
 					<CollapsibleContent>
-						<Box direction="row" gap="2" justify="end" css={{ p: '$3' }}>
-							<ItemSources
-								item={item}
-								css={{ marginRight: 'auto', mt: '$2', ml: '$2' }}
-							/>
+						<div className={classes.secondaryContent}>
+							<ItemSources item={item} />
 							<CategoryPicker item={item} />
 							<ItemDeleteButton color="ghost" item={item}>
 								<TrashIcon />
 							</ItemDeleteButton>
-						</Box>
+						</div>
 					</CollapsibleContent>
 				</CollapsibleRoot>
-			</ItemContainer>
+				{isPurchased && <div className={classes.strikethrough} />}
+			</div>
 		);
 	},
 );
@@ -165,74 +196,6 @@ function useDidQuantityJustChange(item: Item) {
 
 	return didQuantityChange;
 }
-
-const popUp = keyframes({
-	from: {
-		opacity: 0,
-		transform: 'translateY(30px) scale(0.95)',
-	},
-	to: {
-		opacity: 1,
-		transform: 'translateY(0) scale(1)',
-	},
-});
-
-const ItemContainer = styled('div' as const, {
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'stretch',
-	width: '100%',
-	gap: '$2',
-	backgroundColor: '$light',
-	borderRadius: '$md',
-	position: 'relative',
-	animation: 'none',
-	userSelect: 'none',
-
-	transition: 'all 0.2s $transitions$springy',
-
-	variants: {
-		hidden: {
-			true: {
-				visibility: 'hidden',
-				pointerEvents: 'none',
-			},
-			false: {},
-		},
-		dragging: {
-			true: {
-				boxShadow: '$xl',
-				cursor: 'grabbing',
-				touchAction: 'none',
-				border: '1px solid $colors$gray50',
-			},
-		},
-		highlighted: {
-			true: {
-				backgroundColor: '$lemonLighter',
-			},
-		},
-		menuOpen: {
-			true: {
-				backgroundColor: '$white',
-				border: '1px solid $colors$gray50',
-			},
-		},
-		justMoved: {
-			true: {
-				animation: `${popUp} 0.4s $transitions$springy`,
-			},
-		},
-	},
-});
-
-const ItemMainContent = styled('div' as const, {
-	display: 'flex',
-	flexDirection: 'row',
-	alignItems: 'center',
-	gap: '$2',
-	padding: '$3',
-});
 
 const touchActionNoneStyle = { touchAction: 'none' };
 
@@ -277,7 +240,7 @@ export function GroceryListItemDraggable({
 	const style = useMemo(
 		() => ({
 			// transform: transformString,
-			opacity: isDragging ? 0.2 : 1,
+			opacity: isDragging ? 0.2 : undefined,
 		}),
 		[isDragging, transformString],
 	);
@@ -301,27 +264,20 @@ function RecentPeople({ item }: { item: Item }) {
 	}
 
 	return (
-		<PeopleStack>
+		<div className={classes.peopleStack}>
 			{people.map((person) => (
-				<PersonAvatar key={person.id} person={person} />
+				<PersonAvatar
+					key={person.id}
+					person={person}
+					className={classes.person}
+				/>
 			))}
-		</PeopleStack>
+		</div>
 	);
 }
 
-const PeopleStack = styled('div', {
-	display: 'flex',
-	flexDirection: 'row',
-
-	'& > *': {
-		position: 'relative',
-		zIndex: 'var(--index)',
-		left: 'calc(var(--index) * -8px)',
-	},
-});
-
 function usePeopleWhoLastEditedThis(itemId: string) {
-	const groceries = hooks.useStorage();
+	const groceries = hooks.useClient();
 	const [people, setPeople] = useState<UserInfo[]>(() => {
 		return Object.values(groceries.presence.peers).filter(
 			(p) => p.presence.lastInteractedItem === itemId,

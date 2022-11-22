@@ -376,6 +376,7 @@ export const H1 = styled('h1' as const, {
 	...headingCommonStyles,
 	fontFamily: '$title',
 	fontSize: '$3xl',
+	fontWeight: 'normal',
 });
 export const H2 = styled('h2' as const, {
 	...headingCommonStyles,

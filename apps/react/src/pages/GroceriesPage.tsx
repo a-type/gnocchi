@@ -10,9 +10,15 @@ import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
 import { styled } from '@/stitches.config.js';
 import { groceriesDescriptor, hooks } from '@/stores/groceries/index.js';
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
+import {
+	PageContent,
+	PageFixedArea,
+	PageRoot,
+} from '@/components/layouts/index.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useNavigate } from 'react-router-dom';
+import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
+import { NavBar } from '@/components/nav/NavBar.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -34,27 +40,15 @@ export function GroceriesPage() {
 							<SyncMenu />
 						</Suspense>
 					</Box>
-					<Box
-						w="full"
-						p={4}
-						direction="column"
-						gap={2}
-						align="stretch"
-						css={{
-							position: 'sticky',
-							top: 0,
-							zIndex: 1,
-							backgroundColor: '$light',
-							mb: '$6',
-						}}
-					>
+					<PageFixedArea>
 						<Suspense fallback={null}>
 							<GroceryListAdd />
 						</Suspense>
-						<Suspense fallback={null}>
+						{/* <Suspense fallback={null}>
 							<PositionedDeleteChecked />
-						</Suspense>
-					</Box>
+						</Suspense> */}
+						<GroceriesActionBar />
+					</PageFixedArea>
 					<Suspense fallback={null}>
 						<GroceryList />
 					</Suspense>

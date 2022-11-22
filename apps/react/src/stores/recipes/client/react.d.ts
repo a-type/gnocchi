@@ -20,7 +20,9 @@ import type {
 
 export interface GeneratedHooks {
   Provider: Provider<ClientDescriptor<Schema>>;
+  /** @deprecated use useClient instead */
   useStorage: () => Client;
+  useClient: () => Client;
   useSelf: () => UserInfo;
   usePeerIds: () => string[];
   usePeer: (peerId: string) => UserInfo;
@@ -35,6 +37,8 @@ export interface GeneratedHooks {
     entity: T,
     props: P
   ): EntityShape<T>[P];
+  useCanUndo(): boolean;
+  useCanRedo(): boolean;
 
   useRecipe: (id: string) => Recipe;
   useOneRecipe: (config: { index: RecipeFilter }) => Recipe;

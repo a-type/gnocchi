@@ -20,6 +20,10 @@ globalCss({
 			fontFamily: 'Londrina Outline',
 			src: `url('/fonts/LondrinaOutline-Regular.ttf')`,
 		},
+		{
+			fontFamily: 'Libre Baskerville',
+			src: `url('/fonts/LibreBaskerville-Regular.ttf')`,
+		},
 	],
 
 	'html, body': {

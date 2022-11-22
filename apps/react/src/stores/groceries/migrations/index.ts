@@ -5,5 +5,7 @@ import v4 from "./v4.js";
 import v5 from "./v5.js";
 import v6 from "./v6.js";
 import v7 from "./v7.js";
+import v8 from "./v8.js";
+import v9 from "./v9.js";
 
-export default [v1, v2, v3, v4, v5, v6, v7];
+export default [v1, v2, v3, v4, v5, v6, v7, v8, v9];

@@ -8,6 +8,7 @@ export function PersonAvatar({
 }: {
 	person: UserInfo;
 	popIn?: boolean;
+	className?: string;
 }) {
 	return (
 		<Avatar popIn {...rest}>

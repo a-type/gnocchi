@@ -30,7 +30,7 @@ import {
 	MOBILE_DRAG_ACTIVATION_DELAY,
 } from './constants.js';
 import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
-import { GroceryListCategory } from './GroceryListCategory.js';
+import { GroceryListCategory } from './categories/GroceryListCategory.js';
 import { useItemsGroupedAndSorted } from './hooks.js';
 import { GroceryListItem } from './items/GroceryListItem.js';
 import { groceriesState } from './state.js';

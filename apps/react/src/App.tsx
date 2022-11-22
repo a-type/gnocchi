@@ -17,6 +17,8 @@ import { AdminPage } from './pages/AdminPage.jsx';
 import { RecipesPage } from './pages/RecipesPage.jsx';
 import { RecipeEditPage } from './pages/RecipeEditPage.jsx';
 import { StartSignupDialog } from './components/sync/StartSignupDialog.jsx';
+import { PantryPage } from './pages/PantryPage.jsx';
+import { NavBar } from './components/nav/NavBar.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -36,6 +38,7 @@ export function App() {
 											path="/claim/:inviteId"
 											element={<ClaimInvitePage />}
 										/>
+										<Route path="/purchased" element={<PantryPage />} />
 										<Route path="/recipes/:slug" element={<RecipeEditPage />} />
 										<Route path="/recipes" element={<RecipesPage />} />
 										<Route path="/nevermind" element={<NevermindPage />} />
@@ -43,6 +46,7 @@ export function App() {
 										<Route path="/admin" element={<AdminPage />} />
 										<Route path="*" element={<NotFoundPage />} />
 									</Routes>
+									<NavBar />
 									<Toaster position="bottom-center" />
 									<StartSignupDialog />
 								</AuthProvider>

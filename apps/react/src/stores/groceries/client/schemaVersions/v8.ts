@@ -131,9 +131,6 @@ const items = collection({
 		categoryId_sortKey: {
 			of: ['categoryId', 'sortKey'],
 		},
-		purchased_food: {
-			of: ['purchased', 'food'],
-		},
 	},
 });
 
@@ -153,7 +150,7 @@ const suggestions = collection({
 });
 
 export default schema({
-	version: 9,
+	version: 8,
 	collections: {
 		categories: categories,
 		items: items,

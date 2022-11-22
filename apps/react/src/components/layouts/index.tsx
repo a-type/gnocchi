@@ -1,6 +1,8 @@
-import React, { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithoutRef, HTMLAttributes } from 'react';
 import { styled } from '@/stitches.config.js';
 import { Box } from '@/components/primitives/index.js';
+import { clsx } from 'clsx';
+import * as classes from './index.css.js';
 
 export function PageContent({
 	children,
@@ -135,4 +137,11 @@ export function PageNowPlayingBar({
 			</Box>
 		</Box>
 	);
+}
+
+export function PageFixedArea({
+	className,
+	...props
+}: HTMLAttributes<HTMLDivElement>) {
+	return <div {...props} className={clsx(classes.fixedArea, className)} />;
 }
