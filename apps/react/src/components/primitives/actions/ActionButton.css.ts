@@ -3,7 +3,7 @@ import { style } from '@vanilla-extract/css';
 
 export const root = style({
 	borderColor: vars.colors.gray70,
-	fontWeight: 'normal',
+	fontWeight: 'normal !important',
 	whiteSpace: 'nowrap',
 
 	selectors: {
