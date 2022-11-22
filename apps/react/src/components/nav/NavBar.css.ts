@@ -1,5 +1,5 @@
 import { vars } from '@/theme.css.js';
-import { keyframes, style } from '@vanilla-extract/css';
+import { style } from '@vanilla-extract/css';
 
 export const root = style({
 	position: 'fixed',
@@ -52,4 +52,11 @@ export const buttonText = style({
 	overflow: 'hidden',
 	paddingLeft: vars.space[1],
 	display: 'inline-block',
+});
+
+export const collapsible = style({
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	animationTimingFunction: 'linear !important',
 });

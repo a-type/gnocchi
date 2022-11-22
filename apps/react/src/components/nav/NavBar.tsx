@@ -60,13 +60,7 @@ function NavBarLink({
 		<CollapsibleRoot open={!!match}>
 			<Link to={to} className={classes.button}>
 				{icon}
-				<CollapsibleContent
-					data-horizontal
-					css={{
-						animationTimingFunction: 'linear',
-						animationDuration: '150ms',
-					}}
-				>
+				<CollapsibleContent data-horizontal className={classes.collapsible}>
 					<span className={classes.buttonText} data-active={!!match}>
 						{children}
 					</span>
