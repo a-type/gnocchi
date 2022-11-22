@@ -1,5 +1,5 @@
 import { vars } from '@/theme.css.js';
-import { style } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
 
 export const root = style({
 	position: 'fixed',
@@ -17,6 +17,32 @@ export const root = style({
 	borderColor: vars.colors.gray70,
 	overflow: 'hidden',
 	zIndex: vars.zIndices.nav,
+});
+
+const shake = keyframes({
+	'0%': { transform: 'scale(1) rotate(-5deg)' },
+	'10%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'20%': {
+		transform: 'scale(1.25) rotate(-5deg)',
+		color: vars.colors.cucumber,
+	},
+	'30%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'40%': {
+		transform: 'scale(1.25) rotate(-5deg)',
+		color: vars.colors.cucumber,
+	},
+	'50%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'60%': {
+		transform: 'scale(1.25) rotate(-5deg)',
+		color: vars.colors.cucumber,
+	},
+	'70%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'80%': {
+		transform: 'scale(1.25) rotate(-5deg)',
+		color: vars.colors.cucumber,
+	},
+	'90%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'100%': { transform: 'scale(1) rotate(0deg)' },
 });
 
 export const button = style({
@@ -44,6 +70,13 @@ export const button = style({
 
 		'& + &': {
 			borderLeft: `1px solid ${vars.colors.gray70}`,
+		},
+
+		'&[data-shake="true"]': {
+			animationName: shake,
+			animationDuration: '3s',
+			animationIterationCount: '1',
+			animationTimingFunction: vars.transitions.springy,
 		},
 	},
 });

@@ -1,11 +1,13 @@
 import { clsx } from 'clsx';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
+import { useSnapshot } from 'valtio';
+import { groceriesState } from '../groceries/state.js';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
 } from '../primitives/Collapsible.jsx';
-import { CartIcon, FridgeIcon, RecipesIcon, Test } from './icons.jsx';
+import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 
 export interface NavBarProps {}
@@ -33,9 +35,7 @@ export function NavBar({}: NavBarProps) {
 			<NavBarLink to="/" icon={<CartIcon />}>
 				Groceries
 			</NavBarLink>
-			<NavBarLink to="/purchased" icon={<FridgeIcon />}>
-				Purchased
-			</NavBarLink>
+			<PantryNavBarLink />
 			{SHOW_RECIPES && (
 				<NavBarLink to="/recipes" icon={<RecipesIcon />}>
 					Recipes
@@ -49,16 +49,18 @@ function NavBarLink({
 	to,
 	children,
 	icon,
+	shake,
 }: {
 	to: string;
 	children: ReactNode;
 	icon: ReactNode;
+	shake?: boolean;
 }) {
 	const match = useMatch(to);
 
 	return (
 		<CollapsibleRoot open={!!match}>
-			<Link to={to} className={classes.button}>
+			<Link to={to} className={classes.button} data-shake={shake}>
 				{icon}
 				<CollapsibleContent data-horizontal className={classes.collapsible}>
 					<span className={classes.buttonText} data-active={!!match}>
@@ -67,5 +69,27 @@ function NavBarLink({
 				</CollapsibleContent>
 			</Link>
 		</CollapsibleRoot>
+	);
+}
+
+function PantryNavBarLink() {
+	const recent = useSnapshot(groceriesState.recentlyPurchasedItems).size;
+	const [shake, setShake] = useState(recent > 0);
+	useEffect(() => {
+		if (recent > 0) {
+			setShake(true);
+			const timeout = setTimeout(() => {
+				setShake(false);
+			}, 4000);
+			return () => clearTimeout(timeout);
+		} else {
+			setShake(false);
+		}
+	}, [recent]);
+
+	return (
+		<NavBarLink to="/purchased" icon={<FridgeIcon />} shake={shake}>
+			Purchased
+		</NavBarLink>
 	);
 }

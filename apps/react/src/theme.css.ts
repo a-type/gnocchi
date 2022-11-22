@@ -9,6 +9,7 @@ export const vars = createGlobalTheme(':root', {
 		tomato: '#fd7e4d',
 		tomatoDark: '#732207',
 		leek: '#e0f8bb',
+		cucumber: '#3ec188',
 		garlic: '#f7f0e1',
 		onion: '#f6d7f2',
 		wood: '#ebab5c',
