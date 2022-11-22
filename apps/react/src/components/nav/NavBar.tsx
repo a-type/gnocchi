@@ -1,5 +1,3 @@
-import { useSizeCssVars } from '@/hooks/useSize.js';
-import { ArchiveIcon, ListBulletIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 import { Link, useMatch } from 'react-router-dom';
@@ -7,9 +5,12 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 } from '../primitives/Collapsible.jsx';
+import { CartIcon, FridgeIcon, RecipesIcon, Test } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 
 export interface NavBarProps {}
+
+const SHOW_RECIPES = false;
 
 export function NavBar({}: NavBarProps) {
 	const matchGroceries = useMatch({
@@ -19,19 +20,27 @@ export function NavBar({}: NavBarProps) {
 	const matchPurchased = useMatch({
 		path: '/purchased',
 	});
+	const matchRecipes = useMatch({
+		path: '/recipes',
+	});
 
-	if (!matchGroceries && !matchPurchased) {
+	if (!matchGroceries && !matchPurchased && !matchRecipes) {
 		return null;
 	}
 
 	return (
 		<div className={clsx(classes.root)}>
-			<NavBarLink to="/" icon={<ListBulletIcon />}>
+			<NavBarLink to="/" icon={<CartIcon />}>
 				Groceries
 			</NavBarLink>
-			<NavBarLink to="/purchased" icon={<ArchiveIcon />}>
+			<NavBarLink to="/purchased" icon={<FridgeIcon />}>
 				Purchased
 			</NavBarLink>
+			{SHOW_RECIPES && (
+				<NavBarLink to="/recipes" icon={<RecipesIcon />}>
+					Recipes
+				</NavBarLink>
+			)}
 		</div>
 	);
 }
