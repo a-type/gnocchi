@@ -11,7 +11,9 @@ export interface ActionBarProps {
 export function ActionBar({ children }: ActionBarProps) {
 	return (
 		<Suspense fallback={null}>
-			<div className={classes.root}>{children}</div>
+			<div className={classes.root}>
+				<div className={classes.content}>{children}</div>
+			</div>
 		</Suspense>
 	);
 }
