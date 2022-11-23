@@ -8,7 +8,7 @@ export const title = style({
 	textTransform: 'uppercase',
 	fontStyle: 'italic',
 	color: vars.colors.gray90,
-	margin: vars.space[1],
+	margin: 0,
 	minWidth: 0,
 	whiteSpace: 'nowrap',
 	overflow: 'hidden',
@@ -69,6 +69,8 @@ export const titleRow = style({
 	alignItems: 'center',
 	paddingTop: vars.space[1],
 	paddingBottom: vars.space[1],
+	paddingLeft: vars.space[3],
+	paddingRight: vars.space[3],
 });
 
 export const items = style({
@@ -94,7 +96,7 @@ export const claimGroup = style({
 });
 
 export const claimButton = style({
-	marginRight: vars.space[1],
+	// marginRight: vars.space[1],
 	marginTop: vars.space[1],
 	marginBottom: vars.space[1],
 	gap: vars.space[2],
