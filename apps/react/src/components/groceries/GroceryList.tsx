@@ -94,7 +94,17 @@ const GroceryListCategories = forwardRef<
 	const groupedItems = useItemsGroupedAndSorted();
 
 	return (
-		<Box id="groceryList" w="full" flex={1} p={2} ref={ref} {...props}>
+		<Box
+			id="groceryList"
+			w="full"
+			flex={1}
+			p={2}
+			css={{
+				mb: 80,
+			}}
+			ref={ref}
+			{...props}
+		>
 			{groupedItems.map(({ category, items }) => {
 				return (
 					<MemoizedCategory
