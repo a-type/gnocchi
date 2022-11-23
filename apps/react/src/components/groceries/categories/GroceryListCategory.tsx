@@ -4,6 +4,7 @@ import {
 } from '@/components/primitives/Collapsible.jsx';
 import { Button } from '@/components/primitives/primitives.jsx';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
+import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { Category, hooks, Item } from '@/stores/groceries/index.js';
 import { vars } from '@/theme.css.js';
@@ -190,6 +191,12 @@ const CategoryClaim = memo(function CategoryClaim({
 			});
 		}
 	}, [me.id, isMyClaim]);
+
+	const isSubscribed = useIsSubscribed();
+
+	if (!isSubscribed) {
+		return null;
+	}
 
 	return (
 		<Button
