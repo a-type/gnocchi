@@ -98,7 +98,6 @@ export const claimGroup = style({
 export const claimButton = style({
 	marginTop: vars.space[1],
 	marginBottom: vars.space[1],
-	gap: vars.space[2],
 	height: 30,
 });
 
@@ -116,4 +115,25 @@ export const claimIconActive = style({
 	opacity: 1,
 	stroke: vars.colors.cucumber,
 	fill: vars.colors.leek,
+});
+
+export const claimCollapse = style({
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	justifyContent: 'center',
+	gap: vars.space[1],
+});
+
+export const claimLabel = style({
+	fontSize: vars.fontSizes.sm,
+	fontFamily: vars.fonts.sans,
+	fontWeight: 'normal',
+	color: vars.colors.gray50,
+	whiteSpace: 'nowrap',
+});
+
+export const claimAvatarSpacer = style({
+	width: 20,
+	height: 20,
 });

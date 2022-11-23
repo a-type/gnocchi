@@ -1,3 +1,7 @@
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+} from '@/components/primitives/Collapsible.jsx';
 import { Button } from '@/components/primitives/primitives.jsx';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
@@ -187,19 +191,6 @@ const CategoryClaim = memo(function CategoryClaim({
 		}
 	}, [me.id, isMyClaim]);
 
-	if (!claimer) {
-		return (
-			<Button
-				color="ghost"
-				size="small"
-				onClick={claim}
-				className={classes.claimButton}
-			>
-				<ClaimIcon />
-			</Button>
-		);
-	}
-
 	return (
 		<Button
 			color="ghost"
@@ -207,8 +198,17 @@ const CategoryClaim = memo(function CategoryClaim({
 			className={classes.claimButton}
 			onClick={claim}
 		>
-			<PersonAvatar className={classes.claimAvatar} person={claimer} />
-			<ClaimIcon active />
+			<CollapsibleRoot open={!!claimer}>
+				<CollapsibleContent data-horizontal className={classes.claimCollapse}>
+					<span className={classes.claimLabel}>claimed</span>
+					{!!claimer ? (
+						<PersonAvatar className={classes.claimAvatar} person={claimer} />
+					) : (
+						<div className={classes.claimAvatarSpacer} />
+					)}
+				</CollapsibleContent>
+			</CollapsibleRoot>
+			<ClaimIcon active={!!claimer} />
 		</Button>
 	);
 });
