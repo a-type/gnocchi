@@ -58,7 +58,7 @@ export const root = style({
 			backgroundColor: vars.colors.white,
 			border: `1px solid ${vars.colors.gray50}`,
 		},
-		'&[data-just-moved="true"][data-hidden=state="visible"]': {
+		'&[data-just-moved="true"][data-hidden-state="visible"]': {
 			animationName: popUp,
 			animationDuration: '0.4s',
 			animationTimingFunction: vars.transitions.springy,

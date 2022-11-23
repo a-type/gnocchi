@@ -1,13 +1,8 @@
 import cuid from 'cuid';
 import { generateKeyBetween } from 'fractional-indexing';
 import { parseIngredient } from '@aglio/conversion';
-import {
-	EntityShape,
-	Presence,
-	ClientDescriptor,
-	Item,
-} from './client/index.js';
-export { hooks } from './client/react.js';
+import { EntityShape, ClientDescriptor, Item } from './client/index.js';
+import { createHooks } from './client/react.js';
 import migrations from './migrations/index.js';
 import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
@@ -17,22 +12,28 @@ import { groceriesState } from '@/components/groceries/state.js';
 
 export type { Item, Category, FoodCategoryAssignment } from './client/index.js';
 
-declare module '@lo-fi/web' {
-	export interface Presence {
-		lastInteractedItem: string | null;
-	}
-
-	export interface Profile {
-		id: string;
-		name: string;
-		imageUrl?: string;
-	}
+export interface Presence {
+	lastInteractedItem: string | null;
 }
+
+export interface Profile {
+	id: string;
+	name: string;
+	imageUrl?: string;
+}
+
+export const hooks = createHooks<Presence, Profile>();
 
 export const groceriesDescriptor = new ClientDescriptor({
 	sync: {
 		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
-		initialPresence: {} as Presence,
+		initialPresence: {
+			lastInteractedItem: null,
+		} as Presence,
+		defaultProfile: {
+			id: '',
+			name: '',
+		} as Profile,
 	},
 	migrations,
 	namespace: 'groceries',
@@ -122,7 +123,7 @@ export const groceries = {
 			);
 		}
 
-		storage.presence.update({
+		storage.sync.presence.update({
 			lastInteractedItem: item.get('id'),
 		});
 	},
@@ -133,7 +134,7 @@ export const groceries = {
 		} else {
 			await groceries.purchaseItem(item);
 		}
-		storage.presence.update({
+		storage.sync.presence.update({
 			lastInteractedItem: item.get('id'),
 		});
 	},
@@ -161,7 +162,7 @@ export const groceries = {
 		updates: Omit<Partial<EntityShape<Item>>, 'inputs'>,
 	) => {
 		item.update(updates);
-		(await _groceries).presence.update({
+		(await _groceries).sync.presence.update({
 			lastInteractedItem: item.get('id'),
 		});
 	},
@@ -178,7 +179,7 @@ export const groceries = {
 				categoryId,
 			);
 		}
-		storage.presence.update({
+		storage.sync.presence.update({
 			lastInteractedItem: item.get('id'),
 		});
 	},
@@ -315,7 +316,7 @@ export const groceries = {
 		}
 
 		if (lastItemId) {
-			storage.presence.update({
+			storage.sync.presence.update({
 				lastInteractedItem: lastItemId,
 			});
 		}
