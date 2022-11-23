@@ -96,10 +96,10 @@ export const claimGroup = style({
 });
 
 export const claimButton = style({
-	// marginRight: vars.space[1],
 	marginTop: vars.space[1],
 	marginBottom: vars.space[1],
 	gap: vars.space[2],
+	height: 30,
 });
 
 export const claimAvatar = style({
