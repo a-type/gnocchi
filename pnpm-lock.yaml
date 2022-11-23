@@ -16,8 +16,8 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
-      '@lo-fi/common': ^1.3.1
-      '@lo-fi/server': ^1.2.1
+      '@lo-fi/common': ^1.3.2
+      '@lo-fi/server': ^1.2.2
       '@prisma/client': ^4.0.0
       '@trpc/server': ^9.27.2
       '@types/better-sqlite3': ^7.6.0
@@ -55,8 +55,8 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
-      '@lo-fi/common': 1.3.1
-      '@lo-fi/server': 1.2.1_utf-8-validate@5.0.9
+      '@lo-fi/common': 1.3.2
+      '@lo-fi/server': 1.2.2_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 9.27.2
       '@types/better-sqlite3': 7.6.0
@@ -100,10 +100,10 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lo-fi/cli': ^1.5.0
-      '@lo-fi/common': ^1.3.1
-      '@lo-fi/react': ^5.0.0
-      '@lo-fi/web': ^1.4.0
+      '@lo-fi/cli': ^1.5.1
+      '@lo-fi/common': ^1.3.2
+      '@lo-fi/react': ^5.0.1
+      '@lo-fi/web': ^1.4.1
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -176,10 +176,10 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lo-fi/cli': 1.5.0
-      '@lo-fi/common': 1.3.1
-      '@lo-fi/react': 5.0.0_sgbc4rodil35o3eg4ot3ptsmyq
-      '@lo-fi/web': 1.4.0
+      '@lo-fi/cli': 1.5.1
+      '@lo-fi/common': 1.3.2
+      '@lo-fi/react': 5.0.1_zdfezs6fhvbjy3jwq4ipbdqxci
+      '@lo-fi/web': 1.4.1
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1769,8 +1769,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lo-fi/cli/1.5.0:
-    resolution: {integrity: sha512-6bvAe3NI0IUIdKb9GnrMzZdOBV7TOJwrF/Qi2yeu3qIOMvQb3t/EN/9rJ5Db7EsKndVYQDpQ4HeXBJZ8j6DAzA==}
+  /@lo-fi/cli/1.5.1:
+    resolution: {integrity: sha512-jbkfJqvp22ItYaXaN1JPo9XM4sSk7g8tzSL8+l2zLUjdaaaRSqaSlJjkjl7O8fMQ+RzwF+BGYK7fiUSFFbgb3w==}
     hasBin: true
     dependencies:
       '@swc/core': 1.3.19
@@ -1779,29 +1779,29 @@ packages:
       yargs: 17.6.2
     dev: false
 
-  /@lo-fi/common/1.3.1:
-    resolution: {integrity: sha512-CAexzXMpTdYw7UTktdaTt7XzP9TbSFfV87Dlv2qGhjIlimU84BiHRyWXzaEGEStVXrA0FjHxaTUNdpKGGYadkA==}
+  /@lo-fi/common/1.3.2:
+    resolution: {integrity: sha512-H3Q/JpHxjA+rqCseTxH70An//qbhqo7JtTvwQkMBTiSpyQbrKxqgzx856l9cM6SV3HBXTB7uci9Yt1WIaeFOzA==}
     dependencies:
       fast-json-patch: 3.1.1
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/5.0.0_sgbc4rodil35o3eg4ot3ptsmyq:
-    resolution: {integrity: sha512-M60CoGXD156jjiIRAlRrvDKIy0QeZ/EC5WEbbXjHi2EARSElBlxkMS5PNUngzWQEYmwRCDVw/iFgnzzF6ttdwA==}
+  /@lo-fi/react/5.0.1_zdfezs6fhvbjy3jwq4ipbdqxci:
+    resolution: {integrity: sha512-kWHDCqa1FQpy1y3QG4O71mNv3lwh4FimYEJ/buMDnhbDgBuSzO9iotKmhDWuN9DhhehsMQKzSKPb17bCOUFH5w==}
     peerDependencies:
-      '@lo-fi/web': ^1.4.0
+      '@lo-fi/web': ^1.4.1
       react: ^18.2.0
     dependencies:
-      '@lo-fi/common': 1.3.1
-      '@lo-fi/web': 1.4.0
+      '@lo-fi/common': 1.3.2
+      '@lo-fi/web': 1.4.1
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lo-fi/server/1.2.1_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-T4sInpWYnkXgBobV6u5D2yqFlPGDsf55Sas/IAy9FQ74p+wW62auT7rFsTXxTXeRkKjxRs1ESTtLWruEiB+wig==}
+  /@lo-fi/server/1.2.2_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-C7ebsSsOySRfmZsz6hBE3F2mmJrUY2RVgthii8v5knyuEX8rFYDp+0WnntV38N7x6Grrtc3ZqEVX3Qex/r3zTQ==}
     dependencies:
-      '@lo-fi/common': 1.3.1
+      '@lo-fi/common': 1.3.2
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       jsonwebtoken: 8.5.1
@@ -1811,10 +1811,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.4.0:
-    resolution: {integrity: sha512-TT9zKdFNme2gdrAfs+dmiu1Kni+teFWaey0UaFGwkIeRFFsGhUYK4sdfwoeWHfpBcwJtgeej31yMkNrXnJ9huA==}
+  /@lo-fi/web/1.4.1:
+    resolution: {integrity: sha512-zQOCCj+cBlcTsHADgpHSVmbLVn661UT1GmQ4dErIxnZ04ySZDprgBfpaEBOf/8o3kQssqlS0+5tqmXwMJ8xXPA==}
     dependencies:
-      '@lo-fi/common': 1.3.1
+      '@lo-fi/common': 1.3.2
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false

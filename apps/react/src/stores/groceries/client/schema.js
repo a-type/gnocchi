@@ -24,6 +24,22 @@ const categories = collection({
 		 */ expirationDays: {
             type: 'number',
             nullable: true
+        },
+        /**
+		 * Users can claim a category to be responsible for
+		 * it. This is a reference to the user who claimed
+		 * it by their ID. Claims expire after 24 hours.
+		 */ claim: {
+            type: 'object',
+            nullable: true,
+            properties: {
+                claimedBy: {
+                    type: 'string'
+                },
+                claimedAt: {
+                    type: 'number'
+                }
+            }
         }
     }
 });
@@ -151,7 +167,7 @@ const suggestions = collection({
     }
 });
 export default schema({
-    version: 9,
+    version: 10,
     collections: {
         categories: categories,
         items: items,

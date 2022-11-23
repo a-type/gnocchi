@@ -12,7 +12,8 @@
 		"test": "turbo run test",
 		"prisma": "pnpm --filter @aglio/prisma run prisma",
 		"link-lofi": "turbo run link-lofi",
-		"up-lofi": "pnpm --recursive update \"@lo-fi/*\" --latest"
+		"up-lofi": "pnpm --recursive update \"@lo-fi/*\" --latest",
+		"generate": "pnpm --filter @aglio/react generate"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",

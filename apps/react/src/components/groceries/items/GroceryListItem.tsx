@@ -4,12 +4,17 @@ import {
 	CollapsibleTrigger,
 } from '@/components/primitives/Collapsible.js';
 import { Box, Button, ButtonProps } from '@/components/primitives/index.js';
-import { PersonAvatar } from '@/components/sync/PersonAvatar.js';
+import { PersonAvatar } from '@/components/sync/people/PersonAvatar.js';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { useIsFirstRender } from '@/hooks/usePrevious.js';
 import { useSize, useSizeCssVars } from '@/hooks/useSize.js';
-import { keyframes, styled } from '@/stitches.config.js';
-import { groceries, hooks, Item } from '@/stores/groceries/index.js';
+import {
+	groceries,
+	hooks,
+	Item,
+	Presence,
+	Profile,
+} from '@/stores/groceries/index.js';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';
@@ -278,15 +283,15 @@ function RecentPeople({ item }: { item: Item }) {
 
 function usePeopleWhoLastEditedThis(itemId: string) {
 	const groceries = hooks.useClient();
-	const [people, setPeople] = useState<UserInfo[]>(() => {
-		return Object.values(groceries.presence.peers).filter(
+	const [people, setPeople] = useState<UserInfo<Profile, Presence>[]>(() => {
+		return Object.values(groceries.sync.presence.peers).filter(
 			(p) => p.presence.lastInteractedItem === itemId,
 		);
 	});
 	useEffect(() => {
-		return groceries.presence.subscribe('peersChanged', () => {
+		return groceries.sync.presence.subscribe('peersChanged', () => {
 			setPeople(
-				Object.values(groceries.presence.peers).filter(
+				Object.values(groceries.sync.presence.peers).filter(
 					(p) => p.presence.lastInteractedItem === itemId,
 				),
 			);

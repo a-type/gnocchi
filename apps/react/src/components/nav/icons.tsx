@@ -14,20 +14,9 @@ export function FridgeIcon() {
 				height="14.3"
 				rx="1.65"
 				stroke="currentColor"
-				stroke-width="0.7"
 			/>
-			<path
-				d="M3.5 6H11.5"
-				stroke="currentColor"
-				stroke-width="0.7"
-				stroke-linecap="square"
-			/>
-			<path
-				d="M10 8V11.5"
-				stroke="currentColor"
-				stroke-width="0.7"
-				stroke-linecap="round"
-			/>
+			<path d="M3.5 6H11.5" stroke="currentColor" strokeLinecap="square" />
+			<path d="M10 8V11.5" stroke="currentColor" strokeLinecap="round" />
 		</svg>
 	);
 }
@@ -48,14 +37,8 @@ export function RecipesIcon() {
 				height="12.3"
 				rx="0.65"
 				stroke="currentColor"
-				stroke-width="0.7"
 			/>
-			<path
-				d="M10.5 1.5V13.5"
-				stroke="currentColor"
-				stroke-width="0.7"
-				stroke-linecap="round"
-			/>
+			<path d="M10.5 1.5V13.5" stroke="currentColor" strokeLinecap="round" />
 			<rect
 				x="3.65"
 				y="3.65"
@@ -63,7 +46,6 @@ export function RecipesIcon() {
 				height="3.7"
 				rx="1.35"
 				stroke="currentColor"
-				stroke-width="0.7"
 			/>
 		</svg>
 	);
@@ -81,23 +63,10 @@ export function CartIcon() {
 			<path
 				d="M14 2H12.9837C12.5644 2 12.1896 2.26159 12.045 2.65518L11.6923 3.61538M11.6923 3.61538L9.95496 8.34482C9.81038 8.73841 9.4356 9 9.01629 9H8.46154H6.84615H5.23077H4.45005C4.01239 9 3.62558 8.7154 3.49535 8.29757L2.40952 4.81388C2.20738 4.16533 2.69685 3.5083 3.37613 3.51638L11.6923 3.61538Z"
 				stroke="currentColor"
-				stroke-width="0.7"
-				stroke-linecap="round"
+				strokeLinecap="round"
 			/>
-			<circle
-				cx="4"
-				cy="12"
-				r="0.65"
-				stroke="currentColor"
-				stroke-width="0.7"
-			/>
-			<circle
-				cx="10"
-				cy="12"
-				r="0.65"
-				stroke="currentColor"
-				stroke-width="0.7"
-			/>
+			<circle cx="4" cy="12" r="0.65" stroke="currentColor" />
+			<circle cx="10" cy="12" r="0.65" stroke="currentColor" />
 		</svg>
 	);
 }

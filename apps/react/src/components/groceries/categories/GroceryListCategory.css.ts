@@ -8,7 +8,12 @@ export const title = style({
 	textTransform: 'uppercase',
 	fontStyle: 'italic',
 	color: vars.colors.gray90,
-	margin: vars.space[2],
+	margin: vars.space[1],
+	minWidth: 0,
+	whiteSpace: 'nowrap',
+	overflow: 'hidden',
+	textOverflow: 'ellipsis',
+	flex: '1 0 0',
 });
 
 const popIn = keyframes({
@@ -58,6 +63,14 @@ export const root = style({
 	},
 });
 
+export const titleRow = style({
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	paddingTop: vars.space[1],
+	paddingBottom: vars.space[1],
+});
+
 export const items = style({
 	display: 'flex',
 	flexDirection: 'column',
@@ -70,4 +83,35 @@ export const items = style({
 			opacity: 0,
 		},
 	},
+});
+
+export const claimGroup = style({
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	justifyContent: 'space-between',
+	flex: '0 0 auto',
+});
+
+export const claimButton = style({
+	marginRight: vars.space[1],
+	marginTop: vars.space[1],
+	marginBottom: vars.space[1],
+	gap: vars.space[2],
+});
+
+export const claimAvatar = style({
+	width: 20,
+	height: 20,
+});
+
+export const claimIcon = style({
+	opacity: 0.5,
+	transition: `all 0.2s ${vars.transitions.springy}`,
+});
+
+export const claimIconActive = style({
+	opacity: 1,
+	stroke: vars.colors.cucumber,
+	fill: vars.colors.leek,
 });

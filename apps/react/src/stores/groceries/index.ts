@@ -24,16 +24,16 @@ export interface Profile {
 
 export const hooks = createHooks<Presence, Profile>();
 
-export const groceriesDescriptor = new ClientDescriptor({
+export const groceriesDescriptor = new ClientDescriptor<Presence, Profile>({
 	sync: {
 		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
 		initialPresence: {
 			lastInteractedItem: null,
-		} as Presence,
+		},
 		defaultProfile: {
 			id: '',
 			name: '',
-		} as Profile,
+		},
 	},
 	migrations,
 	namespace: 'groceries',

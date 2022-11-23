@@ -16,6 +16,10 @@ export interface CategorySnapshot {
   name: string;
   sortKey: string;
   expirationDays: number | null;
+  claim: {
+    claimedBy: string;
+    claimedAt: number;
+  } | null;
 }
 
 export interface CategoryInit {
@@ -23,8 +27,17 @@ export interface CategoryInit {
   name: string;
   sortKey?: string;
   expirationDays?: number | null;
+  claim?: {
+    claimedBy: string;
+    claimedAt: number;
+  } | null;
 }
 export type Category = ObjectEntity<CategoryInit>;
+
+export type CategoryClaim = ObjectEntity<{
+  claimedBy: string;
+  claimedAt: number;
+} | null>;
 
 export interface CategorySortKeyMatchFilter {
   where: "sortKey";

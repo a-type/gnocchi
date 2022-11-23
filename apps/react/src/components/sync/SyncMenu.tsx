@@ -11,7 +11,7 @@ import {
 } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 import { Tooltip } from '../primitives/Tooltip.js';
-import { People } from './People.js';
+import { People } from './people/People.js';
 import { state as signupState } from './StartSignupDialog.js';
 
 export function SyncMenu() {
