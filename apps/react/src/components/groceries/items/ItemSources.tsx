@@ -1,5 +1,5 @@
+import { ItemInputsItem } from '@/stores/groceries/client/index.js';
 import { hooks, Item } from '@/stores/groceries/index.js';
-import { ObjectEntity } from '@lo-fi/web';
 import * as classes from './ItemSources.css.js';
 
 export interface ItemSourcesProps {
@@ -19,15 +19,7 @@ export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 	);
 }
 
-function InputRenderer({
-	input,
-}: {
-	input: ObjectEntity<{
-		text: string;
-		url: string | null;
-		title: string | null;
-	}>;
-}) {
+function InputRenderer({ input }: { input: ItemInputsItem }) {
 	const url = input.get('url');
 	if (!url) {
 		return <span>{input.get('text')}</span>;

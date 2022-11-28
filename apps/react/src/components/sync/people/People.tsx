@@ -1,8 +1,8 @@
 import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.js';
-import React from 'react';
-import { styled } from '@/stitches.config.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
+import { clsx } from 'clsx';
+import * as classes from './People.css.js';
 
 export function People() {
 	const peerIds = hooks.usePeerIds();
@@ -15,21 +15,15 @@ export function People() {
 
 	return (
 		<ErrorBoundary>
-			<Container>
+			<div className={classes.root}>
 				<SelfAvatar />
-				{peerIds.map((peerId) => (
-					<PeerAvatar key={peerId} peerId={peerId} />
+				{peerIds.map((peerId, index) => (
+					<PeerAvatar key={peerId} peerId={peerId} index={index} />
 				))}
-			</Container>
+			</div>
 		</ErrorBoundary>
 	);
 }
-
-const Container = styled('div', {
-	display: 'flex',
-	flexDirection: 'row',
-	gap: '$1',
-});
 
 function SelfAvatar() {
 	const self = hooks.useSelf();
@@ -37,7 +31,7 @@ function SelfAvatar() {
 	return <PersonAvatar person={self} />;
 }
 
-function PeerAvatar({ peerId }: { peerId: string }) {
+function PeerAvatar({ peerId, index }: { peerId: string; index: number }) {
 	const peer = hooks.usePeer(peerId);
 
 	if (!peer) {
@@ -46,7 +40,7 @@ function PeerAvatar({ peerId }: { peerId: string }) {
 
 	return (
 		// <Tooltip content={peer.profile?.name}>
-		<PersonAvatar person={peer} />
+		<PersonAvatar person={peer} index={index} />
 		// </Tooltip>
 	);
 }

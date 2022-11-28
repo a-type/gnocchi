@@ -19,6 +19,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
+import { CollaborationMenu } from '@/components/sync/collaborationMenu/CollaborationMenu.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -59,7 +60,7 @@ export function GroceriesPage() {
 								<MainMenu />
 								<ListSelect value={listId} onChange={onListChange} />
 							</Box>
-							<SyncMenu />
+							<CollaborationMenu />
 						</Suspense>
 					</Box>
 					<PageFixedArea>

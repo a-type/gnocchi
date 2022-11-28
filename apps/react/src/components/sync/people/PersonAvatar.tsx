@@ -7,13 +7,20 @@ import * as classes from './PersonAvatar.css.js';
 export function PersonAvatar({
 	person,
 	className,
+	index,
 	...rest
 }: {
 	person: UserInfo<Profile, Presence>;
 	className?: string;
+	index?: number;
 }) {
 	return (
-		<div data-pop className={clsx(classes.root, className)} {...rest}>
+		<div
+			data-pop
+			data-index={index}
+			className={clsx(classes.root, className)}
+			{...rest}
+		>
 			<AvatarContent user={person} />
 		</div>
 	);

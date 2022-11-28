@@ -11,33 +11,7 @@ export * from "@lo-fi/web";
 
 import type schema from "./schema.js";
 export type Schema = typeof schema;
-export interface CategorySnapshot {
-  id: string;
-  name: string;
-  sortKey: string;
-  expirationDays: number | null;
-  claim: {
-    claimedBy: string;
-    claimedAt: number;
-  } | null;
-}
-
-export interface CategoryInit {
-  id?: string;
-  name: string;
-  sortKey?: string;
-  expirationDays?: number | null;
-  claim?: {
-    claimedBy: string;
-    claimedAt: number;
-  } | null;
-}
-export type Category = ObjectEntity<CategoryInit>;
-
-export type CategoryClaim = ObjectEntity<{
-  claimedBy: string;
-  claimedAt: number;
-} | null>;
+export type Category = ObjectEntity<CategoryInit, CategoryDestructured>;
 
 export interface CategorySortKeyMatchFilter {
   where: "sortKey";
@@ -64,56 +38,71 @@ export type CategoryFilter =
   | CategorySortKeyRangeFilter
   | CategorySortKeyStartsWithFilter;
 
-export interface ItemSnapshot {
+export type CategoryDestructured = {
   id: string;
-  categoryId: string | null;
-  createdAt: number;
-  totalQuantity: number;
-  unit: string;
-  food: string;
-  inputs: Array<{
-    text: string;
-    url: string | null;
-    title: string | null;
-    quantity: number | null;
-  }>;
-  purchasedAt: number | null;
-  expiredAt: number | null;
-  listId: string | null;
-}
-
-export interface ItemInit {
+  name: string;
+  sortKey: string;
+  expirationDays: number | null;
+  claim: CategoryClaim | null;
+};
+export type CategoryInit = {
   id?: string;
-  categoryId?: string | null;
-  createdAt?: number;
-  totalQuantity: number;
-  unit: string;
-  food: string;
-  inputs?: Array<{
-    text: string;
-    url?: string | null;
-    title?: string | null;
-    quantity?: number | null;
-  }>;
-  purchasedAt?: number | null;
-  expiredAt?: number | null;
-  listId?: string | null;
-}
-export type Item = ObjectEntity<ItemInit>;
+  name: string;
+  sortKey?: string;
+  expirationDays?: number | null;
+  claim?: CategoryClaimInit | null;
+};
+export type CategorySnapshot = {
+  id: string;
+  name: string;
+  sortKey: string;
+  expirationDays: number | null;
+  claim: CategoryClaimSnapshot | null;
+};
+/** Category sub-object types */
 
-export type ItemInputs = ListEntity<{
-  text: string;
-  url: string | null;
-  title: string | null;
-  quantity: number | null;
-}>;
+type CategoryId = string;
+type CategoryIdInit = CategoryId | undefined;
+type CategoryIdSnapshot = CategoryId;
+type CategoryIdDestructured = CategoryId;
+type CategoryName = string;
+type CategoryNameInit = CategoryName;
+type CategoryNameSnapshot = CategoryName;
+type CategoryNameDestructured = CategoryName;
+type CategorySortKey = string;
+type CategorySortKeyInit = CategorySortKey | undefined;
+type CategorySortKeySnapshot = CategorySortKey;
+type CategorySortKeyDestructured = CategorySortKey;
+type CategoryExpirationDays = number | null;
+type CategoryExpirationDaysInit = CategoryExpirationDays | undefined;
+type CategoryExpirationDaysSnapshot = CategoryExpirationDays;
+type CategoryExpirationDaysDestructured = CategoryExpirationDays;
+export type CategoryClaim = ObjectEntity<
+  CategoryClaimInit,
+  CategoryClaimDestructured
+>;
+export type CategoryClaimInit = {
+  claimedBy: string;
+  claimedAt: number;
+};
+export type CategoryClaimDestructured = {
+  claimedBy: string;
+  claimedAt: number;
+};
+export type CategoryClaimSnapshot = {
+  claimedBy: string;
+  claimedAt: number;
+};
+type CategoryClaimClaimedBy = string;
+type CategoryClaimClaimedByInit = CategoryClaimClaimedBy;
+type CategoryClaimClaimedBySnapshot = CategoryClaimClaimedBy;
+type CategoryClaimClaimedByDestructured = CategoryClaimClaimedBy;
+type CategoryClaimClaimedAt = number;
+type CategoryClaimClaimedAtInit = CategoryClaimClaimedAt;
+type CategoryClaimClaimedAtSnapshot = CategoryClaimClaimedAt;
+type CategoryClaimClaimedAtDestructured = CategoryClaimClaimedAt;
 
-export type ItemInputsItem = ObjectEntity<{
-  text: string;
-  url: string | null;
-  title: string | null;
-  quantity: number | null;
-}>;
+export type Item = ObjectEntity<ItemInit, ItemDestructured>;
 
 export interface ItemCategoryIdMatchFilter {
   where: "categoryId";
@@ -208,27 +197,6 @@ export interface ItemListIdStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
-
-export interface ItemListMatchFilter {
-  where: "list";
-  equals: string;
-  order?: "asc" | "desc";
-}
-
-export interface ItemListRangeFilter {
-  where: "list";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-
-export interface ItemListStartsWithFilter {
-  where: "list";
-  startsWith: string;
-  order?: "asc" | "desc";
-}
 export type ItemFilter =
   | ItemCategoryIdMatchFilter
   | ItemCategoryIdRangeFilter
@@ -242,25 +210,130 @@ export type ItemFilter =
   | ItemPurchasedStartsWithFilter
   | ItemListIdMatchFilter
   | ItemListIdRangeFilter
-  | ItemListIdStartsWithFilter
-  | ItemListMatchFilter
-  | ItemListRangeFilter
-  | ItemListStartsWithFilter;
+  | ItemListIdStartsWithFilter;
 
-export interface FoodCategoryAssignmentSnapshot {
+export type ItemDestructured = {
   id: string;
-  foodName: string;
-  categoryId: string;
-  remote: boolean;
-}
-
-export interface FoodCategoryAssignmentInit {
+  categoryId: string | null;
+  createdAt: number;
+  totalQuantity: number;
+  unit: string;
+  food: string;
+  inputs: ItemInputs;
+  purchasedAt: number | null;
+  expiredAt: number | null;
+  listId: string | null;
+};
+export type ItemInit = {
   id?: string;
-  foodName: string;
-  categoryId: string;
-  remote: boolean;
-}
-export type FoodCategoryAssignment = ObjectEntity<FoodCategoryAssignmentInit>;
+  categoryId?: string | null;
+  createdAt?: number;
+  totalQuantity: number;
+  unit: string;
+  food: string;
+  inputs?: ItemInputsInit;
+  purchasedAt?: number | null;
+  expiredAt?: number | null;
+  listId?: string | null;
+};
+export type ItemSnapshot = {
+  id: string;
+  categoryId: string | null;
+  createdAt: number;
+  totalQuantity: number;
+  unit: string;
+  food: string;
+  inputs: ItemInputsSnapshot;
+  purchasedAt: number | null;
+  expiredAt: number | null;
+  listId: string | null;
+};
+/** Item sub-object types */
+
+type ItemId = string;
+type ItemIdInit = ItemId | undefined;
+type ItemIdSnapshot = ItemId;
+type ItemIdDestructured = ItemId;
+type ItemCategoryId = string | null;
+type ItemCategoryIdInit = ItemCategoryId | undefined;
+type ItemCategoryIdSnapshot = ItemCategoryId;
+type ItemCategoryIdDestructured = ItemCategoryId;
+type ItemCreatedAt = number;
+type ItemCreatedAtInit = ItemCreatedAt | undefined;
+type ItemCreatedAtSnapshot = ItemCreatedAt;
+type ItemCreatedAtDestructured = ItemCreatedAt;
+type ItemTotalQuantity = number;
+type ItemTotalQuantityInit = ItemTotalQuantity;
+type ItemTotalQuantitySnapshot = ItemTotalQuantity;
+type ItemTotalQuantityDestructured = ItemTotalQuantity;
+type ItemUnit = string;
+type ItemUnitInit = ItemUnit;
+type ItemUnitSnapshot = ItemUnit;
+type ItemUnitDestructured = ItemUnit;
+type ItemFood = string;
+type ItemFoodInit = ItemFood;
+type ItemFoodSnapshot = ItemFood;
+type ItemFoodDestructured = ItemFood;
+export type ItemInputs = ListEntity<ItemInputsItemInit, ItemInputsItem>;
+export type ItemInputsInit = Array<ItemInputsItemInit>;
+export type ItemInputsDestructured = Array<ItemInputsItem>;
+export type ItemInputsSnapshot = Array<ItemInputsItemSnapshot>;
+export type ItemInputsItem = ObjectEntity<
+  ItemInputsItemInit,
+  ItemInputsItemDestructured
+>;
+export type ItemInputsItemInit = {
+  text: string;
+  url?: string | null;
+  title?: string | null;
+  quantity?: number | null;
+};
+export type ItemInputsItemDestructured = {
+  text: string;
+  url: string | null;
+  title: string | null;
+  quantity: number | null;
+};
+export type ItemInputsItemSnapshot = {
+  text: string;
+  url: string | null;
+  title: string | null;
+  quantity: number | null;
+};
+type ItemInputsItemText = string;
+type ItemInputsItemTextInit = ItemInputsItemText;
+type ItemInputsItemTextSnapshot = ItemInputsItemText;
+type ItemInputsItemTextDestructured = ItemInputsItemText;
+type ItemInputsItemUrl = string | null;
+type ItemInputsItemUrlInit = ItemInputsItemUrl | undefined;
+type ItemInputsItemUrlSnapshot = ItemInputsItemUrl;
+type ItemInputsItemUrlDestructured = ItemInputsItemUrl;
+type ItemInputsItemTitle = string | null;
+type ItemInputsItemTitleInit = ItemInputsItemTitle | undefined;
+type ItemInputsItemTitleSnapshot = ItemInputsItemTitle;
+type ItemInputsItemTitleDestructured = ItemInputsItemTitle;
+type ItemInputsItemQuantity = number | null;
+type ItemInputsItemQuantityInit = ItemInputsItemQuantity | undefined;
+type ItemInputsItemQuantitySnapshot = ItemInputsItemQuantity;
+type ItemInputsItemQuantityDestructured = ItemInputsItemQuantity;
+
+type ItemPurchasedAt = number | null;
+type ItemPurchasedAtInit = ItemPurchasedAt | undefined;
+type ItemPurchasedAtSnapshot = ItemPurchasedAt;
+type ItemPurchasedAtDestructured = ItemPurchasedAt;
+type ItemExpiredAt = number | null;
+type ItemExpiredAtInit = ItemExpiredAt | undefined;
+type ItemExpiredAtSnapshot = ItemExpiredAt;
+type ItemExpiredAtDestructured = ItemExpiredAt;
+type ItemListId = string | null;
+type ItemListIdInit = ItemListId | undefined;
+type ItemListIdSnapshot = ItemListId;
+type ItemListIdDestructured = ItemListId;
+
+export type FoodCategoryAssignment = ObjectEntity<
+  FoodCategoryAssignmentInit,
+  FoodCategoryAssignmentDestructured
+>;
 
 export interface FoodCategoryAssignmentFoodNameMatchFilter {
   where: "foodName";
@@ -311,16 +384,47 @@ export type FoodCategoryAssignmentFilter =
   | FoodCategoryAssignmentCategoryIdRangeFilter
   | FoodCategoryAssignmentCategoryIdStartsWithFilter;
 
-export interface SuggestionSnapshot {
-  text: string;
-  usageCount: number;
-}
+export type FoodCategoryAssignmentDestructured = {
+  id: string;
+  foodName: string;
+  categoryId: string;
+  remote: boolean;
+};
+export type FoodCategoryAssignmentInit = {
+  id?: string;
+  foodName: string;
+  categoryId: string;
+  remote: boolean;
+};
+export type FoodCategoryAssignmentSnapshot = {
+  id: string;
+  foodName: string;
+  categoryId: string;
+  remote: boolean;
+};
+/** FoodCategoryAssignment sub-object types */
 
-export interface SuggestionInit {
-  text: string;
-  usageCount?: number;
-}
-export type Suggestion = ObjectEntity<SuggestionInit>;
+type FoodCategoryAssignmentId = string;
+type FoodCategoryAssignmentIdInit = FoodCategoryAssignmentId | undefined;
+type FoodCategoryAssignmentIdSnapshot = FoodCategoryAssignmentId;
+type FoodCategoryAssignmentIdDestructured = FoodCategoryAssignmentId;
+type FoodCategoryAssignmentFoodName = string;
+type FoodCategoryAssignmentFoodNameInit = FoodCategoryAssignmentFoodName;
+type FoodCategoryAssignmentFoodNameSnapshot = FoodCategoryAssignmentFoodName;
+type FoodCategoryAssignmentFoodNameDestructured =
+  FoodCategoryAssignmentFoodName;
+type FoodCategoryAssignmentCategoryId = string;
+type FoodCategoryAssignmentCategoryIdInit = FoodCategoryAssignmentCategoryId;
+type FoodCategoryAssignmentCategoryIdSnapshot =
+  FoodCategoryAssignmentCategoryId;
+type FoodCategoryAssignmentCategoryIdDestructured =
+  FoodCategoryAssignmentCategoryId;
+type FoodCategoryAssignmentRemote = boolean;
+type FoodCategoryAssignmentRemoteInit = FoodCategoryAssignmentRemote;
+type FoodCategoryAssignmentRemoteSnapshot = FoodCategoryAssignmentRemote;
+type FoodCategoryAssignmentRemoteDestructured = FoodCategoryAssignmentRemote;
+
+export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
 
 export interface SuggestionUsageCountMatchFilter {
   where: "usageCount";
@@ -341,20 +445,115 @@ export type SuggestionFilter =
   | SuggestionUsageCountMatchFilter
   | SuggestionUsageCountRangeFilter;
 
-export interface ListSnapshot {
+export type SuggestionDestructured = {
+  text: string;
+  usageCount: number;
+};
+export type SuggestionInit = {
+  text: string;
+  usageCount?: number;
+};
+export type SuggestionSnapshot = {
+  text: string;
+  usageCount: number;
+};
+/** Suggestion sub-object types */
+
+type SuggestionText = string;
+type SuggestionTextInit = SuggestionText;
+type SuggestionTextSnapshot = SuggestionText;
+type SuggestionTextDestructured = SuggestionText;
+type SuggestionUsageCount = number;
+type SuggestionUsageCountInit = SuggestionUsageCount | undefined;
+type SuggestionUsageCountSnapshot = SuggestionUsageCount;
+type SuggestionUsageCountDestructured = SuggestionUsageCount;
+
+export type List = ObjectEntity<ListInit, ListDestructured>;
+
+export type ListFilter = never;
+export type ListDestructured = {
   id: string;
   name: string;
   color: string;
-}
-
-export interface ListInit {
+};
+export type ListInit = {
   id?: string;
   name: string;
   color?: string;
-}
-export type List = ObjectEntity<ListInit>;
+};
+export type ListSnapshot = {
+  id: string;
+  name: string;
+  color: string;
+};
+/** List sub-object types */
 
-export type ListFilter = never;
+type ListId = string;
+type ListIdInit = ListId | undefined;
+type ListIdSnapshot = ListId;
+type ListIdDestructured = ListId;
+type ListName = string;
+type ListNameInit = ListName;
+type ListNameSnapshot = ListName;
+type ListNameDestructured = ListName;
+type ListColor = string;
+type ListColorInit = ListColor | undefined;
+type ListColorSnapshot = ListColor;
+type ListColorDestructured = ListColor;
+
+export type CollaborationInfo = ObjectEntity<
+  CollaborationInfoInit,
+  CollaborationInfoDestructured
+>;
+
+export type CollaborationInfoFilter = never;
+export type CollaborationInfoDestructured = {
+  id: string;
+  meetup: CollaborationInfoMeetup | null;
+};
+export type CollaborationInfoInit = {
+  id?: string;
+  meetup?: CollaborationInfoMeetupInit | null;
+};
+export type CollaborationInfoSnapshot = {
+  id: string;
+  meetup: CollaborationInfoMeetupSnapshot | null;
+};
+/** CollaborationInfo sub-object types */
+
+type CollaborationInfoId = string;
+type CollaborationInfoIdInit = CollaborationInfoId | undefined;
+type CollaborationInfoIdSnapshot = CollaborationInfoId;
+type CollaborationInfoIdDestructured = CollaborationInfoId;
+export type CollaborationInfoMeetup = ObjectEntity<
+  CollaborationInfoMeetupInit,
+  CollaborationInfoMeetupDestructured
+>;
+export type CollaborationInfoMeetupInit = {
+  createdAt?: number;
+  location: string;
+};
+export type CollaborationInfoMeetupDestructured = {
+  createdAt: number;
+  location: string;
+};
+export type CollaborationInfoMeetupSnapshot = {
+  createdAt: number;
+  location: string;
+};
+type CollaborationInfoMeetupCreatedAt = number;
+type CollaborationInfoMeetupCreatedAtInit =
+  | CollaborationInfoMeetupCreatedAt
+  | undefined;
+type CollaborationInfoMeetupCreatedAtSnapshot =
+  CollaborationInfoMeetupCreatedAt;
+type CollaborationInfoMeetupCreatedAtDestructured =
+  CollaborationInfoMeetupCreatedAt;
+type CollaborationInfoMeetupLocation = string;
+type CollaborationInfoMeetupLocationInit = CollaborationInfoMeetupLocation;
+type CollaborationInfoMeetupLocationSnapshot = CollaborationInfoMeetupLocation;
+type CollaborationInfoMeetupLocationDestructured =
+  CollaborationInfoMeetupLocation;
 
 interface Collection<
   Document extends ObjectEntity<any>,
@@ -399,6 +598,13 @@ export class Client<Presence = any, Profile = any> {
   >;
 
   readonly lists: Collection<List, ListSnapshot, ListInit, ListFilter>;
+
+  readonly collaborationInfo: Collection<
+    CollaborationInfo,
+    CollaborationInfoSnapshot,
+    CollaborationInfoInit,
+    CollaborationInfoFilter
+  >;
 
   sync: ServerSync<Profile, Presence>;
   undoHistory: Storage["undoHistory"];

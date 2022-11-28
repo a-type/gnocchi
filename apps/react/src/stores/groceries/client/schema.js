@@ -142,10 +142,6 @@ const items = collection({
         listId: {
             type: 'string',
             compute: (doc)=>doc.listId
-        },
-        list: {
-            type: 'string',
-            compute: (doc)=>doc.listId
         }
     },
     compounds: {
@@ -189,13 +185,38 @@ const lists = collection({
         }
     }
 });
+const collaborationInfo = collection({
+    name: 'collaborationInfo',
+    pluralName: 'collaborationInfo',
+    primaryKey: 'id',
+    fields: {
+        id: {
+            type: 'string',
+            default: 'default'
+        },
+        meetup: {
+            type: 'object',
+            nullable: true,
+            properties: {
+                createdAt: {
+                    type: 'number',
+                    default: ()=>Date.now()
+                },
+                location: {
+                    type: 'string'
+                }
+            }
+        }
+    }
+});
 export default schema({
-    version: 11,
+    version: 12,
     collections: {
-        categories: categories,
-        items: items,
-        foodCategoryAssignments: foodCategoryAssignments,
+        categories,
+        items,
+        foodCategoryAssignments,
         suggestions,
-        lists
+        lists,
+        collaborationInfo
     }
 });

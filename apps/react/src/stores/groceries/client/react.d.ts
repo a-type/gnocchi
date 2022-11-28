@@ -13,6 +13,8 @@ import type {
   SuggestionFilter,
   List,
   ListFilter,
+  CollaborationInfo,
+  CollaborationInfoFilter,
 } from "./index.js";
 import type {
   UserInfo,
@@ -69,6 +71,14 @@ export interface GeneratedHooks<Presence, Profile> {
   useList: (id: string) => List;
   useOneList: (config: { index: ListFilter }) => List;
   useAllLists: (config?: { index: ListFilter }) => List[];
+
+  useCollaborationInfo: (id: string) => CollaborationInfo;
+  useOneCollaborationInfo: (config: {
+    index: CollaborationInfoFilter;
+  }) => CollaborationInfo;
+  useAllCollaborationInfo: (config?: {
+    index: CollaborationInfoFilter;
+  }) => CollaborationInfo[];
 }
 
 export function createHooks<Presence = any, Profile = any>(): GeneratedHooks<
