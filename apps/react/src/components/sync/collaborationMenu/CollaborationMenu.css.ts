@@ -12,6 +12,7 @@ export const trigger = style({
 	borderRadius: vars.radii.md,
 	display: 'flex',
 	flexDirection: 'row',
+	minHeight: 32,
 	gap: vars.space[1],
 	':hover': {
 		backgroundColor: vars.colors.gray30,
