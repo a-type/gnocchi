@@ -152,6 +152,10 @@ const items = collection({
 			type: 'string',
 			compute: (doc) => doc.listId,
 		},
+		list: {
+			type: 'string',
+			compute: (doc) => doc.listId,
+		},
 	},
 	compounds: {
 		purchased_food_listId: {

@@ -1,8 +1,14 @@
 import { Category, hooks, Item } from '@/stores/groceries/index.js';
 import { useMemo } from 'react';
 
-export function useItemsGroupedAndSorted() {
-	const items = hooks.useAllItems() || [];
+export function useItemsGroupedAndSorted(listId: string | null = null) {
+	const items =
+		hooks.useAllItems({
+			index: {
+				where: 'listId',
+				equals: listId,
+			},
+		}) || [];
 	const categories = hooks.useAllCategories() || [];
 	return useMemo(() => {
 		const categoryGroups: { category: Category | null; items: Item[] }[] = [];

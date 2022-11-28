@@ -40,6 +40,7 @@ import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 
 export interface GroceryListProps {
 	className?: string;
+	listId: string | null;
 }
 
 const MemoizedCategory = memo(GroceryListCategory);
@@ -89,9 +90,9 @@ function useGrocerySync() {
 
 const GroceryListCategories = forwardRef<
 	HTMLDivElement,
-	{ className?: string }
->(function GroceryListCategories(props, ref) {
-	const groupedItems = useItemsGroupedAndSorted();
+	{ className?: string; listId: string | null }
+>(function GroceryListCategories({ listId, ...props }, ref) {
+	const groupedItems = useItemsGroupedAndSorted(listId);
 
 	return (
 		<Box
@@ -183,7 +184,6 @@ function useOnDragStart() {
 	return useCallback(({ active }: DragStartEvent) => {
 		const item = (active.data.current as GroceryDnDDrag).value;
 		groceriesState.draggedItemOriginalCategory = item.get('categoryId');
-		groceriesState.draggedItemOriginalSortKey = item.get('sortKey');
 		groceriesState.isAnyItemDragged = true;
 	}, []);
 }
@@ -195,7 +195,6 @@ function useOnDragEnd() {
 		if (!over) {
 			// they dropped on nothing... cancel any movement
 			item.set('categoryId', groceriesState.draggedItemOriginalCategory);
-			item.set('sortKey', groceriesState.draggedItemOriginalSortKey);
 		} else {
 			const dropZone = over.data.current as GroceryDnDDrop;
 			if (dropZone.type === 'category') {
@@ -204,71 +203,24 @@ function useOnDragEnd() {
 				groceriesState.newCategoryPendingItem = valtioRef(item);
 			} else if (dropZone.type === 'delete') {
 				await groceries.deleteItem(item);
-			} else if (dropZone.type === 'item') {
-				// reorderItem(item, dropZone);
 			}
 		}
 		groceriesState.draggedItemOriginalCategory = null;
-		groceriesState.draggedItemOriginalSortKey = null;
 		groceriesState.isAnyItemDragged = false;
 	}, []);
 }
 
 function useOnDragOver() {
 	return useCallback(async ({ over, active }: DragOverEvent) => {
-		if (!over) return;
-
-		const item = (active.data.current as GroceryDnDDrag).value;
-		const dropZone = over.data.current as GroceryDnDDrop;
-		if (dropZone.type === 'category') {
-			if (item.get('categoryId') !== dropZone.value) {
-				await groceries.setItemCategory(item, dropZone.value);
-			}
-		} else if (dropZone.type === 'item') {
-			console.info(
-				item.get('food'),
-				item.get('sortKey'),
-				'over',
-				dropZone.value.get('food'),
-				dropZone.value.get('sortKey'),
-			);
-			reorderItem(item, dropZone);
-		}
+		// if (!over) return;
+		// const item = (active.data.current as GroceryDnDDrag).value;
+		// const dropZone = over.data.current as GroceryDnDDrop;
+		// if (dropZone.type === 'category') {
+		// 	if (item.get('categoryId') !== dropZone.value) {
+		// 		await groceries.setItemCategory(item, dropZone.value);
+		// 	}
+		// }
 	}, []);
-}
-
-function reorderItem(draggedItem: Item, dropZone: GroceryDnDDrag) {
-	if (draggedItem.get('id') === dropZone.value.get('id')) return;
-
-	let sortKey: string;
-
-	if (dropZone.value.get('sortKey') < draggedItem.get('sortKey')) {
-		sortKey = generateKeyBetween(
-			dropZone.prevSortKey,
-			dropZone.value.get('sortKey'),
-		);
-	} else if (dropZone.value.get('sortKey') > draggedItem.get('sortKey')) {
-		// generate a key between them
-		sortKey = generateKeyBetween(
-			dropZone.value.get('sortKey'),
-			dropZone.nextSortKey,
-		);
-	} else {
-		// problem... sort keys are the same.
-		// this should never happen in theory but could :/
-		console.warn(
-			'identical sortKeys',
-			draggedItem.get('sortKey'),
-			dropZone.value.get('sortKey'),
-		);
-		sortKey = generateKeyBetween(null, dropZone.value.get('sortKey'));
-	}
-
-	groceries.setItemPosition(
-		draggedItem,
-		sortKey,
-		dropZone.value.get('categoryId'),
-	);
 }
 
 function useOnDragCancel() {
@@ -279,7 +231,6 @@ function useOnDragCancel() {
 				'categoryId',
 				groceriesState.draggedItemOriginalCategory,
 			);
-			dragged.value.set('sortKey', groceriesState.draggedItemOriginalSortKey);
 		}
 	}, []);
 }

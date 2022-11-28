@@ -5,7 +5,7 @@ import { Box } from '@/components/primitives/primitives.js';
 import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js';
 import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
 import { SyncMenu } from '@/components/sync/SyncMenu.js';
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useCallback, useEffect } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
 import { styled } from '@/stitches.config.js';
@@ -16,9 +16,9 @@ import {
 	PageRoot,
 } from '@/components/layouts/index.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
-import { NavBar } from '@/components/nav/NavBar.jsx';
+import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -30,19 +30,41 @@ export function GroceriesPage() {
 		}
 	}, [hasSeenWelcome]);
 
+	const onListChange = useCallback(
+		(listId: string | null) => {
+			if (listId === null) {
+				navigate('/');
+			} else {
+				navigate(`/list/${listId}`);
+			}
+		},
+		[navigate],
+	);
+	const { listId = null } = useParams();
+
 	return (
 		<PageRoot>
 			<PageContent fullHeight noPadding flex={1}>
 				<hooks.Provider value={groceriesDescriptor}>
-					<Box w="full" direction="row" align="center" gap={2} p={4}>
+					<Box
+						w="full"
+						direction="row"
+						justify="spaceBetween"
+						align="center"
+						gap={2}
+						p={4}
+					>
 						<Suspense fallback={null}>
-							<MainMenu />
+							<Box direction="row" align="center" gap={2}>
+								<MainMenu />
+								<ListSelect value={listId} onChange={onListChange} />
+							</Box>
 							<SyncMenu />
 						</Suspense>
 					</Box>
 					<PageFixedArea>
 						<Suspense fallback={null}>
-							<GroceryListAdd />
+							<GroceryListAdd listId={listId} />
 						</Suspense>
 						{/* <Suspense fallback={null}>
 							<PositionedDeleteChecked />
@@ -50,7 +72,7 @@ export function GroceriesPage() {
 						<GroceriesActionBar />
 					</PageFixedArea>
 					<Suspense fallback={null}>
-						<GroceryList />
+						<GroceryList listId={listId} />
 					</Suspense>
 					<SubscriptionExpiredDialog />
 					<CompleteSignupDialog />

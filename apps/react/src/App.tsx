@@ -33,6 +33,7 @@ export function App() {
 								<AuthProvider>
 									<Routes>
 										<Route path="/" element={<GroceriesPage />} />
+										<Route path="/list/:listId" element={<GroceriesPage />} />
 										<Route path="/plan" element={<PlanPage />} />
 										<Route
 											path="/claim/:inviteId"

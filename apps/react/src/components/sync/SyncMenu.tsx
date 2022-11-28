@@ -56,8 +56,8 @@ export function SyncMenu() {
 
 	return (
 		<Container>
-			<GlobeIcon className={statusIconClass()} />
 			<People />
+			<GlobeIcon className={statusIconClass()} />
 		</Container>
 	);
 }
