@@ -1,5 +1,4 @@
 import cuid from 'cuid';
-import { generateKeyBetween } from 'fractional-indexing';
 import { parseIngredient } from '@aglio/conversion';
 import { EntityShape, ClientDescriptor, Item } from './client/index.js';
 import { createHooks } from './client/react.js';
@@ -46,6 +45,7 @@ export const groceriesDescriptor = new ClientDescriptor<Presence, Profile>({
 				sortKey: defaultCategory.sortKey,
 			});
 		}
+		await client.collaborationInfo.put({});
 	},
 });
 const _groceries = groceriesDescriptor.open();
