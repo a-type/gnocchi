@@ -7,7 +7,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { forwardRef, ReactNode } from 'react';
+import { forwardRef, ReactNode, Suspense } from 'react';
 import { MeetupHint } from '../meetup/MeetupHint.jsx';
 import { MeetupSelect } from '../meetup/MeetupSelect.jsx';
 import { People } from '../people/People.jsx';
@@ -20,15 +20,17 @@ export interface CollaborationMenuProps {
 
 export function CollaborationMenu({ children }: CollaborationMenuProps) {
 	return (
-		<Popover>
-			<PopoverTrigger asChild>
-				<CollaborationMenuTriggerContent className={classes.trigger} />
-			</PopoverTrigger>
-			<PopoverContent>
-				<PopoverArrow />
-				<CollaborationMenuContent />
-			</PopoverContent>
-		</Popover>
+		<Suspense fallback={<div className={classes.trigger} />}>
+			<Popover>
+				<PopoverTrigger asChild>
+					<CollaborationMenuTriggerContent className={classes.trigger} />
+				</PopoverTrigger>
+				<PopoverContent>
+					<PopoverArrow />
+					<CollaborationMenuContent />
+				</PopoverContent>
+			</Popover>
+		</Suspense>
 	);
 }
 
