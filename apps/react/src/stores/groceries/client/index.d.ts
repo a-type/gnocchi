@@ -71,7 +71,6 @@ export interface ItemSnapshot {
   totalQuantity: number;
   unit: string;
   food: string;
-  sortKey: string;
   inputs: Array<{
     text: string;
     url: string | null;
@@ -80,6 +79,7 @@ export interface ItemSnapshot {
   }>;
   purchasedAt: number | null;
   expiredAt: number | null;
+  listId: string | null;
 }
 
 export interface ItemInit {
@@ -89,7 +89,6 @@ export interface ItemInit {
   totalQuantity: number;
   unit: string;
   food: string;
-  sortKey: string;
   inputs?: Array<{
     text: string;
     url?: string | null;
@@ -98,6 +97,7 @@ export interface ItemInit {
   }>;
   purchasedAt?: number | null;
   expiredAt?: number | null;
+  listId?: string | null;
 }
 export type Item = ObjectEntity<ItemInit>;
 
@@ -157,20 +157,12 @@ export interface ItemFoodStartsWithFilter {
   order?: "asc" | "desc";
 }
 
-export interface ItemCategoryIdSortKeyCompoundFilter {
-  where: "categoryId_sortKey";
-  match: {
-    categoryId?: string | null;
-    sortKey?: string;
-  };
-  order: "asc" | "desc";
-}
-
-export interface ItemPurchasedFoodCompoundFilter {
-  where: "purchased_food";
+export interface ItemPurchasedFoodListIdCompoundFilter {
+  where: "purchased_food_listId";
   match: {
     purchased?: string;
     food?: string;
+    listId?: string;
   };
   order: "asc" | "desc";
 }
@@ -195,6 +187,48 @@ export interface ItemPurchasedStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+
+export interface ItemListIdMatchFilter {
+  where: "listId";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface ItemListIdRangeFilter {
+  where: "listId";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface ItemListIdStartsWithFilter {
+  where: "listId";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
+export interface ItemListMatchFilter {
+  where: "list";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface ItemListRangeFilter {
+  where: "list";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface ItemListStartsWithFilter {
+  where: "list";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
 export type ItemFilter =
   | ItemCategoryIdMatchFilter
   | ItemCategoryIdRangeFilter
@@ -202,11 +236,16 @@ export type ItemFilter =
   | ItemFoodMatchFilter
   | ItemFoodRangeFilter
   | ItemFoodStartsWithFilter
-  | ItemCategoryIdSortKeyCompoundFilter
-  | ItemPurchasedFoodCompoundFilter
+  | ItemPurchasedFoodListIdCompoundFilter
   | ItemPurchasedMatchFilter
   | ItemPurchasedRangeFilter
-  | ItemPurchasedStartsWithFilter;
+  | ItemPurchasedStartsWithFilter
+  | ItemListIdMatchFilter
+  | ItemListIdRangeFilter
+  | ItemListIdStartsWithFilter
+  | ItemListMatchFilter
+  | ItemListRangeFilter
+  | ItemListStartsWithFilter;
 
 export interface FoodCategoryAssignmentSnapshot {
   id: string;
@@ -302,6 +341,21 @@ export type SuggestionFilter =
   | SuggestionUsageCountMatchFilter
   | SuggestionUsageCountRangeFilter;
 
+export interface ListSnapshot {
+  id: string;
+  name: string;
+  color: string;
+}
+
+export interface ListInit {
+  id?: string;
+  name: string;
+  color?: string;
+}
+export type List = ObjectEntity<ListInit>;
+
+export type ListFilter = never;
+
 interface Collection<
   Document extends ObjectEntity<any>,
   Snapshot,
@@ -343,6 +397,8 @@ export class Client<Presence = any, Profile = any> {
     SuggestionInit,
     SuggestionFilter
   >;
+
+  readonly lists: Collection<List, ListSnapshot, ListInit, ListFilter>;
 
   sync: ServerSync<Profile, Presence>;
   undoHistory: Storage["undoHistory"];

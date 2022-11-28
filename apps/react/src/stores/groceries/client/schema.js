@@ -91,9 +91,6 @@ const items = collection({
             type: 'string',
             indexed: true
         },
-        sortKey: {
-            type: 'string'
-        },
         inputs: {
             type: 'array',
             items: {
@@ -129,25 +126,34 @@ const items = collection({
 		 */ expiredAt: {
             type: 'number',
             nullable: true
+        },
+        /**
+		 * If assigned to a list, this ID will be
+		 */ listId: {
+            type: 'string',
+            nullable: true
         }
     },
     synthetics: {
         purchased: {
             type: 'string',
             compute: (doc)=>!!doc.purchasedAt ? 'yes' : 'no'
+        },
+        listId: {
+            type: 'string',
+            compute: (doc)=>doc.listId
+        },
+        list: {
+            type: 'string',
+            compute: (doc)=>doc.listId
         }
     },
     compounds: {
-        categoryId_sortKey: {
-            of: [
-                'categoryId',
-                'sortKey'
-            ]
-        },
-        purchased_food: {
+        purchased_food_listId: {
             of: [
                 'purchased',
-                'food'
+                'food',
+                'listId'
             ]
         }
     }
@@ -166,12 +172,30 @@ const suggestions = collection({
         }
     }
 });
+const lists = collection({
+    name: 'list',
+    primaryKey: 'id',
+    fields: {
+        id: {
+            type: 'string',
+            default: ()=>cuid()
+        },
+        name: {
+            type: 'string'
+        },
+        color: {
+            type: 'string',
+            default: '#ffffff'
+        }
+    }
+});
 export default schema({
-    version: 10,
+    version: 11,
     collections: {
         categories: categories,
         items: items,
         foodCategoryAssignments: foodCategoryAssignments,
-        suggestions
+        suggestions,
+        lists
     }
 });

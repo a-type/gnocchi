@@ -30,6 +30,7 @@ import { state as signupState } from '@/components/sync/StartSignupDialog.jsx';
 
 export interface GroceryListAddProps {
 	className?: string;
+	listId: string | null;
 }
 
 function stateReducer(
@@ -71,7 +72,7 @@ function getRandomPlaceholder() {
 }
 
 export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
-	function GroceryListAdd({ ...rest }, ref) {
+	function GroceryListAdd({ listId, ...rest }, ref) {
 		const isSubscribed = useIsSubscribed();
 		const [hasPastedAUrl, setHasPastedAUrl] = useLocalStorage(
 			'hasPastedAUrl',
@@ -148,7 +149,9 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 							signupState.status = 'open';
 						}
 					} else {
-						await groceries.addItems([selectedItem]);
+						await groceries.addItems([selectedItem], {
+							listId,
+						});
 					}
 					setRandomPlaceholder(getRandomPlaceholder());
 					reset();
@@ -164,11 +167,13 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 				const lines = text.split(/\r?\n/).map((t) => t.trim());
 				const items = lines.filter(Boolean);
 				if (items.length > 1) {
-					await groceries.addItems(items);
+					await groceries.addItems(items, {
+						listId,
+					});
 					reset();
 				}
 			},
-			[setInputValue, reset],
+			[setInputValue, reset, listId],
 		);
 
 		const inputIsUrl = isUrl(inputValue);

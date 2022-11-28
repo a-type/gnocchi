@@ -107,26 +107,7 @@ export const groceries = {
 			});
 		}
 	},
-	setItemPosition: async (
-		item: Item,
-		sortKey: string,
-		categoryId: string | null,
-	) => {
-		const storage = await _groceries;
-		item.set('sortKey', sortKey);
-		item.set('categoryId', categoryId);
-		// if category changed, update lookups
-		if (categoryId) {
-			await groceries.upsertFoodCategoryAssignment(
-				item.get('food'),
-				categoryId,
-			);
-		}
 
-		storage.sync.presence.update({
-			lastInteractedItem: item.get('id'),
-		});
-	},
 	toggleItemPurchased: async (item: Item) => {
 		const storage = await _groceries;
 		if (item.get('purchasedAt')) {
@@ -206,7 +187,13 @@ export const groceries = {
 	},
 	addItems: async (
 		lines: string[],
-		sourceInfo?: { url?: string; title: string },
+		{
+			sourceInfo,
+			listId = null,
+		}: {
+			listId?: string | null;
+			sourceInfo?: { url?: string; title: string };
+		},
 	) => {
 		const storage = await _groceries;
 		if (!lines.length) return;
@@ -216,10 +203,11 @@ export const groceries = {
 		for (const line of lines) {
 			const parsed = parseIngredient(line);
 			const firstMatch = await storage.items.findOne({
-				where: 'purchased_food',
+				where: 'purchased_food_listId',
 				match: {
 					purchased: 'no',
 					food: parsed.food,
+					listId: listId || 'null',
 				},
 				order: 'asc',
 			}).resolved;
@@ -266,28 +254,13 @@ export const groceries = {
 					categoryId = null;
 				}
 
-				// TODO: findOne with a sort order applied to get just
-				// the last item
-				const categoryItems = await storage.items.findAll({
-					where: 'categoryId_sortKey',
-					match: {
-						categoryId,
-					},
-					order: 'desc',
-					// TODO: when limits exist, limit to 1
-				}).resolved;
-				const lastCategoryItem = categoryItems[0];
-
-				const item = await storage.items.create({
+				const item = await storage.items.put({
 					categoryId,
+					listId: listId || null,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
 					unit: parsed.unit,
 					food: parsed.food,
-					sortKey: generateKeyBetween(
-						lastCategoryItem?.get('sortKey') ?? null,
-						null,
-					),
 					inputs: [
 						{
 							text: line,
@@ -321,22 +294,28 @@ export const groceries = {
 			});
 		}
 	},
-	addRecipe: async (url: string) => {
+	addRecipe: async (url: string, listId: string | null = null) => {
 		try {
 			const scanned = await trpcClient.query('scans.recipe', {
 				url,
 			});
 			if (scanned.rawIngredients?.length) {
 				await groceries.addItems(scanned.rawIngredients, {
-					url,
-					title: scanned.title || 'Recipe',
+					listId,
+					sourceInfo: {
+						url,
+						title: scanned.title || 'Recipe',
+					},
 				});
 			} else if (scanned.detailedIngredients?.length) {
 				await groceries.addItems(
 					scanned.detailedIngredients.map((i) => i.original),
 					{
-						url,
-						title: scanned.title || 'Recipe',
+						listId,
+						sourceInfo: {
+							url,
+							title: scanned.title || 'Recipe',
+						},
 					},
 				);
 			} else {
