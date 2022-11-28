@@ -13,7 +13,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/primitives/select/Select.jsx';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { Formik } from 'formik';
 import { useState } from 'react';
 

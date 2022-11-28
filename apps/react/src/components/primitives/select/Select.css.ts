@@ -7,14 +7,18 @@ export const trigger = style({
 	alignItems: 'center',
 	justifyContent: 'center',
 	borderRadius: vars.radii.md,
-	padding: '0 15px',
+	paddingLeft: vars.space[2],
+	paddingRight: vars.space[2],
+	paddingTop: vars.space[1],
+	paddingBottom: vars.space[1],
 	fontSize: vars.fontSizes.sm,
 	lineHeight: 1,
-	height: 35,
-	gap: 5,
-	backgroundColor: 'white',
+	gap: vars.space[1],
 	color: vars.colors.black,
-	':hover': { backgroundColor: vars.colors.lemonLighter },
+	borderWidth: 1,
+	borderStyle: 'solid',
+	borderColor: vars.colors.gray20,
+	':hover': { borderColor: vars.colors.gray70 },
 	':focus': { boxShadow: vars.shadows.focus },
 	selectors: {
 		'&[data-placeholder]': { color: vars.colors.gray80 },
@@ -24,7 +28,7 @@ export const trigger = style({
 export const value = style({});
 
 export const icon = style({
-	color: vars.colors.lemonDark,
+	color: 'inherit',
 });
 
 export const content = style({
