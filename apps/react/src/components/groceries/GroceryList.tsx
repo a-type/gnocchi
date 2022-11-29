@@ -24,7 +24,6 @@ import React, {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
-import { Box } from '../primitives/index.js';
 import {
 	DESKTOP_DRAG_ACTIVATION_DELAY,
 	MOBILE_DRAG_ACTIVATION_DELAY,
@@ -37,6 +36,7 @@ import { groceriesState } from './state.js';
 import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
 import { restrictToVerticalAxis, snapCenterToCursor } from '@dnd-kit/modifiers';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
+import { Box } from '../primitives/box/Box.jsx';
 
 export interface GroceryListProps {
 	className?: string;
@@ -97,12 +97,10 @@ const GroceryListCategories = forwardRef<
 	return (
 		<Box
 			id="groceryList"
-			w="full"
-			flex={1}
+			width="full"
+			flexGrow={1}
 			p={2}
-			css={{
-				mb: 80,
-			}}
+			mb={20}
 			ref={ref}
 			{...props}
 		>

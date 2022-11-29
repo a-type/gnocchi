@@ -1,6 +1,6 @@
 import { Cross1Icon } from '@radix-ui/react-icons';
-import React, { ReactNode } from 'react';
 import { proxy, useSnapshot } from 'valtio';
+import { Box } from '../primitives/box/Box.jsx';
 import {
 	Dialog,
 	DialogClose,
@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../primitives/Dialog.js';
-import { Box, Button, H2, P, Span } from '../primitives/primitives.js';
+import { Button, H2, P, Span } from '../primitives/primitives.js';
 import { LoginButton } from './LoginButton.js';
 
 export interface StartSignupDialogProps {}
@@ -30,7 +30,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 			}}
 		>
 			<DialogContent width="md">
-				<Box direction="row" align="start" gap={2}>
+				<Box flexDirection="row" align="start" gap={2}>
 					<DialogTitle css={{ flex: 1 }}>
 						Subscribe for sync &amp; more
 					</DialogTitle>
@@ -60,7 +60,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 					while you're at the store.
 				</P> */}
 
-				<Box gap={2} align="center" css={{ m: 'auto', mt: '$8' }}>
+				<Box gap={2} align="center" m="auto" mt={8}>
 					<LoginButton color="primary" provider="google" returnTo="/">
 						Start your subscription
 					</LoginButton>

@@ -10,7 +10,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ErrorBoundary } from './components/primitives/ErrorBoundary.js';
 import { PlanPage } from './pages/PlanPage.js';
-import { Box, Button, H1, P } from './components/primitives/primitives.js';
+import { Button, H1, P } from './components/primitives/primitives.js';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { SplashPage } from './pages/SplashPage.jsx';
 import { AdminPage } from './pages/AdminPage.jsx';
@@ -19,6 +19,8 @@ import { RecipeEditPage } from './pages/RecipeEditPage.jsx';
 import { StartSignupDialog } from './components/sync/StartSignupDialog.jsx';
 import { PantryPage } from './pages/PantryPage.jsx';
 import { NavBar } from './components/nav/NavBar.jsx';
+import { UpdatePrompt } from './components/updatePrompt/UpdatePrompt.jsx';
+import { Box } from './components/primitives/box/Box.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -50,6 +52,7 @@ export function App() {
 									<NavBar />
 									<Toaster position="bottom-center" />
 									<StartSignupDialog />
+									<UpdatePrompt />
 								</AuthProvider>
 							</BrowserRouter>
 						</QueryClientProvider>
@@ -63,7 +66,7 @@ export function App() {
 function ErrorFallback() {
 	return (
 		<Box align="center" justify="center" p={4}>
-			<Box align="start" justify="center" gap={4} css={{ maxWidth: 600 }}>
+			<Box align="flex-start" justify="center" gap={4} maxWidth="content">
 				<H1>Something went wrong</H1>
 				<P>
 					Sorry about this. The app has crashed. You can try refreshing, but if

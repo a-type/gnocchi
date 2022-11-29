@@ -1,4 +1,4 @@
-import { Box } from '@/components/primitives/primitives.jsx';
+import { Box } from '@/components/primitives/box/Box.jsx';
 import { hooks } from '@/stores/recipes/index.js';
 import { RecipeTitleField } from './RecipeTitleField.jsx';
 

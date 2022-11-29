@@ -66,6 +66,7 @@ export const vars = createGlobalTheme(':root', {
 		10: '2.5rem',
 		11: '2.75rem',
 		12: '3rem',
+		20: '5rem',
 	},
 	radii: {
 		sm: '0.25rem',

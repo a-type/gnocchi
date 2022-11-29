@@ -1,4 +1,4 @@
-import { Box, Button, Span } from '@/components/primitives/index.js';
+import { Button, Span } from '@/components/primitives/index.js';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { css, styled } from '@/stitches.config.js';
@@ -10,6 +10,7 @@ import {
 	GlobeIcon,
 } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
+import { Box } from '../primitives/box/Box.jsx';
 import { Tooltip } from '../primitives/Tooltip.js';
 import { People } from './people/People.js';
 import { state as signupState } from './StartSignupDialog.js';
@@ -103,14 +104,14 @@ function AnonymousSyncMenu() {
 					Subscribe
 				</Button>
 			) : hasBeenCollapsed ? (
-				<Box direction="row" gap={3} align="center">
+				<Box flexDirection="row" gap={3} align="center">
 					<ArrowLeftIcon />
 					<Span>You can sign up from here</Span>
 				</Box>
 			) : null}
 			{!collapsed && (
 				<>
-					<Box flex={1} css={{ color: '$darkBlend', gridArea: 'pitch' }}>
+					<Box flexGrow={1} color="darkBlend" style={{ gridArea: 'pitch' }}>
 						Sync to your devices, share with family and friends, and more.
 					</Box>
 					<Button

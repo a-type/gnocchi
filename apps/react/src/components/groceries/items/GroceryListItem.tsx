@@ -204,16 +204,7 @@ function useDidQuantityJustChange(item: Item) {
 
 const touchActionNoneStyle = { touchAction: 'none' };
 
-export function GroceryListItemDraggable({
-	item,
-	nextSortKey,
-	prevSortKey,
-	...rest
-}: {
-	item: Item;
-	nextSortKey: string | null;
-	prevSortKey: string | null;
-}) {
+export function GroceryListItemDraggable({ item, ...rest }: { item: Item }) {
 	const {
 		attributes,
 		listeners,
@@ -226,8 +217,6 @@ export function GroceryListItemDraggable({
 		data: {
 			type: 'item',
 			value: item,
-			nextSortKey,
-			prevSortKey,
 		},
 	});
 

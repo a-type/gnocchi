@@ -16,7 +16,7 @@ export function PantryPage({}: PantryPageProps) {
 	return (
 		<hooks.Provider value={groceriesDescriptor}>
 			<PageRoot>
-				<PageContent fullHeight noPadding flex={1}>
+				<PageContent fullHeight noPadding>
 					<H1 css={{ p: '$4', mb: 0, pb: 0 }}>Purchased</H1>
 					<PageFixedArea>
 						<PantryActionBar />

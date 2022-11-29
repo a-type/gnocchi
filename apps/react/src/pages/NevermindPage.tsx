@@ -1,7 +1,6 @@
-import React from 'react';
-import { Box } from '@/components/primitives/primitives.js';
 import { LogoutButton } from '@/components/sync/LogoutButton.js';
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
+import { Box } from '@/components/primitives/box/Box.jsx';
 
 export function NevermindPage() {
 	return (

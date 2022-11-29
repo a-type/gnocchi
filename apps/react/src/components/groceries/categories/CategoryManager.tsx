@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, Button } from '@/components/primitives/primitives.js';
+import { Button } from '@/components/primitives/primitives.js';
 import { groceries, Category, hooks } from '@/stores/groceries/index.js';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { DndContext, DragOverlay, useDndMonitor } from '@dnd-kit/core';
@@ -8,6 +8,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { generateKeyBetween } from 'fractional-indexing';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
+import { Box } from '@/components/primitives/box/Box.jsx';
 
 export interface CategoryManagerProps {}
 
@@ -107,9 +108,9 @@ function CategoryManagerItem({
 	hooks.useWatch(category);
 
 	return (
-		<Box direction="row" align="center" gap={3} width="full" {...nodeProps}>
+		<Box flexDirection="row" align="center" gap={3} width="full" {...nodeProps}>
 			<DragHandleDots2Icon {...handleProps} style={{ touchAction: 'none' }} />
-			<Box flex={1}>{category.get('name')}</Box>
+			<Box flexGrow={1}>{category.get('name')}</Box>
 			<Button
 				color="ghostDestructive"
 				onClick={() => {

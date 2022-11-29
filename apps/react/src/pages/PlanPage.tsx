@@ -1,6 +1,6 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
+import { Box } from '@/components/primitives/box/Box.jsx';
 import {
-	Box,
 	Button,
 	ButtonProps,
 	Span,
@@ -14,17 +14,8 @@ import React from 'react';
 export function PlanPage() {
 	return (
 		<PageRoot>
-			<PageContent fullHeight noPadding flex={1}>
-				<Box
-					w="full"
-					direction="column"
-					css={{
-						mt: '$6',
-						p: '$4',
-					}}
-					gap={4}
-					align="start"
-				>
+			<PageContent fullHeight noPadding>
+				<Box width="full" direction="column" mt={6} p={4} gap={4} align="start">
 					<a href="/">
 						<ArrowLeftIcon /> Home
 					</a>

@@ -16,6 +16,4 @@ export type GroceryDnDDrop =
 export type GroceryDnDDrag = {
 	type: 'item';
 	value: Item;
-	nextSortKey: string | null;
-	prevSortKey: string | null;
 };

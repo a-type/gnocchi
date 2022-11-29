@@ -10,7 +10,6 @@ export default defineConfig({
 		react(),
 		vanillaExtractPlugin(),
 		VitePWA({
-			registerType: 'autoUpdate',
 			includeManifestIcons: true,
 			strategies: 'injectManifest',
 			srcDir: 'src',
@@ -54,13 +53,14 @@ export default defineConfig({
 
 			workbox: {
 				sourcemap: true,
+				cleanupOutdatedCaches: true,
 			},
 
-			// devOptions: {
-			// 	enabled: true,
-			// 	type: 'module',
-			// 	navigateFallback: 'index.html',
-			// },
+			devOptions: {
+				enabled: false,
+				type: 'module',
+				navigateFallback: 'index.html',
+			},
 		}),
 	],
 	optimizeDeps: {

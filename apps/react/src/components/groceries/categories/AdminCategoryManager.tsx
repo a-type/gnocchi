@@ -1,11 +1,6 @@
+import { Box } from '@/components/primitives/box/Box.jsx';
 import { Form, TextField } from '@/components/primitives/forms.jsx';
-import {
-	Box,
-	Button,
-	H1,
-	H2,
-	Input,
-} from '@/components/primitives/primitives.jsx';
+import { Button, H1, H2, Input } from '@/components/primitives/primitives.jsx';
 import { trpc } from '@/trpc.js';
 import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
 import { Formik } from 'formik';
@@ -127,13 +122,13 @@ function AdminCategoryItem({
 
 	return (
 		<Box gap={2}>
-			<Box direction="row" align="center" gap={2}>
+			<Box flexDirection="row" align="center" gap={2}>
 				<Input value={name} onChange={(ev) => setName(ev.target.value)} />
 				<Button onClick={() => updateCategory({ id: category.id, name })}>
 					Update
 				</Button>
 			</Box>
-			<Box justify="spaceBetween" direction="row">
+			<Box justify="space-between" flexDirection="row">
 				<Box>
 					<Button
 						size="small"
@@ -145,7 +140,7 @@ function AdminCategoryItem({
 						Delete
 					</Button>
 				</Box>
-				<Box direction="row" gap={2} align="center">
+				<Box flexDirection="row" gap={2} align="center">
 					<span>
 						{category.sortKey} ({prevSortKey},{nextSortKey})
 					</span>

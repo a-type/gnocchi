@@ -1,6 +1,7 @@
 import { groceries } from '@/stores/groceries/index.js';
-import React, { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { CategoryManager } from '../groceries/categories/CategoryManager.js';
+import { Box } from '../primitives/box/Box.jsx';
 import {
 	Dialog,
 	DialogClose,
@@ -8,7 +9,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../primitives/Dialog.js';
-import { Box, Button } from '../primitives/primitives.js';
+import { Button } from '../primitives/primitives.js';
 import { menuState } from './state.js';
 
 export function ManageCategoriesDialog({ children }: { children: ReactNode }) {
@@ -30,11 +31,11 @@ export function ManageCategoriesDialog({ children }: { children: ReactNode }) {
 					<CategoryManager />
 				</Suspense>
 				<Box
-					direction="row"
-					justify="spaceBetween"
+					flexDirection="row"
+					justify="space-between"
 					align="center"
 					gap={3}
-					css={{ pt: '$3' }}
+					pt={3}
 				>
 					<Button color="ghost" onClick={resetToDefaults}>
 						Reset to defaults

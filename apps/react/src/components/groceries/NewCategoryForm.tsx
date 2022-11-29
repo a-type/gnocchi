@@ -1,8 +1,7 @@
-import React from 'react';
 import { groceries, Category } from '@/stores/groceries/index.js';
 import { Formik } from 'formik';
+import { Box } from '../primitives/box/Box.jsx';
 import { Form, SubmitButton, TextField } from '../primitives/forms.js';
-import { Box } from '../primitives/primitives.js';
 
 export function NewCategoryForm({
 	onDone,
@@ -12,7 +11,7 @@ export function NewCategoryForm({
 	autoFocus?: boolean;
 }) {
 	return (
-		<Box direction="column" gap={2} align="stretch" w="full">
+		<Box flexDirection="column" gap={2} align="stretch" width="full">
 			<Formik
 				initialValues={{ name: '' }}
 				onSubmit={async ({ name }) => {
@@ -22,7 +21,13 @@ export function NewCategoryForm({
 				}}
 			>
 				<Form css={{ width: '100%' }}>
-					<Box direction="row" align="end" justify="stretch" w="full" gap={2}>
+					<Box
+						flexDirection="row"
+						align="end"
+						justify="stretch"
+						width="full"
+						gap={2}
+					>
 						<TextField
 							placeholder="Dairy & Eggs"
 							autoFocusDelay={autoFocus ? 100 : undefined}

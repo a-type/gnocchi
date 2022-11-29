@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
@@ -8,7 +7,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '../primitives/Popover.js';
-import { Box, Button, Span } from '../primitives/primitives.js';
+import { Button, Span } from '../primitives/primitives.js';
 import { styled } from '@/stitches.config.js';
 import { ManageCategoriesDialog } from './ManageCategoriesDialog.js';
 import { LoginButton } from '../sync/LoginButton.js';
@@ -17,6 +16,7 @@ import { LogoutButton } from '../sync/LogoutButton.js';
 import { BugButton } from './BugButton.js';
 import { useSnapshot } from 'valtio';
 import { menuState } from './state.js';
+import { Box } from '../primitives/box/Box.jsx';
 
 export function MainMenu() {
 	const { session, isSubscribed, error } = useAuth();
@@ -148,7 +148,7 @@ function OnlineContents() {
 	return (
 		<MenuList>
 			<MenuSection>
-				<Box direction="row" gap="2">
+				<Box flexDirection="row" gap={2}>
 					<ManagePlanButton color="default" size="small" />
 					<LogoutButton color="default" size="small">
 						Log out
@@ -177,7 +177,7 @@ function UnsubscribedContents() {
 				<MenuBanner>
 					<Span size="small">Subscription inactive</Span>
 				</MenuBanner>
-				<Box direction="row" gap="2">
+				<Box flexDirection="row" gap={2}>
 					<ManagePlanButton color="default" size="small" />
 					<LogoutButton>Log out</LogoutButton>
 				</Box>

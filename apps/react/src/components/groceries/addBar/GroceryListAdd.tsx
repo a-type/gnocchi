@@ -1,4 +1,4 @@
-import { Box, Button, Input } from '@/components/primitives/index.js';
+import { Button, Input } from '@/components/primitives/index.js';
 import {
 	forwardRef,
 	useState,
@@ -27,6 +27,7 @@ import { clsx } from 'clsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { state as signupState } from '@/components/sync/StartSignupDialog.jsx';
+import { Box } from '@/components/primitives/box/Box.jsx';
 
 export interface GroceryListAddProps {
 	className?: string;
@@ -184,8 +185,8 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 			<Popover open={isOpen}>
 				<PopoverAnchor asChild>
 					<Box
-						w="full"
-						direction="row"
+						width="full"
+						flexDirection="row"
 						gap={2}
 						data-state={isOpen ? 'open' : 'closed'}
 						{...rest}

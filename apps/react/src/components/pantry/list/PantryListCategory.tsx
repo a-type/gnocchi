@@ -19,9 +19,11 @@ export function PantryListCategory({
 			data-is-empty={!items || items?.length === 0}
 			{...rest}
 		>
-			<h2 className={groceryCategoryClasses.title}>
-				{category?.get('name') ?? 'Uncategorized'}
-			</h2>
+			<div className={groceryCategoryClasses.titleRow}>
+				<h2 className={groceryCategoryClasses.title}>
+					{category?.get('name') ?? 'Uncategorized'}
+				</h2>
+			</div>
 			<div className={groceryCategoryClasses.items}>
 				{items?.map((item, index) => {
 					return <PantryListItem key={item.get('id')} item={item} />;

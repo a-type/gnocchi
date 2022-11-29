@@ -69,16 +69,7 @@ export function GroceryListCategory({
 			</div>
 			<div className={classes.items} data-is-item-dragging={isDragging}>
 				{visibleItems.map((item, index) => {
-					const prevItem = visibleItems[index - 1];
-					const nextItem = visibleItems[index + 1];
-					return (
-						<MemoizedDraggableItem
-							key={item.get('id')}
-							item={item}
-							nextSortKey={nextItem?.get('sortKey') || null}
-							prevSortKey={prevItem?.get('sortKey') || null}
-						/>
-					);
+					return <MemoizedDraggableItem key={item.get('id')} item={item} />;
 				})}
 			</div>
 		</div>

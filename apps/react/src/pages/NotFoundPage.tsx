@@ -1,5 +1,6 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Box, Button } from '@/components/primitives/primitives.jsx';
+import { Box } from '@/components/primitives/box/Box.jsx';
+import { Button } from '@/components/primitives/primitives.jsx';
 import { Link } from 'react-router-dom';
 
 export function NotFoundPage() {
