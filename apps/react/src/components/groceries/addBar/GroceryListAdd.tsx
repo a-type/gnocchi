@@ -193,6 +193,7 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 						ref={mergedRef}
 					>
 						<Input
+							data-test="grocery-list-add-input"
 							name="text"
 							required
 							css={{ flex: 1 }}
@@ -202,7 +203,11 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 							})}
 							onPaste={onInputPaste}
 						/>
-						<Button color="primary" onClick={() => selectItem(inputValue)}>
+						<Button
+							data-test="grocery-list-add-button"
+							color="primary"
+							onClick={() => selectItem(inputValue)}
+						>
 							{inputIsUrl ? 'Scan' : 'Add'}
 						</Button>
 					</Box>

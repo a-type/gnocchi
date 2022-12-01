@@ -40,8 +40,6 @@ import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemQuantityNumber } from './ItemQuantityNumber.js';
 import { ItemSources } from './ItemSources.js';
 
-const DEBUG_SORT = false;
-
 export interface GroceryListItemProps {
 	className?: string;
 	item: Item;
@@ -64,7 +62,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		{ item, isDragActive, menuProps, className, ...rest },
 		ref,
 	) {
-		const { purchasedAt, totalQuantity, sortKey, id } = hooks.useWatch(item);
+		const { purchasedAt, totalQuantity, id } = hooks.useWatch(item);
 		const inputs = hooks.useWatch(item.get('inputs'));
 
 		const [purchasedHiddenState, setHiddenState] = useState<
@@ -121,6 +119,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				data-menu-open={menuOpen}
 				data-just-moved={justMoved}
 				data-hidden-state={purchasedHiddenState}
+				data-test="grocery-list-item"
 			>
 				<CollapsibleRoot open={menuOpen} onOpenChange={setMenuOpen}>
 					<div className={classes.mainContent}>
@@ -139,15 +138,13 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							onMouseUp={stopPropagation}
 							onPointerDown={stopPropagation}
 							onPointerUp={stopPropagation}
+							data-test="grocery-list-item-checkbox"
 						/>
 						<div className={classes.textContent}>
 							{inputs.length > 1 && (
 								<ItemQuantityNumber value={totalQuantity} />
 							)}
 							{displayString}
-							{DEBUG_SORT && (
-								<span style={{ marginLeft: '1ch' }}>{sortKey}</span>
-							)}
 						</div>
 						<RecentPeople item={item} />
 						<CollapsibleTrigger asChild>

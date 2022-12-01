@@ -1,0 +1,10 @@
+{
+	"name": "@aglio/tests",
+	"type": "module",
+	"scripts": {
+		"test:open": "cypress open"
+	},
+	"dependencies": {
+		"cypress": "^11.2.0"
+	}
+}

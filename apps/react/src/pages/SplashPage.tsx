@@ -1,16 +1,11 @@
 import { Scene } from '@/components/3d/Scene.jsx';
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import {
-	Box,
-	Button,
-	H1,
-	P,
-	Span,
-} from '@/components/primitives/primitives.jsx';
+import { Button, H1, P, Span } from '@/components/primitives/primitives.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { styled } from '@/stitches.config.js';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import * as classes from './SplashPage.css.js';
 
 export function SplashPage() {
 	const [_, setHasSeen] = useLocalStorage('hasSeenWelcome', true);
@@ -66,20 +61,14 @@ export function SplashPage() {
 				</Section>
 			</PageContent>
 			<PageContent
-				direction="column"
-				css={{
-					position: 'fixed',
-					bottom: 0,
-					backgroundColor: '$lemon',
-					borderTop: '1px solid $lemonDark',
-				}}
+				className={classes.fixedContent}
 				innerProps={{
-					gap: 3,
-					align: 'stretch',
+					className: classes.fixedContentInner,
 				}}
 			>
 				<Link to="/">
 					<Button
+						data-test="get-started"
 						css={{ justifyContent: 'center', width: '100%' }}
 						color="default"
 					>

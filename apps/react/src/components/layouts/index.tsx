@@ -7,6 +7,7 @@ export function PageContent({
 	fullHeight,
 	noPadding,
 	innerProps,
+	className,
 	...rest
 }: HTMLAttributes<HTMLDivElement> & {
 	fullHeight?: boolean;
@@ -15,16 +16,24 @@ export function PageContent({
 }) {
 	return (
 		<div
-			className={clsx(classes.content, {
-				[classes.contentNoPadding]: noPadding,
-			})}
+			className={clsx(
+				classes.content,
+				{
+					[classes.contentNoPadding]: noPadding,
+				},
+				className,
+			)}
 			{...rest}
 		>
 			<div
-				className={clsx(classes.innerContent, {
-					[classes.innerContentFullHeight]: fullHeight,
-				})}
 				{...innerProps}
+				className={clsx(
+					classes.innerContent,
+					{
+						[classes.innerContentFullHeight]: fullHeight,
+					},
+					innerProps?.className,
+				)}
 			>
 				{children}
 			</div>
