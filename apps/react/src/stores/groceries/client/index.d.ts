@@ -619,12 +619,7 @@ export class Client<Presence = any, Profile = any> {
 
 // schema is provided internally. loadInitialData must be revised to pass the typed Client
 interface ClientInitOptions<Presence = any, Profile = any>
-  extends Omit<
-    StorageInitOptions<Presence, Profile>,
-    "schema" | "loadInitialData"
-  > {
-  loadInitialData?: (client: Client) => Promise<void>;
-}
+  extends Omit<StorageInitOptions<Presence, Profile>, "schema"> {}
 
 export class ClientDescriptor<Presence = any, Profile = any> {
   constructor(init: ClientInitOptions<Presence, Profile>);

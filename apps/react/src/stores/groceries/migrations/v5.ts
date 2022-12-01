@@ -1,12 +1,30 @@
 import v4Schema from '../client/schemaVersions/v4.js';
 import v5Schema from '../client/schemaVersions/v5.js';
 import { migrate } from '@lo-fi/web';
+import { trpcClient } from '@/trpc.js';
 
-export default migrate(v4Schema, v5Schema, async ({ identity, migrate }) => {
-	await Promise.all([
-		migrate('items', identity),
-		// FIXME: lo-fi #52
-		migrate('categories', identity as any),
-		migrate('foodCategoryAssignments', identity),
-	]);
-});
+export default migrate(
+	v4Schema,
+	v5Schema,
+	async ({ withDefaults, migrate, mutations }) => {
+		await Promise.all([
+			migrate('items', (old) => withDefaults('items', old)),
+			migrate('categories', (old) => withDefaults('categories', old)),
+			migrate('foodCategoryAssignments', (old) =>
+				withDefaults('foodCategoryAssignments', old),
+			),
+		]);
+		try {
+			const defaultCategories = await trpcClient.query('categories.defaults');
+			for (const defaultCategory of defaultCategories) {
+				await mutations.categories.put({
+					id: defaultCategory.id,
+					name: defaultCategory.name,
+					sortKey: defaultCategory.sortKey,
+				});
+			}
+		} catch (error) {
+			console.error(error);
+		}
+	},
+);

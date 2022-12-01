@@ -14,7 +14,6 @@ import type {
   ListEntity,
   EntityBase,
   AccessibleEntityProperty,
-  DestructuredEntity,
   EntityShape,
 } from "@lo-fi/web";
 
@@ -29,7 +28,7 @@ export interface GeneratedHooks<Presence, Profile> {
   useSyncStatus: () => boolean;
   useWatch<T extends EntityBase<any> | null>(
     entity: T
-  ): T extends EntityBase<any> ? DestructuredEntity<EntityShape<T>> : T;
+  ): T extends EntityBase<any> ? EntityShape<T> : T;
   useWatch<
     T extends EntityBase<any> | null,
     P extends AccessibleEntityProperty<EntityShape<T>>
