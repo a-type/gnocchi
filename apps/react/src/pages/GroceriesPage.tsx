@@ -99,7 +99,25 @@ function ThemedPageRoot({
 	children: ReactNode;
 	listId: string | null | undefined;
 }) {
+	return (
+		<Suspense fallback={<PageRoot>{children}</PageRoot>}>
+			<ThemedPageRootInner listId={listId}>{children}</ThemedPageRootInner>
+		</Suspense>
+	);
+}
+
+function ThemedPageRootInner({
+	children,
+	listId,
+}: {
+	children: ReactNode;
+	listId: string | null | undefined;
+}) {
 	const theme = useListThemeClass(listId);
 
-	return <PageRoot className={theme}>{children}</PageRoot>;
+	return (
+		<Suspense fallback={children}>
+			<PageRoot className={theme}>{children}</PageRoot>
+		</Suspense>
+	);
 }
