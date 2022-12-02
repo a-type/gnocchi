@@ -97,10 +97,7 @@ function DeleteAllAction() {
 		<ActionButton
 			size="small"
 			onClick={() => {
-				const confirmed = confirm('Are you sure you want to delete all items?');
-				if (confirmed) {
-					groceries.deleteItems(items.map((i) => i.get('id')));
-				}
+				groceries.deleteItems(items.map((i) => i.get('id')));
 			}}
 			icon={<TrashIcon />}
 		>
