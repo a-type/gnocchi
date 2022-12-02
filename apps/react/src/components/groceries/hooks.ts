@@ -1,15 +1,20 @@
 import { Category, hooks, Item } from '@/stores/groceries/index.js';
 import { useMemo } from 'react';
 
-export function useItemsGroupedAndSorted(listId: string | null = null) {
-	const items =
-		hooks.useAllItems({
-			index: {
-				where: 'listId',
-				equals: listId,
-			},
-		}) || [];
-	const categories = hooks.useAllCategories() || [];
+export function useItemsGroupedAndSorted(
+	listId: string | null | undefined = undefined,
+) {
+	const items = hooks.useAllItems(
+		listId === undefined
+			? undefined
+			: {
+					index: {
+						where: 'listId',
+						equals: listId,
+					},
+			  },
+	);
+	const categories = hooks.useAllCategories();
 	return useMemo(() => {
 		const categoryGroups: { category: Category | null; items: Item[] }[] = [];
 		const sortedCategories: (Category | null)[] = categories

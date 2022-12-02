@@ -37,10 +37,10 @@ import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
 import { restrictToVerticalAxis, snapCenterToCursor } from '@dnd-kit/modifiers';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 import { Box } from '../primitives/box/Box.jsx';
+import { useListId } from '@/contexts/ListContext.jsx';
 
 export interface GroceryListProps {
 	className?: string;
-	listId: string | null;
 }
 
 const MemoizedCategory = memo(GroceryListCategory);
@@ -78,7 +78,7 @@ export default GroceryList;
 function useGrocerySync() {
 	const { session, isSubscribed } = useAuth();
 	const syncEnabled = session && isSubscribed;
-	const groceries = hooks.useStorage();
+	const groceries = hooks.useClient();
 	useEffect(() => {
 		if (syncEnabled) {
 			groceries.sync.start();
@@ -90,8 +90,9 @@ function useGrocerySync() {
 
 const GroceryListCategories = forwardRef<
 	HTMLDivElement,
-	{ className?: string; listId: string | null }
->(function GroceryListCategories({ listId, ...props }, ref) {
+	{ className?: string }
+>(function GroceryListCategories(props, ref) {
+	const listId = useListId();
 	const groupedItems = useItemsGroupedAndSorted(listId);
 
 	return (

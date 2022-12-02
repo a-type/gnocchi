@@ -28,10 +28,10 @@ import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { state as signupState } from '@/components/sync/StartSignupDialog.jsx';
 import { Box } from '@/components/primitives/box/Box.jsx';
+import { useListId } from '@/contexts/ListContext.jsx';
 
 export interface GroceryListAddProps {
 	className?: string;
-	listId: string | null;
 }
 
 function stateReducer(
@@ -73,7 +73,8 @@ function getRandomPlaceholder() {
 }
 
 export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
-	function GroceryListAdd({ listId, ...rest }, ref) {
+	function GroceryListAdd({ ...rest }, ref) {
+		const listId = useListId() || null;
 		const isSubscribed = useIsSubscribed();
 		const [hasPastedAUrl, setHasPastedAUrl] = useLocalStorage(
 			'hasPastedAUrl',

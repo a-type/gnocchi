@@ -17,6 +17,7 @@ import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActi
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 import { CollaborationMenu } from '@/components/sync/collaborationMenu/CollaborationMenu.jsx';
 import { Box } from '@/components/primitives/box/Box.jsx';
+import { ListContext } from '@/contexts/ListContext.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -41,39 +42,41 @@ export function GroceriesPage() {
 	const { listId = null } = useParams();
 
 	return (
-		<PageRoot>
-			<PageContent fullHeight noPadding>
-				<hooks.Provider value={groceriesDescriptor}>
-					<Box
-						width="full"
-						flexDirection="row"
-						justify="space-between"
-						align="center"
-						gap={2}
-						p={4}
-					>
+		<ListContext.Provider value={listId}>
+			<PageRoot>
+				<PageContent fullHeight noPadding>
+					<hooks.Provider value={groceriesDescriptor}>
+						<Box
+							width="full"
+							flexDirection="row"
+							justify="space-between"
+							align="center"
+							gap={2}
+							p={4}
+						>
+							<Suspense fallback={null}>
+								<Box flexDirection="row" align="center" gap={2}>
+									<MainMenu />
+									<ListSelect value={listId} onChange={onListChange} />
+								</Box>
+								<CollaborationMenu />
+							</Suspense>
+						</Box>
+						<PageFixedArea>
+							<Suspense fallback={null}>
+								<GroceryListAdd />
+							</Suspense>
+							<GroceriesActionBar />
+						</PageFixedArea>
 						<Suspense fallback={null}>
-							<Box flexDirection="row" align="center" gap={2}>
-								<MainMenu />
-								<ListSelect value={listId} onChange={onListChange} />
-							</Box>
-							<CollaborationMenu />
+							<GroceryList />
 						</Suspense>
-					</Box>
-					<PageFixedArea>
-						<Suspense fallback={null}>
-							<GroceryListAdd listId={listId} />
-						</Suspense>
-						<GroceriesActionBar />
-					</PageFixedArea>
-					<Suspense fallback={null}>
-						<GroceryList listId={listId} />
-					</Suspense>
-					<SubscriptionExpiredDialog />
-					<CompleteSignupDialog />
-					<SignupSuccessBanner />
-				</hooks.Provider>
-			</PageContent>
-		</PageRoot>
+						<SubscriptionExpiredDialog />
+						<CompleteSignupDialog />
+						<SignupSuccessBanner />
+					</hooks.Provider>
+				</PageContent>
+			</PageRoot>
+		</ListContext.Provider>
 	);
 }

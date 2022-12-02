@@ -15,14 +15,19 @@ export interface NavBarProps {}
 const SHOW_RECIPES = false;
 
 export function NavBar({}: NavBarProps) {
-	const matchGroceries = useMatch({
+	const matchDefaultList = !!useMatch({
 		path: '/',
 		end: true,
 	});
-	const matchPurchased = useMatch({
+	const matchList = !!useMatch({
+		path: '/list',
+		end: false,
+	});
+	const matchGroceries = matchDefaultList || matchList;
+	const matchPurchased = !!useMatch({
 		path: '/purchased',
 	});
-	const matchRecipes = useMatch({
+	const matchRecipes = !!useMatch({
 		path: '/recipes',
 	});
 
@@ -32,12 +37,12 @@ export function NavBar({}: NavBarProps) {
 
 	return (
 		<div className={clsx(classes.root)}>
-			<NavBarLink to="/" icon={<CartIcon />}>
+			<NavBarLink to="/" icon={<CartIcon />} active={matchGroceries}>
 				Groceries
 			</NavBarLink>
-			<PantryNavBarLink />
+			<PantryNavBarLink active={matchPurchased} />
 			{SHOW_RECIPES && (
-				<NavBarLink to="/recipes" icon={<RecipesIcon />}>
+				<NavBarLink to="/recipes" icon={<RecipesIcon />} active={matchRecipes}>
 					Recipes
 				</NavBarLink>
 			)}
@@ -50,20 +55,20 @@ function NavBarLink({
 	children,
 	icon,
 	shake,
+	active,
 }: {
 	to: string;
 	children: ReactNode;
 	icon: ReactNode;
 	shake?: boolean;
+	active: boolean;
 }) {
-	const match = useMatch(to);
-
 	return (
-		<CollapsibleRoot open={!!match}>
+		<CollapsibleRoot open={!!active}>
 			<Link to={to} className={classes.button} data-shake={shake}>
 				{icon}
 				<CollapsibleContent data-horizontal className={classes.collapsible}>
-					<span className={classes.buttonText} data-active={!!match}>
+					<span className={classes.buttonText} data-active={!!active}>
 						{children}
 					</span>
 				</CollapsibleContent>
@@ -72,7 +77,7 @@ function NavBarLink({
 	);
 }
 
-function PantryNavBarLink() {
+function PantryNavBarLink({ active }: { active: boolean }) {
 	const recent = useSnapshot(groceriesState.recentlyPurchasedItems).size;
 	const [shake, setShake] = useState(recent > 0);
 	useEffect(() => {
@@ -88,7 +93,12 @@ function PantryNavBarLink() {
 	}, [recent]);
 
 	return (
-		<NavBarLink to="/purchased" icon={<FridgeIcon />} shake={shake}>
+		<NavBarLink
+			to="/purchased"
+			icon={<FridgeIcon />}
+			shake={shake}
+			active={active}
+		>
 			Purchased
 		</NavBarLink>
 	);
