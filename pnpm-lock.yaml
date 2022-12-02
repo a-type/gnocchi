@@ -143,6 +143,7 @@ importers:
       copy-to-clipboard: ^3.3.2
       csstype: ^3.1.0
       cuid: ^2.1.8
+      date-fns: ^2.29.3
       dotenv: ^16.0.1
       downshift: ^7.0.1
       express: ^4.18.1
@@ -213,6 +214,7 @@ importers:
       copy-to-clipboard: 3.3.2
       csstype: 3.1.0
       cuid: 2.1.8
+      date-fns: 2.29.3
       downshift: 7.0.1_react@18.2.0
       formik: 2.2.9_react@18.2.0
       fractional-indexing: 3.0.1
@@ -4105,7 +4107,6 @@ packages:
   /date-fns/2.29.3:
     resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
     engines: {node: '>=0.11'}
-    dev: true
 
   /dayjs/1.11.6:
     resolution: {integrity: sha512-zZbY5giJAinCG+7AGaw0wIhNZ6J8AhWuSXKvuc1KAyMiRsvGQWqh4L+MomvhdAYjN+lqvVCMq1I41e3YHvXkyQ==}
