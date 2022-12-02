@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ButtonProps } from '../primitives/primitives.js';
+import { Button, ButtonProps } from '../primitives/index.js';
 
 export interface BugButtonProps extends ButtonProps {}
 

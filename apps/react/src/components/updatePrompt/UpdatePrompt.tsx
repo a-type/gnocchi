@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from '../primitives/Dialog.jsx';
-import { Button } from '../primitives/primitives.jsx';
+import { Button } from '@/components/primitives/index.js';
 // @ts-ignore
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import * as classes from './UpdatePrompt.css.js';

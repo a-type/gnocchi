@@ -6,7 +6,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/primitives/DropdownMenu.js';
-import { Button } from '@/components/primitives/primitives.js';
+import { Button } from '@/components/primitives/index.js';
 import { styled } from '@/stitches.config.js';
 import { groceries, Category, Item, hooks } from '@/stores/groceries/index.js';
 import { RowSpacingIcon } from '@radix-ui/react-icons';

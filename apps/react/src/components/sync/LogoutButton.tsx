@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@/components/primitives/primitives.js';
+import { Button, ButtonProps } from '@/components/primitives/index.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
 import React, { ReactNode } from 'react';
 

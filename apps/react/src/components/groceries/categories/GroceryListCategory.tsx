@@ -2,7 +2,7 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 } from '@/components/primitives/Collapsible.jsx';
-import { Button } from '@/components/primitives/primitives.jsx';
+import { Button } from '@/components/primitives/index.js';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';

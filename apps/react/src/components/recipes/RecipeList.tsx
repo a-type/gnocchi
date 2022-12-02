@@ -1,7 +1,6 @@
 import { hooks, Recipe } from '@/stores/recipes/index.js';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box } from '../primitives/box/Box.jsx';
-import { Button } from '../primitives/primitives.jsx';
+import { Button, Box } from '@/components/primitives/index.js';
 
 export interface RecipeListProps {}
 

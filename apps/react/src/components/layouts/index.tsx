@@ -46,14 +46,19 @@ export const PageRoot = forwardRef<
 	{
 		color?: 'default' | 'lemon';
 		children?: ReactNode;
+		className?: string;
 	}
->(function PageRoot(props, ref) {
+>(function PageRoot({ className, ...props }, ref) {
 	return (
 		<div
 			ref={ref}
-			className={clsx(classes.pageRoot, {
-				[classes.pageRootLemon]: props.color === 'lemon',
-			})}
+			className={clsx(
+				classes.pageRoot,
+				{
+					[classes.pageRootLemon]: props.color === 'lemon',
+				},
+				className,
+			)}
 			{...props}
 		/>
 	);

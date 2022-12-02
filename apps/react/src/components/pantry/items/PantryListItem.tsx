@@ -1,7 +1,7 @@
 import { groceries, hooks, Item } from '@/stores/groceries/index.js';
 import * as groceryItemClasses from '@/components/groceries/items/GroceryListItem.css.js';
 import { useItemDisplayText } from '@/components/groceries/items/hooks.js';
-import { Button } from '@/components/primitives/primitives.jsx';
+import { Button } from '@/components/primitives/index.js';
 import { TrashIcon } from '@radix-ui/react-icons';
 import { RelativeTime } from '@/components/primitives/RelativeTime.jsx';
 import { clsx } from 'clsx';

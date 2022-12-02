@@ -21,27 +21,27 @@ export const root = style({
 
 const shake = keyframes({
 	'0%': { transform: 'scale(1) rotate(-5deg)' },
-	'10%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'10%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
 	'20%': {
 		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.cucumber,
+		color: vars.colors.accent,
 	},
-	'30%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'30%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
 	'40%': {
 		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.cucumber,
+		color: vars.colors.accent,
 	},
-	'50%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'50%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
 	'60%': {
 		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.cucumber,
+		color: vars.colors.accent,
 	},
-	'70%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'70%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
 	'80%': {
 		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.cucumber,
+		color: vars.colors.accent,
 	},
-	'90%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.cucumber },
+	'90%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
 	'100%': { transform: 'scale(1) rotate(0deg)' },
 });
 

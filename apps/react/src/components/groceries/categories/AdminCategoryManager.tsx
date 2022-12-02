@@ -1,6 +1,6 @@
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { Form, TextField } from '@/components/primitives/forms.jsx';
-import { Button, H1, H2, Input } from '@/components/primitives/primitives.jsx';
+import { Button, H1, H2, Input } from '@/components/primitives/index.js';
 import { trpc } from '@/trpc.js';
 import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
 import { Formik } from 'formik';

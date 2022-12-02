@@ -157,6 +157,9 @@ const items = collection({
 		purchased_food_listId: {
 			of: ['purchased', 'food', 'listId'],
 		},
+		purchased_listId: {
+			of: ['purchased', 'listId'],
+		},
 	},
 });
 
@@ -188,7 +191,6 @@ const lists = collection({
 		},
 		color: {
 			type: 'string',
-			default: '#ffffff',
 		},
 	},
 });
@@ -219,7 +221,7 @@ const collaborationInfo = collection({
 });
 
 export default schema({
-	version: 12,
+	version: 13,
 	collections: {
 		categories,
 		items,

@@ -52,7 +52,7 @@ export const root = style({
 			border: `1px solid ${vars.colors.gray50}`,
 		},
 		'&[data-highlighted="true"]': {
-			backgroundColor: vars.colors.lemonLighter,
+			backgroundColor: vars.colors.primaryLighter,
 		},
 		'&[data-menu-open="true"]': {
 			backgroundColor: vars.colors.white,
@@ -129,4 +129,42 @@ export const strikethrough = style({
 	animationName: expand,
 	animationDuration: '0.1s',
 	animationTimingFunction: 'ease-out',
+});
+
+export const listTag = style({
+	display: 'flex',
+	alignItems: 'center',
+	justifyContent: 'center',
+	padding: 4,
+	color: vars.colors.white,
+	borderRadius: vars.radii.md,
+	backgroundColor: vars.colors.primary,
+	fontSize: vars.fontSizes.xs,
+	minWidth: 12,
+	minHeight: 12,
+
+	'@media': {
+		'only screen and (min-width: 600px)': {
+			paddingLeft: 8,
+			paddingRight: 8,
+		},
+	},
+});
+
+export const listTagName = style({
+	display: 'none',
+	'@media': {
+		'only screen and (min-width: 600px)': {
+			display: 'inline',
+		},
+	},
+});
+
+export const listTagIcon = style({
+	display: 'inline',
+	'@media': {
+		'only screen and (min-width: 600px)': {
+			display: 'none',
+		},
+	},
 });

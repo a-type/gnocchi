@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@/components/primitives/primitives.jsx';
+import { Button, ButtonProps } from '@/components/primitives/index.js';
 import { clsx } from 'clsx';
 import { ReactNode, useEffect, useState } from 'react';
 import * as classes from './ActionButton.css.js';

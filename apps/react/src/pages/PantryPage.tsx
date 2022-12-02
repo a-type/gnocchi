@@ -6,7 +6,7 @@ import {
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';
-import { H1 } from '@/components/primitives/primitives.jsx';
+import { H1 } from '@/components/primitives/index.js';
 import { groceriesDescriptor, hooks } from '@/stores/groceries/index.js';
 import { Suspense } from 'react';
 

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Button } from '@/components/primitives/primitives.js';
+import { Button } from '@/components/primitives/index.js';
 import { groceries, Category, hooks } from '@/stores/groceries/index.js';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { DndContext, DragOverlay, useDndMonitor } from '@dnd-kit/core';

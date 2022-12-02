@@ -1,6 +1,6 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import { Box } from '@/components/primitives/box/Box.jsx';
-import { Button, H1, P } from '@/components/primitives/primitives.js';
+import { Button, H1, P } from '@/components/primitives/index.js';
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/contexts/AuthContext.js';

@@ -3,8 +3,14 @@ import {
 	CollapsibleRoot,
 	CollapsibleTrigger,
 } from '@/components/primitives/Collapsible.js';
-import { Box, Button, ButtonProps } from '@/components/primitives/index.js';
+import {
+	Box,
+	Button,
+	ButtonProps,
+	Tooltip,
+} from '@/components/primitives/index.js';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.js';
+import { useListId } from '@/contexts/ListContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { useIsFirstRender } from '@/hooks/usePrevious.js';
 import { useSize, useSizeCssVars } from '@/hooks/useSize.js';
@@ -15,10 +21,15 @@ import {
 	Presence,
 	Profile,
 } from '@/stores/groceries/index.js';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';
-import { HamburgerMenuIcon, TrashIcon } from '@radix-ui/react-icons';
+import {
+	HamburgerMenuIcon,
+	ListBulletIcon,
+	TrashIcon,
+} from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import React, {
 	CSSProperties,
@@ -30,8 +41,10 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import { Link } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/Checkbox.js';
+import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
 import { groceriesState } from '../state.js';
 import { CategoryPicker } from './CategoryPicker.js';
 import * as classes from './GroceryListItem.css.js';
@@ -147,13 +160,14 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							{displayString}
 						</div>
 						<RecentPeople item={item} />
+						<ListTag item={item} />
 						<CollapsibleTrigger asChild>
 							<Button
 								color="ghost"
-								css={{
+								className={sprinkles({
 									position: 'relative',
-									zIndex: menuOpen ? 'calc($menu + 1)' : 'initial',
-								}}
+									zIndex: menuOpen ? 'menuTrigger' : undefined,
+								})}
 								onContextMenu={preventDefault}
 								{...menuProps}
 							>
@@ -285,4 +299,33 @@ function usePeopleWhoLastEditedThis(itemId: string) {
 	}, []);
 
 	return people;
+}
+
+function ListTag({ item }: { item: Item }) {
+	const filteredListId = useListId();
+
+	if (filteredListId !== undefined) {
+		// only show list tag when showing all items
+		return null;
+	}
+
+	const { listId } = hooks.useWatch(item);
+
+	const list = useListOrNull(listId);
+	const listThemeClass = useListThemeClass(listId);
+
+	if (!list) {
+		return null;
+	}
+
+	return (
+		<Tooltip content={list.get('name')}>
+			<Link to={`/list/${list.get('id')}`}>
+				<div className={clsx(listThemeClass, classes.listTag)}>
+					<ListBulletIcon className={classes.listTagIcon} />
+					<span className={classes.listTagName}>{list.get('name')}</span>
+				</div>
+			</Link>
+		</Tooltip>
+	);
 }

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-	Button,
-	ButtonProps,
-	Input,
-} from '@/components/primitives/primitives.js';
+import { Button, ButtonProps, Input } from '@/components/primitives/index.js';
 import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
 import copy from 'copy-to-clipboard';
 

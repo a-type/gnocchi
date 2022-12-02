@@ -8,7 +8,7 @@ import React, {
 	Ref,
 	forwardRef,
 } from 'react';
-import { Button, Input, TextArea, TextAreaProps } from './primitives.js';
+import { Button, Input, TextArea, TextAreaProps } from './index.js';
 import { Form as FormikForm } from 'formik';
 import useMergedRef from '@/hooks/useMergedRef.js';
 

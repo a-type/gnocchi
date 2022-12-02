@@ -6,8 +6,8 @@ export const fixedContent = style({
 	position: 'fixed',
 	flexDirection: 'column',
 	bottom: 0,
-	backgroundColor: vars.colors.lemon,
-	borderTop: `1px solid ${vars.colors.lemonDark}`,
+	backgroundColor: vars.colors.primary,
+	borderTop: `1px solid ${vars.colors.primaryDark}`,
 });
 
 export const fixedContentInner = style({

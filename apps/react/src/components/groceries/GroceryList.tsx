@@ -38,6 +38,8 @@ import { restrictToVerticalAxis, snapCenterToCursor } from '@dnd-kit/modifiers';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 import { Box } from '../primitives/box/Box.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
+import { useListThemeClass } from './lists/hooks.js';
+import { clsx } from 'clsx';
 
 export interface GroceryListProps {
 	className?: string;

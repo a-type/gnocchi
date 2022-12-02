@@ -2,7 +2,7 @@ import GroceryList from '@/components/groceries/GroceryList.js';
 import { GroceryListAdd } from '@/components/groceries/addBar/GroceryListAdd.js';
 import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js';
 import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
-import { Suspense, useCallback, useEffect } from 'react';
+import { ReactNode, Suspense, useCallback, useEffect } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
 import { groceriesDescriptor, hooks } from '@/stores/groceries/index.js';
@@ -18,6 +18,8 @@ import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 import { CollaborationMenu } from '@/components/sync/collaborationMenu/CollaborationMenu.jsx';
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { ListContext } from '@/contexts/ListContext.jsx';
+import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -30,22 +32,25 @@ export function GroceriesPage() {
 	}, [hasSeenWelcome]);
 
 	const onListChange = useCallback(
-		(listId: string | null) => {
-			if (listId === null) {
+		(listId: string | null | undefined) => {
+			if (listId === undefined) {
 				navigate('/');
+			} else if (listId === null) {
+				navigate('/list/null');
 			} else {
 				navigate(`/list/${listId}`);
 			}
 		},
 		[navigate],
 	);
-	const { listId = null } = useParams();
+	const { listId: listIdParam } = useParams();
+	const listId = listIdParam === 'null' ? null : listIdParam;
 
 	return (
 		<ListContext.Provider value={listId}>
-			<PageRoot>
-				<PageContent fullHeight noPadding>
-					<hooks.Provider value={groceriesDescriptor}>
+			<hooks.Provider value={groceriesDescriptor}>
+				<ThemedPageRoot listId={listId}>
+					<PageContent fullHeight noPadding>
 						<Box
 							width="full"
 							flexDirection="row"
@@ -62,7 +67,13 @@ export function GroceriesPage() {
 								<CollaborationMenu />
 							</Suspense>
 						</Box>
-						<PageFixedArea>
+						<PageFixedArea
+							className={sprinkles({
+								display: 'flex',
+								flexDirection: 'column',
+								gap: 2,
+							})}
+						>
 							<Suspense fallback={null}>
 								<GroceryListAdd />
 							</Suspense>
@@ -74,9 +85,21 @@ export function GroceriesPage() {
 						<SubscriptionExpiredDialog />
 						<CompleteSignupDialog />
 						<SignupSuccessBanner />
-					</hooks.Provider>
-				</PageContent>
-			</PageRoot>
+					</PageContent>
+				</ThemedPageRoot>
+			</hooks.Provider>
 		</ListContext.Provider>
 	);
+}
+
+function ThemedPageRoot({
+	children,
+	listId,
+}: {
+	children: ReactNode;
+	listId: string | null | undefined;
+}) {
+	const theme = useListThemeClass(listId);
+
+	return <PageRoot className={theme}>{children}</PageRoot>;
 }

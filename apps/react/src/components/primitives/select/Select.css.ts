@@ -25,7 +25,10 @@ export const trigger = style({
 	},
 });
 
-export const value = style({});
+export const value = style({
+	display: 'flex',
+	flexDirection: 'row',
+});
 
 export const icon = style({
 	color: 'inherit',
@@ -51,6 +54,7 @@ export const item = style({
 	borderRadius: 3,
 	display: 'flex',
 	alignItems: 'center',
+	flexDirection: 'row',
 	height: 25,
 	padding: '0 35px 0 25px',
 	position: 'relative',
@@ -64,8 +68,8 @@ export const item = style({
 
 		'&[data-highlighted]': {
 			outline: 'none',
-			backgroundColor: vars.colors.lemonLighter,
-			color: vars.colors.lemonDarker,
+			backgroundColor: vars.colors.primaryLighter,
+			color: vars.colors.primaryDarker,
 		},
 	},
 });
@@ -100,6 +104,6 @@ export const scrollButton = style({
 	justifyContent: 'center',
 	height: 25,
 	backgroundColor: 'white',
-	color: vars.colors.lemonDark,
+	color: vars.colors.primaryDark,
 	cursor: 'default',
 });

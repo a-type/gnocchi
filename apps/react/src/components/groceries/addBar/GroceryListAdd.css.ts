@@ -26,7 +26,7 @@ export const item = style({
 
 	selectors: {
 		'& + &': {
-			borderTopWidth: vars.borderWidths.thin,
+			borderTopWidth: vars.borderWidths.default,
 			borderTopStyle: 'solid',
 			borderTopColor: vars.colors.gray80,
 		},
@@ -34,7 +34,7 @@ export const item = style({
 });
 
 export const itemHighlighted = style({
-	backgroundColor: vars.colors.lemonLighter,
+	backgroundColor: vars.colors.primaryLighter,
 });
 
 export const itemHidden = style({

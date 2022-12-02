@@ -8,7 +8,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../primitives/Dialog.js';
-import { Button, H2, P, Span } from '../primitives/primitives.js';
+import { Button, H2, P, Span } from '../primitives/index.js';
 import { LoginButton } from './LoginButton.js';
 
 export interface StartSignupDialogProps {}

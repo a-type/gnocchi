@@ -1,4 +1,4 @@
-import { Button, Span } from '@/components/primitives/primitives.js';
+import { Button, Span } from '@/components/primitives/index.js';
 import { API_HOST_HTTP } from '@/config.js';
 import React from 'react';
 

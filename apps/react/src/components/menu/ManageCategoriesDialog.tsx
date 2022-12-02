@@ -9,7 +9,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '../primitives/Dialog.js';
-import { Button } from '../primitives/primitives.js';
+import { Button } from '../primitives/index.js';
 import { menuState } from './state.js';
 
 export function ManageCategoriesDialog({ children }: { children: ReactNode }) {

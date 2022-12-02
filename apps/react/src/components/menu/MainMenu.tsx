@@ -7,7 +7,7 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '../primitives/Popover.js';
-import { Button, Span } from '../primitives/primitives.js';
+import { Button, Span } from '../primitives/index.js';
 import { styled } from '@/stitches.config.js';
 import { ManageCategoriesDialog } from './ManageCategoriesDialog.js';
 import { LoginButton } from '../sync/LoginButton.js';

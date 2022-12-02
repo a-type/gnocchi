@@ -1,6 +1,7 @@
+import { ComponentType } from 'react';
 import { clsx } from 'clsx';
 
-export function withClassName<T extends React.ComponentType<any>>(
+export function withClassName<T extends ComponentType<any>>(
 	Component: T,
 	cs: string,
 ): T {

@@ -39,8 +39,8 @@ export const root = style({
 
 	selectors: {
 		'&[data-dragged-over="true"]': {
-			backgroundColor: vars.colors.lemonLighter,
-			borderColor: vars.colors.lemonDark,
+			backgroundColor: vars.colors.primaryLighter,
+			borderColor: vars.colors.primaryDark,
 		},
 		'&[data-is-item-dragging="true"]': {
 			boxShadow: `0 0 0 1px ${vars.colors.gray30}`,
@@ -113,8 +113,8 @@ export const claimIcon = style({
 
 export const claimIconActive = style({
 	opacity: 1,
-	stroke: vars.colors.cucumber,
-	fill: vars.colors.leek,
+	stroke: vars.colors.accent,
+	fill: vars.colors.accentLight,
 });
 
 export const claimCollapse = style({
