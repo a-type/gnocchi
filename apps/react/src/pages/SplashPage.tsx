@@ -2,10 +2,12 @@ import { Scene } from '@/components/3d/Scene.jsx';
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import { Button, H1, P, Span } from '@/components/primitives/index.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { styled } from '@/stitches.config.js';
-import { useEffect } from 'react';
+import { clsx } from 'clsx';
+import { sprinkles } from '@/styles/sprinkles.css.js';
+import { CSSProperties, ReactNode, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as classes from './SplashPage.css.js';
+import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 
 export function SplashPage() {
 	const [_, setHasSeen] = useLocalStorage('hasSeenWelcome', true);
@@ -15,50 +17,102 @@ export function SplashPage() {
 
 	return (
 		<PageRoot color="lemon">
-			<BackgroundSceneContainer>
+			<div className={classes.backgroundSceneContainer}>
 				<Scene />
-			</BackgroundSceneContainer>
+			</div>
 			<PageContent>
-				<Title>Aglio</Title>
-				<Section css={{ mt: '40vh' }} color="white">
-					<H1>Less improv at the grocery store</H1>
-					<P>
-						If you're like me, you usually leave the grocery store with some
-						foods you didn't plan on buying. But you also get home, start
-						loading the fridge, and realize you forgot something, too.
-					</P>
-					<P>
-						I built Aglio to plan grocery trips better, as a solo shopper or a
-						family. It may seem like any old list app, but under the surface
-						I've tried to design intentionally for the task at hand. Give it a
-						shot this week (no account needed!) and let me know what you think.
-					</P>
-					<P>&ndash; Grant</P>
-				</Section>
-				<Section>
-					<H1>How it works</H1>
-					<P>
-						Copy, paste, or share ingredients from recipes directly into the
-						app.
-					</P>
-					<P>Organize your run by aisle.</P>
-					<P>
-						Y'know, grocery stuff. All of this works without even signing in.
-					</P>
-				</Section>
-				<Section>
-					<H1>Sign up for superpowers</H1>
-					<P>
-						An affordable account keeps things running and nets you some cool
-						stuff:
-					</P>
-					<P>Sync your list to all your devices.</P>
-					<P>Share your list with anyone you shop with.</P>
-					<P>
-						Scan a recipe page directly to the app to add all the ingredients to
-						your list.
-					</P>
-				</Section>
+				<div className={classes.demoGrid}>
+					<h1 className={classes.title}>Aglio</h1>
+					<DemoFrame
+						demo="basics"
+						className={classes.demo}
+						style={{ gridArea: 'basic' }}
+					/>
+					<Section style={{ gridArea: 'basicText' }}>
+						<H1>How it works</H1>
+						<p className={classes.item}>
+							<span className={classes.emoji}>🧾</span>
+							<span className={classes.itemText}>
+								Copy, paste, or share ingredients from recipes directly into the
+								app.
+							</span>
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>🏷️</span>
+							<span className={classes.itemText}>
+								Organize your run by aisle. Aglio will remember your
+								categorizations!
+							</span>
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>🛒</span>
+							<span className={classes.itemText}>
+								Y'know, grocery stuff. All of this works without even signing
+								in.
+							</span>
+						</p>
+					</Section>
+					<DemoFrame
+						demo="multiplayer"
+						className={classes.demo}
+						style={{ gridArea: 'multiplayer' }}
+					/>
+					<Section style={{ gridArea: 'multiplayerText' }}>
+						<H1>Sign up for superpowers</H1>
+						<p>
+							An affordable account keeps things running and nets you some cool
+							stuff:
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>☁️</span>
+							<span className={classes.itemText}>
+								Sync your list to all your devices.
+							</span>
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>👯</span>
+							<span className={classes.itemText}>
+								Share your list with anyone you shop with.
+							</span>
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>📌</span>
+							<span className={classes.itemText}>
+								In-store superpowers, like claiming sections and planning a
+								place to meet up
+							</span>
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>🖨️</span>
+							<span className={classes.itemText}>
+								Scan a recipe page directly to the app to add all the
+								ingredients to your list.{' '}
+								<span className={classes.beta}>BETA</span>
+							</span>
+						</p>
+					</Section>
+					<DemoFrame
+						demo="lists"
+						className={classes.demo}
+						style={{ gridArea: 'lists' }}
+					/>
+					<Section color="white" style={{ gridArea: 'outroText' }}>
+						<H1>Less improv at the grocery store</H1>
+						<p>
+							If you're like me, you usually leave the grocery store with some
+							foods you didn't plan on buying. But you also get home, start
+							loading the fridge, and realize you forgot something, too.
+						</p>
+						<p>
+							I built Aglio to plan grocery trips better, as a solo shopper or a
+							family. It may seem like any old list app, but under the surface
+							I've tried to design intentionally for the task at hand. Give it a
+							shot this week (no account needed!) and let me know what you
+							think.
+						</p>
+						<p>&ndash; Grant</p>
+					</Section>
+				</div>
 			</PageContent>
 			<PageContent
 				className={classes.fixedContent}
@@ -69,7 +123,7 @@ export function SplashPage() {
 				<Link to="/">
 					<Button
 						data-test="get-started"
-						css={{ justifyContent: 'center', width: '100%' }}
+						className={sprinkles({ justifyContent: 'center', width: 'full' })}
 						color="default"
 					>
 						Get Started
@@ -81,41 +135,17 @@ export function SplashPage() {
 	);
 }
 
-const Title = styled('h1', {
-	margin: 0,
-	fontFamily: '"Londrina Outline", sans-serif',
-	fontSize: '15vmax',
-	color: '$black',
-	fontWeight: 'lighter',
-});
-
-const BackgroundSceneContainer = styled('div', {
-	position: 'fixed',
-	top: 0,
-	left: 0,
-	width: '100%',
-	height: '80%',
-	pointerEvents: 'none',
-});
-
-const Section = styled('div', {
-	backgroundColor: '$lemon',
-	position: 'relative',
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'start',
-	mb: '120px',
-	p: '$6',
-	borderRadius: '$lg',
-	fontSize: '$sm',
-	border: '1px solid $lemonDark',
-
-	variants: {
-		color: {
-			white: {
-				backgroundColor: '$white',
-				border: '1px solid $black',
-			},
-		},
-	},
-});
+function Section({
+	color = 'default',
+	className,
+	...rest
+}: {
+	color?: 'white' | 'default';
+	className?: string;
+	children: ReactNode;
+	style?: CSSProperties;
+}) {
+	return (
+		<section className={clsx(classes.section[color], className)} {...rest} />
+	);
+}
