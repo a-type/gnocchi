@@ -89,7 +89,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				const timeout = setTimeout(() => {
 					setHiddenState('hidden');
 					groceriesState.recentlyPurchasedItems.delete(id);
-				}, 3000);
+				}, 2000);
 				return () => {
 					clearTimeout(timeout);
 					setHiddenState('visible');

@@ -27,6 +27,24 @@ const popIn = keyframes({
 	},
 });
 
+const expand = keyframes({
+	'0%': {
+		height: 0,
+	},
+	'100%': {
+		height: 'var(--height)',
+	},
+});
+
+const collapse = keyframes({
+	'0%': {
+		height: 'var(--height)',
+	},
+	'100%': {
+		height: 0,
+	},
+});
+
 export const root = style({
 	display: 'flex',
 	flexDirection: 'column',
@@ -50,6 +68,9 @@ export const root = style({
 			opacity: 0,
 			pointerEvents: 'none',
 			marginBottom: 0,
+			// },
+			// '&[data-is-empty="true"][data-is-initially-empty="false"]': {
+			animation: `${collapse} 0.2s ${vars.transitions.default} forwards`,
 		},
 		'&[data-is-item-dragging="true"][data-dragged-over="false"]': {
 			transform: 'scale(0.95)',

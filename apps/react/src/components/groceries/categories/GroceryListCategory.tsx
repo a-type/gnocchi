@@ -6,11 +6,12 @@ import { Button } from '@/components/primitives/index.js';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
+import { useSizeCssVars } from '@/hooks/useSize.js';
 import { Category, hooks, Item } from '@/stores/groceries/index.js';
 import { vars } from '@/theme.css.js';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { clsx } from 'clsx';
-import { memo, useCallback, useRef } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 import { useSnapshot } from 'valtio';
 import { useIsDragging } from '../dndHooks.js';
 import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
@@ -32,6 +33,7 @@ export function GroceryListCategory({
 		return !item.get('purchasedAt') || recentlyPurchased.has(item.get('id'));
 	});
 	const empty = visibleItems.length === 0;
+	// const [mountedEmpty] = useState(empty);
 
 	const isDragging = useIsDragging();
 	const internalRef = useRef<HTMLDivElement>(null);
@@ -46,7 +48,9 @@ export function GroceryListCategory({
 		},
 	});
 
-	const finalRef = useMergedRef(internalRef, setNodeRef);
+	const measureRef = useSizeCssVars(300);
+
+	const finalRef = useMergedRef(internalRef, setNodeRef, measureRef);
 
 	return (
 		<div
@@ -54,6 +58,7 @@ export function GroceryListCategory({
 			data-dragged-over={isOver}
 			data-is-item-dragging={isDragging}
 			data-is-empty={empty}
+			// data-is-initially-empty={mountedEmpty}
 			ref={finalRef}
 			{...rest}
 		>
