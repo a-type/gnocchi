@@ -5,16 +5,19 @@ import migrations from './migrations/index.js';
 export interface Profile {}
 export interface Presence {}
 
-export const recipesDescriptor = new ClientDescriptor({
+export const recipesDescriptor = new ClientDescriptor<Presence, Profile>({
 	sync: {
-		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
-		initialPresence: {} as Presence,
-		defaultProfile: {} as Profile,
+		authEndpoint: `${API_HOST_HTTP}/api/lofi/recipes`,
+		initialPresence: {},
+		defaultProfile: {},
 	},
 	migrations,
 	namespace: 'recipes',
 });
-recipesDescriptor.open();
+recipesDescriptor.open().then((client) => {
+	client.sync.start();
+	(window as any).recipes = client;
+});
 
 import { createHooks } from './client/react.js';
 export const hooks = createHooks<Presence, Profile>();

@@ -12,7 +12,7 @@ import * as classes from './NavBar.css.js';
 
 export interface NavBarProps {}
 
-const SHOW_RECIPES = false;
+const SHOW_RECIPES = import.meta.env.VITE_LOCAL_DEV === 'true';
 
 export function NavBar({}: NavBarProps) {
 	const matchDefaultList = !!useMatch({

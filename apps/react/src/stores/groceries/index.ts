@@ -25,7 +25,7 @@ export const hooks = createHooks<Presence, Profile>();
 
 export const groceriesDescriptor = new ClientDescriptor<Presence, Profile>({
 	sync: {
-		authEndpoint: `${API_HOST_HTTP}/api/auth/lofi`,
+		authEndpoint: `${API_HOST_HTTP}/api/lofi/groceries`,
 		initialPresence: {
 			lastInteractedItem: null,
 		},
@@ -36,17 +36,6 @@ export const groceriesDescriptor = new ClientDescriptor<Presence, Profile>({
 	},
 	migrations,
 	namespace: 'groceries',
-	loadInitialData: async (client) => {
-		const defaultCategories = await trpcClient.query('categories.defaults');
-		for (const defaultCategory of defaultCategories) {
-			await client.categories.put({
-				id: defaultCategory.id,
-				name: defaultCategory.name,
-				sortKey: defaultCategory.sortKey,
-			});
-		}
-		await client.collaborationInfo.put({});
-	},
 });
 const _groceries = groceriesDescriptor.open();
 

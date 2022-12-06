@@ -140,7 +140,29 @@ export const root = recipe({
 				borderRadius: vars.radii.lg,
 			},
 		},
+		toggled: {
+			true: {
+				backgroundColor: activeVar,
+				selectors: {
+					'&:hover:not(:disabled)': {
+						filter: 'brightness(1.1)',
+					},
+				},
+			},
+		},
 	},
+
+	compoundVariants: [
+		{
+			variants: {
+				color: 'ghost',
+				toggled: true,
+			},
+			style: {
+				backgroundColor: vars.colors.primaryLighter,
+			},
+		},
+	],
 
 	defaultVariants: {
 		color: 'default',

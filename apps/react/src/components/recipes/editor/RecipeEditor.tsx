@@ -1,5 +1,6 @@
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { hooks } from '@/stores/recipes/index.js';
+import { RecipeInstructionsField } from './RecipeInstructionsField.jsx';
 import { RecipeTitleField } from './RecipeTitleField.jsx';
 
 export interface RecipeEditorProps {
@@ -18,6 +19,7 @@ export function RecipeEditor({ slug }: RecipeEditorProps) {
 	return (
 		<Box direction="column" gap={8}>
 			<RecipeTitleField recipe={recipe} />
+			<RecipeInstructionsField recipe={recipe} />
 		</Box>
 	);
 }

@@ -4,7 +4,6 @@ import loginSuccessHandler from './loginSuccess.js';
 import googleLoginHandler from './google/login.js';
 import logoutHandler from './logout.js';
 import sessionHandler from './session.js';
-import lofiHandler from './lofi.js';
 
 const authRouter: Router = Router();
 authRouter.use(json());
@@ -14,6 +13,5 @@ authRouter.get('/session', sessionHandler);
 authRouter.use('/loginSuccess', loginSuccessHandler);
 authRouter.post('/google/login', googleLoginHandler);
 authRouter.use('/google/callback', googleCallbackHandler);
-authRouter.use('/lofi', lofiHandler);
 
 export default authRouter;

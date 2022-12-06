@@ -10,7 +10,7 @@ const tokenProvider = new TokenProvider({
 	secret: process.env.LOFI_SECRET,
 });
 
-export default async function lofiHandler(req: Request, res: Response) {
+export default async function groceriesHandler(req: Request, res: Response) {
 	const session = await getLoginSession(req);
 	if (!session) {
 		return res.status(401).send('Please log in');
