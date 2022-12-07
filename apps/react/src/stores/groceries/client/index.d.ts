@@ -156,6 +156,15 @@ export interface ItemPurchasedFoodListIdCompoundFilter {
   order: "asc" | "desc";
 }
 
+export interface ItemPurchasedListIdCompoundFilter {
+  where: "purchased_listId";
+  match: {
+    purchased?: string;
+    listId?: string;
+  };
+  order: "asc" | "desc";
+}
+
 export interface ItemPurchasedMatchFilter {
   where: "purchased";
   equals: string;
@@ -205,6 +214,7 @@ export type ItemFilter =
   | ItemFoodRangeFilter
   | ItemFoodStartsWithFilter
   | ItemPurchasedFoodListIdCompoundFilter
+  | ItemPurchasedListIdCompoundFilter
   | ItemPurchasedMatchFilter
   | ItemPurchasedRangeFilter
   | ItemPurchasedStartsWithFilter
@@ -479,7 +489,7 @@ export type ListDestructured = {
 export type ListInit = {
   id?: string;
   name: string;
-  color?: string;
+  color: string;
 };
 export type ListSnapshot = {
   id: string;
@@ -497,7 +507,7 @@ type ListNameInit = ListName;
 type ListNameSnapshot = ListName;
 type ListNameDestructured = ListName;
 type ListColor = string;
-type ListColorInit = ListColor | undefined;
+type ListColorInit = ListColor;
 type ListColorSnapshot = ListColor;
 type ListColorDestructured = ListColor;
 

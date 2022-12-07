@@ -27,3 +27,5 @@ export type {
 	RecipeIngredientsItem,
 	RecipeIngredientsItemComments,
 } from './client/index.js';
+
+export * as mutations from './mutations.js';

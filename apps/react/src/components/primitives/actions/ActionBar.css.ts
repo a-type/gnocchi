@@ -10,7 +10,7 @@ export const root = style({
 	overflow: 'hidden',
 	position: 'relative',
 
-	height: 52,
+	height: 64,
 
 	transition: `height 0.2s ${vars.transitions.springy}`,
 
@@ -43,6 +43,8 @@ export const content = style({
 	overflowX: 'auto',
 	paddingRight: 80,
 	position: 'relative',
+	height: '100%',
+	paddingLeft: 8,
 
 	selectors: {
 		'&::-webkit-scrollbar': {

@@ -8,9 +8,10 @@ export const controlButton = style({
 export const editor = style({});
 
 globalStyle(`${editor} .ProseMirror`, {
-	backgroundColor: 'transparent',
+	backgroundColor: vars.colors.gray10,
 	borderRadius: vars.radii.md,
-	padding: vars.space[2],
+	padding: vars.space[4],
+	border: `1px solid ${vars.colors.black}`,
 });
 globalStyle(`${editor} .ProseMirror:focus`, {
 	outline: 'none',
@@ -19,3 +20,4 @@ globalStyle(`${editor} .ProseMirror:focus`, {
 globalStyle(`${editor} .ProseMirror h1, h2, h3, p`, {
 	marginTop: 0,
 });
+globalStyle(`${editor} .ProseMirror h1`, {});

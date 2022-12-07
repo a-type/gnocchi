@@ -9,7 +9,7 @@ import {
 	useState,
 } from 'react';
 import { debounce } from '@a-type/utils';
-import { Input, InputProps } from './primitives.jsx';
+import { Input, InputProps } from './input/Input.jsx';
 
 export type LiveUpdateTextFieldProps = Omit<
 	InputProps,

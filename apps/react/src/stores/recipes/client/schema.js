@@ -49,6 +49,10 @@ const recipes = collection({
             items: {
                 type: 'object',
                 properties: {
+                    id: {
+                        type: 'string',
+                        default: ()=>cuid()
+                    },
                     text: {
                         type: 'string'
                     },
@@ -74,12 +78,12 @@ const recipes = collection({
         },
         instructions: {
             type: 'any',
-            default: null
+            default: undefined
         }
     }
 });
 export default schema({
-    version: 1,
+    version: 2,
     collections: {
         recipes,
         collections

@@ -59,10 +59,13 @@ export function GroceriesPage() {
 							gap={2}
 							p={4}
 						>
-							<Suspense fallback={null}>
+							{/* Suspended state approximates final height */}
+							<Suspense fallback={<div style={{ height: 33 }} />}>
 								<Box flexDirection="row" align="center" gap={2}>
 									<MainMenu />
-									<ListSelect value={listId} onChange={onListChange} />
+									<Suspense fallback={null}>
+										<ListSelect value={listId} onChange={onListChange} />
+									</Suspense>
 								</Box>
 								<CollaborationMenu />
 							</Suspense>

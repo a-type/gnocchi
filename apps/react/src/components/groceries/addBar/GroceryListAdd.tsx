@@ -29,6 +29,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { state as signupState } from '@/components/sync/StartSignupDialog.jsx';
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 
 export interface GroceryListAddProps {
 	className?: string;
@@ -197,7 +198,7 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 							data-test="grocery-list-add-input"
 							name="text"
 							required
-							css={{ flex: 1 }}
+							className={sprinkles({ flex: 1 })}
 							autoComplete="off"
 							{...getInputProps({
 								placeholder,

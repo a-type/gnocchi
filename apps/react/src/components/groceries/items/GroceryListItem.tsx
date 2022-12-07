@@ -43,7 +43,7 @@ import React, {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
-import { Checkbox } from '../../primitives/Checkbox.js';
+import { Checkbox } from '../../primitives/index.js';
 import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
 import { groceriesState } from '../state.js';
 import { CategoryPicker } from './CategoryPicker.js';

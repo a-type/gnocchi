@@ -4,6 +4,7 @@ import { createVar, style, styleVariants } from '@vanilla-extract/css';
 import { recipe, RecipeVariants } from '@vanilla-extract/recipes';
 
 const bgVar = createVar('button-bg');
+const hoverVar = createVar('button-hover');
 const activeVar = createVar('button-active');
 
 export const root = recipe({
@@ -16,6 +17,7 @@ export const root = recipe({
 			vars: {
 				[bgVar]: 'transparent',
 				[activeVar]: 'transparent',
+				[hoverVar]: 'transparent',
 			},
 			backgroundColor: bgVar,
 			WebkitTapHighlightColor: 'transparent',
@@ -36,7 +38,8 @@ export const root = recipe({
 
 			selectors: {
 				'&:hover:not(:disabled)': {
-					boxShadow: `0 0 0 6px ${bgVar}`,
+					backgroundColor: hoverVar,
+					boxShadow: `0 0 0 6px ${hoverVar}`,
 				},
 				'&:focus': {
 					outline: 'none',
@@ -60,16 +63,17 @@ export const root = recipe({
 			primary: {
 				vars: {
 					[bgVar]: vars.colors.primaryLighter,
+					[hoverVar]: vars.colors.primaryLight,
 					[activeVar]: vars.colors.primaryLight,
 				},
 				color: vars.colors.primaryDarker,
 				border: `1px solid currentColor`,
 				selectors: {
-					'&:hover:not(:disabled)': {
-						vars: {
-							[bgVar]: vars.colors.primaryLight,
-						},
-					},
+					// '&:hover:not(:disabled)': {
+					// 	vars: {
+					// 		[bgVar]: vars.colors.primaryLight,
+					// 	},
+					// },
 					'&:focus-visible:not(:disabled)': {
 						vars: {
 							[bgVar]: vars.colors.primaryLight,
@@ -80,6 +84,8 @@ export const root = recipe({
 			default: {
 				vars: {
 					[bgVar]: vars.colors.white,
+					[hoverVar]: vars.colors.gray20,
+					[activeVar]: vars.colors.gray30,
 				},
 				color: vars.colors.black,
 				border: `1px solid currentColor`,
@@ -87,6 +93,8 @@ export const root = recipe({
 			ghost: {
 				vars: {
 					[bgVar]: 'transparent',
+					[hoverVar]: vars.colors.gray10,
+					[activeVar]: vars.colors.gray20,
 				},
 				color: vars.colors.darkBlend,
 				selectors: {
@@ -100,6 +108,7 @@ export const root = recipe({
 			destructive: {
 				vars: {
 					[bgVar]: vars.colors.attentionLight,
+					[hoverVar]: vars.colors.attentionLight,
 					[activeVar]: vars.colors.attentionLight,
 				},
 				color: vars.colors.black,
@@ -116,16 +125,17 @@ export const root = recipe({
 			ghostDestructive: {
 				vars: {
 					[bgVar]: 'transparent',
+					[hoverVar]: vars.colors.attentionLight,
 					[activeVar]: vars.colors.attentionLight,
 				},
 				color: vars.colors.attentionDark,
 
 				selectors: {
-					'&:hover:not(:disabled)': {
-						vars: {
-							[bgVar]: vars.colors.attentionLight,
-						},
-					},
+					// '&:hover:not(:disabled)': {
+					// 	vars: {
+					// 		[bgVar]: vars.colors.attentionLight,
+					// 	},
+					// },
 				},
 			},
 		},

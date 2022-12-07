@@ -148,6 +148,7 @@ export type RecipeIngredientsItem = ObjectEntity<
   RecipeIngredientsItemDestructured
 >;
 export type RecipeIngredientsItemInit = {
+  id?: string;
   text: string;
   unit?: string | null;
   food: string;
@@ -155,6 +156,7 @@ export type RecipeIngredientsItemInit = {
   comments?: RecipeIngredientsItemCommentsInit;
 };
 export type RecipeIngredientsItemDestructured = {
+  id: string;
   text: string;
   unit: string | null;
   food: string;
@@ -162,12 +164,17 @@ export type RecipeIngredientsItemDestructured = {
   comments: RecipeIngredientsItemComments;
 };
 export type RecipeIngredientsItemSnapshot = {
+  id: string;
   text: string;
   unit: string | null;
   food: string;
   quantity: number;
   comments: RecipeIngredientsItemCommentsSnapshot;
 };
+type RecipeIngredientsItemId = string;
+type RecipeIngredientsItemIdInit = RecipeIngredientsItemId | undefined;
+type RecipeIngredientsItemIdSnapshot = RecipeIngredientsItemId;
+type RecipeIngredientsItemIdDestructured = RecipeIngredientsItemId;
 type RecipeIngredientsItemText = string;
 type RecipeIngredientsItemTextInit = RecipeIngredientsItemText;
 type RecipeIngredientsItemTextSnapshot = RecipeIngredientsItemText;

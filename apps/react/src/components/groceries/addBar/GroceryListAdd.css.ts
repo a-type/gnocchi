@@ -2,7 +2,9 @@ import { vars } from '@/theme.css.js';
 import { style } from '@vanilla-extract/css';
 
 export const menu = style({
-	overflow: 'hidden',
+	overflowX: 'hidden',
+	overflowY: 'auto',
+	maxHeight: '50vh',
 });
 
 export const menuList = style({

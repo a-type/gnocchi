@@ -1,10 +1,9 @@
-import React from 'react';
-import { Button, ButtonProps } from '../primitives/index.js';
+import { LinkButton, LinkButtonProps } from '../primitives/index.js';
 
-export function ManagePlanButton(props: ButtonProps) {
+export function ManagePlanButton(props: LinkButtonProps) {
 	return (
-		<Button as="a" href="/plan" {...props}>
+		<LinkButton {...props} to="/plan">
 			Manage plan
-		</Button>
+		</LinkButton>
 	);
 }
