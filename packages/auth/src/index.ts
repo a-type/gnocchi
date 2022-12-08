@@ -31,6 +31,7 @@ export async function setLoginSession(res: Response, session: Session) {
 		iat: Date.now(),
 		pid: session.planId,
 		nam: session.name,
+		role: session.role,
 	};
 	const token = jwt.sign(sessionObject, SESSION_SECRET!, {
 		expiresIn: MAX_AGE,
@@ -51,12 +52,14 @@ export async function getLoginSession(
 		iat: number;
 		pid: string;
 		nam: string | null;
+		role: 'admin' | 'user';
 	};
 
 	return {
 		userId: data.sub,
 		planId: data.pid,
 		name: data.nam,
+		role: data.role,
 	};
 }
 

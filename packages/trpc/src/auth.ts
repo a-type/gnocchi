@@ -80,6 +80,7 @@ export const authRouter = createRouter()
 				userId: user.id,
 				planId: user.planId,
 				name: user.friendlyName || user.fullName,
+				role: user.role as 'admin' | 'user',
 			});
 			if (input.returnTo) {
 				ctx.res.setHeader('Location', decodeURIComponent(input.returnTo));
@@ -103,6 +104,7 @@ export const authRouter = createRouter()
 					userId: user.id,
 					planId: user.planId,
 					name: user.friendlyName || user.fullName,
+					role: user.role as 'admin' | 'user',
 				});
 				if (input.returnTo) {
 					ctx.res.setHeader('Location', decodeURIComponent(input.returnTo));
