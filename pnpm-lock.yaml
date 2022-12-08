@@ -321,6 +321,15 @@ importers:
       '@types/pluralize': 0.0.29
       vitest: 0.22.1
 
+  packages/email:
+    specifiers:
+      '@types/nodemailer': ^6.4.6
+      nodemailer: ^6.8.0
+    dependencies:
+      nodemailer: 6.8.0
+    devDependencies:
+      '@types/nodemailer': 6.4.6
+
   packages/prisma:
     specifiers:
       '@prisma/client': ^4.3.1
@@ -352,6 +361,7 @@ importers:
   packages/trpc:
     specifiers:
       '@aglio/auth': workspace:*
+      '@aglio/email': workspace:*
       '@aglio/prisma': workspace:*
       '@aglio/scanning': workspace:*
       '@aglio/tools': workspace:*
@@ -359,6 +369,7 @@ importers:
       zod: ^3.19.0
     dependencies:
       '@aglio/auth': link:../auth
+      '@aglio/email': link:../email
       '@aglio/prisma': link:../prisma
       '@aglio/scanning': link:../scanning
       '@aglio/tools': link:../tools
@@ -3386,6 +3397,12 @@ packages:
 
   /@types/node/18.7.20:
     resolution: {integrity: sha512-adzY4vLLr5Uivmx8+zfSJ5fbdgKxX8UMtjtl+17n0B1q1Nz8JEmE151vefMdpD+1gyh+77weN4qEhej/O7budQ==}
+
+  /@types/nodemailer/6.4.6:
+    resolution: {integrity: sha512-pD6fL5GQtUKvD2WnPmg5bC2e8kWCAPDwMPmHe/ohQbW+Dy0EcHgZ2oCSuPlWNqk74LS5BVMig1SymQbFMPPK3w==}
+    dependencies:
+      '@types/node': 18.7.20
+    dev: true
 
   /@types/offscreencanvas/2019.7.0:
     resolution: {integrity: sha512-PGcyveRIpL1XIqK8eBsmRBt76eFgtzuPiSTyKHZxnGemp2yzGzWpjYKAfK3wIMiU7eH+851yEpiuP8JZerTmWg==}
@@ -6654,6 +6671,11 @@ packages:
   /node-releases/2.0.6:
     resolution: {integrity: sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==}
     dev: true
+
+  /nodemailer/6.8.0:
+    resolution: {integrity: sha512-EjYvSmHzekz6VNkNd12aUqAco+bOkRe3Of5jVhltqKhEsjw/y0PYPJfp83+s9Wzh1dspYAkUW/YNQ350NATbSQ==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nodemon/2.0.19:
     resolution: {integrity: sha512-4pv1f2bMDj0Eeg/MhGqxrtveeQ5/G/UVe9iO6uTZzjnRluSA4PVWf8CW99LUPwGB3eNIA7zUFoP77YuI7hOc0A==}

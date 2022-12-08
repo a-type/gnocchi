@@ -4,7 +4,7 @@ export const commonTheme = {
 	fonts: {
 		sans: '"Inter", sans-serif',
 		serif: '"Domine", serif',
-		title: '"Libre Baskerville", serif',
+		title: '"Inter", sans-serif',
 	},
 	fontSizes: {
 		xs: '0.75rem',
@@ -21,7 +21,19 @@ export const commonTheme = {
 		'8xl': '6rem',
 		'9xl': '7rem',
 	},
+	fontWeights: {
+		thin: '100',
+		extralight: '200',
+		light: '300',
+		normal: '400',
+		medium: '500',
+		semibold: '600',
+		bold: '700',
+		extrabold: '800',
+		black: '900',
+	},
 	space: {
+		0: '0',
 		1: '0.25rem',
 		2: '0.5rem',
 		3: '0.75rem',

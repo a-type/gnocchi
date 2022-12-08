@@ -24,6 +24,7 @@ import { Box } from './components/primitives/box/Box.jsx';
 import { clsx } from 'clsx';
 import * as classes from './App.css.js';
 import { lemonTheme } from './styles/themes/lemon.css.js';
+import { JoinPage } from './pages/JoinPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -59,6 +60,7 @@ export function App() {
 											<Route path="/recipes" element={<RecipesPage />} />
 											<Route path="/nevermind" element={<NevermindPage />} />
 											<Route path="/welcome" element={<SplashPage />} />
+											<Route path="/join" element={<JoinPage />} />
 											<Route path="/admin" element={<AdminPage />} />
 											<Route path="*" element={<NotFoundPage />} />
 										</Routes>

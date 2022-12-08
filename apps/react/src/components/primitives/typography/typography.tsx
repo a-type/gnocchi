@@ -11,7 +11,7 @@ export const H5 = withClassName('h5', classes.heading);
 
 export const Span = forwardRef<
 	HTMLSpanElement,
-	HTMLProps<HTMLSpanElement> & {
+	Omit<HTMLProps<HTMLSpanElement>, 'size'> & {
 		size?: 'xs' | 'sm' | 'default';
 	}
 >(function Span({ size = 'default' as const, className, ...props }, ref) {
@@ -26,7 +26,7 @@ export const Span = forwardRef<
 
 export const P = forwardRef<
 	HTMLParagraphElement,
-	HTMLProps<HTMLParagraphElement> & {
+	Omit<HTMLProps<HTMLParagraphElement>, 'size'> & {
 		size?: 'xs' | 'sm' | 'default';
 	}
 >(function P({ size = 'default' as const, className, ...props }, ref) {

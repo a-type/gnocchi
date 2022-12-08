@@ -53,3 +53,14 @@ export const pageRoot = style({
 export const pageRootLemon = style({
 	backgroundColor: vars.colors.primary,
 });
+
+export const section = style({
+	background: vars.colors.white,
+	borderRadius: vars.radii.lg,
+	borderStyle: vars.borderStyles.solid,
+	borderWidth: vars.borderWidths.default,
+	borderColor: vars.colors.black,
+	padding: vars.space[4],
+	minWidth: 400,
+	maxWidth: '80vw',
+});

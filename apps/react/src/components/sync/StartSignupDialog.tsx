@@ -61,7 +61,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 				</P> */}
 
 				<Box gap={2} align="center" m="auto" mt={8}>
-					<LoginButton color="primary" provider="google" returnTo="/">
+					<LoginButton color="primary" returnTo="/">
 						Start your subscription
 					</LoginButton>
 					<Span size="xs">

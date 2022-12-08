@@ -7,6 +7,8 @@ import {
 	ConditionalValue,
 } from '@vanilla-extract/sprinkles';
 import { calc } from '@vanilla-extract/css-utils';
+// for specificity's sake...
+import './reset.css.js';
 
 function mapValues<In, Out>(
 	values: Record<string, In>,
@@ -186,9 +188,17 @@ const unresponsiveProperties = defineProperties({
 		flexShrink: [0],
 		flexGrow: [0, 1],
 		zIndex: vars.zIndices,
-		width: { full: '100%' },
+		width: {
+			full: '100%',
+			minContent: 'min-content',
+			maxContent: 'max-content',
+			auto: 'auto',
+		},
 		borderRadius: vars.radii,
 		cursor: ['pointer', 'default'],
+		borderWidth: vars.borderWidths,
+		borderColor: vars.colors,
+		borderStyle: ['solid', 'dashed', 'dotted', 'none'],
 	},
 	shorthands: {
 		inset: ['top', 'bottom', 'left', 'right'],

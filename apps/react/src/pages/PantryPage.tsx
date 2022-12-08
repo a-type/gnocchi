@@ -8,6 +8,7 @@ import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';
 import { H1 } from '@/components/primitives/index.js';
 import { groceriesDescriptor, hooks } from '@/stores/groceries/index.js';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Suspense } from 'react';
 
 export interface PantryPageProps {}
@@ -17,7 +18,11 @@ export function PantryPage({}: PantryPageProps) {
 		<hooks.Provider value={groceriesDescriptor}>
 			<PageRoot>
 				<PageContent fullHeight noPadding>
-					<H1 css={{ p: '$4', mb: 0, pb: 0 }}>Purchased</H1>
+					<H1
+						className={sprinkles({ p: 4, marginBottom: 0, paddingBottom: 0 })}
+					>
+						Purchased
+					</H1>
 					<PageFixedArea>
 						<PantryActionBar />
 					</PageFixedArea>

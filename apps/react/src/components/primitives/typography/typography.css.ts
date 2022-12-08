@@ -8,13 +8,13 @@ export const heading = style({
 	selectors: {
 		'h1&': {
 			fontFamily: vars.fonts.title,
-			fontSize: vars.fontSizes['3xl'],
-			fontWeight: 'normal',
+			fontSize: vars.fontSizes['4xl'],
+			fontWeight: vars.fontWeights.thin,
 		},
 		'h2&': {
 			fontSize: vars.fontSizes.lg,
 			fontFamily: vars.fonts.title,
-			fontWeight: 'bold',
+			fontWeight: vars.fontWeights.light,
 			color: vars.colors.gray90,
 		},
 		'h3&': {},

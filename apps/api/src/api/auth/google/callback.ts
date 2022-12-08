@@ -1,5 +1,5 @@
 import { Profile } from '@aglio/prisma';
-import { setLoginSession, getInviteIdCookie } from '@aglio/auth';
+import { setLoginSession, getInviteIdCookie, join } from '@aglio/auth';
 import { googleOauth } from '../../../auth/googleOauth.js';
 import { prisma } from '../../../data/prisma.js';
 import { assert } from '@aglio/tools';
@@ -40,117 +40,21 @@ export default async function googleCallbackHandler(
 
 	let user: Profile;
 
-	let joiningPlanId: string | null = null;
-	if (inviteId) {
-		// check validity of invite
-		const invite = await prisma.planInvitation.findUnique({
-			where: {
-				id: inviteId,
+	if (!accountAndUser) {
+		user = await join({
+			inviteId,
+			email: profile.email,
+			fullName: profile.name,
+			friendlyName: profile.given_name,
+			picture: profile.picture,
+			providerAccount: {
+				accessToken: tokens.access_token!,
+				tokenType: 'Bearer',
+				provider: 'google',
+				providerAccountId: profile.sub,
+				type: 'oauth2',
 			},
 		});
-		if (!invite) {
-			return res.status(400).send('Invalid invite code');
-		}
-		if (invite.expiresAt < new Date()) {
-			return res.status(400).send('Invite expired');
-		}
-		if (invite.claimedAt) {
-			return res.status(400).send('Invite already claimed');
-		}
-		joiningPlanId = invite.planId;
-	}
-
-	if (!accountAndUser) {
-		// create a new account and user
-		const email = profile.email;
-
-		if (joiningPlanId) {
-			user = await prisma.profile.upsert({
-				where: { email },
-				update: {
-					accounts: {
-						create: {
-							provider: 'google',
-							providerAccountId: profile.sub,
-							type: 'oauth2',
-							accessToken: tokens.access_token,
-							tokenType: 'Bearer',
-						},
-					},
-					plan: {
-						connect: {
-							id: joiningPlanId,
-						},
-					},
-				},
-				create: {
-					email,
-					fullName: profile.name,
-					friendlyName: profile.given_name || profile.name,
-					imageUrl: profile.picture,
-					accounts: {
-						create: {
-							provider: 'google',
-							providerAccountId: profile.sub,
-							type: 'oauth2',
-							accessToken: tokens.access_token,
-							tokenType: 'Bearer',
-						},
-					},
-					// create a default plan for new users who aren't using an invite
-					plan: {
-						connect: {
-							id: joiningPlanId,
-						},
-					},
-				},
-			});
-
-			// i'm feeling pretty sloppy right now. maybe refactor later.
-			if (inviteId) {
-				await prisma.planInvitation.update({
-					where: { id: inviteId },
-					data: {
-						claimedAt: new Date(),
-					},
-				});
-			}
-		} else {
-			// user might already exist, check by email
-			user = await prisma.profile.upsert({
-				where: { email },
-				update: {
-					accounts: {
-						create: {
-							provider: 'google',
-							providerAccountId: profile.sub,
-							type: 'oauth2',
-							accessToken: tokens.access_token,
-							tokenType: 'Bearer',
-						},
-					},
-				},
-				create: {
-					email,
-					fullName: profile.name,
-					friendlyName: profile.given_name || profile.name,
-					imageUrl: profile.picture,
-					accounts: {
-						create: {
-							provider: 'google',
-							providerAccountId: profile.sub,
-							type: 'oauth2',
-							accessToken: tokens.access_token,
-							tokenType: 'Bearer',
-						},
-					},
-					// create a default plan for new users who aren't using an invite
-					plan: {
-						create: {},
-					},
-				},
-			});
-		}
 	} else {
 		user = accountAndUser.profile;
 	}

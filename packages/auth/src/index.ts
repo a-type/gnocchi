@@ -18,6 +18,7 @@ export {
 	removeTokenCookie,
 } from './cookies.js';
 export * from './subscription.js';
+export * from './join.js';
 
 const SESSION_SECRET = process.env.SESSION_SECRET;
 assert(SESSION_SECRET, 'SESSION_SECRET environment variable must be set');

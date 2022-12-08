@@ -1,35 +1,24 @@
-import { Button, ButtonProps } from '@/components/primitives/index.js';
-import { API_ORIGIN, SECURE } from '@/config.js';
-import React, { ReactNode } from 'react';
+import { LinkButton, LinkButtonProps } from '@/components/primitives/index.js';
+import { ReactNode } from 'react';
 
 export function LoginButton({
-	provider,
 	returnTo,
 	children,
 	className,
 	inviteId,
 	...rest
 }: {
-	provider: string;
 	returnTo?: string;
 	children?: ReactNode;
 	inviteId?: string;
-} & ButtonProps) {
-	const url = new URL(
-		`${SECURE ? 'https' : 'http'}://${API_ORIGIN}/api/auth/${provider}/login`,
-	);
-	if (returnTo) {
-		url.searchParams.set('returnTo', returnTo);
-	}
-	if (inviteId) {
-		url.searchParams.set('inviteId', inviteId);
-	}
-
+} & Omit<LinkButtonProps, 'to'>) {
 	return (
-		<form action={url.toString()} className={className} method="post">
-			<Button type="submit" {...rest}>
-				{children}
-			</Button>
-		</form>
+		<LinkButton
+			className={className}
+			to={`/join?returnTo=${returnTo}`}
+			{...rest}
+		>
+			{children}
+		</LinkButton>
 	);
 }

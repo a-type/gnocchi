@@ -8,6 +8,7 @@
 	"dependencies": {
 		"@aglio/tools": "workspace:*",
 		"@aglio/auth": "workspace:*",
+		"@aglio/email": "workspace:*",
 		"@aglio/prisma": "workspace:*",
 		"@aglio/scanning": "workspace:*",
 		"@trpc/server": "^9.27.2",

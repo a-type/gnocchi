@@ -99,3 +99,15 @@ model DefaultFoodCategoryAssignment {
   @@index(foodName)
   @@map("default_food_category_assignments")
 }
+
+model EmailVerification {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  expiresAt DateTime @map("expires_at")
+  code      String   @unique
+  email     String   @unique
+  name      String?
+
+  @@map("email_verifications")
+}

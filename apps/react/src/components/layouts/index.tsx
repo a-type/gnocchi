@@ -1,6 +1,7 @@
 import { forwardRef, HTMLAttributes, ReactNode } from 'react';
 import { clsx } from 'clsx';
 import * as classes from './index.css.js';
+import { Box, BoxProps } from '../primitives/index.js';
 
 export function PageContent({
 	children,
@@ -12,7 +13,7 @@ export function PageContent({
 }: HTMLAttributes<HTMLDivElement> & {
 	fullHeight?: boolean;
 	noPadding?: boolean;
-	innerProps?: HTMLAttributes<HTMLDivElement>;
+	innerProps?: BoxProps;
 }) {
 	return (
 		<div
@@ -25,7 +26,7 @@ export function PageContent({
 			)}
 			{...rest}
 		>
-			<div
+			<Box
 				{...innerProps}
 				className={clsx(
 					classes.innerContent,
@@ -36,7 +37,7 @@ export function PageContent({
 				)}
 			>
 				{children}
-			</div>
+			</Box>
 		</div>
 	);
 }
@@ -69,4 +70,11 @@ export function PageFixedArea({
 	...props
 }: HTMLAttributes<HTMLDivElement>) {
 	return <div {...props} className={clsx(classes.fixedArea, className)} />;
+}
+
+export function PageSection({
+	className,
+	...props
+}: HTMLAttributes<HTMLDivElement>) {
+	return <div {...props} className={clsx(classes.section, className)} />;
 }
