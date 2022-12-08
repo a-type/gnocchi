@@ -7,8 +7,21 @@ const storageDbFile = process.env.STORAGE_DATABASE_URL;
 assert(!!storageDbFile, 'STORAGE_DATABASE_URL is not set');
 
 class Profiles implements UserProfiles<any> {
-	get = (userId: string) => {
-		return prisma.profile.findUnique({ where: { id: userId } });
+	get = async (userId: string) => {
+		const profile = await prisma.profile.findUnique({ where: { id: userId } });
+		if (profile) {
+			return {
+				id: profile.id,
+				name: profile.friendlyName,
+				imageUrl: profile.imageUrl,
+			};
+		} else {
+			return {
+				id: userId,
+				name: 'Anonymous',
+				imageUrl: null,
+			};
+		}
 	};
 }
 

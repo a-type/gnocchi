@@ -5,12 +5,19 @@ import * as trpc from '@trpc/server';
 export const createContext = async ({
 	req,
 	res,
-}: trpcExpress.CreateExpressContextOptions) => {
+	deployedContext,
+}: trpcExpress.CreateExpressContextOptions & {
+	deployedContext: {
+		apiHost: string;
+		uiHost: string;
+	};
+}) => {
 	const session = await getLoginSession(req);
 
 	return {
 		req,
 		res,
+		deployedContext,
 		session,
 	};
 };

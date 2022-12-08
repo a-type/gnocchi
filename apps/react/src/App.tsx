@@ -25,6 +25,8 @@ import { clsx } from 'clsx';
 import * as classes from './App.css.js';
 import { lemonTheme } from './styles/themes/lemon.css.js';
 import { JoinPage } from './pages/JoinPage.jsx';
+import { RecipesSync } from './components/recipes/RecipesSync.jsx';
+import { VerifyEmailPage } from './pages/VerifyEmailPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -53,15 +55,18 @@ export function App() {
 												element={<ClaimInvitePage />}
 											/>
 											<Route path="/purchased" element={<PantryPage />} />
-											<Route
-												path="/recipes/:slug"
-												element={<RecipeEditPage />}
-											/>
-											<Route path="/recipes" element={<RecipesPage />} />
 											<Route path="/nevermind" element={<NevermindPage />} />
 											<Route path="/welcome" element={<SplashPage />} />
 											<Route path="/join" element={<JoinPage />} />
+											<Route path="/verify" element={<VerifyEmailPage />} />
 											<Route path="/admin" element={<AdminPage />} />
+											<Route path="/recipes" element={<RecipesSync />}>
+												<Route
+													path="/recipes/:slug"
+													element={<RecipeEditPage />}
+												/>
+												<Route path="/recipes" element={<RecipesPage />} />
+											</Route>
 											<Route path="*" element={<NotFoundPage />} />
 										</Routes>
 										<NavBar />

@@ -20,6 +20,7 @@ model Profile {
   createdAt    DateTime         @default(now()) @map("created_at")
   updatedAt    DateTime         @updatedAt @map("updated_at")
   planId       String           @map("plan_id")
+  password     String?
   plan         Plan             @relation(fields: [planId], references: [id])
   invitations  PlanInvitation[]
   accounts     Account[]

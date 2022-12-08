@@ -6,13 +6,13 @@ const transporter = nodemailer.createTransport({
 	secure: true,
 	pool: true,
 	auth: {
-		user: process.env.EMAIL_USER,
-		pass: process.env.EMAIL_PASS,
+		user: process.env.EMAIL_USER!.trim(),
+		pass: process.env.EMAIL_PASS!.trim(),
 	},
 });
-
+console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS!.trim().length);
 transporter.verify().then((error) => {
-	if (error) {
+	if (error !== true) {
 		console.error('Email error:', error);
 	} else {
 		console.log('Email ready');
@@ -22,9 +22,13 @@ transporter.verify().then((error) => {
 export async function sendEmailVerification({
 	to,
 	code,
+	returnTo,
+	uiOrigin = 'https://aglio.app',
 }: {
 	to: string;
 	code: string;
+	returnTo?: string;
+	uiOrigin?: string;
 }) {
 	transporter.sendMail({
 		from: 'hi@aglio.app',
@@ -35,7 +39,9 @@ export async function sendEmailVerification({
     <div>
       <h1>Thanks for signing up to Aglio!</h1>
       <p>Click the button below to finish signing up on this device.</p>
-      <a href="https://aglio.app/verify?code=${code}">Verify my email</a>
+      <a href="${uiOrigin}/verify?code=${code}${
+			returnTo ? `&returnTo=${returnTo}` : ''
+		}">Verify my email</a>
       <p>After that, you can sign in on any device you want to sync to.</p>
       <p>If you didn't request this email, you can safely ignore it.</p>
       <p>Thanks,</p>

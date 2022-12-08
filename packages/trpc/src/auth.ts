@@ -2,7 +2,8 @@ import { createRouter } from './common.js';
 import { prisma } from '@aglio/prisma';
 import * as z from 'zod';
 import { sendEmailVerification } from '@aglio/email';
-import { join } from '@aglio/auth';
+import { join, login, setLoginSession } from '@aglio/auth';
+import { RequestError } from '@aglio/tools';
 
 export const authRouter = createRouter()
 	.query('isProductAdmin', {
@@ -20,6 +21,7 @@ export const authRouter = createRouter()
 		input: z.object({
 			email: z.string(),
 			name: z.string().optional(),
+			returnTo: z.string().optional(),
 		}),
 		resolve: async ({ input, ctx }) => {
 			const expiresAt = new Date();
@@ -42,6 +44,8 @@ export const authRouter = createRouter()
 			await sendEmailVerification({
 				to: input.email,
 				code: verification.code,
+				returnTo: input.returnTo,
+				uiOrigin: ctx.deployedContext.uiHost,
 			});
 			return {
 				sent: true,
@@ -52,6 +56,8 @@ export const authRouter = createRouter()
 		input: z.object({
 			code: z.string(),
 			inviteId: z.string().optional(),
+			returnTo: z.string().optional(),
+			password: z.string(),
 		}),
 		resolve: async ({ input, ctx }) => {
 			const verification = await prisma.emailVerification.findUnique({
@@ -68,9 +74,45 @@ export const authRouter = createRouter()
 				inviteId: input.inviteId,
 				email: verification.email,
 				fullName: verification.name || 'Anonymous',
+				password: input.password,
 			});
+			setLoginSession(ctx.res, {
+				userId: user.id,
+				planId: user.planId,
+				name: user.friendlyName || user.fullName,
+			});
+			if (input.returnTo) {
+				ctx.res.setHeader('Location', decodeURIComponent(input.returnTo));
+				ctx.res.statusCode = 302;
+			}
 			return {
 				user,
 			};
+		},
+	})
+	.mutation('login', {
+		input: z.object({
+			email: z.string(),
+			password: z.string(),
+			returnTo: z.string().optional(),
+		}),
+		resolve: async ({ input, ctx }) => {
+			const user = await login(input);
+			if (user) {
+				setLoginSession(ctx.res, {
+					userId: user.id,
+					planId: user.planId,
+					name: user.friendlyName || user.fullName,
+				});
+				if (input.returnTo) {
+					ctx.res.setHeader('Location', decodeURIComponent(input.returnTo));
+					ctx.res.statusCode = 302;
+				}
+				return {
+					user,
+				};
+			} else {
+				throw new RequestError(401, 'Incorrect email or password');
+			}
 		},
 	});

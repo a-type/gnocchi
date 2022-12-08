@@ -16,6 +16,7 @@ export const root = style({
 	overflow: 'hidden',
 	width: 24,
 	height: 24,
+	userSelect: 'none',
 
 	selectors: {
 		'&[data-pop="true"]': {

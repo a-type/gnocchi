@@ -15,7 +15,6 @@ export const recipesDescriptor = new ClientDescriptor<Presence, Profile>({
 	namespace: 'recipes',
 });
 recipesDescriptor.open().then((client) => {
-	client.sync.start();
 	(window as any).recipes = client;
 });
 

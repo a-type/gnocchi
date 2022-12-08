@@ -1,5 +1,6 @@
 import { prisma, Profile } from '@aglio/prisma';
 import { RequestError } from '@aglio/tools';
+import * as bcrypt from 'bcrypt';
 
 export async function validateInvite(inviteId: string | null | undefined) {
 	let joiningPlanId: string | null = null;
@@ -31,12 +32,14 @@ export async function join({
 	fullName,
 	friendlyName,
 	picture,
+	password,
 }: {
 	inviteId?: string;
 	email: string;
 	fullName: string;
 	friendlyName?: string;
 	picture?: string;
+	password?: string;
 	providerAccount?: {
 		provider: string;
 		providerAccountId: string;
@@ -67,6 +70,7 @@ export async function join({
 			},
 			create: {
 				email,
+				password: password ? bcrypt.hashSync(password, 10) : undefined,
 				fullName: fullName,
 				friendlyName: friendlyName || fullName,
 				imageUrl: picture,
@@ -106,6 +110,7 @@ export async function join({
 			},
 			create: {
 				email,
+				password: password ? bcrypt.hashSync(password, 10) : undefined,
 				fullName: fullName,
 				friendlyName: friendlyName || fullName,
 				imageUrl: picture,

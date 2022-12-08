@@ -19,6 +19,7 @@ export {
 } from './cookies.js';
 export * from './subscription.js';
 export * from './join.js';
+export * from './login.js';
 
 const SESSION_SECRET = process.env.SESSION_SECRET;
 assert(SESSION_SECRET, 'SESSION_SECRET environment variable must be set');
