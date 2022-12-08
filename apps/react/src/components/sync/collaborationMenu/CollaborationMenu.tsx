@@ -1,3 +1,4 @@
+import { Box } from '@/components/primitives/index.js';
 import {
 	Popover,
 	PopoverArrow,
@@ -6,8 +7,9 @@ import {
 } from '@/components/primitives/Popover.jsx';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { forwardRef, ReactNode, Suspense } from 'react';
+import { InviteLinkButton } from '../InviteLinkButton.jsx';
 import { MeetupHint } from '../meetup/MeetupHint.jsx';
 import { MeetupSelect } from '../meetup/MeetupSelect.jsx';
 import { People } from '../people/People.jsx';
@@ -46,7 +48,7 @@ const CollaborationMenuTriggerContent = forwardRef<
 	if (error || !online || !isSubscribed) {
 		return (
 			<div ref={ref} {...props}>
-				<ExclamationTriangleIcon />
+				<DotsHorizontalIcon />
 			</div>
 		);
 	}
@@ -66,7 +68,16 @@ function CollaborationMenuContent() {
 		return <CollaborationMenuOfflineContent />;
 	}
 
-	return <MeetupSelect />;
+	return (
+		<Box gap={4}>
+			<MeetupSelect />
+			<InviteLinkButton
+				size="small"
+				color="primary"
+				style={{ margin: 'auto' }}
+			/>
+		</Box>
+	);
 }
 
 function CollaborationMenuOfflineContent() {
