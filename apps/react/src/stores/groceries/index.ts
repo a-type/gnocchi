@@ -90,7 +90,7 @@ export const groceries = {
 
 		// send the categorization to the server for research
 		if (categoryId) {
-			await trpcClient.mutation('categories.assign', {
+			await trpcClient.categories.assign.mutation('categories.assign', {
 				foodName: food,
 				categoryId,
 			});
@@ -160,7 +160,7 @@ export const groceries = {
 	},
 	resetCategoriesToDefault: async () => {
 		const storage = await _groceries;
-		const defaultCategories = await trpcClient.query('categories.defaults');
+		const defaultCategories = await trpcClient.categories.defaults.query();
 		const existingCategories = await storage.categories.findAll().resolved;
 		const existingIdsToDelete = existingCategories
 			.map((cat) => cat.get('id'))
@@ -223,8 +223,7 @@ export const groceries = {
 
 				if (!categoryId) {
 					try {
-						const remoteLookup = await trpcClient.query(
-							'categories.assignment',
+						const remoteLookup = await trpcClient.categories.assignment.query(
 							parsed.food,
 						);
 						if (remoteLookup) {
@@ -285,7 +284,7 @@ export const groceries = {
 	},
 	addRecipe: async (url: string, listId: string | null = null) => {
 		try {
-			const scanned = await trpcClient.query('scans.recipe', {
+			const scanned = await trpcClient.scans.recipe.query({
 				url,
 			});
 			if (scanned.rawIngredients?.length) {

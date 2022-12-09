@@ -3,4 +3,5 @@ export interface Session {
 	name: string | null;
 	planId: string;
 	role: 'admin' | 'user';
+	isProductAdmin: boolean;
 }

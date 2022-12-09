@@ -38,7 +38,7 @@ const tools = createStitches({
 		fonts: {
 			sans: '"Inter", sans-serif',
 			serif: '"Domine", serif',
-			title: '"Libre Baskerville", serif',
+			title: '"Inter", sans-serif',
 		},
 		fontSizes: {
 			xs: '0.75rem',

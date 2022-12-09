@@ -1,38 +1,35 @@
-import { createRouter } from './common.js';
+import { t } from './common.js';
 import * as z from 'zod';
 import { prisma } from '@aglio/prisma';
 
-export const categoriesRouter = createRouter()
-	.query('defaults', {
-		resolve: async ({ ctx }) => {
-			const categories = await prisma.defaultCategory.findMany({
-				orderBy: {
-					sortKey: 'asc',
-				},
-			});
-			return categories;
-		},
-	})
-	.query('assignment', {
-		input: z.string(),
-		resolve: async ({ input }) => {
-			const assignment = await prisma.defaultFoodCategoryAssignment.findFirst({
-				where: {
-					foodName: input,
-				},
-				orderBy: {
-					votes: 'desc',
-				},
-			});
-			return assignment?.categoryId;
-		},
-	})
-	.mutation('assign', {
-		input: z.object({
-			foodName: z.string(),
-			categoryId: z.string(),
-		}),
-		resolve: async ({ input }) => {
+export const categoriesRouter = t.router({
+	defaults: t.procedure.query(async ({ ctx }) => {
+		const categories = await prisma.defaultCategory.findMany({
+			orderBy: {
+				sortKey: 'asc',
+			},
+		});
+		return categories;
+	}),
+	assignment: t.procedure.input(z.string()).query(async ({ input }) => {
+		const assignment = await prisma.defaultFoodCategoryAssignment.findFirst({
+			where: {
+				foodName: input,
+			},
+			orderBy: {
+				votes: 'desc',
+			},
+		});
+		return assignment?.categoryId;
+	}),
+	assign: t.procedure
+		.input(
+			z.object({
+				foodName: z.string(),
+				categoryId: z.string(),
+			}),
+		)
+		.mutation(async ({ input }) => {
 			// if not a default category, ignore
 			const category = await prisma.defaultCategory.findUnique({
 				where: { id: input.categoryId },
@@ -62,17 +59,15 @@ export const categoriesRouter = createRouter()
 			});
 
 			return assignment;
-		},
-	})
-	.query('assignments', {
-		resolve: async () => {
-			// select all assignments with distinct food names and the highest votes
-			const assignments: {
-				id: string;
-				foodName: string;
-				categoryId: string;
-				votes: any;
-			}[] = await prisma.$queryRaw`
+		}),
+	assignments: t.procedure.query(async () => {
+		// select all assignments with distinct food names and the highest votes
+		const assignments: {
+			id: string;
+			foodName: string;
+			categoryId: string;
+			votes: any;
+		}[] = await prisma.$queryRaw`
 				SELECT
 					id AS id,
 					food_name AS foodName,
@@ -81,16 +76,20 @@ export const categoriesRouter = createRouter()
 				FROM default_food_category_assignments
 				GROUP BY foodName, categoryId
 			`;
-			return assignments.map(({ votes, ...a }) => a);
-		},
-	})
-	.mutation('updateDefault', {
-		input: z.object({
-			id: z.string(),
-			name: z.string().optional(),
-			sortKey: z.string().optional(),
-		}),
-		resolve: async ({ input }) => {
+		return assignments.map(({ votes, ...a }) => a);
+	}),
+	updateDefault: t.procedure
+		.input(
+			z.object({
+				id: z.string(),
+				name: z.string().optional(),
+				sortKey: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.isProductAdmin) {
+				throw new Error('Not authorized');
+			}
 			const category = await prisma.defaultCategory.update({
 				where: { id: input.id },
 				data: {
@@ -99,14 +98,18 @@ export const categoriesRouter = createRouter()
 				},
 			});
 			return category;
-		},
-	})
-	.mutation('createDefault', {
-		input: z.object({
-			name: z.string(),
-			sortKey: z.string(),
 		}),
-		resolve: async ({ input }) => {
+	createDefault: t.procedure
+		.input(
+			z.object({
+				name: z.string(),
+				sortKey: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.isProductAdmin) {
+				throw new Error('Not authorized');
+			}
 			const category = await prisma.defaultCategory.create({
 				data: {
 					name: input.name,
@@ -114,14 +117,16 @@ export const categoriesRouter = createRouter()
 				},
 			});
 			return category;
-		},
-	})
-	.mutation('deleteDefault', {
-		input: z.string(),
-		resolve: async ({ input }) => {
+		}),
+	deleteDefault: t.procedure
+		.input(z.string())
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.isProductAdmin) {
+				throw new Error('Not authorized');
+			}
 			const category = await prisma.defaultCategory.delete({
 				where: { id: input },
 			});
 			return category;
-		},
-	});
+		}),
+});

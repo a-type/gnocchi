@@ -32,6 +32,7 @@ export async function setLoginSession(res: Response, session: Session) {
 		pid: session.planId,
 		nam: session.name,
 		role: session.role,
+		pad: session.isProductAdmin,
 	};
 	const token = jwt.sign(sessionObject, SESSION_SECRET!, {
 		expiresIn: MAX_AGE,
@@ -53,6 +54,7 @@ export async function getLoginSession(
 		pid: string;
 		nam: string | null;
 		role: 'admin' | 'user';
+		pad: boolean;
 	};
 
 	return {
@@ -60,6 +62,7 @@ export async function getLoginSession(
 		planId: data.pid,
 		name: data.nam,
 		role: data.role,
+		isProductAdmin: data.pad,
 	};
 }
 

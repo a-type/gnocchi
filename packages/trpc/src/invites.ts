@@ -1,11 +1,10 @@
-import { createRouter } from './common.js';
+import { t } from './common.js';
 import * as z from 'zod';
 import { prisma } from '@aglio/prisma';
 import { TRPCError } from '@trpc/server';
 
-export const invitesRouter = createRouter().query('details', {
-	input: z.string(),
-	resolve: async ({ ctx, input }) => {
+export const invitesRouter = t.router({
+	details: t.procedure.input(z.string()).query(async ({ ctx, input }) => {
 		const invite = await prisma.planInvitation.findUnique({
 			where: {
 				id: input,
@@ -22,5 +21,5 @@ export const invitesRouter = createRouter().query('details', {
 		return {
 			inviterName: invite.inviterName,
 		};
-	},
+	}),
 });

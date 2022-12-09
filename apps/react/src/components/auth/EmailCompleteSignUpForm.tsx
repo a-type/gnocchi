@@ -12,7 +12,7 @@ export function EmailCompleteSignUpForm({
 	code,
 	onSuccess,
 }: EmailCompleteSignUpFormProps) {
-	const { mutateAsync } = trpc.useMutation('auth.verifyEmail');
+	const { mutateAsync } = trpc.auth.verifyEmail.useMutation();
 	const { refetch } = useAuth();
 
 	return (

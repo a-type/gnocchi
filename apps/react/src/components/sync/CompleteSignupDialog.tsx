@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext.js';
 import React from 'react';
 import { LogoutButton } from './LogoutButton.js';
 import { SubscribeButton } from './SubscribeButton.js';
+import { H2 } from '../primitives/index.js';
 
 export interface CompleteSignupDialogProps {}
 
@@ -16,7 +17,7 @@ export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
 	return (
 		<Dialog open={open}>
 			<DialogContent>
-				<h2>Complete Signup</h2>
+				<H2>Complete Signup</H2>
 				<p>
 					Now that you're signed in, finish creating your subscription to start
 					syncing and sharing your list!

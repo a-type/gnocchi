@@ -1,29 +1,23 @@
-import { createRouter } from './common.js';
+import { t } from './common.js';
 import { prisma } from '@aglio/prisma';
 import * as z from 'zod';
 import { sendEmailVerification } from '@aglio/email';
 import { join, login, setLoginSession } from '@aglio/auth';
 import { RequestError } from '@aglio/tools';
 
-export const authRouter = createRouter()
-	.query('isProductAdmin', {
-		resolve: async ({ ctx }) => {
-			console.log(ctx.session);
-			if (!ctx.session) return false;
-			const user = await prisma.profile.findUnique({
-				where: { id: ctx.session.userId },
-			});
-
-			return user?.isProductAdmin;
-		},
-	})
-	.mutation('createEmailVerification', {
-		input: z.object({
-			email: z.string(),
-			name: z.string().optional(),
-			returnTo: z.string().optional(),
-		}),
-		resolve: async ({ input, ctx }) => {
+export const authRouter = t.router({
+	isProductAdmin: t.procedure.query(async ({ ctx }) => {
+		return ctx?.isProductAdmin;
+	}),
+	createEmailVerification: t.procedure
+		.input(
+			z.object({
+				email: z.string(),
+				name: z.string().optional(),
+				returnTo: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
 			const expiresAt = new Date();
 			expiresAt.setHours(expiresAt.getHours() + 36);
 			const verification = await prisma.emailVerification.upsert({
@@ -50,16 +44,17 @@ export const authRouter = createRouter()
 			return {
 				sent: true,
 			};
-		},
-	})
-	.mutation('verifyEmail', {
-		input: z.object({
-			code: z.string(),
-			inviteId: z.string().optional(),
-			returnTo: z.string().optional(),
-			password: z.string(),
 		}),
-		resolve: async ({ input, ctx }) => {
+	verifyEmail: t.procedure
+		.input(
+			z.object({
+				code: z.string(),
+				inviteId: z.string().optional(),
+				returnTo: z.string().optional(),
+				password: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
 			const verification = await prisma.emailVerification.findUnique({
 				where: {
 					code: input.code,
@@ -81,23 +76,21 @@ export const authRouter = createRouter()
 				planId: user.planId,
 				name: user.friendlyName || user.fullName,
 				role: user.role as 'admin' | 'user',
+				isProductAdmin: user.isProductAdmin,
 			});
-			if (input.returnTo) {
-				ctx.res.setHeader('Location', decodeURIComponent(input.returnTo));
-				ctx.res.statusCode = 302;
-			}
 			return {
 				user,
 			};
-		},
-	})
-	.mutation('login', {
-		input: z.object({
-			email: z.string(),
-			password: z.string(),
-			returnTo: z.string().optional(),
 		}),
-		resolve: async ({ input, ctx }) => {
+	login: t.procedure
+		.input(
+			z.object({
+				email: z.string(),
+				password: z.string(),
+				returnTo: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
 			const user = await login(input);
 			if (user) {
 				setLoginSession(ctx.res, {
@@ -105,16 +98,13 @@ export const authRouter = createRouter()
 					planId: user.planId,
 					name: user.friendlyName || user.fullName,
 					role: user.role as 'admin' | 'user',
+					isProductAdmin: user.isProductAdmin,
 				});
-				if (input.returnTo) {
-					ctx.res.setHeader('Location', decodeURIComponent(input.returnTo));
-					ctx.res.statusCode = 302;
-				}
 				return {
 					user,
 				};
 			} else {
 				throw new RequestError(401, 'Incorrect email or password');
 			}
-		},
-	});
+		}),
+});

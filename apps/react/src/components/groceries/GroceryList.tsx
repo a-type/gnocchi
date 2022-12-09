@@ -1,4 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext.js';
+import { useListId } from '@/contexts/ListContext.jsx';
 import { groceries, hooks, Item } from '@/stores/groceries/index.js';
 import {
 	DndContext,
@@ -14,32 +15,20 @@ import {
 	useSensor,
 	useSensors,
 } from '@dnd-kit/core';
-import { generateKeyBetween } from 'fractional-indexing';
-import React, {
-	forwardRef,
-	memo,
-	useCallback,
-	useEffect,
-	useState,
-} from 'react';
+import { snapCenterToCursor } from '@dnd-kit/modifiers';
+import { forwardRef, memo, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
+import { Box } from '../primitives/box/Box.jsx';
+import { GroceryListCategory } from './categories/GroceryListCategory.js';
 import {
 	DESKTOP_DRAG_ACTIVATION_DELAY,
 	MOBILE_DRAG_ACTIVATION_DELAY,
 } from './constants.js';
 import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
-import { GroceryListCategory } from './categories/GroceryListCategory.js';
 import { useItemsGroupedAndSorted } from './hooks.js';
-import { GroceryListItem } from './items/GroceryListItem.js';
-import { groceriesState } from './state.js';
-import { useLoadDefaultCategories } from './useLoadDefaultCategories.js';
-import { restrictToVerticalAxis, snapCenterToCursor } from '@dnd-kit/modifiers';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
-import { Box } from '../primitives/box/Box.jsx';
-import { useListId } from '@/contexts/ListContext.jsx';
-import { useListThemeClass } from './lists/hooks.js';
-import { clsx } from 'clsx';
+import { groceriesState } from './state.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -57,7 +46,6 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 		const sensors = useGroceryDndSensors();
 
 		useGrocerySync();
-		useLoadDefaultCategories();
 
 		return (
 			<DndContext

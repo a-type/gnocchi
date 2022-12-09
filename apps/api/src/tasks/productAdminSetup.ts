@@ -10,6 +10,7 @@ export async function productAdminSetup() {
 				where: { id: user.id },
 				data: { isProductAdmin: true },
 			});
+			console.log('Made', email, 'a product admin');
 		}
 	}
 }

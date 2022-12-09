@@ -1,5 +1,7 @@
+import { useAuth } from '@/contexts/AuthContext.jsx';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
+import { useNavigate } from 'react-router-dom';
 import { Form, SubmitButton, TextField } from '../primitives/forms.jsx';
 
 export interface EmailSignInFormProps {
@@ -7,7 +9,9 @@ export interface EmailSignInFormProps {
 }
 
 export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
-	const { mutateAsync } = trpc.useMutation('auth.login');
+	const { mutateAsync } = trpc.auth.login.useMutation();
+	const navigate = useNavigate();
+	const { refetch } = useAuth();
 
 	return (
 		<Formik
@@ -18,6 +22,8 @@ export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
 					password: values.password,
 					returnTo,
 				});
+				refetch();
+				navigate(returnTo || '/');
 			}}
 		>
 			<Form>

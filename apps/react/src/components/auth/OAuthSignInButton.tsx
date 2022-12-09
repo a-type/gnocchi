@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from '@/components/primitives/index.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export function OAuthSignInButton({
 	provider,

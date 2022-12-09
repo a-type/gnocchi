@@ -11,18 +11,13 @@ export function RecipeEditPage({}: RecipeEditPageProps) {
 	const { slug } = useParams();
 
 	return (
-		<hooks.Provider value={recipesDescriptor}>
-			<PageRoot>
-				<PageContent>
-					<Link
-						to="/recipes"
-						className={sprinkles({ display: 'block', mb: 2 })}
-					>
-						<ArrowLeftIcon /> Back
-					</Link>
-					<RecipeEditor slug={slug as string} />
-				</PageContent>
-			</PageRoot>
-		</hooks.Provider>
+		<PageRoot>
+			<PageContent>
+				<Link to="/recipes" className={sprinkles({ display: 'block', mb: 2 })}>
+					<ArrowLeftIcon /> Back
+				</Link>
+				<RecipeEditor slug={slug as string} />
+			</PageContent>
+		</PageRoot>
 	);
 }

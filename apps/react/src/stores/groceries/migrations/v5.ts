@@ -15,7 +15,7 @@ export default migrate(
 			),
 		]);
 		try {
-			const defaultCategories = await trpcClient.query('categories.defaults');
+			const defaultCategories = await trpcClient.categories.defaults.query();
 			for (const defaultCategory of defaultCategories) {
 				await mutations.categories.put({
 					id: defaultCategory.id,

@@ -14,7 +14,7 @@ export function ClaimInvitePage() {
 
 	const { inviteId } = useParams() as { inviteId: string };
 
-	const { data: inviteInfo } = trpc.useQuery(['invites.details', inviteId]);
+	const { data: inviteInfo } = trpc.invites.details.useQuery(inviteId);
 
 	const inviterName = inviteInfo?.inviterName || '...';
 
@@ -78,11 +78,10 @@ export function ClaimInvitePage() {
 					</P>
 					<LoginButton
 						color="primary"
-						provider="google"
 						returnTo={`/claim/${inviteId}`}
 						inviteId={inviteId}
 					>
-						Sign up with Google
+						Sign up
 					</LoginButton>
 				</Box>
 			</PageContent>

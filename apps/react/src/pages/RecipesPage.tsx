@@ -7,14 +7,12 @@ export interface RecipesPageProps {}
 
 export function RecipesPage({}: RecipesPageProps) {
 	return (
-		<Suspense>
-			<hooks.Provider value={recipesDescriptor}>
-				<PageRoot>
-					<PageContent>
-						<RecipeList />
-					</PageContent>
-				</PageRoot>
-			</hooks.Provider>
-		</Suspense>
+		<hooks.Provider value={recipesDescriptor}>
+			<PageRoot>
+				<PageContent>
+					<RecipeList />
+				</PageContent>
+			</PageRoot>
+		</hooks.Provider>
 	);
 }

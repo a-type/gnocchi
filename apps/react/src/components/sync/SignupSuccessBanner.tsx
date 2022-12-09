@@ -1,21 +1,15 @@
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Dialog, DialogClose, DialogContent } from '../primitives/Dialog.js';
 import { Button, H1, H2, P } from '../primitives/index.js';
 
 export interface SignupSuccessBannerProps {}
 
 export function SignupSuccessBanner({}: SignupSuccessBannerProps) {
-	const hasSuccessParam =
-		typeof window !== 'undefined' &&
-		window.location.search?.includes('success=true');
-	const [open, setOpen] = useState(hasSuccessParam);
-
-	useEffect(() => {
-		if (hasSuccessParam) {
-			window.history.replaceState({}, document.title, window.location.pathname);
-		}
-	}, [hasSuccessParam]);
+	const [searchParams] = useSearchParams();
+	const hasSuccessParam = !!searchParams.get('success');
+	const [open, setOpen] = useState(() => hasSuccessParam);
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>

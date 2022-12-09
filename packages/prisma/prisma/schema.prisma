@@ -58,6 +58,7 @@ model Plan {
   subscriptionExpiresAt  DateTime?        @map("subscription_expires_at")
   subscriptionCanceledAt DateTime?        @map("subscription_canceled_at")
   subscriptionStatus     String?          @map("subscription_status")
+  featureFlags           String           @default("{}") @map("feature_flags")
   members                Profile[]
   invitations            PlanInvitation[]
 

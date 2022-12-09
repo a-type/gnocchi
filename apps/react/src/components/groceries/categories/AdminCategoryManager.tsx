@@ -27,10 +27,9 @@ export function AdminCategoryManager() {
 		data: categories,
 		isLoading,
 		refetch,
-	} = trpc.useQuery(['categories.defaults']);
-	const { mutate: createCategory } = trpc.useMutation([
-		'categories.createDefault',
-	]);
+	} = trpc.categories.defaults.useQuery();
+	const { mutate: createCategory } =
+		trpc.categories.createDefault.useMutation();
 
 	const categoryKeys = useMemo(
 		() => (categories ? categories.map((cat) => cat.sortKey) : []),
@@ -102,18 +101,12 @@ function AdminCategoryItem({
 	nextSortKey: string | null;
 	onChange?: () => void;
 }) {
-	const { mutate: updateCategory } = trpc.useMutation(
-		['categories.updateDefault'],
-		{
-			onSuccess: onChange,
-		},
-	);
-	const { mutate: deleteCategory } = trpc.useMutation(
-		['categories.deleteDefault'],
-		{
-			onSuccess: onChange,
-		},
-	);
+	const { mutate: updateCategory } = trpc.categories.updateDefault.useMutation({
+		onSuccess: onChange,
+	});
+	const { mutate: deleteCategory } = trpc.categories.deleteDefault.useMutation({
+		onSuccess: onChange,
+	});
 
 	const [name, setName] = useState(category.name);
 	useEffect(() => {

@@ -1,6 +1,19 @@
-import * as trpcExpress from '@trpc/server/adapters/express/dist/trpc-server-adapters-express.cjs.js';
-import { getLoginSession } from '@aglio/auth';
-import * as trpc from '@trpc/server';
+import { getLoginSession, Session } from '@aglio/auth';
+import { initTRPC } from '@trpc/server';
+import type { Request, Response } from 'express';
+import superjson from 'superjson';
+import * as trpcExpress from '@trpc/server/adapters/express';
+
+type Context = {
+	req: Request;
+	res: Response;
+	deployedContext: {
+		apiHost: string;
+		uiHost: string;
+	};
+	session: Session | null;
+	isProductAdmin: boolean;
+};
 
 export const createContext = async ({
 	req,
@@ -19,10 +32,13 @@ export const createContext = async ({
 		res,
 		deployedContext,
 		session,
+		isProductAdmin: session?.isProductAdmin ?? false,
 	};
 };
-export type Context = trpc.inferAsyncReturnType<typeof createContext>;
 
-export function createRouter() {
-	return trpc.router<Context>();
-}
+export const t = initTRPC.context<Context>().create({
+	transformer: superjson,
+	errorFormatter({ shape }) {
+		return shape;
+	},
+});

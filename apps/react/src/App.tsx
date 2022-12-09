@@ -6,7 +6,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage.js';
 import { trpc, trpcClient } from '@/trpc.js';
 import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ErrorBoundary } from './components/primitives/ErrorBoundary.js';
 import { PlanPage } from './pages/PlanPage.js';
@@ -27,6 +27,8 @@ import { lemonTheme } from './styles/themes/lemon.css.js';
 import { JoinPage } from './pages/JoinPage.jsx';
 import { RecipesSync } from './components/recipes/RecipesSync.jsx';
 import { VerifyEmailPage } from './pages/VerifyEmailPage.jsx';
+import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage.jsx';
+import { AdminFeatureFlagsPage } from './pages/admin/AdminFeatureFlagsPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -59,7 +61,16 @@ export function App() {
 											<Route path="/welcome" element={<SplashPage />} />
 											<Route path="/join" element={<JoinPage />} />
 											<Route path="/verify" element={<VerifyEmailPage />} />
-											<Route path="/admin" element={<AdminPage />} />
+											<Route path="/admin" element={<AdminPage />}>
+												<Route
+													path="/admin/categories"
+													element={<AdminCategoriesPage />}
+												/>
+												<Route
+													path="/admin/feature-flags"
+													element={<AdminFeatureFlagsPage />}
+												/>
+											</Route>
 											<Route path="/recipes" element={<RecipesSync />}>
 												<Route
 													path="/recipes/:slug"

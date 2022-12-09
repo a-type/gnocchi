@@ -1,3 +1,4 @@
+import { trpc } from '@/trpc.js';
 import { clsx } from 'clsx';
 import { ReactNode, useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
@@ -11,8 +12,6 @@ import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 
 export interface NavBarProps {}
-
-const SHOW_RECIPES = import.meta.env.VITE_LOCAL_DEV === 'true';
 
 export function NavBar({}: NavBarProps) {
 	const matchDefaultList = !!useMatch({
@@ -31,6 +30,11 @@ export function NavBar({}: NavBarProps) {
 		path: '/recipes',
 	});
 
+	const { data: showRecipesOverride } =
+		trpc.featureFlags.get.useQuery('recipes');
+
+	const finalShowRecipes = showRecipesOverride;
+
 	if (!matchGroceries && !matchPurchased && !matchRecipes) {
 		return null;
 	}
@@ -41,7 +45,7 @@ export function NavBar({}: NavBarProps) {
 				Groceries
 			</NavBarLink>
 			<PantryNavBarLink active={matchPurchased} />
-			{SHOW_RECIPES && (
+			{finalShowRecipes && (
 				<NavBarLink to="/recipes" icon={<RecipesIcon />} active={matchRecipes}>
 					Recipes
 				</NavBarLink>

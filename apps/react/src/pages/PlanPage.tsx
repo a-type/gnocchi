@@ -6,15 +6,16 @@ import { LogoutButton } from '@/components/sync/LogoutButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export function PlanPage() {
 	return (
 		<PageRoot>
 			<PageContent fullHeight noPadding>
 				<Box width="full" direction="column" mt={6} p={4} gap={4} align="start">
-					<a href="/">
+					<Link to="/">
 						<ArrowLeftIcon /> Home
-					</a>
+					</Link>
 					<div>
 						<InviteLinkButton color="primary" />
 						<Span size="xs">Get a link to invite others to your list</Span>

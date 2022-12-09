@@ -7,7 +7,7 @@ export interface EmailSignUpFormProps {
 }
 
 export function EmailSignUpForm({ returnTo }: EmailSignUpFormProps) {
-	const { mutateAsync } = trpc.useMutation('auth.createEmailVerification');
+	const { mutateAsync } = trpc.auth.createEmailVerification.useMutation();
 
 	return (
 		<Formik
