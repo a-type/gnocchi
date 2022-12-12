@@ -11,6 +11,7 @@ RUN apk add --no-cache git
 # on https://github.com/vercel/turborepo/issues/2293
 RUN apk add --no-cache libc6-compat
 
+ENV CYPRESS_INSTALL_BINARY=0
 ENV PNPM_HOME=/usr/local/share/pnpm
 ENV PATH="$PNPM_HOME:$PATH"
 
