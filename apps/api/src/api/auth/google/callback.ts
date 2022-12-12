@@ -64,6 +64,7 @@ export default async function googleCallbackHandler(
 		name: user.friendlyName,
 		planId: user.planId,
 		role: user.role as 'admin' | 'user',
+		isProductAdmin: user.isProductAdmin,
 	});
 
 	// TODO: safari hack compat
