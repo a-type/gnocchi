@@ -16,8 +16,8 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
-      '@lo-fi/common': ^1.4.1
-      '@lo-fi/server': ^1.2.5
+      '@lo-fi/common': ^1.4.2
+      '@lo-fi/server': ^1.2.6
       '@prisma/client': ^4.0.0
       '@trpc/server': ^10.4.3
       '@types/better-sqlite3': ^7.6.0
@@ -55,8 +55,8 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
-      '@lo-fi/common': 1.4.1
-      '@lo-fi/server': 1.2.5_utf-8-validate@5.0.9
+      '@lo-fi/common': 1.4.2
+      '@lo-fi/server': 1.2.6_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 10.4.3
       '@types/better-sqlite3': 7.6.0
@@ -100,10 +100,10 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lo-fi/cli': ^1.7.0
-      '@lo-fi/common': ^1.4.1
-      '@lo-fi/react': ^7.0.1
-      '@lo-fi/web': ^1.6.3
+      '@lo-fi/cli': ^1.7.1
+      '@lo-fi/common': ^1.4.2
+      '@lo-fi/react': ^7.0.2
+      '@lo-fi/web': ^1.6.4
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -194,10 +194,10 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lo-fi/cli': 1.7.0
-      '@lo-fi/common': 1.4.1
-      '@lo-fi/react': 7.0.1_mel5acudcyto4o77al7h3koah4
-      '@lo-fi/web': 1.6.3
+      '@lo-fi/cli': 1.7.1
+      '@lo-fi/common': 1.4.2
+      '@lo-fi/react': 7.0.2_i7bzqdp4ivr3gftg4irdj5sosu
+      '@lo-fi/web': 1.6.4
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1871,39 +1871,39 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lo-fi/cli/1.7.0:
-    resolution: {integrity: sha512-gCVMQXJXPLTGox0qWOqMM1FUR3KKbwL3jaEUhSAv8uTu8jh4DtW7uOUzRkensOCWL9NzASNq6djLwMeorqwhWw==}
+  /@lo-fi/cli/1.7.1:
+    resolution: {integrity: sha512-DUUXRNjovT6GpdNjXfHAJWh8BoJi0Y+o2a8JEYihJQf6R87zr9mmjIP7ai9k390vP2B1qtB1tsMxPbOwdrrUCA==}
     hasBin: true
     dependencies:
-      '@swc/core': 1.3.21
+      '@swc/core': 1.3.22
       change-case: 4.1.2
-      prettier: 2.8.0
+      prettier: 2.8.1
       yargs: 17.6.2
     dev: false
 
-  /@lo-fi/common/1.4.1:
-    resolution: {integrity: sha512-bJ4CeIo9xLv8DKIB3gsG3QRvGLWb7/6/hh96Ef3NKRRBmqZgD/kvDDatHwVWnLBBHZzpVCtIB0HuA9ofDqYZQw==}
+  /@lo-fi/common/1.4.2:
+    resolution: {integrity: sha512-mg92qu88nAIlZJyjkRDSBotI2sjad9ZqbogLxcOEjhp8prkQZ88U0Jjwzv6xPHvjHCABG7+pRHK4JOolR4Xb2w==}
     dependencies:
       fast-json-patch: 3.1.1
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/7.0.1_mel5acudcyto4o77al7h3koah4:
-    resolution: {integrity: sha512-Dp/LUWi86uURRgYn/HwJ/pippJf87BSPnCH01WoiRF36ZjaXDCdJIuJscyF9RnTPvoJapx3pbkadOgYg6z82uw==}
+  /@lo-fi/react/7.0.2_i7bzqdp4ivr3gftg4irdj5sosu:
+    resolution: {integrity: sha512-qunG29y6IMEYigoTMQ54c3QLkMY3Bm7VHVE38WmbUZNJJzA6uUlmsO+UXfk82pMXsRqoo1RCsWMD1tJj3PsxpA==}
     peerDependencies:
-      '@lo-fi/web': ^1.6.3
+      '@lo-fi/web': ^1.6.4
       react: ^18.2.0
     dependencies:
-      '@lo-fi/common': 1.4.1
-      '@lo-fi/web': 1.6.3
+      '@lo-fi/common': 1.4.2
+      '@lo-fi/web': 1.6.4
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
 
-  /@lo-fi/server/1.2.5_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-wvjADlNODcKWzIcRjo2A6zM6DqDw2ey+4o/ygu0f0+Rx5beB+Y7G6IbG/J0oTP/Y+YaTF58xuLlParRPb8ul2w==}
+  /@lo-fi/server/1.2.6_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-0GnRxaZehuDykz/3nioiftYID+eNaHcMIw9JNc1M9sbqCv5UBofTzKoqIDvEc8wRiQb7/HlfeDEFQfXO0DY9RQ==}
     dependencies:
-      '@lo-fi/common': 1.4.1
+      '@lo-fi/common': 1.4.2
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       jsonwebtoken: 8.5.1
@@ -1913,10 +1913,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.6.3:
-    resolution: {integrity: sha512-5cuSY87Me1USCP50wk+xMJdorQ6uvlM1+SUXd0t7txyhMsOnf6vmjf2zlRuMJsxa/fhAsoFHrXOELGLq2N/0xg==}
+  /@lo-fi/web/1.6.4:
+    resolution: {integrity: sha512-BE1H8GJcchaSI9oy/tzniUCoTto77Gwm+gWVv1RQbtfQw1Tza27k6pHT1/aGcWbczZxTgBRWPCgGbmtfDnwtVg==}
     dependencies:
-      '@lo-fi/common': 1.4.1
+      '@lo-fi/common': 1.4.2
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false
@@ -2939,8 +2939,8 @@ packages:
       string.prototype.matchall: 4.0.7
     dev: true
 
-  /@swc/core-darwin-arm64/1.3.21:
-    resolution: {integrity: sha512-5dBrJyrCzdHOQ9evS9NBJm2geKcXffIuAvSrnwbMHkfTpl+pOM7crry2tolydFXdOE/Jbx8yyahAIXPne1fTHw==}
+  /@swc/core-darwin-arm64/1.3.22:
+    resolution: {integrity: sha512-MMhtPsuXp8gpUgr9bs+RZQ2IyFGiUNDG93usCDAFgAF+6VVp+YaAVjET/3/Bx5Lk2WAt0RxT62C9KTEw1YMo3w==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [darwin]
@@ -2948,8 +2948,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-darwin-x64/1.3.21:
-    resolution: {integrity: sha512-CAtzfsRoVZr7DLKOOWPua6npFdj06wRuv1us275CY2QS3mg1bPl9BxA3c94q3mMcu5Bf06+dzUOjJSGrsBD7Ig==}
+  /@swc/core-darwin-x64/1.3.22:
+    resolution: {integrity: sha512-SG6QbNat4GZ5VJU3Zo6a54oQOtbhJVE6BCQw4JjOCZJmAeBzNebGy9wsT4+fCJNHC3C5qtaRw7ToXJvLniXwfg==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [darwin]
@@ -2957,8 +2957,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-linux-arm-gnueabihf/1.3.21:
-    resolution: {integrity: sha512-oPO7oFr89pjDFlHJ2aZvzGR6hwy5nmQyeiuqpTgfn+RFFLLbipFawJe/2NBWyD35bxuguW6a3/w9I6edKTpLUw==}
+  /@swc/core-linux-arm-gnueabihf/1.3.22:
+    resolution: {integrity: sha512-4E+TdQT1oHnHjDaPs/DyrRy9lOuFd6ncEd67yYA4j9lFqt6nuz/jnXss45k8KU7wR5kOTtdW73xPwkU4NbOWdw==}
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux]
@@ -2966,8 +2966,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-linux-arm64-gnu/1.3.21:
-    resolution: {integrity: sha512-cgPw35T8HO4gB/tvPJMwjJuNNpydmw6U5hkxZ+7jiE+qA8hN8a71i+BBfXeSzlo60t4c44+zK4t+gK7UacZg2w==}
+  /@swc/core-linux-arm64-gnu/1.3.22:
+    resolution: {integrity: sha512-6VcynOMbOBcbLutIPENI3Ejvg5LGz/Pwvzm25hM0FoiEtPxHA+tawQUwLx8Alk1Yr+Rnqid06UEZ0veJOGn2pQ==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
@@ -2975,8 +2975,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-linux-arm64-musl/1.3.21:
-    resolution: {integrity: sha512-kwH+HHtcakSqR3gF5QJ7N7SPs96ilFiXuauB02Ct3UflaGbVYVoeFYj/VEIJ+ZJvlvvOEDByOiLyrk2bw0bG7A==}
+  /@swc/core-linux-arm64-musl/1.3.22:
+    resolution: {integrity: sha512-86RxGy0L3qa4De3xWHx8vL2caTxvSLSWTlgUW/Yd4l1pvrCFibMjhkImGu5ViKiReX9DlBtJ7CBs4dln2kHidw==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
@@ -2984,8 +2984,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-linux-x64-gnu/1.3.21:
-    resolution: {integrity: sha512-/kLQLNxwdX6kO2R751uUrxXZsAhOkA1EeQzAqj+5Y+bzt3hA5asH5evkY0w0Aj1zCofX4p4o/Q35mandUPxMlw==}
+  /@swc/core-linux-x64-gnu/1.3.22:
+    resolution: {integrity: sha512-FLkbiqsdXsVIFZi6iedx4rSBGX8x0vo/5aDlklSxJAAYOcQpO0QADKP5Yr65iMT1d6ABCt2d+/StpGLF7GWOcA==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
@@ -2993,8 +2993,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-linux-x64-musl/1.3.21:
-    resolution: {integrity: sha512-s+l3LqUzDli6rbmIPR3IfO23IOLYBVxk97CDdcJWrRTVtCwUKFhFVJVZyErveriqLXSGJhy5+UL+aOuxC4dk8g==}
+  /@swc/core-linux-x64-musl/1.3.22:
+    resolution: {integrity: sha512-giBuw+Z0Bq6fpZ0Y5TcfpcQwf9p/cE1fOQyO/K1XSTn/haQOqFi7421Jq/dFThSARZiXw1u9Om9VFbwxr8VI+A==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
@@ -3002,8 +3002,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-win32-arm64-msvc/1.3.21:
-    resolution: {integrity: sha512-59gWcdbZxvmyzh+J50yCCodKDYRUnMwNypzzfamF1Vusa4Np+IGMWEaE2KsZUq50OQIRo0PGHpBPMKVYkuGv8g==}
+  /@swc/core-win32-arm64-msvc/1.3.22:
+    resolution: {integrity: sha512-loKGO+ZM2By6VdrmVJk1G79jVgDPaee93qLFuis5KyeoLLb4m1MlNMc/6SIDZUSuYg6NqaGP1spFeiFetMQ4Zg==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [win32]
@@ -3011,8 +3011,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-win32-ia32-msvc/1.3.21:
-    resolution: {integrity: sha512-3gH86ffVAiCmeRy+xSxR5iWSbKy4nUddo4PIahD1zwGJx6LC5ahC/I6EpL1pvoX3KdJKVioUBn0KDfPDUYfqJw==}
+  /@swc/core-win32-ia32-msvc/1.3.22:
+    resolution: {integrity: sha512-lvNWAZ3QjXMsrsch6oLLQVikT/hC/4ZcLrTBXa14HwQylaYigkGElgp3ekJr78HjWDPwB46GXwBbNMG0VNAfvA==}
     engines: {node: '>=10'}
     cpu: [ia32]
     os: [win32]
@@ -3020,8 +3020,8 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core-win32-x64-msvc/1.3.21:
-    resolution: {integrity: sha512-JKWLJdJ3oFc8fGBk4P6mGKhW8n+FmEjLLbsST+h94bZmelrSTeShBt3rr+pMMatFevlu/c9lM3OW2GHsZeZNkg==}
+  /@swc/core-win32-x64-msvc/1.3.22:
+    resolution: {integrity: sha512-ESyn4lZXAKEE3mcTaDfXatsolCiEfVGstsXdgBmZYa6o1IE1bDW8FE7Ob/Y+82WTpm9+A9ZYXYjZ62t67POHZg==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
@@ -3029,22 +3029,22 @@ packages:
     dev: false
     optional: true
 
-  /@swc/core/1.3.21:
-    resolution: {integrity: sha512-RTmqkm5e5sb+Q+YbyqiE52xjvX+kcIVDgaSdSD7mNy2opgDfIdFMhExmB8UQStt3TLrlpAslWaFNWNmvaHP9rg==}
+  /@swc/core/1.3.22:
+    resolution: {integrity: sha512-oQ9EPEb7NgWcGIDoVfLCuffvtC4MzVtrwjqwKzFHP8FUh1fn8+2wraOjkkDXW74BB4Hgve5ykkaHix9bebB9Ww==}
     engines: {node: '>=10'}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@swc/core-darwin-arm64': 1.3.21
-      '@swc/core-darwin-x64': 1.3.21
-      '@swc/core-linux-arm-gnueabihf': 1.3.21
-      '@swc/core-linux-arm64-gnu': 1.3.21
-      '@swc/core-linux-arm64-musl': 1.3.21
-      '@swc/core-linux-x64-gnu': 1.3.21
-      '@swc/core-linux-x64-musl': 1.3.21
-      '@swc/core-win32-arm64-msvc': 1.3.21
-      '@swc/core-win32-ia32-msvc': 1.3.21
-      '@swc/core-win32-x64-msvc': 1.3.21
+      '@swc/core-darwin-arm64': 1.3.22
+      '@swc/core-darwin-x64': 1.3.22
+      '@swc/core-linux-arm-gnueabihf': 1.3.22
+      '@swc/core-linux-arm64-gnu': 1.3.22
+      '@swc/core-linux-arm64-musl': 1.3.22
+      '@swc/core-linux-x64-gnu': 1.3.22
+      '@swc/core-linux-x64-musl': 1.3.22
+      '@swc/core-win32-arm64-msvc': 1.3.22
+      '@swc/core-win32-ia32-msvc': 1.3.22
+      '@swc/core-win32-x64-msvc': 1.3.22
     dev: false
 
   /@tanstack/query-core/4.19.1:
@@ -7108,8 +7108,8 @@ packages:
       tunnel-agent: 0.6.0
     dev: false
 
-  /prettier/2.8.0:
-    resolution: {integrity: sha512-9Lmg8hTFZKG0Asr/kW9Bp8tJjRVluO8EJQVfY2T7FMw9T5jy4I/Uvx0Rca/XWf50QQ1/SS48+6IJWnrb+2yemA==}
+  /prettier/2.8.1:
+    resolution: {integrity: sha512-lqGoSJBQNJidqCHE80vqZJHWHRFoNYsSpP9AjFhlhi9ODCJA541svILes/+/1GM3VaL/abZi7cpFzOpdR9UPKg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: false
