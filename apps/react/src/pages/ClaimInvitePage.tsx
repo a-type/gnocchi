@@ -8,7 +8,7 @@ import { trpc } from '@/trpc.js';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function ClaimInvitePage() {
-	const { session } = useAuth();
+	const { session, refetch } = useAuth();
 
 	const navigate = useNavigate();
 
@@ -28,6 +28,7 @@ export function ClaimInvitePage() {
 		);
 
 		if (res.ok) {
+			refetch();
 			navigate('/');
 		} else {
 			alert('Error claiming invite');

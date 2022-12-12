@@ -24,6 +24,7 @@ export const content = style({
 	paddingRight: vars.space[4],
 	paddingTop: vars.space[6],
 	paddingBottom: vars.space[6],
+	marginBottom: 120,
 });
 
 export const contentNoPadding = style({

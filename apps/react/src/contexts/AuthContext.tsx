@@ -6,6 +6,7 @@ import React, {
 	useEffect,
 	useState,
 } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 export const AuthContext = createContext<{
 	session?: { userId: string; name: string; planId?: string } | null;
@@ -13,10 +14,12 @@ export const AuthContext = createContext<{
 	refetch: () => void;
 	isSubscribed: boolean;
 	subscriptionStatus: string | null;
+	initializing: boolean;
 }>({
 	refetch: () => {},
 	isSubscribed: false,
 	subscriptionStatus: null,
+	initializing: true,
 });
 
 async function getSession(): Promise<{
@@ -73,32 +76,11 @@ async function getSession(): Promise<{
 }
 
 export function AuthProvider(props: { children: ReactNode }) {
-	const [ctx, setCtx] = useState<{
-		session: { userId: string; name: string } | undefined | null;
-		error?: Error;
-		isSubscribed: boolean;
-		subscriptionStatus: string | null;
-	}>({
-		session: undefined,
-		error: undefined,
-		isSubscribed: false,
-		subscriptionStatus: null,
-	});
-
-	const refetch = useCallback(async () => {
-		try {
-			const data = await getSession();
-			setCtx(data);
-		} catch (e) {
-			console.error(e);
-			setCtx({
-				session: null,
-				error: e as Error,
-				isSubscribed: false,
-				subscriptionStatus: null,
-			});
-		}
-	}, []);
+	const { data, refetch, isInitialLoading } = useQuery(
+		['session'],
+		getSession,
+		{},
+	);
 
 	useEffect(() => {
 		// yes, this will run twice in dev mode...
@@ -108,8 +90,13 @@ export function AuthProvider(props: { children: ReactNode }) {
 	return (
 		<AuthContext.Provider
 			value={{
-				...ctx,
+				isSubscribed: false,
+				session: undefined,
+				error: undefined,
+				subscriptionStatus: null,
+				...data,
 				refetch,
+				initializing: isInitialLoading,
 			}}
 			{...props}
 		/>
@@ -123,4 +110,9 @@ export function useAuth() {
 export function useIsSubscribed() {
 	const { isSubscribed } = React.useContext(AuthContext);
 	return isSubscribed;
+}
+
+export function useIsLoggedIn() {
+	const { session, initializing } = React.useContext(AuthContext);
+	return !initializing && !!session;
 }

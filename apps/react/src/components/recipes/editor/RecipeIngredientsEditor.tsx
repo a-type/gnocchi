@@ -49,7 +49,7 @@ export function RecipeIngredientsEditor({
 	);
 
 	return (
-		<>
+		<div className={classes.listContainer}>
 			<DndContext
 				sensors={sensors}
 				onDragEnd={({ active, over }) => {
@@ -75,7 +75,7 @@ export function RecipeIngredientsEditor({
 				</SortableContext>
 			</DndContext>
 			<AddIngredientsForm ingredients={ingredients} />
-		</>
+		</div>
 	);
 }
 
@@ -121,15 +121,16 @@ function AddIngredientsForm({
 	return (
 		<Formik
 			initialValues={{ text: '' }}
-			onSubmit={({ text }) => {
-				mutations.addIngredients(ingredients, text);
+			onSubmit={async ({ text }, bag) => {
+				await mutations.addIngredients(ingredients, text);
+				bag.resetForm();
 			}}
 		>
 			<Form>
 				<TextAreaField
 					name="text"
 					required
-					placeholder="Add ingredients, separated by line"
+					placeholder="Add ingredient line(s)"
 					autoSize
 				/>
 				<SubmitButton>Add</SubmitButton>

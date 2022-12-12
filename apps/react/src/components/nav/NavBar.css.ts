@@ -17,6 +17,7 @@ export const root = style({
 	borderColor: vars.colors.gray70,
 	overflow: 'hidden',
 	zIndex: vars.zIndices.nav,
+	height: 32,
 });
 
 const shake = keyframes({

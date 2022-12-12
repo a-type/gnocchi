@@ -7,6 +7,10 @@ export const purchasedAt = style({
 	color: vars.colors.gray50,
 	fontStyle: 'italic',
 	fontSize: vars.fontSizes.sm,
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	gap: vars.space[2],
 });
 
 export const wordBought = style({

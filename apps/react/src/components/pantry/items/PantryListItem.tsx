@@ -2,7 +2,7 @@ import { groceries, hooks, Item } from '@/stores/groceries/index.js';
 import * as groceryItemClasses from '@/components/groceries/items/GroceryListItem.css.js';
 import { useItemDisplayText } from '@/components/groceries/items/hooks.js';
 import { Button } from '@/components/primitives/index.js';
-import { TrashIcon } from '@radix-ui/react-icons';
+import { ClockIcon, TrashIcon } from '@radix-ui/react-icons';
 import { RelativeTime } from '@/components/primitives/RelativeTime.jsx';
 import { clsx } from 'clsx';
 import * as classes from './PantryListItem.css.js';
@@ -13,7 +13,7 @@ export interface PantryListItemProps {
 
 export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 	const displayText = useItemDisplayText(item);
-	const { purchasedAt } = hooks.useWatch(item);
+	const { purchasedAt, inputs, totalQuantity } = hooks.useWatch(item);
 
 	const deleteItem = () => {
 		groceries.deleteItem(item);
@@ -25,10 +25,13 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 				<Button size="small" color="ghostDestructive" onClick={deleteItem}>
 					<TrashIcon />
 				</Button>
-				<div className={groceryItemClasses.textContent}>{displayText}</div>
+				<div className={groceryItemClasses.textContent}>
+					{inputs.length > 1 && <span>{totalQuantity}</span>}
+					{displayText}
+				</div>
 				{purchasedAt && (
 					<div className={classes.purchasedAt}>
-						<span className={classes.wordBought}>bought&nbsp;</span>
+						<ClockIcon />
 						<RelativeTime value={purchasedAt} />
 						&nbsp;ago
 					</div>

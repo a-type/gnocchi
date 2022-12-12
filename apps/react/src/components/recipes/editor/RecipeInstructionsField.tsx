@@ -11,6 +11,8 @@ import {
 	ListBulletIcon,
 } from '@radix-ui/react-icons';
 import * as classes from './RecipeInstructionsField.css.js';
+import { useSyncedInstructionsEditor } from '../hooks.js';
+import { RichEditor } from '@/components/primitives/richEditor/RichEditor.jsx';
 
 export interface RecipeInstructionsFieldProps {
 	recipe: Recipe;
@@ -19,43 +21,12 @@ export interface RecipeInstructionsFieldProps {
 export function RecipeInstructionsField({
 	recipe,
 }: RecipeInstructionsFieldProps) {
-	const live = hooks.useWatch(recipe);
-	const instructions = live?.instructions as ObjectEntity<any, any>;
-
-	const updatingRef = useRef(false);
-
-	const editor = useEditor(
-		{
-			extensions: [StarterKit as any],
-			content: instructions?.getSnapshot(),
-			onUpdate({ editor }) {
-				if (!updatingRef.current) {
-					const newData = editor.getJSON();
-					if (!instructions) {
-						recipe.set('instructions', newData);
-					} else {
-						instructions.update(newData);
-					}
-				}
-			},
-		},
-		[instructions],
-	);
-
-	useEffect(() => {
-		return instructions?.subscribe('changeDeep', (target, info) => {
-			if (!info.isLocal) {
-				updatingRef.current = true;
-				editor?.commands.setContent(instructions.getSnapshot());
-				updatingRef.current = false;
-			}
-		});
-	}, [instructions, editor]);
+	const editor = useSyncedInstructionsEditor(recipe);
 
 	return (
 		<Box gap={2} flexDirection="column">
 			{editor && <Toolbar editor={editor} />}
-			<EditorContent editor={editor} className={classes.editor} />
+			<RichEditor editor={editor} className={classes.editor} />
 		</Box>
 	);
 }

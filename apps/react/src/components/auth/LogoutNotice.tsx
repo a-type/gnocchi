@@ -14,9 +14,10 @@ export interface LogoutNoticeProps {}
 
 export function LogoutNotice({}: LogoutNoticeProps) {
 	const [wasLoggedIn, setWasLoggedIn] = useLocalStorage('wasLoggedIn', false);
-	const { session, error } = useAuth();
+	const { session, error, initializing } = useAuth();
 
-	const wasLoggedInButNowLoggedOut = wasLoggedIn && !session && !error;
+	const wasLoggedInButNowLoggedOut =
+		wasLoggedIn && !session && !error && !initializing;
 
 	// only want to fire this when session changes, not when flag changes.
 	// flag can be reset manually.

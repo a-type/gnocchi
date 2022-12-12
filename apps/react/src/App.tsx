@@ -30,6 +30,7 @@ import { VerifyEmailPage } from './pages/VerifyEmailPage.jsx';
 import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage.jsx';
 import { AdminFeatureFlagsPage } from './pages/admin/AdminFeatureFlagsPage.jsx';
 import { LogoutNotice } from './components/auth/LogoutNotice.jsx';
+import { RecipeViewPage } from './pages/RecipeViewPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -75,6 +76,10 @@ export function App() {
 											<Route path="/recipes" element={<RecipesSync />}>
 												<Route
 													path="/recipes/:slug"
+													element={<RecipeViewPage />}
+												/>
+												<Route
+													path="/recipes/:slug/edit"
 													element={<RecipeEditPage />}
 												/>
 												<Route path="/recipes" element={<RecipesPage />} />

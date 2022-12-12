@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNowStrict } from 'date-fns';
 
 export interface RelativeTimeProps {
 	value: number;
 }
 
 export function RelativeTime({ value }: RelativeTimeProps) {
-	const [time, setTime] = useState(formatDistanceToNow(new Date(value)));
+	const [time, setTime] = useState(formatDistanceToNowStrict(new Date(value)));
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setTime(formatDistanceToNow(new Date(value)));
+			setTime(formatDistanceToNowStrict(new Date(value)));
 		}, 60 * 1000);
 		return () => clearInterval(interval);
 	}, [value]);

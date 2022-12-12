@@ -1,3 +1,4 @@
+import { useIsLoggedIn } from '@/contexts/AuthContext.jsx';
 import { trpc } from '@/trpc.js';
 import { clsx } from 'clsx';
 import { ReactNode, useEffect, useState } from 'react';
@@ -8,15 +9,22 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 } from '../primitives/Collapsible.jsx';
+import { Tooltip } from '../primitives/Tooltip.jsx';
 import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 
 export interface NavBarProps {}
 
 export function NavBar({}: NavBarProps) {
+	const loggedIn = useIsLoggedIn();
+
 	const matchDefaultList = !!useMatch({
 		path: '/',
 		end: true,
+	});
+	const matchesWelcome = !!useMatch({
+		path: '/welcome',
+		end: false,
 	});
 	const matchList = !!useMatch({
 		path: '/list',
@@ -35,7 +43,7 @@ export function NavBar({}: NavBarProps) {
 
 	const finalShowRecipes = showRecipesOverride;
 
-	if (!matchGroceries && !matchPurchased && !matchRecipes) {
+	if (!loggedIn || matchesWelcome) {
 		return null;
 	}
 
@@ -68,16 +76,18 @@ function NavBarLink({
 	active: boolean;
 }) {
 	return (
-		<CollapsibleRoot open={!!active}>
-			<Link to={to} className={classes.button} data-shake={shake}>
-				{icon}
-				<CollapsibleContent data-horizontal className={classes.collapsible}>
-					<span className={classes.buttonText} data-active={!!active}>
-						{children}
-					</span>
-				</CollapsibleContent>
-			</Link>
-		</CollapsibleRoot>
+		<Tooltip content={children}>
+			<CollapsibleRoot open={!!active}>
+				<Link to={to} className={classes.button} data-shake={shake}>
+					{icon}
+					<CollapsibleContent data-horizontal className={classes.collapsible}>
+						<span className={classes.buttonText} data-active={!!active}>
+							{children}
+						</span>
+					</CollapsibleContent>
+				</Link>
+			</CollapsibleRoot>
+		</Tooltip>
 	);
 }
 

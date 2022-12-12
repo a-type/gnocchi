@@ -3,11 +3,11 @@ import { clsx } from 'clsx';
 import { forwardRef, HTMLProps } from 'react';
 import * as classes from './typography.css.js';
 
-export const H1 = withClassName('h1', classes.heading);
-export const H2 = withClassName('h2', classes.heading);
-export const H3 = withClassName('h3', classes.heading);
-export const H4 = withClassName('h4', classes.heading);
-export const H5 = withClassName('h5', classes.heading);
+export const H1 = withClassName('h1', classes.heading, ['gutterBottom']);
+export const H2 = withClassName('h2', classes.heading, ['gutterBottom']);
+export const H3 = withClassName('h3', classes.heading, ['gutterBottom']);
+export const H4 = withClassName('h4', classes.heading, ['gutterBottom']);
+export const H5 = withClassName('h5', classes.heading, ['gutterBottom']);
 
 export const Span = forwardRef<
 	HTMLSpanElement,

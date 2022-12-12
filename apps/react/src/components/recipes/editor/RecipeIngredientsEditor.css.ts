@@ -7,6 +7,12 @@ export const list = style({
 	gap: vars.space[2],
 });
 
+export const listContainer = style({
+	border: `1px solid ${vars.colors.gray50}`,
+	borderRadius: vars.radii.lg,
+	padding: vars.space[2],
+});
+
 export const item = style({
 	display: 'flex',
 	flexDirection: 'row',

@@ -29,7 +29,7 @@ const recipes = collection({
         slug: {
             type: 'string',
             indexed: true,
-            default: ()=>cuid()
+            default: ()=>cuid().slice(0, 8)
         },
         title: {
             type: 'string',
@@ -83,7 +83,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 2,
+    version: 3,
     collections: {
         recipes,
         collections

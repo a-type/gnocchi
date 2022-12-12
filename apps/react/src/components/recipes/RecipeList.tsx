@@ -1,6 +1,8 @@
 import { hooks, Recipe } from '@/stores/recipes/index.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Box } from '@/components/primitives/index.js';
+import * as classes from './RecipeList.css.js';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 
 export interface RecipeListProps {}
 
@@ -13,18 +15,22 @@ export function RecipeList({}: RecipeListProps) {
 	});
 
 	return (
-		<Box gap={4}>
+		<Box className={classes.list}>
+			<RecipeCreateButton />
 			{recipes.map((recipe) => (
 				<RecipeListItem key={recipe.get('id')} recipe={recipe} />
 			))}
-			<RecipeCreateButton />
 		</Box>
 	);
 }
 
 function RecipeListItem({ recipe }: { recipe: Recipe }) {
 	const { slug, id, title } = hooks.useWatch(recipe);
-	return <Link to={`/recipes/${slug}`}>{title}</Link>;
+	return (
+		<Link className={classes.item} to={`/recipes/${slug}`}>
+			{title}
+		</Link>
+	);
 }
 
 function RecipeCreateButton() {
@@ -35,8 +41,10 @@ function RecipeCreateButton() {
 		<Button
 			onClick={async () => {
 				const recipe = await client.recipes.put({});
-				navigate(`/recipes/${recipe.get('slug')}`);
+				navigate(`/recipes/${recipe.get('slug')}/edit`);
 			}}
+			color="primary"
+			className={sprinkles({ alignSelf: 'start' })}
 		>
 			Create New
 		</Button>
