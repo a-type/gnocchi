@@ -1,11 +1,14 @@
 import { Button, ButtonProps } from '@/components/primitives/index.js';
 import { API_ORIGIN, SECURE } from '@/config.js';
-import React, { ReactNode } from 'react';
+import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 
 export function LogoutButton({ children, ...rest }: ButtonProps) {
+	const [wasLoggedIn, setWasLoggedIn] = useLocalStorage('wasLoggedIn', false);
+
 	return (
 		<form
 			action={`${SECURE ? 'https' : 'http'}://${API_ORIGIN}/api/auth/logout`}
+			onSubmit={() => setWasLoggedIn(false)}
 			method="post"
 		>
 			<Button type="submit" {...rest}>

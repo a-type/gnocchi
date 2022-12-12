@@ -2,7 +2,7 @@ import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { Button, ButtonProps, Span } from '@/components/primitives/index.js';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
-import { LogoutButton } from '@/components/sync/LogoutButton.js';
+import { LogoutButton } from '@/components/auth/LogoutButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import React from 'react';

@@ -1,4 +1,4 @@
-import { LogoutButton } from '@/components/sync/LogoutButton.js';
+import { LogoutButton } from '@/components/auth/LogoutButton.js';
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { H1, P } from '@/components/primitives/index.js';

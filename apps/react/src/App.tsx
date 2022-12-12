@@ -29,6 +29,7 @@ import { RecipesSync } from './components/recipes/RecipesSync.jsx';
 import { VerifyEmailPage } from './pages/VerifyEmailPage.jsx';
 import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage.jsx';
 import { AdminFeatureFlagsPage } from './pages/admin/AdminFeatureFlagsPage.jsx';
+import { LogoutNotice } from './components/auth/LogoutNotice.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -84,6 +85,7 @@ export function App() {
 										<Toaster position="bottom-center" />
 										<StartSignupDialog />
 										<UpdatePrompt />
+										<LogoutNotice />
 									</AuthProvider>
 								</BrowserRouter>
 							</QueryClientProvider>

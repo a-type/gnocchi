@@ -12,7 +12,7 @@ import { styled } from '@/stitches.config.js';
 import { ManageCategoriesDialog } from './ManageCategoriesDialog.js';
 import { LoginButton } from '../sync/LoginButton.js';
 import { ManagePlanButton } from '../sync/ManagePlanButton.js';
-import { LogoutButton } from '../sync/LogoutButton.js';
+import { LogoutButton } from '../auth/LogoutButton.js';
 import { BugButton } from './BugButton.js';
 import { useSnapshot } from 'valtio';
 import { menuState } from './state.js';
@@ -21,7 +21,6 @@ import { useInterval } from '@/hooks/useInterval.js';
 
 export function MainMenu() {
 	const { session, isSubscribed, error } = useAuth();
-	const isSyncing = hooks.useSyncStatus();
 
 	const snap = useSnapshot(menuState);
 
@@ -32,8 +31,6 @@ export function MainMenu() {
 		state = 'anonymous';
 	} else if (!isSubscribed) {
 		state = 'unsubscribed';
-	} else if (!isSyncing) {
-		state = 'offline';
 	}
 
 	const Contents = contents[state];
