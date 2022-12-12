@@ -4,7 +4,7 @@ import { IncomingMessage, OutgoingMessage } from 'http';
 
 const TOKEN_NAME = 'ag-session';
 
-export const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
+export const MAX_AGE = 60 * 60 * 24 * 14; // 2 weeks
 
 export function setTokenCookie(res: OutgoingMessage, token: string) {
 	const cookie = serialize(TOKEN_NAME, token, {

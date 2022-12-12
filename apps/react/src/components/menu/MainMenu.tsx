@@ -17,6 +17,7 @@ import { BugButton } from './BugButton.js';
 import { useSnapshot } from 'valtio';
 import { menuState } from './state.js';
 import { Box } from '../primitives/box/Box.jsx';
+import { useInterval } from '@/hooks/useInterval.js';
 
 export function MainMenu() {
 	const { session, isSubscribed, error } = useAuth();
@@ -93,11 +94,14 @@ const MenuSection = styled('div' as const, {
 
 function OfflineContents() {
 	const { refetch } = useAuth();
+
+	useInterval(refetch, 3000);
+
 	return (
 		<MenuList>
 			<MenuSection>
 				<MenuBanner>
-					<Span size="small">Offline</Span>
+					<Span size="sm">Offline</Span>
 				</MenuBanner>
 				<Button size="small" color="default" onClick={refetch}>
 					Retry connection
@@ -119,12 +123,7 @@ function AnonymousContents() {
 	return (
 		<MenuList>
 			<MenuSection>
-				<LoginButton
-					color="primary"
-					size="small"
-					provider="google"
-					returnTo="/"
-				>
+				<LoginButton color="primary" size="small" returnTo="/">
 					Start syncing
 				</LoginButton>
 				<Span size="xs">
@@ -175,7 +174,7 @@ function UnsubscribedContents() {
 		<MenuList>
 			<MenuSection>
 				<MenuBanner>
-					<Span size="small">Subscription inactive</Span>
+					<Span size="sm">Subscription inactive</Span>
 				</MenuBanner>
 				<Box flexDirection="row" gap={2}>
 					<ManagePlanButton color="default" size="small" />

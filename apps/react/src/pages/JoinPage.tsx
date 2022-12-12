@@ -24,7 +24,7 @@ export function JoinPage({}: JoinPageProps) {
 					alignItems: 'center',
 					justifyContent: 'center',
 				})}
-				innerProps={{ gap: 6, width: 'auto' }}
+				innerProps={{ gap: 6, width: 'auto', minHeight: 0, my: 4 }}
 			>
 				<Box direction="row" justify="space-between" align="center">
 					<H1

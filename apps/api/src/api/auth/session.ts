@@ -1,7 +1,11 @@
 import { SubscriptionError } from '@aglio/tools';
 import { Request, Response } from 'express';
 import { getSubscriptionStatusError } from 'src/auth/verifySubscription.js';
-import { getLoginSession, removeTokenCookie } from '@aglio/auth';
+import {
+	getLoginSession,
+	removeTokenCookie,
+	setLoginSession,
+} from '@aglio/auth';
 
 export default async function sessionHandler(req: Request, res: Response) {
 	const session = await getLoginSession(req);
@@ -16,6 +20,9 @@ export default async function sessionHandler(req: Request, res: Response) {
 		removeTokenCookie(res);
 		return res.status(401).send('Please log in');
 	}
+
+	// refresh session
+	await setLoginSession(res, session);
 
 	res.status(200).json({ session, planStatus: planStatusError });
 }

@@ -47,7 +47,6 @@ export const pageRoot = style({
 	gridTemplateAreas: '"content" "nowPlaying"',
 	gridTemplateRows: '1fr auto',
 	flex: '1 1 0',
-	minHeight: 0,
 });
 
 export const pageRootLemon = style({
@@ -63,4 +62,9 @@ export const section = style({
 	padding: vars.space[4],
 	minWidth: 400,
 	maxWidth: '80vw',
+	'@media': {
+		'(max-width: 640px)': {
+			minWidth: 'unset',
+		},
+	},
 });

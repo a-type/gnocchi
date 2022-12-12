@@ -1,10 +1,17 @@
+import { mediaQueries } from '@/styles/media.js';
 import { vars } from '@/theme.css.js';
 import { style } from '@vanilla-extract/css';
 
 export const menu = style({
 	overflowX: 'hidden',
 	overflowY: 'auto',
-	maxHeight: '50vh',
+	maxHeight: '20vh',
+
+	'@media': {
+		[mediaQueries.lg]: {
+			maxHeight: '50vh',
+		},
+	},
 });
 
 export const menuList = style({
