@@ -39,7 +39,7 @@ export function NavBar({}: NavBarProps) {
 	});
 
 	const { data: showRecipesOverride } =
-		trpc.featureFlags.get.useQuery('recipes');
+		trpc.featureFlags.getValue.useQuery('recipes');
 
 	const finalShowRecipes = showRecipesOverride;
 

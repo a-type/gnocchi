@@ -3,7 +3,7 @@ import { ClaimInvitePage } from '@/pages/ClaimInvitePage.js';
 import { GroceriesPage } from '@/pages/GroceriesPage.js';
 import { NevermindPage } from '@/pages/NevermindPage.js';
 import { NotFoundPage } from '@/pages/NotFoundPage.js';
-import { trpc, trpcClient } from '@/trpc.js';
+import { trpc, trpcClientOptions } from '@/trpc.js';
 import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -34,6 +34,7 @@ import { RecipeViewPage } from './pages/RecipeViewPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
+	const [trpcClient] = useState(() => trpc.createClient(trpcClientOptions));
 
 	useLayoutEffect(() => {
 		if (typeof window !== 'undefined') {

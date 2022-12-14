@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { t } from './common.js';
 
 export const featureFlagsRouter = t.router({
-	get: t.procedure.input(z.string()).query(async ({ ctx, input }) => {
+	getValue: t.procedure.input(z.string()).query(async ({ ctx, input }) => {
 		if (!ctx.session) return false;
 		const plan = await prisma.plan.findUnique({
 			where: {

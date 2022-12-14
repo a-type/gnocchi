@@ -137,8 +137,8 @@ type RecipeUpdatedAtInit = RecipeUpdatedAt | undefined;
 type RecipeUpdatedAtSnapshot = RecipeUpdatedAt;
 type RecipeUpdatedAtDestructured = RecipeUpdatedAt;
 export type RecipeIngredients = ListEntity<
-  RecipeIngredientsItemInit,
-  RecipeIngredientsItem
+  RecipeIngredientsInit,
+  RecipeIngredientsDestructured
 >;
 export type RecipeIngredientsInit = Array<RecipeIngredientsItemInit>;
 export type RecipeIngredientsDestructured = Array<RecipeIngredientsItem>;
@@ -194,8 +194,8 @@ type RecipeIngredientsItemQuantityInit =
 type RecipeIngredientsItemQuantitySnapshot = RecipeIngredientsItemQuantity;
 type RecipeIngredientsItemQuantityDestructured = RecipeIngredientsItemQuantity;
 export type RecipeIngredientsItemComments = ListEntity<
-  RecipeIngredientsItemCommentsItemInit,
-  RecipeIngredientsItemCommentsItem
+  RecipeIngredientsItemCommentsInit,
+  RecipeIngredientsItemCommentsDestructured
 >;
 export type RecipeIngredientsItemCommentsInit =
   Array<RecipeIngredientsItemCommentsItemInit>;

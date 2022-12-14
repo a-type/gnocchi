@@ -11,7 +11,7 @@
 		"@aglio/prisma": "workspace:*",
 		"@aglio/scanning": "workspace:*",
 		"@aglio/tools": "workspace:*",
-		"@trpc/server": "^10.4.3",
+		"@trpc/server": "^10.5.0",
 		"superjson": "^1.12.0",
 		"zod": "^3.19.0"
 	},
