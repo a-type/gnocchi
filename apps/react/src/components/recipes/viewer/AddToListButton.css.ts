@@ -20,11 +20,11 @@ export const item = style({
 export const actions = style({
 	display: 'flex',
 	flexDirection: 'row',
-	alignItems: 'end',
+	alignItems: 'center',
+	justifyContent: 'flex-end',
 	gap: vars.space[2],
 	position: 'sticky',
 	bottom: 0,
 	width: '100%',
 	backgroundColor: vars.colors.white,
-	padding: vars.space[4],
 });
