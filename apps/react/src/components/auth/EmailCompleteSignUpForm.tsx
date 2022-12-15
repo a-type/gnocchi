@@ -34,7 +34,13 @@ export function EmailCompleteSignUpForm({
 			}}
 		>
 			<Form>
-				<TextField name="password" label="Password" type="password" />
+				<TextField
+					name="password"
+					label="Password"
+					type="password"
+					autoComplete="new-password"
+					required
+				/>
 				<SubmitButton>Sign In</SubmitButton>
 			</Form>
 		</Formik>

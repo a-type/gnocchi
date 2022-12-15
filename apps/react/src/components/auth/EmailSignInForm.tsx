@@ -27,12 +27,13 @@ export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
 			}}
 		>
 			<Form>
-				<TextField name="email" label="Email" />
+				<TextField name="email" label="Email" autoComplete="email" required />
 				<TextField
 					autoComplete="current-password"
 					name="password"
 					label="Password"
 					type="password"
+					required
 				/>
 				<SubmitButton>Sign In</SubmitButton>
 			</Form>

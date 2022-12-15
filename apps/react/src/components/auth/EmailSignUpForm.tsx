@@ -24,8 +24,8 @@ export function EmailSignUpForm({ returnTo }: EmailSignUpFormProps) {
 			}}
 		>
 			<Form>
-				<TextField name="email" label="Email" />
-				<TextField name="name" label="Name" />
+				<TextField name="name" label="Your name" autoComplete="name" required />
+				<TextField name="email" label="Email" autoComplete="email" required />
 				<SubmitButton>Sign Up</SubmitButton>
 			</Form>
 		</Formik>
