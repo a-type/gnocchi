@@ -98,7 +98,7 @@ export const collapsible = style({
 
 export const iconContainer = style({
 	position: 'relative',
-	display: 'contents',
+	display: 'flex',
 });
 
 export const icon = style({
