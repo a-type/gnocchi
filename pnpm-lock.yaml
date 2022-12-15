@@ -100,10 +100,10 @@ importers:
       '@dnd-kit/modifiers': ^6.0.0
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
-      '@lo-fi/cli': ^1.7.2
+      '@lo-fi/cli': ^1.7.3
       '@lo-fi/common': ^1.4.3
       '@lo-fi/react': ^7.0.3
-      '@lo-fi/web': ^1.6.6
+      '@lo-fi/web': ^1.6.7
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -194,10 +194,10 @@ importers:
       '@dnd-kit/modifiers': 6.0.0_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
-      '@lo-fi/cli': 1.7.2
+      '@lo-fi/cli': 1.7.3
       '@lo-fi/common': 1.4.3
-      '@lo-fi/react': 7.0.3_awxpspaorlevxla62jpxng5ghq
-      '@lo-fi/web': 1.6.6
+      '@lo-fi/react': 7.0.3_uszozlzkxzgbvfbuyzffwrkh44
+      '@lo-fi/web': 1.6.7
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -1871,8 +1871,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
-  /@lo-fi/cli/1.7.2:
-    resolution: {integrity: sha512-sJaPK3HcpYFUtNrrZAmBtuszCfNKGg2gbbFLBH2Nn9SBGQIvSh5LPtS37ItOEY8RZioH1f9NrUDI+pUgH25o6w==}
+  /@lo-fi/cli/1.7.3:
+    resolution: {integrity: sha512-HE7gZIrS1HCipB3aM6TSoJpQ9CKDGIJBvH3WIkjEYAsFpg895ziOIrAsnT5FxoWW/65aShvLPyQAgZqVecZoHg==}
     hasBin: true
     dependencies:
       '@swc/core': 1.3.23
@@ -1888,14 +1888,14 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/7.0.3_awxpspaorlevxla62jpxng5ghq:
+  /@lo-fi/react/7.0.3_uszozlzkxzgbvfbuyzffwrkh44:
     resolution: {integrity: sha512-ukVfBDJkeKxDnNH44Hd+W6yGNp56rh69MeCosM1EvDC1v3+dPyDxWo+8OyWd5d3q+iiraH6de3Q/S+yDKPUTJg==}
     peerDependencies:
       '@lo-fi/web': ^1.6.6
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 1.4.3
-      '@lo-fi/web': 1.6.6
+      '@lo-fi/web': 1.6.7
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
     dev: false
@@ -1913,8 +1913,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.6.6:
-    resolution: {integrity: sha512-rNfE+lgFTWgfeQgvDdA6lGLqGtow9nYguBLwFMs/oXaRKNvt88ZszjHdiC7htJq3+iTQW1QjM+h5ZOBNrgdUcQ==}
+  /@lo-fi/web/1.6.7:
+    resolution: {integrity: sha512-PY/fMNEXKUTWU7yNgh/axBCgUy290hmkiMVls8C0n8FsV49TYi5qUIqWYhvpcITdJTd4jY2hhEcqNr30AOxGnQ==}
     dependencies:
       '@lo-fi/common': 1.4.3
       cuid: 2.1.8

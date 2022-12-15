@@ -190,6 +190,7 @@ export const groceries = {
 		let lastItemId: string | null = null;
 
 		for (const line of lines) {
+			if (!line.trim()) continue;
 			const parsed = parseIngredient(line);
 			const firstMatch = await storage.items.findOne({
 				where: 'purchased_food_listId',

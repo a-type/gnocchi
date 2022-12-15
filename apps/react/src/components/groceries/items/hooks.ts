@@ -10,7 +10,7 @@ export function useItemDisplayText(item: Item) {
 			: pluralize(item.get('unit'))
 		: '';
 	const pluralizedName =
-		item.get('totalQuantity') === 1
+		item.get('totalQuantity') === 1 || item.get('unit')
 			? item.get('food')
 			: pluralize(item.get('food'));
 	const showOnlyInput = inputs.length === 1;

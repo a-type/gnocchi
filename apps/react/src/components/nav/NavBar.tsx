@@ -12,6 +12,7 @@ import {
 import { Tooltip } from '../primitives/Tooltip.jsx';
 import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
+import { PopEffect } from './PopEffect.jsx';
 
 export interface NavBarProps {}
 
@@ -49,9 +50,7 @@ export function NavBar({}: NavBarProps) {
 
 	return (
 		<div className={clsx(classes.root)}>
-			<NavBarLink to="/" icon={<CartIcon />} active={matchGroceries}>
-				Groceries
-			</NavBarLink>
+			<GroceriesNavBarLink active={matchGroceries} />
 			<PantryNavBarLink active={matchPurchased} />
 			{finalShowRecipes && (
 				<NavBarLink to="/recipes" icon={<RecipesIcon />} active={matchRecipes}>
@@ -66,20 +65,23 @@ function NavBarLink({
 	to,
 	children,
 	icon,
-	shake,
+	animate,
 	active,
 }: {
 	to: string;
 	children: ReactNode;
 	icon: ReactNode;
-	shake?: boolean;
+	animate?: boolean;
 	active: boolean;
 }) {
 	return (
 		<Tooltip content={children}>
 			<CollapsibleRoot open={!!active}>
-				<Link to={to} className={classes.button} data-shake={shake}>
-					{icon}
+				<Link to={to} className={classes.button}>
+					<div className={classes.iconContainer}>
+						<PopEffect active={animate} />
+						{icon}
+					</div>
 					<CollapsibleContent data-horizontal className={classes.collapsible}>
 						<span className={classes.buttonText} data-active={!!active}>
 							{children}
@@ -93,27 +95,30 @@ function NavBarLink({
 
 function PantryNavBarLink({ active }: { active: boolean }) {
 	const recent = useSnapshot(groceriesState.recentlyPurchasedItems).size;
-	const [shake, setShake] = useState(recent > 0);
-	useEffect(() => {
-		if (recent > 0) {
-			setShake(true);
-			const timeout = setTimeout(() => {
-				setShake(false);
-			}, 4000);
-			return () => clearTimeout(timeout);
-		} else {
-			setShake(false);
-		}
-	}, [recent]);
 
 	return (
 		<NavBarLink
 			to="/purchased"
 			icon={<FridgeIcon />}
-			shake={shake}
+			animate={recent > 0}
 			active={active}
 		>
 			Purchased
+		</NavBarLink>
+	);
+}
+
+function GroceriesNavBarLink({ active }: { active: boolean }) {
+	const addedRecipe = useSnapshot(groceriesState).justAddedRecipe;
+
+	return (
+		<NavBarLink
+			to="/"
+			icon={<CartIcon />}
+			active={active}
+			animate={addedRecipe}
+		>
+			Groceries
 		</NavBarLink>
 	);
 }

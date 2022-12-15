@@ -8,6 +8,7 @@ export const root = style({
 	transform: 'translateX(-50%)',
 	display: 'flex',
 	flexDirection: 'row',
+	alignItems: 'center',
 	width: 'min-content',
 	borderRadius: vars.radii.lg,
 	backgroundColor: vars.colors.light,
@@ -17,7 +18,7 @@ export const root = style({
 	borderColor: vars.colors.gray70,
 	overflow: 'hidden',
 	zIndex: vars.zIndices.nav,
-	height: 32,
+	height: 37,
 });
 
 const shake = keyframes({
@@ -93,4 +94,14 @@ export const collapsible = style({
 	flexDirection: 'row',
 	alignItems: 'center',
 	animationTimingFunction: 'linear !important',
+});
+
+export const iconContainer = style({
+	position: 'relative',
+	display: 'contents',
+});
+
+export const icon = style({
+	position: 'relative',
+	zIndex: 1,
 });

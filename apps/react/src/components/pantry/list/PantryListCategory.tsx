@@ -17,6 +17,7 @@ export function PantryListCategory({
 		<div
 			className={clsx('pantryListCategory', groceryCategoryClasses.root)}
 			data-is-empty={!items || items?.length === 0}
+			data-do-not-animate
 			{...rest}
 		>
 			<div className={groceryCategoryClasses.titleRow}>

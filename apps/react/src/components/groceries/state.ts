@@ -9,4 +9,5 @@ export const groceriesState = proxy({
 	isAnyItemDragged: false,
 	justMovedItemId: null as string | null,
 	recentlyPurchasedItems: proxySet<string>(),
+	justAddedRecipe: false,
 });
