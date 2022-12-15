@@ -16,7 +16,7 @@ export const heading = recipe({
 			'h2&': {
 				fontSize: vars.fontSizes.lg,
 				fontFamily: vars.fonts.title,
-				fontWeight: vars.fontWeights.light,
+				fontWeight: vars.fontWeights.bold,
 				color: vars.colors.gray90,
 			},
 			'h3&': {},
@@ -27,9 +27,12 @@ export const heading = recipe({
 	variants: {
 		gutterBottom: {
 			true: {
-				marginBottom: vars.space[2],
+				marginBottom: vars.space[4],
 			},
 		},
+	},
+	defaultVariants: {
+		gutterBottom: true,
 	},
 });
 

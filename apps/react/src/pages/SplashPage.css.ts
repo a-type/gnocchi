@@ -8,6 +8,7 @@ export const fixedContent = style({
 	bottom: 0,
 	backgroundColor: vars.colors.primary,
 	borderTop: `1px solid ${vars.colors.primaryDark}`,
+	margin: 0,
 });
 
 export const fixedContentInner = style({
@@ -20,13 +21,11 @@ export const demoGrid = style({
 	gridTemplateColumns: '1fr',
 	gridTemplateAreas: `"title" "basicText" "basic" "multiplayerText" "multiplayer" "lists" "outroText"`,
 	gridGap: vars.space[3],
-	marginTop: '30vh',
 	marginBottom: '80vh',
 	alignItems: 'start',
 
 	'@media': {
 		'only screen and (min-width: 600px)': {
-			marginTop: '40vh',
 			gridTemplateAreas: `"title title" "basic basicText" "multiplayerText multiplayer" "lists outroText"`,
 			gridTemplateColumns: 'repeat(2, 1fr)',
 		},
@@ -44,6 +43,7 @@ export const sectionBase = style({
 	borderRadius: vars.radii.lg,
 	fontSize: vars.fontSizes.sm,
 	border: `1px solid ${vars.colors.primaryDark}`,
+	lineHeight: 1.5,
 });
 
 export const section = styleVariants({
@@ -66,13 +66,32 @@ export const backgroundSceneContainer = style({
 	pointerEvents: 'none',
 });
 
-export const title = style({
+export const titleWrap = style({
 	gridArea: 'title',
-	margin: 0,
+});
+
+export const appName = style({
 	fontFamily: '"Londrina Outline", sans-serif',
-	fontSize: '15vmax',
+	fontWeight: 500,
+	fontSize: '6vmax',
 	color: vars.colors.black,
-	fontWeight: 'lighter',
+	marginBottom: '20vh',
+	'@media': {
+		'only screen and (min-width: 600px)': {
+			marginBottom: '40vh',
+		},
+	},
+});
+
+export const title = style({
+	width: '100%',
+	margin: 0,
+	marginBottom: vars.space[6],
+	fontFamily: vars.fonts.title,
+	fontSize: '7vmax',
+	color: vars.colors.black,
+	fontWeight: 'black',
+	textShadow: `0 0 4px ${vars.colors.white}`,
 });
 
 export const demo = style({});

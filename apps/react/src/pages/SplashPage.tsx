@@ -1,6 +1,6 @@
 import { Scene } from '@/components/3d/Scene.jsx';
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Button, H1, P, Span } from '@/components/primitives/index.js';
+import { Button, H2, P, Span } from '@/components/primitives/index.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';
 import { sprinkles } from '@/styles/sprinkles.css.js';
@@ -22,14 +22,17 @@ export function SplashPage() {
 			</div>
 			<PageContent>
 				<div className={classes.demoGrid}>
-					<h1 className={classes.title}>Aglio</h1>
+					<div className={classes.titleWrap}>
+						<h2 className={classes.appName}>Aglio</h2>
+						<Title>Your weekly cooking, in one place.</Title>
+					</div>
 					<DemoFrame
 						demo="basics"
 						className={classes.demo}
 						style={{ gridArea: 'basic' }}
 					/>
 					<Section style={{ gridArea: 'basicText' }}>
-						<H1>How it works</H1>
+						<H2>How it works</H2>
 						<p className={classes.item}>
 							<span className={classes.emoji}>🧾</span>
 							<span className={classes.itemText}>
@@ -58,7 +61,7 @@ export function SplashPage() {
 						style={{ gridArea: 'multiplayer' }}
 					/>
 					<Section style={{ gridArea: 'multiplayerText' }}>
-						<H1>Sign up for superpowers</H1>
+						<H2>Sign up for superpowers</H2>
 						<p>
 							An affordable account keeps things running and nets you some cool
 							stuff:
@@ -97,7 +100,7 @@ export function SplashPage() {
 						style={{ gridArea: 'lists' }}
 					/>
 					<Section color="white" style={{ gridArea: 'outroText' }}>
-						<H1>Less improv at the grocery store</H1>
+						<H2>Less improv at the grocery store</H2>
 						<p>
 							If you're like me, you usually leave the grocery store with some
 							foods you didn't plan on buying. But you also get home, start
@@ -148,4 +151,8 @@ function Section({
 	return (
 		<section className={clsx(classes.section[color], className)} {...rest} />
 	);
+}
+
+function Title({ children }: { children: string }) {
+	return <h1 className={classes.title}>{children}</h1>;
 }
