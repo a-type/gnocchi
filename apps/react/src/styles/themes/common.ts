@@ -83,6 +83,7 @@ export const commonTheme = {
 		nav: '500',
 		dialog: '1000',
 		dialogBackdrop: '900',
+		tooltip: '10000',
 	},
 };
 
@@ -101,4 +102,5 @@ export const lightmodeGrays = {
 	gray90: '#42424a',
 	gray0: '#21212b',
 	grayBlend: 'rgba(0, 0, 20, 0.025)',
+	grayDarkBlend: 'rgba(0, 0, 20, 0.05)',
 };

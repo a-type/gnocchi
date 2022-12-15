@@ -8,7 +8,7 @@ export const root = style({
 	transform: 'translateX(-50%)',
 	display: 'flex',
 	flexDirection: 'row',
-	alignItems: 'center',
+	alignItems: 'stretch',
 	width: 'min-content',
 	borderRadius: vars.radii.lg,
 	backgroundColor: vars.colors.light,

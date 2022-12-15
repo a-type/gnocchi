@@ -9,7 +9,7 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 } from '../primitives/Collapsible.jsx';
-import { Tooltip } from '../primitives/Tooltip.jsx';
+import { Tooltip } from '../primitives/index.js';
 import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';

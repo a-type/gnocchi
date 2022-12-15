@@ -93,8 +93,8 @@ export const root = recipe({
 			ghost: {
 				vars: {
 					[bgVar]: 'transparent',
-					[hoverVar]: vars.colors.gray10,
-					[activeVar]: vars.colors.gray20,
+					[hoverVar]: vars.colors.grayBlend,
+					[activeVar]: vars.colors.grayDarkBlend,
 				},
 				color: vars.colors.darkBlend,
 				selectors: {

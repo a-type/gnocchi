@@ -27,6 +27,7 @@ export const vars = createThemeContract({
 		gray90: '',
 		gray0: '',
 		grayBlend: '',
+		grayDarkBlend: '',
 		darkBlend: '',
 		lightBlend: '',
 		overlay: '',
@@ -111,5 +112,6 @@ export const vars = createThemeContract({
 		nav: '',
 		dialog: '',
 		dialogBackdrop: '',
+		tooltip: '',
 	},
 });

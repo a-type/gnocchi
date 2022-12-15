@@ -11,7 +11,7 @@ export * from './ErrorBoundary.jsx';
 export * from './LiveUpdateTextField.jsx';
 export * from './Popover.jsx';
 export * from './RelativeTime.jsx';
-export * from './Tooltip.jsx';
+export * from './tooltip/Tooltip.jsx';
 export * from './textArea/TextArea.jsx';
 export * from './input/Input.jsx';
 export * from './typography/typography.jsx';

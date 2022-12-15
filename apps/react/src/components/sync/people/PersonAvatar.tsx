@@ -1,4 +1,3 @@
-import { keyframes, styled } from '@/stitches.config.js';
 import { UserInfo } from '@lo-fi/web';
 import { Presence, Profile } from '@/stores/groceries/index.js';
 import { clsx } from 'clsx';

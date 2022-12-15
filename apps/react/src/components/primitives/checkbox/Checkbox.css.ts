@@ -8,6 +8,7 @@ export const root = style({
 	border: `1px solid currentColor`,
 	position: 'relative',
 	borderRadius: vars.radii.sm,
+	transition: `100ms ${vars.transitions.default}`,
 
 	selectors: {
 		'&:focus': {},
@@ -19,6 +20,9 @@ export const root = style({
 		'&[data-state="checked"]': {
 			backgroundColor: vars.colors.primaryLighter,
 			borderColor: vars.colors.primaryLight,
+		},
+		'&:hover': {
+			boxShadow: `0 0 0 1px currentColor`,
 		},
 	},
 });
