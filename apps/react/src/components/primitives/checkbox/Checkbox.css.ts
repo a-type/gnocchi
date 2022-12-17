@@ -4,6 +4,7 @@ import { style } from '@vanilla-extract/css';
 export const root = style({
 	width: 24,
 	height: 24,
+	flexShrink: 0,
 	backgroundColor: vars.colors.white,
 	border: `1px solid currentColor`,
 	position: 'relative',
