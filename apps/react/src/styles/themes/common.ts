@@ -88,6 +88,7 @@ export const commonTheme = {
 };
 
 export const lightmodeGrays = {
+	none: 'none',
 	black: '#3c3c3c',
 	white: '#ffffff',
 	light: '#fdfdff',

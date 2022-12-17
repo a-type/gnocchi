@@ -127,6 +127,8 @@ const responsiveProperties = defineProperties({
 		minHeight: [0, '100%'],
 		maxWidth: vars.sizes,
 		transition: vars.transitions,
+		fill: { ...vars.colors, currentColor: 'currentColor' },
+		stroke: { ...vars.colors, currentColor: 'currentColor' },
 	},
 	shorthands: {
 		padding: ['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'],

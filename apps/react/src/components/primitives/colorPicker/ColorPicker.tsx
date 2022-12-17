@@ -8,6 +8,7 @@ import {
 import { clsx } from 'clsx';
 import * as classes from './ColorPicker.css.js';
 import { themeMap } from '@/styles/themes/map.js';
+import { ReactNode } from 'react';
 
 export type ThemeName = 'lemon' | 'tomato' | 'leek' | 'blueberry' | 'eggplant';
 
@@ -52,8 +53,16 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
 	);
 }
 
-export function ColorSwatch({ value }: { value: ThemeName }) {
+export function ColorSwatch({
+	value,
+	children,
+}: {
+	value: ThemeName;
+	children?: ReactNode;
+}) {
 	return (
-		<div className={clsx(classes.swatch, themeMap[value] ?? themeMap.lemon)} />
+		<div className={clsx(classes.swatch, themeMap[value] ?? themeMap.lemon)}>
+			{children}
+		</div>
 	);
 }

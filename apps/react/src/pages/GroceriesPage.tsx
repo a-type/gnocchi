@@ -20,6 +20,7 @@ import { Box } from '@/components/primitives/box/Box.jsx';
 import { ListContext } from '@/contexts/ListContext.jsx';
 import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
+import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -64,7 +65,12 @@ export function GroceriesPage() {
 								<Box flexDirection="row" align="center" gap={2}>
 									<MainMenu />
 									<Suspense fallback={null}>
-										<ListSelect value={listId} onChange={onListChange} />
+										<ListSelect
+											includeAll
+											value={listId}
+											onChange={onListChange}
+										/>
+										{listId && <ListEdit listId={listId} />}
 									</Suspense>
 								</Box>
 								<CollaborationMenu />

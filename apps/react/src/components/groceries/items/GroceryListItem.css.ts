@@ -142,6 +142,7 @@ export const listTag = style({
 	fontSize: vars.fontSizes.xs,
 	minWidth: 12,
 	minHeight: 12,
+	gap: vars.space[1],
 
 	'@media': {
 		'only screen and (min-width: 600px)': {
@@ -153,6 +154,11 @@ export const listTag = style({
 
 export const listTagName = style({
 	display: 'none',
+	whiteSpace: 'nowrap',
+	overflow: 'hidden',
+	textOverflow: 'ellipsis',
+	maxWidth: '100%',
+
 	'@media': {
 		'only screen and (min-width: 600px)': {
 			display: 'inline',
@@ -162,9 +168,9 @@ export const listTagName = style({
 
 export const listTagIcon = style({
 	display: 'inline',
-	'@media': {
-		'only screen and (min-width: 600px)': {
-			display: 'none',
-		},
-	},
+	// '@media': {
+	// 	'only screen and (min-width: 600px)': {
+	// 		display: 'none',
+	// 	},
+	// },
 });

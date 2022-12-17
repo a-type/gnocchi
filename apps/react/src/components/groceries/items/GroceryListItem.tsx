@@ -1,3 +1,4 @@
+import { TagIcon } from '@/components/icons/TagIcon.jsx';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
@@ -45,6 +46,7 @@ import { Link } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { Checkbox } from '../../primitives/index.js';
 import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
+import { ListSelect } from '../lists/ListSelect.jsx';
 import { groceriesState } from '../state.js';
 import { CategoryPicker } from './CategoryPicker.js';
 import * as classes from './GroceryListItem.css.js';
@@ -128,7 +130,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				data-highlighted={quantityJustChanged}
 				data-dragging={isDragActive}
 				data-item-id={id}
-				data-oid={item.oid}
+				data-oid={(item as any).oid}
 				data-menu-open={menuOpen}
 				data-just-moved={justMoved}
 				data-hidden-state={purchasedHiddenState}
@@ -160,7 +162,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							{displayString}
 						</div>
 						<RecentPeople item={item} />
-						<ListTag item={item} />
+						<ListTag item={item} collapsed={menuOpen} />
 						<CollapsibleTrigger asChild>
 							<Button
 								color="ghost"
@@ -178,6 +180,10 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					<CollapsibleContent>
 						<div className={classes.secondaryContent}>
 							<ItemSources item={item} />
+							<ListSelect
+								value={item.get('listId')}
+								onChange={(listId) => item.set('listId', listId)}
+							/>
 							<CategoryPicker item={item} />
 							<ItemDeleteButton color="ghost" item={item}>
 								<TrashIcon />
@@ -301,7 +307,7 @@ function usePeopleWhoLastEditedThis(itemId: string) {
 	return people;
 }
 
-function ListTag({ item }: { item: Item }) {
+function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 	const filteredListId = useListId();
 
 	if (filteredListId !== undefined) {
@@ -320,12 +326,16 @@ function ListTag({ item }: { item: Item }) {
 
 	return (
 		<Tooltip content={list.get('name')}>
-			<Link to={`/list/${list.get('id')}`}>
-				<div className={clsx(listThemeClass, classes.listTag)}>
-					<ListBulletIcon className={classes.listTagIcon} />
-					<span className={classes.listTagName}>{list.get('name')}</span>
-				</div>
-			</Link>
+			<CollapsibleRoot open={!collapsed}>
+				<CollapsibleContent data-horizontal>
+					<Link to={`/list/${list.get('id')}`}>
+						<div className={clsx(listThemeClass, classes.listTag)}>
+							<TagIcon className={classes.listTagIcon} />
+							<span className={classes.listTagName}>{list.get('name')}</span>
+						</div>
+					</Link>
+				</CollapsibleContent>
+			</CollapsibleRoot>
 		</Tooltip>
 	);
 }

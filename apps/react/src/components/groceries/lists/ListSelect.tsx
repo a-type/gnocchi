@@ -1,3 +1,4 @@
+import { TagIcon } from '@/components/icons/TagIcon.jsx';
 import { Dialog, DialogContent } from '@/components/primitives/Dialog.jsx';
 import {
 	Form,
@@ -19,7 +20,7 @@ import { sprinkles } from '@/styles/sprinkles.css.js';
 import { themeMap } from '@/styles/themes/map.js';
 import { Formik } from 'formik';
 import { useState } from 'react';
-import { ListEdit } from './ListEdit.jsx';
+import * as classes from './ListSelect.css.js';
 
 function getRandomColor(): ThemeName {
 	const colors = Object.keys(themeMap);
@@ -27,11 +28,12 @@ function getRandomColor(): ThemeName {
 }
 
 export interface ListSelectProps {
+	includeAll?: boolean;
 	value: string | null | undefined;
 	onChange: (value: string | null | undefined) => void;
 }
 
-export function ListSelect({ value, onChange }: ListSelectProps) {
+export function ListSelect({ value, onChange, includeAll }: ListSelectProps) {
 	const lists = hooks.useAllLists();
 	const [isCreating, setIsCreating] = useState(false);
 	const client = hooks.useClient();
@@ -53,11 +55,11 @@ export function ListSelect({ value, onChange }: ListSelectProps) {
 					<SelectIcon />
 				</SelectTrigger>
 				<SelectContent>
-					<SelectItem value="undefined">All</SelectItem>
+					{includeAll && <SelectItem value="undefined">All</SelectItem>}
 					{lists.length > 0 && (
 						<SelectItem value={'null'}>
 							<Box direction="row" gap={2} align="center">
-								<ColorSwatch value="lemon" />
+								<TagIcon fill className={themeMap.lemon} />
 								<span>Default</span>
 							</Box>
 						</SelectItem>
@@ -65,10 +67,13 @@ export function ListSelect({ value, onChange }: ListSelectProps) {
 					{lists.map((list) => (
 						<SelectItem key={list.get('id')} value={list.get('id')}>
 							<Box direction="row" gap={2} align="center">
-								<ColorSwatch
-									value={(list.get('color') as ThemeName) || 'lemon'}
+								<TagIcon
+									fill
+									className={
+										themeMap[(list.get('color') as ThemeName) || 'lemon']
+									}
 								/>
-								<span>{list.get('name')}</span>
+								<span className={classes.itemText}>{list.get('name')}</span>
 							</Box>
 						</SelectItem>
 					))}
@@ -76,7 +81,6 @@ export function ListSelect({ value, onChange }: ListSelectProps) {
 					<SelectItem value={'new'}>New List</SelectItem>
 				</SelectContent>
 			</Select>
-			{value && <ListEdit listId={value} />}
 			<Dialog open={isCreating} onOpenChange={() => setIsCreating(false)}>
 				<DialogContent>
 					<Formik
