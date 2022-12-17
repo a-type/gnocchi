@@ -78,7 +78,7 @@ function FeatureFlagPlanManager({
 										[flagName]: !flags[flagName],
 									},
 								});
-								onChange();
+								onChange?.();
 							}}
 						/>
 						<label>{flagName}</label>

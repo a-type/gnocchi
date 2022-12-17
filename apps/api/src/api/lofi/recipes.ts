@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ReplicaType, TokenProvider } from '@lo-fi/server';
-import { assert } from '@aglio/tools';
+import { assert, getRecipesLibraryName } from '@aglio/tools';
 import { getLoginSession } from '@aglio/auth';
 import { DEPLOYED_HOST } from '../../config/deployedContext.js';
 import { verifySubscription } from 'src/auth/verifySubscription.js';
@@ -20,7 +20,7 @@ export default async function recipesHandler(req: Request, res: Response) {
 
 	const token = tokenProvider.getToken({
 		userId: session.userId,
-		libraryId: session.planId + '_recipes',
+		libraryId: getRecipesLibraryName(session.planId),
 		syncEndpoint: `${DEPLOYED_HOST}/lofi`,
 		type: ReplicaType.Realtime,
 	});

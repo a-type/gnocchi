@@ -4,13 +4,17 @@
 	"private": true,
 	"main": "src/index.ts",
 	"type": "module",
-	"scripts": {},
+	"scripts": {
+		"link-lofi": "pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/server"
+	},
 	"dependencies": {
 		"@aglio/auth": "workspace:*",
 		"@aglio/email": "workspace:*",
 		"@aglio/prisma": "workspace:*",
 		"@aglio/scanning": "workspace:*",
 		"@aglio/tools": "workspace:*",
+		"@lo-fi/common": "^1.4.3",
+		"@lo-fi/server": "^1.2.7",
 		"@trpc/server": "^10.5.0",
 		"superjson": "^1.12.0",
 		"zod": "^3.19.0"

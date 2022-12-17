@@ -4,7 +4,7 @@ import { attachSocketServer } from './socketServer.js';
 import { createServer } from 'http';
 import cors from 'cors';
 import apiRouter from './api/index.js';
-import { middleware } from './rpc/index.js';
+import { createTrpcMiddleware } from './rpc/index.js';
 import { productAdminSetup } from './tasks/productAdminSetup.js';
 
 const app = express();
@@ -47,10 +47,10 @@ app.get('/', (req, res) => {
 
 app.use('/api', apiRouter);
 
-app.use('/trpc', middleware);
-
 const lofiServer = attachSocketServer(server);
 app.use('/lofi', lofiServer.handleRequest);
+
+app.use('/trpc', createTrpcMiddleware(lofiServer));
 
 server.listen(3001, () => {
 	console.log('http://localhost:3001');

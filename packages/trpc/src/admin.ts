@@ -1,4 +1,5 @@
 import { prisma } from '@aglio/prisma';
+import { getGroceryLibraryName, getRecipesLibraryName } from '@aglio/tools';
 import { z } from 'zod';
 import { t } from './common.js';
 
@@ -43,5 +44,15 @@ export const adminRouter = t.router({
 				},
 			});
 			return plan;
+		}),
+	resetSync: t.procedure
+		.input(
+			z.object({
+				planId: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			// ctx.lofi.evictLibrary(getGroceryLibraryName(input.planId));
+			// ctx.lofi.evictLibrary(getRecipesLibraryName(input.planId));
 		}),
 });

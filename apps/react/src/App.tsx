@@ -31,6 +31,7 @@ import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage.jsx';
 import { AdminFeatureFlagsPage } from './pages/admin/AdminFeatureFlagsPage.jsx';
 import { LogoutNotice } from './components/auth/LogoutNotice.jsx';
 import { RecipeViewPage } from './pages/RecipeViewPage.jsx';
+import { AdminSyncPage } from './pages/admin/AdminSyncPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -73,6 +74,7 @@ export function App() {
 													path="/admin/feature-flags"
 													element={<AdminFeatureFlagsPage />}
 												/>
+												<Route path="/admin/sync" element={<AdminSyncPage />} />
 											</Route>
 											<Route path="/recipes" element={<RecipesSync />}>
 												<Route

@@ -3,6 +3,7 @@ import { initTRPC } from '@trpc/server';
 import type { Request, Response } from 'express';
 import superjson from 'superjson';
 import * as trpcExpress from '@trpc/server/adapters/express';
+import { Server } from '@lo-fi/server';
 
 type Context = {
 	req: Request;
@@ -13,17 +14,20 @@ type Context = {
 	};
 	session: Session | null;
 	isProductAdmin: boolean;
+	lofi: Server;
 };
 
 export const createContext = async ({
 	req,
 	res,
 	deployedContext,
+	lofi,
 }: trpcExpress.CreateExpressContextOptions & {
 	deployedContext: {
 		apiHost: string;
 		uiHost: string;
 	};
+	lofi: Server;
 }) => {
 	const session = await getLoginSession(req);
 
@@ -33,6 +37,7 @@ export const createContext = async ({
 		deployedContext,
 		session,
 		isProductAdmin: session?.isProductAdmin ?? false,
+		lofi,
 	};
 };
 
