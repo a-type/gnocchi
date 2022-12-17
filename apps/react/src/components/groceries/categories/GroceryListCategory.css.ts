@@ -98,7 +98,6 @@ export const titleRow = style({
 export const items = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[1],
 
 	transition: `opacity 0.2s ${vars.transitions.springy}`,
 
