@@ -24,7 +24,7 @@ export const content = style({
 	paddingRight: vars.space[4],
 	paddingTop: vars.space[6],
 	paddingBottom: vars.space[6],
-	marginBottom: 120,
+	flex: 1,
 });
 
 export const contentNoPadding = style({
@@ -38,6 +38,7 @@ export const innerContent = style({
 	width: '100%',
 	maxWidth: vars.sizes.content,
 	flexDirection: 'column',
+	marginBottom: 120,
 });
 export const innerContentFullHeight = style({
 	flex: 1,
@@ -48,6 +49,7 @@ export const pageRoot = style({
 	gridTemplateAreas: '"content" "nowPlaying"',
 	gridTemplateRows: '1fr auto',
 	flex: '1 1 0',
+	minHeight: 0,
 });
 
 export const pageRootLemon = style({
@@ -65,7 +67,7 @@ export const section = style({
 	maxWidth: '80vw',
 	'@media': {
 		'(max-width: 640px)': {
-			minWidth: 'unset',
+			minWidth: 'none',
 		},
 	},
 });
