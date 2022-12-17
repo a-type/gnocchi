@@ -102,7 +102,8 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 			}
 		}, [purchasedAt, id]);
 
-		const [menuOpen, setMenuOpen] = useState(false);
+		const [menuToggleOpen, setMenuOpen] = useState(false);
+		const menuOpen = menuToggleOpen && purchasedHiddenState === 'visible';
 
 		const sectionStateSnap = useSnapshot(groceriesState);
 
@@ -180,14 +181,16 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					<CollapsibleContent>
 						<div className={classes.secondaryContent}>
 							<ItemSources item={item} />
-							<ListSelect
-								value={item.get('listId')}
-								onChange={(listId) => item.set('listId', listId)}
-							/>
-							<CategoryPicker item={item} />
-							<ItemDeleteButton color="ghost" item={item}>
-								<TrashIcon />
-							</ItemDeleteButton>
+							<div className={classes.controls}>
+								<ListSelect
+									value={item.get('listId')}
+									onChange={(listId) => item.set('listId', listId)}
+								/>
+								<CategoryPicker item={item} />
+								<ItemDeleteButton color="ghost" item={item}>
+									<TrashIcon />
+								</ItemDeleteButton>
+							</div>
 						</div>
 					</CollapsibleContent>
 				</CollapsibleRoot>

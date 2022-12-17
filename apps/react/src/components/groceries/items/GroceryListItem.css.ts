@@ -1,3 +1,4 @@
+import { mediaQueries } from '@/styles/media.js';
 import { vars } from '@/theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
 
@@ -27,6 +28,7 @@ const disappear = keyframes({
 		opacity: 0,
 		transform: 'translateY(30px)',
 		height: 0,
+		marginTop: 0,
 	},
 });
 
@@ -45,6 +47,9 @@ export const root = style({
 	transition: `all 0.2s ${vars.transitions.springy}`,
 
 	selectors: {
+		'& + &': {
+			marginTop: vars.space[1],
+		},
 		'&[data-dragging="true"]': {
 			boxShadow: vars.shadows.xl,
 			cursor: 'grabbing',
@@ -99,14 +104,31 @@ export const textContent = style({
 	flexDirection: 'row',
 	gap: vars.space[1],
 	flex: '1',
+	maxWidth: '100%',
+	overflow: 'hidden',
+	textOverflow: 'ellipsis',
 });
 
 export const secondaryContent = style({
 	display: 'flex',
-	flexDirection: 'row',
+	flexDirection: 'column',
 	gap: vars.space[2],
 	justifyContent: 'flex-end',
 	padding: vars.space[3],
+	paddingTop: 0,
+	alignItems: 'flex-end',
+
+	'@media': {
+		[mediaQueries.sm]: {
+			flexDirection: 'row',
+		},
+	},
+});
+
+export const controls = style({
+	display: 'flex',
+	flexDirection: 'row',
+	gap: vars.space[2],
 });
 
 const expand = keyframes({

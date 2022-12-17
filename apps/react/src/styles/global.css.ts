@@ -41,6 +41,6 @@ globalFontFace('Inter', {
 	// variable fonts!
 	src: 'url(/fonts/Inter-VariableFont_slnt,wght.ttf) format("truetype-variations")',
 	fontWeight: '1 999',
-	fontStyle: 'oblique 0deg 10deg',
+	fontStyle: 'oblique 0deg 5deg',
 	fontDisplay: 'swap',
 });

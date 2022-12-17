@@ -1,5 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { Button } from '@/components/primitives/index.js';
+import {
+	Button,
+	Form,
+	SubmitButton,
+	TextField,
+} from '@/components/primitives/index.js';
 import { groceries, Category, hooks } from '@/stores/groceries/index.js';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { DndContext, DragOverlay, useDndMonitor } from '@dnd-kit/core';
@@ -9,6 +14,7 @@ import { generateKeyBetween } from 'fractional-indexing';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
 import { Box } from '@/components/primitives/box/Box.jsx';
+import { Formik } from 'formik';
 
 export interface CategoryManagerProps {}
 
@@ -91,6 +97,7 @@ function CategoryList() {
 						/>
 					);
 				})}
+				<AddCategoryForm />
 			</Box>
 		</SortableContext>
 	);
@@ -187,5 +194,22 @@ function CategoryDragOverlay() {
 			{dragging && <CategoryManagerItem category={dragging} />}
 		</DragOverlay>,
 		document.body,
+	);
+}
+
+function AddCategoryForm() {
+	return (
+		<Formik
+			initialValues={{ name: '' }}
+			onSubmit={(values, bag) => {
+				groceries.createCategory(values.name);
+				bag.resetForm();
+			}}
+		>
+			<Form>
+				<TextField name="name" label="Name" required />
+				<SubmitButton>Add</SubmitButton>
+			</Form>
+		</Formik>
 	);
 }

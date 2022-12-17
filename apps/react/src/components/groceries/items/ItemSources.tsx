@@ -9,13 +9,16 @@ export interface ItemSourcesProps {
 export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 	hooks.useWatch(item.get('inputs'));
 	return (
-		<ul className={classes.root} {...rest}>
-			{item.get('inputs').map((input) => (
-				<li className={classes.item} key={input.oid}>
-					<InputRenderer input={input} />
-				</li>
-			))}
-		</ul>
+		<div className={classes.root} {...rest}>
+			<label className={classes.label}>Sources</label>
+			<ul className={classes.list} {...rest}>
+				{item.get('inputs').map((input) => (
+					<li className={classes.item} key={(input as any).oid}>
+						<InputRenderer input={input} />
+					</li>
+				))}
+			</ul>
+		</div>
 	);
 }
 
