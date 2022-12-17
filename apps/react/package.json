@@ -95,6 +95,7 @@
 	},
 	"devDependencies": {
 		"@types/convert-units": "^2.3.5",
+		"@types/dom-screen-wake-lock": "^1.0.0",
 		"@types/pluralize": "^0.0.29",
 		"@types/prosemirror-state": "^1.4.0",
 		"@types/react": "^18.0.14",

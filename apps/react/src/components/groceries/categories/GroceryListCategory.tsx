@@ -11,7 +11,7 @@ import { Category, hooks, Item } from '@/stores/groceries/index.js';
 import { vars } from '@/theme.css.js';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { clsx } from 'clsx';
-import { memo, useCallback, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useSnapshot } from 'valtio';
 import { useIsDragging } from '../dndHooks.js';
 import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
@@ -33,7 +33,16 @@ export function GroceryListCategory({
 		return !item.get('purchasedAt') || recentlyPurchased.has(item.get('id'));
 	});
 	const empty = visibleItems.length === 0;
-	// const [mountedEmpty] = useState(empty);
+
+	// set a flag if the component mounted empty. we don't animate
+	// the collapse if this is the case to avoid rendering empty
+	// categories on first mount
+	const [mountedEmpty, setMountedEmpty] = useState(empty);
+	useEffect(() => {
+		if (!empty) {
+			setMountedEmpty(false);
+		}
+	}, [empty]);
 
 	const isDragging = useIsDragging();
 	const internalRef = useRef<HTMLDivElement>(null);
@@ -58,7 +67,7 @@ export function GroceryListCategory({
 			data-dragged-over={isOver}
 			data-is-item-dragging={isDragging}
 			data-is-empty={empty}
-			// data-is-initially-empty={mountedEmpty}
+			data-do-not-animate={mountedEmpty}
 			ref={finalRef}
 			{...rest}
 		>

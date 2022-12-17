@@ -5,6 +5,7 @@
 		"outDir": "./dist",
 		"rootDir": ".",
 		"baseUrl": ".",
+		"lib": ["es2017", "dom", "dom.iterable", "ES2021"],
 		"paths": {
 			"@/*": ["./src/*"]
 		},

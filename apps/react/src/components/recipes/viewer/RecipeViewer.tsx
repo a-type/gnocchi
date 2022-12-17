@@ -1,4 +1,5 @@
 import { Box, H1, H2 } from '@/components/primitives/index.js';
+import { useWakeLock } from '@/hooks/useWakeLock.js';
 import { hooks } from '@/stores/recipes/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { useRecipeFromSlugUrl } from '../hooks.js';
@@ -14,6 +15,8 @@ export interface RecipeViewerProps {
 export function RecipeViewer({ slug }: RecipeViewerProps) {
 	const recipe = useRecipeFromSlugUrl(slug);
 	const { title } = hooks.useWatch(recipe);
+
+	useWakeLock(true);
 
 	return (
 		<Box direction="column" gap={6}>

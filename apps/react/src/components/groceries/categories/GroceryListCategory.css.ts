@@ -27,15 +27,6 @@ const popIn = keyframes({
 	},
 });
 
-const expand = keyframes({
-	'0%': {
-		height: 0,
-	},
-	'100%': {
-		height: 'var(--height)',
-	},
-});
-
 const collapse = keyframes({
 	'0%': {
 		height: 'var(--height)',
@@ -70,7 +61,7 @@ export const root = style({
 			marginBottom: 0,
 			animation: `${collapse} 0.2s ${vars.transitions.default} forwards`,
 		},
-		'&[data-do-not-animate]': {
+		'&[data-do-not-animate="true"]': {
 			animation: 'none',
 		},
 		'&[data-is-item-dragging="true"][data-dragged-over="false"]': {

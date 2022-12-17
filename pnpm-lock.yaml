@@ -130,6 +130,7 @@ importers:
       '@trpc/react-query': ^10.5.0
       '@trpc/server': ^10.5.0
       '@types/convert-units': ^2.3.5
+      '@types/dom-screen-wake-lock': ^1.0.0
       '@types/pluralize': ^0.0.29
       '@types/prosemirror-state': ^1.4.0
       '@types/react': ^18.0.14
@@ -267,6 +268,7 @@ importers:
       workbox-window: 6.5.4
     devDependencies:
       '@types/convert-units': 2.3.5
+      '@types/dom-screen-wake-lock': 1.0.0
       '@types/pluralize': 0.0.29
       '@types/prosemirror-state': 1.4.0
       '@types/react': 18.0.17
@@ -3426,6 +3428,10 @@ packages:
   /@types/cors/2.8.12:
     resolution: {integrity: sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==}
     dev: false
+
+  /@types/dom-screen-wake-lock/1.0.0:
+    resolution: {integrity: sha512-3o5jkfJsuhFcKj2EZ3PiEoiQQbB3J/nffsXJBKtyubkBHsX2siS6b4uij3ukr5xgDHsF4BaT9fHo8DneAw/YxA==}
+    dev: true
 
   /@types/estree/0.0.39:
     resolution: {integrity: sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==}
