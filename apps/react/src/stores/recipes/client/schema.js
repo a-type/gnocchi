@@ -31,6 +31,10 @@ const recipes = collection({
             indexed: true,
             default: ()=>cuid().slice(0, 8)
         },
+        multiplier: {
+            type: 'number',
+            default: 1
+        },
         title: {
             type: 'string',
             default: 'New Recipe'
@@ -83,7 +87,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 3,
+    version: 4,
     collections: {
         recipes,
         collections

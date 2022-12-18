@@ -1,6 +1,11 @@
 import cuid from 'cuid';
 import { parseIngredient } from '@aglio/conversion';
-import { EntityShape, ClientDescriptor, Item } from './client/index.js';
+import {
+	EntityShape,
+	ClientDescriptor,
+	Item,
+	ItemInputsItemInit,
+} from './client/index.js';
 import { createHooks } from './client/react.js';
 import migrations from './migrations/index.js';
 import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
@@ -175,13 +180,22 @@ export const groceries = {
 		}
 	},
 	addItems: async (
-		lines: string[],
+		lines: (
+			| string
+			| {
+					original: string;
+					quantity: number;
+					unit: string | null;
+					food: string;
+					comments?: string[];
+			  }
+		)[],
 		{
 			sourceInfo,
 			listId = null,
 		}: {
 			listId?: string | null;
-			sourceInfo?: { url?: string; title: string };
+			sourceInfo?: Omit<ItemInputsItemInit, 'text'>;
 		},
 	) => {
 		const storage = await _groceries;
@@ -190,8 +204,8 @@ export const groceries = {
 		let lastItemId: string | null = null;
 
 		for (const line of lines) {
-			if (!line.trim()) continue;
-			const parsed = parseIngredient(line);
+			if (typeof line === 'string' && !line.trim()) continue;
+			const parsed = typeof line === 'string' ? parseIngredient(line) : line;
 			const firstMatch = await storage.items.findOne({
 				where: 'purchased_food_listId',
 				match: {
@@ -208,9 +222,8 @@ export const groceries = {
 				// add the source, too
 				const inputs = firstMatch.get('inputs');
 				inputs.push({
-					text: line,
-					url: sourceInfo?.url || null,
-					title: sourceInfo?.title || null,
+					...sourceInfo,
+					text: parsed.original,
 				});
 				lastItemId = itemId;
 			} else {
@@ -248,13 +261,12 @@ export const groceries = {
 					listId: listId || null,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
-					unit: parsed.unit,
+					unit: parsed.unit || '',
 					food: parsed.food,
 					inputs: [
 						{
-							text: line,
-							url: sourceInfo?.url || null,
-							title: sourceInfo?.title || null,
+							...sourceInfo,
+							text: parsed.original,
 						},
 					],
 				});

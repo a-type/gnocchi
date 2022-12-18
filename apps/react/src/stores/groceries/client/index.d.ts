@@ -296,19 +296,22 @@ export type ItemInputsItemInit = {
   text: string;
   url?: string | null;
   title?: string | null;
-  quantity?: number | null;
+  multiplier?: number | null;
+  recipeId?: string | null;
 };
 export type ItemInputsItemDestructured = {
   text: string;
   url: string | null;
   title: string | null;
-  quantity: number | null;
+  multiplier: number | null;
+  recipeId: string | null;
 };
 export type ItemInputsItemSnapshot = {
   text: string;
   url: string | null;
   title: string | null;
-  quantity: number | null;
+  multiplier: number | null;
+  recipeId: string | null;
 };
 type ItemInputsItemText = string;
 type ItemInputsItemTextInit = ItemInputsItemText;
@@ -322,10 +325,14 @@ type ItemInputsItemTitle = string | null;
 type ItemInputsItemTitleInit = ItemInputsItemTitle | undefined;
 type ItemInputsItemTitleSnapshot = ItemInputsItemTitle;
 type ItemInputsItemTitleDestructured = ItemInputsItemTitle;
-type ItemInputsItemQuantity = number | null;
-type ItemInputsItemQuantityInit = ItemInputsItemQuantity | undefined;
-type ItemInputsItemQuantitySnapshot = ItemInputsItemQuantity;
-type ItemInputsItemQuantityDestructured = ItemInputsItemQuantity;
+type ItemInputsItemMultiplier = number | null;
+type ItemInputsItemMultiplierInit = ItemInputsItemMultiplier | undefined;
+type ItemInputsItemMultiplierSnapshot = ItemInputsItemMultiplier;
+type ItemInputsItemMultiplierDestructured = ItemInputsItemMultiplier;
+type ItemInputsItemRecipeId = string | null;
+type ItemInputsItemRecipeIdInit = ItemInputsItemRecipeId | undefined;
+type ItemInputsItemRecipeIdSnapshot = ItemInputsItemRecipeId;
+type ItemInputsItemRecipeIdDestructured = ItemInputsItemRecipeId;
 
 type ItemPurchasedAt = number | null;
 type ItemPurchasedAtInit = ItemPurchasedAt | undefined;

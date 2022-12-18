@@ -69,6 +69,8 @@ export const Box = forwardRef<any, BoxProps>(function Box(
 		minHeight,
 		transition,
 		overflow,
+		overflowY,
+		overflowX,
 		mx,
 		my,
 		px,
@@ -91,6 +93,8 @@ export const Box = forwardRef<any, BoxProps>(function Box(
 		borderColor,
 		borderStyle,
 		borderWidth,
+		alignSelf,
+		justifySelf,
 		...restProps
 	},
 	ref,
@@ -144,6 +148,10 @@ export const Box = forwardRef<any, BoxProps>(function Box(
 			borderColor,
 			borderStyle,
 			borderWidth,
+			alignSelf,
+			justifySelf,
+			overflowY,
+			overflowX,
 		}),
 		className,
 	);

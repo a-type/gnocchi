@@ -1,6 +1,7 @@
 import { API_HOST_HTTP } from '@/config.js';
 import { ClientDescriptor } from './client/index.js';
 import migrations from './migrations/index.js';
+import { createHooks } from './client/react.js';
 
 export interface Profile {}
 export interface Presence {}
@@ -18,7 +19,6 @@ recipesDescriptor.open().then((client) => {
 	(window as any).recipes = client;
 });
 
-import { createHooks } from './client/react.js';
 export const hooks = createHooks<Presence, Profile>();
 export type {
 	Recipe,

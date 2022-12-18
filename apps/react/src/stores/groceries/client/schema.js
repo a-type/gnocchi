@@ -107,8 +107,12 @@ const items = collection({
                         type: 'string',
                         nullable: true
                     },
-                    quantity: {
+                    multiplier: {
                         type: 'number',
+                        nullable: true
+                    },
+                    recipeId: {
+                        type: 'string',
                         nullable: true
                     }
                 }
@@ -215,7 +219,7 @@ const collaborationInfo = collection({
     }
 });
 export default schema({
-    version: 13,
+    version: 15,
     collections: {
         categories,
         items,

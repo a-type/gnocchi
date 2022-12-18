@@ -6,6 +6,7 @@ import { useRecipeFromSlugUrl } from '../hooks.js';
 import { AddToListButton } from './AddToListButton.jsx';
 import { RecipeIngredientsViewer } from './RecipeIngredientsViewer.jsx';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
+import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 
 export interface RecipeViewerProps {
@@ -27,9 +28,10 @@ export function RecipeViewer({ slug }: RecipeViewerProps) {
 					className={sprinkles({ alignSelf: 'start' })}
 				/>
 			</Box>
-			<div>
+			<Box width="auto" alignSelf="start" align="start" gap={2}>
 				<AddToListButton recipe={recipe} />
-			</div>
+				<RecipeMultiplierField recipe={recipe} />
+			</Box>
 			<div>
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsViewer recipe={recipe} />

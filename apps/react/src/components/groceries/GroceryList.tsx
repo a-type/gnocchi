@@ -92,7 +92,6 @@ const GroceryListCategories = forwardRef<
 			flexGrow={1}
 			p={2}
 			mb={20}
-			overflowY="hidden"
 			ref={ref}
 			{...props}
 		>

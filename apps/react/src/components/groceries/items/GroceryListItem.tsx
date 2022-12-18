@@ -156,12 +156,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							onPointerUp={stopPropagation}
 							data-test="grocery-list-item-checkbox"
 						/>
-						<div className={classes.textContent}>
-							{inputs.length > 1 && (
-								<ItemQuantityNumber value={totalQuantity} />
-							)}
-							{displayString}
-						</div>
+						<div className={classes.textContent}>{displayString}</div>
 						<RecentPeople item={item} />
 						<ListTag item={item} collapsed={menuOpen} />
 						<CollapsibleTrigger asChild>

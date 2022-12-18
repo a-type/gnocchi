@@ -84,6 +84,7 @@ export type RecipeDestructured = {
   id: string;
   collectionId: string | null;
   slug: string;
+  multiplier: number;
   title: string;
   createdAt: number;
   updatedAt: number;
@@ -94,6 +95,7 @@ export type RecipeInit = {
   id?: string;
   collectionId?: string | null;
   slug?: string;
+  multiplier?: number;
   title?: string;
   createdAt?: number;
   updatedAt?: number;
@@ -104,6 +106,7 @@ export type RecipeSnapshot = {
   id: string;
   collectionId: string | null;
   slug: string;
+  multiplier: number;
   title: string;
   createdAt: number;
   updatedAt: number;
@@ -124,6 +127,10 @@ type RecipeSlug = string;
 type RecipeSlugInit = RecipeSlug | undefined;
 type RecipeSlugSnapshot = RecipeSlug;
 type RecipeSlugDestructured = RecipeSlug;
+type RecipeMultiplier = number;
+type RecipeMultiplierInit = RecipeMultiplier | undefined;
+type RecipeMultiplierSnapshot = RecipeMultiplier;
+type RecipeMultiplierDestructured = RecipeMultiplier;
 type RecipeTitle = string;
 type RecipeTitleInit = RecipeTitle | undefined;
 type RecipeTitleSnapshot = RecipeTitle;

@@ -23,15 +23,26 @@ export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 }
 
 function InputRenderer({ input }: { input: ItemInputsItem }) {
-	const url = input.get('url');
-	if (!url) {
-		return <span>{input.get('text')}</span>;
+	const { url, recipeId, multiplier, title, text } = hooks.useWatch(input);
+	if (!url && !recipeId) {
+		return <span>{text}</span>;
+	}
+	if (recipeId) {
+		return (
+			<span>
+				{text} ({multiplier !== 1 ? ` x${multiplier}` : ''}) (from{' '}
+				<a className={classes.link} href={`/recipes/${recipeId}`}>
+					{title ? truncate(title) : 'a recipe'}
+				</a>
+				)
+			</span>
+		);
 	}
 	return (
 		<span>
-			{input.get('text')} (from{' '}
-			<a href={url}>
-				{input.get('title') ? truncate(input.get('title')!) : 'the web'}
+			{text} (from{' '}
+			<a className={classes.link} href={url!}>
+				{title ? truncate(title) : 'the web'}
 			</a>
 			)
 		</span>

@@ -28,3 +28,10 @@ export const actions = style({
 	width: '100%',
 	backgroundColor: vars.colors.white,
 });
+
+export const mainContent = style({
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'flex-start',
+	gap: vars.space[3],
+});

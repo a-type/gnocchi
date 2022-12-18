@@ -38,3 +38,7 @@ export const item = style({
 		},
 	},
 });
+
+export const link = style({
+	fontWeight: vars.fontWeights.bold,
+});
