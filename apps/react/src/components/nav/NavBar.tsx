@@ -44,7 +44,7 @@ export function NavBar({}: NavBarProps) {
 
 	const finalShowRecipes = showRecipesOverride;
 
-	if (!loggedIn || matchesWelcome) {
+	if (matchesWelcome) {
 		return null;
 	}
 
