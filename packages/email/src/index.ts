@@ -10,7 +10,6 @@ const transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS!.trim(),
 	},
 });
-console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS!.trim().length);
 transporter.verify().then((error) => {
 	if (error !== true) {
 		console.error('Email error:', error);
