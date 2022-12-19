@@ -4,7 +4,8 @@
 		"composite": true,
 		"outDir": "./dist",
 		"rootDir": "./src",
-		"baseUrl": "."
+		"baseUrl": ".",
+		"lib": ["es2021", "dom"]
 	},
-	"include": ["*.ts", "*.mts", "prisma/*.ts", "./typings"]
+	"include": ["**/*.ts", "**/*.mts"]
 }

@@ -329,6 +329,7 @@ export const groceries = {
 				// TODO: pop subscription prompt
 				toast.error('You must subscribe to add recipe URLs');
 			} else {
+				console.error(err);
 				toast.error(
 					"Bummer, we couldn't detect the ingredients in this recipe.",
 				);

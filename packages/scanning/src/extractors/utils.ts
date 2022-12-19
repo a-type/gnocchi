@@ -1,5 +1,5 @@
 import { toSeconds, parse } from 'iso8601-duration';
-import { CheerioAPI } from 'cheerio';
+import { AnyNode, Cheerio, CheerioAPI } from 'cheerio';
 
 export function extractNumber(
 	numberOrString?: number | string,
@@ -59,7 +59,7 @@ export function toYield(yieldStr: string) {
 	if (!yieldStr) {
 		return null;
 	}
-	return parseInt(yieldStr.replace('servings', ''));
+	return parseInt(yieldStr.toLowerCase().replace('servings', ''));
 }
 
 export function findFirstMatch($: CheerioAPI, selectors: string[]) {
@@ -80,4 +80,37 @@ export function findFirstMatches($: CheerioAPI, selectors: string[]) {
 		}
 	}
 	return null;
+}
+
+export function listToStrings($: CheerioAPI, list: Cheerio<AnyNode>) {
+	return list
+		.toArray()
+		.map((el) => $(el).text().trim())
+		.map((s) => collapseWhitespace(s));
+}
+
+/**
+ * Converts strings like
+ * "1 hour 30 minutes"
+ * "1 hour"
+ * "30 minutes"
+ * "1h 30m"
+ * "1h"
+ * "30m"
+ * to minutes
+ */
+export function humanTimeToMinutes(timeString: string) {
+	if (!timeString) {
+		return 0;
+	}
+	const hours = timeString.match(/(\d+)\s?h/);
+	const minutes = timeString.match(/(\d+)\s?m/);
+	let totalMinutes = 0;
+	if (hours) {
+		totalMinutes += parseInt(hours[1]) * 60;
+	}
+	if (minutes) {
+		totalMinutes += parseInt(minutes[1]);
+	}
+	return totalMinutes;
 }

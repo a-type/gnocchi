@@ -11,7 +11,7 @@ export const scansRouter = t.router({
 				url: z.string(),
 			}),
 		)
-		.mutation(async ({ ctx, input: { url } }) => {
+		.query(async ({ ctx, input: { url } }) => {
 			const ok = await isSubscribed(ctx.session);
 			if (!ok) {
 				throw new TRPCError({

@@ -5,15 +5,22 @@ type UnwrapPromise<T extends Promise<any>> = T extends Promise<infer U>
 	: never;
 
 import * as extractors from './extractors/index.js';
+import { ExtractorData } from './extractors/types.js';
 
-const extractorOrdering = [
-	extractors.microdata,
-	extractors.wprm,
-	extractors.naive,
+type Extractor = ($: CheerioAPI) => Promise<ExtractorData | null>;
+
+const extractorOrdering: [RegExp, Extractor][] = [
+	[/.*/, extractors.microdata],
+	[/.*/, extractors.schemaOrg],
+	[/.*/, extractors.wprm],
+	[/.*/, extractors.naive],
 ];
 
-async function tryParse($: CheerioAPI) {
-	for (const extractor of extractorOrdering) {
+async function tryParse($: CheerioAPI, pageUrl: string) {
+	for (const [filter, extractor] of extractorOrdering) {
+		if (!filter.test(pageUrl)) {
+			continue;
+		}
 		const result = await extractor($);
 		if (result) {
 			return result;
@@ -22,7 +29,7 @@ async function tryParse($: CheerioAPI) {
 }
 
 export async function extract($: CheerioAPI, pageUrl: string) {
-	const result = await tryParse($);
+	const result = await tryParse($, pageUrl);
 	return {
 		...result,
 		url: result?.url || pageUrl,
