@@ -10,7 +10,8 @@
 		"generate": "concurrently \"pnpm generate:groceries\" \"pnpm generate:recipes\"",
 		"generate:groceries": "lo-fi -s src/stores/groceries/schema.ts -o src/stores/groceries/client -r",
 		"generate:recipes": "lo-fi -s src/stores/recipes/schema.ts -o src/stores/recipes/client -r",
-		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react && pnpm link --global @lo-fi/cli"
+		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react && pnpm link --global @lo-fi/cli",
+		"clear": "rm -rf node_modules/.vite"
 	},
 	"dependencies": {
 		"@a-type/utils": "^1.0.2",
