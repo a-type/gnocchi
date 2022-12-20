@@ -30,7 +30,8 @@ function InputRenderer({ input }: { input: ItemInputsItem }) {
 	if (recipeId) {
 		return (
 			<span>
-				{text} ({multiplier !== 1 ? ` x${multiplier}` : ''}) (from{' '}
+				{text}
+				{multiplier !== 1 ? ` (x${multiplier})` : ''} (from{' '}
 				<a className={classes.link} href={`/recipes/${recipeId}`}>
 					{title ? truncate(title) : 'a recipe'}
 				</a>

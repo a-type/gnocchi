@@ -78,9 +78,9 @@ export const commonTheme = {
 		default: 'ease',
 	},
 	zIndices: {
+		nav: '50',
 		menu: '100',
 		menuTrigger: '101',
-		nav: '500',
 		dialog: '1000',
 		dialogBackdrop: '900',
 		tooltip: '10000',

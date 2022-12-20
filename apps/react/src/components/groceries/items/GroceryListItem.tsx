@@ -77,8 +77,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		{ item, isDragActive, menuProps, className, ...rest },
 		ref,
 	) {
-		const { purchasedAt, totalQuantity, id } = hooks.useWatch(item);
-		const inputs = hooks.useWatch(item.get('inputs'));
+		const { purchasedAt, id } = hooks.useWatch(item);
 
 		const [purchasedHiddenState, setHiddenState] = useState<
 			'hidden' | 'hiding' | 'visible'

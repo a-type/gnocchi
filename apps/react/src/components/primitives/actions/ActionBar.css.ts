@@ -10,7 +10,7 @@ export const root = style({
 	overflow: 'hidden',
 	position: 'relative',
 
-	height: 64,
+	height: 36,
 
 	transition: `height 0.2s ${vars.transitions.springy}`,
 

@@ -1,33 +1,40 @@
 import { Dialog, DialogContent } from '@/components/primitives/Dialog.js';
-import {
-	DropdownMenu,
-	DropdownMenuArrow,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from '@/components/primitives/DropdownMenu.js';
 import { Button } from '@/components/primitives/index.js';
-import { styled } from '@/stitches.config.js';
+import {
+	Select,
+	SelectTrigger,
+	SelectContent,
+	SelectItem,
+	SelectValue,
+} from '@/components/primitives/select/Select.jsx';
 import { groceries, Category, Item, hooks } from '@/stores/groceries/index.js';
 import { RowSpacingIcon } from '@radix-ui/react-icons';
-import React, { useCallback, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { NewCategoryForm } from '../NewCategoryForm.js';
 import { groceriesState } from '../state.js';
 
 const ITEM_HEIGHT = 32;
 
 export function CategoryPicker({ item }: { item: Item }) {
-	hooks.useWatch(item);
+	const { categoryId } = hooks.useWatch(item);
 	const [state, setState] = useState<
 		'idle' | 'scrubbing' | 'picking' | 'create'
 	>('idle');
 
-	const categories = hooks.useAllCategories();
-
 	const setCategory = useCallback(
-		(categoryId: string) => {
-			groceries.setItemCategory(item, categoryId, true);
-			groceriesState.justMovedItemId = item.get('id');
+		(value: string) => {
+			const realValue = value === 'null' ? null : value;
+			if (realValue === item.get('categoryId')) return;
+
+			if (realValue === null) {
+				groceries.setItemCategory(item, null, false);
+				groceriesState.justMovedItemId = item.get('id');
+			} else if (realValue === 'new') {
+				setState('create');
+			} else {
+				groceries.setItemCategory(item, realValue, true);
+				groceriesState.justMovedItemId = item.get('id');
+			}
 		},
 		[item],
 	);
@@ -39,37 +46,25 @@ export function CategoryPicker({ item }: { item: Item }) {
 
 	return (
 		<>
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild>
+			<Select
+				value={categoryId === null ? 'null' : categoryId}
+				onValueChange={setCategory}
+			>
+				<SelectTrigger asChild>
 					<Button color="ghost">
-						<Trigger />
+						<SelectValue asChild>
+							<RowSpacingIcon />
+						</SelectValue>
 					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent side="left" sideOffset={2}>
-					<DropdownMenuArrow />
-
-					{categories.map((category, index) => (
-						<CategoryItem
-							key={category.get('id')}
-							data-category-index={index}
-							onClick={() => setCategory(category.get('id'))}
-							selected={category.get('id') === item.get('categoryId')}
-						>
-							{category.get('name')}
-						</CategoryItem>
-					))}
-					<CategoryItem
-						key="new"
-						data-category-index={categories.length}
-						onClick={() => {
-							setState('create');
-						}}
-						selected={false}
-					>
-						Create new category
-					</CategoryItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+				</SelectTrigger>
+				<SelectContent>
+					<Suspense>
+						<CategoryList />
+					</Suspense>
+					<SelectItem value="null">Uncategorized</SelectItem>
+					<SelectItem value="new">Create new category</SelectItem>
+				</SelectContent>
+			</Select>
 			<CreateCategory
 				onCreate={onCreateCategory}
 				open={state === 'create'}
@@ -81,28 +76,24 @@ export function CategoryPicker({ item }: { item: Item }) {
 	);
 }
 
-const Trigger = styled(RowSpacingIcon, {});
-
-const CategoryItem = styled(DropdownMenuItem, {
-	height: ITEM_HEIGHT,
-	display: 'flex',
-	flexDirection: 'column',
-	justifyContent: 'center',
-	position: 'relative',
-	borderRadius: '$sm',
-	padding: '$1 $2',
-
-	transition: 'transform 0.2s ease-out, background-color 0.2s ease-out',
-
-	variants: {
-		selected: {
-			true: {
-				backgroundColor: '$lemonLighter',
-				color: '$lemonDarker',
-			},
+function CategoryList() {
+	const categories = hooks.useAllCategories({
+		index: {
+			where: 'sortKey',
+			order: 'asc',
 		},
-	},
-});
+	});
+
+	return (
+		<>
+			{categories.map((category, index) => (
+				<SelectItem key={category.get('id')} value={category.get('id')}>
+					{category.get('name')}
+				</SelectItem>
+			))}
+		</>
+	);
+}
 
 function CreateCategory({
 	onCreate,

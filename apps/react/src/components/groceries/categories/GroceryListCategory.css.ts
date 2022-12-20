@@ -62,7 +62,7 @@ export const root = style({
 			animation: `${collapse} 0.2s ${vars.transitions.default} forwards`,
 		},
 		'&[data-do-not-animate="true"]': {
-			animation: 'none',
+			animation: 'none!important',
 		},
 		'&[data-is-item-dragging="true"][data-dragged-over="false"]': {
 			transform: 'scale(0.95)',
