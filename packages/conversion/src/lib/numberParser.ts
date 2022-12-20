@@ -40,6 +40,17 @@ function identifyLeadingNumberGroup(source: string): [number, string] | null {
 		return [num / denom, trimmedSource.slice(leadingFractionMatch[0].length)];
 	}
 
+	// lookahead for a range
+	const leadingRangeMatch = /^\d+\s?-\s?\d+/.exec(trimmedSource);
+	if (leadingRangeMatch) {
+		const [start, end] = leadingRangeMatch[0].split('-').map(Number);
+		// always use the larger number
+		return [
+			Math.max(start, end),
+			trimmedSource.slice(leadingRangeMatch[0].length),
+		];
+	}
+
 	// lookahead for any number
 	const leadingDigitsMatch = /\d+/.exec(trimmedSource);
 	if (leadingDigitsMatch) {

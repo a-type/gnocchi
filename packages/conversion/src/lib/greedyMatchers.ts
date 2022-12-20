@@ -54,6 +54,12 @@ export function greedyMatchNumber(
 		return greedyMatchNumber(input.slice(leadingDotMatch[0].length), ctx);
 	}
 
+	const leadingDashMatch = /^-/.exec(input);
+	if (leadingDashMatch) {
+		ctx.runningText += leadingDashMatch[0];
+		return greedyMatchNumber(input.slice(leadingDashMatch[0].length), ctx);
+	}
+
 	return {
 		matched: ctx.runningText,
 		remaining: input,
