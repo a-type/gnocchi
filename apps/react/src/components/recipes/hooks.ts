@@ -3,6 +3,7 @@ import { hooks } from '@/stores/recipes/index.js';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect, useRef } from 'react';
+import { tiptapExtensions } from './editor/tiptapExtensions.js';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -12,6 +13,7 @@ export function useRecipeFromSlugUrl(url: string) {
 			equals: slug,
 		},
 	});
+	hooks.useWatch(recipe);
 	return recipe;
 }
 
@@ -23,8 +25,11 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 
 	const editor = useEditor(
 		{
-			extensions: [StarterKit as any],
-			content: instructions?.getSnapshot(),
+			extensions: tiptapExtensions,
+			content: instructions?.getSnapshot() || {
+				type: 'doc',
+				content: [],
+			},
 			editable: !readonly,
 			onUpdate({ editor }) {
 				if (!updatingRef.current) {
@@ -32,7 +37,9 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 					if (!instructions) {
 						recipe.set('instructions', newData);
 					} else {
-						instructions.update(newData);
+						instructions.update(newData, {
+							merge: false,
+						});
 					}
 				}
 			},
@@ -41,6 +48,12 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 	);
 
 	useEffect(() => {
+		if (editor && !editor.isDestroyed && instructions) {
+			updatingRef.current = true;
+			editor.commands.setContent(instructions.getSnapshot());
+			updatingRef.current = false;
+		}
+
 		return instructions?.subscribe('changeDeep', (target, info) => {
 			if (!info.isLocal) {
 				updatingRef.current = true;

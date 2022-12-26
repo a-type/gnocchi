@@ -84,10 +84,7 @@ const recipes = collection({
 		},
 		instructions: {
 			type: 'any',
-			default: {
-				type: 'doc',
-				content: [],
-			},
+			default: undefined,
 		},
 		url: {
 			type: 'string',
@@ -97,7 +94,7 @@ const recipes = collection({
 });
 
 export default schema({
-	version: 6,
+	version: 5,
 	collections: {
 		recipes,
 		collections,

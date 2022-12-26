@@ -13,19 +13,19 @@ import { LoginButton } from './LoginButton.js';
 
 export interface StartSignupDialogProps {}
 
-export const state = proxy({
+export const signupDialogState = proxy({
 	status: 'closed' as 'closed' | 'open',
 });
 
 export function StartSignupDialog({}: StartSignupDialogProps) {
-	const { status } = useSnapshot(state);
+	const { status } = useSnapshot(signupDialogState);
 
 	return (
 		<Dialog
 			open={status !== 'closed'}
 			onOpenChange={(open) => {
 				if (!open) {
-					state.status = 'closed';
+					signupDialogState.status = 'closed';
 				}
 			}}
 		>

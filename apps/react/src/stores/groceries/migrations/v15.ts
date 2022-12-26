@@ -5,7 +5,7 @@ import { migrate } from "@lo-fi/web";
 export default migrate(
   v14Schema,
   v15Schema,
-  async ({ migrate, withDefaults }) => {
+  async ({ migrate, withDefaults, info }) => {
     // add or modify migration logic here
     // if a line has a type error, that indicates the shape of your models may have changed
     await migrate("categories", (old) => withDefaults("categories", old));

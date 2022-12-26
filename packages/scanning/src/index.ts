@@ -1,3 +1,4 @@
+export type { ExtractorData } from './extractors/types.js';
 import cheerio from 'cheerio';
 import { extract } from './extractor.js';
 

@@ -82,12 +82,19 @@ const recipes = collection({
         },
         instructions: {
             type: 'any',
-            default: undefined
+            default: {
+                type: 'doc',
+                content: []
+            }
+        },
+        url: {
+            type: 'string',
+            nullable: true
         }
     }
 });
 export default schema({
-    version: 4,
+    version: 6,
     collections: {
         recipes,
         collections

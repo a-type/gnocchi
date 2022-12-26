@@ -129,6 +129,7 @@ const responsiveProperties = defineProperties({
 		transition: vars.transitions,
 		fill: { ...vars.colors, currentColor: 'currentColor' },
 		stroke: { ...vars.colors, currentColor: 'currentColor' },
+		strokeWidth: [0, 1],
 	},
 	shorthands: {
 		padding: ['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'],

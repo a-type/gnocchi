@@ -26,7 +26,7 @@ import * as classes from './GroceryListAdd.css.js';
 import { clsx } from 'clsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { state as signupState } from '@/components/sync/StartSignupDialog.jsx';
+import { signupDialogState as signupState } from '@/components/sync/StartSignupDialog.jsx';
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { sprinkles } from '@/styles/sprinkles.css.js';

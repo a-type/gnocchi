@@ -90,6 +90,7 @@ export type RecipeDestructured = {
   updatedAt: number;
   ingredients: RecipeIngredients;
   instructions: any;
+  url: string | null;
 };
 export type RecipeInit = {
   id?: string;
@@ -101,6 +102,7 @@ export type RecipeInit = {
   updatedAt?: number;
   ingredients?: RecipeIngredientsInit;
   instructions?: any;
+  url?: string | null;
 };
 export type RecipeSnapshot = {
   id: string;
@@ -112,6 +114,7 @@ export type RecipeSnapshot = {
   updatedAt: number;
   ingredients: RecipeIngredientsSnapshot;
   instructions: any;
+  url: string | null;
 };
 /** Recipe sub-object types */
 
@@ -220,6 +223,10 @@ type RecipeInstructions = any;
 type RecipeInstructionsInit = RecipeInstructions | undefined;
 type RecipeInstructionsSnapshot = RecipeInstructions;
 type RecipeInstructionsDestructured = RecipeInstructions;
+type RecipeUrl = string | null;
+type RecipeUrlInit = RecipeUrl | undefined;
+type RecipeUrlSnapshot = RecipeUrl;
+type RecipeUrlDestructured = RecipeUrl;
 
 export type Collection = ObjectEntity<CollectionInit, CollectionDestructured>;
 
@@ -285,8 +292,12 @@ export class Client<Presence = any, Profile = any> {
   namespace: Storage["namespace"];
   entities: Storage["entities"];
   queryStore: Storage["queryStore"];
+  batch: Storage["batch"];
 
   close: Storage["close"];
+
+  export: Storage["export"];
+  import: Storage["import"];
 
   stats: () => Promise<any>;
 }

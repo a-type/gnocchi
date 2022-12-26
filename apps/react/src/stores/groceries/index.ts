@@ -5,6 +5,7 @@ import {
 	ClientDescriptor,
 	Item,
 	ItemInputsItemInit,
+	ItemDestructured,
 } from './client/index.js';
 import { createHooks } from './client/react.js';
 import migrations from './migrations/index.js';
@@ -134,7 +135,7 @@ export const groceries = {
 	},
 	updateItem: async (
 		item: Item,
-		updates: Omit<Partial<EntityShape<Item>>, 'inputs'>,
+		updates: Omit<Partial<ItemDestructured>, 'inputs'>,
 	) => {
 		item.update(updates);
 		(await _groceries).sync.presence.update({
