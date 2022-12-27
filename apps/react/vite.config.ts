@@ -15,8 +15,8 @@ export default defineConfig({
 			srcDir: 'src',
 			filename: 'service-worker.ts',
 			manifest: {
-				name: 'Aglio',
-				short_name: 'Aglio',
+				name: 'Gnocchi',
+				short_name: 'Gnocchi',
 				description: 'Your grocery list, done better',
 				theme_color: '#fdfdff',
 				background_color: '#fdfdff',

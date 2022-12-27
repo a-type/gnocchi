@@ -22,7 +22,7 @@ export async function sendEmailVerification({
 	to,
 	code,
 	returnTo,
-	uiOrigin = 'https://aglio.app',
+	uiOrigin = 'https://gnocchi.club',
 }: {
 	to: string;
 	code: string;
@@ -30,7 +30,7 @@ export async function sendEmailVerification({
 	uiOrigin?: string;
 }) {
 	transporter.sendMail({
-		from: 'hi@aglio.app',
+		from: 'hi@gnocchi.club',
 		to,
 		subject: 'Verify your email on Aglio',
 		text: `Your verification code is ${code}`,

@@ -8,6 +8,7 @@ import { CSSProperties, ReactNode, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as classes from './SplashPage.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
+import { APP_NAME } from '@/config.js';
 
 export function SplashPage() {
 	const [_, setHasSeen] = useLocalStorage('hasSeenWelcome', true);
@@ -23,7 +24,7 @@ export function SplashPage() {
 			<PageContent>
 				<div className={classes.demoGrid}>
 					<div className={classes.titleWrap}>
-						<h2 className={classes.appName}>Aglio</h2>
+						<h2 className={classes.appName}>{APP_NAME}</h2>
 						<Title>Your weekly cooking, in one place.</Title>
 					</div>
 					<DemoFrame
@@ -43,7 +44,7 @@ export function SplashPage() {
 						<p className={classes.item}>
 							<span className={classes.emoji}>🏷️</span>
 							<span className={classes.itemText}>
-								Organize your run by aisle. Aglio will remember your
+								Organize your run by aisle. {APP_NAME} will remember your
 								categorizations!
 							</span>
 						</p>
@@ -107,11 +108,11 @@ export function SplashPage() {
 							loading the fridge, and realize you forgot something, too.
 						</p>
 						<p>
-							I built Aglio to plan grocery trips better, as a solo shopper or a
-							family. It may seem like any old list app, but under the surface
-							I've tried to design intentionally for the task at hand. Give it a
-							shot this week (no account needed!) and let me know what you
-							think.
+							I built {APP_NAME} to plan grocery trips better, as a solo shopper
+							or a family. It may seem like any old list app, but under the
+							surface I've tried to design intentionally for the task at hand.
+							Give it a shot this week (no account needed!) and let me know what
+							you think.
 						</p>
 						<p>&ndash; Grant</p>
 					</Section>

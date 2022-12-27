@@ -1,3 +1,4 @@
+import { APP_NAME } from '@/config.js';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { proxy, useSnapshot } from 'valtio';
 import { Box } from '../primitives/box/Box.jsx';
@@ -40,7 +41,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 						</Button>
 					</DialogClose>
 				</Box>
-				<P>Make Aglio your household's new grocery list.</P>
+				<P>Make {APP_NAME} your household's new grocery list.</P>
 				<H2>Sync with family or friends so everyone's on the same page</H2>
 				<P>Everyone you invite can add items to the list.</P>
 				<H2>Team up at the store with live collaboration</H2>
