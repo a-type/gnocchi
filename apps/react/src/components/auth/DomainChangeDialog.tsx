@@ -7,9 +7,8 @@ export interface DomainChangeDialogProps {}
 
 export function DomainChangeDialog({}: DomainChangeDialogProps) {
 	const isOldDomain =
-		true ||
-		(typeof window !== 'undefined' &&
-			window.location.hostname.includes('aglio.app'));
+		typeof window !== 'undefined' &&
+		window.location.hostname.includes('aglio.app');
 
 	const auth = useAuth();
 
