@@ -87,6 +87,8 @@ const StyledContentContent = styled(DialogPrimitive.Content, {
 	overflowY: 'auto',
 	maxHeight: 'inherit',
 	position: 'relative',
+	display: 'flex',
+	flexDirection: 'column',
 
 	'@media (prefers-reduced-motion: no-preference)': {
 		animation: `${contentShowMobile} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
@@ -103,13 +105,13 @@ const StyledContentContent = styled(DialogPrimitive.Content, {
 function Content({
 	children,
 	...props
-}: ComponentPropsWithoutRef<typeof StyledContent>) {
+}: ComponentPropsWithoutRef<typeof StyledContentContent>) {
 	return (
 		<DialogPrimitive.Portal>
 			<StyledOverlay />
-			<StyledContent {...props}>
+			<StyledContent>
 				<StyledBlurLayer />
-				<StyledContentContent>{children}</StyledContentContent>
+				<StyledContentContent {...props}>{children}</StyledContentContent>
 			</StyledContent>
 		</DialogPrimitive.Portal>
 	);

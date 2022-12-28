@@ -203,6 +203,9 @@ const unresponsiveProperties = defineProperties({
 		borderWidth: vars.borderWidths,
 		borderColor: vars.colors,
 		borderStyle: ['solid', 'dashed', 'dotted', 'none'],
+		fontWeight: vars.fontWeights,
+		fontSize: vars.fontSizes,
+		fontFamily: vars.fonts,
 	},
 	shorthands: {
 		inset: ['top', 'bottom', 'left', 'right'],

@@ -32,11 +32,11 @@ export async function sendEmailVerification({
 	transporter.sendMail({
 		from: 'hi@gnocchi.club',
 		to,
-		subject: 'Verify your email on Aglio',
+		subject: 'Verify your email on Gnocchi.club',
 		text: `Your verification code is ${code}`,
 		html: `
     <div>
-      <h1>Thanks for signing up to Aglio!</h1>
+      <h1>Thanks for signing up to Gnocchi.club!</h1>
       <p>Click the button below to finish signing up on this device.</p>
       <a href="${uiOrigin}/verify?code=${code}${
 			returnTo ? `&returnTo=${returnTo}` : ''
