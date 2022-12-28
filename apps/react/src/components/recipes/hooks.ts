@@ -55,7 +55,8 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 		}
 
 		return instructions?.subscribe('changeDeep', (target, info) => {
-			if (!info.isLocal) {
+			console.log('instructions changed', target, info);
+			if (!info.isLocal || target === instructions) {
 				updatingRef.current = true;
 				editor?.commands.setContent(instructions.getSnapshot());
 				updatingRef.current = false;

@@ -103,7 +103,18 @@ export async function addRecipeFromUrl(url: string) {
 export async function updateRecipeFromUrl(recipe: Recipe, url: string) {
 	try {
 		const scanned = await getScannedRecipe(url);
-		recipe.update(scanned);
+
+		recipe.update({
+			title: scanned.title,
+			url: scanned.url,
+			ingredients: scanned.ingredients,
+		});
+
+		// set this separately - do not merge
+		if (scanned.instructions) {
+			recipe.set('instructions', scanned.instructions);
+		}
+
 		return recipe;
 	} catch (err) {
 		if (!(err instanceof TRPCClientError && err.message === 'FORBIDDEN')) {
