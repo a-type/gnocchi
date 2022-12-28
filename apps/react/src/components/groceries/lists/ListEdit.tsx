@@ -7,7 +7,7 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@/components/primitives/Dialog.jsx';
+} from '@/components/primitives/index.js';
 import { Box } from '@/components/primitives/index.js';
 import { LiveUpdateTextField } from '@/components/primitives/LiveUpdateTextField.jsx';
 import { Button, H2 } from '@/components/primitives/index.js';

@@ -1,15 +1,19 @@
 import { APP_NAME } from '@/config.js';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { proxy, useSnapshot } from 'valtio';
-import { Box } from '../primitives/box/Box.jsx';
 import {
+	Box,
+	Button,
+	H2,
+	P,
+	Span,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '../primitives/Dialog.js';
-import { Button, H2, P, Span } from '../primitives/index.js';
+} from '../primitives/index.js';
 import { LoginButton } from './LoginButton.js';
 
 export interface StartSignupDialogProps {}
@@ -32,7 +36,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 		>
 			<DialogContent width="md">
 				<Box flexDirection="row" align="start" gap={2}>
-					<DialogTitle css={{ flex: 1 }}>
+					<DialogTitle className={sprinkles({ flex: 1 })}>
 						Subscribe for sync &amp; more
 					</DialogTitle>
 					<DialogClose asChild>

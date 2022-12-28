@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent } from '@/components/primitives/Dialog.js';
+import { Dialog, DialogContent } from '@/components/primitives/index.js';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { SubscriptionError } from '@aglio/tools';
 import { LogoutButton } from '../auth/LogoutButton.js';

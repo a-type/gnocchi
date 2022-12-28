@@ -1,11 +1,16 @@
 import { TagIcon } from '@/components/icons/TagIcon.jsx';
-import { Dialog, DialogContent } from '@/components/primitives/Dialog.jsx';
 import {
 	Form,
 	SubmitButton,
 	TextField,
 } from '@/components/primitives/forms.jsx';
-import { Box, ColorSwatch, ThemeName } from '@/components/primitives/index.js';
+import {
+	Dialog,
+	DialogContent,
+	Box,
+	ColorSwatch,
+	ThemeName,
+} from '@/components/primitives/index.js';
 import {
 	Select,
 	SelectContent,

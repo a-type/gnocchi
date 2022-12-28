@@ -1,7 +1,12 @@
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { sprinkles } from '@/styles/sprinkles.css.js';
-import { Dialog, DialogContent, DialogTitle } from '../primitives/Dialog.jsx';
-import { Button, P } from '../primitives/index.js';
+import {
+	Button,
+	P,
+	Dialog,
+	DialogContent,
+	DialogTitle,
+} from '../primitives/index.js';
 
 export interface DomainChangeDialogProps {}
 

@@ -2,12 +2,14 @@ import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useEffect } from 'react';
 import {
+	Box,
+	Button,
+	P,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '../primitives/Dialog.jsx';
-import { Box, Button, P } from '../primitives/index.js';
+} from '../primitives/index.js';
 import { LoginButton } from '../sync/LoginButton.jsx';
 
 export interface LogoutNoticeProps {}

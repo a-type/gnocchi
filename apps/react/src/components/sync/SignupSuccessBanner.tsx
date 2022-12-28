@@ -1,8 +1,15 @@
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Dialog, DialogClose, DialogContent } from '../primitives/Dialog.js';
-import { Button, H1, H2, P } from '../primitives/index.js';
+import {
+	Dialog,
+	DialogClose,
+	DialogContent,
+	Button,
+	H1,
+	H2,
+	P,
+} from '../primitives/index.js';
 
 export interface SignupSuccessBannerProps {}
 

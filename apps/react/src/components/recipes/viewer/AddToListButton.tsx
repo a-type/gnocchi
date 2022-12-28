@@ -1,10 +1,11 @@
 import {
 	Dialog,
+	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/primitives/Dialog.jsx';
+} from '@/components/primitives/index.js';
 import { Button, Checkbox } from '@/components/primitives/index.js';
 import { hooks, Recipe } from '@/stores/recipes/index.js';
 import { useEffect, useState } from 'react';
@@ -72,7 +73,7 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 						))}
 					</ul>
 				</div>
-				<div className={classes.actions}>
+				<DialogActions>
 					<DialogClose asChild>
 						<Button color="ghost">Cancel</Button>
 					</DialogClose>
@@ -110,7 +111,7 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 					>
 						Add
 					</Button>
-				</div>
+				</DialogActions>
 			</DialogContent>
 		</Dialog>
 	);

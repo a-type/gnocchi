@@ -2,7 +2,7 @@ export * from './forms.js';
 export * from './box/Box.js';
 export * from './button/Button.js';
 export * from './button/LinkButton.jsx';
-export * from './Dialog.js';
+export * from './dialog/Dialog.js';
 export * from './colorPicker/ColorPicker.jsx';
 export * from './DropdownMenu.js';
 export * from './Collapsible.jsx';

@@ -21,7 +21,13 @@ export function withClassName<
 			typeof cs === 'function'
 				? cs(propFilter === undefined ? props : pick(props, propFilter))
 				: cs;
-		return <Component {...rest} ref={ref} className={clsx(c, className)} />;
+		return (
+			<Component
+				{...(propFilter === undefined ? rest : omit(rest, propFilter))}
+				ref={ref}
+				className={clsx(c, className)}
+			/>
+		);
 	});
 	return WithClassName as any;
 }
@@ -30,6 +36,16 @@ function pick(obj: any, attrs: string[]) {
 	const result: any = {};
 	for (const attr of attrs) {
 		result[attr] = obj[attr];
+	}
+	return result;
+}
+
+function omit(obj: any, attrs: string[] = []) {
+	const result: any = {};
+	for (const key in obj) {
+		if (!attrs.includes(key)) {
+			result[key] = obj[key];
+		}
 	}
 	return result;
 }

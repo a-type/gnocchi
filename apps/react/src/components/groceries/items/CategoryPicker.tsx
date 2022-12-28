@@ -1,4 +1,4 @@
-import { Dialog, DialogContent } from '@/components/primitives/Dialog.js';
+import { Dialog, DialogContent } from '@/components/primitives/index.js';
 import { Button } from '@/components/primitives/index.js';
 import {
 	Select,

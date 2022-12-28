@@ -35,7 +35,7 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 
 function RecipeCreateButton() {
 	const navigate = useNavigate();
-	const client = hooks.useStorage();
+	const client = hooks.useClient();
 
 	return (
 		<Button

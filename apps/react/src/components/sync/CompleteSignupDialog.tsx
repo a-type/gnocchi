@@ -1,7 +1,6 @@
 import { SubscriptionError } from '@aglio/tools';
-import { Dialog, DialogContent } from '@/components/primitives/Dialog.js';
+import { Dialog, DialogContent } from '@/components/primitives/index.js';
 import { useAuth } from '@/contexts/AuthContext.js';
-import React from 'react';
 import { LogoutButton } from '../auth/LogoutButton.js';
 import { SubscribeButton } from './SubscribeButton.js';
 import { H2 } from '../primitives/index.js';
