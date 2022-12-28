@@ -37,7 +37,7 @@ export function UpdatePrompt({}: UpdatePromptProps) {
 
 	return (
 		<Dialog modal={false} open={needRefresh || TEST}>
-			<DialogContent className={classes.content}>
+			<DialogContent outerClassName={classes.content}>
 				<div className={classes.contentInner}>
 					<div className={classes.text}>
 						<StarIcon />

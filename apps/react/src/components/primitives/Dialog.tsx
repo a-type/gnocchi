@@ -104,12 +104,15 @@ const StyledContentContent = styled(DialogPrimitive.Content, {
 
 function Content({
 	children,
+	outerClassName,
 	...props
-}: ComponentPropsWithoutRef<typeof StyledContentContent>) {
+}: ComponentPropsWithoutRef<typeof StyledContentContent> & {
+	outerClassName?: string;
+}) {
 	return (
 		<DialogPrimitive.Portal>
 			<StyledOverlay />
-			<StyledContent>
+			<StyledContent className={outerClassName}>
 				<StyledBlurLayer />
 				<StyledContentContent {...props}>{children}</StyledContentContent>
 			</StyledContent>
