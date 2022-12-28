@@ -4,4 +4,5 @@ export const SECURE =
 export const API_HOST_HTTP = (SECURE ? 'https://' : 'http://') + API_ORIGIN;
 export const API_HOST_WS = (SECURE ? 'wss://' : 'ws://') + API_ORIGIN;
 export const UI_HOST_HTTP = import.meta.env.VITE_PUBLIC_URL;
-console.log(import.meta.env.VITE_PUBLIC_URL);
+
+export const APP_NAME = 'Gnocchi';

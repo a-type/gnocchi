@@ -14,6 +14,7 @@ export const fixedContent = style({
 export const fixedContentInner = style({
 	gap: vars.space[3],
 	alignItems: 'stretch',
+	marginBottom: 0,
 });
 
 export const demoGrid = style({

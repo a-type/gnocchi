@@ -32,6 +32,7 @@ import { AdminFeatureFlagsPage } from './pages/admin/AdminFeatureFlagsPage.jsx';
 import { LogoutNotice } from './components/auth/LogoutNotice.jsx';
 import { RecipeViewPage } from './pages/RecipeViewPage.jsx';
 import { AdminSyncPage } from './pages/admin/AdminSyncPage.jsx';
+import { DomainChangeDialog } from './components/auth/DomainChangeDialog.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -94,6 +95,7 @@ export function App() {
 										<StartSignupDialog />
 										<UpdatePrompt />
 										<LogoutNotice />
+										<DomainChangeDialog />
 									</AuthProvider>
 								</BrowserRouter>
 							</QueryClientProvider>

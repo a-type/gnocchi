@@ -36,7 +36,7 @@ export function JoinPage({}: JoinPageProps) {
 					>
 						Welcome!
 					</H1>
-					<img src="/pwa-512x512.png" alt="logo" width="100" height="100" />
+					<img src="/pwa-512x512.png" alt="logo" width="80" height="80" />
 				</Box>
 				<PageSection>
 					<H2>First time?</H2>
