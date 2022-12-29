@@ -67,8 +67,6 @@ self.addEventListener('fetch', (event) => {
 
 	// detect a share event from the PWA
 	if (event.request.method === 'POST' && url.pathname === '/share') {
-		console.log('SHARE', event);
-
 		// redirect so the user can refresh without resending data
 		event.respondWith(Response.redirect('/'));
 
@@ -86,7 +84,6 @@ self.addEventListener('fetch', (event) => {
 
 				const formData = await event.request.formData();
 				const text = formData.get('text');
-				console.log('SHARE TEXT', text);
 				if (text && typeof text === 'string') {
 					// check if text is a URL
 					try {
