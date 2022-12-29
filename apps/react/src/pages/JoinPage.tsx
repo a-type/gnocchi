@@ -36,7 +36,12 @@ export function JoinPage({}: JoinPageProps) {
 					>
 						Welcome!
 					</H1>
-					<img src="/pwa-512x512.png" alt="logo" width="80" height="80" />
+					<img
+						src="/android-chrome-512x512.png"
+						alt="logo"
+						width="80"
+						height="80"
+					/>
 				</Box>
 				<PageSection>
 					<H2>First time?</H2>
