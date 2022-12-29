@@ -86,13 +86,14 @@ self.addEventListener('fetch', (event) => {
 
 				const formData = await event.request.formData();
 				const text = formData.get('text');
+				console.log('SHARE TEXT', text);
 				if (text && typeof text === 'string') {
 					// check if text is a URL
 					try {
-						const url = new URL(text);
+						new URL(text);
 						// post message to the client
 
-						client.postMessage({ type: 'pwa-share', url });
+						client.postMessage({ type: 'pwa-share', url: text });
 					} catch (e) {
 						// not a URL, could be ingredients list
 						const items = text.split('\n');

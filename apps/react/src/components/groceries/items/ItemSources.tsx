@@ -24,9 +24,6 @@ export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 
 function InputRenderer({ input }: { input: ItemInputsItem }) {
 	const { url, recipeId, multiplier, title, text } = hooks.useWatch(input);
-	if (!url && !recipeId) {
-		return <span>{text}</span>;
-	}
 	if (recipeId) {
 		return (
 			<span>
@@ -39,15 +36,22 @@ function InputRenderer({ input }: { input: ItemInputsItem }) {
 			</span>
 		);
 	}
-	return (
-		<span>
-			{text} (from{' '}
-			<a className={classes.link} href={url!}>
-				{title ? truncate(title) : 'the web'}
+	if (url) {
+		return (
+			<a
+				href={url}
+				className={classes.link}
+				rel="noopener noreferrer"
+				target="_blank"
+			>
+				{title || 'A website'}
 			</a>
-			)
-		</span>
-	);
+		);
+	}
+	if (title) {
+		return <span>{truncate(title)}</span>;
+	}
+	return <span>Typed in the add bar</span>;
 }
 
 function truncate(str: string, max = 20) {
