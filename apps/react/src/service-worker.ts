@@ -124,8 +124,11 @@ function nextMessage(dataVal: string): Promise<void> {
 }
 
 self.addEventListener('message', (event) => {
-	const resolvers = nextMessageResolveMap.get(event.data);
-	if (!resolvers) return;
-	nextMessageResolveMap.delete(event.data);
-	for (const resolve of resolvers) resolve();
+	const type = event.data && event.data.type;
+	if (type) {
+		const resolvers = nextMessageResolveMap.get(type);
+		if (!resolvers) return;
+		nextMessageResolveMap.delete(type);
+		for (const resolve of resolvers) resolve();
+	}
 });
