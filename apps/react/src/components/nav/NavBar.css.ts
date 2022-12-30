@@ -1,7 +1,6 @@
 import { mediaQueries } from '@/styles/media.js';
 import { vars } from '@/theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
-import { NAV_MOBILE_HEIGHT } from './constants.js';
 
 export const root = style({
 	display: 'flex',
@@ -16,7 +15,7 @@ export const root = style({
 	backgroundColor: vars.colors.gray10,
 	borderTop: `1px solid ${vars.colors.gray20}`,
 	padding: 2,
-	height: NAV_MOBILE_HEIGHT,
+	height: 'auto',
 
 	'@media': {
 		[mediaQueries.sm]: {
@@ -43,8 +42,8 @@ export const button = style({
 	alignItems: 'center',
 	justifyContent: 'center',
 	whiteSpace: 'nowrap',
-	paddingTop: vars.space[1],
-	paddingBottom: vars.space[1],
+	paddingTop: vars.space[2],
+	paddingBottom: vars.space[2],
 	paddingLeft: vars.space[3],
 	paddingRight: vars.space[3],
 	backgroundColor: 'transparent',
@@ -54,6 +53,7 @@ export const button = style({
 	fontSize: vars.fontSizes.sm,
 	transition: `background-color 0.2s ease-out, color 0.2s ease-out`,
 	height: '100%',
+	gap: 2,
 
 	'@media': {
 		[mediaQueries.sm]: {

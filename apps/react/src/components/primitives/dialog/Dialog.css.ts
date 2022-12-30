@@ -1,4 +1,3 @@
-import { NAV_MOBILE_HEIGHT } from '@/components/nav/constants.js';
 import { mediaQueries } from '@/styles/media.js';
 import { vars } from '@/theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
