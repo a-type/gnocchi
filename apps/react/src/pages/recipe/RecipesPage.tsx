@@ -1,7 +1,6 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
 import { RecipeList } from '@/components/recipes/RecipeList.jsx';
 import { hooks, recipesDescriptor } from '@/stores/recipes/index.js';
-import { Suspense } from 'react';
 
 export interface RecipesPageProps {}
 

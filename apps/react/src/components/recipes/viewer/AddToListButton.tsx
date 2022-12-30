@@ -40,7 +40,7 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 	return (
 		<Dialog open={adding} onOpenChange={setAdding}>
 			<DialogTrigger asChild>
-				<Button color="primary">Add to list</Button>
+				<Button color="default">Add to list</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Add to list</DialogTitle>

@@ -9,23 +9,29 @@ import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 
-export interface RecipeViewerProps {
+export interface RecipeOverviewProps {
 	slug: string;
 }
 
-export function RecipeViewer({ slug }: RecipeViewerProps) {
+export function RecipeOverview({ slug }: RecipeOverviewProps) {
 	const recipe = useRecipeFromSlugUrl(slug);
 	const { title } = hooks.useWatch(recipe);
 
-	useWakeLock(true);
-
 	return (
 		<Box direction="column" gap={6}>
-			<Box direction="row" justify="space-between" gap={3}>
-				<H1 className={sprinkles({ mb: 0 })}>{title}</H1>
+			<Box
+				direction="row"
+				justify="space-between"
+				align="baseline"
+				gap={3}
+				my={3}
+			>
+				<H1 className={sprinkles({ mb: 0 })} gutterBottom={false}>
+					{title}
+				</H1>
 				<RecipeViewerEditButton
 					slug={slug}
-					className={sprinkles({ alignSelf: 'start' })}
+					className={sprinkles({ alignSelf: 'center' })}
 				/>
 			</Box>
 			<Box width="auto" alignSelf="start" align="start" gap={2}>
@@ -35,10 +41,6 @@ export function RecipeViewer({ slug }: RecipeViewerProps) {
 			<div>
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsViewer recipe={recipe} />
-			</div>
-			<div>
-				<H2 gutterBottom>Instructions</H2>
-				<RecipeInstructionsViewer recipe={recipe} />
 			</div>
 		</Box>
 	);

@@ -14,8 +14,8 @@ import { Button, H1, P } from './components/primitives/index.js';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { SplashPage } from './pages/SplashPage.jsx';
 import { AdminPage } from './pages/AdminPage.jsx';
-import { RecipesPage } from './pages/RecipesPage.jsx';
-import { RecipeEditPage } from './pages/RecipeEditPage.jsx';
+import { RecipesPage } from './pages/recipe/RecipesPage.jsx';
+import { RecipeEditPage } from './pages/recipe/RecipeEditPage.jsx';
 import { StartSignupDialog } from './components/sync/StartSignupDialog.jsx';
 import { PantryPage } from './pages/PantryPage.jsx';
 import { NavBar } from './components/nav/NavBar.jsx';
@@ -30,10 +30,12 @@ import { VerifyEmailPage } from './pages/VerifyEmailPage.jsx';
 import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage.jsx';
 import { AdminFeatureFlagsPage } from './pages/admin/AdminFeatureFlagsPage.jsx';
 import { LogoutNotice } from './components/auth/LogoutNotice.jsx';
-import { RecipeViewPage } from './pages/RecipeViewPage.jsx';
+import { RecipeViewPage } from './pages/recipe/RecipeViewPage.jsx';
 import { AdminSyncPage } from './pages/admin/AdminSyncPage.jsx';
 import { DomainChangeDialog } from './components/auth/DomainChangeDialog.jsx';
 import { RecipeSavePrompt } from './components/recipes/savePrompt/RecipeSavePrompt.jsx';
+import { RecipeCookPage } from './pages/recipe/RecipeCookPage.jsx';
+import { RecipeOverviewPage } from './pages/recipe/RecipeOverviewPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -82,11 +84,20 @@ export function App() {
 												<Route
 													path="/recipes/:slug"
 													element={<RecipeViewPage />}
-												/>
-												<Route
-													path="/recipes/:slug/edit"
-													element={<RecipeEditPage />}
-												/>
+												>
+													<Route
+														path="/recipes/:slug"
+														element={<RecipeOverviewPage />}
+													/>
+													<Route
+														path="/recipes/:slug/edit"
+														element={<RecipeEditPage />}
+													/>
+													<Route
+														path="/recipes/:slug/cook"
+														element={<RecipeCookPage />}
+													/>
+												</Route>
 												<Route path="/recipes" element={<RecipesPage />} />
 											</Route>
 											<Route path="*" element={<NotFoundPage />} />
