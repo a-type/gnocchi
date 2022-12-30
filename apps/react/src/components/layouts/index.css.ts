@@ -21,7 +21,6 @@ export const content = style({
 	gridTemplateRows: '1fr',
 	alignItems: 'start',
 	justifyItems: 'center',
-	overflowX: 'hidden',
 	position: 'relative',
 	flex: 1,
 	gap: vars.space[3],
