@@ -21,7 +21,7 @@ export function SplashPage() {
 			<div className={classes.backgroundSceneContainer}>
 				<Scene />
 			</div>
-			<PageContent>
+			<PageContent nav={false}>
 				<div className={classes.demoGrid}>
 					<div className={classes.titleWrap}>
 						<h2 className={classes.appName}>{APP_NAME}</h2>
@@ -119,6 +119,7 @@ export function SplashPage() {
 				</div>
 			</PageContent>
 			<PageContent
+				nav={false}
 				className={classes.fixedContent}
 				innerProps={{
 					className: classes.fixedContentInner,

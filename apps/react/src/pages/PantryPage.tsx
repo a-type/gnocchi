@@ -17,7 +17,7 @@ export function PantryPage({}: PantryPageProps) {
 	return (
 		<hooks.Provider value={groceriesDescriptor}>
 			<PageRoot>
-				<PageContent fullHeight noPadding>
+				<PageContent fullHeight noPadding nav>
 					<H1
 						className={sprinkles({ p: 4, marginBottom: 0, paddingBottom: 0 })}
 					>

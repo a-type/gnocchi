@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
+import { PageNav } from '../layouts/index.jsx';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
@@ -37,6 +38,7 @@ export function NavBar({}: NavBarProps) {
 	});
 	const matchRecipes = !!useMatch({
 		path: '/recipes',
+		end: false,
 	});
 
 	const { data: showRecipesOverride } =
@@ -49,7 +51,8 @@ export function NavBar({}: NavBarProps) {
 	}
 
 	return (
-		<div className={clsx(classes.root)}>
+		<PageNav className={clsx(classes.root)}>
+			<img src="/android-chrome-192x192.png" className={classes.logo} />
 			<GroceriesNavBarLink active={matchGroceries} />
 			<PantryNavBarLink active={matchPurchased} />
 			{finalShowRecipes && (
@@ -57,7 +60,7 @@ export function NavBar({}: NavBarProps) {
 					Recipes
 				</NavBarLink>
 			)}
-		</div>
+		</PageNav>
 	);
 }
 
@@ -75,21 +78,20 @@ function NavBarLink({
 	active: boolean;
 }) {
 	return (
-		<Tooltip content={children}>
-			<CollapsibleRoot open={!!active}>
-				<Link to={to} className={classes.button}>
-					<div className={classes.iconContainer}>
-						<PopEffect active={animate} />
-						{icon}
-					</div>
-					<CollapsibleContent data-horizontal className={classes.collapsible}>
-						<span className={classes.buttonText} data-active={!!active}>
-							{children}
-						</span>
-					</CollapsibleContent>
-				</Link>
-			</CollapsibleRoot>
-		</Tooltip>
+		<Link
+			to={to}
+			className={clsx(classes.button, {
+				[classes.buttonActive]: active,
+			})}
+		>
+			<div className={classes.iconContainer}>
+				<PopEffect active={animate} />
+				{icon}
+			</div>
+			<span className={classes.buttonText} data-active={!!active}>
+				{children}
+			</span>
+		</Link>
 	);
 }
 

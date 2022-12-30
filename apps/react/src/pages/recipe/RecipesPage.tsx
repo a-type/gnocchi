@@ -1,4 +1,5 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { NavBar } from '@/components/nav/NavBar.jsx';
 import { RecipeList } from '@/components/recipes/RecipeList.jsx';
 import { hooks, recipesDescriptor } from '@/stores/recipes/index.js';
 
@@ -8,7 +9,7 @@ export function RecipesPage({}: RecipesPageProps) {
 	return (
 		<hooks.Provider value={recipesDescriptor}>
 			<PageRoot>
-				<PageContent>
+				<PageContent nav>
 					<RecipeList />
 				</PageContent>
 			</PageRoot>

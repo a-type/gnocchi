@@ -1,4 +1,5 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { NavBar } from '@/components/nav/NavBar.jsx';
 import { Button } from '@/components/primitives/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
@@ -11,7 +12,7 @@ export function RecipeViewPage({}: RecipeViewPageProps) {
 
 	return (
 		<PageRoot>
-			<PageContent>
+			<PageContent nav>
 				<Button
 					color="ghost"
 					onClick={() => navigate(-1)}

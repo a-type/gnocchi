@@ -96,7 +96,7 @@ export const groceries = {
 
 		// send the categorization to the server for research
 		if (categoryId) {
-			await trpcClient.categories.assign.mutation('categories.assign', {
+			await trpcClient.categories.assign.mutate({
 				foodName: food,
 				categoryId,
 			});

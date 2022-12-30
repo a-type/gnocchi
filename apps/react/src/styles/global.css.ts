@@ -17,6 +17,7 @@ globalStyle('html, body', {
 globalStyle('body', {
 	height: '100%',
 	backgroundColor: vars.colors.light,
+	overflow: 'overlay',
 });
 
 globalStyle('#root', {

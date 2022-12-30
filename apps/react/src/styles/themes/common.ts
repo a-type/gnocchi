@@ -7,6 +7,7 @@ export const commonTheme = {
 		title: '"Inter", sans-serif',
 	},
 	fontSizes: {
+		xxs: '0.5rem',
 		xs: '0.75rem',
 		sm: '0.88888888888888888888rem',
 		md: '1rem',

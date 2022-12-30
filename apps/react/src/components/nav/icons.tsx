@@ -1,6 +1,6 @@
 import * as classes from './NavBar.css.js';
 
-const size = 18;
+const size = 15;
 
 export function FridgeIcon() {
 	return (

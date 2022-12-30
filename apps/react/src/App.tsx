@@ -18,7 +18,6 @@ import { RecipesPage } from './pages/recipe/RecipesPage.jsx';
 import { RecipeEditPage } from './pages/recipe/RecipeEditPage.jsx';
 import { StartSignupDialog } from './components/sync/StartSignupDialog.jsx';
 import { PantryPage } from './pages/PantryPage.jsx';
-import { NavBar } from './components/nav/NavBar.jsx';
 import { UpdatePrompt } from './components/updatePrompt/UpdatePrompt.jsx';
 import { Box } from './components/primitives/box/Box.jsx';
 import { clsx } from 'clsx';
@@ -51,7 +50,7 @@ export function App() {
 		<div className={clsx(classes.wrapper, lemonTheme)}>
 			<ErrorBoundary fallback={<ErrorFallback />}>
 				<TooltipProvider>
-					<Suspense fallback="Loading...">
+					<Suspense fallback={null}>
 						<trpc.Provider client={trpcClient} queryClient={queryClient}>
 							<QueryClientProvider client={queryClient}>
 								<BrowserRouter>
@@ -102,7 +101,6 @@ export function App() {
 											</Route>
 											<Route path="*" element={<NotFoundPage />} />
 										</Routes>
-										<NavBar />
 										<Toaster position="bottom-center" />
 										<StartSignupDialog />
 										<UpdatePrompt />

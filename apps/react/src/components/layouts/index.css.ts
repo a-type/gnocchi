@@ -1,3 +1,4 @@
+import { mediaQueries } from '@/styles/media.js';
 import { vars } from '@/theme.css.js';
 import { style } from '@vanilla-extract/css';
 
@@ -15,23 +16,23 @@ export const fixedArea = style({
 export const content = style({
 	gridArea: 'content',
 	width: '100%',
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'center',
+	display: 'grid',
+	gridTemplateAreas: '"innerContent"',
+	gridTemplateRows: '1fr',
+	alignItems: 'start',
+	justifyItems: 'center',
 	overflowX: 'hidden',
 	position: 'relative',
-	paddingLeft: vars.space[4],
-	paddingRight: vars.space[4],
-	paddingTop: vars.space[6],
-	paddingBottom: vars.space[6],
 	flex: 1,
-});
+	gap: vars.space[3],
+	height: 'max-content',
 
-export const contentNoPadding = style({
-	paddingLeft: 0,
-	paddingRight: 0,
-	paddingTop: 0,
-	paddingBottom: 0,
+	'@media': {
+		[mediaQueries.sm]: {
+			gridTemplateAreas: '"gutter1 nav innerContent gutter2"',
+			gridTemplateColumns: '1fr auto min(800px, 60vw) 1fr',
+		},
+	},
 });
 
 export const innerContent = style({
@@ -39,6 +40,27 @@ export const innerContent = style({
 	maxWidth: vars.sizes.content,
 	flexDirection: 'column',
 	marginBottom: 120,
+	gridArea: 'innerContent',
+	paddingLeft: vars.space[4],
+	paddingRight: vars.space[4],
+	paddingTop: vars.space[6],
+	paddingBottom: vars.space[6],
+});
+
+export const contentNoPadding = style({
+	paddingLeft: 0,
+	paddingRight: 0,
+	paddingTop: 0,
+	paddingBottom: 0,
+
+	'@media': {
+		[mediaQueries.sm]: {
+			paddingLeft: vars.space[4],
+			paddingRight: vars.space[4],
+			paddingTop: vars.space[4],
+			paddingBottom: vars.space[4],
+		},
+	},
 });
 export const innerContentFullHeight = style({
 	flex: 1,
@@ -46,10 +68,11 @@ export const innerContentFullHeight = style({
 
 export const pageRoot = style({
 	display: 'grid',
+	flex: '1 1 0',
+	// minHeight: 0,
 	gridTemplateAreas: '"content" "nowPlaying"',
 	gridTemplateRows: '1fr auto',
-	flex: '1 1 0',
-	minHeight: 0,
+	gridTemplateColumns: '1fr',
 });
 
 export const pageRootLemon = style({
@@ -67,7 +90,28 @@ export const section = style({
 	maxWidth: '80vw',
 	'@media': {
 		'(max-width: 640px)': {
-			minWidth: 'none',
+			minWidth: 'auto',
+		},
+	},
+});
+
+export const nav = style({
+	gridArea: 'auto',
+	position: 'fixed',
+	bottom: 0,
+	left: 0,
+	right: 0,
+	zIndex: vars.zIndices.nav,
+
+	'@media': {
+		[mediaQueries.sm]: {
+			gridArea: 'nav',
+			position: 'sticky',
+			top: 0,
+			height: 'auto',
+			bottom: 'auto',
+			left: 'auto',
+			right: 'auto',
 		},
 	},
 });

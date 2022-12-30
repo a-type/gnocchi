@@ -21,6 +21,7 @@ import { ListContext } from '@/contexts/ListContext.jsx';
 import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
+import { NavBar } from '@/components/nav/NavBar.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -51,7 +52,7 @@ export function GroceriesPage() {
 		<ListContext.Provider value={listId}>
 			<hooks.Provider value={groceriesDescriptor}>
 				<ThemedPageRoot listId={listId}>
-					<PageContent fullHeight noPadding>
+					<PageContent fullHeight noPadding nav>
 						<Box
 							width="full"
 							flexDirection="row"

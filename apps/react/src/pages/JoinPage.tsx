@@ -37,7 +37,7 @@ export function JoinPage({}: JoinPageProps) {
 						Welcome!
 					</H1>
 					<img
-						src="/android-chrome-512x512.png"
+						src="/android-chrome-192x192.png"
 						alt="logo"
 						width="80"
 						height="80"

@@ -39,6 +39,7 @@ export const vars = createThemeContract({
 		title: '',
 	},
 	fontSizes: {
+		xxs: '',
 		xs: '',
 		sm: '',
 		md: '',

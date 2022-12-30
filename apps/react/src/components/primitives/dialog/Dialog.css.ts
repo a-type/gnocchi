@@ -1,3 +1,4 @@
+import { NAV_MOBILE_HEIGHT } from '@/components/nav/constants.js';
 import { mediaQueries } from '@/styles/media.js';
 import { vars } from '@/theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
@@ -10,13 +11,8 @@ const overlayShow = keyframes({
 	'100%': { opacity: 1 },
 });
 
-const contentShow = keyframes({
-	'0%': { opacity: 0, transform: 'translate(-50%, -48%) scale(.96)' },
-	'100%': { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
-});
-
 const contentShowMobile = keyframes({
-	'0%': { opacity: 0, transform: 'translate(0, 2%) scale(.96)' },
+	'0%': { opacity: 0, transform: 'translate(0, 80vh) scale(.96)' },
 	'100%': { opacity: 1, transform: 'translate(0, 0) scale(1)' },
 });
 

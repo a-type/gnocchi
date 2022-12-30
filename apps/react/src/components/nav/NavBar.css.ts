@@ -1,55 +1,45 @@
+import { mediaQueries } from '@/styles/media.js';
 import { vars } from '@/theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
+import { NAV_MOBILE_HEIGHT } from './constants.js';
 
 export const root = style({
-	position: 'fixed',
-	bottom: vars.space[4],
-	left: '50%',
-	transform: 'translateX(-50%)',
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'stretch',
-	width: 'min-content',
-	borderRadius: vars.radii.lg,
-	backgroundColor: vars.colors.light,
+	justifyContent: 'space-around',
+	width: '100%',
+	borderRadius: 0,
 	boxShadow: vars.shadows.lg,
-	borderWidth: '1px',
-	borderStyle: 'solid',
-	borderColor: vars.colors.gray70,
 	overflow: 'hidden',
 	zIndex: vars.zIndices.nav,
-	height: 37,
-});
+	backgroundColor: vars.colors.gray10,
+	borderTop: `1px solid ${vars.colors.gray20}`,
+	padding: 2,
+	height: NAV_MOBILE_HEIGHT,
 
-const shake = keyframes({
-	'0%': { transform: 'scale(1) rotate(-5deg)' },
-	'10%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
-	'20%': {
-		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.accent,
+	'@media': {
+		[mediaQueries.sm]: {
+			backgroundColor: 'transparent',
+			flexDirection: 'column',
+			borderRadius: 0,
+			borderWidth: 0,
+			borderStyle: 'none',
+			borderColor: 'transparent',
+			boxShadow: 'none',
+			height: 'min-content',
+			overflowY: 'auto',
+			overflowX: 'hidden',
+			justifyContent: 'start',
+			alignItems: 'stretch',
+			gap: vars.space[2],
+		},
 	},
-	'30%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
-	'40%': {
-		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.accent,
-	},
-	'50%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
-	'60%': {
-		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.accent,
-	},
-	'70%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
-	'80%': {
-		transform: 'scale(1.25) rotate(-5deg)',
-		color: vars.colors.accent,
-	},
-	'90%': { transform: 'scale(1.25) rotate(5deg)', color: vars.colors.accent },
-	'100%': { transform: 'scale(1) rotate(0deg)' },
 });
 
 export const button = style({
 	display: 'flex',
-	flexDirection: 'row',
+	flexDirection: 'column',
 	alignItems: 'center',
 	justifyContent: 'center',
 	whiteSpace: 'nowrap',
@@ -58,35 +48,47 @@ export const button = style({
 	paddingLeft: vars.space[3],
 	paddingRight: vars.space[3],
 	backgroundColor: 'transparent',
+	borderRadius: vars.radii.md,
 	border: 'none',
-	gap: vars.space[1],
 	cursor: 'pointer',
 	fontSize: vars.fontSizes.sm,
-	transition: `background-color 0.2s ease-out`,
+	transition: `background-color 0.2s ease-out, color 0.2s ease-out`,
 	height: '100%',
+
+	'@media': {
+		[mediaQueries.sm]: {
+			flexDirection: 'row-reverse',
+			height: 'auto',
+			justifyContent: 'end',
+			gap: vars.space[1],
+		},
+	},
 
 	selectors: {
 		'&:hover': {
 			backgroundColor: vars.colors.gray20,
 		},
-
-		'& + &': {
-			borderLeft: `1px solid ${vars.colors.gray70}`,
-		},
-
-		'&[data-shake="true"]': {
-			animationName: shake,
-			animationDuration: '3s',
-			animationIterationCount: '1',
-			animationTimingFunction: vars.transitions.springy,
-		},
 	},
+});
+
+export const buttonActive = style({
+	backgroundColor: vars.colors.primaryLighter,
+	color: vars.colors.primaryDarker,
 });
 
 export const buttonText = style({
 	overflow: 'hidden',
 	paddingLeft: vars.space[1],
 	display: 'inline-block',
+	fontSize: vars.fontSizes.xxs,
+	whiteSpace: 'nowrap',
+	textOverflow: 'ellipsis',
+
+	'@media': {
+		[mediaQueries.sm]: {
+			fontSize: vars.fontSizes.md,
+		},
+	},
 });
 
 export const collapsible = style({
@@ -104,4 +106,18 @@ export const iconContainer = style({
 export const icon = style({
 	position: 'relative',
 	zIndex: 1,
+});
+
+export const logo = style({
+	display: 'none',
+
+	'@media': {
+		[mediaQueries.sm]: {
+			alignSelf: 'center',
+			padding: vars.space[2],
+			display: 'block',
+			width: 80,
+			height: 80,
+		},
+	},
 });
