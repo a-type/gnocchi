@@ -11,10 +11,12 @@ import { ExtractorData } from './types.js';
 export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 	let titleElement = findFirstMatch($, [
 		'#title',
-		'.title',
+		'h1',
+		'h2.title',
+		'h3.title',
 		'.recipe__title',
 		'.recipe h1',
-		'h1',
+		'.title',
 	]);
 	let authorElement = findFirstMatch($, [
 		'.recipe .author',
@@ -56,6 +58,8 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'ul.ingredients li',
 		'.ingredients > *',
 		'.recipe__list--ingredients li',
+		'.recipe-ingredients li',
+		'[class*=ingredients] li',
 	]);
 	let instructionsList = findFirstMatches($, [
 		'.recipe .instructions .instruction',
@@ -69,6 +73,11 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.instructions > *',
 		'.steps > *',
 		'.recipe__list-step',
+		'.recipe-instructions li',
+		'.recipe-steps li',
+		'.recipeSteps li',
+		'[class*=instructions] li',
+		'[class*=steps] li',
 	]);
 	let imageElement = findFirstMatch($, [
 		'.recipe img.image',

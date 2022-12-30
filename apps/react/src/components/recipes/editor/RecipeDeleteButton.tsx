@@ -4,15 +4,20 @@ import { useNavigate } from 'react-router-dom';
 
 export interface RecipeDeleteButtonProps {
 	recipe: Recipe;
+	className?: string;
 }
 
-export function RecipeDeleteButton({ recipe }: RecipeDeleteButtonProps) {
+export function RecipeDeleteButton({
+	recipe,
+	...rest
+}: RecipeDeleteButtonProps) {
 	const client = hooks.useClient();
 
 	const navigate = useNavigate();
 
 	return (
 		<Button
+			{...rest}
 			color="destructive"
 			onClick={() => {
 				client.recipes.delete(recipe.get('id'));
