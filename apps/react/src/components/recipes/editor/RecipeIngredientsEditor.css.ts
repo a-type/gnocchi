@@ -28,4 +28,6 @@ export const itemText = style({
 
 export const dragHandle = style({
 	touchAction: 'none',
+	position: 'relative',
+	top: 4,
 });

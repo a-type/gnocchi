@@ -7,10 +7,15 @@ export interface TextAreaProps
 	extends Omit<HTMLProps<HTMLTextAreaElement>, 'ref'> {
 	className?: string;
 	autoSize?: boolean;
+	// if auto-size, pad the height by this many px
+	padBottomPixels?: number;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-	function TextArea({ autoSize, className, rows, ...rest }, ref) {
+	function TextArea(
+		{ autoSize, className, rows, padBottomPixels = 0, ...rest },
+		ref,
+	) {
 		const innerRef = useRef<HTMLTextAreaElement>(null);
 		const finalRef = useMergedRef(innerRef, ref);
 
@@ -19,9 +24,10 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 			const element = innerRef.current;
 			if (element) {
 				function refresh() {
-					element!.style.height = 'auto';
-					if (element!.value !== '') {
-						element!.style.height = element!.scrollHeight + 'px';
+					if (element!.value !== '' || padBottomPixels) {
+						element!.style.height = 'auto';
+						const baseHeight = element!.scrollHeight;
+						element!.style.height = baseHeight + padBottomPixels + 'px';
 					}
 				}
 				refresh();
@@ -31,7 +37,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 					element.removeEventListener('keyup', refresh);
 				};
 			}
-		}, [autoSize]);
+		}, [autoSize, padBottomPixels]);
 
 		return (
 			<textarea

@@ -132,6 +132,7 @@ function AddIngredientsForm({
 					required
 					placeholder="Add ingredient line(s)"
 					autoSize
+					padBottomPixels={40}
 				/>
 				<SubmitButton>Add</SubmitButton>
 			</Form>
