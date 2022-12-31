@@ -9,6 +9,10 @@ export const fixedContent = style({
 	backgroundColor: vars.colors.primary,
 	borderTop: `1px solid ${vars.colors.primaryDark}`,
 	margin: 0,
+	width: '100%',
+	padding: vars.space[6],
+	alignItems: 'center',
+	gap: vars.space[3],
 });
 
 export const fixedContentInner = style({

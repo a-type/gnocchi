@@ -60,13 +60,7 @@ export const button = style({
 			flexDirection: 'row-reverse',
 			height: 'auto',
 			justifyContent: 'end',
-			gap: vars.space[1],
-		},
-	},
-
-	selectors: {
-		'&:hover': {
-			backgroundColor: vars.colors.gray20,
+			gap: vars.space[2],
 		},
 	},
 });
@@ -101,6 +95,14 @@ export const collapsible = style({
 export const iconContainer = style({
 	position: 'relative',
 	display: 'flex',
+
+	'@media': {
+		[mediaQueries.sm]: {
+			padding: 6,
+			borderRadius: '100%',
+			backgroundColor: vars.colors.lightBlend,
+		},
+	},
 });
 
 export const icon = style({

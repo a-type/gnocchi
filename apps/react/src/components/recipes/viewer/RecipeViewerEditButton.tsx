@@ -10,7 +10,12 @@ export function RecipeViewerEditButton({
 	...rest
 }: RecipeViewerEditButtonProps) {
 	return (
-		<LinkButton color="default" to={`/recipes/${slug}/edit`} {...rest}>
+		<LinkButton
+			size="small"
+			color="default"
+			to={`/recipes/${slug}/edit`}
+			{...rest}
+		>
 			Edit
 		</LinkButton>
 	);

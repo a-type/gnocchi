@@ -1,6 +1,12 @@
 import { Scene } from '@/components/3d/Scene.jsx';
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Button, H2, P, Span } from '@/components/primitives/index.js';
+import {
+	Button,
+	H2,
+	LinkButton,
+	P,
+	Span,
+} from '@/components/primitives/index.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';
 import { sprinkles } from '@/styles/sprinkles.css.js';
@@ -118,24 +124,18 @@ export function SplashPage() {
 					</Section>
 				</div>
 			</PageContent>
-			<PageContent
-				nav={false}
-				className={classes.fixedContent}
-				innerProps={{
-					className: classes.fixedContentInner,
-				}}
-			>
-				<Link to="/">
-					<Button
-						data-test="get-started"
-						className={sprinkles({ justifyContent: 'center', width: 'full' })}
-						color="default"
-					>
-						Get Started
-					</Button>
-				</Link>
+			<div className={classes.fixedContent}>
+				<LinkButton
+					to="/"
+					data-test="get-started"
+					className={sprinkles({ justifyContent: 'center', width: 'full' })}
+					color="default"
+				>
+					Get Started
+				</LinkButton>
+
 				<Span size="sm">Free, no signup required</Span>
-			</PageContent>
+			</div>
 		</PageRoot>
 	);
 }

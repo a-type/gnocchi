@@ -1,4 +1,5 @@
 import { useIsLoggedIn } from '@/contexts/AuthContext.jsx';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
 import { clsx } from 'clsx';
 import { ReactNode, useEffect, useState } from 'react';
@@ -18,8 +19,6 @@ import { PopEffect } from './PopEffect.jsx';
 export interface NavBarProps {}
 
 export function NavBar({}: NavBarProps) {
-	const loggedIn = useIsLoggedIn();
-
 	const matchDefaultList = !!useMatch({
 		path: '/',
 		end: true,
@@ -41,8 +40,7 @@ export function NavBar({}: NavBarProps) {
 		end: false,
 	});
 
-	const { data: showRecipesOverride } =
-		trpc.featureFlags.getValue.useQuery('recipes');
+	const showRecipesOverride = useFeatureFlag('recipes');
 
 	const finalShowRecipes = showRecipesOverride;
 
