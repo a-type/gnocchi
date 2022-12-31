@@ -1,6 +1,6 @@
-# Aglio
+# Gnocchi
 
-Aglio, a tiny groceries list app.
+Gnocchi, a tiny cooking app.
 
 The web app is designed to work local-first and local-only. Users can subscribe to sync their list between devices and unlock realtime collaboration with family or friends they shop with.
 
