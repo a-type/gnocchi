@@ -103,7 +103,7 @@ function RecipeIngredientItem({
 			{...attributes}
 			style={style}
 		>
-			<DragHandleDots2Icon {...listeners} />
+			<DragHandleDots2Icon className={classes.dragHandle} {...listeners} />
 
 			<span className={classes.itemText}>{ingredient.get('text')}</span>
 			<Button color="ghostDestructive" onClick={onDelete}>

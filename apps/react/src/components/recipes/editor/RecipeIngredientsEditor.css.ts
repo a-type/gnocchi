@@ -25,3 +25,7 @@ export const itemText = style({
 	flex: 1,
 	minWidth: 40,
 });
+
+export const dragHandle = style({
+	touchAction: 'none',
+});
