@@ -4,11 +4,9 @@ import React, {
 	ReactNode,
 	useState,
 } from 'react';
-import { keyframes, styled } from '@/stitches.config.js';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { BlurLayer } from '../BlurLayer.js';
+import { BlurLayer } from '../blurLayer/BlurLayer.js';
 import { withClassName } from '@/hocs/withClassName.jsx';
-import { clsx } from 'clsx';
 import * as classes from './Dialog.css.js';
 import { createPortal } from 'react-dom';
 import useMergedRef from '@/hooks/useMergedRef.js';

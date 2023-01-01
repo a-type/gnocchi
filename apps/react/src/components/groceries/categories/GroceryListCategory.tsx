@@ -1,7 +1,7 @@
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
-} from '@/components/primitives/Collapsible.jsx';
+} from '@/components/primitives/index.js';
 import { Button, H2 } from '@/components/primitives/index.js';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';

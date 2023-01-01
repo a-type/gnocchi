@@ -1,14 +1,12 @@
 import { useAuth } from '@/contexts/AuthContext.js';
-import { hooks } from '@/stores/groceries/index.js';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import {
 	Popover,
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
-} from '../primitives/Popover.js';
+} from '../primitives/popover/Popover.js';
 import { Button, Span } from '../primitives/index.js';
-import { styled } from '@/stitches.config.js';
 import { ManageCategoriesDialog } from './ManageCategoriesDialog.js';
 import { LoginButton } from '../sync/LoginButton.js';
 import { ManagePlanButton } from '../sync/ManagePlanButton.js';
@@ -18,6 +16,7 @@ import { useSnapshot } from 'valtio';
 import { menuState } from './state.js';
 import { Box } from '../primitives/box/Box.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
+import * as classes from './MainMenu.css.js';
 
 export function MainMenu() {
 	const { session, isSubscribed, error } = useAuth();
@@ -46,21 +45,13 @@ export function MainMenu() {
 				</Button>
 			</PopoverTrigger>
 			{/* @ts-ignore */}
-			<PopoverContent collisionPadding={16} align="start" css={{ p: 0 }}>
+			<PopoverContent collisionPadding={16} align="start" padding="none">
 				<PopoverArrow />
 				<Contents />
 			</PopoverContent>
 		</Popover>
 	);
 }
-
-const MenuList = styled('div' as const, {
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'start',
-	width: 300,
-	maxWidth: '90vw',
-});
 
 const contents = {
 	offline: OfflineContents,
@@ -69,37 +60,17 @@ const contents = {
 	online: OnlineContents,
 } as const;
 
-const MenuBanner = styled('div' as const, {
-	width: '100%',
-	textAlign: 'center',
-	backgroundColor: '$lemonLighter',
-	p: '$2',
-});
-
-const MenuSection = styled('div' as const, {
-	display: 'flex',
-	flexDirection: 'column',
-	gap: '$4',
-	alignItems: 'start',
-	p: '$5',
-	width: '100%',
-
-	'& + &': {
-		borderTop: '1px solid $black',
-	},
-});
-
 function OfflineContents() {
 	const { refetch } = useAuth();
 
 	useInterval(refetch, 3000);
 
 	return (
-		<MenuList>
-			<MenuSection>
-				<MenuBanner>
+		<div className={classes.list}>
+			<div className={classes.section}>
+				<div className={classes.banner}>
 					<Span size="sm">Offline</Span>
-				</MenuBanner>
+				</div>
 				<Button size="small" color="default" onClick={refetch}>
 					Retry connection
 				</Button>
@@ -108,18 +79,18 @@ function OfflineContents() {
 						Manage categories
 					</Button>
 				</ManageCategoriesDialog>
-			</MenuSection>
-			<MenuSection>
+			</div>
+			<div className={classes.section}>
 				<BugButton />
-			</MenuSection>
-		</MenuList>
+			</div>
+		</div>
 	);
 }
 
 function AnonymousContents() {
 	return (
-		<MenuList>
-			<MenuSection>
+		<div className={classes.list}>
+			<div className={classes.section}>
 				<LoginButton color="primary" size="small" returnTo="/">
 					Start syncing
 				</LoginButton>
@@ -132,62 +103,62 @@ function AnonymousContents() {
 						Manage categories
 					</Button>
 				</ManageCategoriesDialog>
-			</MenuSection>
-			<MenuSection>
+			</div>
+			<div className={classes.section}>
 				<BugButton />
-			</MenuSection>
-		</MenuList>
+			</div>
+		</div>
 	);
 }
 
 function OnlineContents() {
 	return (
-		<MenuList>
-			<MenuSection>
+		<div className={classes.list}>
+			<div className={classes.section}>
 				<Box flexDirection="row" gap={2}>
 					<ManagePlanButton color="default" size="small" />
 					<LogoutButton color="default" size="small">
 						Log out
 					</LogoutButton>
 				</Box>
-			</MenuSection>
-			<MenuSection>
+			</div>
+			<div className={classes.section}>
 				<ManageCategoriesDialog>
 					<Button color="default" size="small">
 						Manage categories
 					</Button>
 				</ManageCategoriesDialog>
-			</MenuSection>
-			<MenuSection>
+			</div>
+			<div className={classes.section}>
 				<BugButton />
-			</MenuSection>
-		</MenuList>
+			</div>
+		</div>
 	);
 }
 
 function UnsubscribedContents() {
 	// user has account but has not completed signup
 	return (
-		<MenuList>
-			<MenuSection>
-				<MenuBanner>
+		<div className={classes.list}>
+			<div className={classes.section}>
+				<div className={classes.banner}>
 					<Span size="sm">Subscription inactive</Span>
-				</MenuBanner>
+				</div>
 				<Box flexDirection="row" gap={2}>
 					<ManagePlanButton color="default" size="small" />
 					<LogoutButton>Log out</LogoutButton>
 				</Box>
-			</MenuSection>
-			<MenuSection>
+			</div>
+			<div className={classes.section}>
 				<ManageCategoriesDialog>
 					<Button color="default" size="small">
 						Manage categories
 					</Button>
 				</ManageCategoriesDialog>
-			</MenuSection>
-			<MenuSection>
+			</div>
+			<div className={classes.section}>
 				<BugButton />
-			</MenuSection>
-		</MenuList>
+			</div>
+		</div>
 	);
 }

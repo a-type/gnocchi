@@ -3,7 +3,7 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
-} from '@/components/primitives/Collapsible.js';
+} from '@/components/primitives/index.js';
 import {
 	Box,
 	Button,
@@ -52,7 +52,6 @@ import { CategoryPicker } from './CategoryPicker.js';
 import * as classes from './GroceryListItem.css.js';
 import { useItemDisplayText } from './hooks.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
-import { ItemQuantityNumber } from './ItemQuantityNumber.js';
 import { ItemSources } from './ItemSources.js';
 
 export interface GroceryListItemProps {

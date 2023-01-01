@@ -7,3 +7,4 @@ export const CollapsibleContent = withClassName(
 	CollapsiblePrimitive.Content,
 	classes.content,
 );
+export const CollapsibleTrigger = CollapsiblePrimitive.Trigger;

@@ -13,7 +13,7 @@ import {
 	Popover,
 	PopoverAnchor,
 	PopoverContent,
-} from '@/components/primitives/Popover.jsx';
+} from '@/components/primitives/index.js';
 import {
 	default as Downshift,
 	useCombobox,

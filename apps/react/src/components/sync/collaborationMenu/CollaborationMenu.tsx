@@ -4,7 +4,7 @@ import {
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
-} from '@/components/primitives/Popover.jsx';
+} from '@/components/primitives/index.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';

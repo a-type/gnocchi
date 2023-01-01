@@ -121,7 +121,6 @@ importers:
       '@react-three/drei': ^9.40.0
       '@react-three/fiber': ^8.9.1
       '@react-three/postprocessing': ^2.7.0
-      '@stitches/react': ^1.2.8
       '@tanstack/react-query': ^4.3.8
       '@tiptap/core': ^2.0.0-beta.193
       '@tiptap/html': 2.0.0-beta.209
@@ -217,7 +216,6 @@ importers:
       '@react-three/drei': 9.40.0_xwynmv5llzsuuouxruzymqw67e
       '@react-three/fiber': 8.9.1_mjlgqb43i6mvslmnwgzrdumoh4
       '@react-three/postprocessing': 2.7.0_aj5kj473hsgheg4miwvuwybosy
-      '@stitches/react': 1.2.8_react@18.2.0
       '@tanstack/react-query': 4.19.1_biqbaboplfbrettd7655fr4n2y
       '@tiptap/core': 2.0.0-beta.205_rd5pjtxohzfgv2zee3iufpqkay
       '@tiptap/html': 2.0.0-beta.209_qw674dtrcywogvah35xjyevg4y
@@ -2942,14 +2940,6 @@ packages:
       picomatch: 2.3.1
       rollup: 2.78.1
     dev: true
-
-  /@stitches/react/1.2.8_react@18.2.0:
-    resolution: {integrity: sha512-9g9dWI4gsSVe8bNLlb+lMkBYsnIKCZTmvqvDG+Avnn69XfmHZKiaMrx7cgTaddq7aTPPmXiTsbFcUy0xgI4+wA==}
-    peerDependencies:
-      react: '>= 16.3.0'
-    dependencies:
-      react: 18.2.0
-    dev: false
 
   /@surma/rollup-plugin-off-main-thread/2.2.3:
     resolution: {integrity: sha512-lR8q/9W7hZpMWweNiAKU7NQerBnzQQLvi8qnTDU/fxItPhtZVMbPV3lbCwjhIlNBe9Bbr5V+KHshvWmVSG9cxQ==}
