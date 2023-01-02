@@ -114,3 +114,47 @@ export const nav = style({
 		},
 	},
 });
+
+export const navInner = style({});
+
+export const nowPlayingContainer = style({
+	position: 'absolute',
+	bottom: `100%`,
+	width: '100%',
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space[2],
+	alignItems: 'end',
+	padding: vars.space[2],
+
+	'@media': {
+		[mediaQueries.sm]: {
+			position: 'sticky',
+			bottom: 0,
+			top: 'auto',
+			alignItems: 'end',
+			width: 'auto',
+			padding: 0,
+		},
+	},
+});
+
+export const nowPlaying = style({
+	backgroundColor: vars.colors.light,
+	padding: 2,
+	borderRadius: vars.radii.xl,
+	borderStyle: vars.borderStyles.solid,
+	borderWidth: vars.borderWidths.default,
+	borderColor: vars.colors.gray50,
+	boxShadow: vars.shadows.md,
+	minWidth: 32,
+	alignItems: 'center',
+	justifyContent: 'center',
+
+	'@media': {
+		[mediaQueries.sm]: {
+			border: 'none',
+			boxShadow: 'none',
+		},
+	},
+});

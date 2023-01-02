@@ -1,9 +1,20 @@
-import { forwardRef, HTMLAttributes, ReactNode } from 'react';
+import {
+	createContext,
+	createRef,
+	forwardRef,
+	HTMLAttributes,
+	ReactNode,
+	RefObject,
+	useContext,
+	useRef,
+	useState,
+} from 'react';
 import { clsx } from 'clsx';
 import * as classes from './index.css.js';
 import { Box, BoxProps } from '../primitives/index.js';
 import { withClassName } from '@/hocs/withClassName.jsx';
 import { NavBar } from '../nav/NavBar.jsx';
+import { createPortal } from 'react-dom';
 
 export function PageContent({
 	children,
@@ -47,18 +58,22 @@ export const PageRoot = forwardRef<
 		className?: string;
 	}
 >(function PageRoot({ className, ...props }, ref) {
+	const [container, setContainer] = useState<HTMLDivElement>();
+
 	return (
-		<div
-			ref={ref}
-			className={clsx(
-				classes.pageRoot,
-				{
-					[classes.pageRootLemon]: props.color === 'lemon',
-				},
-				className,
-			)}
-			{...props}
-		/>
+		<NowPlayingContext.Provider value={{ container, setContainer }}>
+			<div
+				ref={ref}
+				className={clsx(
+					classes.pageRoot,
+					{
+						[classes.pageRootLemon]: props.color === 'lemon',
+					},
+					className,
+				)}
+				{...props}
+			/>
+		</NowPlayingContext.Provider>
 	);
 });
 
@@ -76,4 +91,37 @@ export function PageSection({
 	return <div {...props} className={clsx(classes.section, className)} />;
 }
 
-export const PageNav = withClassName('div', classes.nav);
+export const NowPlayingContext = createContext<{
+	container: HTMLDivElement | undefined;
+	setContainer: (container: HTMLDivElement) => void;
+}>({ container: undefined, setContainer: () => {} });
+
+export function PageNav({
+	className,
+	innerClassName,
+	children,
+	...props
+}: HTMLAttributes<HTMLDivElement> & { innerClassName?: string }) {
+	const { setContainer } = useContext(NowPlayingContext);
+
+	return (
+		<div {...props} className={clsx(classes.nav, className)}>
+			<div className={clsx(classes.navInner, innerClassName)}>{children}</div>
+			<div ref={setContainer} className={classes.nowPlayingContainer} />
+		</div>
+	);
+}
+
+export function PageNowPlaying({
+	className,
+	...props
+}: HTMLAttributes<HTMLDivElement>) {
+	const { container } = useContext(NowPlayingContext);
+	if (container) {
+		return createPortal(
+			<div {...props} className={clsx(classes.nowPlaying, className)} />,
+			container,
+		);
+	}
+	return null;
+}

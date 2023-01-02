@@ -38,7 +38,9 @@ export function LogoutNotice({}: LogoutNoticeProps) {
 					<DialogClose asChild>
 						<Button color="ghost">Cancel</Button>
 					</DialogClose>
-					<LoginButton color="primary">Sign in</LoginButton>
+					<DialogClose asChild>
+						<LoginButton color="primary">Sign in</LoginButton>
+					</DialogClose>
 				</Box>
 			</DialogContent>
 		</Dialog>

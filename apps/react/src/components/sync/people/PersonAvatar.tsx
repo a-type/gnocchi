@@ -1,5 +1,5 @@
 import { UserInfo } from '@lo-fi/web';
-import { Presence, Profile } from '@/stores/groceries/index.js';
+import { Profile } from '@/stores/groceries/index.js';
 import { clsx } from 'clsx';
 import * as classes from './PersonAvatar.css.js';
 
@@ -9,7 +9,7 @@ export function PersonAvatar({
 	index,
 	...rest
 }: {
-	person: UserInfo<Profile, Presence>;
+	person: UserInfo<Profile, any>;
 	className?: string;
 	index?: number;
 }) {
@@ -25,7 +25,7 @@ export function PersonAvatar({
 	);
 }
 
-function AvatarContent({ user }: { user: UserInfo<Profile, Presence> }) {
+function AvatarContent({ user }: { user: UserInfo<Profile, any> }) {
 	if (user.profile?.imageUrl) {
 		return (
 			<img

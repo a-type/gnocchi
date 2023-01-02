@@ -2,15 +2,24 @@ import { API_HOST_HTTP } from '@/config.js';
 import { ClientDescriptor } from './client/index.js';
 import migrations from './migrations/index.js';
 import { createHooks } from './client/react.js';
+import { Profile } from '../groceries/index.js';
 
-export interface Profile {}
-export interface Presence {}
+export type { Profile };
+
+export interface Presence {
+	viewingRecipeId: string | null;
+}
 
 export const recipesDescriptor = new ClientDescriptor<Presence, Profile>({
 	sync: {
 		authEndpoint: `${API_HOST_HTTP}/api/lofi/recipes`,
-		initialPresence: {},
-		defaultProfile: {},
+		initialPresence: {
+			viewingRecipeId: null,
+		},
+		defaultProfile: {
+			id: '',
+			name: '',
+		},
 	},
 	migrations,
 	namespace: 'recipes',

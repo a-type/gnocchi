@@ -1,7 +1,6 @@
 import { getLoginSession, Session } from '@aglio/auth';
 import { initTRPC } from '@trpc/server';
 import type { Request, Response } from 'express';
-import superjson from 'superjson';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { Server } from '@lo-fi/server';
 

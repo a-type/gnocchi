@@ -22,6 +22,7 @@ import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
+import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -96,6 +97,7 @@ export function GroceriesPage() {
 						<CompleteSignupDialog />
 						<SignupSuccessBanner />
 					</PageContent>
+					<RecipePresenceNotification />
 				</ThemedPageRoot>
 			</hooks.Provider>
 		</ListContext.Provider>

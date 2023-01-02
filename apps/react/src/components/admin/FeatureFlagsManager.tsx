@@ -33,7 +33,7 @@ function FeatureFlagPlanManagerWrapper({
 }) {
 	const updateFlags = trpc.admin.updateFeatureFlags.useMutation();
 	const reset = async () => {
-		updateFlags.mutate({ planId: plan.id, featureFlags: {} });
+		await updateFlags.mutate({ planId: plan.id, featureFlags: {} });
 		onChange?.();
 	};
 

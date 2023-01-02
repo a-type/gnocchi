@@ -1,3 +1,4 @@
+import { PageNowPlaying } from '@/components/layouts/index.jsx';
 import { Box } from '@/components/primitives/index.js';
 import {
 	Popover,
@@ -7,6 +8,7 @@ import {
 } from '@/components/primitives/index.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import { trpc } from '@/trpc.js';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { forwardRef, ReactNode, Suspense } from 'react';
 import { InviteLinkButton } from '../InviteLinkButton.jsx';

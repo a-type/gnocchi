@@ -7,11 +7,6 @@ import { Link, useMatch } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
 import { PageNav } from '../layouts/index.jsx';
-import {
-	CollapsibleContent,
-	CollapsibleRoot,
-} from '../primitives/Collapsible.jsx';
-import { Tooltip } from '../primitives/index.js';
 import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
@@ -49,7 +44,7 @@ export function NavBar({}: NavBarProps) {
 	}
 
 	return (
-		<PageNav className={clsx(classes.root)}>
+		<PageNav innerClassName={clsx(classes.root)}>
 			<img src="/android-chrome-192x192.png" className={classes.logo} />
 			<GroceriesNavBarLink active={matchGroceries} />
 			<PantryNavBarLink active={matchPurchased} />
