@@ -77,6 +77,8 @@ function RecipePresenceLink({
 }) {
 	const recipe = hooks.useRecipe(recipeId);
 
+	if (!recipe) return null;
+
 	return (
 		<div className={classes.root}>
 			<Button size="small" onClick={onDismiss} color="ghost">
