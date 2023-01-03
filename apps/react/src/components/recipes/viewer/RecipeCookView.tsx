@@ -6,6 +6,7 @@ import * as classes from './RecipeCookView.css.js';
 import { H1 } from '@/components/primitives/index.js';
 import { useEffect } from 'react';
 import { hooks } from '@/stores/recipes/index.js';
+import { CookingToolbar } from './CookingToolbar.jsx';
 
 export interface RecipeCookViewProps {
 	slug: string;
@@ -30,6 +31,7 @@ export function RecipeCookView({ slug, className }: RecipeCookViewProps) {
 		<div className={clsx(classes.container, className)}>
 			<H1 gutterBottom>{recipe.get('title')}</H1>
 			<RecipeInstructionsViewer recipe={recipe} />
+			<CookingToolbar recipe={recipe} />
 		</div>
 	);
 }

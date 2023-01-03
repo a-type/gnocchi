@@ -129,8 +129,10 @@ export const nowPlayingContainer = style({
 
 	'@media': {
 		[mediaQueries.sm]: {
-			position: 'sticky',
-			bottom: 0,
+			position: 'fixed',
+			bottom: vars.space[3],
+			left: '50%',
+			transform: 'translateX(-50%)',
 			top: 'auto',
 			alignItems: 'end',
 			width: 'auto',
@@ -150,11 +152,4 @@ export const nowPlaying = style({
 	minWidth: 32,
 	alignItems: 'center',
 	justifyContent: 'center',
-
-	'@media': {
-		[mediaQueries.sm]: {
-			border: 'none',
-			boxShadow: 'none',
-		},
-	},
 });

@@ -35,6 +35,10 @@ import { DomainChangeDialog } from './components/auth/DomainChangeDialog.jsx';
 import { RecipeSavePrompt } from './components/recipes/savePrompt/RecipeSavePrompt.jsx';
 import { RecipeCookPage } from './pages/recipe/RecipeCookPage.jsx';
 import { RecipeOverviewPage } from './pages/recipe/RecipeOverviewPage.jsx';
+import {
+	hooks as recipeHooks,
+	recipesDescriptor,
+} from '@/stores/recipes/index.js';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());

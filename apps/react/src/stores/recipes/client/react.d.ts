@@ -19,6 +19,16 @@ import type {
   EntityDestructured,
 } from "@lo-fi/web";
 
+type NullIfSkip<V, C> = C extends { skip: boolean } ? V | null : V;
+type SkippableFilterConfig<F> =
+  | {
+      index: F;
+    }
+  | {
+      index: F;
+      skip: boolean;
+    };
+
 export interface GeneratedHooks<Presence, Profile> {
   /**
    * Render this context Provider at the top level of your
@@ -36,9 +46,18 @@ export interface GeneratedHooks<Presence, Profile> {
   /** @deprecated use useClient instead */
   useStorage: () => Client<Presence, Profile>;
   useClient: () => Client<Presence, Profile>;
+  useUnsuspendedClient: () => Client<Presence, Profile> | null;
   useSelf: () => UserInfo<Profile, Presence>;
   usePeerIds: () => string[];
   usePeer: (peerId: string | null) => UserInfo<Profile, Presence> | null;
+  useFindPeer: (
+    query: (peer: UserInfo<Profile, Presence>) => boolean,
+    options?: { includeSelf: boolean }
+  ) => UserInfo<Profile, Presence> | null;
+  useFindPeers: (
+    query: (peer: UserInfo<Profile, Presence>) => boolean,
+    options?: { includeSelf: boolean }
+  ) => UserInfo<Profile, Presence>[];
   useSyncStatus: () => boolean;
   useWatch<T extends AnyEntity<any, any, any> | null>(
     entity: T
@@ -62,13 +81,23 @@ export interface GeneratedHooks<Presence, Profile> {
    */
   useSync(isOn: boolean): void;
 
-  useRecipe: (id: string) => Recipe;
-  useOneRecipe: (config: { index: RecipeFilter }) => Recipe;
-  useAllRecipes: (config?: { index: RecipeFilter }) => Recipe[];
+  useRecipe(id: string): Recipe;
+  useRecipe(id: string, config: { skip: boolean }): Recipe | null;
+  useOneRecipe: <Config extends SkippableFilterConfig<RecipeFilter>>(
+    config?: Config
+  ) => NullIfSkip<Recipe, Config>;
+  useAllRecipes: <Config extends SkippableFilterConfig<RecipeFilter>>(
+    config?: Config
+  ) => NullIfSkip<Recipe[], Config>;
 
-  useCollection: (id: string) => Collection;
-  useOneCollection: (config: { index: CollectionFilter }) => Collection;
-  useAllCollections: (config?: { index: CollectionFilter }) => Collection[];
+  useCollection(id: string): Collection;
+  useCollection(id: string, config: { skip: boolean }): Collection | null;
+  useOneCollection: <Config extends SkippableFilterConfig<CollectionFilter>>(
+    config?: Config
+  ) => NullIfSkip<Collection, Config>;
+  useAllCollections: <Config extends SkippableFilterConfig<CollectionFilter>>(
+    config?: Config
+  ) => NullIfSkip<Collection[], Config>;
 }
 
 export function createHooks<Presence = any, Profile = any>(): GeneratedHooks<

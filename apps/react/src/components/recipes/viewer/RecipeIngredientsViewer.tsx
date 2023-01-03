@@ -1,19 +1,21 @@
 import { hooks, Recipe } from '@/stores/recipes/index.js';
+import { forwardRef } from 'react';
 import { IngredientText } from './IngredientText.jsx';
 
 export interface RecipeIngredientsViewerProps {
 	recipe: Recipe;
 }
 
-export function RecipeIngredientsViewer({
-	recipe,
-}: RecipeIngredientsViewerProps) {
+export const RecipeIngredientsViewer = forwardRef<
+	HTMLUListElement,
+	RecipeIngredientsViewerProps
+>(function RecipeIngredientsViewer({ recipe, ...rest }, ref) {
 	const { multiplier } = hooks.useWatch(recipe);
 	const ingredients = recipe.get('ingredients');
 	hooks.useWatch(ingredients);
 
 	return (
-		<ul>
+		<ul ref={ref}>
 			{ingredients.map((ingredient) => (
 				<li key={ingredient.get('id')}>
 					<IngredientText ingredient={ingredient} multiplier={multiplier} />
@@ -21,4 +23,4 @@ export function RecipeIngredientsViewer({
 			))}
 		</ul>
 	);
-}
+});

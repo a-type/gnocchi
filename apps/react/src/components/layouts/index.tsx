@@ -114,12 +114,16 @@ export function PageNav({
 
 export function PageNowPlaying({
 	className,
+	unstyled,
 	...props
-}: HTMLAttributes<HTMLDivElement>) {
+}: HTMLAttributes<HTMLDivElement> & { unstyled?: boolean }) {
 	const { container } = useContext(NowPlayingContext);
 	if (container) {
 		return createPortal(
-			<div {...props} className={clsx(classes.nowPlaying, className)} />,
+			<div
+				{...props}
+				className={clsx(unstyled ? undefined : classes.nowPlaying, className)}
+			/>,
 			container,
 		);
 	}
