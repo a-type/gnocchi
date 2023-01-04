@@ -11,7 +11,7 @@ dockerfile = "Dockerfile"
 [env]
 DATABASE_URL = "file:/data/aglio.db"
 STORAGE_DATABASE_URL = "/data/aglio-storage.db"
-HOST = "https://api.aglio.gfor.rest"
+HOST = "https://api.gnocchi.club"
 
 [experimental]
 allowed_public_ports = []
@@ -21,9 +21,9 @@ auto_rollback = true
 internal_port = 3001
 protocol = "tcp"
 [services.concurrency]
-hard_limit = 25
-soft_limit = 20
 type = "connections"
+hard_limit = 10000
+soft_limit = 10000
 
 [[services.ports]]
 force_https = true
