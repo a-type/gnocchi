@@ -25,6 +25,7 @@ export async function createCheckoutHandler(req: Request, res: Response) {
 
 	const checkout = await stripe.checkout.sessions.create({
 		billing_address_collection: 'auto',
+		allow_promotion_codes: true,
 		line_items: [
 			{
 				price: price.id,
