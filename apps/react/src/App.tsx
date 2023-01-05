@@ -39,6 +39,7 @@ import {
 	hooks as recipeHooks,
 	recipesDescriptor,
 } from '@/stores/recipes/index.js';
+import { SubscriberFeaturesPage } from './pages/SubscriberFeaturesPage.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -103,6 +104,10 @@ export function App() {
 												</Route>
 												<Route path="/recipes" element={<RecipesPage />} />
 											</Route>
+											<Route
+												path="/subscriber-features"
+												element={<SubscriberFeaturesPage />}
+											/>
 											<Route path="*" element={<NotFoundPage />} />
 										</Routes>
 										<Toaster position="bottom-center" />

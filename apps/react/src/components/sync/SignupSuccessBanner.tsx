@@ -1,6 +1,7 @@
+import { sprinkles } from '@/styles/sprinkles.css.js';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
 	Dialog,
 	DialogClose,
@@ -9,7 +10,9 @@ import {
 	H1,
 	H2,
 	P,
+	DialogActions,
 } from '../primitives/index.js';
+import { InviteLinkButton } from './InviteLinkButton.jsx';
 
 export interface SignupSuccessBannerProps {}
 
@@ -20,20 +23,34 @@ export function SignupSuccessBanner({}: SignupSuccessBannerProps) {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent>
-				<H1>Sync activated!</H1>
+			<DialogContent className={sprinkles({ align: 'start' })}>
+				<H1>You're subscribed!</H1>
 				<P>
-					Now your list will travel with you. Sign in from any device to add and
-					update groceries.
+					<Link
+						target="_blank"
+						rel="noopener noreferrer"
+						className={sprinkles({ fontWeight: 'bold' })}
+						to="/subscriber-features"
+					>
+						Click here
+					</Link>{' '}
+					to learn more about what you get with your subscription - including
+					sync, recipe scanning, and more.
 				</P>
-				<H2>Invite your family or friends</H2>
+				<InviteLinkButton color="primary" className={sprinkles({ my: 3 })} />
 				<P>
-					Use the <HamburgerMenuIcon /> menu to manage your plan and invite
-					fellow grocery shoppers or household members.
+					As a paid subscriber you can invite any number of people to shop and
+					cook with you, for free.
 				</P>
-				<DialogClose asChild>
-					<Button color="primary">Got it</Button>
-				</DialogClose>
+				<P size="sm">
+					(You can find this option in the <HamburgerMenuIcon /> menu at any
+					time. You can also manage or cancel your subscription there.)
+				</P>
+				<DialogActions>
+					<DialogClose asChild>
+						<Button color="primary">Got it</Button>
+					</DialogClose>
+				</DialogActions>
 			</DialogContent>
 		</Dialog>
 	);

@@ -37,7 +37,7 @@ async function generateLink() {
 export function InviteLinkButton(props: InviteLinkButtonProps) {
 	return (
 		<Button {...props} onClick={generateLink}>
-			Invite people
+			Invite people to your list
 		</Button>
 	);
 }

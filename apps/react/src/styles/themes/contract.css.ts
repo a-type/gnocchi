@@ -89,6 +89,7 @@ export const vars = createThemeContract({
 	},
 	borderWidths: {
 		default: '',
+		0: '',
 	},
 	borderStyles: {
 		solid: '',

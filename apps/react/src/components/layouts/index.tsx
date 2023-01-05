@@ -91,6 +91,8 @@ export function PageSection({
 	return <div {...props} className={clsx(classes.section, className)} />;
 }
 
+export const PageSectionGrid = withClassName('div', classes.sectionGrid);
+
 export const NowPlayingContext = createContext<{
 	container: HTMLDivElement | undefined;
 	setContainer: (container: HTMLDivElement) => void;

@@ -85,13 +85,20 @@ export const section = style({
 	borderWidth: vars.borderWidths.default,
 	borderColor: vars.colors.black,
 	padding: vars.space[4],
-	minWidth: 400,
+	width: '100%',
 	maxWidth: '80vw',
 	'@media': {
 		'(max-width: 640px)': {
 			minWidth: 'auto',
 		},
 	},
+});
+
+export const sectionGrid = style({
+	display: 'grid',
+	gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+	gap: vars.space[4],
+	alignItems: 'start',
 });
 
 export const nav = style({

@@ -57,6 +57,7 @@ export const commonTheme = {
 	},
 	borderWidths: {
 		default: '1px',
+		0: '0',
 	},
 	borderStyles: {
 		solid: 'solid',

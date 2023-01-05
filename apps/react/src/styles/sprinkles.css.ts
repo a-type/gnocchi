@@ -185,10 +185,10 @@ const colorProperties = defineProperties({
 const unresponsiveProperties = defineProperties({
 	properties: {
 		flexWrap: ['wrap', 'nowrap', 'wrap-reverse'],
-		top: [0],
-		right: [0],
-		bottom: [0],
-		left: [0],
+		top: [0, 'auto'],
+		right: [0, 'auto'],
+		bottom: [0, 'auto'],
+		left: [0, 'auto'],
 		flexShrink: [0],
 		flexGrow: [0, 1],
 		zIndex: vars.zIndices,
