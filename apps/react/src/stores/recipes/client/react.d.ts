@@ -83,19 +83,27 @@ export interface GeneratedHooks<Presence, Profile> {
 
   useRecipe(id: string): Recipe;
   useRecipe(id: string, config: { skip: boolean }): Recipe | null;
-  useOneRecipe: <Config extends SkippableFilterConfig<RecipeFilter>>(
+  useOneRecipe: <
+    Config extends SkippableFilterConfig<RecipeFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Recipe, Config>;
-  useAllRecipes: <Config extends SkippableFilterConfig<RecipeFilter>>(
+  useAllRecipes: <
+    Config extends SkippableFilterConfig<RecipeFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Recipe[], Config>;
 
   useCollection(id: string): Collection;
   useCollection(id: string, config: { skip: boolean }): Collection | null;
-  useOneCollection: <Config extends SkippableFilterConfig<CollectionFilter>>(
+  useOneCollection: <
+    Config extends SkippableFilterConfig<CollectionFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Collection, Config>;
-  useAllCollections: <Config extends SkippableFilterConfig<CollectionFilter>>(
+  useAllCollections: <
+    Config extends SkippableFilterConfig<CollectionFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Collection[], Config>;
 }

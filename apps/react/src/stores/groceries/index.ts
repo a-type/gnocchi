@@ -13,7 +13,6 @@ import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { TRPCClientError } from '@trpc/client';
 import { toast } from 'react-hot-toast';
-import { groceriesState } from '@/components/groceries/state.js';
 
 export type { Item, Category, FoodCategoryAssignment } from './client/index.js';
 
@@ -126,7 +125,6 @@ export const groceries = {
 		if (expirationDays) {
 			item.set('expiredAt', Date.now() + expirationDays * 24 * 60 * 60 * 1000);
 		}
-		groceriesState.recentlyPurchasedItems.add(item.get('id'));
 	},
 	purchaseItems: async (items: Item[]) => {
 		for (const item of items) {

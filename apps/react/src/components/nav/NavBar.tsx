@@ -89,13 +89,14 @@ function NavBarLink({
 }
 
 function PantryNavBarLink({ active }: { active: boolean }) {
-	const recent = useSnapshot(groceriesState.recentlyPurchasedItems).size;
+	const { purchasedHidingItems } = useSnapshot(groceriesState);
+	const recent = !!purchasedHidingItems.size;
 
 	return (
 		<NavBarLink
 			to="/purchased"
 			icon={<FridgeIcon />}
-			animate={recent > 0}
+			animate={recent}
 			active={active}
 		>
 			Purchased

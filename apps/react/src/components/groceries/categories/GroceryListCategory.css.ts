@@ -149,3 +149,7 @@ export const claimAvatarSpacer = style({
 	width: 20,
 	height: 20,
 });
+
+export const itemContainer = style({
+	overflow: 'hidden',
+});

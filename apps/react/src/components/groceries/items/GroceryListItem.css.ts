@@ -68,14 +68,12 @@ export const root = style({
 			animationDuration: '0.4s',
 			animationTimingFunction: vars.transitions.springy,
 		},
-		'&[data-hidden-state="hiding"]': {
+		'&[data-hidden-state="hiding"]': {},
+		'&[data-hidden-state="hidden"]': {
 			animationName: disappear,
 			animationDuration: '3s',
 			animationTimingFunction: 'ease-out',
 			animationFillMode: 'forwards',
-		},
-		'&[data-hidden-state="hidden"]': {
-			display: 'none',
 		},
 	},
 });

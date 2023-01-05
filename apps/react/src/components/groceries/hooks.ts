@@ -1,5 +1,7 @@
 import { Category, hooks, Item } from '@/stores/groceries/index.js';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useSnapshot } from 'valtio';
+import { groceriesState } from './state.js';
 
 export function useItemsGroupedAndSorted(
 	listId: string | null | undefined = undefined,
@@ -46,4 +48,32 @@ export function useItemsGroupedAndSorted(
 		}
 		return categoryGroups;
 	}, [items, categories]);
+}
+
+export function useTransitionPurchasedItems() {
+	const { purchasedStillVisibleItems, purchasedHidingItems } =
+		useSnapshot(groceriesState);
+	useEffect(() => {
+		if (purchasedStillVisibleItems.size) {
+			const timeout1 = setTimeout(() => {
+				console.log('moving items to hiding');
+				for (const id of purchasedStillVisibleItems) {
+					groceriesState.purchasedHidingItems.add(id);
+				}
+				groceriesState.purchasedStillVisibleItems.clear();
+			}, 5000);
+			return () => {
+				clearTimeout(timeout1);
+			};
+		}
+	}, [purchasedStillVisibleItems.size]);
+	useEffect(() => {
+		if (purchasedHidingItems.size) {
+			const timeout = setTimeout(() => {
+				console.log('clearing hiding');
+				groceriesState.purchasedHidingItems.clear();
+			}, 1000);
+			return () => clearTimeout(timeout);
+		}
+	}, [purchasedHidingItems.size]);
 }

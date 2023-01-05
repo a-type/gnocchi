@@ -13,7 +13,7 @@ import {
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
-import { useIsFirstRender } from '@/hooks/usePrevious.js';
+import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
 import { useSize, useSizeCssVars } from '@/hooks/useSize.js';
 import {
 	groceries,
@@ -78,34 +78,31 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	) {
 		const { purchasedAt, id } = hooks.useWatch(item);
 
-		const [purchasedHiddenState, setHiddenState] = useState<
-			'hidden' | 'hiding' | 'visible'
-		>(() => {
-			return purchasedAt ? 'hidden' : 'visible';
-		});
+		const isPurchased = !!purchasedAt;
+		const { purchasedHidingItems } = useSnapshot(groceriesState);
+		const isHiding = purchasedHidingItems.has(id);
+
+		// TODO: clean this up
+		const purchasedHiddenState = isHiding ? 'hidden' : 'visible';
+
+		const previousPurchasedAt = usePrevious(isPurchased);
+		const wasPurchasedSinceMount = isPurchased && !previousPurchasedAt;
 		useEffect(() => {
-			if (purchasedAt) {
-				setHiddenState('hiding');
-				const timeout = setTimeout(() => {
-					setHiddenState('hidden');
-					groceriesState.recentlyPurchasedItems.delete(id);
-				}, 2000);
-				return () => {
-					clearTimeout(timeout);
-					setHiddenState('visible');
-					groceriesState.recentlyPurchasedItems.delete(id);
-				};
-			} else {
-				setHiddenState('visible');
+			if (wasPurchasedSinceMount) {
+				groceriesState.purchasedStillVisibleItems.add(id);
 			}
-		}, [purchasedAt, id]);
+		}, [wasPurchasedSinceMount, id]);
+		useEffect(() => {
+			if (!isPurchased) {
+				groceriesState.purchasedStillVisibleItems.delete(id);
+			}
+		}, [isPurchased]);
 
 		const [menuToggleOpen, setMenuOpen] = useState(false);
 		const menuOpen = menuToggleOpen && purchasedHiddenState === 'visible';
 
 		const sectionStateSnap = useSnapshot(groceriesState);
 
-		const isPurchased = !!purchasedAt;
 		const isPartiallyPurchased = false;
 		const displayString = useItemDisplayText(item);
 

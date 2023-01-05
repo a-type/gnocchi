@@ -8,6 +8,7 @@ export const groceriesState = proxy({
 	draggedItemOriginalCategory: null as any | null,
 	isAnyItemDragged: false,
 	justMovedItemId: null as string | null,
-	recentlyPurchasedItems: proxySet<string>(),
+	purchasedStillVisibleItems: proxySet<string>(),
+	purchasedHidingItems: proxySet<string>(),
 	justAddedRecipe: false,
 });

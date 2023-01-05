@@ -91,19 +91,27 @@ export interface GeneratedHooks<Presence, Profile> {
 
   useCategory(id: string): Category;
   useCategory(id: string, config: { skip: boolean }): Category | null;
-  useOneCategory: <Config extends SkippableFilterConfig<CategoryFilter>>(
+  useOneCategory: <
+    Config extends SkippableFilterConfig<CategoryFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Category, Config>;
-  useAllCategories: <Config extends SkippableFilterConfig<CategoryFilter>>(
+  useAllCategories: <
+    Config extends SkippableFilterConfig<CategoryFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Category[], Config>;
 
   useItem(id: string): Item;
   useItem(id: string, config: { skip: boolean }): Item | null;
-  useOneItem: <Config extends SkippableFilterConfig<ItemFilter>>(
+  useOneItem: <
+    Config extends SkippableFilterConfig<ItemFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Item, Config>;
-  useAllItems: <Config extends SkippableFilterConfig<ItemFilter>>(
+  useAllItems: <
+    Config extends SkippableFilterConfig<ItemFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Item[], Config>;
 
@@ -113,31 +121,43 @@ export interface GeneratedHooks<Presence, Profile> {
     config: { skip: boolean }
   ): FoodCategoryAssignment | null;
   useOneFoodCategoryAssignment: <
-    Config extends SkippableFilterConfig<FoodCategoryAssignmentFilter>
+    Config extends SkippableFilterConfig<FoodCategoryAssignmentFilter> = {
+      index: any;
+    }
   >(
     config?: Config
   ) => NullIfSkip<FoodCategoryAssignment, Config>;
   useAllFoodCategoryAssignments: <
-    Config extends SkippableFilterConfig<FoodCategoryAssignmentFilter>
+    Config extends SkippableFilterConfig<FoodCategoryAssignmentFilter> = {
+      index: any;
+    }
   >(
     config?: Config
   ) => NullIfSkip<FoodCategoryAssignment[], Config>;
 
   useSuggestion(id: string): Suggestion;
   useSuggestion(id: string, config: { skip: boolean }): Suggestion | null;
-  useOneSuggestion: <Config extends SkippableFilterConfig<SuggestionFilter>>(
+  useOneSuggestion: <
+    Config extends SkippableFilterConfig<SuggestionFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Suggestion, Config>;
-  useAllSuggestions: <Config extends SkippableFilterConfig<SuggestionFilter>>(
+  useAllSuggestions: <
+    Config extends SkippableFilterConfig<SuggestionFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<Suggestion[], Config>;
 
   useList(id: string): List;
   useList(id: string, config: { skip: boolean }): List | null;
-  useOneList: <Config extends SkippableFilterConfig<ListFilter>>(
+  useOneList: <
+    Config extends SkippableFilterConfig<ListFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<List, Config>;
-  useAllLists: <Config extends SkippableFilterConfig<ListFilter>>(
+  useAllLists: <
+    Config extends SkippableFilterConfig<ListFilter> = { index: any }
+  >(
     config?: Config
   ) => NullIfSkip<List[], Config>;
 
@@ -147,12 +167,16 @@ export interface GeneratedHooks<Presence, Profile> {
     config: { skip: boolean }
   ): CollaborationInfo | null;
   useOneCollaborationInfo: <
-    Config extends SkippableFilterConfig<CollaborationInfoFilter>
+    Config extends SkippableFilterConfig<CollaborationInfoFilter> = {
+      index: any;
+    }
   >(
     config?: Config
   ) => NullIfSkip<CollaborationInfo, Config>;
   useAllCollaborationInfo: <
-    Config extends SkippableFilterConfig<CollaborationInfoFilter>
+    Config extends SkippableFilterConfig<CollaborationInfoFilter> = {
+      index: any;
+    }
   >(
     config?: Config
   ) => NullIfSkip<CollaborationInfo[], Config>;

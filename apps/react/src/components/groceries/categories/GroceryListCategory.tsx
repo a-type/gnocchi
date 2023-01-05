@@ -28,21 +28,8 @@ export function GroceryListCategory({
 	category: Category | null;
 	items: Item[];
 }) {
-	const recentlyPurchased = useSnapshot(groceriesState.recentlyPurchasedItems);
-	const visibleItems = items.filter((item) => {
-		return !item.get('purchasedAt') || recentlyPurchased.has(item.get('id'));
-	});
-	const empty = visibleItems.length === 0;
-
-	// set a flag if the component mounted empty. we don't animate
-	// the collapse if this is the case to avoid rendering empty
-	// categories on first mount
-	const [mountedEmpty, setMountedEmpty] = useState(empty);
-	useEffect(() => {
-		if (!empty) {
-			setMountedEmpty(false);
-		}
-	}, [empty]);
+	const { empty, mountedEmpty, visibleItems } =
+		useCategoryItemVisibilityState(items);
 
 	const isDragging = useIsDragging();
 	const internalRef = useRef<HTMLDivElement>(null);
@@ -258,4 +245,35 @@ function ClaimIcon({ active }: { active?: boolean }) {
 			/>
 		</svg>
 	);
+}
+
+function useCategoryItemVisibilityState(items: Item[]) {
+	const { purchasedStillVisibleItems, purchasedHidingItems } =
+		useSnapshot(groceriesState);
+	const visibleItems = items.filter((item) => {
+		if (!item.get('purchasedAt')) {
+			return true;
+		} else {
+			return (
+				purchasedStillVisibleItems.has(item.get('id')) ||
+				purchasedHidingItems.has(item.get('id'))
+			);
+		}
+	});
+	const empty = visibleItems.length === 0;
+	// set a flag if the component mounted empty. we don't animate
+	// the collapse if this is the case to avoid rendering empty
+	// categories on first mount
+	const [mountedEmpty, setMountedEmpty] = useState(empty);
+	useEffect(() => {
+		if (!empty) {
+			setMountedEmpty(false);
+		}
+	}, [empty]);
+
+	return {
+		empty,
+		mountedEmpty,
+		visibleItems,
+	};
 }
