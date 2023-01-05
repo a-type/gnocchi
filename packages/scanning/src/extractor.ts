@@ -13,6 +13,7 @@ const extractorOrdering: [RegExp, Extractor][] = [
 	[/.*/, extractors.microdata],
 	[/.*/, extractors.schemaOrg],
 	[/.*/, extractors.wprm],
+	[/.*/, extractors.tasty],
 	[/.*/, extractors.naive],
 ];
 

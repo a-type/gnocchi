@@ -14,6 +14,13 @@ export function extractNumber(
 	return undefined;
 }
 
+export function extractText($element: Cheerio<AnyNode> | null) {
+	if (!$element) {
+		return null;
+	}
+	return collapseWhitespace($element.text().trim());
+}
+
 export function toArray(data: string | string[]): string[] {
 	if (!data) {
 		return [];
