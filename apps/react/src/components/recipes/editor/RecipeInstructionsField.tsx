@@ -56,7 +56,7 @@ function Toolbar({ editor }: { editor: Editor }) {
 			>
 				<FontItalicIcon />
 			</Button>
-			<Button
+			{/* <Button
 				color="ghost"
 				onClick={() => {
 					editor.chain().focus().toggleHeading({ level: 1 }).run();
@@ -95,7 +95,7 @@ function Toolbar({ editor }: { editor: Editor }) {
 				className={classes.controlButton}
 			>
 				<ListBulletIcon />
-			</Button>
+			</Button> */}
 		</Box>
 	);
 }

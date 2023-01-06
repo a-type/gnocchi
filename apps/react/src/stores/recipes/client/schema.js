@@ -90,11 +90,45 @@ const recipes = collection({
         url: {
             type: 'string',
             nullable: true
+        },
+        session: {
+            type: 'object',
+            nullable: true,
+            properties: {
+                startedAt: {
+                    type: 'number',
+                    default: ()=>Date.now()
+                },
+                completedInstructions: {
+                    type: 'array',
+                    items: {
+                        type: 'string'
+                    }
+                },
+                completedIngredients: {
+                    type: 'array',
+                    items: {
+                        type: 'string'
+                    }
+                },
+                instructionAssignments: {
+                    type: 'map',
+                    values: {
+                        type: 'string'
+                    }
+                },
+                ingredientAssignments: {
+                    type: 'map',
+                    values: {
+                        type: 'string'
+                    }
+                }
+            }
         }
     }
 });
 export default schema({
-    version: 6,
+    version: 7,
     collections: {
         recipes,
         collections

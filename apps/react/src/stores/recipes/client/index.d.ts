@@ -91,6 +91,7 @@ export type RecipeDestructured = {
   ingredients: RecipeIngredients;
   instructions: any;
   url: string | null;
+  session: RecipeSession | null;
 };
 export type RecipeInit = {
   id?: string;
@@ -103,6 +104,7 @@ export type RecipeInit = {
   ingredients?: RecipeIngredientsInit;
   instructions?: any;
   url?: string | null;
+  session?: RecipeSessionInit | null;
 };
 export type RecipeSnapshot = {
   id: string;
@@ -115,6 +117,7 @@ export type RecipeSnapshot = {
   ingredients: RecipeIngredientsSnapshot;
   instructions: any;
   url: string | null;
+  session: RecipeSessionSnapshot | null;
 };
 /** Recipe sub-object types */
 
@@ -227,6 +230,116 @@ type RecipeUrl = string | null;
 type RecipeUrlInit = RecipeUrl | undefined;
 type RecipeUrlSnapshot = RecipeUrl;
 type RecipeUrlDestructured = RecipeUrl;
+export type RecipeSession = ObjectEntity<
+  RecipeSessionInit,
+  RecipeSessionDestructured
+>;
+export type RecipeSessionInit = {
+  startedAt?: number;
+  completedInstructions?: RecipeSessionCompletedInstructionsInit;
+  completedIngredients?: RecipeSessionCompletedIngredientsInit;
+  instructionAssignments?: RecipeSessionInstructionAssignmentsInit;
+  ingredientAssignments?: RecipeSessionIngredientAssignmentsInit;
+};
+export type RecipeSessionDestructured = {
+  startedAt: number;
+  completedInstructions: RecipeSessionCompletedInstructions;
+  completedIngredients: RecipeSessionCompletedIngredients;
+  instructionAssignments: RecipeSessionInstructionAssignments;
+  ingredientAssignments: RecipeSessionIngredientAssignments;
+};
+export type RecipeSessionSnapshot = {
+  startedAt: number;
+  completedInstructions: RecipeSessionCompletedInstructionsSnapshot;
+  completedIngredients: RecipeSessionCompletedIngredientsSnapshot;
+  instructionAssignments: RecipeSessionInstructionAssignmentsSnapshot;
+  ingredientAssignments: RecipeSessionIngredientAssignmentsSnapshot;
+};
+type RecipeSessionStartedAt = number;
+type RecipeSessionStartedAtInit = RecipeSessionStartedAt | undefined;
+type RecipeSessionStartedAtSnapshot = RecipeSessionStartedAt;
+type RecipeSessionStartedAtDestructured = RecipeSessionStartedAt;
+export type RecipeSessionCompletedInstructions = ListEntity<
+  RecipeSessionCompletedInstructionsInit,
+  RecipeSessionCompletedInstructionsDestructured
+>;
+export type RecipeSessionCompletedInstructionsInit =
+  Array<RecipeSessionCompletedInstructionsItemInit>;
+export type RecipeSessionCompletedInstructionsDestructured =
+  Array<RecipeSessionCompletedInstructionsItem>;
+export type RecipeSessionCompletedInstructionsSnapshot =
+  Array<RecipeSessionCompletedInstructionsItemSnapshot>;
+type RecipeSessionCompletedInstructionsItem = string;
+type RecipeSessionCompletedInstructionsItemInit =
+  RecipeSessionCompletedInstructionsItem;
+type RecipeSessionCompletedInstructionsItemSnapshot =
+  RecipeSessionCompletedInstructionsItem;
+type RecipeSessionCompletedInstructionsItemDestructured =
+  RecipeSessionCompletedInstructionsItem;
+export type RecipeSessionCompletedIngredients = ListEntity<
+  RecipeSessionCompletedIngredientsInit,
+  RecipeSessionCompletedIngredientsDestructured
+>;
+export type RecipeSessionCompletedIngredientsInit =
+  Array<RecipeSessionCompletedIngredientsItemInit>;
+export type RecipeSessionCompletedIngredientsDestructured =
+  Array<RecipeSessionCompletedIngredientsItem>;
+export type RecipeSessionCompletedIngredientsSnapshot =
+  Array<RecipeSessionCompletedIngredientsItemSnapshot>;
+type RecipeSessionCompletedIngredientsItem = string;
+type RecipeSessionCompletedIngredientsItemInit =
+  RecipeSessionCompletedIngredientsItem;
+type RecipeSessionCompletedIngredientsItemSnapshot =
+  RecipeSessionCompletedIngredientsItem;
+type RecipeSessionCompletedIngredientsItemDestructured =
+  RecipeSessionCompletedIngredientsItem;
+export type RecipeSessionInstructionAssignments = ObjectEntity<
+  RecipeSessionInstructionAssignmentsInit,
+  RecipeSessionInstructionAssignmentsDestructured
+>;
+export type RecipeSessionInstructionAssignmentsInit = Record<
+  string,
+  RecipeSessionInstructionAssignmentsValueInit
+>;
+export type RecipeSessionInstructionAssignmentsDestructured = Record<
+  string,
+  RecipeSessionInstructionAssignmentsValue
+>;
+export type RecipeSessionInstructionAssignmentsSnapshot = Record<
+  string,
+  RecipeSessionInstructionAssignmentsValueSnapshot
+>;
+type RecipeSessionInstructionAssignmentsValue = string;
+type RecipeSessionInstructionAssignmentsValueInit =
+  RecipeSessionInstructionAssignmentsValue;
+type RecipeSessionInstructionAssignmentsValueSnapshot =
+  RecipeSessionInstructionAssignmentsValue;
+type RecipeSessionInstructionAssignmentsValueDestructured =
+  RecipeSessionInstructionAssignmentsValue;
+
+export type RecipeSessionIngredientAssignments = ObjectEntity<
+  RecipeSessionIngredientAssignmentsInit,
+  RecipeSessionIngredientAssignmentsDestructured
+>;
+export type RecipeSessionIngredientAssignmentsInit = Record<
+  string,
+  RecipeSessionIngredientAssignmentsValueInit
+>;
+export type RecipeSessionIngredientAssignmentsDestructured = Record<
+  string,
+  RecipeSessionIngredientAssignmentsValue
+>;
+export type RecipeSessionIngredientAssignmentsSnapshot = Record<
+  string,
+  RecipeSessionIngredientAssignmentsValueSnapshot
+>;
+type RecipeSessionIngredientAssignmentsValue = string;
+type RecipeSessionIngredientAssignmentsValueInit =
+  RecipeSessionIngredientAssignmentsValue;
+type RecipeSessionIngredientAssignmentsValueSnapshot =
+  RecipeSessionIngredientAssignmentsValue;
+type RecipeSessionIngredientAssignmentsValueDestructured =
+  RecipeSessionIngredientAssignmentsValue;
 
 export type Collection = ObjectEntity<CollectionInit, CollectionDestructured>;
 

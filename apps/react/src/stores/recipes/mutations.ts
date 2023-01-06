@@ -6,7 +6,7 @@ import { toast } from 'react-hot-toast';
 import { Recipe, RecipeIngredientsItemInit } from './client/index.js';
 import { RecipeIngredients, recipesDescriptor } from './index.js';
 import { generateJSON } from '@tiptap/html';
-import { tiptapExtensions } from '@/components/recipes/editor/tiptapExtensions.js';
+import { createTiptapExtensions } from '@/components/recipes/editor/tiptapExtensions.js';
 
 export async function addIngredients(
 	ingredients: RecipeIngredients,
@@ -74,7 +74,7 @@ async function getScannedRecipe(url: string) {
 						(scanned.steps || [])
 							.map((line: string) => `<p>${line}</p>`)
 							.join(''),
-						tiptapExtensions,
+						createTiptapExtensions(),
 				  )
 				: undefined,
 		};

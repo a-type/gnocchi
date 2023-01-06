@@ -2,8 +2,9 @@ import { ObjectEntity, Recipe } from '@/stores/recipes/client/index.js';
 import { hooks } from '@/stores/recipes/index.js';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useRef } from 'react';
-import { tiptapExtensions } from './editor/tiptapExtensions.js';
+import { useEffect, useRef, useState } from 'react';
+import Paragraph from '@tiptap/extension-paragraph';
+import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -17,15 +18,37 @@ export function useRecipeFromSlugUrl(url: string) {
 	return recipe;
 }
 
+const TWO_DAYS = 1000 * 60 * 60 * 24 * 2;
+const THIRTY_MINUTES = 1000 * 60 * 30;
+// for local development (defined by env var), use five minutes
+
+const SESSION_TIMEOUT = import.meta.env.DEV ? THIRTY_MINUTES : TWO_DAYS;
+export function useCurrentRecipeSession(recipe: Recipe) {
+	const live = hooks.useWatch(recipe);
+	let session = live.session;
+	if (!session || session.get('startedAt') < Date.now() - SESSION_TIMEOUT) {
+		recipe.set('session', {
+			completedIngredients: [],
+			completedInstructions: [],
+			ingredientAssignments: {},
+			instructionAssignments: {},
+			startedAt: Date.now(),
+		});
+		session = recipe.get('session')!;
+	}
+	return session;
+}
+
 export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 	const live = hooks.useWatch(recipe);
-	const instructions = live?.instructions as ObjectEntity<any, any>;
+	const instructions = live.instructions as ObjectEntity<any, any>;
+	const session = useCurrentRecipeSession(recipe);
 
 	const updatingRef = useRef(false);
 
 	const editor = useEditor(
 		{
-			extensions: tiptapExtensions,
+			extensions: createTiptapExtensions(session),
 			content: instructions?.getSnapshot() || {
 				type: 'doc',
 				content: [],
