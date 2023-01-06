@@ -20,7 +20,7 @@ export const recipesDescriptor = new ClientDescriptor<Presence, Profile>({
 			id: '',
 			name: '',
 		},
-		automaticTransportSelection: false,
+		automaticTransportSelection: true,
 		initialTransport: 'pull',
 		pullInterval: 15000,
 	},
