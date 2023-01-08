@@ -4,6 +4,7 @@ import { useEditor } from '@tiptap/react';
 import { useEffect, useRef, useState } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import { useDebouncedCallback } from '@/hooks/useDebouncedCallback.js';
+import { assert } from '@aglio/tools';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -48,11 +49,17 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 	const update = useDebouncedCallback((editor) => {
 		if (updatingRef.current) return;
 
+		console.log('Updating recipe instructions to sync');
 		const newData = editor.getJSON();
 		const instructions = recipe.get('instructions');
 		if (!instructions) {
 			recipe.set('instructions', newData);
 		} else {
+			let i = 0;
+			for (const item of newData.content || []) {
+				console.log(i++, item.attrs.id);
+				assert(item.attrs.id, 'item has no id');
+			}
 			instructions.update(newData, {
 				merge: false,
 				replaceSubObjects: false,
@@ -68,10 +75,13 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 				content: [],
 			},
 			editable: !readonly,
-			onTransaction({ editor, transaction }) {
-				if (transaction.docChanged) {
-					update(editor);
-				}
+			// onTransaction({ editor, transaction }) {
+			// 	if (transaction.docChanged) {
+			// 		update(editor);
+			// 	}
+			// },
+			onUpdate({ editor }) {
+				update(editor);
 			},
 		},
 		[instructions],
