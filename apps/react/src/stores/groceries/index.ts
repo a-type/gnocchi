@@ -41,7 +41,12 @@ export const groceriesDescriptor = new ClientDescriptor<Presence, Profile>({
 	},
 	migrations,
 	namespace: 'groceries',
+	log: import.meta.env.DEV
+		? (...args) => console.debug('🎧', ...args)
+		: undefined,
+	disableRebasing: false,
 });
+(window as any).groceriesDescriptor = groceriesDescriptor;
 const _groceries = groceriesDescriptor.open();
 
 (window as any).stats = async () => {

@@ -1,7 +1,7 @@
 import { mergeAttributes, Node } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Document from '@tiptap/extension-document';
-import { RecipeSession } from '@aglio/groceries-client';
+import { Recipe } from '@aglio/groceries-client';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import { InstructionStepNodeView } from './InstructionStepNodeView.jsx';
 import { Plugin, PluginKey } from 'prosemirror-state';
@@ -26,12 +26,14 @@ interface SectionTitleOptions {
 	HTMLAttributes: Record<string, any>;
 }
 
-export function createTiptapExtensions(session?: RecipeSession) {
-	const Step = Node.create<StepOptions, { session?: RecipeSession }>({
+export function createTiptapExtensions(recipe?: Recipe) {
+	const Step = Node.create<StepOptions, { recipe?: Recipe }>({
 		name: 'step',
 
+		group: 'block',
 		content: 'inline*',
 		defining: true,
+		priority: 1001,
 
 		addOptions() {
 			return {
@@ -41,7 +43,7 @@ export function createTiptapExtensions(session?: RecipeSession) {
 
 		addStorage() {
 			return {
-				session,
+				recipe,
 			};
 		},
 
@@ -120,7 +122,7 @@ export function createTiptapExtensions(session?: RecipeSession) {
 	const RecipeDocument = Document.extend({
 		// the recipe document may only contain steps and section titles at the top level
 		// and must contain at least one step
-		content: '(step|sectionTitle?)+',
+		content: 'step+',
 
 		addProseMirrorPlugins() {
 			return [

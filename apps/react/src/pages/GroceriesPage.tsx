@@ -5,7 +5,6 @@ import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpired
 import { ReactNode, Suspense, useCallback, useEffect } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
-import { groceriesDescriptor, hooks } from '@/stores/groceries/index.js';
 import {
 	PageContent,
 	PageFixedArea,
@@ -51,55 +50,53 @@ export function GroceriesPage() {
 
 	return (
 		<ListContext.Provider value={listId}>
-			<hooks.Provider value={groceriesDescriptor}>
-				<ThemedPageRoot listId={listId}>
-					<PageContent fullHeight noPadding nav>
-						<Box
-							width="full"
-							flexDirection="row"
-							justify="space-between"
-							align="center"
-							gap={2}
-							p={4}
-						>
-							{/* Suspended state approximates final height */}
-							<Suspense fallback={<div style={{ height: 33 }} />}>
-								<Box flexDirection="row" align="center" gap={2}>
-									<MainMenu />
-									<Suspense fallback={null}>
-										<ListSelect
-											includeAll
-											value={listId}
-											onChange={onListChange}
-										/>
-										{listId && <ListEdit listId={listId} />}
-									</Suspense>
-								</Box>
-								<CollaborationMenu />
-							</Suspense>
-						</Box>
-						<PageFixedArea
-							className={sprinkles({
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 2,
-							})}
-						>
-							<Suspense fallback={null}>
-								<GroceryListAdd />
-							</Suspense>
-							<GroceriesActionBar />
-						</PageFixedArea>
-						<Suspense fallback={null}>
-							<GroceryList />
+			<ThemedPageRoot listId={listId}>
+				<PageContent fullHeight noPadding nav>
+					<Box
+						width="full"
+						flexDirection="row"
+						justify="space-between"
+						align="center"
+						gap={2}
+						p={4}
+					>
+						{/* Suspended state approximates final height */}
+						<Suspense fallback={<div style={{ height: 33 }} />}>
+							<Box flexDirection="row" align="center" gap={2}>
+								<MainMenu />
+								<Suspense fallback={null}>
+									<ListSelect
+										includeAll
+										value={listId}
+										onChange={onListChange}
+									/>
+									{listId && <ListEdit listId={listId} />}
+								</Suspense>
+							</Box>
+							<CollaborationMenu />
 						</Suspense>
-						<SubscriptionExpiredDialog />
-						<CompleteSignupDialog />
-						<SignupSuccessBanner />
-					</PageContent>
-					<RecipePresenceNotification />
-				</ThemedPageRoot>
-			</hooks.Provider>
+					</Box>
+					<PageFixedArea
+						className={sprinkles({
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 2,
+						})}
+					>
+						<Suspense fallback={null}>
+							<GroceryListAdd />
+						</Suspense>
+						<GroceriesActionBar />
+					</PageFixedArea>
+					<Suspense fallback={null}>
+						<GroceryList />
+					</Suspense>
+					<SubscriptionExpiredDialog />
+					<CompleteSignupDialog />
+					<SignupSuccessBanner />
+				</PageContent>
+				<RecipePresenceNotification />
+			</ThemedPageRoot>
 		</ListContext.Provider>
 	);
 }

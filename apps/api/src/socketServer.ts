@@ -32,6 +32,7 @@ export function attachSocketServer(httpServer: HttpServer) {
 		tokenSecret: process.env.LOFI_SECRET!,
 		profiles: new Profiles(),
 		replicaTruancyMinutes: 30 * 60 * 24,
+		log: console.debug,
 	});
 
 	server.on('error', console.error);

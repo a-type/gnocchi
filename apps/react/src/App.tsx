@@ -35,7 +35,8 @@ import { RecipeSavePrompt } from './components/recipes/savePrompt/RecipeSaveProm
 import { RecipeCookPage } from './pages/recipe/RecipeCookPage.jsx';
 import { RecipeOverviewPage } from './pages/recipe/RecipeOverviewPage.jsx';
 import { SubscriberFeaturesPage } from './pages/SubscriberFeaturesPage.jsx';
-import { hooks, groceriesDescriptor } from './stores/groceries/index.js';
+import { hooks } from './stores/groceries/index.js';
+import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -56,7 +57,7 @@ export function App() {
 							<QueryClientProvider client={queryClient}>
 								<BrowserRouter>
 									<AuthProvider>
-										<hooks.Provider value={groceriesDescriptor}>
+										<GroceriesProvider>
 											<Routes>
 												<Route path="/" element={<GroceriesPage />} />
 												<Route
@@ -117,7 +118,7 @@ export function App() {
 											<LogoutNotice />
 											<DomainChangeDialog />
 											<RecipeSavePrompt />
-										</hooks.Provider>
+										</GroceriesProvider>
 									</AuthProvider>
 								</BrowserRouter>
 							</QueryClientProvider>

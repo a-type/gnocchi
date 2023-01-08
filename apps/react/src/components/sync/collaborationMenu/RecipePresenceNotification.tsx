@@ -31,20 +31,6 @@ export function RecipePresenceNotification({}: RecipePresenceNotificationProps) 
 function RecipePresenceNotificationContent() {
 	const [dismissedId, setDismissedId] = useState('');
 
-	// while visible, enable sync at 30s interval
-	const maybeClient = hooks.useUnsuspendedClient();
-	useEffect(() => {
-		if (maybeClient) {
-			const originalInterval = maybeClient.sync.pullInterval;
-			maybeClient.sync.setPullInterval(30000);
-			maybeClient.sync.start();
-			return () => {
-				maybeClient.sync.setPullInterval(originalInterval);
-				maybeClient.sync.stop();
-			};
-		}
-	}, [maybeClient]);
-
 	const viewingRecipe = hooks.useFindPeer((peer) => {
 		return !!peer.presence.viewingRecipeId;
 	});

@@ -292,6 +292,38 @@ const recipes = collection({
 				type: 'doc',
 				content: [],
 			},
+
+			/**
+			 * Potential instructions schema
+			 * for ProseMirror
+			type: 'object',
+			properties: {
+				type: {
+					type: 'string',
+					default: 'doc',
+				},
+				content: {
+					type: 'array',
+					items: {
+						type: 'object',
+						properties: {
+							type: {
+								type: 'string',
+							},
+							content: {
+								type: 'any',
+							},
+							attrs: {
+								type: 'map',
+								values: {
+									type: 'string'
+								}
+							}
+						},
+					},
+				}
+			}
+			 */
 		},
 		url: {
 			type: 'string',

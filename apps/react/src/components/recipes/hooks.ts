@@ -3,6 +3,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { useEditor } from '@tiptap/react';
 import { useEffect, useRef, useState } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
+import { useDebouncedCallback } from '@/hooks/useDebouncedCallback.js';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -40,28 +41,36 @@ export function useCurrentRecipeSession(recipe: Recipe) {
 export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 	const live = hooks.useWatch(recipe);
 	const instructions = live.instructions as ObjectEntity<any, any>;
-	const session = useCurrentRecipeSession(recipe);
+	useCurrentRecipeSession(recipe);
 
 	const updatingRef = useRef(false);
 
+	const update = useDebouncedCallback((editor) => {
+		if (updatingRef.current) return;
+
+		const newData = editor.getJSON();
+		const instructions = recipe.get('instructions');
+		if (!instructions) {
+			recipe.set('instructions', newData);
+		} else {
+			instructions.update(newData, {
+				merge: false,
+				replaceSubObjects: false,
+			});
+		}
+	}, 300);
+
 	const editor = useEditor(
 		{
-			extensions: createTiptapExtensions(session),
+			extensions: createTiptapExtensions(recipe),
 			content: instructions?.getSnapshot() || {
 				type: 'doc',
 				content: [],
 			},
 			editable: !readonly,
-			onUpdate({ editor }) {
-				if (!updatingRef.current) {
-					const newData = editor.getJSON();
-					if (!instructions) {
-						recipe.set('instructions', newData);
-					} else {
-						instructions.update(newData, {
-							merge: false,
-						});
-					}
+			onTransaction({ editor, transaction }) {
+				if (transaction.docChanged) {
+					update(editor);
 				}
 			},
 		},
@@ -71,14 +80,14 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 	useEffect(() => {
 		if (editor && !editor.isDestroyed && instructions) {
 			updatingRef.current = true;
-			editor.commands.setContent(instructions.getSnapshot());
+			editor.commands.setContent(instructions.getSnapshot(), false);
 			updatingRef.current = false;
 		}
 
 		return instructions?.subscribe('changeDeep', (target, info) => {
 			if (!info.isLocal || target === instructions) {
 				updatingRef.current = true;
-				editor?.commands.setContent(instructions.getSnapshot());
+				editor?.commands.setContent(instructions.getSnapshot(), false);
 				updatingRef.current = false;
 			}
 		});

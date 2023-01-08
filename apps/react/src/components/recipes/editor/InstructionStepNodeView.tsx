@@ -1,5 +1,5 @@
 import { Checkbox } from '@/components/primitives/index.js';
-import { RecipeSession } from '@aglio/groceries-client';
+import { Recipe } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
 import { Node, NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import classnames from 'classnames';
@@ -10,7 +10,7 @@ export interface InstructionStepNodeViewProps {
 		attrs: { id: string };
 	};
 	extension: {
-		storage: { session?: RecipeSession };
+		storage: { recipe?: Recipe };
 	};
 }
 
@@ -19,7 +19,10 @@ export function InstructionStepNodeView({
 	extension,
 	...rest
 }: InstructionStepNodeViewProps) {
-	const maybeSession = extension.storage.session;
+	const maybeRecipe = extension.storage.recipe;
+	hooks.useWatch(maybeRecipe || null);
+	const maybeSession = maybeRecipe?.get('session');
+	hooks.useWatch(maybeSession || null);
 	const maybeCompletedSteps = maybeSession
 		? maybeSession.get('completedInstructions')
 		: null;

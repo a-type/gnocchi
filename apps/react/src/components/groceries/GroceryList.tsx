@@ -49,7 +49,6 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 
 		const sensors = useGroceryDndSensors();
 
-		useGrocerySync();
 		useTransitionPurchasedItems();
 
 		return (
@@ -69,19 +68,6 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 );
 
 export default GroceryList;
-
-function useGrocerySync() {
-	const { session, isSubscribed } = useAuth();
-	const syncEnabled = session && isSubscribed;
-	const groceries = hooks.useClient();
-	useEffect(() => {
-		if (syncEnabled) {
-			groceries.sync.start();
-		} else {
-			groceries.sync.stop();
-		}
-	}, [syncEnabled]);
-}
 
 const GroceryListCategories = forwardRef<
 	HTMLDivElement,
