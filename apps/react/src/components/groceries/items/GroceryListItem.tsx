@@ -18,11 +18,11 @@ import { useSize, useSizeCssVars } from '@/hooks/useSize.js';
 import {
 	groceries,
 	hooks,
-	Item,
 	Presence,
 	Profile,
 } from '@/stores/groceries/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
+import { Item } from '@aglio/groceries-client';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';

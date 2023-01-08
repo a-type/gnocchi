@@ -1,6 +1,7 @@
 import { Button } from '@/components/primitives/index.js';
-import { Recipe, hooks } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { useNavigate } from 'react-router-dom';
+import { Recipe } from '@aglio/groceries-client';
 
 export interface RecipeDeleteButtonProps {
 	recipe: Recipe;

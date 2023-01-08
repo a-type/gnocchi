@@ -40,6 +40,12 @@
 		},
 		{
 			"path": "./packages/email"
+		},
+		{
+			"path": "./packages/recipeEditor"
+		},
+		{
+			"path": "./packages/groceriesClient"
 		}
 	]
 }

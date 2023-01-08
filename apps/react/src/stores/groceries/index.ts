@@ -6,18 +6,17 @@ import {
 	Item,
 	ItemInputsItemInit,
 	ItemDestructured,
-} from './client/index.js';
-import { createHooks } from './client/react.js';
-import migrations from './migrations/index.js';
+	createHooks,
+	migrations,
+} from '@aglio/groceries-client';
 import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { TRPCClientError } from '@trpc/client';
 import { toast } from 'react-hot-toast';
 
-export type { Item, Category, FoodCategoryAssignment } from './client/index.js';
-
 export interface Presence {
 	lastInteractedItem: string | null;
+	viewingRecipeId: string | null;
 }
 
 export interface Profile {
@@ -33,6 +32,7 @@ export const groceriesDescriptor = new ClientDescriptor<Presence, Profile>({
 		authEndpoint: `${API_HOST_HTTP}/api/lofi/groceries`,
 		initialPresence: {
 			lastInteractedItem: null,
+			viewingRecipeId: null,
 		},
 		defaultProfile: {
 			id: '',

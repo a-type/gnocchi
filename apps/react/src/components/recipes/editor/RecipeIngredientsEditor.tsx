@@ -4,13 +4,13 @@ import {
 	TextAreaField,
 } from '@/components/primitives/forms.jsx';
 import { Button } from '@/components/primitives/index.js';
+import { hooks } from '@/stores/groceries/index.js';
+import * as mutations from '@/stores/groceries/recipeMutations.js';
 import {
-	hooks,
-	mutations,
 	Recipe,
 	RecipeIngredients,
 	RecipeIngredientsItem,
-} from '@/stores/recipes/index.js';
+} from '@aglio/groceries-client';
 import {
 	DndContext,
 	KeyboardSensor,

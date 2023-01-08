@@ -1,6 +1,6 @@
 import { Box, H1, H2, P } from '@/components/primitives/index.js';
 import { useWakeLock } from '@/hooks/useWakeLock.js';
-import { hooks } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { format } from 'date-fns/esm';
 import { useRecipeFromSlugUrl } from '../hooks.js';

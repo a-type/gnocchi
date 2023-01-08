@@ -1,9 +1,7 @@
-import { ObjectEntity, Recipe } from '@/stores/recipes/client/index.js';
-import { hooks } from '@/stores/recipes/index.js';
+import { ObjectEntity, Recipe } from '@aglio/groceries-client';
+import { hooks } from '@/stores/groceries/index.js';
 import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
 import { useEffect, useRef, useState } from 'react';
-import Paragraph from '@tiptap/extension-paragraph';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 
 export function useRecipeFromSlugUrl(url: string) {

@@ -1,0 +1,14 @@
+{
+	"name": "@aglio/recipe-editor",
+	"version": "0.0.1",
+	"private": true,
+	"main": "src/index.ts",
+	"type": "commonjs",
+	"scripts": {
+		"dev": "vite"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"vite": "^4.0.4"
+	}
+}

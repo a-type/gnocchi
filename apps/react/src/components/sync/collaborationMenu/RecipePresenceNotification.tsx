@@ -1,11 +1,6 @@
 import { Button, LinkButton } from '@/components/primitives/index.js';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
-import {
-	hooks,
-	Presence,
-	Profile,
-	recipesDescriptor,
-} from '@/stores/recipes/index.js';
+import { hooks, Presence, Profile } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { UserInfo } from '@lo-fi/common';
 import { Suspense, useContext, useEffect, useState } from 'react';
@@ -25,9 +20,7 @@ export function RecipePresenceNotification({}: RecipePresenceNotificationProps) 
 	if (flagEnabled && isSubscribed) {
 		return (
 			<Suspense>
-				<hooks.Provider value={recipesDescriptor}>
-					<RecipePresenceNotificationContent />
-				</hooks.Provider>
+				<RecipePresenceNotificationContent />
 			</Suspense>
 		);
 	} else {

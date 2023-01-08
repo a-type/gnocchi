@@ -1,0 +1,12 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"composite": true,
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"baseUrl": ".",
+		"lib": ["es2021", "dom"],
+		"jsx": "preserve"
+	},
+	"include": ["**/*.ts", "**/*.tsx", "**/*.mts"]
+}

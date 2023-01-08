@@ -1,4 +1,5 @@
-import { hooks, RecipeIngredientsItem } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
+import { RecipeIngredientsItem } from '@aglio/groceries-client';
 import { fractionToText } from '@aglio/tools';
 import pluralize from 'pluralize';
 

@@ -15,6 +15,8 @@ import type {
   ListFilter,
   CollaborationInfo,
   CollaborationInfoFilter,
+  Recipe,
+  RecipeFilter,
 } from "./index.js";
 import type {
   UserInfo,
@@ -180,6 +182,19 @@ export interface GeneratedHooks<Presence, Profile> {
   >(
     config?: Config
   ) => NullIfSkip<CollaborationInfo[], Config>;
+
+  useRecipe(id: string): Recipe;
+  useRecipe(id: string, config: { skip: boolean }): Recipe | null;
+  useOneRecipe: <
+    Config extends SkippableFilterConfig<RecipeFilter> = { index: any }
+  >(
+    config?: Config
+  ) => NullIfSkip<Recipe, Config>;
+  useAllRecipes: <
+    Config extends SkippableFilterConfig<RecipeFilter> = { index: any }
+  >(
+    config?: Config
+  ) => NullIfSkip<Recipe[], Config>;
 }
 
 export function createHooks<Presence = any, Profile = any>(): GeneratedHooks<

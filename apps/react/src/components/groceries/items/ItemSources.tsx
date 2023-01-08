@@ -1,5 +1,5 @@
-import { ItemInputsItem } from '@/stores/groceries/client/index.js';
-import { hooks, Item } from '@/stores/groceries/index.js';
+import { ItemInputsItem, Item } from '@aglio/groceries-client';
+import { hooks } from '@/stores/groceries/index.js';
 import * as classes from './ItemSources.css.js';
 
 export interface ItemSourcesProps {

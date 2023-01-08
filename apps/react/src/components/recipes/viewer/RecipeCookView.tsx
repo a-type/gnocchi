@@ -5,7 +5,7 @@ import { clsx } from 'clsx';
 import * as classes from './RecipeCookView.css.js';
 import { H1 } from '@/components/primitives/index.js';
 import { useEffect } from 'react';
-import { hooks } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { CookingToolbar } from './CookingToolbar.jsx';
 
 export interface RecipeCookViewProps {

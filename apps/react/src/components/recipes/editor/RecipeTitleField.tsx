@@ -1,5 +1,6 @@
 import { LiveUpdateTextField } from '@/components/primitives/LiveUpdateTextField.jsx';
-import { hooks, Recipe } from '@/stores/recipes';
+import { hooks } from '@/stores/groceries/index.js';
+import { Recipe } from '@aglio/groceries-client';
 import { clsx } from 'clsx';
 import * as classes from './RecipeTitleField.css.js';
 

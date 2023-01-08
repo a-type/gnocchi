@@ -1,18 +1,10 @@
-import { hooks, Recipe } from '@/stores/recipes/index.js';
-import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import { ObjectEntity } from '@lo-fi/web';
-import { Editor } from '@tiptap/core';
 import { Box, Button } from '@/components/primitives/index.js';
-import {
-	FontBoldIcon,
-	FontItalicIcon,
-	ListBulletIcon,
-} from '@radix-ui/react-icons';
-import * as classes from './RecipeInstructionsField.css.js';
-import { useSyncedInstructionsEditor } from '../hooks.js';
 import { RichEditor } from '@/components/primitives/richEditor/RichEditor.jsx';
+import { Recipe } from '@aglio/groceries-client';
+import { FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons';
+import { Editor } from '@tiptap/core';
+import { useSyncedInstructionsEditor } from '../hooks.js';
+import * as classes from './RecipeInstructionsField.css.js';
 
 export interface RecipeInstructionsFieldProps {
 	recipe: Recipe;

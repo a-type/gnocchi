@@ -1,6 +1,6 @@
 import { Checkbox } from '@/components/primitives/index.js';
-import { RecipeSession } from '@/stores/recipes/client/index.js';
-import { hooks } from '@/stores/recipes/index.js';
+import { RecipeSession } from '@aglio/groceries-client';
+import { hooks } from '@/stores/groceries/index.js';
 import { Node, NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import classnames from 'classnames';
 import * as classes from './InstructionStepNodeView.css.js';

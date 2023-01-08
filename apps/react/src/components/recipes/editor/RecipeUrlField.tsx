@@ -2,8 +2,9 @@ import { ScanIcon } from '@/components/icons/ScanIcon.jsx';
 import { Box, Button } from '@/components/primitives/index.js';
 import { LiveUpdateTextField } from '@/components/primitives/LiveUpdateTextField.jsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
-import { hooks, Recipe } from '@/stores/recipes/index.js';
-import { updateRecipeFromUrl } from '@/stores/recipes/mutations.js';
+import { hooks } from '@/stores/groceries/index.js';
+import { updateRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
+import { Recipe } from '@aglio/groceries-client';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { useState } from 'react';
 

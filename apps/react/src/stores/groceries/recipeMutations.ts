@@ -3,8 +3,12 @@ import { trpcClient } from '@/trpc.js';
 import { parseIngredient } from '@aglio/conversion';
 import { TRPCClientError } from '@trpc/client';
 import { toast } from 'react-hot-toast';
-import { Recipe, RecipeIngredientsItemInit } from './client/index.js';
-import { RecipeIngredients, recipesDescriptor } from './index.js';
+import {
+	Recipe,
+	RecipeIngredientsItemInit,
+	RecipeIngredients,
+} from '@aglio/groceries-client';
+import { groceriesDescriptor } from './index.js';
 import { generateJSON } from '@tiptap/html';
 import { createTiptapExtensions } from '@/components/recipes/editor/tiptapExtensions.js';
 
@@ -73,7 +77,7 @@ async function getScannedRecipe(url: string) {
 				? generateJSON(
 						(scanned.steps || [])
 							.map((line: string) => `<p>${line}</p>`)
-							.join(''),
+							.join('\n'),
 						createTiptapExtensions(),
 				  )
 				: undefined,
@@ -87,7 +91,7 @@ async function getScannedRecipe(url: string) {
 }
 
 export async function addRecipeFromUrl(url: string) {
-	const client = await recipesDescriptor.open();
+	const client = await groceriesDescriptor.open();
 
 	try {
 		const scanned = await getScannedRecipe(url);

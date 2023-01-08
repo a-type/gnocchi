@@ -1,10 +1,7 @@
 import { mergeAttributes, Node } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Document from '@tiptap/extension-document';
-import {
-	RecipeSession,
-	RecipeSessionCompletedInstructions,
-} from '@/stores/recipes/client/index.js';
+import { RecipeSession } from '@aglio/groceries-client';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import { InstructionStepNodeView } from './InstructionStepNodeView.jsx';
 import { Plugin, PluginKey } from 'prosemirror-state';

@@ -1,8 +1,9 @@
-import { hooks, Recipe } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Box } from '@/components/primitives/index.js';
 import * as classes from './RecipeList.css.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
+import { Recipe } from '@aglio/groceries-client';
 
 export interface RecipeListProps {}
 

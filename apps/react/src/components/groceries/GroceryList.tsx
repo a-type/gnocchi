@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useListId } from '@/contexts/ListContext.jsx';
-import { groceries, hooks, Item } from '@/stores/groceries/index.js';
+import { groceries, hooks } from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
 import {
 	DndContext,
 	DragCancelEvent,

@@ -7,13 +7,12 @@ import {
 	SelectItem,
 	SelectValue,
 } from '@/components/primitives/select/Select.jsx';
-import { groceries, Category, Item, hooks } from '@/stores/groceries/index.js';
+import { groceries, hooks } from '@/stores/groceries/index.js';
+import { Category, Item } from '@aglio/groceries-client';
 import { RowSpacingIcon } from '@radix-ui/react-icons';
 import { Suspense, useCallback, useState } from 'react';
 import { NewCategoryForm } from '../NewCategoryForm.js';
 import { groceriesState } from '../state.js';
-
-const ITEM_HEIGHT = 32;
 
 export function CategoryPicker({ item }: { item: Item }) {
 	const { categoryId } = hooks.useWatch(item);

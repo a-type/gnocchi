@@ -1,4 +1,5 @@
-import { Category, hooks, Item } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
+import { Category, Item } from '@aglio/groceries-client';
 import { useEffect, useMemo } from 'react';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from './state.js';

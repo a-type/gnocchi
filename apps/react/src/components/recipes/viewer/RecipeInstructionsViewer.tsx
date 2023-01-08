@@ -1,4 +1,4 @@
-import { Recipe } from '@/stores/recipes/index.js';
+import { Recipe } from '@aglio/groceries-client';
 import { useSyncedInstructionsEditor } from '../hooks.js';
 import * as classes from './RecipeInstructionsViewer.css.js';
 import { RichEditor } from '@/components/primitives/richEditor/RichEditor.jsx';
