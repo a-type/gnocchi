@@ -37,6 +37,8 @@ import { RecipeOverviewPage } from './pages/recipe/RecipeOverviewPage.jsx';
 import { SubscriberFeaturesPage } from './pages/SubscriberFeaturesPage.jsx';
 import { hooks } from './stores/groceries/index.js';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
+import { inject } from '@vercel/analytics';
+inject();
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
