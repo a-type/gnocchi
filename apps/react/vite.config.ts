@@ -66,6 +66,7 @@ export default defineConfig({
 		checker({
 			typescript: {
 				tsconfigPath: './tsconfig.json',
+				buildMode: true,
 			},
 			overlay: {
 				initialIsOpen: false,

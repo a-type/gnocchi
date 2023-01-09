@@ -17,11 +17,14 @@ import { PepperMill } from './foods/PepperMill.jsx';
 import { Leek } from './foods/Leek.jsx';
 import { Garlic } from './foods/Garlic.jsx';
 import { animated, useSpring, useTrail } from '@react-spring/three';
-// @ts-ignore
 import {
+	// @ts-ignore
 	EffectComposer,
+	// @ts-ignore
 	Outline,
+	// @ts-ignore
 	Selection,
+	// @ts-ignore
 	Select,
 } from '@react-three/postprocessing';
 
