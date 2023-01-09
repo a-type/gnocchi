@@ -10,10 +10,10 @@
 	},
 	"dependencies": {
 		"@aglio/trpc": "workspace:*",
-		"@lo-fi/cli": "^1.9.5",
-		"@lo-fi/common": "^1.8.0",
-		"@lo-fi/react": "^11.0.4",
-		"@lo-fi/web": "^1.10.6",
+		"@lo-fi/cli": "^1.10.0",
+		"@lo-fi/common": "^1.8.1",
+		"@lo-fi/react": "^11.1.0",
+		"@lo-fi/web": "^1.10.7",
 		"@trpc/client": "^10.5.0",
 		"@trpc/server": "^10.5.0",
 		"cuid": "^2.1.8"
