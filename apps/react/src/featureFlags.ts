@@ -1,4 +1,4 @@
 export const featureFlags = {
 	recipes: true,
-	recipePresence: false,
+	recipePresence: true,
 };
