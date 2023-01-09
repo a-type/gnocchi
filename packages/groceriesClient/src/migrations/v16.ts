@@ -23,8 +23,12 @@ export default migrate(
 		// load recipes from the recipes database into the groceries database
 		// - this migration consolidates both into one library
 
-		await readRawIdb('recipes_collections', 7, 'recipes', async (recipe) => {
-			await mutations.recipes.put(recipe);
-		});
+		try {
+			await readRawIdb('recipes_collections', 7, 'recipes', async (recipe) => {
+				await mutations.recipes.put(recipe);
+			});
+		} catch (e) {
+			console.error('Error migrating recipes', e);
+		}
 	},
 );
