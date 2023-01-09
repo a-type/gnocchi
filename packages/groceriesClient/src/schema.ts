@@ -367,7 +367,7 @@ const recipes = collection({
 });
 
 export default schema({
-	version: 16,
+	version: 17,
 	collections: {
 		categories,
 		items,

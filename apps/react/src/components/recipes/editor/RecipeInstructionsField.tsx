@@ -48,6 +48,17 @@ function Toolbar({ editor }: { editor: Editor }) {
 			>
 				<FontItalicIcon />
 			</Button>
+			<Button
+				color="ghost"
+				onClick={() => {
+					editor.chain().focus().toggleSectionTitle().run();
+				}}
+				disabled={!editor.can().chain().focus().toggleSectionTitle().run()}
+				toggled={editor.isActive('sectionTitle')}
+				className={classes.controlButton}
+			>
+				H
+			</Button>
 			{/* <Button
 				color="ghost"
 				onClick={() => {

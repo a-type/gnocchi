@@ -55,13 +55,11 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 		if (!instructions) {
 			recipe.set('instructions', newData);
 		} else {
-			let i = 0;
-			for (const item of newData.content || []) {
-				console.log(i++, item.attrs.id);
-				assert(item.attrs.id, 'item has no id');
-			}
 			instructions.update(newData, {
+				// disable merge - items missing in new data should be removed
 				merge: false,
+				// disable replaceSubObjects - subobjects should be merged with the
+				// same identity rather than overwritten (this is default anyway)
 				replaceSubObjects: false,
 			});
 		}

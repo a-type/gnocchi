@@ -1,4 +1,4 @@
-import { mergeAttributes, Node } from '@tiptap/core';
+import { mergeAttributes, Node, textblockTypeInputRule } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Document from '@tiptap/extension-document';
 import { Recipe } from '@aglio/groceries-client';
@@ -14,6 +14,7 @@ declare module '@tiptap/core' {
 		};
 		sectionTitle: {
 			setSectionTitle: () => ReturnType;
+			toggleSectionTitle: () => ReturnType;
 		};
 	}
 }
@@ -96,9 +97,26 @@ export function createTiptapExtensions(recipe?: Recipe) {
 		name: 'sectionTitle',
 		content: 'inline*',
 		defining: true,
+		group: 'block',
+
+		addAttributes() {
+			return {
+				id: {
+					default: null,
+					keepOnSplit: false,
+					rendered: false,
+					parseHTML: (element) => element.getAttribute('data-id'),
+					renderHTML: (attributes) => {
+						return {
+							'data-id': attributes.id,
+						};
+					},
+				},
+			};
+		},
 
 		parseHTML() {
-			return [{ tag: 'h2' }];
+			return [{ tag: 'h2' }, { tag: 'h1' }, { tag: 'h3' }];
 		},
 
 		renderHTML({ HTMLAttributes }) {
@@ -115,14 +133,27 @@ export function createTiptapExtensions(recipe?: Recipe) {
 					({ commands }) => {
 						return commands.setNode(this.name);
 					},
+				toggleSectionTitle:
+					() =>
+					({ commands }) => {
+						return commands.toggleNode(this.name, 'step');
+					},
 			};
+		},
+		addInputRules() {
+			return [
+				textblockTypeInputRule({
+					find: /^#\\s$/,
+					type: this.type,
+				}),
+			];
 		},
 	});
 
 	const RecipeDocument = Document.extend({
 		// the recipe document may only contain steps and section titles at the top level
 		// and must contain at least one step
-		content: 'step+',
+		content: '(step|sectionTitle)+',
 
 		addProseMirrorPlugins() {
 			return [

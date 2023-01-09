@@ -4,7 +4,7 @@ import { style } from '@vanilla-extract/css';
 export const root = style({
 	display: 'flex',
 	flexDirection: 'row',
-	gap: vars.space[2],
+	gap: vars.space[4],
 	marginBottom: vars.space[5],
 });
 
