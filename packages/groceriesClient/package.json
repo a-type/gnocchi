@@ -9,10 +9,10 @@
 		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/cli && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react"
 	},
 	"dependencies": {
-		"@lo-fi/cli": "^1.9.4",
-		"@lo-fi/common": "^1.7.1",
-		"@lo-fi/react": "^11.0.3",
-		"@lo-fi/web": "^1.10.5",
+		"@lo-fi/cli": "^1.9.5",
+		"@lo-fi/common": "^1.8.0",
+		"@lo-fi/react": "^11.0.4",
+		"@lo-fi/web": "^1.10.6",
 		"cuid": "^2.1.8"
 	}
 }
