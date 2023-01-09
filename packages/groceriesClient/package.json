@@ -9,10 +9,13 @@
 		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/cli && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react"
 	},
 	"dependencies": {
+		"@aglio/trpc": "workspace:*",
 		"@lo-fi/cli": "^1.9.5",
 		"@lo-fi/common": "^1.8.0",
 		"@lo-fi/react": "^11.0.4",
 		"@lo-fi/web": "^1.10.6",
+		"@trpc/client": "^10.5.0",
+		"@trpc/server": "^10.5.0",
 		"cuid": "^2.1.8"
 	}
 }

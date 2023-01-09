@@ -4,7 +4,6 @@ import { useEditor } from '@tiptap/react';
 import { useEffect, useRef, useState } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import { useDebouncedCallback } from '@/hooks/useDebouncedCallback.js';
-import { assert } from '@aglio/tools';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -14,7 +13,7 @@ export function useRecipeFromSlugUrl(url: string) {
 			equals: slug,
 		},
 		// TODO: update lo-fi types to add |null
-	}) as Recipe | null;
+	});
 	hooks.useWatch(recipe);
 	return recipe;
 }

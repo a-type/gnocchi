@@ -5,16 +5,10 @@ export interface BugButtonProps extends ButtonProps {}
 
 export function BugButton(props: BugButtonProps) {
 	return (
-		<Button
-			as="a"
-			size="small"
-			color="default"
-			href="mailto:gaforres@gmail.com"
-			target="_blank"
-			rel="noopener noreferrer"
-			{...props}
-		>
-			Report a bug
-		</Button>
+		<a href="mailto:hi@gnocchi.club" target="_blank" rel="noopener noreferrer">
+			<Button size="small" color="default" {...props}>
+				Report a bug
+			</Button>
+		</a>
 	);
 }

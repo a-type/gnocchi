@@ -8,7 +8,7 @@ import {
 import { Box, Divider, H1, H2, P } from '@/components/primitives/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { useSearchParams } from 'react-router-dom';
-import { OAuthSignInButton } from '../components/auth/OAuthSignInButton';
+import { OAuthSignInButton } from '../components/auth/OAuthSignInButton.jsx';
 
 export interface JoinPageProps {}
 

@@ -1,15 +1,7 @@
-import {
-	createTRPCReact,
-	httpBatchLink,
-	TRPCClient,
-	createTRPCProxyClient,
-} from '@trpc/react-query';
+import { httpBatchLink, createTRPCProxyClient } from '@trpc/client';
 import type { AppRouter } from '@aglio/trpc';
 import { API_HOST_HTTP } from './config.js';
 import type { inferRouterOutputs, inferRouterInputs } from '@trpc/server';
-import superjson from 'superjson';
-
-export const trpc = createTRPCReact<AppRouter>();
 
 export const trpcClientOptions = {
 	links: [
@@ -23,7 +15,6 @@ export const trpcClientOptions = {
 			},
 		}),
 	],
-	// transformer: superjson,
 };
 
 export const trpcClient = createTRPCProxyClient<AppRouter>(trpcClientOptions);

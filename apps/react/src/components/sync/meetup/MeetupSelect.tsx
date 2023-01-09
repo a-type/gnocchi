@@ -17,7 +17,7 @@ export interface MeetupSelectProps {}
 export function MeetupSelect({}: MeetupSelectProps) {
 	const info = hooks.useCollaborationInfo('default');
 	hooks.useWatch(info);
-	const meetup = info?.get('meetup');
+	const meetup = info?.get('meetup') ?? null;
 	hooks.useWatch(meetup);
 
 	const client = hooks.useClient();
@@ -38,14 +38,14 @@ export function MeetupSelect({}: MeetupSelectProps) {
 
 	const setMeetup = useCallback(
 		(value: string) => {
-			info.set('meetup', {
+			info?.set('meetup', {
 				location: value,
 			});
 		},
 		[info],
 	);
 	const clearMeetup = useCallback(() => {
-		info.set('meetup', undefined);
+		info?.set('meetup', undefined);
 	}, [info]);
 
 	return (

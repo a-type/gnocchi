@@ -1,4 +1,4 @@
-import { Item } from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
 
 export type GroceryDnDDrop =
 	| {

@@ -17,13 +17,13 @@ import { PepperMill } from './foods/PepperMill.jsx';
 import { Leek } from './foods/Leek.jsx';
 import { Garlic } from './foods/Garlic.jsx';
 import { animated, useSpring, useTrail } from '@react-spring/three';
+// @ts-ignore
 import {
 	EffectComposer,
 	Outline,
 	Selection,
 	Select,
 } from '@react-three/postprocessing';
-import { Resizer } from 'postprocessing';
 
 softShadows();
 

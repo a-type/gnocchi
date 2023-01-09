@@ -1,7 +1,18 @@
 import { ComponentType, ElementType, forwardRef } from 'react';
 import { clsx } from 'clsx';
-import { RecipeVariants } from 'node_modules/@vanilla-extract/recipes';
-import { RuntimeFn } from 'node_modules/@vanilla-extract/recipes/dist/declarations/src/types.js';
+import { RecipeVariants } from '@vanilla-extract/recipes';
+import type { ComplexStyleRule } from '@vanilla-extract/css';
+
+type RecipeStyleRule = ComplexStyleRule | string;
+type VariantDefinitions = Record<string, RecipeStyleRule>;
+type VariantGroups = Record<string, VariantDefinitions>;
+type BooleanMap<T> = T extends 'true' | 'false' ? boolean : T;
+type VariantSelection<Variants extends VariantGroups> = {
+	[VariantGroup in keyof Variants]?: BooleanMap<keyof Variants[VariantGroup]>;
+};
+type RuntimeFn<Variants extends VariantGroups> = (
+	options?: VariantSelection<Variants>,
+) => string;
 
 type VariantProps<V extends string | RuntimeFn<any>> = V extends RuntimeFn<any>
 	? RecipeVariants<V>

@@ -4,6 +4,7 @@ import Document from '@tiptap/extension-document';
 import { Recipe } from '@aglio/groceries-client';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import { InstructionStepNodeView } from './InstructionStepNodeView.jsx';
+// @ts-ignore
 import { Plugin, PluginKey } from 'prosemirror-state';
 import cuid from 'cuid';
 
@@ -165,12 +166,12 @@ export function createTiptapExtensions(recipe?: Recipe) {
 				 */
 				new Plugin({
 					key: new PluginKey('step-ids'),
-					appendTransaction: (_, oldState, newState) => {
+					appendTransaction: (_: any, oldState: any, newState: any) => {
 						// no changes
 						if (newState.doc === oldState.doc) return;
 						const tr = newState.tr;
 						const usedIds = new Set<string>();
-						newState.doc.descendants((node, pos, parent) => {
+						newState.doc.descendants((node: any, pos: any, parent: any) => {
 							if (
 								(node.type.name === 'step' ||
 									node.type.name === 'sectionTitle') &&

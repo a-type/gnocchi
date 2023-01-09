@@ -1,7 +1,7 @@
 import { Checkbox } from '@/components/primitives/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
-import { Node, NodeViewContent, NodeViewWrapper } from '@tiptap/react';
+import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import classnames from 'classnames';
 import * as classes from './InstructionStepNodeView.css.js';
 
