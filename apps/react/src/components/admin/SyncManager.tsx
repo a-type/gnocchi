@@ -37,7 +37,7 @@ function SyncPlanManager({
 			</div>
 
 			<button
-				onChange={async () => {
+				onClick={async () => {
 					if (confirm('Are you sure?')) {
 						reset.mutate({
 							planId: plan.id,

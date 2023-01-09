@@ -1,4 +1,4 @@
-import { Item } from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
 import { fractionToText } from '@aglio/tools';
 import pluralize from 'pluralize';
 

@@ -1,4 +1,4 @@
-import { Item } from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
 import { container, root } from './GroceryItemDragPreview.css.js';
 import { useItemDisplayText } from './hooks.js';
 

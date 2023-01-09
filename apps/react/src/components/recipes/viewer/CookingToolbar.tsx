@@ -1,7 +1,7 @@
 import { PageNowPlaying } from '@/components/layouts/index.jsx';
 import { Button } from '@/components/primitives/index.js';
 import { useToggle } from '@/hooks/useToggle.jsx';
-import { Recipe } from '@/stores/recipes/index.js';
+import { Recipe } from '@aglio/groceries-client';
 import { ListBulletIcon } from '@radix-ui/react-icons';
 import classnames from 'classnames';
 import { UIEvent, useCallback, useEffect, useRef } from 'react';

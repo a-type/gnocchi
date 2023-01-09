@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import * as groceryCategoryClasses from '@/components/groceries/categories/GroceryListCategory.css.js';
-import { Category, Item } from '@/stores/groceries/index.js';
+import { Category, Item } from '@aglio/groceries-client';
 import { PantryListItem } from '../items/PantryListItem.jsx';
 
 export interface PantryListCategoryProps {

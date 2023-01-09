@@ -24,7 +24,6 @@ import { clsx } from 'clsx';
 import * as classes from './App.css.js';
 import { lemonTheme } from './styles/themes/lemon.css.js';
 import { JoinPage } from './pages/JoinPage.jsx';
-import { RecipesSync } from './components/recipes/RecipesSync.jsx';
 import { VerifyEmailPage } from './pages/VerifyEmailPage.jsx';
 import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage.jsx';
 import { AdminFeatureFlagsPage } from './pages/admin/AdminFeatureFlagsPage.jsx';
@@ -35,12 +34,9 @@ import { DomainChangeDialog } from './components/auth/DomainChangeDialog.jsx';
 import { RecipeSavePrompt } from './components/recipes/savePrompt/RecipeSavePrompt.jsx';
 import { RecipeCookPage } from './pages/recipe/RecipeCookPage.jsx';
 import { RecipeOverviewPage } from './pages/recipe/RecipeOverviewPage.jsx';
-import {
-	hooks as recipeHooks,
-	recipesDescriptor,
-} from '@/stores/recipes/index.js';
 import { SubscriberFeaturesPage } from './pages/SubscriberFeaturesPage.jsx';
-// @ts-ignore
+import { hooks } from './stores/groceries/index.js';
+import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { inject } from '@vercel/analytics';
 inject();
 
@@ -63,31 +59,37 @@ export function App() {
 							<QueryClientProvider client={queryClient}>
 								<BrowserRouter>
 									<AuthProvider>
-										<Routes>
-											<Route path="/" element={<GroceriesPage />} />
-											<Route path="/list/:listId" element={<GroceriesPage />} />
-											<Route path="/plan" element={<PlanPage />} />
-											<Route
-												path="/claim/:inviteId"
-												element={<ClaimInvitePage />}
-											/>
-											<Route path="/purchased" element={<PantryPage />} />
-											<Route path="/nevermind" element={<NevermindPage />} />
-											<Route path="/welcome" element={<SplashPage />} />
-											<Route path="/join" element={<JoinPage />} />
-											<Route path="/verify" element={<VerifyEmailPage />} />
-											<Route path="/admin" element={<AdminPage />}>
+										<GroceriesProvider>
+											<Routes>
+												<Route path="/" element={<GroceriesPage />} />
 												<Route
-													path="/admin/categories"
-													element={<AdminCategoriesPage />}
+													path="/list/:listId"
+													element={<GroceriesPage />}
 												/>
+												<Route path="/plan" element={<PlanPage />} />
 												<Route
-													path="/admin/feature-flags"
-													element={<AdminFeatureFlagsPage />}
+													path="/claim/:inviteId"
+													element={<ClaimInvitePage />}
 												/>
-												<Route path="/admin/sync" element={<AdminSyncPage />} />
-											</Route>
-											<Route path="/recipes" element={<RecipesSync />}>
+												<Route path="/purchased" element={<PantryPage />} />
+												<Route path="/nevermind" element={<NevermindPage />} />
+												<Route path="/welcome" element={<SplashPage />} />
+												<Route path="/join" element={<JoinPage />} />
+												<Route path="/verify" element={<VerifyEmailPage />} />
+												<Route path="/admin" element={<AdminPage />}>
+													<Route
+														path="/admin/categories"
+														element={<AdminCategoriesPage />}
+													/>
+													<Route
+														path="/admin/feature-flags"
+														element={<AdminFeatureFlagsPage />}
+													/>
+													<Route
+														path="/admin/sync"
+														element={<AdminSyncPage />}
+													/>
+												</Route>
 												<Route
 													path="/recipes/:slug"
 													element={<RecipeViewPage />}
@@ -106,19 +108,19 @@ export function App() {
 													/>
 												</Route>
 												<Route path="/recipes" element={<RecipesPage />} />
-											</Route>
-											<Route
-												path="/subscriber-features"
-												element={<SubscriberFeaturesPage />}
-											/>
-											<Route path="*" element={<NotFoundPage />} />
-										</Routes>
-										<Toaster position="bottom-center" />
-										<StartSignupDialog />
-										<UpdatePrompt />
-										<LogoutNotice />
-										<DomainChangeDialog />
-										<RecipeSavePrompt />
+												<Route
+													path="/subscriber-features"
+													element={<SubscriberFeaturesPage />}
+												/>
+												<Route path="*" element={<NotFoundPage />} />
+											</Routes>
+											<Toaster position="bottom-center" />
+											<StartSignupDialog />
+											<UpdatePrompt />
+											<LogoutNotice />
+											<DomainChangeDialog />
+											<RecipeSavePrompt />
+										</GroceriesProvider>
 									</AuthProvider>
 								</BrowserRouter>
 							</QueryClientProvider>

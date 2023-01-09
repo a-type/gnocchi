@@ -52,7 +52,7 @@ export const adminRouter = t.router({
 			}),
 		)
 		.mutation(async ({ input, ctx }) => {
-			// ctx.lofi.evictLibrary(getGroceryLibraryName(input.planId));
-			// ctx.lofi.evictLibrary(getRecipesLibraryName(input.planId));
+			ctx.lofi.evictLibrary(getGroceryLibraryName(input.planId));
+			ctx.lofi.evictLibrary(getRecipesLibraryName(input.planId));
 		}),
 });

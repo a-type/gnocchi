@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useListId } from '@/contexts/ListContext.jsx';
-import { groceries, hooks, Item } from '@/stores/groceries/index.js';
+import { groceries, hooks } from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
 import {
 	DndContext,
 	DragCancelEvent,
@@ -48,7 +49,6 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 
 		const sensors = useGroceryDndSensors();
 
-		useGrocerySync();
 		useTransitionPurchasedItems();
 
 		return (
@@ -68,19 +68,6 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 );
 
 export default GroceryList;
-
-function useGrocerySync() {
-	const { session, isSubscribed } = useAuth();
-	const syncEnabled = session && isSubscribed;
-	const groceries = hooks.useClient();
-	useEffect(() => {
-		if (syncEnabled) {
-			groceries.sync.start();
-		} else {
-			groceries.sync.stop();
-		}
-	}, [syncEnabled]);
-}
 
 const GroceryListCategories = forwardRef<
 	HTMLDivElement,

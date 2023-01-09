@@ -5,17 +5,31 @@ import { clsx } from 'clsx';
 import * as classes from './RecipeCookView.css.js';
 import { H1 } from '@/components/primitives/index.js';
 import { useEffect } from 'react';
-import { hooks } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { CookingToolbar } from './CookingToolbar.jsx';
+import { RecipeNotFound } from '../RecipeNotFound.jsx';
+import { Recipe } from '@aglio/groceries-client';
 
 export interface RecipeCookViewProps {
 	slug: string;
 	className?: string;
 }
 
-export function RecipeCookView({ slug, className }: RecipeCookViewProps) {
+export function RecipeCookView({ slug, ...rest }: RecipeCookViewProps) {
 	const recipe = useRecipeFromSlugUrl(slug);
 
+	if (!recipe) return <RecipeNotFound />;
+
+	return <RecipeCookViewContent recipe={recipe} {...rest} />;
+}
+
+function RecipeCookViewContent({
+	recipe,
+	className,
+}: {
+	recipe: Recipe;
+	className?: string;
+}) {
 	useWakeLock(true);
 
 	const recipeId = recipe.get('id');

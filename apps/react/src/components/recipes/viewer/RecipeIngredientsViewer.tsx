@@ -1,4 +1,5 @@
-import { hooks, Recipe } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
+import { Recipe } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
 import { IngredientText } from './IngredientText.jsx';
 

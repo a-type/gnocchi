@@ -26,7 +26,7 @@ export const trpcClientOptions = {
 	// transformer: superjson,
 };
 
-export const trpcClient = createTRPCProxyClient(trpcClientOptions);
+export const trpcClient = createTRPCProxyClient<AppRouter>(trpcClientOptions);
 
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 export type RouterInputs = inferRouterInputs<AppRouter>;

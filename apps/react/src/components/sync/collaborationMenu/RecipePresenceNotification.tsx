@@ -1,11 +1,6 @@
 import { Button, LinkButton } from '@/components/primitives/index.js';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
-import {
-	hooks,
-	Presence,
-	Profile,
-	recipesDescriptor,
-} from '@/stores/recipes/index.js';
+import { hooks, Presence, Profile } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { UserInfo } from '@lo-fi/common';
 import { Suspense, useContext, useEffect, useState } from 'react';
@@ -25,9 +20,7 @@ export function RecipePresenceNotification({}: RecipePresenceNotificationProps) 
 	if (flagEnabled && isSubscribed) {
 		return (
 			<Suspense>
-				<hooks.Provider value={recipesDescriptor}>
-					<RecipePresenceNotificationContent />
-				</hooks.Provider>
+				<RecipePresenceNotificationContent />
 			</Suspense>
 		);
 	} else {
@@ -37,20 +30,6 @@ export function RecipePresenceNotification({}: RecipePresenceNotificationProps) 
 
 function RecipePresenceNotificationContent() {
 	const [dismissedId, setDismissedId] = useState('');
-
-	// while visible, enable sync at 30s interval
-	const maybeClient = hooks.useUnsuspendedClient();
-	useEffect(() => {
-		if (maybeClient) {
-			const originalInterval = maybeClient.sync.pullInterval;
-			maybeClient.sync.setPullInterval(30000);
-			maybeClient.sync.start();
-			return () => {
-				maybeClient.sync.setPullInterval(originalInterval);
-				maybeClient.sync.stop();
-			};
-		}
-	}, [maybeClient]);
 
 	const viewingRecipe = hooks.useFindPeer((peer) => {
 		return !!peer.presence.viewingRecipeId;

@@ -1,8 +1,10 @@
-import { hooks, Recipe } from '@/stores/recipes/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Box } from '@/components/primitives/index.js';
 import * as classes from './RecipeList.css.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
+import { Recipe } from '@aglio/groceries-client';
+import { makeRecipeLink } from './makeRecipeLink.js';
 
 export interface RecipeListProps {}
 
@@ -27,7 +29,7 @@ export function RecipeList({}: RecipeListProps) {
 function RecipeListItem({ recipe }: { recipe: Recipe }) {
 	const { slug, id, title } = hooks.useWatch(recipe);
 	return (
-		<Link className={classes.item} to={`/recipes/${slug}`}>
+		<Link className={classes.item} to={makeRecipeLink(recipe)}>
 			{title}
 		</Link>
 	);
@@ -41,7 +43,7 @@ function RecipeCreateButton() {
 		<Button
 			onClick={async () => {
 				const recipe = await client.recipes.put({});
-				navigate(`/recipes/${recipe.get('slug')}/edit`);
+				navigate(makeRecipeLink(recipe, '/edit'));
 			}}
 			color="primary"
 			className={sprinkles({ alignSelf: 'start' })}

@@ -1,0 +1,21 @@
+{
+	"name": "@aglio/groceries-client",
+	"version": "0.0.1",
+	"private": true,
+	"main": "src/index.ts",
+	"type": "module",
+	"scripts": {
+		"generate": "lo-fi -s ./src/schema.ts -o ./src/client -r",
+		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/cli && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react"
+	},
+	"dependencies": {
+		"@aglio/trpc": "workspace:*",
+		"@lo-fi/cli": "^1.10.0",
+		"@lo-fi/common": "^1.8.1",
+		"@lo-fi/react": "^11.1.0",
+		"@lo-fi/web": "^1.10.7",
+		"@trpc/client": "^10.5.0",
+		"@trpc/server": "^10.5.0",
+		"cuid": "^2.1.8"
+	}
+}

@@ -40,6 +40,9 @@
 		},
 		{
 			"path": "./packages/email"
+		},
+		{
+			"path": "./packages/groceriesClient"
 		}
 	]
 }

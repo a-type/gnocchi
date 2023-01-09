@@ -5,7 +5,7 @@ import {
 	SubmitButton,
 	TextField,
 } from '@/components/primitives/index.js';
-import { groceries, Category, hooks } from '@/stores/groceries/index.js';
+import { groceries, hooks } from '@/stores/groceries/index.js';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { DndContext, DragOverlay, useDndMonitor } from '@dnd-kit/core';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
@@ -15,6 +15,7 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { Formik } from 'formik';
+import { Category } from '@aglio/groceries-client';
 
 export interface CategoryManagerProps {}
 

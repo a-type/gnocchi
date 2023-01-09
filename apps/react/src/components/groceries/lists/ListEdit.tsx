@@ -21,6 +21,10 @@ export interface ListEditProps {
 export function ListEdit({ listId }: ListEditProps) {
 	const list = hooks.useList(listId);
 
+	if (!list) {
+		return null;
+	}
+
 	return (
 		<Dialog>
 			<DialogTrigger asChild>

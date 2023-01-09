@@ -1,19 +1,21 @@
 import { LinkButton, LinkButtonProps } from '@/components/primitives/index.js';
+import { Recipe } from '@aglio/groceries-client';
+import { makeRecipeLink } from '../makeRecipeLink.js';
 
 export interface RecipeViewerEditButtonProps
 	extends Omit<LinkButtonProps, 'to'> {
-	slug: string;
+	recipe: Recipe;
 }
 
 export function RecipeViewerEditButton({
-	slug,
+	recipe,
 	...rest
 }: RecipeViewerEditButtonProps) {
 	return (
 		<LinkButton
 			size="small"
 			color="default"
-			to={`/recipes/${slug}/edit`}
+			to={makeRecipeLink(recipe, '/edit')}
 			{...rest}
 		>
 			Edit

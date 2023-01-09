@@ -6,7 +6,7 @@ import {
 	DialogTitle,
 } from '@/components/primitives/index.js';
 import { Button, P } from '@/components/primitives/index.js';
-import { addRecipeFromUrl } from '@/stores/recipes/mutations.js';
+import { addRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { proxy, useSnapshot } from 'valtio';
