@@ -71,6 +71,7 @@ export default defineConfig({
 				initialIsOpen: false,
 				badgeStyle: 'display: none',
 			},
+			enableBuild: false,
 		}),
 	],
 	optimizeDeps: {
