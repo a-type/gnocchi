@@ -1,6 +1,8 @@
 import { H2, Box, LiveUpdateTextField } from '@/components/primitives/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
+import { Recipe } from '@aglio/groceries-client';
 import { useRecipeFromSlugUrl } from '../hooks.js';
+import { RecipeNotFound } from '../RecipeNotFound.jsx';
 import { RecipeDeleteButton } from './RecipeDeleteButton.jsx';
 import { RecipeIngredientsEditor } from './RecipeIngredientsEditor.jsx';
 import { RecipeInstructionsField } from './RecipeInstructionsField.jsx';
@@ -14,6 +16,12 @@ export interface RecipeEditorProps {
 export function RecipeEditor({ slug }: RecipeEditorProps) {
 	const recipe = useRecipeFromSlugUrl(slug);
 
+	if (!recipe) return <RecipeNotFound />;
+
+	return <RecipeEditorContent recipe={recipe} />;
+}
+
+function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	return (
 		<Box direction="column" gap={8}>
 			<RecipeTitleField recipe={recipe} />
