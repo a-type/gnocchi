@@ -17,11 +17,13 @@ export const RecipeIngredientsViewer = forwardRef<
 
 	return (
 		<ul ref={ref}>
-			{ingredients.map((ingredient) => (
-				<li key={ingredient.get('id')}>
-					<IngredientText ingredient={ingredient} multiplier={multiplier} />
-				</li>
-			))}
+			{ingredients
+				.filter((i) => !!i)
+				.map((ingredient) => (
+					<li key={ingredient.get('id')}>
+						<IngredientText ingredient={ingredient} multiplier={multiplier} />
+					</li>
+				))}
 		</ul>
 	);
 });

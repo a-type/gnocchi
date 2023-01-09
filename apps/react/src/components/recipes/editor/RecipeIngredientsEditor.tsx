@@ -62,15 +62,17 @@ export function RecipeIngredientsEditor({
 			>
 				<SortableContext items={ids} strategy={verticalListSortingStrategy}>
 					<div className={classes.list}>
-						{ingredients.map((ingredient, index) => (
-							<RecipeIngredientItem
-								key={ingredient.get('id')}
-								ingredient={ingredient}
-								onDelete={() => {
-									ingredients.delete(index);
-								}}
-							/>
-						))}
+						{ingredients
+							.filter((i) => !!i)
+							.map((ingredient, index) => (
+								<RecipeIngredientItem
+									key={ingredient.get('id')}
+									ingredient={ingredient}
+									onDelete={() => {
+										ingredients.delete(index);
+									}}
+								/>
+							))}
 					</div>
 				</SortableContext>
 			</DndContext>
