@@ -40,6 +40,9 @@ import {
 	recipesDescriptor,
 } from '@/stores/recipes/index.js';
 import { SubscriberFeaturesPage } from './pages/SubscriberFeaturesPage.jsx';
+// @ts-ignore
+import { inject } from '@vercel/analytics';
+inject();
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());

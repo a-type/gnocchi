@@ -142,6 +142,7 @@ importers:
       '@vanilla-extract/recipes': ^0.2.5
       '@vanilla-extract/sprinkles': ^1.5.0
       '@vanilla-extract/vite-plugin': ^3.6.1
+      '@vercel/analytics': ^0.1.6
       '@vitejs/plugin-react': ^2.1.0
       classnames: ^2.3.2
       clsx: ^1.2.1
@@ -230,6 +231,7 @@ importers:
       '@vanilla-extract/css-utils': 0.1.3
       '@vanilla-extract/recipes': 0.2.5_@vanilla-extract+css@1.9.1
       '@vanilla-extract/sprinkles': 1.5.0_@vanilla-extract+css@1.9.1
+      '@vercel/analytics': 0.1.6_react@18.2.0
       classnames: 2.3.2
       clsx: 1.2.1
       convert-units: 3.0.0-beta.4
@@ -3685,6 +3687,14 @@ packages:
       - supports-color
       - ts-node
     dev: true
+
+  /@vercel/analytics/0.1.6_react@18.2.0:
+    resolution: {integrity: sha512-zNd5pj3iDvq8IMBQHa1YRcIteiw6ZiPB8AsONHd8ieFXlNpLqhXfIYnf4WvTfZ7S1NSJ++mIM14aJnNac/VMXQ==}
+    peerDependencies:
+      react: ^16.8||^17||^18
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /@vitejs/plugin-react/2.1.0_vite@3.1.0:
     resolution: {integrity: sha512-am6rPyyU3LzUYne3Gd9oj9c4Rzbq5hQnuGXSMT6Gujq45Il/+bunwq3lrB7wghLkiF45ygMwft37vgJ/NE8IAA==}
