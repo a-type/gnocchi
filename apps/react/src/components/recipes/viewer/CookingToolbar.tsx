@@ -1,5 +1,6 @@
 import { PageNowPlaying } from '@/components/layouts/index.jsx';
 import { Button } from '@/components/primitives/index.js';
+import { People } from '@/components/sync/people/People.jsx';
 import { useToggle } from '@/hooks/useToggle.jsx';
 import { Recipe } from '@aglio/groceries-client';
 import { ListBulletIcon } from '@radix-ui/react-icons';

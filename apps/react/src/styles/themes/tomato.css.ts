@@ -12,6 +12,7 @@ export const tomatoTheme = createTheme(contract, {
 		accent: '#3ec188',
 		accentDark: '#1e5a3e',
 		primaryLighter: '#ffc0c0',
+		primaryWash: '#ffe7e7',
 		primary: '#fd7e4d',
 		primaryLight: '#fc9c7e',
 		primaryDark: '#b03510',

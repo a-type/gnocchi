@@ -1,15 +1,14 @@
 import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
-import { clsx } from 'clsx';
 import * as classes from './People.css.js';
 
-export function People() {
+export function People({ hideIfAlone }: { hideIfAlone?: boolean }) {
 	const peerIds = hooks.usePeerIds();
 
 	const syncing = hooks.useSyncStatus();
 
-	if (!syncing) {
+	if (!syncing || (hideIfAlone && peerIds.length === 0)) {
 		return null;
 	}
 

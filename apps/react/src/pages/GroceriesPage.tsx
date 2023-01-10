@@ -58,29 +58,24 @@ export function GroceriesPage() {
 						justify="space-between"
 						align="center"
 						gap={2}
-						p={4}
+						px={4}
+						py={2}
+						mt={1}
 					>
 						{/* Suspended state approximates final height */}
-						<Suspense fallback={<div style={{ height: 33 }} />}>
-							<Box flexDirection="row" align="center" gap={2}>
-								<MainMenu />
-								<Suspense fallback={null}>
-									<ListSelect
-										includeAll
-										value={listId}
-										onChange={onListChange}
-									/>
-									{listId && <ListEdit listId={listId} />}
-								</Suspense>
-							</Box>
-							<CollaborationMenu />
-						</Suspense>
+						<Box flexDirection="row" align="center" gap={2}>
+							<Suspense fallback={<div style={{ height: 28 }} />}>
+								<ListSelect includeAll value={listId} onChange={onListChange} />
+								{listId && <ListEdit listId={listId} />}
+							</Suspense>
+						</Box>
 					</Box>
 					<PageFixedArea
 						className={sprinkles({
 							display: 'flex',
 							flexDirection: 'column',
 							gap: 2,
+							py: 2,
 						})}
 					>
 						<Suspense fallback={null}>

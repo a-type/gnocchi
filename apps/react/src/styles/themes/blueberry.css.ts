@@ -11,6 +11,7 @@ export const blueberryTheme = createTheme(contract, {
 		accent: '#3ec188',
 		accentDark: '#1e5a3e',
 		primaryLighter: '#E0F2FE',
+		primaryWash: '#F3F9FE',
 		primaryLight: '#BAE6FD',
 		primary: '#38BDF8',
 		primaryDark: '#0284C7',

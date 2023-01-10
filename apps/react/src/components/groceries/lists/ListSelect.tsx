@@ -60,7 +60,7 @@ export function ListSelect({ value, onChange, includeAll }: ListSelectProps) {
 					<SelectIcon />
 				</SelectTrigger>
 				<SelectContent>
-					{includeAll && <SelectItem value="undefined">All</SelectItem>}
+					{includeAll && <SelectItem value="undefined">All lists</SelectItem>}
 					{lists.length > 0 && (
 						<SelectItem value={'null'}>
 							<Box direction="row" gap={2} align="center">

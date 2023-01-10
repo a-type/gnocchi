@@ -25,7 +25,16 @@ export function RecipeInstructionsField({
 
 function Toolbar({ editor }: { editor: Editor }) {
 	return (
-		<Box flexDirection="row" gap={2} align="center">
+		// Sticks below the action bar
+		<Box
+			flexDirection="row"
+			gap={2}
+			align="center"
+			position="sticky"
+			zIndex="menu"
+			style={{ top: 72 }}
+			background="white"
+		>
 			<Button
 				color="ghost"
 				onClick={() => {

@@ -17,7 +17,7 @@ export const trigger = style({
 	color: vars.colors.black,
 	borderWidth: 1,
 	borderStyle: 'solid',
-	borderColor: vars.colors.gray20,
+	borderColor: vars.colors.gray50,
 	':hover': { borderColor: vars.colors.gray70 },
 	':focus': { boxShadow: vars.shadows.focus },
 	selectors: {
@@ -56,7 +56,7 @@ export const item = style({
 	alignItems: 'center',
 	flexDirection: 'row',
 	height: 36,
-	padding: '0 35px 0 25px',
+	padding: `0 ${vars.space[4]} 0 35px`,
 	position: 'relative',
 	userSelect: 'none',
 

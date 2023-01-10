@@ -1,9 +1,15 @@
+import { PageFixedArea } from '@/components/layouts/index.jsx';
 import { H2, Box, LiveUpdateTextField } from '@/components/primitives/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Recipe } from '@aglio/groceries-client';
 import { useRecipeFromSlugUrl } from '../hooks.js';
 import { RecipeNotFound } from '../RecipeNotFound.jsx';
+import {
+	InstructionsContext,
+	InstructionsProvider,
+} from './InstructionStepNodeView.jsx';
 import { RecipeDeleteButton } from './RecipeDeleteButton.jsx';
+import { RecipeEditActions } from './RecipeEditActions.jsx';
 import { RecipeIngredientsEditor } from './RecipeIngredientsEditor.jsx';
 import { RecipeInstructionsField } from './RecipeInstructionsField.jsx';
 import { RecipeTitleField } from './RecipeTitleField.jsx';
@@ -25,14 +31,19 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	return (
 		<Box direction="column" gap={8}>
 			<RecipeTitleField recipe={recipe} />
+			<PageFixedArea className={sprinkles({ px: 0 })}>
+				<RecipeEditActions />
+			</PageFixedArea>
 			<RecipeUrlField recipe={recipe} />
 			<div>
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsEditor recipe={recipe} />
 			</div>
 			<div>
-				<H2 gutterBottom>Instructions</H2>
-				<RecipeInstructionsField recipe={recipe} />
+				<InstructionsProvider isEditing>
+					<H2 gutterBottom>Instructions</H2>
+					<RecipeInstructionsField recipe={recipe} />
+				</InstructionsProvider>
 			</div>
 			<RecipeDeleteButton
 				className={sprinkles({ alignSelf: 'start' })}

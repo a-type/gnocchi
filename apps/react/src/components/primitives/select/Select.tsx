@@ -29,6 +29,24 @@ export const SelectItem = forwardRef<
 	);
 });
 
+export const SelectItemRoot = withClassName(SelectPrimitive.Item, classes.item);
+export const SelectItemIndicatorRoot = withClassName(
+	SelectPrimitive.ItemIndicator,
+	classes.itemIndicator,
+);
+export const SelectItemIndicator = (
+	props: SelectPrimitive.SelectItemIndicatorProps,
+) => (
+	<SelectItemIndicatorRoot {...props}>
+		<CheckIcon />
+	</SelectItemIndicatorRoot>
+);
+export const SelectItemText = withClassName(
+	SelectPrimitive.ItemText,
+	classes.itemText,
+);
+export const SelectGroup = SelectPrimitive.Group;
+
 export const Select = SelectPrimitive.Root;
 export const SelectTrigger = withClassName(
 	SelectPrimitive.Trigger,

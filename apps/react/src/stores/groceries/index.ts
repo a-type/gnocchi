@@ -8,6 +8,7 @@ import {
 	ItemDestructured,
 	createHooks,
 	migrations,
+	UserInfo,
 } from '@aglio/groceries-client';
 import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
@@ -24,6 +25,8 @@ export interface Profile {
 	name: string;
 	imageUrl?: string;
 }
+
+export type Person = UserInfo<Profile, Presence>;
 
 export const hooks = createHooks<Presence, Profile>();
 

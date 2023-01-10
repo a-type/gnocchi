@@ -11,6 +11,7 @@ export const leekTheme = createTheme(contract, {
 		accent: '#f7d352',
 		accentDark: '#996505',
 		primaryLighter: '#DCFCE7',
+		primaryWash: '#F0FAF5',
 		primaryLight: '#86EFAC',
 		primary: '#34D399',
 		primaryDark: '#22C55E',

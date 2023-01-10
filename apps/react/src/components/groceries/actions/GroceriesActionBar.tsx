@@ -3,12 +3,16 @@ import { groceries, hooks } from '@/stores/groceries/index.js';
 import { CheckboxIcon, ResetIcon, TrashIcon } from '@radix-ui/react-icons';
 import { ActionButton } from '@/components/primitives/actions/ActionButton.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
+import { UndoAction } from './UndoAction.jsx';
+import { RedoAction } from './RedoAction.jsx';
+import { CollaborationMenu } from '@/components/sync/collaborationMenu/CollaborationMenu.jsx';
 
 export interface GroceriesActionBarProps {}
 
 export function GroceriesActionBar({}: GroceriesActionBarProps) {
 	return (
 		<ActionBar>
+			<CollaborationMenu />
 			<UndoAction />
 			<RedoAction />
 			<PurchaseAllAction />
@@ -42,46 +46,6 @@ function PurchaseAllAction() {
 			icon={<CheckboxIcon />}
 		>
 			Purchase All
-		</ActionButton>
-	);
-}
-
-function UndoAction() {
-	const canUndo = hooks.useCanUndo();
-
-	if (!canUndo) {
-		return null;
-	}
-
-	return (
-		<ActionButton
-			size="small"
-			onClick={() => {
-				groceries.undo();
-			}}
-			icon={<ResetIcon />}
-		>
-			Undo
-		</ActionButton>
-	);
-}
-
-function RedoAction() {
-	const canRedo = hooks.useCanRedo();
-
-	if (!canRedo) {
-		return null;
-	}
-
-	return (
-		<ActionButton
-			size="small"
-			onClick={() => {
-				groceries.redo();
-			}}
-			icon={<ResetIcon style={{ transform: 'scaleX(-1)' }} />}
-		>
-			Redo
 		</ActionButton>
 	);
 }

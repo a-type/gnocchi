@@ -1,3 +1,4 @@
+import { vars } from '@/theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
 
 const fadeUp = keyframes({
@@ -13,4 +14,8 @@ const fadeUp = keyframes({
 
 export const container = style({
 	animation: `${fadeUp} 0.3s ease-out`,
+	gap: vars.space[4],
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'start',
 });

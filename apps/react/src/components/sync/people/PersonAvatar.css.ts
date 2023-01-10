@@ -43,3 +43,8 @@ export const initials = style({
 	fontWeight: 'bold',
 	borderRadius: '100%',
 });
+
+export const empty = style({
+	borderStyle: 'dashed',
+	backgroundColor: vars.colors.gray20,
+});

@@ -2,25 +2,29 @@ import { UserInfo } from '@lo-fi/web';
 import { Profile } from '@/stores/groceries/index.js';
 import { clsx } from 'clsx';
 import * as classes from './PersonAvatar.css.js';
+import { PersonIcon } from '@radix-ui/react-icons';
 
 export function PersonAvatar({
 	person,
 	className,
 	index,
+	popIn = true,
 	...rest
 }: {
-	person: UserInfo<Profile, any>;
+	person: UserInfo<Profile, any> | null;
 	className?: string;
 	index?: number;
+	popIn?: boolean;
 }) {
 	return (
 		<div
-			data-pop
+			data-pop={popIn}
 			data-index={index}
-			className={clsx(classes.root, className)}
+			className={clsx(classes.root, !person && classes.empty, className)}
 			{...rest}
 		>
-			<AvatarContent user={person} />
+			{person && <AvatarContent user={person} />}
+			{!person && <PersonIcon />}
 		</div>
 	);
 }

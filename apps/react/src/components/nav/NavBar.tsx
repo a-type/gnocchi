@@ -1,6 +1,7 @@
 import { useIsLoggedIn } from '@/contexts/AuthContext.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
+import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { ReactNode, useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
@@ -34,6 +35,10 @@ export function NavBar({}: NavBarProps) {
 		path: '/recipes',
 		end: false,
 	});
+	const matchSettings = !!useMatch({
+		path: '/settings',
+		end: false,
+	});
 
 	const showRecipesOverride = useFeatureFlag('recipes');
 
@@ -53,6 +58,13 @@ export function NavBar({}: NavBarProps) {
 					Recipes
 				</NavBarLink>
 			)}
+			<NavBarLink
+				to="/settings"
+				icon={<HamburgerMenuIcon />}
+				active={matchSettings}
+			>
+				Settings
+			</NavBarLink>
 		</PageNav>
 	);
 }

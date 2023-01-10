@@ -16,6 +16,7 @@ export const vars = createThemeContract({
 		primaryLight: '',
 		primaryDark: '',
 		primaryLighter: '',
+		primaryWash: '',
 		primaryDarker: '',
 		gray10: '',
 		gray20: '',

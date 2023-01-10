@@ -11,6 +11,7 @@ export const eggplantTheme = createTheme(contract, {
 		accent: '#3ec188',
 		accentDark: '#1e5a3e',
 		primaryLighter: '#E0E7FF',
+		primaryWash: '#F3F4FF',
 		primaryLight: '#C7D2FE',
 		primary: '#818CF8',
 		primaryDark: '#4F46E5',

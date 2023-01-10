@@ -11,6 +11,7 @@ export const lemonTheme = createTheme(contract, {
 		accent: '#3ec188',
 		accentDark: '#1e5a3e',
 		primaryLighter: '#fff1ba',
+		primaryWash: '#fff9e7',
 		primaryLight: '#f9e794',
 		primary: '#f9e794',
 		primaryDark: '#f7d352',

@@ -66,8 +66,13 @@ export const button = style({
 });
 
 export const buttonActive = style({
-	backgroundColor: vars.colors.primaryLighter,
 	color: vars.colors.primaryDarker,
+
+	'@media': {
+		[mediaQueries.sm]: {
+			backgroundColor: vars.colors.primaryLighter,
+		},
+	},
 });
 
 export const buttonText = style({
@@ -108,6 +113,12 @@ export const iconContainer = style({
 export const icon = style({
 	position: 'relative',
 	zIndex: 1,
+
+	selectors: {
+		[`${buttonActive} &`]: {
+			fill: vars.colors.primary,
+		},
+	},
 });
 
 export const logo = style({

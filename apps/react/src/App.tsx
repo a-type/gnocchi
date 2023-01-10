@@ -35,7 +35,6 @@ import { RecipeSavePrompt } from './components/recipes/savePrompt/RecipeSaveProm
 import { RecipeCookPage } from './pages/recipe/RecipeCookPage.jsx';
 import { RecipeOverviewPage } from './pages/recipe/RecipeOverviewPage.jsx';
 import { SubscriberFeaturesPage } from './pages/SubscriberFeaturesPage.jsx';
-import { hooks } from './stores/groceries/index.js';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { inject } from '@vercel/analytics';
 inject();
@@ -66,7 +65,7 @@ export function App() {
 													path="/list/:listId"
 													element={<GroceriesPage />}
 												/>
-												<Route path="/plan" element={<PlanPage />} />
+												<Route path="/settings" element={<PlanPage />} />
 												<Route
 													path="/claim/:inviteId"
 													element={<ClaimInvitePage />}
