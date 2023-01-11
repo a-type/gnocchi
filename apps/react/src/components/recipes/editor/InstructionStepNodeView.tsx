@@ -121,12 +121,16 @@ export const InstructionsContext = createContext<{
 
 export const InstructionsProvider = ({
 	isEditing,
+	recipeId,
 	children,
 }: {
+	recipeId: string;
 	isEditing: boolean;
 	children: ReactNode;
 }) => {
-	const hasPeers = hooks.usePeerIds().length > 0;
+	const hasPeers =
+		hooks.useFindPeers((peer) => peer.presence.viewingRecipeId === recipeId)
+			.length > 0;
 	const value = useMemo(() => ({ isEditing, hasPeers }), [isEditing, hasPeers]);
 	return (
 		<InstructionsContext.Provider value={value}>

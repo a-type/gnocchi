@@ -9,10 +9,6 @@ export interface MeetupActionProps {}
 export function MeetupAction({}: MeetupActionProps) {
 	const hasPeers = hooks.usePeerIds().length > 0;
 
-	if (!hasPeers) {
-		return null;
-	}
-
 	return (
 		<MeetupSelect>
 			{(location) => (
@@ -20,6 +16,7 @@ export function MeetupAction({}: MeetupActionProps) {
 					size="small"
 					icon={<MeetupIcon />}
 					color={!!location ? 'accent' : 'default'}
+					visible={hasPeers}
 				>
 					<SelectValue />
 				</ActionButton>

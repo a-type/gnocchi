@@ -6,10 +6,6 @@ export function RedoAction() {
 	const canRedo = hooks.useCanRedo();
 	const groceries = hooks.useClient();
 
-	if (!canRedo) {
-		return null;
-	}
-
 	return (
 		<ActionButton
 			size="small"
@@ -17,6 +13,7 @@ export function RedoAction() {
 				groceries.undoHistory.redo();
 			}}
 			icon={<ResetIcon style={{ transform: 'scaleX(-1)' }} />}
+			visible={canRedo}
 		>
 			Redo
 		</ActionButton>

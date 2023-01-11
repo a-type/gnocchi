@@ -35,12 +35,9 @@ function PurchaseAllAction() {
 		})
 		.filter((item) => listId === undefined || item.get('listId') === listId);
 
-	if (!items.length) {
-		return null;
-	}
-
 	return (
 		<ActionButton
+			visible={items.length > 0}
 			size="small"
 			onClick={() => {
 				groceries.purchaseItems(items);
@@ -64,12 +61,9 @@ function DeleteAllAction() {
 		})
 		.filter((item) => listId === undefined || item.get('listId') === listId);
 
-	if (!items.length) {
-		return null;
-	}
-
 	return (
 		<ActionButton
+			visible={items.length > 0}
 			size="small"
 			onClick={() => {
 				groceries.deleteItems(items.map((i) => i.get('id')));

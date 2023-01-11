@@ -48,10 +48,10 @@ function RecipeCookViewContent({
 	return (
 		<div className={clsx(classes.container, className)}>
 			<H1 gutterBottom={false}>{recipe.get('title')}</H1>
-			<PageFixedArea className={sprinkles({ px: 0 })}>
+			<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
 				<CookingActionBar recipe={recipe} />
 			</PageFixedArea>
-			<InstructionsProvider isEditing={false}>
+			<InstructionsProvider isEditing={false} recipeId={recipe.get('id')}>
 				<RecipeInstructionsViewer recipe={recipe} />
 			</InstructionsProvider>
 			<CookingToolbar recipe={recipe} />

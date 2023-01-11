@@ -12,3 +12,7 @@ export const root = style({
 		},
 	},
 });
+
+export const outer = style({
+	overflow: 'hidden',
+});

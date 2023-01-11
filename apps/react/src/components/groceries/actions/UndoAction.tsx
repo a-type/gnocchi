@@ -6,10 +6,6 @@ export function UndoAction() {
 	const canUndo = hooks.useCanUndo();
 	const groceries = hooks.useClient();
 
-	if (!canUndo) {
-		return null;
-	}
-
 	return (
 		<ActionButton
 			size="small"
@@ -17,6 +13,7 @@ export function UndoAction() {
 				groceries.undoHistory.undo();
 			}}
 			icon={<ResetIcon />}
+			visible={canUndo}
 		>
 			Undo
 		</ActionButton>

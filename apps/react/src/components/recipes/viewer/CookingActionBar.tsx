@@ -1,6 +1,10 @@
 import { ActionBar } from '@/components/primitives/actions/ActionBar.jsx';
 import { ActionButton } from '@/components/primitives/actions/ActionButton.jsx';
 import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.jsx';
+import {
+	PeopleList,
+	PeopleListItem,
+} from '@/components/sync/people/People.jsx';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
@@ -40,12 +44,16 @@ function CookingPeople({ recipeId }: { recipeId: string }) {
 
 	return (
 		<ErrorBoundary>
-			<div className={classes.peopleList}>
-				<PersonAvatar person={self} index={0} />
+			<PeopleList count={peers.length + 1}>
+				<PeopleListItem index={0}>
+					<PersonAvatar person={self} />
+				</PeopleListItem>
 				{peers.map((peer, index) => (
-					<PersonAvatar person={peer} index={index + 1} key={peerk.id} />
+					<PeopleListItem index={index + 1} key={peer.id}>
+						<PersonAvatar person={peer} />
+					</PeopleListItem>
 				))}
-			</div>
+			</PeopleList>
 		</ErrorBoundary>
 	);
 }
