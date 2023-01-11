@@ -14,3 +14,5 @@ export function RecipeOverviewPage({}: RecipeOverviewPageProps) {
 		</Box>
 	);
 }
+
+export default RecipeOverviewPage;

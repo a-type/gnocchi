@@ -51,6 +51,8 @@ export function PlanPage() {
 	);
 }
 
+export default PlanPage;
+
 function ManageSubscriptionButton(props: ButtonProps) {
 	return (
 		<form action={`${API_HOST_HTTP}/api/stripe/create-portal`} method="POST">

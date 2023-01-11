@@ -88,3 +88,5 @@ function FeatureFlagPlanManager({
 		</div>
 	);
 }
+
+export default FeatureFlagsManager;

@@ -162,3 +162,5 @@ function AdminCategoryItem({
 		</Box>
 	);
 }
+
+export default AdminCategoryManager;

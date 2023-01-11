@@ -38,3 +38,5 @@ export function VerifyEmailPage({}: VerifyEmailPageProps) {
 		</PageRoot>
 	);
 }
+
+export default VerifyEmailPage;

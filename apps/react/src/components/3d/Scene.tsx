@@ -160,3 +160,5 @@ export function Scene(props: { className?: string }) {
 		</Canvas>
 	);
 }
+
+export default Scene;

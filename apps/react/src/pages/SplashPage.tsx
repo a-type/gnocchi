@@ -1,4 +1,3 @@
-import { Scene } from '@/components/3d/Scene.jsx';
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import {
 	Button,
@@ -10,11 +9,13 @@ import {
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';
 import { sprinkles } from '@/styles/sprinkles.css.js';
-import { CSSProperties, ReactNode, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { CSSProperties, lazy, ReactNode, Suspense, useEffect } from 'react';
 import * as classes from './SplashPage.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 import { APP_NAME } from '@/config.js';
+
+// dynamically import Scene
+const Scene = lazy(() => import('@/components/3d/Scene.jsx'));
 
 export function SplashPage() {
 	const [_, setHasSeen] = useLocalStorage('hasSeenWelcome', true);
@@ -25,7 +26,9 @@ export function SplashPage() {
 	return (
 		<PageRoot color="lemon">
 			<div className={classes.backgroundSceneContainer}>
-				<Scene />
+				<Suspense>
+					<Scene />
+				</Suspense>
 			</div>
 			<PageContent nav={false}>
 				<div className={classes.demoGrid}>
@@ -139,6 +142,8 @@ export function SplashPage() {
 		</PageRoot>
 	);
 }
+
+export default SplashPage;
 
 function Section({
 	color = 'default',

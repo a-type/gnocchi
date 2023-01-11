@@ -13,7 +13,6 @@ import { clsx } from 'clsx';
 import * as classes from './index.css.js';
 import { Box, BoxProps } from '../primitives/index.js';
 import { withClassName } from '@/hocs/withClassName.jsx';
-import { NavBar } from '../nav/NavBar.jsx';
 import { createPortal } from 'react-dom';
 
 export function PageContent({
@@ -45,7 +44,7 @@ export function PageContent({
 			>
 				{children}
 			</Box>
-			{nav && <NavBar />}
+			<NavOutlet />
 		</div>
 	);
 }
@@ -57,7 +56,7 @@ export const PageRoot = forwardRef<
 		children?: ReactNode;
 		className?: string;
 	}
->(function PageRoot({ className, ...props }, ref) {
+>(function PageRoot({ className, children, ...props }, ref) {
 	const [container, setContainer] = useState<HTMLDivElement>();
 
 	return (
@@ -72,10 +71,23 @@ export const PageRoot = forwardRef<
 					className,
 				)}
 				{...props}
-			/>
+			>
+				{children}
+			</div>
 		</NowPlayingContext.Provider>
 	);
 });
+
+const NavContext = createContext<{
+	container: HTMLDivElement | null;
+	setContainer: (container: HTMLDivElement) => void;
+}>({ container: null, setContainer: () => {} });
+
+function NavOutlet() {
+	const { setContainer } = useContext(NavContext);
+
+	return <div className={classes.nav} ref={setContainer} />;
+}
 
 export function PageFixedArea({
 	className,
@@ -104,13 +116,17 @@ export function PageNav({
 	children,
 	...props
 }: HTMLAttributes<HTMLDivElement> & { innerClassName?: string }) {
+	const { container } = useContext(NavContext);
 	const { setContainer } = useContext(NowPlayingContext);
 
-	return (
-		<div {...props} className={clsx(classes.nav, className)}>
+	if (!container) return null;
+
+	return createPortal(
+		<>
 			<div className={clsx(classes.navInner, innerClassName)}>{children}</div>
 			<div ref={setContainer} className={classes.nowPlayingContainer} />
-		</div>
+		</>,
+		container,
 	);
 }
 
@@ -130,4 +146,14 @@ export function PageNowPlaying({
 		);
 	}
 	return null;
+}
+
+export function NavContextProvider({ children }: { children: ReactNode }) {
+	const [container, setContainer] = useState<HTMLDivElement | null>(null);
+
+	return (
+		<NavContext.Provider value={{ container, setContainer }}>
+			{children}
+		</NavContext.Provider>
+	);
 }

@@ -15,3 +15,5 @@ export function RecipesPage({}: RecipesPageProps) {
 		</PageRoot>
 	);
 }
+
+export default RecipesPage;

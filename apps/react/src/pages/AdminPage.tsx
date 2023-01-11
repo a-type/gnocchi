@@ -25,3 +25,5 @@ export function AdminPage() {
 		</PageRoot>
 	);
 }
+
+export default AdminPage;

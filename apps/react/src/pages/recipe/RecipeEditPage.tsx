@@ -8,3 +8,5 @@ export function RecipeEditPage({}: RecipeEditPageProps) {
 
 	return <RecipeEditor slug={slug as string} />;
 }
+
+export default RecipeEditPage;

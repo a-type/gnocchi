@@ -3,3 +3,5 @@ import { AdminCategoryManager } from '@/components/groceries/categories/AdminCat
 export function AdminCategoriesPage() {
 	return <AdminCategoryManager />;
 }
+
+export default AdminCategoriesPage;

@@ -90,3 +90,5 @@ export function SubscriberFeaturesPage() {
 		</PageRoot>
 	);
 }
+
+export default SubscriberFeaturesPage;

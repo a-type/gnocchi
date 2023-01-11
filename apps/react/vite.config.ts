@@ -10,6 +10,17 @@ export default defineConfig({
 	plugins: [
 		react(),
 		vanillaExtractPlugin(),
+		checker({
+			typescript: {
+				tsconfigPath: './tsconfig.json',
+				buildMode: true,
+			},
+			overlay: {
+				initialIsOpen: false,
+				badgeStyle: 'display: none',
+			},
+			enableBuild: false,
+		}),
 		VitePWA({
 			includeManifestIcons: true,
 			strategies: 'injectManifest',
@@ -52,11 +63,6 @@ export default defineConfig({
 				'models/**/*',
 				'assets/**/*',
 			],
-			injectManifest: {
-				globPatterns: [
-					'**/*.{js,css,html,png,jpg,jpeg,gif,svg,eot,ttf,woff,woff,woff2,gtlf,glb}',
-				],
-			},
 
 			workbox: {
 				sourcemap: true,
@@ -67,17 +73,6 @@ export default defineConfig({
 				type: 'module',
 				navigateFallback: 'index.html',
 			},
-		}),
-		checker({
-			typescript: {
-				tsconfigPath: './tsconfig.json',
-				buildMode: true,
-			},
-			overlay: {
-				initialIsOpen: false,
-				badgeStyle: 'display: none',
-			},
-			enableBuild: false,
 		}),
 	],
 	optimizeDeps: {

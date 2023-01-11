@@ -9,3 +9,5 @@ export function RecipeCookPage({}: RecipeCookPageProps) {
 
 	return <RecipeCookView slug={slug} />;
 }
+
+export default RecipeCookPage;

@@ -24,3 +24,5 @@ export function NevermindPage() {
 		</PageRoot>
 	);
 }
+
+export default NevermindPage;

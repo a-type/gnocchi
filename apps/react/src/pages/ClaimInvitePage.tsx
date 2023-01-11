@@ -89,3 +89,5 @@ export function ClaimInvitePage() {
 		</PageRoot>
 	);
 }
+
+export default ClaimInvitePage;

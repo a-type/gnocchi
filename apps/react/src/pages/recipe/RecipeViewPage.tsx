@@ -31,3 +31,5 @@ export function RecipeViewPage({}: RecipeViewPageProps) {
 		</PageRoot>
 	);
 }
+
+export default RecipeViewPage;

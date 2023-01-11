@@ -71,3 +71,5 @@ export function JoinPage({}: JoinPageProps) {
 		</PageRoot>
 	);
 }
+
+export default JoinPage;

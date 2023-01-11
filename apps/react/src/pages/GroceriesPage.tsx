@@ -14,7 +14,6 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
-import { CollaborationMenu } from '@/components/sync/collaborationMenu/CollaborationMenu.jsx';
 import { Box } from '@/components/primitives/box/Box.jsx';
 import { ListContext } from '@/contexts/ListContext.jsx';
 import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
@@ -22,6 +21,7 @@ import { sprinkles } from '@/styles/sprinkles.css.js';
 import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';
+import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
@@ -50,6 +50,7 @@ export function GroceriesPage() {
 
 	return (
 		<ListContext.Provider value={listId}>
+			<RecipeSavePrompt />
 			<ThemedPageRoot listId={listId}>
 				<PageContent fullHeight noPadding nav>
 					<Box
