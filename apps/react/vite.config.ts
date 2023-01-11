@@ -54,7 +54,6 @@ export default defineConfig({
 
 			workbox: {
 				sourcemap: true,
-				cleanupOutdatedCaches: true,
 			},
 
 			devOptions: {
