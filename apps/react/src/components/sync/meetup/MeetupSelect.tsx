@@ -1,26 +1,33 @@
 import {
 	Select,
 	SelectContent,
+	SelectGroup,
 	SelectIcon,
 	SelectItem,
+	SelectItemRoot,
+	SelectItemText,
+	SelectLabel,
 	SelectTrigger,
 	SelectValue,
+	UnstyledSelectTrigger,
 } from '@/components/primitives/select/Select.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { useCallback, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect } from 'react';
 import * as classes from './MeetupSelect.css.js';
 import { Button } from '@/components/primitives/index.js';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
-export interface MeetupSelectProps {}
+export interface MeetupSelectProps {
+	children?: (value: string | undefined) => ReactNode;
+}
 
-export function MeetupSelect({}: MeetupSelectProps) {
+export function MeetupSelect({ children }: MeetupSelectProps) {
+	const client = hooks.useClient();
 	const info = hooks.useCollaborationInfo('default');
 	hooks.useWatch(info);
 	const meetup = info?.get('meetup') ?? null;
 	hooks.useWatch(meetup);
 
-	const client = hooks.useClient();
 	useEffect(() => {
 		if (!info) {
 			client.collaborationInfo.put({});
@@ -38,44 +45,47 @@ export function MeetupSelect({}: MeetupSelectProps) {
 
 	const setMeetup = useCallback(
 		(value: string) => {
-			info?.set('meetup', {
-				location: value,
-			});
+			client
+				.batch({ undoable: false })
+				.run(() => {
+					info?.set('meetup', {
+						location: value,
+					});
+				})
+				.flush();
 		},
-		[info],
+		[info, client],
 	);
 	const clearMeetup = useCallback(() => {
 		info?.set('meetup', undefined);
 	}, [info]);
+	const Trigger = children ? UnstyledSelectTrigger : SelectTrigger;
 
 	return (
-		<div className={classes.root}>
-			<label className={classes.label}>Meet up at:</label>
-			<div className={classes.controls}>
-				<Select value={location || ''} onValueChange={setMeetup}>
-					<SelectTrigger>
+		<Select value={location || ''} onValueChange={setMeetup}>
+			<Trigger asChild={!!children}>
+				{children ? (
+					children(location)
+				) : (
+					<>
 						<SelectValue />
 						<SelectIcon />
-					</SelectTrigger>
-					<SelectContent>
-						<SelectItem value="" disabled>
-							Select a place
-						</SelectItem>
-						<SelectItem value="Checkout Lanes">Checkout Lanes</SelectItem>
-						<SelectItem value="Self Checkout">Self Checkout</SelectItem>
-						{options.map((option) => (
-							<SelectItem value={option} key={option}>
-								{option}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-				{!!location && (
-					<Button color="ghostDestructive" onClick={clearMeetup}>
-						<Cross2Icon />
-					</Button>
+					</>
 				)}
-			</div>
-		</div>
+			</Trigger>
+			<SelectContent>
+				<SelectItem value="">{location ? 'Clear' : 'Meet'}</SelectItem>
+				<SelectGroup>
+					<SelectLabel>Choose a location</SelectLabel>
+					<SelectItem value="Checkout Lanes">Checkout Lanes</SelectItem>
+					<SelectItem value="Self Checkout">Self Checkout</SelectItem>
+					{options.map((option) => (
+						<SelectItem value={option} key={option}>
+							{option}
+						</SelectItem>
+					))}
+				</SelectGroup>
+			</SelectContent>
+		</Select>
 	);
 }

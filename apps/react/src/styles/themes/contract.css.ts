@@ -12,6 +12,8 @@ export const vars = createThemeContract({
 		accent: '',
 		accentLight: '',
 		accentDark: '',
+		accentLighter: '',
+		accentDarker: '',
 		primary: '',
 		primaryLight: '',
 		primaryDark: '',

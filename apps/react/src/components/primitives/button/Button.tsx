@@ -3,7 +3,13 @@ import { forwardRef, ButtonHTMLAttributes } from 'react';
 import * as classes from './Button.css.js';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-	color?: 'primary' | 'default' | 'ghost' | 'destructive' | 'ghostDestructive';
+	color?:
+		| 'primary'
+		| 'default'
+		| 'ghost'
+		| 'destructive'
+		| 'ghostDestructive'
+		| 'accent';
 	size?: 'default' | 'small';
 	toggled?: boolean;
 }

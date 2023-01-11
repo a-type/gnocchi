@@ -52,6 +52,7 @@ export const SelectTrigger = withClassName(
 	SelectPrimitive.Trigger,
 	classes.trigger,
 );
+export const UnstyledSelectTrigger = SelectPrimitive.Trigger;
 export const SelectValue = withClassName(SelectPrimitive.Value, classes.value);
 export const SelectLabel = withClassName(SelectPrimitive.Label, classes.label);
 export const SelectSeparator = withClassName(

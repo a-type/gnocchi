@@ -81,6 +81,22 @@ export const root = recipe({
 					},
 				},
 			},
+			accent: {
+				vars: {
+					[bgVar]: vars.colors.accentLighter,
+					[hoverVar]: vars.colors.accentLight,
+					[activeVar]: vars.colors.accentLight,
+				},
+				color: vars.colors.accentDarker,
+				border: `1px solid currentColor`,
+				selectors: {
+					'&:focus-visible:not(:disabled)': {
+						vars: {
+							[bgVar]: vars.colors.accentLight,
+						},
+					},
+				},
+			},
 			default: {
 				vars: {
 					[bgVar]: vars.colors.white,
