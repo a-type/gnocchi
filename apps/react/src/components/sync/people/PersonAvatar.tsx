@@ -3,23 +3,22 @@ import { Profile } from '@/stores/groceries/index.js';
 import { clsx } from 'clsx';
 import * as classes from './PersonAvatar.css.js';
 import { PersonIcon } from '@radix-ui/react-icons';
+import { CSSProperties } from 'react';
 
 export function PersonAvatar({
 	person,
 	className,
-	index,
 	popIn = true,
 	...rest
 }: {
 	person: UserInfo<Profile, any> | null;
 	className?: string;
-	index?: number;
 	popIn?: boolean;
+	style?: CSSProperties;
 }) {
 	return (
 		<div
 			data-pop={popIn}
-			data-index={index}
 			className={clsx(classes.root, !person && classes.empty, className)}
 			{...rest}
 		>

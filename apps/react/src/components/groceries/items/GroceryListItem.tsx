@@ -10,6 +10,10 @@ import {
 	ButtonProps,
 	Tooltip,
 } from '@/components/primitives/index.js';
+import {
+	PeopleList,
+	PeopleListItem,
+} from '@/components/sync/people/People.jsx';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
@@ -268,15 +272,17 @@ function RecentPeople({ item }: { item: Item }) {
 	}
 
 	return (
-		<div className={classes.peopleStack}>
-			{people.map((person) => (
-				<PersonAvatar
-					key={person.id}
-					person={person}
-					className={classes.person}
-				/>
+		<PeopleList count={people.length}>
+			{people.map((person, index) => (
+				<PeopleListItem index={index}>
+					<PersonAvatar
+						key={person.id}
+						person={person}
+						className={classes.person}
+					/>
+				</PeopleListItem>
 			))}
-		</div>
+		</PeopleList>
 	);
 }
 
@@ -317,6 +323,8 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 		return null;
 	}
 
+	const name = list.get('name');
+
 	return (
 		<Tooltip content={list.get('name')}>
 			<CollapsibleRoot open={!collapsed}>
@@ -324,11 +332,21 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 					<Link to={`/list/${list.get('id')}`}>
 						<div className={clsx(listThemeClass, classes.listTag)}>
 							<TagIcon className={classes.listTagIcon} />
-							<span className={classes.listTagName}>{list.get('name')}</span>
+							<span className={classes.listTagName}>{name}</span>
+							<span className={classes.listTagNameSmall}>
+								{getInitials(name)}
+							</span>
 						</div>
 					</Link>
 				</CollapsibleContent>
 			</CollapsibleRoot>
 		</Tooltip>
 	);
+}
+
+function getInitials(name: string) {
+	return name
+		.split(' ')
+		.map((word) => word[0])
+		.join('');
 }

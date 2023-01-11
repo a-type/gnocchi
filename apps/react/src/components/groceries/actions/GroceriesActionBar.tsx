@@ -5,7 +5,6 @@ import { ActionButton } from '@/components/primitives/actions/ActionButton.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { UndoAction } from './UndoAction.jsx';
 import { RedoAction } from './RedoAction.jsx';
-import { CollaborationMenu } from '@/components/sync/collaborationMenu/CollaborationMenu.jsx';
 import { MeetupAction } from './MeetupAction.jsx';
 import { People } from '@/components/sync/people/People.jsx';
 

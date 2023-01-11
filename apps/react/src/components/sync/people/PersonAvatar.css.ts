@@ -17,6 +17,8 @@ export const root = style({
 	width: 24,
 	height: 24,
 	userSelect: 'none',
+	position: 'relative',
+	backgroundColor: vars.colors.white,
 
 	selectors: {
 		'&[data-pop="true"]': {

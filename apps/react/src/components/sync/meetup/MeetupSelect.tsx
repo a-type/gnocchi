@@ -74,7 +74,7 @@ export function MeetupSelect({ children }: MeetupSelectProps) {
 				)}
 			</Trigger>
 			<SelectContent>
-				<SelectItem value="">{location ? 'Clear' : 'Meet'}</SelectItem>
+				<SelectItem value="">{location ? 'Clear' : 'Regroup'}</SelectItem>
 				<SelectGroup>
 					<SelectLabel>Choose a location</SelectLabel>
 					<SelectItem value="Checkout Lanes">Checkout Lanes</SelectItem>

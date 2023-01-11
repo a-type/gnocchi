@@ -186,6 +186,20 @@ export const listTagName = style({
 	},
 });
 
+export const listTagNameSmall = style({
+	display: 'inline',
+	whiteSpace: 'nowrap',
+	overflow: 'hidden',
+	textOverflow: 'ellipsis',
+	maxWidth: '100%',
+
+	'@media': {
+		'only screen and (min-width: 600px)': {
+			display: 'none',
+		},
+	},
+});
+
 export const listTagIcon = style({
 	display: 'inline',
 	// '@media': {

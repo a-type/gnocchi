@@ -2,6 +2,7 @@ import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
 import * as classes from './People.css.js';
+import { ReactNode } from 'react';
 
 export function People({ hideIfAlone }: { hideIfAlone?: boolean }) {
 	const peerIds = hooks.usePeerIds();
@@ -14,13 +15,46 @@ export function People({ hideIfAlone }: { hideIfAlone?: boolean }) {
 
 	return (
 		<ErrorBoundary>
-			<div className={classes.root}>
+			<PeopleList count={peerIds.length + 1}>
 				<SelfAvatar />
 				{peerIds.map((peerId, index) => (
-					<PeerAvatar key={peerId} peerId={peerId} index={index} />
+					<PeerAvatar key={peerId} peerId={peerId} index={index + 1} />
 				))}
-			</div>
+			</PeopleList>
 		</ErrorBoundary>
+	);
+}
+
+export function PeopleList({
+	children,
+	count,
+}: {
+	children: ReactNode;
+	count: number;
+}) {
+	const width = count > 0 ? 24 + (count - 1) * 16 : 0;
+
+	return (
+		<div className={classes.root} style={{ width, minWidth: width }}>
+			{children}
+		</div>
+	);
+}
+
+export function PeopleListItem({
+	index,
+	children,
+}: {
+	index: number;
+	children: ReactNode;
+}) {
+	return (
+		<div
+			className={classes.person}
+			style={{ left: index === 0 ? 0 : index * 16, zIndex: index, top: 0 }}
+		>
+			{children}
+		</div>
 	);
 }
 
@@ -38,8 +72,8 @@ function PeerAvatar({ peerId, index }: { peerId: string; index: number }) {
 	}
 
 	return (
-		// <Tooltip content={peer.profile?.name}>
-		<PersonAvatar person={peer} index={index} />
-		// </Tooltip>
+		<PeopleListItem index={index}>
+			<PersonAvatar person={peer} />
+		</PeopleListItem>
 	);
 }
