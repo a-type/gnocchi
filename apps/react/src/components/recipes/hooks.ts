@@ -25,18 +25,24 @@ const THIRTY_MINUTES = 1000 * 60 * 30;
 const SESSION_TIMEOUT = import.meta.env.DEV ? THIRTY_MINUTES : TWO_DAYS;
 export function useCurrentRecipeSession(recipe: Recipe) {
 	const live = hooks.useWatch(recipe);
+	const client = hooks.useClient();
 	let session = live.session;
 	if (!session || session.get('startedAt') < Date.now() - SESSION_TIMEOUT) {
-		recipe.set('session', {
-			completedIngredients: [],
-			completedInstructions: [],
-			ingredientAssignments: {},
-			instructionAssignments: {},
-			startedAt: Date.now(),
-		});
-		session = recipe.get('session')!;
+		client
+			.batch({ undoable: false })
+			.run(() => {
+				recipe.set('session', {
+					completedIngredients: [],
+					completedInstructions: [],
+					ingredientAssignments: {},
+					instructionAssignments: {},
+					startedAt: Date.now(),
+				});
+				session = recipe.get('session')!;
+			})
+			.flush();
 	}
-	return session;
+	return session!;
 }
 
 export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
