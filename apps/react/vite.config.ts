@@ -46,6 +46,7 @@ export default defineConfig({
 					},
 				},
 			} as any,
+			includeAssets: ['fonts/**/*', 'images/**/*', 'models/**/*'],
 			// injectManifest: {
 			// 	globPatterns: [
 			// 		'**/*.{js,css,html,png,jpg,jpeg,gif,svg,eot,ttf,woff,woff,woff2}',
