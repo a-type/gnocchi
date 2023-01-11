@@ -18,7 +18,7 @@ allowed_public_ports = []
 auto_rollback = true
 
 [[services]]
-internal_port = 3001
+internal_port = 4445
 protocol = "tcp"
 [services.concurrency]
 type = "connections"

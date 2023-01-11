@@ -13,7 +13,7 @@
 
 describe('aglio offline', () => {
 	beforeEach(() => {
-		cy.visit('http://localhost:3000');
+		cy.visit('http://localhost:4444');
 		cy.clearIndexedDB();
 		cy.get('[data-test=get-started]').click();
 	});

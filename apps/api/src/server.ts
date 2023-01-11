@@ -14,8 +14,8 @@ app.use(
 	cors({
 		origin: [
 			'http://localhost:8080',
-			'http://localhost:3000',
-			'http://127.0.0.1:3000',
+			'http://localhost:4444',
+			'http://127.0.0.1:4444',
 			'http://localhost:4173',
 			'https://aglio.gfor.rest',
 			'https://aglio.app',
@@ -54,8 +54,8 @@ app.use('/lofi', lofiServer.handleRequest);
 
 app.use('/trpc', createTrpcMiddleware(lofiServer));
 
-server.listen(3001, () => {
-	console.log('http://localhost:3001');
+server.listen(4445, () => {
+	console.log('http://localhost:4445');
 });
 
 productAdminSetup();
