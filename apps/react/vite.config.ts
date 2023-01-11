@@ -52,11 +52,11 @@ export default defineConfig({
 				'models/**/*',
 				'assets/**/*',
 			],
-			// injectManifest: {
-			// 	globPatterns: [
-			// 		'**/*.{js,css,html,png,jpg,jpeg,gif,svg,eot,ttf,woff,woff,woff2}',
-			// 	],
-			// },
+			injectManifest: {
+				globPatterns: [
+					'**/*.{js,css,html,png,jpg,jpeg,gif,svg,eot,ttf,woff,woff,woff2,gtlf,glb}',
+				],
+			},
 
 			workbox: {
 				sourcemap: true,
