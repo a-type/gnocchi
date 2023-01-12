@@ -107,6 +107,10 @@ export async function join({
 							create: providerAccount,
 					  }
 					: undefined,
+				password: password ? bcrypt.hashSync(password, 10) : undefined,
+				fullName,
+				friendlyName: friendlyName || fullName,
+				imageUrl: picture ?? undefined,
 			},
 			create: {
 				email,

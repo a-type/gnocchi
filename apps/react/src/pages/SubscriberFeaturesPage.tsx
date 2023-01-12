@@ -80,6 +80,7 @@ export function SubscriberFeaturesPage() {
 							borderWidth: 0,
 							borderStyle: 'solid',
 							mt: 6,
+							py: 4,
 						})}
 						style={{ borderTopWidth: 1 }}
 					>

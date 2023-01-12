@@ -1,15 +1,17 @@
 import { useAuth } from '@/contexts/AuthContext.jsx';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import { Form, SubmitButton, TextField } from '../primitives/forms.jsx';
+import { P } from '../primitives/index.js';
 
 export interface EmailSignInFormProps {
 	returnTo?: string;
 }
 
 export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
-	const { mutateAsync } = trpc.auth.login.useMutation();
+	const { mutateAsync, error } = trpc.auth.login.useMutation();
 	const navigate = useNavigate();
 	const { refetch } = useAuth();
 
@@ -36,6 +38,9 @@ export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
 					required
 				/>
 				<SubmitButton>Sign In</SubmitButton>
+				{error && (
+					<P className={sprinkles({ color: 'attention' })}>{error.message}</P>
+				)}
 			</Form>
 		</Formik>
 	);

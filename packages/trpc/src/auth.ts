@@ -61,8 +61,20 @@ export const authRouter = t.router({
 				},
 			});
 			if (!verification) {
-				throw new Error(
+				throw new RequestError(
+					400,
 					'No email verification exists for that code. Try sending another one',
+				);
+			}
+			const existingUser = await prisma.profile.findUnique({
+				where: {
+					email: verification.email,
+				},
+			});
+			if (existingUser?.password) {
+				throw new RequestError(
+					400,
+					'An account already exists with that email. Try logging in.',
 				);
 			}
 			const user = await join({

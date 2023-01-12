@@ -6,6 +6,8 @@ import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from './makeRecipeLink.js';
 import { Suspense } from 'react';
+import { RecipeListActions } from './RecipeListActions.jsx';
+import { PageFixedArea } from '../layouts/index.jsx';
 
 export interface RecipeListProps {}
 
@@ -20,6 +22,11 @@ export function RecipeList({}: RecipeListProps) {
 				}
 			>
 				<RecipeCreateButton />
+			</Suspense>
+			<Suspense>
+				<PageFixedArea>
+					<RecipeListActions />
+				</PageFixedArea>
 			</Suspense>
 			<Suspense
 				fallback={
