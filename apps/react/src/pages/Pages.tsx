@@ -12,6 +12,7 @@ import { PantryPage } from './PantryPage.jsx';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import {
 	NavContextProvider,
+	NowPlayingProvider,
 	PageContent,
 	PageNav,
 	PageRoot,
@@ -148,11 +149,13 @@ const router = createBrowserRouter([
 
 export function Pages() {
 	return (
-		<NavContextProvider>
-			<Suspense>
-				<RouterProvider router={router} />
-			</Suspense>
-		</NavContextProvider>
+		<NowPlayingProvider>
+			<NavContextProvider>
+				<Suspense>
+					<RouterProvider router={router} />
+				</Suspense>
+			</NavContextProvider>
+		</NowPlayingProvider>
 	);
 }
 

@@ -29,7 +29,7 @@ export default defineConfig({
 			manifest: {
 				name: 'Gnocchi',
 				short_name: 'Gnocchi',
-				description: 'Your grocery list, done better',
+				description: 'Your grocery list, done better.',
 				theme_color: '#fdfdff',
 				background_color: '#fdfdff',
 				icons: [
@@ -43,7 +43,31 @@ export default defineConfig({
 						sizes: '512x512',
 						type: 'image/png',
 					},
+					{
+						src: 'android-chrome-512x512-mask.png',
+						sizes: '512x512',
+						type: 'image/png',
+						purpose: 'maskable',
+					},
 				],
+				screenshots: [
+					{
+						src: 'images/screenshots/list.png',
+						type: 'image/png',
+						sizes: '1170x2532',
+					},
+					{
+						src: 'images/screenshots/recipe_overview.png',
+						type: 'image/png',
+						sizes: '1170x2532',
+					},
+					{
+						src: 'images/screenshots/cooking.png',
+						type: 'image/png',
+						sizes: '1170x2532',
+					},
+				],
+				categories: ['food'],
 				display: 'standalone',
 				start_url: '/',
 				share_target: {

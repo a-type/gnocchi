@@ -6,6 +6,7 @@ import {
 	ReactNode,
 	RefObject,
 	useContext,
+	useMemo,
 	useRef,
 	useState,
 } from 'react';
@@ -57,24 +58,20 @@ export const PageRoot = forwardRef<
 		className?: string;
 	}
 >(function PageRoot({ className, children, ...props }, ref) {
-	const [container, setContainer] = useState<HTMLDivElement>();
-
 	return (
-		<NowPlayingContext.Provider value={{ container, setContainer }}>
-			<div
-				ref={ref}
-				className={clsx(
-					classes.pageRoot,
-					{
-						[classes.pageRootLemon]: props.color === 'lemon',
-					},
-					className,
-				)}
-				{...props}
-			>
-				{children}
-			</div>
-		</NowPlayingContext.Provider>
+		<div
+			ref={ref}
+			className={clsx(
+				classes.pageRoot,
+				{
+					[classes.pageRootLemon]: props.color === 'lemon',
+				},
+				className,
+			)}
+			{...props}
+		>
+			{children}
+		</div>
 	);
 });
 
@@ -109,6 +106,17 @@ export const NowPlayingContext = createContext<{
 	container: HTMLDivElement | undefined;
 	setContainer: (container: HTMLDivElement) => void;
 }>({ container: undefined, setContainer: () => {} });
+
+export const NowPlayingProvider = ({ children }: { children: ReactNode }) => {
+	const [container, setContainer] = useState<HTMLDivElement>();
+	const value = useMemo(() => ({ container, setContainer }), [container]);
+
+	return (
+		<NowPlayingContext.Provider value={value}>
+			{children}
+		</NowPlayingContext.Provider>
+	);
+};
 
 export function PageNav({
 	className,
@@ -150,10 +158,7 @@ export function PageNowPlaying({
 
 export function NavContextProvider({ children }: { children: ReactNode }) {
 	const [container, setContainer] = useState<HTMLDivElement | null>(null);
+	const value = useMemo(() => ({ container, setContainer }), [container]);
 
-	return (
-		<NavContext.Provider value={{ container, setContainer }}>
-			{children}
-		</NavContext.Provider>
-	);
+	return <NavContext.Provider value={value}>{children}</NavContext.Provider>;
 }
