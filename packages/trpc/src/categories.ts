@@ -1,6 +1,7 @@
 import { t } from './common.js';
 import * as z from 'zod';
 import { prisma } from '@aglio/prisma';
+import { RequestError } from '@aglio/tools';
 
 export const categoriesRouter = t.router({
 	defaults: t.procedure.query(async ({ ctx }) => {
@@ -88,7 +89,7 @@ export const categoriesRouter = t.router({
 		)
 		.mutation(async ({ input, ctx }) => {
 			if (!ctx.isProductAdmin) {
-				throw new Error('Not authorized');
+				throw new RequestError(403, 'Not authorized');
 			}
 			const category = await prisma.defaultCategory.update({
 				where: { id: input.id },
@@ -108,7 +109,7 @@ export const categoriesRouter = t.router({
 		)
 		.mutation(async ({ input, ctx }) => {
 			if (!ctx.isProductAdmin) {
-				throw new Error('Not authorized');
+				throw new RequestError(403, 'Not authorized');
 			}
 			const category = await prisma.defaultCategory.create({
 				data: {
@@ -122,7 +123,7 @@ export const categoriesRouter = t.router({
 		.input(z.string())
 		.mutation(async ({ input, ctx }) => {
 			if (!ctx.isProductAdmin) {
-				throw new Error('Not authorized');
+				throw new RequestError(403, 'Not authorized');
 			}
 			const category = await prisma.defaultCategory.delete({
 				where: { id: input },

@@ -21,6 +21,7 @@ import { atom, useAtomValue } from 'jotai';
 import { ThemeName } from '@/components/primitives/index.js';
 import RecipesPage from './recipe/RecipesPage.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
+import { VerifyPasswordResetPage } from './VerifyPasswordReset.jsx';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -136,6 +137,11 @@ const router = createBrowserRouter([
 			{
 				path: '/subscriber-features',
 				element: <SubscriberFeaturesPage />,
+				handle: { nav: true },
+			},
+			{
+				path: '/reset-password',
+				element: <VerifyPasswordResetPage />,
 				handle: { nav: true },
 			},
 			{

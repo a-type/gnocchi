@@ -1,12 +1,16 @@
 import { prisma } from '@aglio/prisma';
-import { getGroceryLibraryName, getRecipesLibraryName } from '@aglio/tools';
+import {
+	getGroceryLibraryName,
+	getRecipesLibraryName,
+	RequestError,
+} from '@aglio/tools';
 import { z } from 'zod';
 import { t } from './common.js';
 
 export const adminRouter = t.router({
 	plans: t.procedure.query(async ({ ctx }) => {
 		if (!ctx.isProductAdmin) {
-			throw new Error('Not authorized');
+			throw new RequestError(403, 'Not authorized');
 		}
 		// TODO: pagination
 		const allPlans = await prisma.plan.findMany({
@@ -30,7 +34,7 @@ export const adminRouter = t.router({
 		)
 		.mutation(async ({ input, ctx }) => {
 			if (!ctx.isProductAdmin) {
-				throw new Error('Not authorized');
+				throw new RequestError(403, 'Not authorized');
 			}
 			const { planId, featureFlags } = input;
 			const plan = await prisma.plan.update({

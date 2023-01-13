@@ -48,3 +48,33 @@ export async function sendEmailVerification({
     </div>`,
 	});
 }
+
+export async function sendPasswordReset({
+	to,
+	code,
+	returnTo,
+	uiOrigin = 'https://gnocchi.club',
+}: {
+	to: string;
+	code: string;
+	returnTo?: string;
+	uiOrigin?: string;
+}) {
+	transporter.sendMail({
+		from: 'hi@gnocchi.club',
+		to,
+		subject: 'Reset your password on Gnocchi.club',
+		text: `Your password reset code is ${code}`,
+		html: `
+		<div>
+			<h1>Reset your password on Gnocchi.club</h1>
+			<p>Click the link below to reset your password.</p>
+			<a href="${uiOrigin}/reset-password?code=${code}${
+			returnTo ? `&returnTo=${returnTo}` : ''
+		}">Reset my password</a>
+			<p>If you didn't request this email, you can safely ignore it.</p>
+			<p>Thanks,</p>
+			<p>Grant</p>
+		</div>`,
+	});
+}

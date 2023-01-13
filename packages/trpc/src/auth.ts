@@ -1,9 +1,10 @@
 import { t } from './common.js';
 import { prisma } from '@aglio/prisma';
 import * as z from 'zod';
-import { sendEmailVerification } from '@aglio/email';
+import { sendEmailVerification, sendPasswordReset } from '@aglio/email';
 import { join, login, setLoginSession } from '@aglio/auth';
 import { RequestError } from '@aglio/tools';
+import { resetPassword } from '@aglio/auth/src/password.js';
 
 export const authRouter = t.router({
 	isProductAdmin: t.procedure.query(async ({ ctx }) => {
@@ -118,5 +119,92 @@ export const authRouter = t.router({
 			} else {
 				throw new RequestError(401, 'Incorrect email or password');
 			}
+		}),
+	resetPassword: t.procedure
+		.input(
+			z.object({
+				email: z.string(),
+				returnTo: z.string().optional(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			const user = await prisma.profile.findUnique({
+				where: {
+					email: input.email,
+				},
+			});
+			if (!user) {
+				throw new RequestError(404, 'No user found with that email');
+			}
+			const expiresAt = new Date();
+			expiresAt.setHours(expiresAt.getHours() + 36);
+			const reset = await prisma.passwordReset.upsert({
+				where: {
+					email: input.email,
+				},
+				create: {
+					email: input.email,
+					code: Math.floor(Math.random() * 1000000).toString(),
+					expiresAt,
+				},
+				update: {
+					code: Math.floor(Math.random() * 1000000).toString(),
+					expiresAt,
+				},
+			});
+			await sendPasswordReset({
+				to: input.email,
+				code: reset.code,
+				returnTo: input.returnTo,
+				uiOrigin: ctx.deployedContext.uiHost,
+			});
+			return {
+				sent: true,
+			};
+		}),
+	verifyPasswordReset: t.procedure
+		.input(
+			z.object({
+				code: z.string(),
+				password: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			const reset = await prisma.passwordReset.findUnique({
+				where: {
+					code: input.code,
+				},
+			});
+			if (!reset) {
+				throw new RequestError(
+					400,
+					'No password reset exists for that code. Try sending another one',
+				);
+			}
+			if (reset.expiresAt < new Date()) {
+				throw new RequestError(
+					400,
+					'That password reset code has expired. Try sending another one',
+				);
+			}
+			const user = await prisma.profile.findUnique({
+				where: {
+					email: reset.email,
+				},
+			});
+			if (!user) {
+				throw new RequestError(404, 'No user found with that email');
+			}
+			await resetPassword(reset, input.password);
+			setLoginSession(ctx.res, {
+				userId: user.id,
+				planId: user.planId,
+				name: user.friendlyName || user.fullName,
+				role: user.role as 'admin' | 'user',
+				isProductAdmin: user.isProductAdmin,
+			});
+			return {
+				user,
+			};
 		}),
 });

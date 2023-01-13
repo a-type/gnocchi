@@ -198,6 +198,7 @@ const unresponsiveProperties = defineProperties({
 			maxContent: 'max-content',
 			auto: 'auto',
 		},
+		border: ['none'],
 		borderRadius: vars.radii,
 		cursor: ['pointer', 'default'],
 		borderWidth: vars.borderWidths,
@@ -207,6 +208,7 @@ const unresponsiveProperties = defineProperties({
 		fontSize: vars.fontSizes,
 		fontFamily: vars.fonts,
 		fontStyle: ['normal', 'italic'],
+		textDecoration: ['none', 'underline', 'line-through'],
 	},
 	shorthands: {
 		inset: ['top', 'bottom', 'left', 'right'],
