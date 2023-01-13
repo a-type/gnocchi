@@ -18,7 +18,7 @@ export function useItemsGroupedAndSorted(
 			  },
 	);
 	const categories = hooks.useAllCategories();
-	return useMemo(() => {
+	const categoryGroups = useMemo(() => {
 		const categoryGroups: { category: Category | null; items: Item[] }[] = [];
 		const sortedCategories: (Category | null)[] = categories
 			.slice()
@@ -49,6 +49,10 @@ export function useItemsGroupedAndSorted(
 		}
 		return categoryGroups;
 	}, [items, categories]);
+	return {
+		categoryGroups,
+		itemCount: items.length,
+	};
 }
 
 export function useTransitionPurchasedItems() {

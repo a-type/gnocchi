@@ -1,6 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { groceries, hooks } from '@/stores/groceries/index.js';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Item } from '@aglio/groceries-client';
 import {
 	DndContext,
@@ -20,7 +21,9 @@ import { snapCenterToCursor } from '@dnd-kit/modifiers';
 import { forwardRef, memo, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
+import { Cart } from '../graphics/Cart.jsx';
 import { Box } from '../primitives/box/Box.jsx';
+import { P } from '../primitives/index.js';
 import { GroceryListCategory } from './categories/GroceryListCategory.js';
 import {
 	DESKTOP_DRAG_ACTIVATION_DELAY,
@@ -74,7 +77,11 @@ const GroceryListCategories = forwardRef<
 	{ className?: string }
 >(function GroceryListCategories(props, ref) {
 	const listId = useListId();
-	const groupedItems = useItemsGroupedAndSorted(listId);
+	const { categoryGroups, itemCount } = useItemsGroupedAndSorted(listId);
+
+	if (itemCount === 0) {
+		return <EmptyContent />;
+	}
 
 	return (
 		<Box
@@ -86,7 +93,7 @@ const GroceryListCategories = forwardRef<
 			ref={ref}
 			{...props}
 		>
-			{groupedItems.map(({ category, items }) => {
+			{categoryGroups.map(({ category, items }) => {
 				return (
 					<MemoizedCategory
 						key={category?.get('id') || 'null'}
@@ -119,6 +126,29 @@ function GroceryListDragOverlay() {
 			{draggingItem && <GroceryItemDragPreview item={draggingItem} />}
 		</DragOverlay>,
 		document.body,
+	);
+}
+
+function EmptyContent() {
+	return (
+		<Box
+			align="center"
+			justify="center"
+			p={8}
+			flexGrow={1}
+			textAlign="center"
+			color="gray70"
+		>
+			<Cart width="20%" />
+			<P
+				className={sprinkles({
+					fontStyle: 'italic',
+					fontSize: 'sm',
+				})}
+			>
+				Your list is empty. Use the search bar above to add items.
+			</P>
+		</Box>
 	);
 }
 

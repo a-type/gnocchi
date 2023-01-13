@@ -206,6 +206,7 @@ const unresponsiveProperties = defineProperties({
 		fontWeight: vars.fontWeights,
 		fontSize: vars.fontSizes,
 		fontFamily: vars.fonts,
+		fontStyle: ['normal', 'italic'],
 	},
 	shorthands: {
 		inset: ['top', 'bottom', 'left', 'right'],
