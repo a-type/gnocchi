@@ -103,12 +103,14 @@ export const contentContent = style({
 	position: 'relative',
 	display: 'flex',
 	flexDirection: 'column',
+	paddingBottom: `calc(${vars.space[6]} + env(safe-area-inset-bottom, 0px))`,
 
 	'@media': {
 		'(prefers-reduced-motion: no-preference)': {
 			animation: `${contentShowMobile} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
 		},
 		[mediaQueries.sm]: {
+			paddingBottom: vars.space[6],
 			borderRadius: vars.radii.lg,
 			borderBottom: `1px solid ${vars.colors.black}`,
 		},

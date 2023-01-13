@@ -22,13 +22,19 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 		useLayoutEffect(() => {
 			if (!autoSize) return;
 			const element = innerRef.current;
+			let valueWasEmpty = false;
 			if (element) {
 				function refresh() {
-					if (element!.value !== '' || padBottomPixels) {
+					if (
+						element!.value !== '' ||
+						(!valueWasEmpty && element!.value === '') ||
+						padBottomPixels
+					) {
 						element!.style.height = 'auto';
 						const baseHeight = element!.scrollHeight;
 						element!.style.height = baseHeight + padBottomPixels + 'px';
 					}
+					valueWasEmpty = element!.value === '';
 				}
 				refresh();
 

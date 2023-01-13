@@ -3,6 +3,7 @@ import { style } from '@vanilla-extract/css';
 
 export const nowPlaying = style({
 	width: '100%',
+	paddingBottom: 'env(safe-area-inset-bottom, 0px)',
 });
 
 export const root = style({

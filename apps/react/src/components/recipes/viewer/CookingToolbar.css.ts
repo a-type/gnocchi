@@ -16,9 +16,7 @@ export const container = style({
 	backgroundColor: vars.colors.light,
 	width: '100%',
 	position: 'relative',
-	height: 0,
 	overflow: 'hidden',
-	transition: 'height 0.3s ease-in-out',
 });
 
 export const containerOpen = style({
@@ -30,6 +28,7 @@ export const containerScroll = style({
 	overflow: 'overlay',
 	height: '100%',
 	marginTop: vars.space[3],
+	paddingBottom: `calc(${vars.space[3]} + env(safe-area-inset-bottom, 0px))`,
 });
 
 export const toggleButton = style({

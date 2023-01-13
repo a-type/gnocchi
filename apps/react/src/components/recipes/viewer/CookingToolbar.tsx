@@ -50,6 +50,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 				animation.cancel();
 			});
 			container.style.height = height + 'px';
+			// container.style.minHeight = height + 'px';
 			scrollRoot.scrollTo({ top: 0 });
 		}
 	}, []);
@@ -59,6 +60,9 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 			const container = containerRef.current;
 			if (!container) return;
 			if (open) {
+				container.getAnimations().forEach((animation) => {
+					animation.cancel();
+				});
 				scrollRef.current?.scrollTo({ top: 0 });
 				container.animate([{ height: '0px' }, { height: `${PEEK_HEIGHT}px` }], {
 					fill: 'forwards',
@@ -67,7 +71,24 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 					id: 'open',
 				});
 			} else {
-				container.style.height = '0px';
+				container.getAnimations().forEach((animation) => {
+					animation.cancel();
+				});
+				container.animate(
+					[
+						{
+							height: `${container.clientHeight}px`,
+							// minHeight: `${container.clientHeight}px`,
+						},
+						{ height: '0px' /*minHeight: '0px'*/ },
+					],
+					{
+						fill: 'forwards',
+						easing: 'ease-in-out',
+						duration: 200,
+						id: 'close',
+					},
+				);
 			}
 		});
 	}, [open]);
@@ -78,6 +99,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 			<div
 				ref={containerRef}
 				className={classnames(classes.container, open && classes.containerOpen)}
+				style={{ height: 0 }}
 			>
 				<div
 					className={classes.containerScroll}
