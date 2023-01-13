@@ -17,6 +17,8 @@ export const root = style({
 	padding: 2,
 	height: 'auto',
 
+	paddingBottom: 'calc(2px + env(safe-area-inset-bottom, 0px))',
+
 	'@media': {
 		[mediaQueries.sm]: {
 			backgroundColor: 'transparent',
