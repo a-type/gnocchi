@@ -17,6 +17,7 @@ import { ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
+import { InstallHint } from '@/components/promotional/InstallHint.jsx';
 
 const contents = {
 	offline: OfflineContents,
@@ -77,6 +78,7 @@ function OfflineContents() {
 
 	return (
 		<MainContainer>
+			<InstallHint />
 			<Button size="small" color="default" onClick={refetch}>
 				Retry connection
 			</Button>
@@ -89,6 +91,7 @@ function OfflineContents() {
 function AnonymousContents() {
 	return (
 		<MainContainer>
+			<InstallHint />
 			<LoginButton color="primary" returnTo="/">
 				<ArrowRightIcon />
 				&nbsp;Subscribe (or sign in)
@@ -102,6 +105,7 @@ function AnonymousContents() {
 function UnsubscribedContents() {
 	return (
 		<MainContainer>
+			<InstallHint />
 			<Box
 				background="primaryWash"
 				color="primaryDarker"
@@ -121,6 +125,7 @@ function UnsubscribedContents() {
 function OnlineContents() {
 	return (
 		<MainContainer>
+			<InstallHint />
 			<Invite />
 			<ManageCategories />
 			<ManageSubscriptionButton />
