@@ -1,10 +1,12 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
 import {
+	Box,
 	Button,
 	H2,
 	LinkButton,
 	P,
 	Span,
+	TextLink,
 } from '@/components/primitives/index.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';
@@ -126,6 +128,15 @@ export function SplashPage() {
 						<p>&ndash; Grant</p>
 					</Section>
 				</div>
+				<Box>
+					<TextLink
+						href="https://gnocchi.club/privacy-policy"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Read the privacy policy
+					</TextLink>
+				</Box>
 			</PageContent>
 			<div className={classes.fixedContent}>
 				<LinkButton
@@ -137,7 +148,16 @@ export function SplashPage() {
 					Get Started
 				</LinkButton>
 
-				<Span size="sm">Free, no signup required</Span>
+				<Span size="sm">
+					Free, no signup required. By continuing you agree to{' '}
+					<TextLink
+						href="https://gnocchi.club/toc"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						the terms and conditions of usage.
+					</TextLink>
+				</Span>
 			</div>
 		</PageRoot>
 	);

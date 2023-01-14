@@ -5,7 +5,14 @@ import {
 	PageRoot,
 	PageSection,
 } from '@/components/layouts/index.jsx';
-import { Box, Divider, H1, H2, P } from '@/components/primitives/index.js';
+import {
+	Box,
+	Divider,
+	H1,
+	H2,
+	P,
+	TextLink,
+} from '@/components/primitives/index.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { useSearchParams } from 'react-router-dom';
 import { OAuthSignInButton } from '../components/auth/OAuthSignInButton.jsx';
@@ -67,6 +74,10 @@ export function JoinPage({}: JoinPageProps) {
 					<Divider padded compensate={4} />
 					<EmailSignInForm returnTo={returnTo} />
 				</PageSection>
+				<Box gap={2} mt={6}>
+					<TextLink href="/privacy-policy">Privacy Policy</TextLink>
+					<TextLink href="/toc">Terms and conditions of usage</TextLink>
+				</Box>
 			</PageContent>
 		</PageRoot>
 	);

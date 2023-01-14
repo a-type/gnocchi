@@ -5,6 +5,7 @@ import {
 	ButtonProps,
 	H1,
 	Span,
+	TextLink,
 } from '@/components/primitives/index.js';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
@@ -47,6 +48,18 @@ export function PlanPage() {
 				<Box width="full" direction="column" mt={6} p={4} gap={4} align="start">
 					<H1>Settings</H1>
 					<Contents />
+					<Box fontSize="xs" gap={2}>
+						<TextLink
+							href="/privacy-policy"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Privacy policy
+						</TextLink>
+						<TextLink href="/toc" target="_blank" rel="noopener noreferrer">
+							Terms and conditions of use
+						</TextLink>
+					</Box>
 				</Box>
 			</PageContent>
 		</PageRoot>

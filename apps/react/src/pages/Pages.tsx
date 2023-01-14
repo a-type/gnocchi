@@ -34,6 +34,8 @@ import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
 import { DomainChangeDialog } from '@/components/auth/DomainChangeDialog.jsx';
 import { LogoutNotice } from '@/components/auth/LogoutNotice.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
+import { PrivacyPolicy } from './PrivacyPolicy.jsx';
+import { TermsAndConditions } from './TermsAndConditions.jsx';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -58,6 +60,8 @@ const RecipeOverviewPage = lazy(
 const SubscriberFeaturesPage = lazy(
 	() => import('./SubscriberFeaturesPage.jsx'),
 );
+const PrivacyPolicyPage = lazy(() => import('./PrivacyPolicy.jsx'));
+const TermsAndConditionsPage = lazy(() => import('./TermsAndConditions.jsx'));
 
 const router = createBrowserRouter([
 	{
@@ -169,6 +173,18 @@ const router = createBrowserRouter([
 			{
 				path: '/reset-password',
 				element: <VerifyPasswordResetPage />,
+				handle: { nav: true },
+				hasErrorBoundary: false,
+			},
+			{
+				path: '/privacy-policy',
+				element: <PrivacyPolicyPage />,
+				handle: { nav: true },
+				hasErrorBoundary: false,
+			},
+			{
+				path: '/toc',
+				element: <TermsAndConditionsPage />,
 				handle: { nav: true },
 				hasErrorBoundary: false,
 			},
