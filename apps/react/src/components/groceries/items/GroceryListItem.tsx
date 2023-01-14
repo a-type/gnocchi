@@ -175,7 +175,6 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 								color="ghost"
 								className={sprinkles({
 									position: 'relative',
-									zIndex: menuOpen ? 'menuTrigger' : undefined,
 								})}
 								onContextMenu={preventDefault}
 								{...menuProps}
@@ -193,7 +192,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									onChange={(listId) => item.set('listId', listId)}
 								/>
 								<CategoryPicker item={item} />
-								<ItemDeleteButton color="ghost" item={item}>
+								<ItemDeleteButton color="ghostDestructive" item={item}>
 									<TrashIcon />
 								</ItemDeleteButton>
 							</div>

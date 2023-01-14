@@ -16,6 +16,7 @@ export function useItemDisplayText(item: Item) {
 			? item.get('food')
 			: pluralize(item.get('food'));
 	const showOnlyInput =
+		quantity === 1 &&
 		inputs.length === 1 &&
 		(inputs.get(0).get('multiplier') === null ||
 			inputs.get(0).get('multiplier') === 1);

@@ -1,6 +1,6 @@
 import { setLoginSession } from '@aglio/auth';
 import { prisma } from '@aglio/prisma';
-import { RequestError } from '@aglio/tools';
+import { getGroceryLibraryName, RequestError } from '@aglio/tools';
 import * as z from 'zod';
 import { t } from './common.js';
 
@@ -54,6 +54,8 @@ export const planRouter = t.router({
 					},
 				},
 			});
+
+			ctx.lofi.evictUser(getGroceryLibraryName(plan.id), kicked.id);
 
 			await prisma.activityLog.create({
 				data: {
@@ -141,6 +143,8 @@ export const planRouter = t.router({
 				}),
 			},
 		});
+
+		ctx.lofi.evictUser(getGroceryLibraryName(plan.id), ctx.session.userId);
 
 		// update the session
 		await setLoginSession(ctx.res, {

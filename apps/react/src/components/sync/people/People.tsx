@@ -4,7 +4,13 @@ import { PersonAvatar } from './PersonAvatar.js';
 import * as classes from './People.css.js';
 import { ReactNode } from 'react';
 
-export function People({ hideIfAlone }: { hideIfAlone?: boolean }) {
+export function People({
+	hideIfAlone,
+	avatarClassName,
+}: {
+	hideIfAlone?: boolean;
+	avatarClassName?: string;
+}) {
 	const peerIds = hooks.usePeerIds();
 
 	const syncing = hooks.useSyncStatus();
@@ -16,9 +22,14 @@ export function People({ hideIfAlone }: { hideIfAlone?: boolean }) {
 	return (
 		<ErrorBoundary>
 			<PeopleList count={peerIds.length + 1}>
-				<SelfAvatar />
+				<SelfAvatar className={avatarClassName} />
 				{peerIds.map((peerId, index) => (
-					<PeerAvatar key={peerId} peerId={peerId} index={index + 1} />
+					<PeerAvatar
+						key={peerId}
+						peerId={peerId}
+						index={index + 1}
+						className={avatarClassName}
+					/>
 				))}
 			</PeopleList>
 		</ErrorBoundary>
@@ -58,13 +69,21 @@ export function PeopleListItem({
 	);
 }
 
-function SelfAvatar() {
+function SelfAvatar({ className }: { className?: string }) {
 	const self = hooks.useSelf();
 
-	return <PersonAvatar person={self} />;
+	return <PersonAvatar person={self} className={className} />;
 }
 
-function PeerAvatar({ peerId, index }: { peerId: string; index: number }) {
+function PeerAvatar({
+	peerId,
+	index,
+	className,
+}: {
+	peerId: string;
+	index: number;
+	className?: string;
+}) {
 	const peer = hooks.usePeer(peerId);
 
 	if (!peer) {
@@ -73,7 +92,7 @@ function PeerAvatar({ peerId, index }: { peerId: string; index: number }) {
 
 	return (
 		<PeopleListItem index={index}>
-			<PersonAvatar person={peer} />
+			<PersonAvatar person={peer} className={className} />
 		</PeopleListItem>
 	);
 }

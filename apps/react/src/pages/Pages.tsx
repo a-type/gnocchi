@@ -18,7 +18,14 @@ import {
 	PageRoot,
 } from '@/components/layouts/index.jsx';
 import { atom, useAtomValue } from 'jotai';
-import { ThemeName } from '@/components/primitives/index.js';
+import {
+	Box,
+	Button,
+	H1,
+	LinkButton,
+	P,
+	ThemeName,
+} from '@/components/primitives/index.js';
 import RecipesPage from './recipe/RecipesPage.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { VerifyPasswordResetPage } from './VerifyPasswordReset.jsx';
@@ -26,6 +33,7 @@ import { StartSignupDialog } from '@/components/sync/StartSignupDialog.jsx';
 import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
 import { DomainChangeDialog } from '@/components/auth/DomainChangeDialog.jsx';
 import { LogoutNotice } from '@/components/auth/LogoutNotice.jsx';
+import { BugButton } from '@/components/menu/BugButton.jsx';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -54,7 +62,7 @@ const SubscriberFeaturesPage = lazy(
 const router = createBrowserRouter([
 	{
 		element: <PageLayoutRoot />,
-		hasErrorBoundary: false,
+		errorElement: <ErrorFallback />,
 		children: [
 			{
 				path: '/',
@@ -207,5 +215,23 @@ function PageLayoutRoot() {
 			</Suspense>
 			{showNav && <NavBar />}
 		</>
+	);
+}
+
+function ErrorFallback() {
+	return (
+		<Box align="center" justify="center" p={4}>
+			<Box align="flex-start" justify="center" gap={4} maxWidth="content">
+				<H1>Something went wrong</H1>
+				<P>
+					Sorry about this. The app has crashed. You can try refreshing, but if
+					that doesn't work,{' '}
+					<a href="mailto:gaforres@gmail.com">let me know about it.</a>
+				</P>
+				<LinkButton to="/">Go Home</LinkButton>
+				<Button onClick={() => window.location.reload()}>Refresh</Button>
+				<BugButton />
+			</Box>
+		</Box>
 	);
 }

@@ -51,7 +51,7 @@ function InputRenderer({ input }: { input: ItemInputsItem }) {
 	if (title) {
 		return <span>{truncate(title)}</span>;
 	}
-	return <span>Typed in the add bar</span>;
+	return <span>Added "{text}"</span>;
 }
 
 function truncate(str: string, max = 20) {
