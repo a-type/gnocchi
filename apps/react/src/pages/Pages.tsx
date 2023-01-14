@@ -22,6 +22,10 @@ import { ThemeName } from '@/components/primitives/index.js';
 import RecipesPage from './recipe/RecipesPage.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { VerifyPasswordResetPage } from './VerifyPasswordReset.jsx';
+import { StartSignupDialog } from '@/components/sync/StartSignupDialog.jsx';
+import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
+import { DomainChangeDialog } from '@/components/auth/DomainChangeDialog.jsx';
+import { LogoutNotice } from '@/components/auth/LogoutNotice.jsx';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -33,8 +37,8 @@ const AdminPage = lazy(() => import('./AdminPage.jsx'));
 const AdminCategoriesPage = lazy(
 	() => import('./admin/AdminCategoriesPage.jsx'),
 );
-const AdminFeatureFlagsPage = lazy(
-	() => import('./admin/AdminFeatureFlagsPage.jsx'),
+const AdminPlanManagerPage = lazy(
+	() => import('./admin/AdminPlanManagerPage.js'),
 );
 const AdminSyncPage = lazy(() => import('./admin/AdminSyncPage.jsx'));
 const RecipeViewPage = lazy(() => import('./recipe/RecipeViewPage.jsx'));
@@ -101,8 +105,8 @@ const router = createBrowserRouter([
 						element: <AdminCategoriesPage />,
 					},
 					{
-						path: 'feature-flags',
-						element: <AdminFeatureFlagsPage />,
+						path: 'plans',
+						element: <AdminPlanManagerPage />,
 					},
 					{
 						path: 'sync',
@@ -179,6 +183,10 @@ function PageLayoutRoot() {
 				}
 			>
 				<Outlet />
+				<StartSignupDialog />
+				<UpdatePrompt />
+				<LogoutNotice />
+				<DomainChangeDialog />
 			</Suspense>
 			{showNav && <NavBar />}
 		</>

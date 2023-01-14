@@ -9,7 +9,12 @@ import React, {
 import { useQuery } from '@tanstack/react-query';
 
 export const AuthContext = createContext<{
-	session?: { userId: string; name: string; planId?: string } | null;
+	session?: {
+		userId: string;
+		name: string;
+		planId?: string;
+		role: 'admin' | 'member';
+	} | null;
 	error?: Error;
 	refetch: () => void;
 	isSubscribed: boolean;
@@ -23,7 +28,7 @@ export const AuthContext = createContext<{
 });
 
 async function getSession(): Promise<{
-	session: { userId: string; name: string } | null;
+	session: { userId: string; name: string; role: 'admin' | 'member' } | null;
 	error?: Error;
 	isSubscribed: boolean;
 	// any error in the subscription

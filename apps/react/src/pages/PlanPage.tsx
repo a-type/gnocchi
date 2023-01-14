@@ -18,6 +18,7 @@ import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
 import { InstallHint } from '@/components/promotional/InstallHint.jsx';
+import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
 
 const contents = {
 	offline: OfflineContents,
@@ -115,6 +116,7 @@ function UnsubscribedContents() {
 				Subscription inactive
 			</Box>
 			<ManageSubscriptionButton />
+			<MemberManager />
 			<ManageCategories />
 			<LogoutButton>Sign out</LogoutButton>
 			<BugButton />
@@ -128,7 +130,7 @@ function OnlineContents() {
 			<InstallHint />
 			<Invite />
 			<ManageCategories />
-			<ManageSubscriptionButton />
+			<MemberManager />
 			<BugButton />
 			<LogoutButton>Sign out</LogoutButton>
 		</MainContainer>
@@ -150,7 +152,6 @@ function Invite() {
 	return (
 		<div>
 			<InviteLinkButton color="primary" />
-			<Span size="xs">Get a link to invite others to your list</Span>
 		</div>
 	);
 }

@@ -128,6 +128,8 @@ export async function join({
 				plan: {
 					create: {},
 				},
+				// since they created the plan, they're the admin
+				role: 'admin',
 			},
 		});
 	}

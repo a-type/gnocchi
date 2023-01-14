@@ -17,7 +17,7 @@ export function AdminPage() {
 				<Box direction="row" gap={2} mb={6}>
 					<Link to="/">Home</Link>
 					<Link to="/admin/categories">Categories</Link>
-					<Link to="/admin/feature-flags">Feature Flags</Link>
+					<Link to="/admin/plans">Plans</Link>
 					<Link to="/admin/sync">Sync</Link>
 				</Box>
 				<Outlet />

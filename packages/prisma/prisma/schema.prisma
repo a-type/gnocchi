@@ -25,6 +25,7 @@ model Profile {
   plan         Plan             @relation(fields: [planId], references: [id])
   invitations  PlanInvitation[]
   accounts     Account[]
+  logs         ActivityLog[]
 
   isProductAdmin Boolean @default(false) @map("is_product_admin")
 
@@ -125,4 +126,16 @@ model PasswordReset {
   name      String?
 
   @@map("password_resets")
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  profileId String?  @map("profile_id")
+  profile   Profile? @relation(fields: [profileId], references: [id])
+  action    String
+  data      String?
+
+  @@map("activity_logs")
 }

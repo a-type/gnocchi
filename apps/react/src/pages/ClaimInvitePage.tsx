@@ -8,7 +8,7 @@ import { trpc } from '@/trpc.js';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function ClaimInvitePage() {
-	const { session, refetch } = useAuth();
+	const { session, isSubscribed, refetch } = useAuth();
 
 	const navigate = useNavigate();
 
@@ -36,7 +36,7 @@ export function ClaimInvitePage() {
 	};
 
 	if (session) {
-		if (session.planId) {
+		if (isSubscribed) {
 			return (
 				<PageRoot>
 					<PageContent>
@@ -46,7 +46,7 @@ export function ClaimInvitePage() {
 								By claiming this invite you will cancel your current
 								subscription and join {inviterName}'s grocery list
 							</P>
-							<Button color="primary" onClick={claim}>
+							<Button align="end" color="primary" onClick={claim}>
 								Claim Invite
 							</Button>
 						</Box>
@@ -59,7 +59,11 @@ export function ClaimInvitePage() {
 					<PageContent>
 						<Box p={2} align="start">
 							<H1>Join {inviterName}'s grocery list</H1>
-							<Button color="primary" onClick={claim}>
+							<P>
+								Your current list will be deleted, and you'll begin syncing your
+								groceries and recipes with {inviterName}.
+							</P>
+							<Button align="end" color="primary" onClick={claim}>
 								Claim Invite
 							</Button>
 						</Box>
@@ -78,6 +82,7 @@ export function ClaimInvitePage() {
 						Collaborate on shopping together in the store or during the week.
 					</P>
 					<LoginButton
+						align="end"
 						color="primary"
 						returnTo={`/claim/${inviteId}`}
 						inviteId={inviteId}

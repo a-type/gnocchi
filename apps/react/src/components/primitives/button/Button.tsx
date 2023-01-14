@@ -12,15 +12,19 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 		| 'accent';
 	size?: 'default' | 'small';
 	toggled?: boolean;
+	align?: 'start' | 'stretch' | 'end';
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-	function Button({ className, color, size, toggled, ...props }, ref) {
+	function Button({ className, color, size, toggled, align, ...props }, ref) {
 		return (
 			<button
 				ref={ref}
 				{...props}
-				className={clsx(classes.root({ color, size, toggled }), className)}
+				className={clsx(
+					classes.root({ color, size, toggled, align }),
+					className,
+				)}
 			/>
 		);
 	},

@@ -176,6 +176,17 @@ export const root = recipe({
 				},
 			},
 		},
+		align: {
+			start: {
+				alignSelf: 'flex-start',
+			},
+			stretch: {
+				alignSelf: 'stretch',
+			},
+			end: {
+				alignSelf: 'flex-end',
+			},
+		},
 	},
 
 	compoundVariants: [

@@ -17,6 +17,9 @@ export async function verifySubscription(session: Session) {
 	}
 }
 
+/**
+ * WARNING: mutates session, because I'm lazy.
+ */
 export async function getSubscriptionStatusError(session: Session) {
 	const profileAndPlan = await prisma.profile.findUnique({
 		where: { id: session.userId },
@@ -30,6 +33,11 @@ export async function getSubscriptionStatusError(session: Session) {
 	}
 
 	const plan = profileAndPlan.plan;
+
+	if (plan.id !== session.planId) {
+		// the user's plan has changed, so we need to refresh the session
+		return Message.PlanChanged;
+	}
 
 	if (!plan) {
 		return Message.NoPlan;
@@ -45,6 +53,12 @@ export async function getSubscriptionStatusError(session: Session) {
 	) {
 		return Message.NoSubscription;
 	}
+
+	// no error? update session
+	session.role = profileAndPlan.role as 'admin' | 'user';
+	session.planId = plan.id;
+	session.name = profileAndPlan.friendlyName;
+	session.isProductAdmin = profileAndPlan.isProductAdmin;
 }
 
 const rejectedSubscriptionStatuses: Stripe.Subscription.Status[] = [

@@ -7,16 +7,18 @@ import { ButtonProps } from './Button.jsx';
 export interface LinkButtonProps extends LinkProps {
 	color?: ButtonProps['color'];
 	size?: ButtonProps['size'];
+	align?: ButtonProps['align'];
 }
 
 export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
-	function LinkButton({ className, color, size, ...props }, ref) {
+	function LinkButton({ className, color, size, align, ...props }, ref) {
 		return (
 			<Link
 				className={clsx(
 					classes.root({
 						color,
 						size,
+						align,
 					}),
 					className,
 				)}

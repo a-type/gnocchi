@@ -19,6 +19,8 @@ export const adminRouter = t.router({
 					select: {
 						email: true,
 						fullName: true,
+						role: true,
+						id: true,
 					},
 				},
 			},
@@ -58,5 +60,29 @@ export const adminRouter = t.router({
 		.mutation(async ({ input, ctx }) => {
 			ctx.lofi.evictLibrary(getGroceryLibraryName(input.planId));
 			ctx.lofi.evictLibrary(getRecipesLibraryName(input.planId));
+		}),
+	updateProfile: t.procedure
+		.input(
+			z.object({
+				profileId: z.string(),
+				role: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.isProductAdmin) {
+				throw new RequestError(403, 'Not authorized');
+			}
+			const { profileId, role } = input;
+			const profile = await prisma.profile.update({
+				where: {
+					id: profileId,
+				},
+				data: {
+					role,
+				},
+			});
+			return {
+				success: true,
+			};
 		}),
 });

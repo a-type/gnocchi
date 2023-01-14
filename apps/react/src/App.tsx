@@ -6,13 +6,11 @@ import { clsx } from 'clsx';
 import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import * as classes from './App.css.js';
-import { DomainChangeDialog } from './components/auth/DomainChangeDialog.jsx';
-import { LogoutNotice } from './components/auth/LogoutNotice.jsx';
+
 import { Box } from './components/primitives/box/Box.jsx';
 import { ErrorBoundary } from './components/primitives/ErrorBoundary.js';
 import { Button, H1, P } from './components/primitives/index.js';
-import { StartSignupDialog } from './components/sync/StartSignupDialog.jsx';
-import { UpdatePrompt } from './components/updatePrompt/UpdatePrompt.jsx';
+
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { lemonTheme } from './styles/themes/lemon.css.js';
@@ -42,10 +40,6 @@ export function App() {
 									<GroceriesProvider>
 										<Pages />
 										<Toaster position="bottom-center" />
-										<StartSignupDialog />
-										<UpdatePrompt />
-										<LogoutNotice />
-										<DomainChangeDialog />
 									</GroceriesProvider>
 								</AuthProvider>
 							</QueryClientProvider>

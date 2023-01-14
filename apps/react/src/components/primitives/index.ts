@@ -16,3 +16,4 @@ export * from './textArea/TextArea.jsx';
 export * from './input/Input.jsx';
 export * from './typography/typography.jsx';
 export * from './divider/Divider.jsx';
+export * from './textLink/TextLink.jsx';
