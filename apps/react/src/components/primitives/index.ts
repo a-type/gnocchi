@@ -17,3 +17,4 @@ export * from './input/Input.jsx';
 export * from './typography/typography.jsx';
 export * from './divider/Divider.jsx';
 export * from './textLink/TextLink.jsx';
+export * from './numberStepper/NumberStepper.jsx';

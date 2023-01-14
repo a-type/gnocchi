@@ -3,6 +3,13 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+	NumberStepper,
 } from '@/components/primitives/index.js';
 import {
 	Box,
@@ -10,6 +17,7 @@ import {
 	ButtonProps,
 	Tooltip,
 } from '@/components/primitives/index.js';
+import { MultiplierStepper } from '@/components/recipes/viewer/MultiplierStepper.jsx';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -33,6 +41,7 @@ import { UserInfo } from '@lo-fi/web';
 import {
 	HamburgerMenuIcon,
 	ListBulletIcon,
+	Pencil1Icon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
@@ -80,7 +89,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		{ item, isDragActive, menuProps, className, ...rest },
 		ref,
 	) {
-		const { purchasedAt, id } = hooks.useWatch(item);
+		const { purchasedAt, totalQuantity, id } = hooks.useWatch(item);
 
 		const isPurchased = !!purchasedAt;
 		const { purchasedHidingItems } = useSnapshot(groceriesState);
@@ -155,7 +164,10 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							onPointerUp={stopPropagation}
 							data-test="grocery-list-item-checkbox"
 						/>
-						<div className={classes.textContent}>{displayString}</div>
+						<div className={classes.textContent}>
+							<span>{displayString}</span>
+							{menuOpen && <QuantityEditor item={item} />}
+						</div>
 						<RecentPeople item={item} />
 						<ListTag item={item} collapsed={menuOpen} />
 						<CollapsibleTrigger asChild>
@@ -349,4 +361,33 @@ function getInitials(name: string) {
 		.split(' ')
 		.map((word) => word[0])
 		.join('');
+}
+
+function QuantityEditor({ item }: { item: Item }) {
+	const { totalQuantity } = hooks.useWatch(item);
+	const displayText = useItemDisplayText(item);
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button size="small" color="ghost">
+					<Pencil1Icon />
+				</Button>
+			</DialogTrigger>
+			<DialogContent>
+				<DialogTitle>Edit quantity</DialogTitle>
+				<Box align="center" gap={4}>
+					<span>{displayText}</span>
+					<NumberStepper
+						value={totalQuantity}
+						onChange={(v) => item.set('totalQuantity', v)}
+					/>
+				</Box>
+				<DialogActions>
+					<DialogClose asChild>
+						<Button align="end">Done</Button>
+					</DialogClose>
+				</DialogActions>
+			</DialogContent>
+		</Dialog>
+	);
 }

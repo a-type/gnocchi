@@ -20,7 +20,9 @@ export function useItemDisplayText(item: Item) {
 		(inputs.get(0).get('multiplier') === null ||
 			inputs.get(0).get('multiplier') === 1);
 	const displayString = showOnlyInput
-		? inputs.get(0).get('text')
+		? `${quantity === 1 ? '' : `${fractionToText(quantity)} `}${inputs
+				.get(0)
+				.get('text')}`
 		: `${fractionToText(quantity)} ${
 				pluralizedUnit && `${pluralizedUnit} `
 		  }${pluralizedName}`;

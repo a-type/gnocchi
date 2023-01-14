@@ -54,59 +54,71 @@ const SubscriberFeaturesPage = lazy(
 const router = createBrowserRouter([
 	{
 		element: <PageLayoutRoot />,
+		hasErrorBoundary: false,
 		children: [
 			{
 				path: '/',
 				element: <GroceriesPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/settings',
 				element: <PlanPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/claim/:inviteId',
 				element: <ClaimInvitePage />,
 				handle: { nav: false },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/purchased',
 				element: <PantryPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/nevermind',
 				element: <NevermindPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/welcome',
 				element: <SplashPage />,
 				handle: { nav: false },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/join',
 				element: <JoinPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/verify',
 				element: <VerifyEmailPage />,
 				handle: { nav: false },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/admin',
 				element: <AdminPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 				children: [
 					{
 						path: 'categories',
 						element: <AdminCategoriesPage />,
+						hasErrorBoundary: false,
 					},
 					{
 						path: 'plans',
 						element: <AdminPlanManagerPage />,
+						hasErrorBoundary: false,
 					},
 					{
 						path: 'sync',
@@ -118,6 +130,7 @@ const router = createBrowserRouter([
 				path: '/recipes',
 				element: <RecipesPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/recipes/:slug',
@@ -137,21 +150,25 @@ const router = createBrowserRouter([
 						element: <RecipeCookPage />,
 					},
 				],
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/subscriber-features',
 				element: <SubscriberFeaturesPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '/reset-password',
 				element: <VerifyPasswordResetPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 			{
 				path: '*',
 				element: <NotFoundPage />,
 				handle: { nav: true },
+				hasErrorBoundary: false,
 			},
 		],
 	},
