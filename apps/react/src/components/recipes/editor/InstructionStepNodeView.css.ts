@@ -16,7 +16,7 @@ export const root = style({
 });
 
 export const completed = style({
-	opacity: 0.7,
+	opacity: 0.6,
 });
 
 export const tools = style({
