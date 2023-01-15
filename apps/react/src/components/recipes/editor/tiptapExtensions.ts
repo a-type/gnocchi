@@ -28,7 +28,10 @@ interface SectionTitleOptions {
 	HTMLAttributes: Record<string, any>;
 }
 
-export function createTiptapExtensions(recipe?: Recipe) {
+export function createTiptapExtensions(
+	recipe?: Recipe,
+	interactiveSteps = false,
+) {
 	const Step = Node.create<StepOptions, { recipe?: Recipe }>({
 		name: 'step',
 
@@ -89,9 +92,13 @@ export function createTiptapExtensions(recipe?: Recipe) {
 			};
 		},
 
-		addNodeView() {
-			return ReactNodeViewRenderer(InstructionStepNodeView);
-		},
+		...(interactiveSteps
+			? {
+					addNodeView() {
+						return ReactNodeViewRenderer(InstructionStepNodeView);
+					},
+			  }
+			: {}),
 	});
 
 	const SectionTitle = Node.create<SectionTitleOptions>({

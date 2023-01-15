@@ -73,7 +73,7 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 
 	const editor = useEditor(
 		{
-			extensions: createTiptapExtensions(recipe),
+			extensions: createTiptapExtensions(recipe, readonly),
 			content: instructions?.getSnapshot() || {
 				type: 'doc',
 				content: [],

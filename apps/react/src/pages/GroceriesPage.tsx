@@ -76,7 +76,7 @@ export function GroceriesPage() {
 							display: 'flex',
 							flexDirection: 'column',
 							gap: 2,
-							py: 2,
+							p: 2,
 						})}
 					>
 						<Suspense fallback={null}>

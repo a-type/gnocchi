@@ -22,7 +22,7 @@ export const root = style({
 			backgroundColor: vars.colors.primaryLighter,
 			borderColor: vars.colors.primaryLight,
 		},
-		'&:hover': {
+		'&:hover:not(:disabled)': {
 			boxShadow: `0 0 0 1px currentColor`,
 		},
 	},

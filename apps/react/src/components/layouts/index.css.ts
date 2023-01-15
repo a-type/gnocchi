@@ -8,7 +8,6 @@ export const fixedArea = style({
 	zIndex: 1,
 	backgroundColor: vars.colors.light,
 	width: '100%',
-	padding: vars.space[2],
 	alignItems: 'stretch',
 	gap: vars.space[2],
 });

@@ -127,22 +127,36 @@ export function SplashPage() {
 						</p>
 						<p>&ndash; Grant</p>
 					</Section>
+					<Box mt={6} gap={4}>
+						<TextLink
+							href="/privacy-policy"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Read the privacy policy
+						</TextLink>
+						<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
+							Terms and Conditions of usage
+						</TextLink>
+						<TextLink
+							href="https://github.com/a-type/gnocchi"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Gnocchi is open source
+						</TextLink>
+					</Box>
 				</div>
-				<Box>
-					<TextLink
-						href="https://gnocchi.club/privacy-policy"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						Read the privacy policy
-					</TextLink>
-				</Box>
 			</PageContent>
 			<div className={classes.fixedContent}>
 				<LinkButton
 					to="/"
 					data-test="get-started"
-					className={sprinkles({ justifyContent: 'center', width: 'full' })}
+					className={sprinkles({
+						justifyContent: 'center',
+
+						alignSelf: 'center',
+					})}
 					color="default"
 				>
 					Get Started
@@ -150,11 +164,7 @@ export function SplashPage() {
 
 				<Span size="sm">
 					Free, no signup required. By continuing you agree to{' '}
-					<TextLink
-						href="https://gnocchi.club/tos"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
+					<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
 						the terms and conditions of usage.
 					</TextLink>
 				</Span>

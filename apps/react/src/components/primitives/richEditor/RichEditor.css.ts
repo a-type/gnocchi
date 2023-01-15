@@ -20,6 +20,8 @@ globalStyle(`${root} .ProseMirror h1`, {
 globalStyle(`${root} .ProseMirror h2`, {
 	fontSize: vars.fontSizes['lg'],
 	fontWeight: vars.fontWeights.medium,
+	marginTop: vars.space[4],
+	marginBottom: vars.space[2],
 });
 globalStyle(`${root} .ProseMirror h3`, {
 	fontSize: vars.fontSizes['md'],

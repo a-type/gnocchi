@@ -70,42 +70,42 @@ export function InstructionStepNodeView({
 				isAssignedToMe && classes.assignedToMe,
 			)}
 		>
-			{!isEditing && isAssignedToMe && (
-				<label className={classes.label}>Assigned to you</label>
-			)}
-			{!isEditing && (
-				<div className={classes.tools}>
-					<Checkbox
-						checked={completed}
-						tabIndex={-1}
-						contentEditable={false}
-						onCheckedChange={(checked) => {
-							if (!maybeCompletedSteps) return;
-							if (!node.attrs.id) {
-								debugger;
-								return;
-							}
-
-							if (checked) {
-								maybeCompletedSteps.add(node.attrs.id);
-							} else {
-								maybeCompletedSteps.removeAll(node.attrs.id);
-							}
-						}}
-					/>
-					{hasPeers && (
-						<PersonSelect
-							includeSelf
-							allowNone
-							value={assignedPersonId}
-							onChange={assignPersonId}
-							label="Assign to:"
-						/>
-					)}
-				</div>
-			)}
-			<div className={classes.content}>
+			<div className={classes.content} contentEditable={true}>
 				<NodeViewContent />
+			</div>
+			{!isEditing && isAssignedToMe && (
+				<label contentEditable={false} className={classes.label}>
+					Assigned to you
+				</label>
+			)}
+			<div className={classes.tools}>
+				<Checkbox
+					checked={!isEditing && completed}
+					disabled={isEditing}
+					tabIndex={-1}
+					contentEditable={false}
+					onCheckedChange={(checked) => {
+						if (!maybeCompletedSteps) return;
+						if (!node.attrs.id) {
+							return;
+						}
+
+						if (checked) {
+							maybeCompletedSteps.add(node.attrs.id);
+						} else {
+							maybeCompletedSteps.removeAll(node.attrs.id);
+						}
+					}}
+				/>
+				{!isEditing && hasPeers && (
+					<PersonSelect
+						includeSelf
+						allowNone
+						value={assignedPersonId}
+						onChange={assignPersonId}
+						label="Assign to:"
+					/>
+				)}
 			</div>
 		</NodeViewWrapper>
 	);

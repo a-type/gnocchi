@@ -38,7 +38,7 @@ export const demoGrid = style({
 });
 
 export const sectionBase = style({
-	backgroundColor: vars.colors.primary,
+	backgroundColor: vars.colors.primaryLighter,
 	position: 'relative',
 	display: 'flex',
 	flexDirection: 'column',
@@ -83,7 +83,7 @@ export const appName = style({
 	marginBottom: '20vh',
 	'@media': {
 		'only screen and (min-width: 600px)': {
-			marginBottom: '40vh',
+			marginBottom: '20vh',
 		},
 	},
 });

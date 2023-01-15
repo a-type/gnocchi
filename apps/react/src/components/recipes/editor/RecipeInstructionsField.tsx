@@ -1,4 +1,4 @@
-import { Box, Button } from '@/components/primitives/index.js';
+import { Box, Button, P } from '@/components/primitives/index.js';
 import { RichEditor } from '@/components/primitives/richEditor/RichEditor.jsx';
 import { Recipe } from '@aglio/groceries-client';
 import { FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons';
@@ -17,9 +17,30 @@ export function RecipeInstructionsField({
 
 	return (
 		<Box gap={2} flexDirection="column">
+			{/* {isMobileOs() && (
+				<Box background="primaryWash" p={2} borderRadius="md">
+					<P size="xs">
+						Hi, mobile user! Sorry, but the instruction editor doesn't always
+						work correctly on phones. I'm working on it! If you have a sync
+						subscription, I recommend switching to a computer to write up your
+						recipes for now.
+					</P>
+				</Box>
+			)} */}
 			{editor && <Toolbar editor={editor} />}
 			<RichEditor editor={editor} className={classes.editor} />
+			<P size="xs">
+				Press <kbd>Enter</kbd> to create a new step. Each step line will have a
+				checkbox you can use to track completion. I recommend keeping steps
+				short and self-contained.
+			</P>
 		</Box>
+	);
+}
+
+function isMobileOs() {
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+		navigator.userAgent,
 	);
 }
 
@@ -66,7 +87,7 @@ function Toolbar({ editor }: { editor: Editor }) {
 				toggled={editor.isActive('sectionTitle')}
 				className={classes.controlButton}
 			>
-				H
+				Heading
 			</Button>
 			{/* <Button
 				color="ghost"

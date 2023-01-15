@@ -8,6 +8,7 @@ import {
 	SelectItemIndicator,
 	SelectLabel,
 	SelectGroup,
+	SelectProps,
 } from '@/components/primitives/select/Select.jsx';
 import { hooks, Person } from '@/stores/groceries/index.js';
 import { useCallback } from 'react';
@@ -16,7 +17,8 @@ import classnames from 'classnames';
 import * as classes from './PersonSelect.css.js';
 import {} from '@radix-ui/react-select';
 
-export interface PersonSelectProps {
+export interface PersonSelectProps
+	extends Omit<SelectProps, 'value' | 'onChange'> {
 	filter?: (person: Person) => boolean;
 	includeSelf?: boolean;
 	allowNone?: boolean;
@@ -36,6 +38,7 @@ export function PersonSelect({
 	allowNone,
 	onChange,
 	label,
+	...rest
 }: PersonSelectProps) {
 	const people = hooks.useFindPeers(filter, { includeSelf });
 
@@ -51,8 +54,9 @@ export function PersonSelect({
 		<Select
 			value={value === null ? 'null' : value}
 			onValueChange={onChangeInternal}
+			{...rest}
 		>
-			<SelectTrigger className={classes.trigger}>
+			<SelectTrigger className={classes.trigger} contentEditable={false}>
 				<SelectValue>
 					{value === null ? (
 						<PersonAvatar popIn={false} person={null} />

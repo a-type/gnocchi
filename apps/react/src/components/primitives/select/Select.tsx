@@ -48,6 +48,7 @@ export const SelectItemText = withClassName(
 export const SelectGroup = SelectPrimitive.Group;
 
 export const Select = SelectPrimitive.Root;
+export type SelectProps = SelectPrimitive.SelectProps;
 export const SelectTrigger = withClassName(
 	SelectPrimitive.Trigger,
 	classes.trigger,
