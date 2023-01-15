@@ -15,10 +15,6 @@ import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { lemonTheme } from './styles/themes/lemon.css.js';
 
-// @ts-ignore
-import { inject } from '@vercel/analytics';
-inject();
-
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
 	const [trpcClient] = useState(() => trpc.createClient(trpcClientOptions));

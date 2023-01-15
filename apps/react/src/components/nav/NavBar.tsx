@@ -50,7 +50,10 @@ export function NavBar({}: NavBarProps) {
 
 	return (
 		<PageNav innerClassName={clsx(classes.root)}>
-			<img src="/android-chrome-192x192.png" className={classes.logo} />
+			<div className={classes.logo}>
+				<img src="/android-chrome-192x192.png" className={classes.logoImage} />
+				<h1 className={classes.logoText}>Gnocchi</h1>
+			</div>
 			<GroceriesNavBarLink active={matchGroceries} />
 			<PantryNavBarLink active={matchPurchased} />
 			{finalShowRecipes && (

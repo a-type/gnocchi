@@ -5,6 +5,10 @@ import { App } from './App.js';
 import { attachToPwaEvents } from './pwaEventListener.js';
 import './styles/global.css.js';
 
+import('@vercel/analytics').then((mod) => {
+	mod.inject();
+});
+
 function main() {
 	const root = createRoot(document.getElementById('root')!);
 	root.render(

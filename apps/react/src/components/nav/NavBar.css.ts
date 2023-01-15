@@ -128,11 +128,25 @@ export const logo = style({
 
 	'@media': {
 		[mediaQueries.sm]: {
-			alignSelf: 'center',
+			display: 'flex',
+			flexDirection: 'row',
+			gap: vars.space[1],
+			alignItems: 'center',
+			justifyContent: 'center',
 			padding: vars.space[2],
-			display: 'block',
-			width: 80,
-			height: 80,
+			paddingTop: vars.space[4],
+			paddingBottom: vars.space[4],
 		},
 	},
+});
+
+export const logoImage = style({
+	width: 40,
+	height: 40,
+});
+
+export const logoText = style({
+	fontSize: vars.fontSizes.md,
+	fontFamily: vars.fonts.title,
+	fontWeight: vars.fontWeights.medium,
 });
