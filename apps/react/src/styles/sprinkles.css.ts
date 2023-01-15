@@ -205,7 +205,7 @@ const unresponsiveProperties = defineProperties({
 		borderColor: vars.colors,
 		borderStyle: ['solid', 'dashed', 'dotted', 'none'],
 		fontWeight: vars.fontWeights,
-		fontSize: vars.fontSizes,
+		fontSize: { ...vars.fontSizes, inherit: 'inherit' },
 		fontFamily: vars.fonts,
 		fontStyle: ['normal', 'italic'],
 		textDecoration: ['none', 'underline', 'line-through'],

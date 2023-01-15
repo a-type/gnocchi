@@ -27,7 +27,7 @@ export const heading = recipe({
 	variants: {
 		gutterBottom: {
 			true: {
-				marginBottom: vars.space[4],
+				marginBottom: vars.space[2],
 			},
 		},
 	},

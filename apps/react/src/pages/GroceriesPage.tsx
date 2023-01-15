@@ -79,7 +79,7 @@ export function GroceriesPage() {
 							p: 2,
 						})}
 					>
-						<Suspense fallback={null}>
+						<Suspense fallback={<div style={{ height: 41 }} />}>
 							<GroceryListAdd />
 						</Suspense>
 						<GroceriesActionBar />
