@@ -183,7 +183,7 @@ const router = createBrowserRouter([
 				hasErrorBoundary: false,
 			},
 			{
-				path: '/toc',
+				path: '/tos',
 				element: <TermsAndConditionsPage />,
 				handle: { nav: true },
 				hasErrorBoundary: false,

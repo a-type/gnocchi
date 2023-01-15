@@ -76,7 +76,7 @@ export function JoinPage({}: JoinPageProps) {
 				</PageSection>
 				<Box gap={2} mt={6}>
 					<TextLink href="/privacy-policy">Privacy Policy</TextLink>
-					<TextLink href="/toc">Terms and conditions of usage</TextLink>
+					<TextLink href="/tos">Terms and conditions of usage</TextLink>
 				</Box>
 			</PageContent>
 		</PageRoot>

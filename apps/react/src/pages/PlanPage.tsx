@@ -56,7 +56,7 @@ export function PlanPage() {
 						>
 							Privacy policy
 						</TextLink>
-						<TextLink href="/toc" target="_blank" rel="noopener noreferrer">
+						<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
 							Terms and conditions of use
 						</TextLink>
 					</Box>

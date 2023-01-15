@@ -151,7 +151,7 @@ export function SplashPage() {
 				<Span size="sm">
 					Free, no signup required. By continuing you agree to{' '}
 					<TextLink
-						href="https://gnocchi.club/toc"
+						href="https://gnocchi.club/tos"
 						target="_blank"
 						rel="noopener noreferrer"
 					>
