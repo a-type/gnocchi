@@ -45,3 +45,9 @@ globalFontFace('Inter', {
 	fontStyle: 'oblique 0deg 5deg',
 	fontDisplay: 'swap',
 });
+
+globalFontFace('Londrina Outline', {
+	src: 'url(/fonts/LondrinaOutline-Regular.ttf)',
+	fontDisplay: 'swap',
+	fontStyle: 'normal',
+});
