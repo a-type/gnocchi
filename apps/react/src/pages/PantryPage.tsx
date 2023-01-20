@@ -19,7 +19,7 @@ export function PantryPage({}: PantryPageProps) {
 				<H1 className={sprinkles({ p: 4, marginBottom: 0, paddingBottom: 0 })}>
 					Purchased
 				</H1>
-				<PageFixedArea>
+				<PageFixedArea className={sprinkles({ p: 2 })}>
 					<PantryActionBar />
 				</PageFixedArea>
 				<Suspense>

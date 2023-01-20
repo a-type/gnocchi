@@ -31,7 +31,7 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	return (
 		<Box direction="column" gap={8}>
 			<RecipeTitleField recipe={recipe} />
-			<PageFixedArea className={sprinkles({ px: 0 })}>
+			<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
 				<RecipeEditActions />
 			</PageFixedArea>
 			<RecipeUrlField recipe={recipe} />

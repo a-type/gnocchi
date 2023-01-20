@@ -53,7 +53,7 @@ function Toolbar({ editor }: { editor: Editor }) {
 			align="center"
 			position="sticky"
 			zIndex="menu"
-			style={{ top: 72 }}
+			style={{ top: 38 }}
 			background="white"
 		>
 			<Button
@@ -89,46 +89,6 @@ function Toolbar({ editor }: { editor: Editor }) {
 			>
 				Heading
 			</Button>
-			{/* <Button
-				color="ghost"
-				onClick={() => {
-					editor.chain().focus().toggleHeading({ level: 1 }).run();
-				}}
-				toggled={editor.isActive('heading', { level: 1 })}
-				className={classes.controlButton}
-			>
-				H1
-			</Button>
-			<Button
-				color="ghost"
-				onClick={() => {
-					editor.chain().focus().toggleHeading({ level: 2 }).run();
-				}}
-				toggled={editor.isActive('heading', { level: 2 })}
-				className={classes.controlButton}
-			>
-				H2
-			</Button>
-			<Button
-				color="ghost"
-				onClick={() => {
-					editor.chain().focus().toggleHeading({ level: 3 }).run();
-				}}
-				toggled={editor.isActive('heading', { level: 3 })}
-				className={classes.controlButton}
-			>
-				H3
-			</Button>
-			<Button
-				color="ghost"
-				onClick={() => {
-					editor.chain().focus().toggleBulletList().run();
-				}}
-				toggled={editor.isActive('bulletList')}
-				className={classes.controlButton}
-			>
-				<ListBulletIcon />
-			</Button> */}
 		</Box>
 	);
 }
