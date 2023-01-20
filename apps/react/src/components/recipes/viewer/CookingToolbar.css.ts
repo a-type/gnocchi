@@ -21,7 +21,6 @@ export const container = style({
 
 export const containerOpen = style({
 	borderTop: `1px solid ${vars.colors.black}`,
-	transition: 'padding-top 0.3s ease-in-out, border-top 0.3s ease-in-out',
 });
 
 export const containerScroll = style({
@@ -39,4 +38,9 @@ export const toggleButton = style({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'center',
+	touchAction: 'none',
+});
+
+export const list = style({
+	padding: `${vars.space[2]} !important`,
 });

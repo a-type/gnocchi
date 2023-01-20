@@ -57,7 +57,7 @@ export function PersonSelect({
 			{...rest}
 		>
 			<SelectTrigger className={classes.trigger} contentEditable={false}>
-				<SelectValue>
+				<SelectValue contentEditable={false}>
 					{value === null ? (
 						<PersonAvatar popIn={false} person={null} />
 					) : (

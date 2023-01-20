@@ -1,3 +1,4 @@
+import { PageNowPlaying } from '@/components/layouts/index.jsx';
 import { Box, H1, H2, LinkButton, P } from '@/components/primitives/index.js';
 import { useWakeLock } from '@/hooks/useWakeLock.js';
 import { hooks } from '@/stores/groceries/index.js';
@@ -68,9 +69,16 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsViewer recipe={recipe} />
 			</div>
-			<LinkButton color="primary" to={makeRecipeLink(recipe, '/cook')}>
-				Start cooking
-			</LinkButton>
+			<PageNowPlaying unstyled>
+				<Box direction="row" gap={2} align="center" justify="end" width="full">
+					<LinkButton to={makeRecipeLink(recipe, '/cook/prep')}>
+						Start prep
+					</LinkButton>
+					<LinkButton color="primary" to={makeRecipeLink(recipe, '/cook/prep')}>
+						Start cooking
+					</LinkButton>
+				</Box>
+			</PageNowPlaying>
 		</Box>
 	);
 }

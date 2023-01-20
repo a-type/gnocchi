@@ -10,7 +10,7 @@ export const root = style({
 	marginBottom: vars.space[1],
 	borderRadius: vars.radii.md,
 	width: '100%',
-	padding: vars.space[2],
+	// padding: vars.space[2],
 
 	transition: `background-color 0.2s ease-out, color 0.2s ease-out`,
 });

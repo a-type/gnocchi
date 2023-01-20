@@ -69,8 +69,9 @@ export function InstructionStepNodeView({
 				completed && classes.completed,
 				isAssignedToMe && classes.assignedToMe,
 			)}
+			contentEditable={false}
 		>
-			<div className={classes.content} contentEditable={true}>
+			<div className={classes.content}>
 				<NodeViewContent />
 			</div>
 			{!isEditing && isAssignedToMe && (
@@ -78,7 +79,7 @@ export function InstructionStepNodeView({
 					Assigned to you
 				</label>
 			)}
-			<div className={classes.tools}>
+			<div className={classes.tools} contentEditable={false}>
 				<Checkbox
 					checked={!isEditing && completed}
 					disabled={isEditing}

@@ -10,6 +10,7 @@ import { PageNowPlaying } from '@/components/layouts/index.jsx';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { PersonAvatar } from '../people/PersonAvatar.jsx';
+import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 
 export interface RecipePresenceNotificationProps {}
 
@@ -79,7 +80,7 @@ function RecipePresenceLink({
 			</div>
 			<LinkButton
 				size="small"
-				to={`/recipes/${recipe.get('slug')}/cook`}
+				to={makeRecipeLink(recipe, '/cook/prep')}
 				className={classes.button}
 				onClick={onDismiss}
 			>

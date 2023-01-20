@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import {
 	createBrowserRouter,
+	Navigate,
 	Outlet,
 	Route,
 	RouterProvider,
@@ -53,7 +54,13 @@ const AdminPlanManagerPage = lazy(
 const AdminSyncPage = lazy(() => import('./admin/AdminSyncPage.jsx'));
 const RecipeViewPage = lazy(() => import('./recipe/RecipeViewPage.jsx'));
 const RecipeEditPage = lazy(() => import('./recipe/RecipeEditPage.jsx'));
-const RecipeCookPage = lazy(() => import('./recipe/RecipeCookPage.jsx'));
+const RecipeCookPage = lazy(() => import('./recipe/cook/RecipeCookPage.jsx'));
+const RecipeCookPrepPage = lazy(
+	() => import('./recipe/cook/RecipeCookPrepPage.jsx'),
+);
+const RecipeCookStepsPage = lazy(
+	() => import('./recipe/cook/RecipeCookStepsPage.jsx'),
+);
 const RecipeOverviewPage = lazy(
 	() => import('./recipe/RecipeOverviewPage.jsx'),
 );
@@ -160,6 +167,21 @@ const router = createBrowserRouter([
 					{
 						path: 'cook',
 						element: <RecipeCookPage />,
+						children: [
+							{
+								// back compat
+								index: true,
+								element: <RecipeCookStepsPage />,
+							},
+							{
+								path: 'prep',
+								element: <RecipeCookPrepPage />,
+							},
+							{
+								path: 'steps',
+								element: <RecipeCookStepsPage />,
+							},
+						],
 					},
 				],
 				hasErrorBoundary: false,

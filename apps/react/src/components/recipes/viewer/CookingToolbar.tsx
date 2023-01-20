@@ -1,13 +1,14 @@
 import { PageNowPlaying } from '@/components/layouts/index.jsx';
-import { Button } from '@/components/primitives/index.js';
-import { People } from '@/components/sync/people/People.jsx';
-import { useToggle } from '@/hooks/useToggle.jsx';
+import { Button, H5 } from '@/components/primitives/index.js';
+import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Recipe } from '@aglio/groceries-client';
 import { ListBulletIcon } from '@radix-ui/react-icons';
+import { animated, useSpring } from '@react-spring/web';
+import { useDrag } from '@use-gesture/react';
 import classnames from 'classnames';
-import { UIEvent, useCallback, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import * as classes from './CookingToolbar.css.js';
-import { RecipeIngredientsViewer } from './RecipeIngredientsViewer.jsx';
+import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
 
 export interface CookingToolbarProps {
 	recipe: Recipe;
@@ -17,116 +18,57 @@ const PEEK_HEIGHT = 110;
 const MAX_HEIGHT = 300;
 
 export function CookingToolbar({ recipe }: CookingToolbarProps) {
-	const [open, toggleOpen] = useToggle();
+	const lastExpandedHeightRef = useRef(PEEK_HEIGHT);
 
-	const listRef = useRef<HTMLUListElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
-	const scrollRef = useRef<HTMLDivElement>(null);
+	const [containerStyle, containerSpring] = useSpring(() => ({
+		height: 0,
+	}));
 
-	const openRef = useRef(open);
-	openRef.current = open;
-
-	const onScroll = useCallback((ev: UIEvent) => {
-		const container = containerRef.current;
-		if (!container) return;
-		if (!openRef.current) return;
-
-		const scrollRoot = ev.target as HTMLDivElement;
-		const listHeight = Math.min(
-			MAX_HEIGHT,
-			listRef.current?.clientHeight ?? MAX_HEIGHT,
-		);
-		const currentHeight = container.clientHeight;
-		if (currentHeight >= listHeight) {
-			return;
-		}
-		if (scrollRoot.scrollTop > 0) {
-			const height = Math.max(
-				PEEK_HEIGHT,
-				currentHeight + Math.abs(scrollRoot.scrollTop),
-			);
-
-			container.getAnimations().forEach((animation) => {
-				animation.cancel();
+	const onToggle = () => {
+		if (containerStyle.height.goal) {
+			containerSpring.start({ height: 0 });
+		} else {
+			containerSpring.start({
+				height: Math.max(PEEK_HEIGHT, lastExpandedHeightRef.current),
 			});
-			container.style.height = height + 'px';
-			// container.style.minHeight = height + 'px';
-			scrollRoot.scrollTo({ top: 0 });
 		}
-	}, []);
+	};
 
-	useEffect(() => {
-		requestAnimationFrame(() => {
-			const container = containerRef.current;
-			if (!container) return;
-			if (open) {
-				container.getAnimations().forEach((animation) => {
-					animation.cancel();
-				});
-				scrollRef.current?.scrollTo({ top: 0 });
-				container.animate([{ height: '0px' }, { height: `${PEEK_HEIGHT}px` }], {
-					fill: 'forwards',
-					easing: 'ease-in-out',
-					duration: 200,
-					id: 'open',
-				});
-			} else {
-				container.getAnimations().forEach((animation) => {
-					animation.cancel();
-				});
-				container.animate(
-					[
-						{
-							height: `${container.clientHeight}px`,
-							// minHeight: `${container.clientHeight}px`,
-						},
-						{ height: '0px' /*minHeight: '0px'*/ },
-					],
-					{
-						fill: 'forwards',
-						easing: 'ease-in-out',
-						duration: 200,
-						id: 'close',
-					},
-				);
-			}
+	const bind = useDrag(({ down, delta: [, dy], tap }) => {
+		const target = Math.min(MAX_HEIGHT, containerStyle.height.goal - dy);
+		if (target >= PEEK_HEIGHT) {
+			lastExpandedHeightRef.current = target;
+		}
+		containerSpring.start({
+			height: target,
+			immediate: true,
 		});
-	}, [open]);
+		if (tap) {
+			onToggle();
+		}
+	});
 
 	return (
 		<PageNowPlaying unstyled className={classes.root}>
-			<ToggleButton open={open} onToggle={toggleOpen} />
-			<div
+			<Button className={classes.toggleButton} {...bind()}>
+				<ListBulletIcon />
+			</Button>
+			<animated.div
 				ref={containerRef}
-				className={classnames(classes.container, open && classes.containerOpen)}
-				style={{ height: 0 }}
+				className={classnames(classes.container)}
+				style={{
+					height: containerStyle.height,
+					borderTop: containerStyle.height.to((h) =>
+						h > 0 ? '1px solid currentColor' : 'none',
+					),
+				}}
 			>
-				<div
-					className={classes.containerScroll}
-					ref={scrollRef}
-					onScroll={onScroll}
-				>
-					<RecipeIngredientsViewer recipe={recipe} ref={listRef} />
+				<div className={classes.containerScroll}>
+					<H5 className={sprinkles({ mx: 2 })}>Ingredients</H5>
+					<IngredientCheckoffView recipe={recipe} className={classes.list} />
 				</div>
-			</div>
+			</animated.div>
 		</PageNowPlaying>
-	);
-}
-
-function ToggleButton({
-	open,
-	onToggle,
-}: {
-	open: boolean;
-	onToggle: () => void;
-}) {
-	return (
-		<Button
-			className={classes.toggleButton}
-			color={open ? 'primary' : 'default'}
-			onClick={onToggle}
-		>
-			<ListBulletIcon />
-		</Button>
 	);
 }
