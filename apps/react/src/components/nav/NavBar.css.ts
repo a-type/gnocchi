@@ -12,9 +12,9 @@ export const root = style({
 	boxShadow: vars.shadows.lg,
 	overflow: 'hidden',
 	zIndex: vars.zIndices.nav,
-	backgroundColor: vars.colors.gray10,
-	borderTop: `1px solid ${vars.colors.gray20}`,
-	padding: 2,
+	backgroundColor: vars.colors.light,
+	borderTop: `1px solid ${vars.colors.gray30}`,
+	padding: vars.space[1],
 	height: 'auto',
 
 	paddingBottom: 'calc(2px + env(safe-area-inset-bottom, 0px))',
@@ -44,8 +44,8 @@ export const button = style({
 	alignItems: 'center',
 	justifyContent: 'center',
 	whiteSpace: 'nowrap',
-	paddingTop: vars.space[2],
-	paddingBottom: vars.space[2],
+	paddingTop: vars.space[1],
+	paddingBottom: vars.space[1],
 	paddingLeft: vars.space[3],
 	paddingRight: vars.space[3],
 	backgroundColor: 'transparent',
@@ -55,7 +55,7 @@ export const button = style({
 	fontSize: vars.fontSizes.sm,
 	transition: `background-color 0.2s ease-out, color 0.2s ease-out`,
 	height: '100%',
-	gap: 2,
+	gap: 6,
 
 	'@media': {
 		[mediaQueries.sm]: {
@@ -63,6 +63,19 @@ export const button = style({
 			height: 'auto',
 			justifyContent: 'end',
 			gap: vars.space[2],
+		},
+	},
+
+	selectors: {
+		'&:hover': {
+			backgroundColor: vars.colors.primaryWash,
+		},
+		'&:focus-visible': {
+			outline: 'none',
+			backgroundColor: vars.colors.primaryWash,
+		},
+		'&:active': {
+			backgroundColor: vars.colors.primaryWash,
 		},
 	},
 });

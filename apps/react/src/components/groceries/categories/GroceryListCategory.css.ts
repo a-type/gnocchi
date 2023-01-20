@@ -60,6 +60,7 @@ export const root = style({
 			pointerEvents: 'none',
 			marginBottom: 0,
 			animation: `${collapse} 0.2s ${vars.transitions.default} forwards`,
+			visibility: 'hidden',
 		},
 		'&[data-do-not-animate="true"]': {
 			animation: 'none!important',
@@ -73,6 +74,11 @@ export const root = style({
 				animationDuration: '0.2s',
 				animationTimingFunction: vars.transitions.springy,
 			},
+
+		'&:focus-visible': {
+			color: vars.colors.primaryDark,
+			outline: `1px solid ${vars.colors.primaryWash}`,
+		},
 	},
 });
 
