@@ -13,8 +13,8 @@
 		"@aglio/prisma": "workspace:*",
 		"@aglio/scanning": "workspace:*",
 		"@aglio/tools": "workspace:*",
-		"@lo-fi/common": "^1.8.1",
-		"@lo-fi/server": "^1.4.2",
+		"@lo-fi/common": "^1.8.4",
+		"@lo-fi/server": "^1.5.2",
 		"@trpc/server": "^10.5.0",
 		"superjson": "^1.12.0",
 		"zod": "^3.19.0"
