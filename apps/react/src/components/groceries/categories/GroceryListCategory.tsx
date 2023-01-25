@@ -13,10 +13,8 @@ import { Category, Item } from '@aglio/groceries-client';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { clsx } from 'clsx';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useSnapshot } from 'valtio';
 import { useIsDragging } from '../dndHooks.js';
 import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
-import { groceriesState } from '../state.js';
 import * as classes from './GroceryListCategory.css.js';
 
 const EMPTY_DROPPABLE_SIZE = 48;
@@ -29,8 +27,7 @@ export function GroceryListCategory({
 	category: Category | null;
 	items: Item[];
 }) {
-	const { empty, mountedEmpty, visibleItems } =
-		useCategoryItemVisibilityState(items);
+	const { empty, mountedEmpty } = useCategoryItemVisibilityState(items);
 
 	const isDragging = useIsDragging();
 	const internalRef = useRef<HTMLDivElement>(null);
@@ -70,7 +67,7 @@ export function GroceryListCategory({
 				)}
 			</div>
 			<div className={classes.items} data-is-item-dragging={isDragging}>
-				{visibleItems.map((item, index) => {
+				{items.map((item, index) => {
 					return <MemoizedDraggableItem key={item.get('id')} item={item} />;
 				})}
 			</div>
@@ -249,19 +246,7 @@ function ClaimIcon({ active }: { active?: boolean }) {
 }
 
 function useCategoryItemVisibilityState(items: Item[]) {
-	const { purchasedStillVisibleItems, purchasedHidingItems } =
-		useSnapshot(groceriesState);
-	const visibleItems = items.filter((item) => {
-		if (!item.get('purchasedAt')) {
-			return true;
-		} else {
-			return (
-				purchasedStillVisibleItems.has(item.get('id')) ||
-				purchasedHidingItems.has(item.get('id'))
-			);
-		}
-	});
-	const empty = visibleItems.length === 0;
+	const empty = items.length === 0;
 	// set a flag if the component mounted empty. we don't animate
 	// the collapse if this is the case to avoid rendering empty
 	// categories on first mount
@@ -275,6 +260,5 @@ function useCategoryItemVisibilityState(items: Item[]) {
 	return {
 		empty,
 		mountedEmpty,
-		visibleItems,
 	};
 }

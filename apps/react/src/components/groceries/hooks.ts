@@ -18,6 +18,21 @@ export function useItemsGroupedAndSorted(
 			  },
 	);
 	const categories = hooks.useAllCategories();
+	const { purchasedStillVisibleItems, purchasedHidingItems } =
+		useSnapshot(groceriesState);
+
+	const visibleItems = useMemo(
+		() =>
+			items.filter((item) => {
+				if (!item.get('purchasedAt')) return true;
+				return (
+					purchasedStillVisibleItems.has(item.get('id')) ||
+					purchasedHidingItems.has(item.get('id'))
+				);
+			}),
+		[items, purchasedStillVisibleItems, purchasedHidingItems],
+	);
+
 	const categoryGroups = useMemo(() => {
 		const categoryGroups: { category: Category | null; items: Item[] }[] = [];
 		const sortedCategories: (Category | null)[] = categories
@@ -41,17 +56,18 @@ export function useItemsGroupedAndSorted(
 				categoryGroups.length - 1,
 			);
 		}
-		for (const item of items) {
+		for (const item of visibleItems) {
 			const categoryId = item.get('categoryId');
 			const categoryIndex =
 				categoryIndexLookup.get(categoryId) ?? categoryIndexLookup.get(null)!;
 			categoryGroups[categoryIndex].items.push(item);
 		}
 		return categoryGroups;
-	}, [items, categories]);
+	}, [visibleItems, categories]);
+
 	return {
 		categoryGroups,
-		itemCount: items.length,
+		itemCount: visibleItems.length,
 	};
 }
 
