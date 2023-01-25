@@ -27,13 +27,17 @@ export const Span = forwardRef<
 export const P = forwardRef<
 	HTMLParagraphElement,
 	Omit<HTMLProps<HTMLParagraphElement>, 'size'> & {
-		size?: 'xs' | 'sm' | 'default';
+		size?: 'xs' | 'sm' | 'default' | 'inherit';
+		gutterBottom?: boolean;
 	}
->(function P({ size = 'default' as const, className, ...props }, ref) {
+>(function P(
+	{ size = 'default' as const, gutterBottom = true, className, ...props },
+	ref,
+) {
 	return (
 		<p
 			{...props}
-			className={clsx(classes.paragraph({ size }), className)}
+			className={clsx(classes.paragraph({ size, gutterBottom }), className)}
 			ref={ref}
 		/>
 	);

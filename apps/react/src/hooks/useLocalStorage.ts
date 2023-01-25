@@ -1,9 +1,13 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { proxy, useSnapshot } from 'valtio';
 
 const cache = proxy({} as Record<string, any>);
 
-export function useLocalStorage<T>(key: string, initialValue: T) {
+export function useLocalStorage<T>(
+	key: string,
+	initialValue: T,
+	writeInitialValue = false,
+) {
 	// using useMemo to execute synchronous code in render just once.
 	// this hook comes before useLocalStorageCache because we want to load
 	// values into the cache before accessing them.
@@ -21,7 +25,13 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 		}
 	}, [key]);
 	const snapshot = useSnapshot(cache);
-	const storedValue = snapshot[key] ?? (initialValue as T);
+	const storedValue = (snapshot[key] ?? initialValue) as T;
+
+	useEffect(() => {
+		if (snapshot[key] === undefined && writeInitialValue) {
+			window.localStorage.setItem(key, JSON.stringify(initialValue));
+		}
+	}, [!!snapshot[key], initialValue, writeInitialValue, key]);
 
 	// Return a wrapped version of useState's setter function that
 	// persists the new value to localStorage. It's throttled to prevent

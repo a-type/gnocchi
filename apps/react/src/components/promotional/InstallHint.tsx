@@ -1,5 +1,4 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { Cross2Icon } from '@radix-ui/react-icons';
 import {
 	Box,
 	Button,
@@ -11,7 +10,6 @@ import {
 	H2,
 	P,
 } from '../primitives/index.js';
-import classnames from 'classnames';
 import * as classes from './InstallHint.css.js';
 
 export interface InstallHintProps {}

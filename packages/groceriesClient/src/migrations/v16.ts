@@ -28,6 +28,14 @@ export default migrate(
 				await mutations.recipes.put(recipe);
 			});
 		} catch (e) {
+			if (
+				(e as DOMException)?.message?.includes(
+					'One of the specified object stores was not found',
+				)
+			) {
+				// this is expected if the recipes database doesn't exist
+				return;
+			}
 			console.error('Error migrating recipes', e);
 		}
 	},

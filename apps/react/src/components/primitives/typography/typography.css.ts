@@ -39,6 +39,8 @@ export const heading = recipe({
 export const paragraph = recipe({
 	base: {
 		lineHeight: 1.5,
+		marginTop: 0,
+		marginBottom: 0,
 	},
 	variants: {
 		size: {
@@ -50,6 +52,14 @@ export const paragraph = recipe({
 			},
 			default: {
 				fontSize: vars.fontSizes.md,
+			},
+			inherit: {
+				fontSize: 'inherit',
+			},
+		},
+		gutterBottom: {
+			true: {
+				marginBottom: vars.space[2],
 			},
 		},
 	},

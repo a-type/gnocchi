@@ -30,6 +30,7 @@ import {
 	MOBILE_DRAG_ACTIVATION_DELAY,
 } from './constants.js';
 import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
+import { GroceryEmptyContent } from './GroceryEmptyContent.jsx';
 import {
 	useItemsGroupedAndSorted,
 	useTransitionPurchasedItems,
@@ -80,7 +81,7 @@ const GroceryListCategories = forwardRef<
 	const { categoryGroups, itemCount } = useItemsGroupedAndSorted(listId);
 
 	if (itemCount === 0) {
-		return <EmptyContent />;
+		return <GroceryEmptyContent />;
 	}
 
 	return (
@@ -126,29 +127,6 @@ function GroceryListDragOverlay() {
 			{draggingItem && <GroceryItemDragPreview item={draggingItem} />}
 		</DragOverlay>,
 		document.body,
-	);
-}
-
-function EmptyContent() {
-	return (
-		<Box
-			align="center"
-			justify="center"
-			p={8}
-			flexGrow={1}
-			textAlign="center"
-			color="gray70"
-		>
-			<Cart width="20%" />
-			<P
-				className={sprinkles({
-					fontStyle: 'italic',
-					fontSize: 'sm',
-				})}
-			>
-				Your list is empty. Use the search bar above to add items.
-			</P>
-		</Box>
 	);
 }
 
