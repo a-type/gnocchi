@@ -7,7 +7,6 @@ import { UndoAction } from './UndoAction.jsx';
 import { RedoAction } from './RedoAction.jsx';
 import { MeetupAction } from './MeetupAction.jsx';
 import { People } from '@/components/sync/people/People.jsx';
-import classnames from 'classnames';
 import * as classes from './GroceriesActionBar.css.js';
 
 export interface GroceriesActionBarProps {}
@@ -15,7 +14,7 @@ export interface GroceriesActionBarProps {}
 export function GroceriesActionBar({}: GroceriesActionBarProps) {
 	return (
 		<ActionBar>
-			<People avatarClassName={classes.avatar} />
+			<People avatarClassName={classes.avatar} hideIfAlone />
 			<MeetupAction />
 			<UndoAction />
 			<RedoAction />
