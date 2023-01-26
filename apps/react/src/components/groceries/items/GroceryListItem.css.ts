@@ -33,11 +33,11 @@ const disappear = keyframes({
 });
 
 export const root = style({
-	display: 'flex',
-	flexDirection: 'column',
-	alignItems: 'stretch',
+	display: 'grid',
+	gridTemplateAreas: '"check main" "check comment" "secondary secondary"',
+	gridTemplateColumns: 'min-content 1fr min-content',
+	gridTemplateRows: 'min-content min-content min-content',
 	width: '100%',
-	gap: vars.space[2],
 	backgroundColor: vars.colors.light,
 	borderRadius: vars.radii.md,
 	position: 'relative',
@@ -78,17 +78,24 @@ export const root = style({
 	},
 });
 
+export const checkbox = style({
+	gridArea: 'check',
+	margin: `${vars.space[2]} ${vars.space[3]}`,
+});
+
 export const mainContent = style({
 	display: 'flex',
 	flexDirection: 'row',
-	alignItems: 'center',
+	alignItems: 'start',
 	gap: vars.space[2],
-	padding: vars.space[3],
+	gridArea: 'main',
+	padding: `${vars.space[2]} ${vars.space[3]}`,
 });
 
 export const peopleStack = style({
 	display: 'flex',
 	flexDirection: 'row',
+	gridArea: 'people',
 });
 
 export const person = style({
@@ -101,10 +108,21 @@ export const textContent = style({
 	display: 'flex',
 	flexDirection: 'row',
 	gap: vars.space[1],
-	flex: '1',
 	maxWidth: '100%',
 	overflow: 'hidden',
 	textOverflow: 'ellipsis',
+});
+
+export const textStack = style({
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space[2],
+	alignItems: 'flex-start',
+	flex: 1,
+});
+
+export const secondaryCollapse = style({
+	gridArea: 'secondary',
 });
 
 export const secondaryContent = style({
@@ -116,17 +134,20 @@ export const secondaryContent = style({
 	paddingTop: 0,
 	alignItems: 'flex-end',
 
-	'@media': {
-		[mediaQueries.sm]: {
-			flexDirection: 'row',
-		},
-	},
+	// '@media': {
+	// 	[mediaQueries.sm]: {
+	// 		flexDirection: 'row',
+	// 	},
+	// },
 });
 
 export const controls = style({
 	display: 'flex',
 	flexDirection: 'row',
 	gap: vars.space[2],
+	flexWrap: 'wrap',
+	justifyContent: 'flex-end',
+	width: '100%',
 });
 
 const expand = keyframes({
@@ -207,4 +228,17 @@ export const listTagIcon = style({
 	// 		display: 'none',
 	// 	},
 	// },
+});
+
+export const comment = style({
+	fontSize: vars.fontSizes.xs,
+	color: vars.colors.gray70,
+	fontStyle: 'italic',
+	gridArea: 'comment',
+});
+
+export const commentBox = style({
+	fontSize: vars.fontSizes.xs,
+	borderColor: vars.colors.gray50,
+	flex: '1 1 80px',
 });

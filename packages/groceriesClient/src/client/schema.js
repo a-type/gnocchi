@@ -136,6 +136,13 @@ const items = collection({
 		 */ listId: {
             type: 'string',
             nullable: true
+        },
+        /**
+		 * Shows up below the item, useful for reminders or notes
+		 * about a brand, etc.
+		 */ comment: {
+            type: 'string',
+            nullable: true
         }
     },
     synthetics: {
@@ -328,7 +335,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 17,
+    version: 18,
     collections: {
         categories,
         items,

@@ -9,6 +9,7 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
+	LiveUpdateTextField,
 	NumberStepper,
 } from '@/components/primitives/index.js';
 import {
@@ -17,7 +18,6 @@ import {
 	ButtonProps,
 	Tooltip,
 } from '@/components/primitives/index.js';
-import { MultiplierStepper } from '@/components/recipes/viewer/MultiplierStepper.jsx';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -89,7 +89,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		{ item, isDragActive, menuProps, className, ...rest },
 		ref,
 	) {
-		const { purchasedAt, totalQuantity, id } = hooks.useWatch(item);
+		const { purchasedAt, comment, id } = hooks.useWatch(item);
 
 		const isPurchased = !!purchasedAt;
 		const { purchasedHidingItems } = useSnapshot(groceriesState);
@@ -131,8 +131,10 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		const finalRef = useMergedRef(ref, sizeRef);
 
 		return (
-			<div
+			<CollapsibleRoot
 				className={clsx('item', classes.root, className)}
+				open={menuOpen}
+				onOpenChange={setMenuOpen}
 				hidden={sectionStateSnap.newCategoryPendingItem?.get('id') === id}
 				{...rest}
 				ref={finalRef}
@@ -145,62 +147,69 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				data-hidden-state={purchasedHiddenState}
 				data-test="grocery-list-item"
 			>
-				<CollapsibleRoot open={menuOpen} onOpenChange={setMenuOpen}>
-					<div className={classes.mainContent}>
-						<Checkbox
-							checked={
-								isPurchased
-									? true
-									: isPartiallyPurchased
-									? 'indeterminate'
-									: false
-							}
-							onCheckedChange={togglePurchased}
-							// prevent click/tap from reaching draggable container -
-							// don't disrupt a check action
-							onMouseDown={stopPropagation}
-							onMouseUp={stopPropagation}
-							onPointerDown={stopPropagation}
-							onPointerUp={stopPropagation}
-							data-test="grocery-list-item-checkbox"
-						/>
+				<Checkbox
+					checked={
+						isPurchased ? true : isPartiallyPurchased ? 'indeterminate' : false
+					}
+					onCheckedChange={togglePurchased}
+					// prevent click/tap from reaching draggable container -
+					// don't disrupt a check action
+					onMouseDown={stopPropagation}
+					onMouseUp={stopPropagation}
+					onPointerDown={stopPropagation}
+					onPointerUp={stopPropagation}
+					data-test="grocery-list-item-checkbox"
+					className={classes.checkbox}
+				/>
+				<div className={classes.mainContent}>
+					<div className={classes.textStack}>
 						<div className={classes.textContent}>
 							<span>{displayString}</span>
 							{menuOpen && <QuantityEditor item={item} />}
 						</div>
-						<RecentPeople item={item} />
-						<ListTag item={item} collapsed={menuOpen} />
-						<CollapsibleTrigger asChild>
-							<Button
-								color="ghost"
-								className={sprinkles({
-									position: 'relative',
-								})}
-								onContextMenu={preventDefault}
-								{...menuProps}
-							>
-								<HamburgerMenuIcon />
-							</Button>
-						</CollapsibleTrigger>
+						{comment && !menuOpen && (
+							<Box className={classes.comment}>{comment}</Box>
+						)}
 					</div>
-					<CollapsibleContent>
-						<div className={classes.secondaryContent}>
-							<ItemSources item={item} />
-							<div className={classes.controls}>
-								<ListSelect
-									value={item.get('listId')}
-									onChange={(listId) => item.set('listId', listId)}
-								/>
-								<CategoryPicker item={item} />
-								<ItemDeleteButton color="ghostDestructive" item={item}>
-									<TrashIcon />
-								</ItemDeleteButton>
-							</div>
+					<RecentPeople item={item} />
+					<ListTag item={item} collapsed={menuOpen} />
+					<CollapsibleTrigger asChild>
+						<Button
+							color="ghost"
+							className={sprinkles({
+								position: 'relative',
+							})}
+							onContextMenu={preventDefault}
+							{...menuProps}
+						>
+							<HamburgerMenuIcon />
+						</Button>
+					</CollapsibleTrigger>
+				</div>
+				<CollapsibleContent className={classes.secondaryCollapse}>
+					<div className={classes.secondaryContent}>
+						<ItemSources item={item} />
+
+						<div className={classes.controls}>
+							<LiveUpdateTextField
+								value={comment || ''}
+								onChange={(val) => item.set('comment', val)}
+								placeholder="Add a comment"
+								className={classes.commentBox}
+							/>
+							<ListSelect
+								value={item.get('listId')}
+								onChange={(listId) => item.set('listId', listId)}
+							/>
+							<CategoryPicker item={item} />
+							<ItemDeleteButton color="ghostDestructive" item={item}>
+								<TrashIcon />
+							</ItemDeleteButton>
 						</div>
-					</CollapsibleContent>
-				</CollapsibleRoot>
+					</div>
+				</CollapsibleContent>
 				{isPurchased && <div className={classes.strikethrough} />}
-			</div>
+			</CollapsibleRoot>
 		);
 	},
 );

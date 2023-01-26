@@ -29,15 +29,10 @@ import type {
   EntityDestructured,
 } from "@lo-fi/web";
 
-type NullIfSkip<V, C> = C extends { skip: boolean } ? V | null : V;
-type SkippableFilterConfig<F> =
-  | {
-      index: F;
-    }
-  | {
-      index: F;
-      skip: boolean;
-    };
+type SkippableFilterConfig<F> = {
+  index: F;
+  skip?: boolean;
+};
 
 export interface GeneratedHooks<Presence, Profile> {
   /**
@@ -91,7 +86,7 @@ export interface GeneratedHooks<Presence, Profile> {
    */
   useSync(isOn: boolean): void;
 
-  useCategory(id: string, config?: { skip: boolean }): Category | null;
+  useCategory(id: string, config?: { skip?: boolean }): Category | null;
   useOneCategory: <Config extends SkippableFilterConfig<CategoryFilter>>(
     config?: Config
   ) => Category | null;
@@ -99,7 +94,7 @@ export interface GeneratedHooks<Presence, Profile> {
     config?: Config
   ) => Category[];
 
-  useItem(id: string, config?: { skip: boolean }): Item | null;
+  useItem(id: string, config?: { skip?: boolean }): Item | null;
   useOneItem: <Config extends SkippableFilterConfig<ItemFilter>>(
     config?: Config
   ) => Item | null;
@@ -109,7 +104,7 @@ export interface GeneratedHooks<Presence, Profile> {
 
   useFoodCategoryAssignment(
     id: string,
-    config?: { skip: boolean }
+    config?: { skip?: boolean }
   ): FoodCategoryAssignment | null;
   useOneFoodCategoryAssignment: <
     Config extends SkippableFilterConfig<FoodCategoryAssignmentFilter>
@@ -122,7 +117,7 @@ export interface GeneratedHooks<Presence, Profile> {
     config?: Config
   ) => FoodCategoryAssignment[];
 
-  useSuggestion(id: string, config?: { skip: boolean }): Suggestion | null;
+  useSuggestion(id: string, config?: { skip?: boolean }): Suggestion | null;
   useOneSuggestion: <Config extends SkippableFilterConfig<SuggestionFilter>>(
     config?: Config
   ) => Suggestion | null;
@@ -130,7 +125,7 @@ export interface GeneratedHooks<Presence, Profile> {
     config?: Config
   ) => Suggestion[];
 
-  useList(id: string, config?: { skip: boolean }): List | null;
+  useList(id: string, config?: { skip?: boolean }): List | null;
   useOneList: <Config extends SkippableFilterConfig<ListFilter>>(
     config?: Config
   ) => List | null;
@@ -140,7 +135,7 @@ export interface GeneratedHooks<Presence, Profile> {
 
   useCollaborationInfo(
     id: string,
-    config?: { skip: boolean }
+    config?: { skip?: boolean }
   ): CollaborationInfo | null;
   useOneCollaborationInfo: <
     Config extends SkippableFilterConfig<CollaborationInfoFilter>
@@ -153,7 +148,7 @@ export interface GeneratedHooks<Presence, Profile> {
     config?: Config
   ) => CollaborationInfo[];
 
-  useRecipe(id: string, config?: { skip: boolean }): Recipe | null;
+  useRecipe(id: string, config?: { skip?: boolean }): Recipe | null;
   useOneRecipe: <Config extends SkippableFilterConfig<RecipeFilter>>(
     config?: Config
   ) => Recipe | null;

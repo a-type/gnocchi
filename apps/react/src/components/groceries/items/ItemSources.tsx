@@ -31,7 +31,7 @@ export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 	hooks.useWatch(item.get('inputs'));
 	return (
 		<div className={classes.root} {...rest}>
-			<label className={classes.label}>Sources</label>
+			<label className={classes.label}>Sources:</label>
 			<ul className={classes.list} {...rest}>
 				{item.get('inputs').map((input) => (
 					<li className={classes.item} key={(input as any).oid}>

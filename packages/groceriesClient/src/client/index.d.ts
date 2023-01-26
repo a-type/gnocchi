@@ -1,3 +1,4 @@
+import type schema from "./schema.js";
 import type { StorageSchema } from "@lo-fi/common";
 import type {
   Storage,
@@ -6,11 +7,103 @@ import type {
   ListEntity,
   Query,
   ServerSync,
+  EntityFile,
 } from "@lo-fi/web";
 export * from "@lo-fi/web";
-
-import type schema from "./schema.js";
 export type Schema = typeof schema;
+
+interface Collection<
+  Document extends ObjectEntity<any, any>,
+  Snapshot,
+  Init,
+  Filter
+> {
+  /**
+   * @deprecated use put
+   */
+  create: (init: Init) => Promise<Document>;
+  put: (init: Init) => Promise<Document>;
+  delete: (id: string) => Promise<void>;
+  deleteAll: (ids: string[]) => Promise<void>;
+  get: (id: string) => Query<Document>;
+  findOne: (filter: Filter) => Query<Document>;
+  findAll: (filter?: Filter) => Query<Document[]>;
+}
+
+export class Client<Presence = any, Profile = any> {
+  readonly categories: Collection<
+    Category,
+    CategorySnapshot,
+    CategoryInit,
+    CategoryFilter
+  >;
+
+  readonly items: Collection<Item, ItemSnapshot, ItemInit, ItemFilter>;
+
+  readonly foodCategoryAssignments: Collection<
+    FoodCategoryAssignment,
+    FoodCategoryAssignmentSnapshot,
+    FoodCategoryAssignmentInit,
+    FoodCategoryAssignmentFilter
+  >;
+
+  readonly suggestions: Collection<
+    Suggestion,
+    SuggestionSnapshot,
+    SuggestionInit,
+    SuggestionFilter
+  >;
+
+  readonly lists: Collection<List, ListSnapshot, ListInit, ListFilter>;
+
+  readonly collaborationInfo: Collection<
+    CollaborationInfo,
+    CollaborationInfoSnapshot,
+    CollaborationInfoInit,
+    CollaborationInfoFilter
+  >;
+
+  readonly recipes: Collection<
+    Recipe,
+    RecipeSnapshot,
+    RecipeInit,
+    RecipeFilter
+  >;
+
+  sync: ServerSync<Profile, Presence>;
+  undoHistory: Storage["undoHistory"];
+  namespace: Storage["namespace"];
+  entities: Storage["entities"];
+  queryStore: Storage["queryStore"];
+  batch: Storage["batch"];
+
+  close: Storage["close"];
+
+  export: Storage["export"];
+  import: Storage["import"];
+
+  stats: () => Promise<any>;
+  /**
+   * Resets all local data. Use with caution. If this replica
+   * is synced, it can restore from the server, but if it is not,
+   * the data will be permanently lost.
+   */
+  __dangerous__resetLocal: Storage["__dangerous__resetLocal"];
+}
+
+// schema is provided internally. loadInitialData must be revised to pass the typed Client
+interface ClientInitOptions<Presence = any, Profile = any>
+  extends Omit<StorageInitOptions<Presence, Profile>, "schema"> {}
+
+export class ClientDescriptor<Presence = any, Profile = any> {
+  constructor(init: ClientInitOptions<Presence, Profile>);
+  open: () => Promise<Client<Presence, Profile>>;
+  readonly current: Client<Presence, Profile> | null;
+  readonly readyPromise: Promise<Client<Presence, Profile>>;
+  readonly schema: StorageSchema;
+  readonly namespace: string;
+  close: () => Promise<void>;
+}
 export type Category = ObjectEntity<CategoryInit, CategoryDestructured>;
 
 export interface CategorySortKeyMatchFilter {
@@ -233,6 +326,7 @@ export type ItemDestructured = {
   purchasedAt: number | null;
   expiredAt: number | null;
   listId: string | null;
+  comment: string | null;
 };
 export type ItemInit = {
   id?: string;
@@ -245,6 +339,7 @@ export type ItemInit = {
   purchasedAt?: number | null;
   expiredAt?: number | null;
   listId?: string | null;
+  comment?: string | null;
 };
 export type ItemSnapshot = {
   id: string;
@@ -257,6 +352,7 @@ export type ItemSnapshot = {
   purchasedAt: number | null;
   expiredAt: number | null;
   listId: string | null;
+  comment: string | null;
 };
 /** Item sub-object types */
 
@@ -346,6 +442,10 @@ type ItemListId = string | null;
 type ItemListIdInit = ItemListId | undefined;
 type ItemListIdSnapshot = ItemListId;
 type ItemListIdDestructured = ItemListId;
+type ItemComment = string | null;
+type ItemCommentInit = ItemComment | undefined;
+type ItemCommentSnapshot = ItemComment;
+type ItemCommentDestructured = ItemComment;
 
 export type FoodCategoryAssignment = ObjectEntity<
   FoodCategoryAssignmentInit,
@@ -870,90 +970,3 @@ type RecipeSessionIngredientAssignmentsValueSnapshot =
   RecipeSessionIngredientAssignmentsValue;
 type RecipeSessionIngredientAssignmentsValueDestructured =
   RecipeSessionIngredientAssignmentsValue;
-
-interface Collection<
-  Document extends ObjectEntity<any>,
-  Snapshot,
-  Init,
-  Filter
-> {
-  /**
-   * @deprecated use put
-   */
-  create: (init: Init) => Promise<Document>;
-  put: (init: Init) => Promise<Document>;
-  delete: (id: string) => Promise<void>;
-  deleteAll: (ids: string[]) => Promise<void>;
-  get: (id: string) => Query<Document>;
-  findOne: (filter: Filter) => Query<Document>;
-  findAll: (filter?: Filter) => Query<Document[]>;
-}
-
-export class Client<Presence = any, Profile = any> {
-  readonly categories: Collection<
-    Category,
-    CategorySnapshot,
-    CategoryInit,
-    CategoryFilter
-  >;
-
-  readonly items: Collection<Item, ItemSnapshot, ItemInit, ItemFilter>;
-
-  readonly foodCategoryAssignments: Collection<
-    FoodCategoryAssignment,
-    FoodCategoryAssignmentSnapshot,
-    FoodCategoryAssignmentInit,
-    FoodCategoryAssignmentFilter
-  >;
-
-  readonly suggestions: Collection<
-    Suggestion,
-    SuggestionSnapshot,
-    SuggestionInit,
-    SuggestionFilter
-  >;
-
-  readonly lists: Collection<List, ListSnapshot, ListInit, ListFilter>;
-
-  readonly collaborationInfo: Collection<
-    CollaborationInfo,
-    CollaborationInfoSnapshot,
-    CollaborationInfoInit,
-    CollaborationInfoFilter
-  >;
-
-  readonly recipes: Collection<
-    Recipe,
-    RecipeSnapshot,
-    RecipeInit,
-    RecipeFilter
-  >;
-
-  sync: ServerSync<Profile, Presence>;
-  undoHistory: Storage["undoHistory"];
-  namespace: Storage["namespace"];
-  entities: Storage["entities"];
-  queryStore: Storage["queryStore"];
-  batch: Storage["batch"];
-
-  close: Storage["close"];
-
-  export: Storage["export"];
-  import: Storage["import"];
-
-  stats: () => Promise<any>;
-}
-
-// schema is provided internally. loadInitialData must be revised to pass the typed Client
-interface ClientInitOptions<Presence = any, Profile = any>
-  extends Omit<StorageInitOptions<Presence, Profile>, "schema"> {}
-
-export class ClientDescriptor<Presence = any, Profile = any> {
-  constructor(init: ClientInitOptions<Presence, Profile>);
-  open: () => Promise<Client<Presence, Profile>>;
-  readonly current: Client<Presence, Profile> | null;
-  readonly readyPromise: Promise<Client<Presence, Profile>>;
-  readonly schema: StorageSchema;
-  readonly namespace: string;
-  close: () => Promise<void>;
-}
