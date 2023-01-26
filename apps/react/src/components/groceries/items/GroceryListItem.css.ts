@@ -80,7 +80,7 @@ export const root = style({
 
 export const checkbox = style({
 	gridArea: 'check',
-	margin: `${vars.space[2]} ${vars.space[3]}`,
+	margin: `${vars.space[4]} ${vars.space[3]} 0 ${vars.space[3]}`,
 });
 
 export const mainContent = style({
@@ -89,7 +89,8 @@ export const mainContent = style({
 	alignItems: 'start',
 	gap: vars.space[2],
 	gridArea: 'main',
-	padding: `${vars.space[2]} ${vars.space[3]}`,
+	padding: `${vars.space[4]} ${vars.space[3]} ${vars.space[2]} 0`,
+	position: 'relative',
 });
 
 export const peopleStack = style({
@@ -111,6 +112,7 @@ export const textContent = style({
 	maxWidth: '100%',
 	overflow: 'hidden',
 	textOverflow: 'ellipsis',
+	position: 'relative',
 });
 
 export const textStack = style({
@@ -161,8 +163,8 @@ const expand = keyframes({
 
 export const strikethrough = style({
 	position: 'absolute',
-	left: 48,
-	right: 48,
+	left: 0,
+	right: 52,
 	top: '28px',
 	borderBottom: `1px solid ${vars.colors.gray70}`,
 	height: '1px',

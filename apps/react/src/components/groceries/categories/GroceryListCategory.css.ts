@@ -54,7 +54,7 @@ export const root = style({
 		'&[data-is-item-dragging="true"]': {
 			boxShadow: `0 0 0 1px ${vars.colors.gray30}`,
 		},
-		'&[data-is-empty="true"]': {
+		'&[data-is-empty="true"]:not([data-is-item-dragging="true"])': {
 			height: 0,
 			opacity: 0,
 			pointerEvents: 'none',

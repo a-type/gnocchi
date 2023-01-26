@@ -167,8 +167,11 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							<span>{displayString}</span>
 							{menuOpen && <QuantityEditor item={item} />}
 						</div>
+						{isPurchased && <div className={classes.strikethrough} />}
 						{comment && !menuOpen && (
-							<Box className={classes.comment}>{comment}</Box>
+							<Box open={!menuOpen} className={classes.comment}>
+								{comment}
+							</Box>
 						)}
 					</div>
 					<RecentPeople item={item} />
@@ -208,7 +211,6 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 						</div>
 					</div>
 				</CollapsibleContent>
-				{isPurchased && <div className={classes.strikethrough} />}
 			</CollapsibleRoot>
 		);
 	},
