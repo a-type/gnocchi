@@ -182,6 +182,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							className={sprinkles({
 								position: 'relative',
 							})}
+							size="small"
 							onContextMenu={preventDefault}
 							{...menuProps}
 						>
