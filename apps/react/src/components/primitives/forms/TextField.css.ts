@@ -6,7 +6,6 @@ export const fieldGroup = style({
 	flexDirection: 'column',
 	alignItems: 'stretch',
 	gap: vars.space[1],
-	minWidth: 120,
 	alignSelf: 'stretch',
 });
 

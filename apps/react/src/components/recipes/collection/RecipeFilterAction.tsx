@@ -32,7 +32,6 @@ export function RecipeFilterAction({}: RecipeFilterActionProps) {
 				<PopoverArrow />
 				<Suspense>
 					<RecipeTagsList
-						showNone
 						selectedValue={tagFilter}
 						onSelect={(tag) => {
 							setTagFilter(tag);

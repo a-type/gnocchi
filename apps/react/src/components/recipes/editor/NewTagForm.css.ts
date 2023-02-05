@@ -6,8 +6,11 @@ export const form = style({
 	alignItems: 'center',
 	gap: vars.space[2],
 	flexDirection: 'row',
+	maxWidth: '100%',
 });
 
 export const input = style({
-	flex: 1,
+	flex: '1 1 0',
+	minWidth: 60,
+	maxWidth: '40vw',
 });
