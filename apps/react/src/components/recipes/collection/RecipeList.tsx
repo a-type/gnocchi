@@ -1,16 +1,15 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Box } from '@/components/primitives/index.js';
 import * as classes from './RecipeList.css.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
-import { Suspense, useMemo } from 'react';
+import { Suspense } from 'react';
 import { RecipeListActions } from './RecipeListActions.jsx';
 import { PageFixedArea } from '@/components/layouts/index.jsx';
-import { useSnapshot } from 'valtio';
-import { recipesCollectionState } from './state.js';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
+import { useRecipeTagFilter } from './hooks.js';
 
 export interface RecipeListProps {}
 
@@ -47,7 +46,7 @@ export function RecipeList({}: RecipeListProps) {
 }
 
 function RecipeListContent() {
-	const { tagFilter } = useSnapshot(recipesCollectionState);
+	const [tagFilter] = useRecipeTagFilter();
 	// just in... 'case'
 	const normalizedTagFilter = tagFilter?.toLocaleLowerCase();
 	const recipes = hooks.useAllRecipes(

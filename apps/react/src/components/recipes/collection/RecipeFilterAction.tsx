@@ -1,9 +1,6 @@
 import { FilterIcon } from '@/components/icons/FilterIcon.jsx';
-import { TagIcon } from '@/components/icons/TagIcon.jsx';
 import { ActionButton } from '@/components/primitives/actions/ActionButton.jsx';
 import {
-	Button,
-	ButtonProps,
 	Popover,
 	PopoverArrow,
 	PopoverContent,
@@ -12,19 +9,17 @@ import {
 } from '@/components/primitives/index.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { themeMap } from '@/styles/themes/map.js';
-import { RecipeTagMetadata } from '@aglio/groceries-client';
 import classNames from 'classnames';
 import { forwardRef, Suspense, useState } from 'react';
-import { useSnapshot } from 'valtio';
+import { useRecipeTagFilter } from './hooks.js';
 import * as classes from './RecipeFilterAction.css.js';
 import { RecipeTagsList } from './RecipeTagsList.jsx';
-import { recipesCollectionState } from './state.js';
 
 export interface RecipeFilterActionProps {}
 
 export function RecipeFilterAction({}: RecipeFilterActionProps) {
 	const [open, setOpen] = useState(false);
-	const tagFilter = useSnapshot(recipesCollectionState).tagFilter;
+	const [tagFilter, setTagFilter] = useRecipeTagFilter();
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>
@@ -40,7 +35,7 @@ export function RecipeFilterAction({}: RecipeFilterActionProps) {
 						showNone
 						selectedValue={tagFilter}
 						onSelect={(tag) => {
-							recipesCollectionState.tagFilter = tag;
+							setTagFilter(tag);
 							setOpen(false);
 						}}
 					/>
@@ -52,9 +47,9 @@ export function RecipeFilterAction({}: RecipeFilterActionProps) {
 
 const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 	function SelectedTagDisplay(props, ref) {
-		const selectedTagName = useSnapshot(recipesCollectionState).tagFilter;
-		const selectedTag = hooks.useRecipeTagMetadata(selectedTagName!, {
-			skip: !selectedTagName,
+		const [tagFilter, setTagFilter] = useRecipeTagFilter();
+		const selectedTag = hooks.useRecipeTagMetadata(tagFilter!, {
+			skip: !tagFilter,
 		});
 
 		if (!selectedTag) {
@@ -76,7 +71,7 @@ const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 				{...props}
 				icon={selectedTag.get('icon') ?? <FilterIcon />}
 				onClick={() => {
-					recipesCollectionState.tagFilter = null;
+					setTagFilter(null);
 				}}
 				ref={ref}
 				className={classNames(
