@@ -12,6 +12,7 @@ import { AddToListButton } from './AddToListButton.jsx';
 import { RecipeIngredientsViewer } from './RecipeIngredientsViewer.jsx';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
+import { RecipeTagsViewer } from './RecipeTagsViewer.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 
 export interface RecipeOverviewProps {
@@ -55,6 +56,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					</a>
 				)}
 			</Box>
+			<RecipeTagsViewer recipe={recipe} />
 			<Box
 				width="auto"
 				alignSelf="start"

@@ -4,10 +4,13 @@ import { Button, Box } from '@/components/primitives/index.js';
 import * as classes from './RecipeList.css.js';
 import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Recipe } from '@aglio/groceries-client';
-import { makeRecipeLink } from './makeRecipeLink.js';
-import { Suspense } from 'react';
+import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
+import { Suspense, useMemo } from 'react';
 import { RecipeListActions } from './RecipeListActions.jsx';
-import { PageFixedArea } from '../layouts/index.jsx';
+import { PageFixedArea } from '@/components/layouts/index.jsx';
+import { useSnapshot } from 'valtio';
+import { recipesCollectionState } from './state.js';
+import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 
 export interface RecipeListProps {}
 
@@ -44,27 +47,39 @@ export function RecipeList({}: RecipeListProps) {
 }
 
 function RecipeListContent() {
-	const recipes = hooks.useAllRecipes({
-		index: {
-			where: 'updatedAt',
-			order: 'desc',
-		},
-	});
+	const { tagFilter } = useSnapshot(recipesCollectionState);
+	// just in... 'case'
+	const normalizedTagFilter = tagFilter?.toLocaleLowerCase();
+	const recipes = hooks.useAllRecipes(
+		normalizedTagFilter
+			? {
+					index: {
+						where: 'tag',
+						equals: normalizedTagFilter,
+					},
+			  }
+			: undefined,
+	);
 
 	return (
 		<>
-			{recipes.map((recipe) => (
-				<RecipeListItem key={recipe.get('id')} recipe={recipe} />
-			))}
+			{recipes
+				.sort((a, b) => a.get('updatedAt') - b.get('updatedAt'))
+				.map((recipe) => (
+					<RecipeListItem key={recipe.get('id')} recipe={recipe} />
+				))}
 		</>
 	);
 }
 
 function RecipeListItem({ recipe }: { recipe: Recipe }) {
-	const { slug, id, title } = hooks.useWatch(recipe);
+	const { title } = hooks.useWatch(recipe);
 	return (
 		<Link className={classes.item} to={makeRecipeLink(recipe)}>
-			{title}
+			<span>{title}</span>
+			<div className={classes.tags}>
+				<RecipeTagsViewer recipe={recipe} />
+			</div>
 		</Link>
 	);
 }

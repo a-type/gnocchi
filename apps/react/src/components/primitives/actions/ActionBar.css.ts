@@ -37,14 +37,12 @@ export const content = style({
 	alignItems: 'center',
 	justifyContent: 'start',
 	flexDirection: 'row',
-	gap: vars.space[2],
 	width: '100%',
 	overflowY: 'hidden',
 	overflowX: 'auto',
 	paddingRight: 80,
 	position: 'relative',
 	height: '100%',
-	paddingLeft: 8,
 
 	selectors: {
 		'&::-webkit-scrollbar': {

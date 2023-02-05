@@ -11,3 +11,9 @@ export const themeMap = {
 	lemon: lemonTheme,
 	tomato: tomatoTheme,
 };
+
+export function randomTheme() {
+	const themes = Object.keys(themeMap);
+	const randomIndex = Math.floor(Math.random() * themes.length);
+	return themes[randomIndex];
+}

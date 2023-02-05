@@ -1,5 +1,5 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
-import { RecipeList } from '@/components/recipes/RecipeList.jsx';
+import { RecipeList } from '@/components/recipes/collection/RecipeList.jsx';
 import { Suspense } from 'react';
 
 export interface RecipesPageProps {}

@@ -5,6 +5,11 @@ export const root = style({
 	borderColor: vars.colors.gray70,
 	fontWeight: 'normal !important',
 	whiteSpace: 'nowrap',
+	margin: 8,
+	display: 'flex',
+	flexDirection: 'row',
+	gap: vars.space[2],
+	alignItems: 'center',
 
 	selectors: {
 		'&:hover': {

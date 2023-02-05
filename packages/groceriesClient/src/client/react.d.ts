@@ -17,6 +17,8 @@ import type {
   CollaborationInfoFilter,
   Recipe,
   RecipeFilter,
+  RecipeTagMetadata,
+  RecipeTagMetadataFilter,
 } from "./index.js";
 import type {
   UserInfo,
@@ -155,6 +157,21 @@ export interface GeneratedHooks<Presence, Profile> {
   useAllRecipes: <Config extends SkippableFilterConfig<RecipeFilter>>(
     config?: Config
   ) => Recipe[];
+
+  useRecipeTagMetadata(
+    id: string,
+    config?: { skip?: boolean }
+  ): RecipeTagMetadata | null;
+  useOneRecipeTagMetadata: <
+    Config extends SkippableFilterConfig<RecipeTagMetadataFilter>
+  >(
+    config?: Config
+  ) => RecipeTagMetadata | null;
+  useAllRecipeTagMetadata: <
+    Config extends SkippableFilterConfig<RecipeTagMetadataFilter>
+  >(
+    config?: Config
+  ) => RecipeTagMetadata[];
 }
 
 export function createHooks<Presence = any, Profile = any>(): GeneratedHooks<

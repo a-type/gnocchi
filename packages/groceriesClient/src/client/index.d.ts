@@ -70,12 +70,20 @@ export class Client<Presence = any, Profile = any> {
     RecipeFilter
   >;
 
+  readonly recipeTagMetadata: Collection<
+    RecipeTagMetadata,
+    RecipeTagMetadataSnapshot,
+    RecipeTagMetadataInit,
+    RecipeTagMetadataFilter
+  >;
+
   sync: ServerSync<Profile, Presence>;
   undoHistory: Storage["undoHistory"];
   namespace: Storage["namespace"];
   entities: Storage["entities"];
   queryStore: Storage["queryStore"];
   batch: Storage["batch"];
+  files: Storage["files"];
 
   close: Storage["close"];
 
@@ -710,12 +718,35 @@ export interface RecipeUpdatedAtRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipeTagMatchFilter {
+  where: "tag";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeTagRangeFilter {
+  where: "tag";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeTagStartsWithFilter {
+  where: "tag";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
 export type RecipeFilter =
   | RecipeSlugMatchFilter
   | RecipeSlugRangeFilter
   | RecipeSlugStartsWithFilter
   | RecipeUpdatedAtMatchFilter
-  | RecipeUpdatedAtRangeFilter;
+  | RecipeUpdatedAtRangeFilter
+  | RecipeTagMatchFilter
+  | RecipeTagRangeFilter
+  | RecipeTagStartsWithFilter;
 
 export type RecipeDestructured = {
   id: string;
@@ -728,6 +759,7 @@ export type RecipeDestructured = {
   instructions: any;
   url: string | null;
   session: RecipeSession | null;
+  tags: RecipeTags;
 };
 export type RecipeInit = {
   id?: string;
@@ -740,6 +772,7 @@ export type RecipeInit = {
   instructions?: any;
   url?: string | null;
   session?: RecipeSessionInit | null;
+  tags?: RecipeTagsInit;
 };
 export type RecipeSnapshot = {
   id: string;
@@ -752,6 +785,7 @@ export type RecipeSnapshot = {
   instructions: any;
   url: string | null;
   session: RecipeSessionSnapshot | null;
+  tags: RecipeTagsSnapshot;
 };
 /** Recipe sub-object types */
 
@@ -931,10 +965,9 @@ export type RecipeSessionInstructionAssignmentsInit = Record<
   string,
   RecipeSessionInstructionAssignmentsValueInit
 >;
-export type RecipeSessionInstructionAssignmentsDestructured = Record<
-  string,
-  RecipeSessionInstructionAssignmentsValue
->;
+export type RecipeSessionInstructionAssignmentsDestructured = {
+  [key: string]: RecipeSessionInstructionAssignmentsValue | undefined;
+};
 export type RecipeSessionInstructionAssignmentsSnapshot = Record<
   string,
   RecipeSessionInstructionAssignmentsValueSnapshot
@@ -955,10 +988,9 @@ export type RecipeSessionIngredientAssignmentsInit = Record<
   string,
   RecipeSessionIngredientAssignmentsValueInit
 >;
-export type RecipeSessionIngredientAssignmentsDestructured = Record<
-  string,
-  RecipeSessionIngredientAssignmentsValue
->;
+export type RecipeSessionIngredientAssignmentsDestructured = {
+  [key: string]: RecipeSessionIngredientAssignmentsValue | undefined;
+};
 export type RecipeSessionIngredientAssignmentsSnapshot = Record<
   string,
   RecipeSessionIngredientAssignmentsValueSnapshot
@@ -970,3 +1002,47 @@ type RecipeSessionIngredientAssignmentsValueSnapshot =
   RecipeSessionIngredientAssignmentsValue;
 type RecipeSessionIngredientAssignmentsValueDestructured =
   RecipeSessionIngredientAssignmentsValue;
+
+export type RecipeTags = ListEntity<RecipeTagsInit, RecipeTagsDestructured>;
+export type RecipeTagsInit = Array<RecipeTagsItemInit>;
+export type RecipeTagsDestructured = Array<RecipeTagsItem>;
+export type RecipeTagsSnapshot = Array<RecipeTagsItemSnapshot>;
+type RecipeTagsItem = string;
+type RecipeTagsItemInit = RecipeTagsItem;
+type RecipeTagsItemSnapshot = RecipeTagsItem;
+type RecipeTagsItemDestructured = RecipeTagsItem;
+export type RecipeTagMetadata = ObjectEntity<
+  RecipeTagMetadataInit,
+  RecipeTagMetadataDestructured
+>;
+
+export type RecipeTagMetadataFilter = never;
+export type RecipeTagMetadataDestructured = {
+  name: string;
+  color: string | null;
+  icon: string | null;
+};
+export type RecipeTagMetadataInit = {
+  name: string;
+  color?: string | null;
+  icon?: string | null;
+};
+export type RecipeTagMetadataSnapshot = {
+  name: string;
+  color: string | null;
+  icon: string | null;
+};
+/** RecipeTagMetadata sub-object types */
+
+type RecipeTagMetadataName = string;
+type RecipeTagMetadataNameInit = RecipeTagMetadataName;
+type RecipeTagMetadataNameSnapshot = RecipeTagMetadataName;
+type RecipeTagMetadataNameDestructured = RecipeTagMetadataName;
+type RecipeTagMetadataColor = string | null;
+type RecipeTagMetadataColorInit = RecipeTagMetadataColor | undefined;
+type RecipeTagMetadataColorSnapshot = RecipeTagMetadataColor;
+type RecipeTagMetadataColorDestructured = RecipeTagMetadataColor;
+type RecipeTagMetadataIcon = string | null;
+type RecipeTagMetadataIconInit = RecipeTagMetadataIcon | undefined;
+type RecipeTagMetadataIconSnapshot = RecipeTagMetadataIcon;
+type RecipeTagMetadataIconDestructured = RecipeTagMetadataIcon;

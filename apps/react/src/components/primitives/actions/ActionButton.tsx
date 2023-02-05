@@ -41,14 +41,15 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 
 		return (
 			<CollapsibleRoot open={!visible ? false : render}>
-				<CollapsibleContent data-horizontal>
+				<CollapsibleContent data-horizontal className={classes.outer}>
 					<Button
 						ref={ref}
 						size="small"
 						className={clsx(classes.root)}
 						{...rest}
 					>
-						{icon}&nbsp;{children}
+						{icon}
+						{children}
 					</Button>
 				</CollapsibleContent>
 			</CollapsibleRoot>

@@ -12,6 +12,7 @@ import { RecipeDeleteButton } from './RecipeDeleteButton.jsx';
 import { RecipeEditActions } from './RecipeEditActions.jsx';
 import { RecipeIngredientsEditor } from './RecipeIngredientsEditor.jsx';
 import { RecipeInstructionsField } from './RecipeInstructionsField.jsx';
+import { RecipeTagsEditor } from './RecipeTagsEditor.jsx';
 import { RecipeTitleField } from './RecipeTitleField.jsx';
 import { RecipeUrlField } from './RecipeUrlField.jsx';
 
@@ -30,11 +31,14 @@ export function RecipeEditor({ slug }: RecipeEditorProps) {
 function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	return (
 		<Box direction="column" gap={8}>
-			<RecipeTitleField recipe={recipe} />
-			<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
-				<RecipeEditActions />
-			</PageFixedArea>
-			<RecipeUrlField recipe={recipe} />
+			<Box direction="column" gap={2}>
+				<RecipeTitleField recipe={recipe} />
+				<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
+					<RecipeEditActions />
+				</PageFixedArea>
+				<RecipeUrlField recipe={recipe} />
+			</Box>
+			<RecipeTagsEditor recipe={recipe} />
 			<div>
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsEditor recipe={recipe} />

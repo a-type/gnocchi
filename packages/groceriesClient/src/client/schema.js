@@ -331,11 +331,50 @@ const recipes = collection({
                     }
                 }
             }
+        },
+        /**
+		 * String literal tags. Recipes can be filtered by tags.
+		 * Before assigning, tags should always be made lowercase.
+		 */ tags: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
+        }
+    },
+    synthetics: {
+        // makes tags indexable individually
+        tag: {
+            type: 'string[]',
+            compute: (recipe)=>{
+                return recipe.tags;
+            }
+        }
+    }
+});
+/**
+ * I'm keeping this practically only to serve as a lookup for what
+ * tags have been created so they can be reused.
+ */ const recipeTagMetadata = collection({
+    name: 'recipeTagMetadata',
+    primaryKey: 'name',
+    pluralName: 'recipeTagMetadata',
+    fields: {
+        name: {
+            type: 'string'
+        },
+        color: {
+            type: 'string',
+            nullable: true
+        },
+        icon: {
+            type: 'string',
+            nullable: true
         }
     }
 });
 export default schema({
-    version: 18,
+    version: 19,
     collections: {
         categories,
         items,
@@ -343,6 +382,7 @@ export default schema({
         suggestions,
         lists,
         collaborationInfo,
-        recipes
+        recipes,
+        recipeTagMetadata
     }
 });

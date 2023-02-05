@@ -31,15 +31,21 @@ export const PopoverAnchor = withClassName(
 
 export const PopoverContent = forwardRef<
 	HTMLDivElement,
-	ComponentPropsWithoutRef<typeof StyledContent> & { disableBlur?: boolean }
+	ComponentPropsWithoutRef<typeof StyledContent> & {
+		disableBlur?: boolean;
+		containerClassName?: string;
+	}
 >(function PopoverContent(
-	{ children, forceMount, disableBlur, ...props },
+	{ children, forceMount, disableBlur, containerClassName, ...props },
 	ref,
 ) {
 	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
 	const mergedRef = useMergedRef(ref, contentRef);
 	return (
-		<PopoverPrimitive.Portal forceMount={forceMount}>
+		<PopoverPrimitive.Portal
+			forceMount={forceMount}
+			className={containerClassName}
+		>
 			<>
 				<StyledContent {...props} forceMount={forceMount} ref={mergedRef}>
 					{children}
