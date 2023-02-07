@@ -1,11 +1,5 @@
-import {
-	Form,
-	SubmitButton,
-	TextField,
-} from '@/components/primitives/forms.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
-import { randomTheme } from '@/styles/themes/map.js';
+import { Form, randomTheme, SubmitButton, TextField } from '@aglio/ui';
 import { Formik } from 'formik';
 import * as classes from './NewTagForm.css.js';
 

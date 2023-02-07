@@ -1,6 +1,6 @@
 import { PageNowPlaying } from '@/components/layouts/index.jsx';
-import { Button, H5 } from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { Button, H5 } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { ListBulletIcon } from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';

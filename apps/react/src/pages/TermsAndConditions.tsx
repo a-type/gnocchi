@@ -1,5 +1,5 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
-import { H1, H2, P, TextLink } from '@/components/primitives/index.js';
+import { H1, H2, P, TextLink } from '@aglio/ui';
 
 export function TermsAndConditions() {
 	return (

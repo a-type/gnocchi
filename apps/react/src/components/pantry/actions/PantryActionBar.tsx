@@ -1,5 +1,5 @@
-import { ActionBar } from '@/components/primitives/actions/ActionBar.jsx';
-import { ActionButton } from '@/components/primitives/actions/ActionButton.jsx';
+import { ActionBar } from '@aglio/ui';
+import { ActionButton } from '@aglio/ui';
 import { groceries, hooks } from '@/stores/groceries/index.js';
 import { ResetIcon, TrashIcon } from '@radix-ui/react-icons';
 

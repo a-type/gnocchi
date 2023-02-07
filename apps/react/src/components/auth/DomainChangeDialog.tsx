@@ -1,12 +1,12 @@
 import { useAuth } from '@/contexts/AuthContext.jsx';
-import { sprinkles } from '@/styles/sprinkles.css.js';
 import {
+	sprinkles,
 	Button,
 	P,
 	Dialog,
 	DialogContent,
 	DialogTitle,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 
 export interface DomainChangeDialogProps {}
 

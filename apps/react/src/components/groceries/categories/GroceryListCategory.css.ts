@@ -1,4 +1,4 @@
-import { vars } from '@/theme.css.js';
+import { vars } from '@aglio/ui';
 import { keyframes, style } from '@vanilla-extract/css';
 
 export const title = style({

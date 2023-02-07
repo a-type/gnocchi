@@ -1,4 +1,4 @@
-import { Box, H1, LinkButton, P } from '../primitives/index.js';
+import { Box, H1, LinkButton, P } from '@aglio/ui';
 
 export interface RecipeNotFoundProps {}
 

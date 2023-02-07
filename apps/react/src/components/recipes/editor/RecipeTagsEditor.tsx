@@ -1,4 +1,6 @@
 import { TagIcon } from '@/components/icons/TagIcon.jsx';
+import { hooks } from '@/stores/groceries/index.js';
+import { Recipe } from '@aglio/groceries-client';
 import {
 	Box,
 	Button,
@@ -7,11 +9,9 @@ import {
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
+	themeMap,
 	ThemeName,
-} from '@/components/primitives/index.js';
-import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@/styles/themes/map.js';
-import { Recipe } from '@aglio/groceries-client';
+} from '@aglio/ui';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
 import classnames from 'classnames';
 import { Suspense, useState } from 'react';

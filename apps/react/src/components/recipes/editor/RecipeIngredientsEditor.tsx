@@ -1,9 +1,5 @@
-import {
-	Form,
-	SubmitButton,
-	TextAreaField,
-} from '@/components/primitives/forms.jsx';
-import { Button } from '@/components/primitives/index.js';
+import { Form, SubmitButton, TextAreaField } from '@aglio/ui';
+import { Button } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import * as mutations from '@/stores/groceries/recipeMutations.js';
 import {

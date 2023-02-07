@@ -1,6 +1,6 @@
 import { PageFixedArea, PageNowPlaying } from '@/components/layouts/index.jsx';
-import { H1, H2, LinkButton, P } from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { H1, H2, LinkButton, P } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
 import { makeRecipeLink } from '../makeRecipeLink.js';
 import { CookingActionBar } from './CookingActionBar.jsx';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';

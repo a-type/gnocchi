@@ -1,11 +1,7 @@
 import { TagIcon } from '@/components/icons/TagIcon.jsx';
-import {
-	Button,
-	ButtonProps,
-	ThemeName,
-} from '@/components/primitives/index.js';
+import { Button, ButtonProps, ThemeName } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@/styles/themes/map.js';
+import { themeMap } from '@aglio/ui';
 import classnames from 'classnames';
 import * as classes from './RecipeTagsList.css.js';
 

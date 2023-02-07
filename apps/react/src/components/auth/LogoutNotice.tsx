@@ -9,7 +9,7 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 import { LoginButton } from '../sync/LoginButton.jsx';
 
 export interface LogoutNoticeProps {}

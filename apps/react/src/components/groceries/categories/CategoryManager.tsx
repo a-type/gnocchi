@@ -1,10 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import {
-	Button,
-	Form,
-	SubmitButton,
-	TextField,
-} from '@/components/primitives/index.js';
+import { Button, Form, SubmitButton, TextField } from '@aglio/ui';
 import { groceries, hooks } from '@/stores/groceries/index.js';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { DndContext, DragOverlay, useDndMonitor } from '@dnd-kit/core';
@@ -13,7 +8,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { generateKeyBetween } from 'fractional-indexing';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
-import { Box } from '@/components/primitives/box/Box.jsx';
+import { Box } from '@aglio/ui';
 import { Formik } from 'formik';
 import { Category } from '@aglio/groceries-client';
 

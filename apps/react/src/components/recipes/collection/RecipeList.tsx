@@ -1,8 +1,8 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Box } from '@/components/primitives/index.js';
+import { Button, Box } from '@aglio/ui';
 import * as classes from './RecipeList.css.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { Suspense } from 'react';

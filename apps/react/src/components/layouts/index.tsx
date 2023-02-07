@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { clsx } from 'clsx';
 import * as classes from './index.css.js';
-import { Box, BoxProps } from '../primitives/index.js';
+import { Box, BoxProps } from '@aglio/ui';
 import { withClassName } from '@/hocs/withClassName.jsx';
 import { createPortal } from 'react-dom';
 

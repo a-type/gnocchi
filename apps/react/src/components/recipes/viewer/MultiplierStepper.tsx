@@ -1,7 +1,4 @@
-import {
-	NumberStepper,
-	NumberStepperProps,
-} from '@/components/primitives/index.js';
+import { NumberStepper, NumberStepperProps } from '@aglio/ui';
 import { fractionToText } from '@aglio/tools';
 import { Cross1Icon } from '@radix-ui/react-icons';
 

@@ -1,7 +1,7 @@
 import { APP_NAME } from '@/config.js';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { Box, Button, P } from '../primitives/index.js';
+import { Box, Button, P } from '@aglio/ui';
 import { PromoteSubscriptionButton } from './PromoteSubscriptionButton.jsx';
 
 export function InfrequentSubscriptionHint() {

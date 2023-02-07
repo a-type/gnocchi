@@ -1,11 +1,11 @@
 import { ScanIcon } from '@/components/icons/ScanIcon.jsx';
-import { Box, Button } from '@/components/primitives/index.js';
-import { LiveUpdateTextField } from '@/components/primitives/LiveUpdateTextField.jsx';
+import { Box, Button } from '@aglio/ui';
+import { LiveUpdateTextField } from '@aglio/ui';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { updateRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { Recipe } from '@aglio/groceries-client';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { useState } from 'react';
 
 export interface RecipeUrlFieldProps {

@@ -1,9 +1,7 @@
 import { groceries } from '@/stores/groceries/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
 import { Category } from '@aglio/groceries-client';
+import { Box, Form, sprinkles, SubmitButton, TextField } from '@aglio/ui';
 import { Formik } from 'formik';
-import { Box } from '../primitives/box/Box.jsx';
-import { Form, SubmitButton, TextField } from '../primitives/forms.js';
 
 export function NewCategoryForm({
 	onDone,

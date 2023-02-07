@@ -6,8 +6,8 @@ import {
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';
-import { H1 } from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { H1 } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
 import { Suspense } from 'react';
 
 export interface PantryPageProps {}

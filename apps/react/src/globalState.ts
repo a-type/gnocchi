@@ -1,5 +1,5 @@
 import { proxy } from 'valtio';
-import { ThemeName } from './components/primitives/colorPicker/ColorPicker.jsx';
+import { ThemeName } from '@aglio/ui';
 
 export const globalState = proxy({
 	theme: 'lemon' as ThemeName,

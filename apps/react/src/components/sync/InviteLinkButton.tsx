@@ -11,7 +11,7 @@ import {
 	Input,
 	P,
 	Span,
-} from '@/components/primitives/index.js';
+} from '@aglio/ui';
 import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
 import copy from 'copy-to-clipboard';
 import { toast } from 'react-hot-toast';

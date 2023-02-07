@@ -1,4 +1,4 @@
-import { LinkButton, LinkButtonProps } from '@/components/primitives/index.js';
+import { LinkButton, LinkButtonProps } from '@aglio/ui';
 import { ReactNode } from 'react';
 
 export function LoginButton({

@@ -1,7 +1,7 @@
 import { TagIcon } from '@/components/icons/TagIcon.jsx';
-import { ThemeName } from '@/components/primitives/index.js';
+import { ThemeName } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@/styles/themes/map.js';
+import { themeMap } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import classnames from 'classnames';
 import * as classes from './RecipeTagsViewer.css.js';

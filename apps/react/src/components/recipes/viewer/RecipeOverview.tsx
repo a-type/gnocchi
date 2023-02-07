@@ -1,8 +1,8 @@
 import { PageNowPlaying } from '@/components/layouts/index.jsx';
-import { Box, H1, H2, LinkButton, P } from '@/components/primitives/index.js';
+import { Box, H1, H2, LinkButton, P } from '@aglio/ui';
 import { useWakeLock } from '@/hooks/useWakeLock.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { format } from 'date-fns/esm';
 import { useRecipeFromSlugUrl } from '../hooks.js';

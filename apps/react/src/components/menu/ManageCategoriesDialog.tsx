@@ -9,7 +9,7 @@ import {
 	DialogTrigger,
 	Button,
 	DialogActions,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 import { menuState } from './state.js';
 
 export function ManageCategoriesDialog({ children }: { children: ReactNode }) {

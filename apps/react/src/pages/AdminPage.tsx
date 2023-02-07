@@ -1,5 +1,5 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
-import { Box } from '@/components/primitives/index.js';
+import { Box } from '@aglio/ui';
 import { trpc } from '@/trpc.js';
 import { Link, Outlet } from 'react-router-dom';
 import { NotFoundPage } from './NotFoundPage.jsx';

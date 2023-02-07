@@ -11,7 +11,7 @@ import {
 	H2,
 	P,
 	Span,
-} from '@/components/primitives/index.js';
+} from '@aglio/ui';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';

@@ -2,13 +2,13 @@ import { useRecipeFromSlugUrl } from '../hooks.js';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { clsx } from 'clsx';
 import * as classes from './RecipeCookView.css.js';
-import { H1 } from '@/components/primitives/index.js';
+import { H1 } from '@aglio/ui';
 import { useEffect } from 'react';
 import { hooks } from '@/stores/groceries/index.js';
 import { CookingToolbar } from './CookingToolbar.jsx';
 import { CookingActionBar } from './CookingActionBar.jsx';
 import { PageFixedArea } from '@/components/layouts/index.jsx';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { InstructionsProvider } from '../editor/InstructionStepNodeView.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
 

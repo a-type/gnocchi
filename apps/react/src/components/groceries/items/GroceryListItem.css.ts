@@ -1,5 +1,5 @@
-import { mediaQueries } from '@/styles/media.js';
-import { vars } from '@/theme.css.js';
+import { mediaQueries } from '@aglio/ui';
+import { vars } from '@aglio/ui';
 import { keyframes, style } from '@vanilla-extract/css';
 
 const popUp = keyframes({

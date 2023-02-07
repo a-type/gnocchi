@@ -1,5 +1,5 @@
 import { APP_NAME } from '@/config.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { proxy, useSnapshot } from 'valtio';
 import {
@@ -13,7 +13,7 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 import { LoginButton } from './LoginButton.js';
 
 export interface StartSignupDialogProps {}

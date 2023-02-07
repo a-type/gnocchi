@@ -1,12 +1,12 @@
-import { Dialog, DialogContent } from '@/components/primitives/index.js';
-import { Button } from '@/components/primitives/index.js';
+import { Dialog, DialogContent } from '@aglio/ui';
+import { Button } from '@aglio/ui';
 import {
 	Select,
 	SelectTrigger,
 	SelectContent,
 	SelectItem,
 	SelectValue,
-} from '@/components/primitives/select/Select.jsx';
+} from '@aglio/ui';
 import { groceries, hooks } from '@/stores/groceries/index.js';
 import { Category, Item } from '@aglio/groceries-client';
 import { RowSpacingIcon } from '@radix-ui/react-icons';

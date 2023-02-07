@@ -1,16 +1,6 @@
 import { TagIcon } from '@/components/icons/TagIcon.jsx';
-import {
-	Form,
-	SubmitButton,
-	TextField,
-} from '@/components/primitives/forms.jsx';
-import {
-	Dialog,
-	DialogContent,
-	Box,
-	ColorSwatch,
-	ThemeName,
-} from '@/components/primitives/index.js';
+import { Form, SubmitButton, TextField } from '@aglio/ui';
+import { Dialog, DialogContent, Box, ColorSwatch, ThemeName } from '@aglio/ui';
 import {
 	Select,
 	SelectContent,
@@ -19,10 +9,10 @@ import {
 	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
-} from '@/components/primitives/select/Select.jsx';
+} from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
-import { themeMap } from '@/styles/themes/map.js';
+import { sprinkles } from '@aglio/ui';
+import { themeMap } from '@aglio/ui';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import * as classes from './ListSelect.css.js';

@@ -1,4 +1,4 @@
-import { Button, Input } from '@/components/primitives/index.js';
+import { Button, Input } from '@aglio/ui';
 import {
 	forwardRef,
 	useState,
@@ -9,11 +9,7 @@ import {
 } from 'react';
 import { groceries, hooks } from '@/stores/groceries/index.js';
 import { isUrl } from '@aglio/tools';
-import {
-	Popover,
-	PopoverAnchor,
-	PopoverContent,
-} from '@/components/primitives/index.js';
+import { Popover, PopoverAnchor, PopoverContent } from '@aglio/ui';
 import {
 	default as Downshift,
 	useCombobox,
@@ -27,9 +23,9 @@ import { clsx } from 'clsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { signupDialogState as signupState } from '@/components/sync/StartSignupDialog.jsx';
-import { Box } from '@/components/primitives/box/Box.jsx';
+import { Box } from '@aglio/ui';
 import { useListId } from '@/contexts/ListContext.jsx';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 
 export interface GroceryListAddProps {
 	className?: string;

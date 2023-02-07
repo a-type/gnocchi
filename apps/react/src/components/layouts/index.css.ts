@@ -1,5 +1,5 @@
-import { mediaQueries } from '@/styles/media.js';
-import { vars } from '@/theme.css.js';
+import { mediaQueries } from '@aglio/ui';
+import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const fixedArea = style({

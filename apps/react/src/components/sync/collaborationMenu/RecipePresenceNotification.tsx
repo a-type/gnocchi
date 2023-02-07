@@ -1,4 +1,4 @@
-import { Button, LinkButton } from '@/components/primitives/index.js';
+import { Button, LinkButton } from '@aglio/ui';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { hooks, Presence, Profile } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';

@@ -1,4 +1,4 @@
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -11,7 +11,7 @@ import {
 	H2,
 	P,
 	DialogActions,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 import { InviteLinkButton } from './InviteLinkButton.jsx';
 
 export interface SignupSuccessBannerProps {}

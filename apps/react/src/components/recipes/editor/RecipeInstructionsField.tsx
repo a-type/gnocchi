@@ -1,6 +1,5 @@
-import { Box, Button, P } from '@/components/primitives/index.js';
-import { RichEditor } from '@/components/primitives/richEditor/RichEditor.jsx';
 import { Recipe } from '@aglio/groceries-client';
+import { Box, Button, P, RichEditor } from '@aglio/ui';
 import { FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons';
 import { Editor } from '@tiptap/core';
 import { useSyncedInstructionsEditor } from '../hooks.js';

@@ -1,12 +1,6 @@
 import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Box } from '@/components/primitives/box/Box.jsx';
-import {
-	Button,
-	ButtonProps,
-	H1,
-	Span,
-	TextLink,
-} from '@/components/primitives/index.js';
+import { Box } from '@aglio/ui';
+import { Button, ButtonProps, H1, Span, TextLink } from '@aglio/ui';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
 import { API_HOST_HTTP } from '@/config.js';
