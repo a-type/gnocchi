@@ -1,3 +1,5 @@
+'use client';
+
 import { forwardRef } from 'react';
 import { Link, LinkProps } from 'react-router-dom';
 import { clsx } from 'clsx';

@@ -7,7 +7,7 @@ import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { Suspense } from 'react';
 import { RecipeListActions } from './RecipeListActions.jsx';
-import { PageFixedArea } from '@/components/layouts/index.jsx';
+import { PageFixedArea } from '@aglio/ui';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import { useRecipeTagFilter } from './hooks.js';
 

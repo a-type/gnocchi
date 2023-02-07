@@ -206,5 +206,3 @@ export const root = recipe({
 		size: 'default',
 	},
 });
-
-export type ButtonVariants = RecipeVariants<typeof root>;

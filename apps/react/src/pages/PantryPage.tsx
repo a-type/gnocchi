@@ -1,8 +1,4 @@
-import {
-	PageContent,
-	PageFixedArea,
-	PageRoot,
-} from '@/components/layouts/index.jsx';
+import { PageContent, PageFixedArea, PageRoot } from '@aglio/ui';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';

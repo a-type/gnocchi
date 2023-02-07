@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { RecipeList } from '@/components/recipes/collection/RecipeList.jsx';
 import { Suspense } from 'react';
 

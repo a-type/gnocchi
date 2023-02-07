@@ -14,6 +14,8 @@ export function RecipeTagsViewer({ recipe }: RecipeTagsViewerProps) {
 	const { tags } = hooks.useWatch(recipe);
 	hooks.useWatch(tags);
 
+	if (!tags) return null;
+
 	return (
 		<div className={classes.list}>
 			{tags.map((tag) => (

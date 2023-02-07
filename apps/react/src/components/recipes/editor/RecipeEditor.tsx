@@ -1,4 +1,4 @@
-import { PageFixedArea } from '@/components/layouts/index.jsx';
+import { PageFixedArea } from '@aglio/ui';
 import { H2, Box, LiveUpdateTextField } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';

@@ -1,4 +1,4 @@
-import { PageNowPlaying } from '@/components/layouts/index.jsx';
+import { PageNowPlaying } from '@aglio/ui';
 import { Button, H5 } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';

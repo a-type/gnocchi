@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { Box, Button, H2, LinkButton, P, Span, TextLink } from '@aglio/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';

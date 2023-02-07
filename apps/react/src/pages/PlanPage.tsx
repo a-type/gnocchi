@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { Box } from '@aglio/ui';
 import { Button, ButtonProps, H1, Span, TextLink } from '@aglio/ui';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';

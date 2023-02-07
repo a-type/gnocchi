@@ -1,3 +1,5 @@
+'use client';
+
 import { clsx } from 'clsx';
 import * as classes from './TextArea.css.js';
 import useMergedRef from '../../hooks/useMergedRef.js';

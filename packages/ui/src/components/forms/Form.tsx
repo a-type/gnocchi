@@ -1,3 +1,5 @@
+'use client';
+
 import { Form as FormikForm } from 'formik';
 import { withClassName } from '../../withClassName.jsx';
 import * as classes from './Form.css.js';

@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { Button } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';

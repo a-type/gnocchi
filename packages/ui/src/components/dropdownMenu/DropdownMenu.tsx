@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { createPortal } from 'react-dom';

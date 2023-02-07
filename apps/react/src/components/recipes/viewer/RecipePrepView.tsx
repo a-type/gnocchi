@@ -1,4 +1,4 @@
-import { PageFixedArea, PageNowPlaying } from '@/components/layouts/index.jsx';
+import { PageFixedArea, PageNowPlaying } from '@aglio/ui';
 import { H1, H2, LinkButton, P } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';
 import { makeRecipeLink } from '../makeRecipeLink.js';

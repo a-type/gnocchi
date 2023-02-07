@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { Box } from '@aglio/ui';
 import { trpc } from '@/trpc.js';
 import { Link, Outlet } from 'react-router-dom';

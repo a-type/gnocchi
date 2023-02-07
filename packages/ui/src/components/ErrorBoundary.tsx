@@ -1,3 +1,4 @@
+'use client';
 import React, { Component, ReactNode } from 'react';
 
 export class ErrorBoundary extends Component<

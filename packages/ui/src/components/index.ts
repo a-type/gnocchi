@@ -23,3 +23,4 @@ export * from './richEditor/RichEditor.jsx';
 export * from './actions/ActionBar.jsx';
 export * from './actions/ActionButton.jsx';
 export * from './select/Select.jsx';
+export * from './layouts/index.jsx';

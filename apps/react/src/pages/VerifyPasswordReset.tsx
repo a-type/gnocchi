@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { Form, SubmitButton, TextField } from '@aglio/ui';
 import { H1, P } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';

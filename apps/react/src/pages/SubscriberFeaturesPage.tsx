@@ -4,7 +4,7 @@ import {
 	PageRoot,
 	PageSection,
 	PageSectionGrid,
-} from '@/components/layouts/index.jsx';
+} from '@aglio/ui';
 import { H1, H2, P } from '@aglio/ui';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
 import { APP_NAME } from '@/config.js';

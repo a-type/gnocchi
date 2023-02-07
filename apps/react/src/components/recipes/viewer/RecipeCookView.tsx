@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { hooks } from '@/stores/groceries/index.js';
 import { CookingToolbar } from './CookingToolbar.jsx';
 import { CookingActionBar } from './CookingActionBar.jsx';
-import { PageFixedArea } from '@/components/layouts/index.jsx';
+import { PageFixedArea } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';
 import { InstructionsProvider } from '../editor/InstructionStepNodeView.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';

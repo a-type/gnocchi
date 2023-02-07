@@ -3,6 +3,7 @@ import { initTRPC } from '@trpc/server';
 import type { Request, Response } from 'express';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { Server } from '@lo-fi/server';
+import { getIsHubAuthorizedRequest } from '@aglio/tools';
 
 type Context = {
 	req: Request;
@@ -10,10 +11,15 @@ type Context = {
 	deployedContext: {
 		apiHost: string;
 		uiHost: string;
+		hubHost: string;
 	};
 	session: Session | null;
 	isProductAdmin: boolean;
 	lofi: Server;
+	/**
+	 * This is an authenticated request from the hub service
+	 */
+	isHubRequest: boolean;
 };
 
 export const createContext = async ({
@@ -29,6 +35,7 @@ export const createContext = async ({
 	lofi: Server;
 }) => {
 	const session = await getLoginSession(req);
+	const isHubRequest = getIsHubAuthorizedRequest(req.headers);
 
 	return {
 		req,
@@ -37,6 +44,7 @@ export const createContext = async ({
 		session,
 		isProductAdmin: session?.isProductAdmin ?? false,
 		lofi,
+		isHubRequest,
 	};
 };
 

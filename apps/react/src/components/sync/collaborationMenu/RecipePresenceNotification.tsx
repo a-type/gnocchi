@@ -6,7 +6,7 @@ import { UserInfo } from '@lo-fi/common';
 import { Suspense, useContext, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import * as classes from './RecipePresenceNotification.css.js';
-import { PageNowPlaying } from '@/components/layouts/index.jsx';
+import { PageNowPlaying } from '@aglio/ui';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { PersonAvatar } from '../people/PersonAvatar.jsx';

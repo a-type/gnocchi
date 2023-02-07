@@ -1,3 +1,5 @@
+'use client';
+
 import React, { ComponentPropsWithoutRef } from 'react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import { clsx } from 'clsx';

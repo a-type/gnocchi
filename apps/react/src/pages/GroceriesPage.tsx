@@ -5,11 +5,7 @@ import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpired
 import { ReactNode, Suspense, useCallback, useEffect } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
-import {
-	PageContent,
-	PageFixedArea,
-	PageRoot,
-} from '@/components/layouts/index.js';
+import { PageContent, PageFixedArea, PageRoot } from '@aglio/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';

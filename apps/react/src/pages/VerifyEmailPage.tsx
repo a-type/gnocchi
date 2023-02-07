@@ -1,5 +1,5 @@
 import { EmailCompleteSignUpForm } from '@/components/auth/EmailCompleteSignUpForm.jsx';
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { H1, P } from '@aglio/ui';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 

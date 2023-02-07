@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { H1, H2, P, TextLink } from '@aglio/ui';
 
 export function TermsAndConditions() {

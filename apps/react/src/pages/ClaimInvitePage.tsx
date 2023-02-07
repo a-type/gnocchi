@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { Box } from '@aglio/ui';
 import { Button, H1, P } from '@aglio/ui';
 import { LoginButton } from '@/components/sync/LoginButton.js';

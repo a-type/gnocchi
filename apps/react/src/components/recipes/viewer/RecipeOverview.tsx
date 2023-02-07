@@ -1,4 +1,4 @@
-import { PageNowPlaying } from '@/components/layouts/index.jsx';
+import { PageNowPlaying } from '@aglio/ui';
 import { Box, H1, H2, LinkButton, P } from '@aglio/ui';
 import { useWakeLock } from '@/hooks/useWakeLock.js';
 import { hooks } from '@/stores/groceries/index.js';
@@ -14,6 +14,7 @@ import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
 import { RecipeTagsViewer } from './RecipeTagsViewer.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
+import { RecipePublishControl } from './RecipePublishControl.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -56,6 +57,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					</a>
 				)}
 			</Box>
+			<RecipePublishControl recipeId={recipe.get('id')} />
 			<RecipeTagsViewer recipe={recipe} />
 			<Box
 				width="auto"
