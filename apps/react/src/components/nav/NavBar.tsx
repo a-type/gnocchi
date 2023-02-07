@@ -7,7 +7,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
-import { PageNav } from '../layouts/index.jsx';
+import { PageNav } from '@aglio/ui';
 import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
