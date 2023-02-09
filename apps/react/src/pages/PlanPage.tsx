@@ -39,7 +39,14 @@ export function PlanPage() {
 	return (
 		<PageRoot>
 			<PageContent fullHeight noPadding>
-				<Box width="full" direction="column" mt={6} p={4} gap={4} align="start">
+				<Box
+					width="full"
+					direction="column"
+					mt={6}
+					p={4}
+					gap={4}
+					align="flex-start"
+				>
 					<H1>Settings</H1>
 					<Contents />
 					<Box fontSize="xs" gap={2}>
@@ -74,7 +81,7 @@ function ManageSubscriptionButton(props: ButtonProps) {
 }
 
 const MainContainer = ({ children }: { children: ReactNode }) => (
-	<Box width="full" direction="column" gap={4} align="start">
+	<Box width="full" direction="column" gap={4} align="flex-start">
 		{children}
 	</Box>
 );

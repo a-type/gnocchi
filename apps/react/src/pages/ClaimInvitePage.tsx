@@ -40,7 +40,7 @@ export function ClaimInvitePage() {
 			return (
 				<PageRoot>
 					<PageContent>
-						<Box p={2} align="start">
+						<Box p={2} align="flex-start">
 							<P>You already have a subscription.</P>
 							<P>
 								By claiming this invite you will cancel your current
@@ -57,7 +57,7 @@ export function ClaimInvitePage() {
 			return (
 				<PageRoot>
 					<PageContent>
-						<Box p={2} align="start">
+						<Box p={2} align="flex-start">
 							<H1>Join {inviterName}'s grocery list</H1>
 							<P>
 								Your current list will be deleted, and you'll begin syncing your

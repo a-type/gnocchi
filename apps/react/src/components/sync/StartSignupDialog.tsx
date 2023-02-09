@@ -35,7 +35,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 			}}
 		>
 			<DialogContent width="md">
-				<Box flexDirection="row" align="start" gap={2}>
+				<Box flexDirection="row" align="flex-start" gap={2}>
 					<DialogTitle className={sprinkles({ flex: 1 })}>
 						Subscribe for sync &amp; more
 					</DialogTitle>

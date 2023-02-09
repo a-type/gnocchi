@@ -34,8 +34,14 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	const { title, createdAt, url } = hooks.useWatch(recipe);
 
 	return (
-		<Box direction="column" gap={6} align="start">
-			<Box width="auto" alignSelf="start" align="start" fontSize="xs" my={3}>
+		<Box direction="column" gap={6} align="flex-start">
+			<Box
+				width="auto"
+				alignSelf="flex-start"
+				align="flex-start"
+				fontSize="xs"
+				my={3}
+			>
 				<H1>{title}</H1>
 				<Box direction="row" justify="space-between" align="center" gap={3}>
 					<p className={sprinkles({ m: 0 })}>
@@ -61,7 +67,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 			<RecipeTagsViewer recipe={recipe} />
 			<Box
 				width="auto"
-				alignSelf="start"
+				alignSelf="flex-start"
 				gap={2}
 				direction="row"
 				align="center"

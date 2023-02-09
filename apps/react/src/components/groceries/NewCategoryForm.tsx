@@ -23,7 +23,7 @@ export function NewCategoryForm({
 				<Form className={sprinkles({ width: 'full' })}>
 					<Box
 						flexDirection="row"
-						align="end"
+						align="flex-end"
 						justify="stretch"
 						width="full"
 						gap={2}

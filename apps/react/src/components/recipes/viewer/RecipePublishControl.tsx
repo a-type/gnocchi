@@ -1,4 +1,5 @@
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
 import { Box, Button } from '@aglio/ui';
 import { toast } from 'react-hot-toast';
@@ -8,13 +9,14 @@ export interface RecipePublishControlProps {
 }
 
 export function RecipePublishControl({ recipeId }: RecipePublishControlProps) {
+	const enabled = useFeatureFlag('hub');
 	const isSubscribed = useIsSubscribed();
 
 	const { data, isLoading, refetch } = trpc.recipes.publishedInfo.useQuery({
 		recipeId,
 	});
 
-	if (!isSubscribed) return null;
+	if (!enabled || !isSubscribed) return null;
 
 	if (isLoading) {
 		return <Button disabled>Publish</Button>;
@@ -47,7 +49,7 @@ function PublishedButton({
 	});
 
 	return (
-		<Box direction="column" gap={2} align="start">
+		<Box direction="column" gap={2} align="flex-start">
 			<span>Published {new Date(publishedAt).toLocaleDateString()}</span>
 			<Button
 				color="destructive"
@@ -84,7 +86,7 @@ function UnpublishedButton({
 			color="default"
 			onClick={async () => {
 				try {
-					await publish.mutateAsyncl({
+					await publish.mutateAsync({
 						recipeId,
 					});
 				} catch (err) {

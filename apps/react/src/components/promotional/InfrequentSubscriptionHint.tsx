@@ -40,7 +40,7 @@ export function InfrequentSubscriptionHint() {
 				color="gray80"
 			>
 				<P>Enjoying {APP_NAME}? A subscription unlocks device sync and more</P>
-				<Box direction="row" align="center" justify="end" gap={2}>
+				<Box direction="row" align="center" justify="flex-end" gap={2}>
 					<Button color="ghost" onClick={() => setDismissedAt(Date.now())}>
 						Dismiss
 					</Button>

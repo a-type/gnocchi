@@ -61,7 +61,7 @@ export const button = style({
 		[mediaQueries.sm]: {
 			flexDirection: 'row-reverse',
 			height: 'auto',
-			justifyContent: 'flex-end',
+			justifyContent: 'flex-start',
 			gap: vars.space[2],
 		},
 	},

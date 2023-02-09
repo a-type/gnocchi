@@ -25,7 +25,7 @@ export function ListEdit({ listId }: ListEditProps) {
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
-				<Box gap={2} align="start">
+				<Box gap={2} align="flex-start">
 					<H2>Edit List</H2>
 					<Box flexDirection="row" gap={2}>
 						<LiveUpdateTextField
