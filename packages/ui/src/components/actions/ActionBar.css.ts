@@ -4,7 +4,7 @@ import { style } from '@vanilla-extract/css';
 export const root = style({
 	display: 'flex',
 	alignItems: 'center',
-	justifyContent: 'start',
+	justifyContent: 'flex-start',
 	flexDirection: 'row',
 	width: '100%',
 	overflow: 'hidden',
@@ -35,7 +35,7 @@ export const root = style({
 export const content = style({
 	display: 'flex',
 	alignItems: 'center',
-	justifyContent: 'start',
+	justifyContent: 'flex-start',
 	flexDirection: 'row',
 	width: '100%',
 	overflowY: 'hidden',

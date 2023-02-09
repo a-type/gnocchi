@@ -18,7 +18,10 @@ export function RecipeList({}: RecipeListProps) {
 		<Box className={classes.list}>
 			<Suspense
 				fallback={
-					<Button color="primary" className={sprinkles({ alignSelf: 'start' })}>
+					<Button
+						color="primary"
+						className={sprinkles({ alignSelf: 'flex-start' })}
+					>
 						Create New
 					</Button>
 				}
@@ -94,7 +97,7 @@ function RecipeCreateButton() {
 				navigate(makeRecipeLink(recipe, '/edit'));
 			}}
 			color="primary"
-			className={sprinkles({ alignSelf: 'start' })}
+			className={sprinkles({ alignSelf: 'flex-start' })}
 		>
 			Create New
 		</Button>

@@ -13,8 +13,8 @@
 		"seed": "ts-node-esm prisma/seed.ts"
 	},
 	"dependencies": {
-		"@prisma/client": "^4.3.1",
-		"prisma": "^4.3.1"
+		"@prisma/client": "^4.10.1",
+		"prisma": "^4.10.1"
 	},
 	"devDependencies": {
 		"@types/node": "^18.7.20",

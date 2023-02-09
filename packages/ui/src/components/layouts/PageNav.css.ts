@@ -32,7 +32,7 @@ export const nowPlayingContainer = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[2],
-	alignItems: 'end',
+	alignItems: 'flex-end',
 	padding: vars.space[2],
 
 	'@media': {
@@ -42,7 +42,7 @@ export const nowPlayingContainer = style({
 			left: '50%',
 			transform: 'translateX(-50%)',
 			top: 'auto',
-			alignItems: 'end',
+			alignItems: 'flex-end',
 			width: '100%',
 			maxWidth: 600,
 			padding: 0,

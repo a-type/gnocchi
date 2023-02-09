@@ -74,7 +74,13 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				<RecipeIngredientsViewer recipe={recipe} />
 			</div>
 			<PageNowPlaying unstyled>
-				<Box direction="row" gap={2} align="center" justify="end" width="full">
+				<Box
+					direction="row"
+					gap={2}
+					align="center"
+					justify="flex-end"
+					width="full"
+				>
 					<LinkButton to={makeRecipeLink(recipe, '/cook/prep')}>
 						Start prep
 					</LinkButton>

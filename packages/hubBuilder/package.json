@@ -1,0 +1,21 @@
+{
+	"name": "@aglio/hub-builder",
+	"version": "0.0.1",
+	"private": true,
+	"main": "src/index.ts",
+	"type": "module",
+	"scripts": {},
+	"dependencies": {
+		"@a-type/utils": "^1.0.2",
+		"@aglio/tools": "workspace:*",
+		"@aglio/prisma": "workspace:*",
+		"@aglio/ui": "workspace:*",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"typescript": "^4.7.4",
+		"@types/react": "^18.0.14",
+		"@types/react-dom": "^18.0.10"
+	}
+}

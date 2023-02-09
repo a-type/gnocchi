@@ -23,7 +23,7 @@ export function SignupSuccessBanner({}: SignupSuccessBannerProps) {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className={sprinkles({ align: 'start' })}>
+			<DialogContent className={sprinkles({ align: 'flex-start' })}>
 				<H1>You're subscribed!</H1>
 				<P>
 					<Link

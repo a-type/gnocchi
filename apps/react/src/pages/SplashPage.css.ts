@@ -27,7 +27,7 @@ export const demoGrid = style({
 	gridTemplateAreas: `"title" "basicText" "basic" "multiplayerText" "multiplayer" "lists" "outroText"`,
 	gridGap: vars.space[3],
 	marginBottom: '80vh',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 
 	'@media': {
 		'only screen and (min-width: 600px)': {
@@ -42,7 +42,7 @@ export const sectionBase = style({
 	position: 'relative',
 	display: 'flex',
 	flexDirection: 'column',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	marginBottom: 'auto',
 	padding: vars.space[6],
 	borderRadius: vars.radii.lg,
@@ -110,7 +110,7 @@ export const itemText = style({
 });
 export const item = style({
 	display: 'flex',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	gap: vars.space[2],
 });
 

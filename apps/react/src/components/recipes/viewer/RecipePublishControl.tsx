@@ -1,6 +1,7 @@
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { trpc } from '@/trpc.js';
 import { Box, Button } from '@aglio/ui';
+import { toast } from 'react-hot-toast';
 
 export interface RecipePublishControlProps {
 	recipeId: string;
@@ -50,11 +51,16 @@ function PublishedButton({
 			<span>Published {new Date(publishedAt).toLocaleDateString()}</span>
 			<Button
 				color="destructive"
-				onClick={() =>
-					unpublish.mutate({
-						recipeId,
-					})
-				}
+				onClick={async () => {
+					try {
+						await unpublish.mutateAsync({
+							recipeId,
+						});
+					} catch (err) {
+						console.error(err);
+						toast.error('Failed to unpublish recipe');
+					}
+				}}
 			>
 				Unpublish
 			</Button>
@@ -76,11 +82,16 @@ function UnpublishedButton({
 	return (
 		<Button
 			color="default"
-			onClick={() =>
-				publish.mutate({
-					recipeId,
-				})
-			}
+			onClick={async () => {
+				try {
+					await publish.mutateAsyncl({
+						recipeId,
+					});
+				} catch (err) {
+					console.error(err);
+					toast.error('Failed to publish recipe');
+				}
+			}}
 		>
 			Publish
 		</Button>

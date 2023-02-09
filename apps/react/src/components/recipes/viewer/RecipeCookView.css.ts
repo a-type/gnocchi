@@ -17,5 +17,5 @@ export const container = style({
 	gap: vars.space[4],
 	display: 'flex',
 	flexDirection: 'column',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 });

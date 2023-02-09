@@ -24,7 +24,7 @@ export const menuList = style({
 
 export const item = style({
 	display: 'flex',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	justifyContent: 'space-between',
 	width: '100%',
 	borderRadius: 0,

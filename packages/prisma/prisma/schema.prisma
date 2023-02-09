@@ -146,13 +146,46 @@ model PublishedRecipe {
   publishedAt   DateTime  @default(now()) @map("published_at")
   recipeId      String    @map("recipe_id")
   libraryId     String    @map("library_id")
-  snapshot      String
   publisherId   String?   @map("publisher_id")
   unpublishedAt DateTime? @map("unpublished_at")
   slug          String    @unique
+  title         String
+  version       Int       @default(1)
 
-  publisher Profile? @relation(fields: [publisherId], references: [id])
+  ingredients  PublishedRecipeIngredient[]
+  instructions PublishedRecipeInstruction[]
+  publisher    Profile?                     @relation(fields: [publisherId], references: [id])
 
   @@unique([recipeId, libraryId])
   @@map("published_recipes")
+}
+
+model PublishedRecipeIngredient {
+  id                String          @id @default(cuid())
+  publishedRecipeId String          @map("published_recipe_id")
+  publishedRecipe   PublishedRecipe @relation(fields: [publishedRecipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  text     String
+  unit     String?
+  food     String
+  quantity Float   @default(1)
+  // JSON type
+  comments String  @default("[]")
+
+  index Int
+
+  @@map("published_recipe_ingredients")
+}
+
+model PublishedRecipeInstruction {
+  id                String          @id @default(cuid())
+  publishedRecipeId String          @map("published_recipe_id")
+  publishedRecipe   PublishedRecipe @relation(fields: [publishedRecipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  type    String
+  content String
+
+  index Int
+
+  @@map("published_recipe_instructions")
 }

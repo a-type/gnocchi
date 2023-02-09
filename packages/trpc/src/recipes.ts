@@ -26,7 +26,31 @@ export const recipesRouter = t.router({
 				libraryId,
 				'recipes',
 				input.recipeId,
-			);
+			) as {
+				title: string;
+				ingredients: {
+					id: string;
+					text: string;
+					unit: string | null;
+					quantity: number;
+					comments: string[];
+					food: string;
+				}[];
+				instructions: {
+					type: string;
+					content: {
+						id: string;
+						type: 'step' | 'sectionTitle';
+						content: {
+							type: string;
+							text?: string;
+						}[];
+						attrs: {
+							id: string;
+						};
+					}[];
+				};
+			};
 
 			if (!snapshot) {
 				throw new TRPCError({
@@ -35,7 +59,19 @@ export const recipesRouter = t.router({
 				});
 			}
 
-			const serializedSnapshot = JSON.stringify(snapshot);
+			const ingredients = snapshot.ingredients.map((i) => ({
+				id: i.id,
+				text: i.text,
+				unit: i.unit,
+				quantity: i.quantity,
+				food: i.food,
+				comments: JSON.stringify(i.comments),
+			}));
+			const instructions = snapshot.instructions.content.map((i) => ({
+				id: i.attrs.id,
+				type: i.type,
+				content: i.content?.reduce((text, i) => text + i.text ?? '', '') ?? '',
+			}));
 
 			const saved = await prisma.publishedRecipe.upsert({
 				where: {
@@ -45,16 +81,69 @@ export const recipesRouter = t.router({
 					},
 				},
 				update: {
-					snapshot: serializedSnapshot,
+					publishedAt: new Date(),
+					title: snapshot.title,
 				},
 				create: {
 					recipeId: input.recipeId,
 					libraryId,
-					snapshot: serializedSnapshot,
+					title: snapshot.title,
 					publisherId: ctx.session.userId,
 					slug: cuid.slug(),
 				},
+				include: {
+					ingredients: true,
+					instructions: true,
+				},
 			});
+
+			const instructonsToDelete = saved.instructions
+				.filter((i) => !instructions.some((i2) => i2.id === i.id))
+				.map((i) => i.id);
+			const ingredientsToDelete = saved.ingredients
+				.filter((i) => !ingredients.some((i2) => i2.id === i.id))
+				.map((i) => i.id);
+
+			await prisma.$transaction([
+				...ingredients.map((i, index) =>
+					prisma.publishedRecipeIngredient.upsert({
+						where: { id: i.id },
+						update: {
+							...i,
+							index,
+						},
+						create: {
+							...i,
+							publishedRecipeId: saved.id,
+							index,
+						},
+					}),
+				),
+				...instructions.map((i, index) =>
+					prisma.publishedRecipeInstruction.upsert({
+						where: { id: i.id },
+						update: {
+							...i,
+							index,
+						},
+						create: {
+							...i,
+							publishedRecipeId: saved.id,
+							index,
+						},
+					}),
+				),
+				...instructonsToDelete.map((i) =>
+					prisma.publishedRecipeInstruction.delete({
+						where: { id: i },
+					}),
+				),
+				...ingredientsToDelete.map((i) =>
+					prisma.publishedRecipeIngredient.delete({
+						where: { id: i },
+					}),
+				),
+			]);
 
 			// revalidate the hub page
 			fetch(`${ctx.deployedContext.hubHost}/api/revalidate`, {

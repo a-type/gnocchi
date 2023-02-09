@@ -50,7 +50,7 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 				</InstructionsProvider>
 			</div>
 			<RecipeDeleteButton
-				className={sprinkles({ alignSelf: 'start' })}
+				className={sprinkles({ alignSelf: 'flex-start' })}
 				recipe={recipe}
 			/>
 		</Box>

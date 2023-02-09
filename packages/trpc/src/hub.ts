@@ -39,18 +39,42 @@ export const hubRouter = t.router({
 				where: {
 					slug: input.slug,
 				},
+				select: {
+					id: true,
+					publishedAt: true,
+					publisher: {
+						select: {
+							id: true,
+							fullName: true,
+						},
+					},
+					slug: true,
+					title: true,
+					version: true,
+					ingredients: {
+						select: {
+							id: true,
+							text: true,
+						},
+					},
+					instructions: {
+						select: {
+							id: true,
+							type: true,
+							content: true,
+						},
+					},
+				},
 			});
 
 			if (!publishedRecipe) {
 				return null;
 			}
 
-			return {
-				publishedAt: publishedRecipe.publishedAt,
-				slug: publishedRecipe.slug,
-				snapshot: publishedRecipe.snapshot
-					? JSON.parse(publishedRecipe.snapshot)
-					: null,
-			};
+			return publishedRecipe;
 		}),
 });
+
+export type HubPublishedRecipeInfo = Awaited<
+	ReturnType<typeof hubRouter.recipeRenderData>
+>;

@@ -4,6 +4,7 @@
 	"private": true,
 	"main": "src/index.ts",
 	"type": "module",
+	"module": "src/index.ts",
 	"scripts": {},
 	"dependencies": {
 		"@a-type/utils": "^1.0.2",

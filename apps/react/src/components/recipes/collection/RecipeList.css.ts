@@ -12,7 +12,7 @@ export const list = style({
 export const item = style({
 	display: 'flex',
 	flexDirection: 'column',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	padding: vars.space[6],
 	border: `1px solid ${vars.colors.gray50}`,
 	borderRadius: vars.radii.lg,

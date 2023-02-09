@@ -20,7 +20,7 @@ export function DomainChangeDialog({}: DomainChangeDialogProps) {
 	if (isOldDomain) {
 		return (
 			<Dialog open>
-				<DialogContent className={sprinkles({ alignItems: 'start' })}>
+				<DialogContent className={sprinkles({ alignItems: 'flex-start' })}>
 					<DialogTitle>Aglio is now Gnocchi</DialogTitle>
 					<P>Hi there! I rebranded the app! It's called Gnocchi now.</P>
 					<P>

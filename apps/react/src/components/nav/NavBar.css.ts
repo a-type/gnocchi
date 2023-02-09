@@ -31,7 +31,7 @@ export const root = style({
 			height: 'min-content',
 			overflowY: 'auto',
 			overflowX: 'hidden',
-			justifyContent: 'start',
+			justifyContent: 'flex-start',
 			alignItems: 'stretch',
 			gap: vars.space[2],
 		},
@@ -61,7 +61,7 @@ export const button = style({
 		[mediaQueries.sm]: {
 			flexDirection: 'row-reverse',
 			height: 'auto',
-			justifyContent: 'end',
+			justifyContent: 'flex-end',
 			gap: vars.space[2],
 		},
 	},

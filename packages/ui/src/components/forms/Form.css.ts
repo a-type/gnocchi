@@ -5,5 +5,5 @@ export const form = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[2],
-	alignItems: 'start',
+	alignItems: 'flex-start',
 });

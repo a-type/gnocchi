@@ -20,5 +20,5 @@ export const contentInner = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[3],
-	alignItems: 'start',
+	alignItems: 'flex-start',
 });

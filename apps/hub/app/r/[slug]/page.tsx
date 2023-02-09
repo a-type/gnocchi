@@ -21,7 +21,7 @@ export default async function RecipePage({
 	return (
 		<PageRoot>
 			<PageContent>
-				<H1>{data.snapshot.title}</H1>
+				<H1>{data.title}</H1>
 			</PageContent>
 		</PageRoot>
 	);

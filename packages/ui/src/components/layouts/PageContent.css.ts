@@ -8,7 +8,7 @@ export const content = style({
 	display: 'grid',
 	gridTemplateAreas: '"innerContent"',
 	gridTemplateRows: '1fr',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	justifyItems: 'center',
 	position: 'relative',
 	flex: 1,

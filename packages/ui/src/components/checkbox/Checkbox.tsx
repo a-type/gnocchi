@@ -2,7 +2,7 @@
 
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ComponentProps, forwardRef } from 'react';
-import { CheckIcon } from '@radix-ui/react-icons';
+import { CheckIcon } from '@radix-ui/react-icons/dist/react-icons.esm.js';
 import { clsx } from 'clsx';
 import * as classes from './Checkbox.css.js';
 import { withClassName } from '../../withClassName.jsx';

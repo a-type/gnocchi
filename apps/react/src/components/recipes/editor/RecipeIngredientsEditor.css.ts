@@ -17,7 +17,7 @@ export const item = style({
 	display: 'flex',
 	flexDirection: 'row',
 	gap: vars.space[2],
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	padding: vars.space[2],
 });
 

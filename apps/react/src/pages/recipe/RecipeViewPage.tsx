@@ -21,7 +21,7 @@ export function RecipeViewPage({}: RecipeViewPageProps) {
 						flexDirection: 'row',
 						gap: 2,
 						mb: 2,
-						alignSelf: 'start',
+						alignSelf: 'flex-start',
 					})}
 				>
 					<ArrowLeftIcon /> Back

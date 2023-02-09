@@ -21,5 +21,5 @@ export const sectionGrid = style({
 	display: 'grid',
 	gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
 	gap: vars.space[4],
-	alignItems: 'start',
+	alignItems: 'flex-start',
 });
