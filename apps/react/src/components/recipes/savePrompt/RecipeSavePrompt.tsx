@@ -4,8 +4,8 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@/components/primitives/index.js';
-import { Button, P } from '@/components/primitives/index.js';
+} from '@aglio/ui';
+import { Button, P } from '@aglio/ui';
 import { addRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';

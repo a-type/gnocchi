@@ -1,11 +1,7 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
-import {
-	Form,
-	SubmitButton,
-	TextField,
-} from '@/components/primitives/forms.jsx';
-import { H1, P } from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { Form, SubmitButton, TextField } from '@aglio/ui';
+import { H1, P } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
 import { useNavigate, useSearchParams } from 'react-router-dom';

@@ -9,7 +9,7 @@ import {
 	SelectLabel,
 	SelectGroup,
 	SelectProps,
-} from '@/components/primitives/select/Select.jsx';
+} from '@aglio/ui';
 import { hooks, Person } from '@/stores/groceries/index.js';
 import { useCallback } from 'react';
 import { PersonAvatar } from './PersonAvatar.jsx';

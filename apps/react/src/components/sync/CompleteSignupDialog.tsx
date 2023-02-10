@@ -9,11 +9,11 @@ import {
 	DialogContent,
 	P,
 	TextLink,
-} from '@/components/primitives/index.js';
+} from '@aglio/ui';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { LogoutButton } from '../auth/LogoutButton.js';
 import { SubscribeButton } from './SubscribeButton.js';
-import { H2 } from '../primitives/index.js';
+import { H2 } from '@aglio/ui';
 
 export interface CompleteSignupDialogProps {}
 

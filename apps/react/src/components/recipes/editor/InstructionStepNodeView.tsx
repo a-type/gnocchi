@@ -1,4 +1,4 @@
-import { Checkbox } from '@/components/primitives/index.js';
+import { Checkbox } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';

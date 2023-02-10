@@ -1,5 +1,5 @@
-import { mediaQueries } from '@/styles/media.js';
-import { vars } from '@/theme.css.js';
+import { mediaQueries } from '@aglio/ui';
+import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const menu = style({
@@ -24,7 +24,7 @@ export const menuList = style({
 
 export const item = style({
 	display: 'flex',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	justifyContent: 'space-between',
 	width: '100%',
 	borderRadius: 0,

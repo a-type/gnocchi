@@ -9,7 +9,7 @@ import {
 	DialogTrigger,
 	H2,
 	P,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 import * as classes from './InstallHint.css.js';
 
 export interface InstallHintProps {}

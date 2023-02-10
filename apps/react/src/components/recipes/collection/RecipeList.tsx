@@ -1,13 +1,13 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, Box } from '@/components/primitives/index.js';
+import { Button, Box } from '@aglio/ui';
 import * as classes from './RecipeList.css.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { Suspense } from 'react';
 import { RecipeListActions } from './RecipeListActions.jsx';
-import { PageFixedArea } from '@/components/layouts/index.jsx';
+import { PageFixedArea } from '@aglio/ui';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import { useRecipeTagFilter } from './hooks.js';
 
@@ -18,7 +18,10 @@ export function RecipeList({}: RecipeListProps) {
 		<Box className={classes.list}>
 			<Suspense
 				fallback={
-					<Button color="primary" className={sprinkles({ alignSelf: 'start' })}>
+					<Button
+						color="primary"
+						className={sprinkles({ alignSelf: 'flex-start' })}
+					>
 						Create New
 					</Button>
 				}
@@ -94,7 +97,7 @@ function RecipeCreateButton() {
 				navigate(makeRecipeLink(recipe, '/edit'));
 			}}
 			color="primary"
-			className={sprinkles({ alignSelf: 'start' })}
+			className={sprinkles({ alignSelf: 'flex-start' })}
 		>
 			Create New
 		</Button>

@@ -10,11 +10,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 	UnstyledSelectTrigger,
-} from '@/components/primitives/select/Select.jsx';
+} from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import { ReactNode, useCallback, useEffect } from 'react';
 import * as classes from './MeetupSelect.css.js';
-import { Button } from '@/components/primitives/index.js';
+import { Button } from '@aglio/ui';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 export interface MeetupSelectProps {

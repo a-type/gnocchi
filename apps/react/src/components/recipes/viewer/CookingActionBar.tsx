@@ -1,6 +1,4 @@
-import { ActionBar } from '@/components/primitives/actions/ActionBar.jsx';
-import { ActionButton } from '@/components/primitives/actions/ActionButton.jsx';
-import { ErrorBoundary } from '@/components/primitives/ErrorBoundary.jsx';
+import { ActionBar, ActionButton, ErrorBoundary } from '@aglio/ui';
 import {
 	PeopleList,
 	PeopleListItem,

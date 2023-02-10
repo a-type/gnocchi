@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Span } from '@/components/primitives/index.js';
+import { Button, ButtonProps, Span } from '@aglio/ui';
 import { API_HOST_HTTP } from '@/config.js';
 import React from 'react';
 

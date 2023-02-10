@@ -1,8 +1,8 @@
-import { PageNowPlaying } from '@/components/layouts/index.jsx';
-import { Box, H1, H2, LinkButton, P } from '@/components/primitives/index.js';
+import { PageNowPlaying } from '@aglio/ui';
+import { Box, H1, H2, LinkButton, P } from '@aglio/ui';
 import { useWakeLock } from '@/hooks/useWakeLock.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { format } from 'date-fns/esm';
 import { useRecipeFromSlugUrl } from '../hooks.js';
@@ -14,6 +14,7 @@ import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
 import { RecipeTagsViewer } from './RecipeTagsViewer.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
+import { RecipePublishControl } from './RecipePublishControl.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -33,8 +34,14 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	const { title, createdAt, url } = hooks.useWatch(recipe);
 
 	return (
-		<Box direction="column" gap={6} align="start">
-			<Box width="auto" alignSelf="start" align="start" fontSize="xs" my={3}>
+		<Box direction="column" gap={6} align="flex-start">
+			<Box
+				width="auto"
+				alignSelf="flex-start"
+				align="flex-start"
+				fontSize="xs"
+				my={3}
+			>
 				<H1>{title}</H1>
 				<Box direction="row" justify="space-between" align="center" gap={3}>
 					<p className={sprinkles({ m: 0 })}>
@@ -56,10 +63,11 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					</a>
 				)}
 			</Box>
+			<RecipePublishControl recipeId={recipe.get('id')} />
 			<RecipeTagsViewer recipe={recipe} />
 			<Box
 				width="auto"
-				alignSelf="start"
+				alignSelf="flex-start"
 				gap={2}
 				direction="row"
 				align="center"
@@ -72,7 +80,13 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				<RecipeIngredientsViewer recipe={recipe} />
 			</div>
 			<PageNowPlaying unstyled>
-				<Box direction="row" gap={2} align="center" justify="end" width="full">
+				<Box
+					direction="row"
+					gap={2}
+					align="center"
+					justify="flex-end"
+					width="full"
+				>
 					<LinkButton to={makeRecipeLink(recipe, '/cook/prep')}>
 						Start prep
 					</LinkButton>

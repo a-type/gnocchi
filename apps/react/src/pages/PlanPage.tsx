@@ -1,12 +1,6 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Box } from '@/components/primitives/box/Box.jsx';
-import {
-	Button,
-	ButtonProps,
-	H1,
-	Span,
-	TextLink,
-} from '@/components/primitives/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { Box } from '@aglio/ui';
+import { Button, ButtonProps, H1, Span, TextLink } from '@aglio/ui';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
 import { API_HOST_HTTP } from '@/config.js';
@@ -45,7 +39,14 @@ export function PlanPage() {
 	return (
 		<PageRoot>
 			<PageContent fullHeight noPadding>
-				<Box width="full" direction="column" mt={6} p={4} gap={4} align="start">
+				<Box
+					width="full"
+					direction="column"
+					mt={6}
+					p={4}
+					gap={4}
+					align="flex-start"
+				>
 					<H1>Settings</H1>
 					<Contents />
 					<Box fontSize="xs" gap={2}>
@@ -80,7 +81,7 @@ function ManageSubscriptionButton(props: ButtonProps) {
 }
 
 const MainContainer = ({ children }: { children: ReactNode }) => (
-	<Box width="full" direction="column" gap={4} align="start">
+	<Box width="full" direction="column" gap={4} align="flex-start">
 		{children}
 	</Box>
 );

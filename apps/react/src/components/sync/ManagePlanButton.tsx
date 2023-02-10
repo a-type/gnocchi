@@ -1,4 +1,4 @@
-import { LinkButton, LinkButtonProps } from '../primitives/index.js';
+import { LinkButton, LinkButtonProps } from '@aglio/ui';
 
 export function ManagePlanButton(props: Omit<LinkButtonProps, 'to'>) {
 	return (

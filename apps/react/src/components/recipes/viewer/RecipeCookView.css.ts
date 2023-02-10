@@ -1,4 +1,4 @@
-import { vars } from '@/theme.css.js';
+import { vars } from '@aglio/ui';
 import { keyframes, style } from '@vanilla-extract/css';
 
 const fadeUp = keyframes({
@@ -17,5 +17,5 @@ export const container = style({
 	gap: vars.space[4],
 	display: 'flex',
 	flexDirection: 'column',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 });

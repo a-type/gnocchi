@@ -5,8 +5,8 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@/components/primitives/index.js';
-import { Button, Checkbox } from '@/components/primitives/index.js';
+} from '@aglio/ui';
+import { Button, Checkbox } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { useEffect, useState } from 'react';

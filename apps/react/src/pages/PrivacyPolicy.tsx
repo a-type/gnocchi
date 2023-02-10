@@ -1,7 +1,7 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
-import { TextLink } from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
-import { vars } from '@/theme.css.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { TextLink } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
+import { vars } from '@aglio/ui';
 
 export function PrivacyPolicy() {
 	return (

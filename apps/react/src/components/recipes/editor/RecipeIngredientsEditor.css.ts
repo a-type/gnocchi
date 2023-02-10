@@ -1,4 +1,4 @@
-import { vars } from '@/theme.css.js';
+import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const list = style({
@@ -17,7 +17,7 @@ export const item = style({
 	display: 'flex',
 	flexDirection: 'row',
 	gap: vars.space[2],
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	padding: vars.space[2],
 });
 

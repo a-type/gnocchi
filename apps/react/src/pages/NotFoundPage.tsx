@@ -1,6 +1,6 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Box } from '@/components/primitives/box/Box.jsx';
-import { Button } from '@/components/primitives/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { Box } from '@aglio/ui';
+import { Button } from '@aglio/ui';
 import { Link } from 'react-router-dom';
 
 export function NotFoundPage() {

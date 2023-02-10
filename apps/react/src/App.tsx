@@ -7,13 +7,11 @@ import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import * as classes from './App.css.js';
 
-import { Box } from './components/primitives/box/Box.jsx';
-import { ErrorBoundary } from './components/primitives/ErrorBoundary.js';
-import { Button, H1, P } from './components/primitives/index.js';
+import { Box, ErrorBoundary, Button, H1, P } from '@aglio/ui';
 
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
-import { lemonTheme } from './styles/themes/lemon.css.js';
+import { lemonTheme } from '@aglio/ui';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());

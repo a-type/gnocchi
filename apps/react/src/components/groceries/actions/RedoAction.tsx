@@ -1,4 +1,4 @@
-import { ActionButton } from '@/components/primitives/actions/ActionButton.jsx';
+import { ActionButton } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import { ResetIcon } from '@radix-ui/react-icons';
 

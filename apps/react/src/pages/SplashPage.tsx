@@ -1,16 +1,8 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import {
-	Box,
-	Button,
-	H2,
-	LinkButton,
-	P,
-	Span,
-	TextLink,
-} from '@/components/primitives/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { Box, Button, H2, LinkButton, P, Span, TextLink } from '@aglio/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { CSSProperties, lazy, ReactNode, Suspense, useEffect } from 'react';
 import * as classes from './SplashPage.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';

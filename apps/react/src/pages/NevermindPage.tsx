@@ -1,7 +1,7 @@
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Box } from '@/components/primitives/box/Box.jsx';
-import { H1, P } from '@/components/primitives/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { Box } from '@aglio/ui';
+import { H1, P } from '@aglio/ui';
 import { APP_NAME } from '@/config.js';
 
 export function NevermindPage() {

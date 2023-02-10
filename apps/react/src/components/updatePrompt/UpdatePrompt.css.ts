@@ -1,4 +1,4 @@
-import { vars } from '@/theme.css.js';
+import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const text = style({});
@@ -20,5 +20,5 @@ export const contentInner = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[3],
-	alignItems: 'start',
+	alignItems: 'flex-start',
 });

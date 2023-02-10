@@ -12,20 +12,21 @@ datasource db {
 }
 
 model Profile {
-  id           String           @id @default(cuid())
-  fullName     String           @map("full_name")
-  friendlyName String           @map("friendly_name")
-  email        String           @unique
-  imageUrl     String?
-  createdAt    DateTime         @default(now()) @map("created_at")
-  updatedAt    DateTime         @updatedAt @map("updated_at")
-  planId       String           @map("plan_id")
-  password     String?
-  role         String           @default("user")
-  plan         Plan             @relation(fields: [planId], references: [id])
-  invitations  PlanInvitation[]
-  accounts     Account[]
-  logs         ActivityLog[]
+  id               String            @id @default(cuid())
+  fullName         String            @map("full_name")
+  friendlyName     String            @map("friendly_name")
+  email            String            @unique
+  imageUrl         String?
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  planId           String            @map("plan_id")
+  password         String?
+  role             String            @default("user")
+  plan             Plan              @relation(fields: [planId], references: [id])
+  invitations      PlanInvitation[]
+  accounts         Account[]
+  logs             ActivityLog[]
+  publishedRecipes PublishedRecipe[]
 
   isProductAdmin Boolean @default(false) @map("is_product_admin")
 
@@ -138,4 +139,53 @@ model ActivityLog {
   data      String?
 
   @@map("activity_logs")
+}
+
+model PublishedRecipe {
+  id            String    @id @default(cuid())
+  publishedAt   DateTime  @default(now()) @map("published_at")
+  recipeId      String    @map("recipe_id")
+  libraryId     String    @map("library_id")
+  publisherId   String?   @map("publisher_id")
+  unpublishedAt DateTime? @map("unpublished_at")
+  slug          String    @unique
+  title         String
+  version       Int       @default(1)
+
+  ingredients  PublishedRecipeIngredient[]
+  instructions PublishedRecipeInstruction[]
+  publisher    Profile?                     @relation(fields: [publisherId], references: [id])
+
+  @@unique([recipeId, libraryId])
+  @@map("published_recipes")
+}
+
+model PublishedRecipeIngredient {
+  id                String          @id @default(cuid())
+  publishedRecipeId String          @map("published_recipe_id")
+  publishedRecipe   PublishedRecipe @relation(fields: [publishedRecipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  text     String
+  unit     String?
+  food     String
+  quantity Float   @default(1)
+  // JSON type
+  comments String  @default("[]")
+
+  index Int
+
+  @@map("published_recipe_ingredients")
+}
+
+model PublishedRecipeInstruction {
+  id                String          @id @default(cuid())
+  publishedRecipeId String          @map("published_recipe_id")
+  publishedRecipe   PublishedRecipe @relation(fields: [publishedRecipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  type    String
+  content String
+
+  index Int
+
+  @@map("published_recipe_instructions")
 }

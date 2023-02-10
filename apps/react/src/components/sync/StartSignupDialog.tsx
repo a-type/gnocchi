@@ -1,5 +1,5 @@
 import { APP_NAME } from '@/config.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { proxy, useSnapshot } from 'valtio';
 import {
@@ -13,7 +13,7 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 import { LoginButton } from './LoginButton.js';
 
 export interface StartSignupDialogProps {}
@@ -35,7 +35,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 			}}
 		>
 			<DialogContent width="md">
-				<Box flexDirection="row" align="start" gap={2}>
+				<Box flexDirection="row" align="flex-start" gap={2}>
 					<DialogTitle className={sprinkles({ flex: 1 })}>
 						Subscribe for sync &amp; more
 					</DialogTitle>

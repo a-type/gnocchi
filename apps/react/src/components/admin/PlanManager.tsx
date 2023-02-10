@@ -1,15 +1,15 @@
 import { featureFlags } from '@/featureFlags.js';
-import { trpc, RouterOutputs } from '@/trpc.js';
-import { ErrorBoundary } from '../primitives/ErrorBoundary.js';
+import { RouterOutputs, trpc } from '@/trpc.js';
 import {
 	Box,
 	Button,
 	Dialog,
 	DialogContent,
 	DialogTrigger,
+	ErrorBoundary,
 	H2,
 	P,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 
 export interface PlanManagerProps {}
 

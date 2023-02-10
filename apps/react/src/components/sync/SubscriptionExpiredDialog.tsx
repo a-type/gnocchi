@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dialog, DialogContent } from '@/components/primitives/index.js';
+import { Dialog, DialogContent } from '@aglio/ui';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { SubscriptionError } from '@aglio/tools';
 import { LogoutButton } from '../auth/LogoutButton.js';
-import { H2 } from '../primitives/index.js';
+import { H2 } from '@aglio/ui';
 
 export interface SubscriptionExpiredDialogProps {}
 

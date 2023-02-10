@@ -1,10 +1,10 @@
-import { vars } from '@/theme.css.js';
+import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const list = style({
 	display: 'flex',
 	flexDirection: 'column',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	width: 300,
 	maxWidth: '90vw',
 });
@@ -20,7 +20,7 @@ export const section = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[4],
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	padding: vars.space[5],
 	width: '100%',
 

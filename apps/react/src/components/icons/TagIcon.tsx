@@ -1,4 +1,4 @@
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 
 export function TagIcon({
 	fill,

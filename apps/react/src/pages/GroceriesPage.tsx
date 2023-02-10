@@ -5,19 +5,15 @@ import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpired
 import { ReactNode, Suspense, useCallback, useEffect } from 'react';
 import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
-import {
-	PageContent,
-	PageFixedArea,
-	PageRoot,
-} from '@/components/layouts/index.js';
+import { PageContent, PageFixedArea, PageRoot } from '@aglio/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
-import { Box } from '@/components/primitives/box/Box.jsx';
+import { Box } from '@aglio/ui';
 import { ListContext } from '@/contexts/ListContext.jsx';
 import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';

@@ -5,8 +5,8 @@ import {
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
-} from '../primitives/popover/Popover.js';
-import { Button, Span } from '../primitives/index.js';
+} from '@aglio/ui';
+import { Button, Span } from '@aglio/ui';
 import { ManageCategoriesDialog } from './ManageCategoriesDialog.js';
 import { LoginButton } from '../sync/LoginButton.js';
 import { ManagePlanButton } from '../sync/ManagePlanButton.js';
@@ -14,7 +14,7 @@ import { LogoutButton } from '../auth/LogoutButton.js';
 import { BugButton } from './BugButton.js';
 import { useSnapshot } from 'valtio';
 import { menuState } from './state.js';
-import { Box } from '../primitives/box/Box.jsx';
+import { Box } from '@aglio/ui';
 import { useInterval } from '@/hooks/useInterval.js';
 import * as classes from './MainMenu.css.js';
 

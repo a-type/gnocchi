@@ -8,6 +8,9 @@
 		"generate": "lo-fi -s ./src/schema.ts -o ./src/client -r",
 		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/cli && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react"
 	},
+	"peerDependencies": {
+		"react": "^18.2.0"
+	},
 	"dependencies": {
 		"@aglio/trpc": "workspace:*",
 		"@lo-fi/cli": "^1.11.0",

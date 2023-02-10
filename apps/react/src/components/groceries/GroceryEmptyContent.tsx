@@ -1,5 +1,5 @@
 import { Cart } from '../graphics/Cart.jsx';
-import { Box, P } from '../primitives/index.js';
+import { Box, P } from '@aglio/ui';
 import { InfrequentSubscriptionHint } from '../promotional/InfrequentSubscriptionHint.jsx';
 import { InstallHint } from '../promotional/InstallHint.jsx';
 

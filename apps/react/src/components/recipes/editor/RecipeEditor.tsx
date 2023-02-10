@@ -1,6 +1,6 @@
-import { PageFixedArea } from '@/components/layouts/index.jsx';
-import { H2, Box, LiveUpdateTextField } from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { PageFixedArea } from '@aglio/ui';
+import { H2, Box, LiveUpdateTextField } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { useRecipeFromSlugUrl } from '../hooks.js';
 import { RecipeNotFound } from '../RecipeNotFound.jsx';
@@ -50,7 +50,7 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 				</InstructionsProvider>
 			</div>
 			<RecipeDeleteButton
-				className={sprinkles({ alignSelf: 'start' })}
+				className={sprinkles({ alignSelf: 'flex-start' })}
 				recipe={recipe}
 			/>
 		</Box>

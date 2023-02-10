@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { groceries, hooks } from '@/stores/groceries/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Item } from '@aglio/groceries-client';
 import {
 	DndContext,
@@ -22,8 +22,8 @@ import { forwardRef, memo, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
 import { Cart } from '../graphics/Cart.jsx';
-import { Box } from '../primitives/box/Box.jsx';
-import { P } from '../primitives/index.js';
+import { Box } from '@aglio/ui';
+import { P } from '@aglio/ui';
 import { GroceryListCategory } from './categories/GroceryListCategory.js';
 import {
 	DESKTOP_DRAG_ACTIVATION_DELAY,

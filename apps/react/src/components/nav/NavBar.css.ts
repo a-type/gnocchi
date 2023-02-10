@@ -1,5 +1,5 @@
-import { mediaQueries } from '@/styles/media.js';
-import { vars } from '@/theme.css.js';
+import { mediaQueries } from '@aglio/ui';
+import { vars } from '@aglio/ui';
 import { keyframes, style } from '@vanilla-extract/css';
 
 export const root = style({
@@ -31,7 +31,7 @@ export const root = style({
 			height: 'min-content',
 			overflowY: 'auto',
 			overflowX: 'hidden',
-			justifyContent: 'start',
+			justifyContent: 'flex-start',
 			alignItems: 'stretch',
 			gap: vars.space[2],
 		},
@@ -61,7 +61,7 @@ export const button = style({
 		[mediaQueries.sm]: {
 			flexDirection: 'row-reverse',
 			height: 'auto',
-			justifyContent: 'end',
+			justifyContent: 'flex-start',
 			gap: vars.space[2],
 		},
 	},

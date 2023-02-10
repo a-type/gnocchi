@@ -1,8 +1,8 @@
-import { vars } from '@/theme.css.js';
+import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const purchasedAt = style({
-	justifySelf: 'end',
+	justifySelf: 'flex-end',
 	marginLeft: 'auto',
 	color: vars.colors.gray50,
 	fontStyle: 'italic',

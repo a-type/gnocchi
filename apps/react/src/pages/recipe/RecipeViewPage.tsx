@@ -1,7 +1,7 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
+import { PageContent, PageRoot } from '@aglio/ui';
 import { NavBar } from '@/components/nav/NavBar.jsx';
-import { Button } from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { Button } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ export function RecipeViewPage({}: RecipeViewPageProps) {
 						flexDirection: 'row',
 						gap: 2,
 						mb: 2,
-						alignSelf: 'start',
+						alignSelf: 'flex-start',
 					})}
 				>
 					<ArrowLeftIcon /> Back

@@ -15,12 +15,12 @@ import {
 	Span,
 	TextLink,
 	TextLocalLink,
-} from '@/components/primitives/index.js';
+} from '@aglio/ui';
 import { fractionToText } from '@aglio/tools';
 import { IngredientText } from '@/components/recipes/viewer/IngredientText.jsx';
 import { Link } from 'react-router-dom';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Suspense } from 'react';
 
 export interface ItemSourcesProps {

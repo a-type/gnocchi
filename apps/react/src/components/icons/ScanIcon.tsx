@@ -1,4 +1,4 @@
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { clsx } from 'clsx';
 import { SVGProps } from 'react';
 

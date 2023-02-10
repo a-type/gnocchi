@@ -1,7 +1,7 @@
 import { APP_NAME } from '@/config.js';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { Box, Button, P } from '../primitives/index.js';
+import { Box, Button, P } from '@aglio/ui';
 import { PromoteSubscriptionButton } from './PromoteSubscriptionButton.jsx';
 
 export function InfrequentSubscriptionHint() {
@@ -40,7 +40,7 @@ export function InfrequentSubscriptionHint() {
 				color="gray80"
 			>
 				<P>Enjoying {APP_NAME}? A subscription unlocks device sync and more</P>
-				<Box direction="row" align="center" justify="end" gap={2}>
+				<Box direction="row" align="center" justify="flex-end" gap={2}>
 					<Button color="ghost" onClick={() => setDismissedAt(Date.now())}>
 						Dismiss
 					</Button>

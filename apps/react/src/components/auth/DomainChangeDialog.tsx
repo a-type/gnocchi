@@ -1,12 +1,12 @@
 import { useAuth } from '@/contexts/AuthContext.jsx';
-import { sprinkles } from '@/styles/sprinkles.css.js';
 import {
+	sprinkles,
 	Button,
 	P,
 	Dialog,
 	DialogContent,
 	DialogTitle,
-} from '../primitives/index.js';
+} from '@aglio/ui';
 
 export interface DomainChangeDialogProps {}
 
@@ -20,7 +20,7 @@ export function DomainChangeDialog({}: DomainChangeDialogProps) {
 	if (isOldDomain) {
 		return (
 			<Dialog open>
-				<DialogContent className={sprinkles({ alignItems: 'start' })}>
+				<DialogContent className={sprinkles({ alignItems: 'flex-start' })}>
 					<DialogTitle>Aglio is now Gnocchi</DialogTitle>
 					<P>Hi there! I rebranded the app! It's called Gnocchi now.</P>
 					<P>

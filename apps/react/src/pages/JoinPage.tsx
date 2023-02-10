@@ -1,19 +1,8 @@
 import { EmailSignInForm } from '@/components/auth/EmailSignInForm.jsx';
 import { EmailSignUpForm } from '@/components/auth/EmailSignUpForm.jsx';
-import {
-	PageContent,
-	PageRoot,
-	PageSection,
-} from '@/components/layouts/index.jsx';
-import {
-	Box,
-	Divider,
-	H1,
-	H2,
-	P,
-	TextLink,
-} from '@/components/primitives/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { PageContent, PageRoot, PageSection } from '@aglio/ui';
+import { Box, Divider, H1, H2, P, TextLink } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui';
 import { useSearchParams } from 'react-router-dom';
 import { OAuthSignInButton } from '../components/auth/OAuthSignInButton.jsx';
 

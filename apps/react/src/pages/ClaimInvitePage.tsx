@@ -1,6 +1,6 @@
-import { PageContent, PageRoot } from '@/components/layouts/index.js';
-import { Box } from '@/components/primitives/box/Box.jsx';
-import { Button, H1, P } from '@/components/primitives/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { Box } from '@aglio/ui';
+import { Button, H1, P } from '@aglio/ui';
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/contexts/AuthContext.js';
@@ -40,7 +40,7 @@ export function ClaimInvitePage() {
 			return (
 				<PageRoot>
 					<PageContent>
-						<Box p={2} align="start">
+						<Box p={2} align="flex-start">
 							<P>You already have a subscription.</P>
 							<P>
 								By claiming this invite you will cancel your current
@@ -57,7 +57,7 @@ export function ClaimInvitePage() {
 			return (
 				<PageRoot>
 					<PageContent>
-						<Box p={2} align="start">
+						<Box p={2} align="flex-start">
 							<H1>Join {inviterName}'s grocery list</H1>
 							<P>
 								Your current list will be deleted, and you'll begin syncing your

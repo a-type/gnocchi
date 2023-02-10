@@ -17,16 +17,9 @@ import {
 	PageContent,
 	PageNav,
 	PageRoot,
-} from '@/components/layouts/index.jsx';
+} from '@aglio/ui';
 import { atom, useAtomValue } from 'jotai';
-import {
-	Box,
-	Button,
-	H1,
-	LinkButton,
-	P,
-	ThemeName,
-} from '@/components/primitives/index.js';
+import { Box, Button, H1, LinkButton, P, ThemeName } from '@aglio/ui';
 import RecipesPage from './recipe/RecipesPage.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { VerifyPasswordResetPage } from './VerifyPasswordReset.jsx';

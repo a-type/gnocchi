@@ -1,6 +1,6 @@
 import { EmailCompleteSignUpForm } from '@/components/auth/EmailCompleteSignUpForm.jsx';
-import { PageContent, PageRoot } from '@/components/layouts/index.jsx';
-import { H1, P } from '@/components/primitives/index.js';
+import { PageContent, PageRoot } from '@aglio/ui';
+import { H1, P } from '@aglio/ui';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export interface VerifyEmailPageProps {}

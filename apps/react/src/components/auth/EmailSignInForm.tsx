@@ -1,15 +1,17 @@
 import { useAuth } from '@/contexts/AuthContext.jsx';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { Form, SubmitButton, TextField } from '../primitives/forms.jsx';
 import {
 	Dialog,
 	DialogContent,
 	DialogTrigger,
 	P,
-} from '../primitives/index.js';
+	Form,
+	SubmitButton,
+	TextField,
+} from '@aglio/ui';
 
 export interface EmailSignInFormProps {
 	returnTo?: string;

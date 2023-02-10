@@ -11,13 +11,8 @@ import {
 	DialogTrigger,
 	LiveUpdateTextField,
 	NumberStepper,
-} from '@/components/primitives/index.js';
-import {
-	Box,
-	Button,
-	ButtonProps,
-	Tooltip,
-} from '@/components/primitives/index.js';
+} from '@aglio/ui';
+import { Box, Button, ButtonProps, Tooltip } from '@aglio/ui';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -33,7 +28,7 @@ import {
 	Presence,
 	Profile,
 } from '@/stores/groceries/index.js';
-import { sprinkles } from '@/styles/sprinkles.css.js';
+import { sprinkles } from '@aglio/ui';
 import { Item } from '@aglio/groceries-client';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
@@ -57,7 +52,7 @@ import React, {
 } from 'react';
 import { Link } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
-import { Checkbox } from '../../primitives/index.js';
+import { Checkbox } from '@aglio/ui';
 import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
 import { ListSelect } from '../lists/ListSelect.jsx';
 import { groceriesState } from '../state.js';

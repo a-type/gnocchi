@@ -1,4 +1,4 @@
-import { Checkbox } from '@/components/primitives/index.js';
+import { Checkbox } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';

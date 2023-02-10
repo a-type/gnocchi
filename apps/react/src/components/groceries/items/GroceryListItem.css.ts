@@ -1,5 +1,5 @@
-import { mediaQueries } from '@/styles/media.js';
-import { vars } from '@/theme.css.js';
+import { mediaQueries } from '@aglio/ui';
+import { vars } from '@aglio/ui';
 import { keyframes, style } from '@vanilla-extract/css';
 
 const popUp = keyframes({
@@ -86,7 +86,7 @@ export const checkbox = style({
 export const mainContent = style({
 	display: 'flex',
 	flexDirection: 'row',
-	alignItems: 'start',
+	alignItems: 'flex-start',
 	gap: vars.space[2],
 	gridArea: 'main',
 	padding: `${vars.space[4]} ${vars.space[3]} ${vars.space[2]} 0`,
