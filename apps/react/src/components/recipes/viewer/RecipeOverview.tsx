@@ -90,7 +90,10 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					<LinkButton to={makeRecipeLink(recipe, '/cook/prep')}>
 						Start prep
 					</LinkButton>
-					<LinkButton color="primary" to={makeRecipeLink(recipe, '/cook/prep')}>
+					<LinkButton
+						color="primary"
+						to={makeRecipeLink(recipe, '/cook/steps')}
+					>
 						Start cooking
 					</LinkButton>
 				</Box>

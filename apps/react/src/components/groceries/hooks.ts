@@ -3,6 +3,7 @@ import { Category, Item } from '@aglio/groceries-client';
 import { useEffect, useMemo } from 'react';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from './state.js';
+import { debounce } from '@a-type/utils';
 
 export function useItemsGroupedAndSorted(
 	listId: string | null | undefined = undefined,
@@ -74,27 +75,33 @@ export function useItemsGroupedAndSorted(
 export function useTransitionPurchasedItems() {
 	const { purchasedStillVisibleItems, purchasedHidingItems } =
 		useSnapshot(groceriesState);
+	// no cleanups in these effects since we want them to run even if
+	// the user navigates away
 	useEffect(() => {
 		if (purchasedStillVisibleItems.size) {
-			const timeout1 = setTimeout(() => {
-				console.log('moving items to hiding');
-				for (const id of purchasedStillVisibleItems) {
-					groceriesState.purchasedHidingItems.add(id);
-				}
-				groceriesState.purchasedStillVisibleItems.clear();
-			}, 5000);
-			return () => {
-				clearTimeout(timeout1);
-			};
+			debouncedMovePurchasedItemsToHiding();
 		}
 	}, [purchasedStillVisibleItems.size]);
-	useEffect(() => {
-		if (purchasedHidingItems.size) {
-			const timeout = setTimeout(() => {
-				console.log('clearing hiding');
-				groceriesState.purchasedHidingItems.clear();
-			}, 1000);
-			return () => clearTimeout(timeout);
-		}
-	}, [purchasedHidingItems.size]);
 }
+
+function movePurchasedItemsToHiding() {
+	console.log('moving purchased items to hiding');
+	for (const id of groceriesState.purchasedStillVisibleItems) {
+		groceriesState.purchasedHidingItems.add(id);
+	}
+	groceriesState.purchasedStillVisibleItems.clear();
+	debouncedClearPurchasedHidingItems();
+}
+const debouncedMovePurchasedItemsToHiding = debounce(
+	movePurchasedItemsToHiding,
+	5000,
+);
+
+function clearPurchasedHidingItems() {
+	console.log('clearing purchased hiding items');
+	groceriesState.purchasedHidingItems.clear();
+}
+const debouncedClearPurchasedHidingItems = debounce(
+	clearPurchasedHidingItems,
+	1000,
+);

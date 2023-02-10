@@ -34,7 +34,7 @@ export function RecipeTagsEditor({ recipe }: RecipeTagsEditorProps) {
 		<div className={classes.root}>
 			<H2>Tags</H2>
 			<div className={classes.list}>
-				{tags.map((tag) => (
+				{tags?.map((tag) => (
 					<Suspense key={tag}>
 						<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
 					</Suspense>
@@ -83,7 +83,7 @@ function TagAdd({ recipe, onAdd }: { recipe: Recipe; onAdd?: () => void }) {
 	};
 	const { tags } = hooks.useWatch(recipe);
 	hooks.useWatch(tags);
-	const tagsSnapshot = tags.getSnapshot();
+	const tagsSnapshot = tags?.getSnapshot() ?? [];
 
 	return (
 		<Popover open={open} onOpenChange={setOpen}>

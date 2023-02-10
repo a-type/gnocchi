@@ -35,6 +35,7 @@ export const content = recipe({
 		border: `1px solid ${vars.colors.black}`,
 		opacity: 0,
 		display: 'none',
+		maxWidth: '90vw',
 		'@media': {
 			'(prefers-reduced-motion: no-preference)': {
 				animationDuration: '400ms',

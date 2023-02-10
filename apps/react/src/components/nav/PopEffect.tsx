@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
-import { useEffect, useState } from 'react';
+import { debounce } from '@a-type/utils';
+import { useEffect, useMemo, useState } from 'react';
 import * as classes from './PopEffect.css.js';
 
 export interface PopEffectProps {
@@ -9,13 +10,14 @@ export interface PopEffectProps {
 
 export function PopEffect({ active, className }: PopEffectProps) {
 	const [animate, setAnimate] = useState(active);
+	const cancelAnimation = useMemo(
+		() => debounce(() => setAnimate(false), 1500),
+		[setAnimate],
+	);
 	useEffect(() => {
 		if (active) {
 			setAnimate(true);
-			const timeout = setTimeout(() => {
-				setAnimate(false);
-			}, 1500);
-			return () => clearTimeout(timeout);
+			cancelAnimation();
 		}
 	}, [active]);
 

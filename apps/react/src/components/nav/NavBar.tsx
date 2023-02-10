@@ -106,6 +106,7 @@ function NavBarLink({
 function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);
 	const recent = !!purchasedHidingItems.size;
+	console.log(purchasedHidingItems);
 
 	return (
 		<NavBarLink
