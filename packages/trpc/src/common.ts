@@ -31,6 +31,7 @@ export const createContext = async ({
 	deployedContext: {
 		apiHost: string;
 		uiHost: string;
+		hubHost: string;
 	};
 	lofi: Server;
 }) => {
