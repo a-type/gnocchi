@@ -1,4 +1,15 @@
-import { Checkbox, H1, H2, lemonTheme, PageContent, PageRoot } from '@aglio/ui';
+import {
+	Checkbox,
+	H1,
+	H2,
+	P,
+	lemonTheme,
+	PageContent,
+	PageRoot,
+	sprinkles,
+	PageSection,
+	Box,
+} from '@aglio/ui';
 import { trpc } from '@/lib/tprc';
 import {
 	GetStaticPathsResult,
@@ -6,11 +17,16 @@ import {
 	GetStaticPropsResult,
 } from 'next';
 import { HubRecipeInfo } from '@aglio/tools';
+import {
+	IngredientList,
+	IngredientListItem,
+} from '@/components/IngredientList';
+import { Instructions } from '@/components/Instructions';
 
 export default function RecipePage({ data }: { data: HubRecipeInfo }) {
 	if (!data) {
 		return (
-			<PageRoot>
+			<PageRoot className={lemonTheme}>
 				<PageContent>
 					<H1>Not found</H1>
 				</PageContent>
@@ -21,21 +37,24 @@ export default function RecipePage({ data }: { data: HubRecipeInfo }) {
 	return (
 		<PageRoot className={lemonTheme}>
 			<PageContent>
-				<H1>{data.title}</H1>
-				<H2>Ingredients</H2>
-				<ul>
-					{data.ingredients.map((ingredient) => (
-						<li key={ingredient.id}>
-							<Checkbox /> {ingredient.text}
-						</li>
-					))}
-				</ul>
-				<H2>Instructions</H2>
-				<ol>
-					{data.instructions.map((instruction) => (
-						<li key={instruction.id}>{instruction.content}</li>
-					))}
-				</ol>
+				<Box mb={6}>
+					<H1>{data.title}</H1>
+					<P>Published by {data.publisher?.fullName ?? 'Anonymous'}</P>
+				</Box>
+				<Box mb={6}>
+					<H2 gutterBottom>Ingredients</H2>
+					<IngredientList>
+						{data.ingredients.map((ingredient) => (
+							<IngredientListItem key={ingredient.id}>
+								{ingredient.text}
+							</IngredientListItem>
+						))}
+					</IngredientList>
+				</Box>
+				<Box mb={6}>
+					<H2 gutterBottom>Instructions</H2>
+					<Instructions instructions={data.instructions} />
+				</Box>
 			</PageContent>
 		</PageRoot>
 	);

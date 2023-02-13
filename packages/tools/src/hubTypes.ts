@@ -3,9 +3,9 @@ export type HubRecipeInfo = {
 	version: number;
 	title: string;
 	publishedAt: string;
-	author: {
+	publisher: {
 		id: string;
-		name: string;
+		fullName: string;
 	};
 	ingredients: {
 		id: string;
@@ -17,7 +17,7 @@ export type HubRecipeInfo = {
 	}[];
 	instructions: {
 		id: string;
-		type: 'step' | 'heading';
+		type: 'step' | 'sectionTitle';
 		content: string;
 	}[];
 };
