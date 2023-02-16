@@ -3,7 +3,14 @@ import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
-import { ReactNode, useEffect, useState } from 'react';
+import {
+	ReactNode,
+	Suspense,
+	memo,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
@@ -51,29 +58,38 @@ export function NavBar({}: NavBarProps) {
 
 	return (
 		<PageNav innerClassName={clsx(classes.root)}>
-			<div className={classes.logo}>
-				<img src="/android-chrome-192x192.png" className={classes.logoImage} />
-				<h1 className={classes.logoText}>Gnocchi</h1>
-			</div>
-			<GroceriesNavBarLink active={matchGroceries} />
-			<PantryNavBarLink active={matchPurchased} />
-			{finalShowRecipes && (
-				<NavBarLink to="/recipes" icon={<RecipesIcon />} active={matchRecipes}>
-					Recipes
+			<Suspense>
+				<div className={classes.logo}>
+					<img
+						src="/android-chrome-192x192.png"
+						className={classes.logoImage}
+					/>
+					<h1 className={classes.logoText}>Gnocchi</h1>
+				</div>
+				<GroceriesNavBarLink active={matchGroceries} />
+				<PantryNavBarLink active={matchPurchased} />
+				{finalShowRecipes && (
+					<NavBarLink
+						to="/recipes"
+						icon={<RecipesIcon />}
+						active={matchRecipes}
+					>
+						Recipes
+					</NavBarLink>
+				)}
+				<NavBarLink
+					to="/settings"
+					icon={<HamburgerMenuIcon />}
+					active={matchSettings}
+				>
+					Settings
 				</NavBarLink>
-			)}
-			<NavBarLink
-				to="/settings"
-				icon={<HamburgerMenuIcon />}
-				active={matchSettings}
-			>
-				Settings
-			</NavBarLink>
+			</Suspense>
 		</PageNav>
 	);
 }
 
-function NavBarLink({
+const NavBarLink = memo(function NavBarLink({
 	to,
 	children,
 	icon,
@@ -88,6 +104,9 @@ function NavBarLink({
 }) {
 	// reset undo history when navigating
 	const client = hooks.useClient();
+	const onClick = useCallback(() => {
+		client.undoHistory.clear();
+	}, [client]);
 
 	return (
 		<Link
@@ -95,9 +114,7 @@ function NavBarLink({
 			className={clsx(classes.button, {
 				[classes.buttonActive]: active,
 			})}
-			onClick={() => {
-				client.undoHistory.clear();
-			}}
+			onClick={onClick}
 		>
 			<div className={classes.iconContainer}>
 				<PopEffect active={animate} />
@@ -108,7 +125,7 @@ function NavBarLink({
 			</span>
 		</Link>
 	);
-}
+});
 
 function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);
