@@ -15,6 +15,12 @@ import { RecipeInstructionsField } from './RecipeInstructionsField.jsx';
 import { RecipeTagsEditor } from './RecipeTagsEditor.jsx';
 import { RecipeTitleField } from './RecipeTitleField.jsx';
 import { RecipeUrlField } from './RecipeUrlField.jsx';
+import { RecipeMainImageEditor } from './RecipeMainImageEditor.jsx';
+import {
+	ImageContainer,
+	TitleAndImageLayout,
+	TitleContainer,
+} from '../layout/TitleAndImageLayout.jsx';
 
 export interface RecipeEditorProps {
 	slug: string;
@@ -32,10 +38,17 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	return (
 		<Box direction="column" gap={8}>
 			<Box direction="column" gap={2}>
-				<RecipeTitleField recipe={recipe} />
 				<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
 					<RecipeEditActions />
 				</PageFixedArea>
+				<TitleAndImageLayout>
+					<TitleContainer>
+						<RecipeTitleField recipe={recipe} />
+					</TitleContainer>
+					<ImageContainer>
+						<RecipeMainImageEditor recipe={recipe} />
+					</ImageContainer>
+				</TitleAndImageLayout>
 				<RecipeUrlField recipe={recipe} />
 			</Box>
 			<RecipeTagsEditor recipe={recipe} />

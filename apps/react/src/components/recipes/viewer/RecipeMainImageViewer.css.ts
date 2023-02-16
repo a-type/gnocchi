@@ -2,7 +2,9 @@ import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const root = style({
-	fontSize: vars.fontSizes['3xl'],
-	maxWidth: '100%',
 	width: '100%',
+	height: '100%',
+	overflow: 'hidden',
+	borderRadius: vars.radii.lg,
+	objectFit: 'cover',
 });

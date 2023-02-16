@@ -12,6 +12,7 @@ export interface ListEditProps {
 
 export function ListEdit({ listId }: ListEditProps) {
 	const list = hooks.useList(listId);
+	hooks.useWatch(list);
 
 	if (!list) {
 		return null;

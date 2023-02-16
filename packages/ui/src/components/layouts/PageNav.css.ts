@@ -47,5 +47,8 @@ export const nowPlayingContainer = style({
 			maxWidth: 600,
 			padding: 0,
 		},
+		[mediaQueries.lg]: {
+			maxWidth: 800,
+		},
 	},
 });

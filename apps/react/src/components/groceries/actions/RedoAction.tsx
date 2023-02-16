@@ -14,8 +14,6 @@ export function RedoAction() {
 			}}
 			icon={<ResetIcon style={{ transform: 'scaleX(-1)' }} />}
 			visible={canRedo}
-		>
-			Redo
-		</ActionButton>
+		></ActionButton>
 	);
 }

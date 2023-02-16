@@ -10,9 +10,13 @@ export const root = style({
 	flexDirection: 'row',
 	gap: vars.space[2],
 	alignItems: 'center',
+	height: 30,
+	borderRadius: 15,
+	marginLeft: 4,
+	marginRight: 4,
 
 	selectors: {
-		'&:hover': {
+		'&:hover:not(:disabled):not([data-disabled="true"])': {
 			backgroundColor: vars.colors.gray20,
 		},
 	},

@@ -50,8 +50,18 @@ app.get('/', (req, res) => {
 app.use('/api', apiRouter);
 
 const lofiServer = attachSocketServer(server);
-app.use('/lofi', lofiServer.handleRequest);
-
+app.post('/lofi', async (req, res) => {
+	await lofiServer.handleRequest(req, res);
+});
+app.get('/lofi', async (req, res) => {
+	await lofiServer.handleRequest(req, res);
+});
+app.post('/lofi/files/:fileId', async (req, res) => {
+	await lofiServer.handleFileRequest(req, res);
+});
+app.get('/lofi/files/:fileId', async (req, res) => {
+	await lofiServer.handleFileRequest(req, res);
+});
 app.use('/trpc', createTrpcMiddleware(lofiServer));
 
 server.listen(4445, () => {

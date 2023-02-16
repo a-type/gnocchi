@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import { default as react } from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'url';
 import { VitePWA } from 'vite-plugin-pwa';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
@@ -101,7 +101,7 @@ export default defineConfig({
 	],
 	optimizeDeps: {
 		exclude: [],
-		include: ['react/jsx-runtime'],
+		include: ['react/jsx-runtime', 'react', 'react-dom'],
 	},
 	resolve: {
 		alias: {

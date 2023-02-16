@@ -88,17 +88,27 @@ export const groceries = {
 		const existing = allExisting?.find((a) => a.get('remote') === false);
 		if (existing) {
 			if (categoryId) {
-				existing.set('categoryId', categoryId);
+				(await _groceries)
+					.batch({ undoable: false })
+					.run(() => {
+						existing.set('categoryId', categoryId);
+					})
+					.flush();
 			}
 		} else if (categoryId) {
 			await (
 				await _groceries
-			).foodCategoryAssignments.put({
-				id: cuid(),
-				foodName: food,
-				categoryId,
-				remote: false,
-			});
+			).foodCategoryAssignments.put(
+				{
+					id: cuid(),
+					foodName: food,
+					categoryId,
+					remote: false,
+				},
+				{
+					undoable: false,
+				},
+			);
 		}
 
 		// send the categorization to the server for research
@@ -284,15 +294,23 @@ export const groceries = {
 			const matchingSuggestion = await storage.suggestions.get(parsed.food)
 				.resolved;
 			if (matchingSuggestion) {
-				matchingSuggestion.set(
-					'usageCount',
-					matchingSuggestion.get('usageCount') + 1,
-				);
+				storage
+					.batch({ undoable: false })
+					.run(() => {
+						matchingSuggestion.set(
+							'usageCount',
+							matchingSuggestion.get('usageCount') + 1,
+						);
+					})
+					.flush();
 			} else {
-				await storage.suggestions.put({
-					text: parsed.food,
-					usageCount: 1,
-				});
+				await storage.suggestions.put(
+					{
+						text: parsed.food,
+						usageCount: 1,
+					},
+					{ undoable: false },
+				);
 			}
 		}
 
@@ -358,9 +376,9 @@ export const groceries = {
 			where: 'categoryId',
 			equals: categoryId,
 		}).resolved;
-		for (const lookup of lookups) {
-			storage.foodCategoryAssignments.delete(lookup.get('id'));
-		}
+		await storage.foodCategoryAssignments.deleteAll(
+			lookups.map((l) => l.get('id')),
+		);
 
 		storage.categories.delete(categoryId);
 	},

@@ -21,10 +21,10 @@ interface Collection<
   /**
    * @deprecated use put
    */
-  create: (init: Init) => Promise<Document>;
-  put: (init: Init) => Promise<Document>;
-  delete: (id: string) => Promise<void>;
-  deleteAll: (ids: string[]) => Promise<void>;
+  create: (init: Init, options?: { undoable?: boolean }) => Promise<Document>;
+  put: (init: Init, options?: { undoable?: boolean }) => Promise<Document>;
+  delete: (id: string, options?: { undoable?: boolean }) => Promise<void>;
+  deleteAll: (ids: string[], options?: { undoable?: boolean }) => Promise<void>;
   get: (id: string) => Query<Document>;
   findOne: (filter: Filter) => Query<Document>;
   findAll: (filter?: Filter) => Query<Document[]>;
@@ -733,11 +733,6 @@ export interface RecipeTagRangeFilter {
   order?: "asc" | "desc";
 }
 
-export interface RecipeTagStartsWithFilter {
-  where: "tag";
-  startsWith: string;
-  order?: "asc" | "desc";
-}
 export type RecipeFilter =
   | RecipeSlugMatchFilter
   | RecipeSlugRangeFilter
@@ -745,8 +740,7 @@ export type RecipeFilter =
   | RecipeUpdatedAtMatchFilter
   | RecipeUpdatedAtRangeFilter
   | RecipeTagMatchFilter
-  | RecipeTagRangeFilter
-  | RecipeTagStartsWithFilter;
+  | RecipeTagRangeFilter;
 
 export type RecipeDestructured = {
   id: string;
@@ -760,6 +754,7 @@ export type RecipeDestructured = {
   url: string | null;
   session: RecipeSession | null;
   tags: RecipeTags;
+  mainImage: RecipeMainImage | null;
 };
 export type RecipeInit = {
   id?: string;
@@ -773,6 +768,7 @@ export type RecipeInit = {
   url?: string | null;
   session?: RecipeSessionInit | null;
   tags?: RecipeTagsInit;
+  mainImage?: RecipeMainImageInit | null;
 };
 export type RecipeSnapshot = {
   id: string;
@@ -786,6 +782,7 @@ export type RecipeSnapshot = {
   url: string | null;
   session: RecipeSessionSnapshot | null;
   tags: RecipeTagsSnapshot;
+  mainImage: RecipeMainImageSnapshot | null;
 };
 /** Recipe sub-object types */
 
@@ -1011,6 +1008,11 @@ type RecipeTagsItem = string;
 type RecipeTagsItemInit = RecipeTagsItem;
 type RecipeTagsItemSnapshot = RecipeTagsItem;
 type RecipeTagsItemDestructured = RecipeTagsItem;
+export type RecipeMainImage = EntityFile;
+export type RecipeMainImageInit = File;
+export type RecipeMainImageDestructured = EntityFile;
+export type RecipeMainImageSnapshot = string;
+
 export type RecipeTagMetadata = ObjectEntity<
   RecipeTagMetadataInit,
   RecipeTagMetadataDestructured

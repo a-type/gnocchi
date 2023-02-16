@@ -37,21 +37,26 @@ export const root = recipe({
 				'box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out',
 
 			selectors: {
-				'&:hover:not(:disabled)': {
+				'&:hover:not(:disabled):not([data-disabled="true"])': {
 					backgroundColor: hoverVar,
 					boxShadow: `0 0 0 6px ${hoverVar}`,
 				},
 				'&:focus': {
 					outline: 'none',
 				},
-				'&:focus-visible:not(:disabled)': {
+				'&:focus-visible:not(:disabled):not([data-disabled="true"])': {
 					outline: 'none',
 					boxShadow: vars.shadows.focus,
 				},
 				'&:disabled': {
 					opacity: 0.5,
+					cursor: 'default',
 				},
-				'&:active:not(:disabled)': {
+				'&[data-disabled="true"]': {
+					opacity: 0.5,
+					cursor: 'default',
+				},
+				'&:active:not(:disabled):not([data-disabled="true"])': {
 					boxShadow: `0 0 0 6px ${activeVar}`,
 					backgroundColor: activeVar,
 				},
@@ -69,12 +74,12 @@ export const root = recipe({
 				color: vars.colors.primaryDarker,
 				border: `1px solid currentColor`,
 				selectors: {
-					// '&:hover:not(:disabled)': {
+					// '&:hover:not(:disabled):not([data-disabled="true"])': {
 					// 	vars: {
 					// 		[bgVar]: vars.colors.primaryLight,
 					// 	},
 					// },
-					'&:focus-visible:not(:disabled)': {
+					'&:focus-visible:not(:disabled):not([data-disabled="true"])': {
 						vars: {
 							[bgVar]: vars.colors.primaryLight,
 						},
@@ -90,7 +95,7 @@ export const root = recipe({
 				color: vars.colors.accentDarker,
 				border: `1px solid currentColor`,
 				selectors: {
-					'&:focus-visible:not(:disabled)': {
+					'&:focus-visible:not(:disabled):not([data-disabled="true"])': {
 						vars: {
 							[bgVar]: vars.colors.accentLight,
 						},
@@ -114,7 +119,7 @@ export const root = recipe({
 				},
 				color: vars.colors.darkBlend,
 				selectors: {
-					'&:hover:not(:disabled)': {
+					'&:hover:not(:disabled):not([data-disabled="true"])': {
 						vars: {
 							[bgVar]: vars.colors.grayBlend,
 						},
@@ -131,7 +136,7 @@ export const root = recipe({
 				border: `1px solid currentColor`,
 
 				selectors: {
-					'&:hover:not(:disabled)': {
+					'&:hover:not(:disabled):not([data-disabled="true"])': {
 						vars: {
 							[bgVar]: vars.colors.attention,
 						},
@@ -147,7 +152,7 @@ export const root = recipe({
 				color: vars.colors.attentionDark,
 
 				selectors: {
-					// '&:hover:not(:disabled)': {
+					// '&:hover:not(:disabled):not([data-disabled="true"])': {
 					// 	vars: {
 					// 		[bgVar]: vars.colors.attentionLight,
 					// 	},
@@ -170,7 +175,7 @@ export const root = recipe({
 			true: {
 				backgroundColor: activeVar,
 				selectors: {
-					'&:hover:not(:disabled)': {
+					'&:hover:not(:disabled):not([data-disabled="true"])': {
 						filter: 'brightness(1.1)',
 					},
 				},

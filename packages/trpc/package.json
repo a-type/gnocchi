@@ -14,7 +14,7 @@
 		"@aglio/scanning": "workspace:*",
 		"@aglio/tools": "workspace:*",
 		"@lo-fi/common": "^1.9.0",
-		"@lo-fi/server": "^1.6.0",
+		"@lo-fi/server": "^1.6.3",
 		"@trpc/server": "^10.5.0",
 		"cuid": "^3.0.0",
 		"superjson": "^1.12.0",

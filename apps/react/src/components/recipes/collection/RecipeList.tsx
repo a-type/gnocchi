@@ -10,6 +10,7 @@ import { RecipeListActions } from './RecipeListActions.jsx';
 import { PageFixedArea } from '@aglio/ui';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import { useRecipeTagFilter } from './hooks.js';
+import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 
 export interface RecipeListProps {}
 
@@ -66,7 +67,7 @@ function RecipeListContent() {
 	return (
 		<>
 			{recipes
-				.sort((a, b) => a.get('updatedAt') - b.get('updatedAt'))
+				.sort((a, b) => b.get('updatedAt') - a.get('updatedAt'))
 				.map((recipe) => (
 					<RecipeListItem key={recipe.get('id')} recipe={recipe} />
 				))}
@@ -78,10 +79,13 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 	const { title } = hooks.useWatch(recipe);
 	return (
 		<Link className={classes.item} to={makeRecipeLink(recipe)}>
-			<span>{title}</span>
-			<div className={classes.tags}>
-				<RecipeTagsViewer recipe={recipe} />
-			</div>
+			<Box direction="column" gap={1} flex={1}>
+				<span>{title}</span>
+				<div className={classes.tags}>
+					<RecipeTagsViewer recipe={recipe} />
+				</div>
+			</Box>
+			<RecipeMainImageViewer recipe={recipe} className={classes.itemImage} />
 		</Link>
 	);
 }

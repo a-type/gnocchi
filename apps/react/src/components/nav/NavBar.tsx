@@ -11,6 +11,7 @@ import { PageNav } from '@aglio/ui';
 import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
+import { hooks } from '@/stores/groceries/index.js';
 
 export interface NavBarProps {}
 
@@ -85,12 +86,18 @@ function NavBarLink({
 	animate?: boolean;
 	active: boolean;
 }) {
+	// reset undo history when navigating
+	const client = hooks.useClient();
+
 	return (
 		<Link
 			to={to}
 			className={clsx(classes.button, {
 				[classes.buttonActive]: active,
 			})}
+			onClick={() => {
+				client.undoHistory.clear();
+			}}
 		>
 			<div className={classes.iconContainer}>
 				<PopEffect active={animate} />
@@ -106,7 +113,6 @@ function NavBarLink({
 function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);
 	const recent = !!purchasedHidingItems.size;
-	console.log(purchasedHidingItems);
 
 	return (
 		<NavBarLink

@@ -97,6 +97,7 @@ export const Box = forwardRef<any, BoxProps>(function Box(
 		justifySelf,
 		fontSize,
 		fontStyle,
+		flex,
 		...restProps
 	},
 	ref,
@@ -156,6 +157,7 @@ export const Box = forwardRef<any, BoxProps>(function Box(
 			overflowX,
 			fontSize,
 			fontStyle,
+			flex,
 		}),
 		className,
 	);

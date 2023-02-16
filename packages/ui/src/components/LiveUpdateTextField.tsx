@@ -12,14 +12,19 @@ import {
 } from 'react';
 import { debounce } from '@a-type/utils';
 import { Input, InputProps } from './input/Input.jsx';
+import { TextArea } from './textArea/TextArea.jsx';
 
-export type LiveUpdateTextFieldProps = Omit<
-	InputProps,
-	'value' | 'onChange'
-> & {
+export type LiveUpdateTextFieldProps = {
 	value: string;
 	debounceMs?: number;
 	onChange: (value: string) => void;
+	textArea?: boolean;
+	className?: string;
+	onFocus?: (ev: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+	onBlur?: (ev: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+	autoComplete?: InputProps['autoComplete'];
+	autoFocus?: InputProps['autoFocus'];
+	required?: boolean;
 };
 
 /**
@@ -30,10 +35,10 @@ export type LiveUpdateTextFieldProps = Omit<
  * This component is optimistic and will not respond to external changes while focused.
  */
 export const LiveUpdateTextField = forwardRef<
-	HTMLInputElement,
+	HTMLInputElement | HTMLTextAreaElement,
 	LiveUpdateTextFieldProps
 >(function LiveUpdateTextField(
-	{ value, onChange, debounceMs = 500, onFocus, onBlur, ...rest },
+	{ value, onChange, debounceMs = 500, onFocus, onBlur, textArea, ...rest },
 	ref,
 ) {
 	const [displayValue, setDisplayValue] = useState(value || '');
@@ -41,7 +46,7 @@ export const LiveUpdateTextField = forwardRef<
 	const didChange = useRef(false);
 
 	const handleFocus = useCallback(
-		(ev: FocusEvent<HTMLInputElement>) => {
+		(ev: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 			onFocus?.(ev);
 			ignoreUpdates.current = true;
 		},
@@ -49,7 +54,7 @@ export const LiveUpdateTextField = forwardRef<
 	);
 
 	const handleBlur = useCallback(
-		(ev: FocusEvent<HTMLInputElement>) => {
+		(ev: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 			onBlur?.(ev);
 			ignoreUpdates.current = false;
 			// immediately send update if the user typed anything.
@@ -87,14 +92,28 @@ export const LiveUpdateTextField = forwardRef<
 		[debouncedOnChange],
 	);
 
-	return (
-		<Input
-			ref={ref}
-			onFocus={handleFocus}
-			onBlur={handleBlur}
-			value={displayValue}
-			onChange={handleChange}
-			{...rest}
-		/>
-	);
+	if (textArea) {
+		return (
+			<TextArea
+				ref={ref as any}
+				onFocus={handleFocus}
+				onBlur={handleBlur}
+				value={displayValue}
+				onChange={handleChange}
+				autoSize
+				{...rest}
+			/>
+		);
+	} else {
+		return (
+			<Input
+				ref={ref as any}
+				onFocus={handleFocus}
+				onBlur={handleBlur}
+				value={displayValue}
+				onChange={handleChange}
+				{...rest}
+			/>
+		);
+	}
 });

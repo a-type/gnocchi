@@ -15,7 +15,6 @@ import { ListContext } from '@/contexts/ListContext.jsx';
 import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
 import { sprinkles } from '@aglio/ui';
 import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
-import { NavBar } from '@/components/nav/NavBar.jsx';
 import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';
 import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
 

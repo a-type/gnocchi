@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import {
 	createBrowserRouter,
 	Navigate,
@@ -6,12 +6,15 @@ import {
 	Route,
 	RouterProvider,
 	Routes,
+	useLocation,
 	useMatches,
+	useNavigation,
 } from 'react-router-dom';
 import { GroceriesPage } from './GroceriesPage.jsx';
 import { PantryPage } from './PantryPage.jsx';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import {
+	FullScreenSpinner,
 	NavContextProvider,
 	NowPlayingProvider,
 	PageContent,
@@ -30,6 +33,7 @@ import { LogoutNotice } from '@/components/auth/LogoutNotice.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
 import { PrivacyPolicy } from './PrivacyPolicy.jsx';
 import { TermsAndConditions } from './TermsAndConditions.jsx';
+import { hooks } from '@/stores/groceries/index.js';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -70,6 +74,12 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: '/',
+				element: <GroceriesPage />,
+				handle: { nav: true },
+				hasErrorBoundary: false,
+			},
+			{
+				path: '/list/:listId',
 				element: <GroceriesPage />,
 				handle: { nav: true },
 				hasErrorBoundary: false,
@@ -217,7 +227,7 @@ export function Pages() {
 	return (
 		<NowPlayingProvider>
 			<NavContextProvider>
-				<Suspense>
+				<Suspense fallback={<FullScreenSpinner />}>
 					<RouterProvider router={router} />
 				</Suspense>
 			</NavContextProvider>
@@ -234,7 +244,9 @@ function PageLayoutRoot() {
 			<Suspense
 				fallback={
 					<PageRoot>
-						<PageContent />
+						<PageContent>
+							<FullScreenSpinner />
+						</PageContent>
 					</PageRoot>
 				}
 			>

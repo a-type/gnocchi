@@ -17,6 +17,7 @@ import v16 from "./v16.js";
 import v17 from "./v17.js";
 import v18 from "./v18.js";
 import v19 from "./v19.js";
+import v20 from "./v20.js";
 
 export default [
   v1,
@@ -38,4 +39,5 @@ export default [
   v17,
   v18,
   v19,
+  v20,
 ];

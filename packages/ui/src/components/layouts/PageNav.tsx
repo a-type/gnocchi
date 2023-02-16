@@ -3,6 +3,7 @@
 import {
 	createContext,
 	HTMLAttributes,
+	memo,
 	ReactNode,
 	useContext,
 	useMemo,
@@ -18,11 +19,11 @@ const NavContext = createContext<{
 	setContainer: (container: HTMLDivElement) => void;
 }>({ container: null, setContainer: () => {} });
 
-export function NavOutlet() {
+export const NavOutlet = memo(function NavOutlet() {
 	const { setContainer } = useContext(NavContext);
 
 	return <div className={classes.nav} ref={setContainer} />;
-}
+});
 
 export function NavContextProvider({ children }: { children: ReactNode }) {
 	const [container, setContainer] = useState<HTMLDivElement | null>(null);

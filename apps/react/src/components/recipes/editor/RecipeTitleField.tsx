@@ -13,6 +13,7 @@ export function RecipeTitleField({ recipe }: RecipeTitleFieldProps) {
 
 	return (
 		<LiveUpdateTextField
+			textArea
 			value={title}
 			onChange={(value) => {
 				recipe.set('title', value);

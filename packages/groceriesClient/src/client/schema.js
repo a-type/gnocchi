@@ -340,6 +340,10 @@ const recipes = collection({
             items: {
                 type: 'string'
             }
+        },
+        mainImage: {
+            type: 'file',
+            nullable: true
         }
     },
     synthetics: {
@@ -374,7 +378,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 19,
+    version: 20,
     collections: {
         categories,
         items,

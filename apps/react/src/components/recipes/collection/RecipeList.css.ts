@@ -11,13 +11,14 @@ export const list = style({
 
 export const item = style({
 	display: 'flex',
-	flexDirection: 'column',
+	flexDirection: 'row',
 	alignItems: 'flex-start',
-	padding: vars.space[6],
+	padding: vars.space[4],
 	border: `1px solid ${vars.colors.gray50}`,
 	borderRadius: vars.radii.lg,
 	fontSize: vars.fontSizes.lg,
 	gap: vars.space[1],
+	cursor: 'pointer',
 
 	transition: `0.2s ${vars.transitions.default}`,
 
@@ -32,4 +33,10 @@ export const item = style({
 
 export const tags = style({
 	fontSize: vars.fontSizes.sm,
+});
+
+export const itemImage = style({
+	width: '80px !important',
+	height: '80px !important',
+	flexShrink: 0,
 });

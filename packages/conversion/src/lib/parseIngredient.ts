@@ -28,7 +28,13 @@ const DEFAULT_FOOD = null;
  *
  * II: Parse remainder for comments and preparations
  */
-export function parseIngredient(source: string) {
+export function parseIngredient(source: string): {
+	original: string;
+	quantity: number;
+	unit: string;
+	food: string;
+	comments: string[];
+} {
 	const numberResult = greedyMatchNumber(source);
 	const unitResult = greedyMatchUnit(numberResult.remaining);
 	const ofResult = greedyMatchOf(unitResult.remaining);
