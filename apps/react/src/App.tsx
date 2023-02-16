@@ -1,13 +1,12 @@
 import { AuthProvider } from '@/contexts/AuthContext.js';
 import { trpc, trpcClientOptions } from '@/trpc.js';
-import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import * as classes from './App.css.js';
 
-import { Box, Button, ErrorBoundary, H1, P } from '@aglio/ui';
+import { Box, Button, ErrorBoundary, H1, P, TooltipProvider } from '@aglio/ui';
 
 import { lemonTheme } from '@aglio/ui';
 import { Pages } from './pages/Pages.jsx';

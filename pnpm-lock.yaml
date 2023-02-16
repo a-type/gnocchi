@@ -167,7 +167,6 @@ importers:
       '@radix-ui/react-popover': ^1.0.0
       '@radix-ui/react-select': ^1.1.2
       '@radix-ui/react-toast': ^1.0.0
-      '@radix-ui/react-tooltip': ^1.0.0
       '@react-spring/three': ^9.5.5
       '@react-spring/web': ^9.4.5
       '@react-three/drei': ^9.40.0
@@ -270,7 +269,6 @@ importers:
       '@radix-ui/react-popover': 1.0.0_zxljzmqdrxwnuenbkrz77w74uy
       '@radix-ui/react-select': 1.1.2_zxljzmqdrxwnuenbkrz77w74uy
       '@radix-ui/react-toast': 1.0.0_biqbaboplfbrettd7655fr4n2y
-      '@radix-ui/react-tooltip': 1.0.0_zxljzmqdrxwnuenbkrz77w74uy
       '@react-spring/three': 9.5.5_aj5kj473hsgheg4miwvuwybosy
       '@react-spring/web': 9.5.2_biqbaboplfbrettd7655fr4n2y
       '@react-three/drei': 9.40.0_xwynmv5llzsuuouxruzymqw67e
@@ -4112,31 +4110,6 @@ packages:
       '@radix-ui/react-dismissable-layer': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-id': 1.0.0_react@18.2.0
       '@radix-ui/react-popper': 1.0.0_ib3m5ricvtkl2cll7qpr2f6lvq
-      '@radix-ui/react-portal': 1.0.0_biqbaboplfbrettd7655fr4n2y
-      '@radix-ui/react-presence': 1.0.0_biqbaboplfbrettd7655fr4n2y
-      '@radix-ui/react-primitive': 1.0.0_biqbaboplfbrettd7655fr4n2y
-      '@radix-ui/react-slot': 1.0.0_react@18.2.0
-      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
-      '@radix-ui/react-visually-hidden': 1.0.0_biqbaboplfbrettd7655fr4n2y
-      react: 18.2.0
-      react-dom: 18.2.0_react@18.2.0
-    transitivePeerDependencies:
-      - '@types/react'
-    dev: false
-
-  /@radix-ui/react-tooltip/1.0.0_zxljzmqdrxwnuenbkrz77w74uy:
-    resolution: {integrity: sha512-RB06pov+O4Npy10ei1C6fsyB9QoOjz7Ubo8Sl3qdKtLgkL9iI96925DYtH0bxx6MH6YB2FuzLU6B75qn3AQQQw==}
-    peerDependencies:
-      react: ^16.8 || ^17.0 || ^18.0
-      react-dom: ^16.8 || ^17.0 || ^18.0
-    dependencies:
-      '@babel/runtime': 7.18.9
-      '@radix-ui/primitive': 1.0.0
-      '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
-      '@radix-ui/react-context': 1.0.0_react@18.2.0
-      '@radix-ui/react-dismissable-layer': 1.0.0_biqbaboplfbrettd7655fr4n2y
-      '@radix-ui/react-id': 1.0.0_react@18.2.0
-      '@radix-ui/react-popper': 1.0.0_zxljzmqdrxwnuenbkrz77w74uy
       '@radix-ui/react-portal': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-presence': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-primitive': 1.0.0_biqbaboplfbrettd7655fr4n2y

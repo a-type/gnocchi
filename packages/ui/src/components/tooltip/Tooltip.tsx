@@ -24,7 +24,7 @@ function Content({
 }
 
 // Exports
-export const Provider = TooltipPrimitive.Provider;
+export const TooltipProvider = TooltipPrimitive.Provider;
 
 export function Tooltip({
 	content,
