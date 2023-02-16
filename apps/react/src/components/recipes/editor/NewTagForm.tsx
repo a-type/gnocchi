@@ -32,6 +32,7 @@ export function NewTagForm({ onCreate }: NewTagFormProps) {
 					name="name"
 					placeholder="tag name"
 					className={classes.input}
+					autoComplete="off"
 				/>
 				<SubmitButton>Create</SubmitButton>
 			</Form>
