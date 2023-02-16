@@ -24,7 +24,7 @@
 		"@lo-fi/cli": "^1.12.0",
 		"@lo-fi/common": "^1.10.0",
 		"@lo-fi/react": "^13.0.0",
-		"@lo-fi/web": "^1.12.0",
+		"@lo-fi/web": "^1.12.1",
 		"@radix-ui/colors": "^0.1.8",
 		"@radix-ui/react-accordion": "^1.0.0",
 		"@radix-ui/react-checkbox": "^1.0.0",
