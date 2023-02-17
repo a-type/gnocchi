@@ -7,8 +7,8 @@ import type {
   CategoryFilter,
   Item,
   ItemFilter,
-  FoodCategoryAssignment,
-  FoodCategoryAssignmentFilter,
+  Food,
+  FoodFilter,
   Suggestion,
   SuggestionFilter,
   List,
@@ -106,20 +106,13 @@ export interface GeneratedHooks<Presence, Profile> {
     config?: Config
   ) => Item[];
 
-  useFoodCategoryAssignment(
-    id: string,
-    config?: { skip?: boolean }
-  ): FoodCategoryAssignment | null;
-  useOneFoodCategoryAssignment: <
-    Config extends SkippableFilterConfig<FoodCategoryAssignmentFilter>
-  >(
+  useFood(id: string, config?: { skip?: boolean }): Food | null;
+  useOneFood: <Config extends SkippableFilterConfig<FoodFilter>>(
     config?: Config
-  ) => FoodCategoryAssignment | null;
-  useAllFoodCategoryAssignments: <
-    Config extends SkippableFilterConfig<FoodCategoryAssignmentFilter>
-  >(
+  ) => Food | null;
+  useAllFoods: <Config extends SkippableFilterConfig<FoodFilter>>(
     config?: Config
-  ) => FoodCategoryAssignment[];
+  ) => Food[];
 
   useSuggestion(id: string, config?: { skip?: boolean }): Suggestion | null;
   useOneSuggestion: <Config extends SkippableFilterConfig<SuggestionFilter>>(

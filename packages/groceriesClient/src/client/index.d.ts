@@ -40,12 +40,7 @@ export class Client<Presence = any, Profile = any> {
 
   readonly items: Collection<Item, ItemSnapshot, ItemInit, ItemFilter>;
 
-  readonly foodCategoryAssignments: Collection<
-    FoodCategoryAssignment,
-    FoodCategoryAssignmentSnapshot,
-    FoodCategoryAssignmentInit,
-    FoodCategoryAssignmentFilter
-  >;
+  readonly foods: Collection<Food, FoodSnapshot, FoodInit, FoodFilter>;
 
   readonly suggestions: Collection<
     Suggestion,
@@ -455,99 +450,108 @@ type ItemCommentInit = ItemComment | undefined;
 type ItemCommentSnapshot = ItemComment;
 type ItemCommentDestructured = ItemComment;
 
-export type FoodCategoryAssignment = ObjectEntity<
-  FoodCategoryAssignmentInit,
-  FoodCategoryAssignmentDestructured
+export type Food = ObjectEntity<FoodInit, FoodDestructured>;
+
+export interface FoodCategoryIdMatchFilter {
+  where: "categoryId";
+  equals: string | null;
+  order?: "asc" | "desc";
+}
+
+export interface FoodCategoryIdRangeFilter {
+  where: "categoryId";
+  gte?: string | null;
+  gt?: string | null;
+  lte?: string | null;
+  lt?: string | null;
+  order?: "asc" | "desc";
+}
+
+export interface FoodCategoryIdStartsWithFilter {
+  where: "categoryId";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
+export interface FoodNameLookupMatchFilter {
+  where: "nameLookup";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface FoodNameLookupRangeFilter {
+  where: "nameLookup";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
+export type FoodFilter =
+  | FoodCategoryIdMatchFilter
+  | FoodCategoryIdRangeFilter
+  | FoodCategoryIdStartsWithFilter
+  | FoodNameLookupMatchFilter
+  | FoodNameLookupRangeFilter;
+
+export type FoodDestructured = {
+  canonicalName: string;
+  alternateNames: FoodAlternateNames;
+  categoryId: string | null;
+  isPerishable: boolean | null;
+  isStaple: boolean;
+  expiresAfterDays: number | null;
+};
+export type FoodInit = {
+  canonicalName: string;
+  alternateNames?: FoodAlternateNamesInit;
+  categoryId?: string | null;
+  isPerishable?: boolean | null;
+  isStaple: boolean;
+  expiresAfterDays?: number | null;
+};
+export type FoodSnapshot = {
+  canonicalName: string;
+  alternateNames: FoodAlternateNamesSnapshot;
+  categoryId: string | null;
+  isPerishable: boolean | null;
+  isStaple: boolean;
+  expiresAfterDays: number | null;
+};
+/** Food sub-object types */
+
+type FoodCanonicalName = string;
+type FoodCanonicalNameInit = FoodCanonicalName;
+type FoodCanonicalNameSnapshot = FoodCanonicalName;
+type FoodCanonicalNameDestructured = FoodCanonicalName;
+export type FoodAlternateNames = ListEntity<
+  FoodAlternateNamesInit,
+  FoodAlternateNamesDestructured
 >;
-
-export interface FoodCategoryAssignmentFoodNameMatchFilter {
-  where: "foodName";
-  equals: string;
-  order?: "asc" | "desc";
-}
-
-export interface FoodCategoryAssignmentFoodNameRangeFilter {
-  where: "foodName";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-
-export interface FoodCategoryAssignmentFoodNameStartsWithFilter {
-  where: "foodName";
-  startsWith: string;
-  order?: "asc" | "desc";
-}
-
-export interface FoodCategoryAssignmentCategoryIdMatchFilter {
-  where: "categoryId";
-  equals: string;
-  order?: "asc" | "desc";
-}
-
-export interface FoodCategoryAssignmentCategoryIdRangeFilter {
-  where: "categoryId";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-
-export interface FoodCategoryAssignmentCategoryIdStartsWithFilter {
-  where: "categoryId";
-  startsWith: string;
-  order?: "asc" | "desc";
-}
-export type FoodCategoryAssignmentFilter =
-  | FoodCategoryAssignmentFoodNameMatchFilter
-  | FoodCategoryAssignmentFoodNameRangeFilter
-  | FoodCategoryAssignmentFoodNameStartsWithFilter
-  | FoodCategoryAssignmentCategoryIdMatchFilter
-  | FoodCategoryAssignmentCategoryIdRangeFilter
-  | FoodCategoryAssignmentCategoryIdStartsWithFilter;
-
-export type FoodCategoryAssignmentDestructured = {
-  id: string;
-  foodName: string;
-  categoryId: string;
-  remote: boolean;
-};
-export type FoodCategoryAssignmentInit = {
-  id?: string;
-  foodName: string;
-  categoryId: string;
-  remote: boolean;
-};
-export type FoodCategoryAssignmentSnapshot = {
-  id: string;
-  foodName: string;
-  categoryId: string;
-  remote: boolean;
-};
-/** FoodCategoryAssignment sub-object types */
-
-type FoodCategoryAssignmentId = string;
-type FoodCategoryAssignmentIdInit = FoodCategoryAssignmentId | undefined;
-type FoodCategoryAssignmentIdSnapshot = FoodCategoryAssignmentId;
-type FoodCategoryAssignmentIdDestructured = FoodCategoryAssignmentId;
-type FoodCategoryAssignmentFoodName = string;
-type FoodCategoryAssignmentFoodNameInit = FoodCategoryAssignmentFoodName;
-type FoodCategoryAssignmentFoodNameSnapshot = FoodCategoryAssignmentFoodName;
-type FoodCategoryAssignmentFoodNameDestructured =
-  FoodCategoryAssignmentFoodName;
-type FoodCategoryAssignmentCategoryId = string;
-type FoodCategoryAssignmentCategoryIdInit = FoodCategoryAssignmentCategoryId;
-type FoodCategoryAssignmentCategoryIdSnapshot =
-  FoodCategoryAssignmentCategoryId;
-type FoodCategoryAssignmentCategoryIdDestructured =
-  FoodCategoryAssignmentCategoryId;
-type FoodCategoryAssignmentRemote = boolean;
-type FoodCategoryAssignmentRemoteInit = FoodCategoryAssignmentRemote;
-type FoodCategoryAssignmentRemoteSnapshot = FoodCategoryAssignmentRemote;
-type FoodCategoryAssignmentRemoteDestructured = FoodCategoryAssignmentRemote;
+export type FoodAlternateNamesInit = Array<FoodAlternateNamesItemInit>;
+export type FoodAlternateNamesDestructured = Array<FoodAlternateNamesItem>;
+export type FoodAlternateNamesSnapshot = Array<FoodAlternateNamesItemSnapshot>;
+type FoodAlternateNamesItem = string;
+type FoodAlternateNamesItemInit = FoodAlternateNamesItem;
+type FoodAlternateNamesItemSnapshot = FoodAlternateNamesItem;
+type FoodAlternateNamesItemDestructured = FoodAlternateNamesItem;
+type FoodCategoryId = string | null;
+type FoodCategoryIdInit = FoodCategoryId | undefined;
+type FoodCategoryIdSnapshot = FoodCategoryId;
+type FoodCategoryIdDestructured = FoodCategoryId;
+type FoodIsPerishable = boolean | null;
+type FoodIsPerishableInit = FoodIsPerishable | undefined;
+type FoodIsPerishableSnapshot = FoodIsPerishable;
+type FoodIsPerishableDestructured = FoodIsPerishable;
+type FoodIsStaple = boolean;
+type FoodIsStapleInit = FoodIsStaple;
+type FoodIsStapleSnapshot = FoodIsStaple;
+type FoodIsStapleDestructured = FoodIsStaple;
+type FoodExpiresAfterDays = number | null;
+type FoodExpiresAfterDaysInit = FoodExpiresAfterDays | undefined;
+type FoodExpiresAfterDaysSnapshot = FoodExpiresAfterDays;
+type FoodExpiresAfterDaysDestructured = FoodExpiresAfterDays;
 
 export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
 

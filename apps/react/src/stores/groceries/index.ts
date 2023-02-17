@@ -79,16 +79,26 @@ export const groceries = {
 		food: string,
 		categoryId: string | null,
 	) => {
-		const allExisting = await (
-			await _groceries
-		).foodCategoryAssignments.findAll({
-			where: 'foodName',
+		// send the categorization to the server for research
+		if (categoryId) {
+			try {
+				await trpcClient.categories.assign.mutate({
+					foodName: food,
+					categoryId,
+				});
+			} catch (err) {
+				console.error(err);
+			}
+		}
+
+		const storage = await _groceries;
+		const existing = await storage.foods.findOne({
+			where: 'nameLookup',
 			equals: food,
 		}).resolved;
-		const existing = allExisting?.find((a) => a.get('remote') === false);
 		if (existing) {
 			if (categoryId) {
-				(await _groceries)
+				storage
 					.batch({ undoable: false })
 					.run(() => {
 						existing.set('categoryId', categoryId);
@@ -96,27 +106,23 @@ export const groceries = {
 					.flush();
 			}
 		} else if (categoryId) {
-			await (
-				await _groceries
-			).foodCategoryAssignments.put(
-				{
-					id: cuid(),
-					foodName: food,
-					categoryId,
-					remote: false,
-				},
-				{
-					undoable: false,
-				},
-			);
-		}
-
-		// send the categorization to the server for research
-		if (categoryId) {
-			await trpcClient.categories.assign.mutate({
-				foodName: food,
-				categoryId,
-			});
+			try {
+				const remoteLookup = await trpcClient.food.data.query(food);
+				if (remoteLookup) {
+					await storage.foods.put(
+						{
+							canonicalName: remoteLookup.canonicalName,
+							categoryId,
+							isPerishable: remoteLookup.isPerishable,
+							isStaple: remoteLookup.isStaple,
+							alternateNames: remoteLookup.alternateNames,
+						},
+						{ undoable: false },
+					);
+				}
+			} catch (err) {
+				console.error(err);
+			}
 		}
 	},
 
@@ -244,21 +250,23 @@ export const groceries = {
 				});
 				lastItemId = itemId;
 			} else {
-				const lookups = await storage.foodCategoryAssignments.findAll({
-					where: 'foodName',
+				const lookup = await storage.foods.findOne({
+					where: 'nameLookup',
 					equals: parsed.food,
 				}).resolved;
-				// if there are local and remote lookups, use the local one
-				const lookup = lookups.find((l) => !l.get('remote')) || lookups[0];
 				let categoryId: string | null = lookup?.get('categoryId') ?? null;
 
 				if (!categoryId) {
 					try {
-						const remoteLookup = await trpcClient.categories.assignment.query(
-							parsed.food,
-						);
+						const remoteLookup = await trpcClient.food.data.query(parsed.food);
 						if (remoteLookup) {
-							categoryId = remoteLookup;
+							await storage.foods.put({
+								canonicalName: remoteLookup.canonicalName,
+								categoryId: remoteLookup.categoryId,
+								isPerishable: remoteLookup.isPerishable,
+								isStaple: remoteLookup.isStaple,
+								alternateNames: remoteLookup.alternateNames,
+							});
 						}
 					} catch (err) {
 						console.error(err);
@@ -372,13 +380,13 @@ export const groceries = {
 			item.set('categoryId', null);
 		}
 		// delete all lookups for this category locally
-		const lookups = await storage.foodCategoryAssignments.findAll({
+		const lookups = await storage.foods.findAll({
 			where: 'categoryId',
 			equals: categoryId,
 		}).resolved;
-		await storage.foodCategoryAssignments.deleteAll(
-			lookups.map((l) => l.get('id')),
-		);
+		for (const lookup of lookups) {
+			lookup.set('categoryId', null);
+		}
 
 		storage.categories.delete(categoryId);
 	},

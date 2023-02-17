@@ -97,12 +97,36 @@ model DefaultFoodCategoryAssignment {
   id         String          @id @default(cuid())
   categoryId String          @map("category_id")
   category   DefaultCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  foodName   String          @map("food_name")
+  foodId     String          @map("food_id")
+  foodData   FoodData        @relation(fields: [foodId], references: [id], onDelete: Cascade)
   votes      Int             @default(1)
 
-  @@unique([categoryId, foodName])
-  @@index(foodName)
+  @@unique([categoryId, foodId])
   @@map("default_food_category_assignments")
+}
+
+model FoodData {
+  id            String   @id @default(cuid())
+  canonicalName String
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  isPerishable     Boolean? @map("is_perishable")
+  isStaple         Boolean? @map("is_staple")
+  expiresAfterDays Int?     @map("expires_after_days")
+
+  names               FoodName[]
+  categoryAssignments DefaultFoodCategoryAssignment[]
+
+  @@map("food_data")
+}
+
+model FoodName {
+  name     String   @id
+  foodId   String   @map("food_id")
+  foodData FoodData @relation(fields: [foodId], references: [id], onDelete: Cascade)
+
+  @@map("food_names")
 }
 
 model EmailVerification {
