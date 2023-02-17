@@ -499,7 +499,7 @@ export type FoodDestructured = {
   canonicalName: string;
   alternateNames: FoodAlternateNames;
   categoryId: string | null;
-  isPerishable: boolean;
+  isPerishable: boolean | null;
   isStaple: boolean;
   expiresAfterDays: number | null;
 };
@@ -507,7 +507,7 @@ export type FoodInit = {
   canonicalName: string;
   alternateNames?: FoodAlternateNamesInit;
   categoryId?: string | null;
-  isPerishable: boolean;
+  isPerishable?: boolean | null;
   isStaple: boolean;
   expiresAfterDays?: number | null;
 };
@@ -515,7 +515,7 @@ export type FoodSnapshot = {
   canonicalName: string;
   alternateNames: FoodAlternateNamesSnapshot;
   categoryId: string | null;
-  isPerishable: boolean;
+  isPerishable: boolean | null;
   isStaple: boolean;
   expiresAfterDays: number | null;
 };
@@ -540,8 +540,8 @@ type FoodCategoryId = string | null;
 type FoodCategoryIdInit = FoodCategoryId | undefined;
 type FoodCategoryIdSnapshot = FoodCategoryId;
 type FoodCategoryIdDestructured = FoodCategoryId;
-type FoodIsPerishable = boolean;
-type FoodIsPerishableInit = FoodIsPerishable;
+type FoodIsPerishable = boolean | null;
+type FoodIsPerishableInit = FoodIsPerishable | undefined;
 type FoodIsPerishableSnapshot = FoodIsPerishable;
 type FoodIsPerishableDestructured = FoodIsPerishable;
 type FoodIsStaple = boolean;

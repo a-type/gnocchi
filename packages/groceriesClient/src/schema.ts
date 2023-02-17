@@ -68,6 +68,8 @@ const foods = collection({
 		},
 		isPerishable: {
 			type: 'boolean',
+			// null means unknown
+			nullable: true,
 		},
 		isStaple: {
 			type: 'boolean',

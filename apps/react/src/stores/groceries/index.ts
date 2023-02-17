@@ -79,6 +79,18 @@ export const groceries = {
 		food: string,
 		categoryId: string | null,
 	) => {
+		// send the categorization to the server for research
+		if (categoryId) {
+			try {
+				await trpcClient.categories.assign.mutate({
+					foodName: food,
+					categoryId,
+				});
+			} catch (err) {
+				console.error(err);
+			}
+		}
+
 		const storage = await _groceries;
 		const existing = await storage.foods.findOne({
 			where: 'nameLookup',
@@ -111,14 +123,6 @@ export const groceries = {
 			} catch (err) {
 				console.error(err);
 			}
-		}
-
-		// send the categorization to the server for research
-		if (categoryId) {
-			await trpcClient.categories.assign.mutate({
-				foodName: food,
-				categoryId,
-			});
 		}
 	},
 

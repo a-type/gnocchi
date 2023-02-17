@@ -111,9 +111,9 @@ model FoodData {
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
 
-  isPerishable     Boolean @default(false) @map("is_perishable")
-  isStaple         Boolean @default(false) @map("is_staple")
-  expiresAfterDays Int?    @map("expires_after_days")
+  isPerishable     Boolean? @map("is_perishable")
+  isStaple         Boolean? @map("is_staple")
+  expiresAfterDays Int?     @map("expires_after_days")
 
   names               FoodName[]
   categoryAssignments DefaultFoodCategoryAssignment[]

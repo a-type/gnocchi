@@ -7,7 +7,7 @@ export default migrate(v20Schema, v21Schema, async ({ queries, mutations }) => {
 	for (const assignment of oldAssignments) {
 		await mutations.foods.put({
 			categoryId: assignment.categoryId,
-			isPerishable: false,
+			isPerishable: null,
 			isStaple: false,
 			canonicalName: assignment.foodName,
 			alternateNames: [assignment.foodName],

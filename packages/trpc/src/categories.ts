@@ -37,8 +37,6 @@ export const categoriesRouter = t.router({
 					foodData: {
 						create: {
 							canonicalName: input.foodName,
-							isPerishable: false,
-							isStaple: false,
 						},
 					},
 				},
