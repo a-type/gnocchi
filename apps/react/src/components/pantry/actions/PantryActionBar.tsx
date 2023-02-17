@@ -2,6 +2,8 @@ import { ActionBar } from '@aglio/ui';
 import { ActionButton } from '@aglio/ui';
 import { groceries, hooks } from '@/stores/groceries/index.js';
 import { ResetIcon, TrashIcon } from '@radix-ui/react-icons';
+import { UndoAction } from '@/components/groceries/actions/UndoAction.jsx';
+import { RedoAction } from '@/components/groceries/actions/RedoAction.jsx';
 
 export interface PantryActionBarProps {}
 
@@ -12,46 +14,6 @@ export function PantryActionBar({}: PantryActionBarProps) {
 			<RedoAction />
 			<DeleteAllAction />
 		</ActionBar>
-	);
-}
-
-function UndoAction() {
-	const canUndo = hooks.useCanUndo();
-
-	if (!canUndo) {
-		return null;
-	}
-
-	return (
-		<ActionButton
-			size="small"
-			onClick={() => {
-				groceries.undo();
-			}}
-			icon={<ResetIcon />}
-		>
-			Undo
-		</ActionButton>
-	);
-}
-
-function RedoAction() {
-	const canRedo = hooks.useCanRedo();
-
-	if (!canRedo) {
-		return null;
-	}
-
-	return (
-		<ActionButton
-			size="small"
-			onClick={() => {
-				groceries.redo();
-			}}
-			icon={<ResetIcon style={{ transform: 'scaleX(-1)' }} />}
-		>
-			Redo
-		</ActionButton>
 	);
 }
 

@@ -7,6 +7,7 @@ import { RelativeTime } from '@aglio/ui';
 import { clsx } from 'clsx';
 import * as classes from './PantryListItem.css.js';
 import { Item } from '@aglio/groceries-client';
+import classNames from 'classnames';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -22,7 +23,12 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 
 	return (
 		<div className={groceryItemClasses.root} {...rest}>
-			<div className={groceryItemClasses.mainContent}>
+			<div
+				className={classNames(
+					groceryItemClasses.mainContent,
+					classes.mainContent,
+				)}
+			>
 				<Button size="small" color="ghostDestructive" onClick={deleteItem}>
 					<TrashIcon />
 				</Button>
