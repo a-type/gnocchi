@@ -43,24 +43,39 @@ const categories = collection({
         }
     }
 });
-const foodCategoryAssignments = collection({
-    name: 'foodCategoryAssignment',
-    primaryKey: 'id',
+const foods = collection({
+    name: 'food',
+    primaryKey: 'canonicalName',
     fields: {
-        id: {
-            type: 'string',
-            default: ()=>cuid()
+        canonicalName: {
+            type: 'string'
         },
-        foodName: {
-            type: 'string',
-            indexed: true
+        alternateNames: {
+            type: 'array',
+            items: {
+                type: 'string'
+            }
         },
         categoryId: {
             type: 'string',
-            indexed: true
+            indexed: true,
+            nullable: true
         },
-        remote: {
+        isPerishable: {
             type: 'boolean'
+        },
+        isStaple: {
+            type: 'boolean'
+        },
+        expiresAfterDays: {
+            type: 'number',
+            nullable: true
+        }
+    },
+    synthetics: {
+        nameLookup: {
+            type: 'string[]',
+            compute: (food)=>food.alternateNames
         }
     }
 });
@@ -378,11 +393,11 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 20,
+    version: 21,
     collections: {
         categories,
         items,
-        foodCategoryAssignments,
+        foods,
         suggestions,
         lists,
         collaborationInfo,

@@ -12,17 +12,6 @@ export const categoriesRouter = t.router({
 		});
 		return categories;
 	}),
-	assignment: t.procedure.input(z.string()).query(async ({ input }) => {
-		const assignment = await prisma.defaultFoodCategoryAssignment.findFirst({
-			where: {
-				foodName: input,
-			},
-			orderBy: {
-				votes: 'desc',
-			},
-		});
-		return assignment?.categoryId;
-	}),
 	assign: t.procedure
 		.input(
 			z.object({
@@ -40,15 +29,34 @@ export const categoriesRouter = t.router({
 				return;
 			}
 
+			// lookup food by name to see if it exists
+			const existingName = await prisma.foodName.upsert({
+				where: { name: input.foodName },
+				create: {
+					name: input.foodName,
+					foodData: {
+						create: {
+							canonicalName: input.foodName,
+							isPerishable: false,
+							isStaple: false,
+						},
+					},
+				},
+				update: {},
+				include: {
+					foodData: true,
+				},
+			});
+
 			const assignment = await prisma.defaultFoodCategoryAssignment.upsert({
 				where: {
-					categoryId_foodName: {
-						foodName: input.foodName,
+					categoryId_foodId: {
 						categoryId: input.categoryId,
+						foodId: existingName.foodData.id,
 					},
 				},
 				create: {
-					foodName: input.foodName,
+					foodId: existingName.foodData.id,
 					categoryId: input.categoryId,
 					votes: 1,
 				},
@@ -61,24 +69,6 @@ export const categoriesRouter = t.router({
 
 			return assignment;
 		}),
-	assignments: t.procedure.query(async () => {
-		// select all assignments with distinct food names and the highest votes
-		const assignments: {
-			id: string;
-			foodName: string;
-			categoryId: string;
-			votes: any;
-		}[] = await prisma.$queryRaw`
-				SELECT
-					id AS id,
-					food_name AS foodName,
-					category_id AS categoryId,
-					MAX(votes) AS votes
-				FROM default_food_category_assignments
-				GROUP BY foodName, categoryId
-			`;
-		return assignments.map(({ votes, ...a }) => a);
-	}),
 	updateDefault: t.procedure
 		.input(
 			z.object({

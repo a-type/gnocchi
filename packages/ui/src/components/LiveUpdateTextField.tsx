@@ -25,6 +25,7 @@ export type LiveUpdateTextFieldProps = {
 	autoComplete?: InputProps['autoComplete'];
 	autoFocus?: InputProps['autoFocus'];
 	required?: boolean;
+	placeholder?: string;
 };
 
 /**
