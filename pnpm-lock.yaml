@@ -155,7 +155,7 @@ importers:
       '@lo-fi/cli': ^1.12.0
       '@lo-fi/common': ^1.10.0
       '@lo-fi/react': ^13.0.0
-      '@lo-fi/web': ^1.12.2
+      '@lo-fi/web': ^1.12.3
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -256,8 +256,8 @@ importers:
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
       '@lo-fi/cli': 1.12.0
       '@lo-fi/common': 1.10.0
-      '@lo-fi/react': 13.0.0_3t2wifwvxbrdibjrbsd5eljae4
-      '@lo-fi/web': 1.12.2
+      '@lo-fi/react': 13.0.0_4r5wzwqoyrtehy6alhsucjz77u
+      '@lo-fi/web': 1.12.3
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -402,7 +402,7 @@ importers:
       '@lo-fi/cli': ^1.12.0
       '@lo-fi/common': ^1.10.0
       '@lo-fi/react': ^13.0.0
-      '@lo-fi/web': ^1.12.2
+      '@lo-fi/web': ^1.12.3
       '@trpc/client': ^10.5.0
       '@trpc/server': ^10.5.0
       cuid: ^2.1.8
@@ -410,8 +410,8 @@ importers:
       '@aglio/trpc': link:../trpc
       '@lo-fi/cli': 1.12.0
       '@lo-fi/common': 1.10.0
-      '@lo-fi/react': 13.0.0_@lo-fi+web@1.12.2
-      '@lo-fi/web': 1.12.2
+      '@lo-fi/react': 13.0.0_@lo-fi+web@1.12.3
+      '@lo-fi/web': 1.12.3
       '@trpc/client': 10.5.0_@trpc+server@10.5.0
       '@trpc/server': 10.5.0
       cuid: 2.1.8
@@ -3116,27 +3116,27 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/13.0.0_3t2wifwvxbrdibjrbsd5eljae4:
+  /@lo-fi/react/13.0.0_4r5wzwqoyrtehy6alhsucjz77u:
     resolution: {integrity: sha512-mbqt2P3BkBTkVNLX/uPEyD8V3enDcxBjewM6Dx+grRVN5MmfcVsP+n9MW/WwZOChag4PTVNeA0vatVbLEImlKA==}
     peerDependencies:
       '@lo-fi/web': ^1.12.0
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 1.10.0
-      '@lo-fi/web': 1.12.2
+      '@lo-fi/web': 1.12.3
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
-  /@lo-fi/react/13.0.0_@lo-fi+web@1.12.2:
+  /@lo-fi/react/13.0.0_@lo-fi+web@1.12.3:
     resolution: {integrity: sha512-mbqt2P3BkBTkVNLX/uPEyD8V3enDcxBjewM6Dx+grRVN5MmfcVsP+n9MW/WwZOChag4PTVNeA0vatVbLEImlKA==}
     peerDependencies:
       '@lo-fi/web': ^1.12.0
       react: ^18.2.0
     dependencies:
       '@lo-fi/common': 1.10.0
-      '@lo-fi/web': 1.12.2
+      '@lo-fi/web': 1.12.3
       suspend-react: 0.0.8
       use-sync-external-store: 1.2.0
     dev: false
@@ -3169,8 +3169,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.12.2:
-    resolution: {integrity: sha512-ItEZ4AvrD7+NICsIibC6gFpWGy8ia+SwvjNXLsI+hBC2BuCbxsBjDDboBK0w9jbuwPDsIhu920r5o3Y3gN9QFg==}
+  /@lo-fi/web/1.12.3:
+    resolution: {integrity: sha512-c+IxupiQfUZmEanTuOvawUohpTW/+/tZHE8lOm+3qKG9Cqr0ABl/c5PapCqeg3uUWRHEkforyiJLzDJEvRAopg==}
     dependencies:
       '@lo-fi/common': 1.10.0
       cuid: 2.1.8
