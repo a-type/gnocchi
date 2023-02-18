@@ -74,6 +74,7 @@ export async function getStaticProps(
 	if (!context.params) throw new Error('No params');
 	const slugBase = (context.params.slug as string | undefined) ?? '';
 	const slug = slugBase.split('-').pop();
+	if (!slug) throw new Error('No slug');
 	const data = await trpc.hub.recipeRenderData.query({
 		slug,
 	});
