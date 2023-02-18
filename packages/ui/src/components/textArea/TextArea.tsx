@@ -26,7 +26,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 			const element = innerRef.current;
 			let valueWasEmpty = false;
 			if (element) {
-				function refresh() {
+				const refresh = () => {
 					if (
 						element!.value !== '' ||
 						(!valueWasEmpty && element!.value === '') ||
@@ -37,7 +37,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 						element!.style.height = baseHeight + padBottomPixels + 'px';
 					}
 					valueWasEmpty = element!.value === '';
-				}
+				};
 				refresh();
 
 				element.addEventListener('keyup', refresh);

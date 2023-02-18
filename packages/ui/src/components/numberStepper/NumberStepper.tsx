@@ -1,10 +1,6 @@
 import { Button } from '../../index.js';
 import { fractionToText } from '@aglio/tools';
-import {
-	Cross1Icon,
-	MinusIcon,
-	PlusIcon,
-} from '@radix-ui/react-icons/dist/react-icons.esm.js';
+import { Cross1Icon, MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { ReactNode } from 'react';
 import * as classes from './NumberStepper.css.js';
