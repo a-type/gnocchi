@@ -1,4 +1,4 @@
-import { featureFlags } from '@/featureFlags.js';
+import { FeatureFlagName, featureFlags } from '@/featureFlags.js';
 import { RouterOutputs, trpc } from '@/trpc.js';
 import {
 	Box,
@@ -41,7 +41,7 @@ function FeatureFlagPlanManagerWrapper({
 }) {
 	const updateFlags = trpc.admin.updateFeatureFlags.useMutation();
 	const reset = async () => {
-		await updateFlags.mutate({ planId: plan.id, featureFlags: {} });
+		await updateFlags.mutateAsync({ planId: plan.id, featureFlags: {} });
 		onChange?.();
 	};
 
@@ -49,7 +49,7 @@ function FeatureFlagPlanManagerWrapper({
 		<ErrorBoundary
 			fallback={<button onClick={() => reset()}>Invalid flags. Reset?</button>}
 		>
-			<FeatureFlagPlanManager plan={plan} />
+			<FeatureFlagPlanManager plan={plan} onChange={onChange} />
 		</ErrorBoundary>
 	);
 }
@@ -77,8 +77,8 @@ function FeatureFlagPlanManager({
 		>
 			<div>
 				<div>
-					{!plan.members.some((m) => m.role === 'admin') && <span>🚩</span>}
-					{plan.id}
+					{!plan.members.some((m) => m.role === 'admin') && <b>🚩 no admin</b>}
+					<span>{plan.id}</span>
 				</div>
 				<P size="xs">
 					{plan.members
@@ -86,6 +86,12 @@ function FeatureFlagPlanManager({
 						.map((member) => `${member.fullName} [${member.email}]`)
 						.join(', ')}
 				</P>
+				{plan.subscriptionStatus !== 'active' &&
+				plan.subscriptionStatus === 'trialing' ? (
+					<i>📈 Trial</i>
+				) : (
+					<b>🚩 Subscription {plan.subscriptionStatus}</b>
+				)}
 			</div>
 			<Dialog>
 				<DialogTrigger asChild>
@@ -98,7 +104,11 @@ function FeatureFlagPlanManager({
 							<li key={flagName}>
 								<input
 									type="checkbox"
-									checked={!!flags[flagName]}
+									checked={
+										!!flags[flagName] ||
+										featureFlags[flagName as FeatureFlagName]
+									}
+									disabled={featureFlags[flagName as FeatureFlagName]}
 									onChange={async () => {
 										await updateFlags.mutateAsync({
 											planId: plan.id,

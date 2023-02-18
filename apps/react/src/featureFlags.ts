@@ -4,3 +4,5 @@ export const featureFlags = {
 	hub: false,
 	recipeImages: false,
 };
+
+export type FeatureFlagName = keyof typeof featureFlags;

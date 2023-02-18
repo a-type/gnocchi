@@ -92,7 +92,7 @@ function TagAdd({ recipe, onAdd }: { recipe: Recipe; onAdd?: () => void }) {
 					<PlusIcon />
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent>
+			<PopoverContent className={classes.popover}>
 				<PopoverArrow />
 				<Suspense>
 					<NewTagForm onCreate={addTag} />

@@ -27,3 +27,7 @@ export const tag = style({
 });
 
 export const tagRemoveButton = style({});
+
+export const popover = style({
+	maxWidth: 350,
+});

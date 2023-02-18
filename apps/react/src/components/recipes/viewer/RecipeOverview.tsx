@@ -34,7 +34,7 @@ export function RecipeOverview({ slug }: RecipeOverviewProps) {
 }
 
 function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
-	const { title, createdAt, url } = hooks.useWatch(recipe);
+	const { title, createdAt, url, mainImage } = hooks.useWatch(recipe);
 
 	return (
 		<Box direction="column" gap={6} align="flex-start" width="full">
@@ -76,9 +76,11 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						)}
 					</Box>
 				</TitleContainer>
-				<ImageContainer>
-					<RecipeMainImageViewer recipe={recipe} />
-				</ImageContainer>
+				{mainImage && (
+					<ImageContainer>
+						<RecipeMainImageViewer recipe={recipe} />
+					</ImageContainer>
+				)}
 			</TitleAndImageLayout>
 			<RecipePublishControl recipeId={recipe.get('id')} />
 			<RecipeTagsViewer recipe={recipe} />
