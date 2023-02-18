@@ -4,7 +4,7 @@ import {
 	CheckIcon,
 	ChevronDownIcon,
 	ChevronUpIcon,
-} from '@radix-ui/react-icons/dist/react-icons.esm.js';
+} from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { forwardRef } from 'react';
 import { clsx } from 'clsx';

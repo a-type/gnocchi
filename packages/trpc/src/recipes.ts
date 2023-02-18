@@ -1,5 +1,5 @@
 import { prisma } from '@aglio/prisma';
-import { getGroceryLibraryName } from '@aglio/tools';
+import { getGroceryLibraryName, urlify } from '@aglio/tools';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { t } from './common.js';
@@ -217,6 +217,9 @@ export const recipesRouter = t.router({
 			return {
 				publishedAt: publishedRecipe.publishedAt,
 				slug: publishedRecipe.slug,
+				url: `${ctx.deployedContext.hubHost}/r/${urlify(
+					publishedRecipe.title,
+				)}-${publishedRecipe.slug}`,
 			};
 		}),
 });

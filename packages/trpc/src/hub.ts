@@ -2,6 +2,7 @@ import { prisma } from '@aglio/prisma';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { t } from './common.js';
+import { urlify } from '@aglio/tools';
 
 export const hubRouter = t.router({
 	allPublishedSlugs: t.procedure.query(async ({ ctx }) => {
@@ -17,10 +18,11 @@ export const hubRouter = t.router({
 			},
 			select: {
 				slug: true,
+				title: true,
 			},
 		});
 
-		return publishedRecipes.map((r) => r.slug);
+		return publishedRecipes.map((r) => `${urlify(r.title)}-${r.slug}`);
 	}),
 	recipeRenderData: t.procedure
 		.input(

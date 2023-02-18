@@ -28,6 +28,7 @@ export function RecipePublishControl({ recipeId }: RecipePublishControlProps) {
 				recipeId={recipeId}
 				publishedAt={data.publishedAt}
 				onChange={refetch}
+				url={data.url}
 			/>
 		);
 	} else {
@@ -39,10 +40,12 @@ function PublishedButton({
 	recipeId,
 	publishedAt,
 	onChange,
+	url,
 }: {
 	recipeId: string;
 	publishedAt: string;
 	onChange?: () => void;
+	url: string;
 }) {
 	const unpublish = trpc.recipes.unpublish.useMutation({
 		onSuccess: onChange,
@@ -50,7 +53,9 @@ function PublishedButton({
 
 	return (
 		<Box direction="column" gap={2} align="flex-start">
-			<span>Published {new Date(publishedAt).toLocaleDateString()}</span>
+			<a href={url} target="_blank">
+				Published {new Date(publishedAt).toLocaleDateString()}
+			</a>
 			<Button
 				color="destructive"
 				onClick={async () => {
