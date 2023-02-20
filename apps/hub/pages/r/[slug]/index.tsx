@@ -124,7 +124,7 @@ export async function getStaticPaths(): Promise<GetStaticPathsResult> {
 	const all = await trpc.hub.allPublishedSlugs.query();
 	return {
 		paths: all.map((slug) => ({ params: { slug } })),
-		fallback: false,
+		fallback: 'blocking',
 	};
 }
 
