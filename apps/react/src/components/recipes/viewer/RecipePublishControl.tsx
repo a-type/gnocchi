@@ -135,11 +135,11 @@ function UnpublishedContent({
 						onCheckedChange={(c) => setConsent(c !== false)}
 					/>
 					<P size="xs">
-						I affirm that I own and have the right to publish this recipe, in
-						conformity with the{' '}
-						<a href="https://www.aglio.com/terms" target="_blank">
+						I confirm that I own and have the right to publish this recipe, in
+						accordance with the{' '}
+						<TextLink href="https://www.aglio.com/terms" target="_blank">
 							Aglio Terms of Service
-						</a>
+						</TextLink>
 					</P>
 				</Box>
 			</Box>
