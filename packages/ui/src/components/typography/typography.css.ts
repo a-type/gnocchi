@@ -19,7 +19,10 @@ export const heading = recipe({
 				fontWeight: vars.fontWeights.bold,
 				color: vars.colors.gray90,
 			},
-			'h3&': {},
+			'h3&': {
+				fontSize: vars.fontSizes.md,
+				fontFamily: vars.fonts.title,
+			},
 			'h4&': {},
 			'h5&': {},
 		},

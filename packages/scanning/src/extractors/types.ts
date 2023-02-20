@@ -16,6 +16,10 @@ export interface ExtractorData {
 		comments?: string[];
 		preparations?: string[];
 	}[];
+	detailedSteps?: {
+		type: string;
+		content: string;
+	}[];
 	cookTimeMinutes?: number | null;
 	prepTimeMinutes?: number | null;
 	totalTimeMinutes?: number | null;

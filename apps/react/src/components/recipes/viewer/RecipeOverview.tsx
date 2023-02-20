@@ -1,6 +1,14 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Box, H1, H2, LinkButton, PageNowPlaying, sprinkles } from '@aglio/ui';
+import {
+	Box,
+	H1,
+	H2,
+	LinkButton,
+	PageNowPlaying,
+	Peek,
+	sprinkles,
+} from '@aglio/ui';
 import { format } from 'date-fns/esm';
 import { useRecipeFromSlugUrl } from '../hooks.js';
 import {
@@ -18,6 +26,9 @@ import * as classes from './RecipeOverview.css.js';
 import { RecipePublishControl } from './RecipePublishControl.jsx';
 import { RecipeTagsViewer } from './RecipeTagsViewer.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
+import { RecipePreludeViewer } from './RecipePreludeViewer.jsx';
+import { FirstTimeScanOnboarding } from './FirstTimeScanOnboarding.jsx';
+import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -84,6 +95,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 			</TitleAndImageLayout>
 			<RecipePublishControl recipeId={recipe.get('id')} />
 			<RecipeTagsViewer recipe={recipe} />
+			<FirstTimeScanOnboarding />
 			<Box
 				width="auto"
 				alignSelf="flex-start"
@@ -94,10 +106,17 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				<RecipeMultiplierField recipe={recipe} />
 				<AddToListButton recipe={recipe} />
 			</Box>
+			<PreludeSection recipe={recipe} />
 			<div>
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsViewer recipe={recipe} />
 			</div>
+			<Box width="full">
+				<H2 gutterBottom>Instructions</H2>
+				<Peek>
+					<RecipeInstructionsViewer recipe={recipe} />
+				</Peek>
+			</Box>
 			<PageNowPlaying unstyled>
 				<Box
 					direction="row"
@@ -121,6 +140,22 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					</LinkButton>
 				</Box>
 			</PageNowPlaying>
+		</Box>
+	);
+}
+
+function PreludeSection({ recipe }: { recipe: Recipe }) {
+	const prelude = hooks.useWatch(recipe, 'prelude');
+	hooks.useWatch(prelude);
+
+	if (prelude.get('content')?.length === 0) {
+		return null;
+	}
+
+	return (
+		<Box width="full">
+			<H2 gutterBottom>Description</H2>
+			<RecipePreludeViewer recipe={recipe} />
 		</Box>
 	);
 }

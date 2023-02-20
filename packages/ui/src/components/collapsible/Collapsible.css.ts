@@ -1,4 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
+import { vars } from '../../theme.css.js';
 
 const openVertical = keyframes({
 	from: { height: 0 },
@@ -19,7 +20,7 @@ const closeHorizontal = keyframes({
 
 export const content = style({
 	overflow: 'hidden',
-	animationTimingFunction: '$transitions$springy',
+	animationTimingFunction: vars.transitions.springy,
 	selectors: {
 		'&[data-state=open]': {
 			animationName: openVertical,

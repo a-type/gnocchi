@@ -5,6 +5,7 @@ import { forwardRef } from 'react';
 import { useCurrentRecipeSession } from '../hooks.js';
 import classnames from 'classnames';
 import * as classes from './IngredientCheckoffView.css.js';
+import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 
 export interface IngredientCheckoffViewProps {
 	recipe: Recipe;
@@ -18,7 +19,7 @@ export const IngredientCheckoffView = forwardRef<
 	const session = useCurrentRecipeSession(recipe);
 	const { completedIngredients } = hooks.useWatch(session);
 	hooks.useWatch(completedIngredients);
-	const { ingredients } = hooks.useWatch(recipe);
+	const { ingredients, multiplier } = hooks.useWatch(recipe);
 	hooks.useWatch(ingredients);
 
 	return (
@@ -27,6 +28,7 @@ export const IngredientCheckoffView = forwardRef<
 				<IngredientCheckoffItem
 					key={ingredient.get('id')}
 					ingredient={ingredient}
+					multiplier={multiplier}
 					checked={completedIngredients.has(ingredient.get('id'))}
 					onCheckedChange={(checked) => {
 						if (checked) {
@@ -45,19 +47,20 @@ function IngredientCheckoffItem({
 	ingredient,
 	onCheckedChange,
 	checked,
+	multiplier,
 }: {
 	ingredient: RecipeIngredientsItem;
 	checked: boolean;
 	onCheckedChange: (checked: boolean) => void;
+	multiplier?: number;
 }) {
-	const { text } = hooks.useWatch(ingredient);
 	return (
 		<li className={classnames(classes.item, checked && classes.itemChecked)}>
 			<Checkbox
 				checked={checked}
 				onCheckedChange={(checked) => onCheckedChange(checked === true)}
 			/>
-			{text}
+			<RecipeIngredientViewer ingredient={ingredient} multiplier={multiplier} />
 		</li>
 	);
 }

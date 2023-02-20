@@ -753,6 +753,7 @@ export type RecipeDestructured = {
   title: string;
   createdAt: number;
   updatedAt: number;
+  prelude: any;
   ingredients: RecipeIngredients;
   instructions: any;
   url: string | null;
@@ -767,6 +768,7 @@ export type RecipeInit = {
   title?: string;
   createdAt?: number;
   updatedAt?: number;
+  prelude?: any;
   ingredients?: RecipeIngredientsInit;
   instructions?: any;
   url?: string | null;
@@ -781,6 +783,7 @@ export type RecipeSnapshot = {
   title: string;
   createdAt: number;
   updatedAt: number;
+  prelude: any;
   ingredients: RecipeIngredientsSnapshot;
   instructions: any;
   url: string | null;
@@ -814,6 +817,10 @@ type RecipeUpdatedAt = number;
 type RecipeUpdatedAtInit = RecipeUpdatedAt | undefined;
 type RecipeUpdatedAtSnapshot = RecipeUpdatedAt;
 type RecipeUpdatedAtDestructured = RecipeUpdatedAt;
+type RecipePrelude = any;
+type RecipePreludeInit = RecipePrelude | undefined;
+type RecipePreludeSnapshot = RecipePrelude;
+type RecipePreludeDestructured = RecipePrelude;
 export type RecipeIngredients = ListEntity<
   RecipeIngredientsInit,
   RecipeIngredientsDestructured
@@ -832,6 +839,7 @@ export type RecipeIngredientsItemInit = {
   food: string;
   quantity?: number;
   comments?: RecipeIngredientsItemCommentsInit;
+  note?: string | null;
 };
 export type RecipeIngredientsItemDestructured = {
   id: string;
@@ -840,6 +848,7 @@ export type RecipeIngredientsItemDestructured = {
   food: string;
   quantity: number;
   comments: RecipeIngredientsItemComments;
+  note: string | null;
 };
 export type RecipeIngredientsItemSnapshot = {
   id: string;
@@ -848,6 +857,7 @@ export type RecipeIngredientsItemSnapshot = {
   food: string;
   quantity: number;
   comments: RecipeIngredientsItemCommentsSnapshot;
+  note: string | null;
 };
 type RecipeIngredientsItemId = string;
 type RecipeIngredientsItemIdInit = RecipeIngredientsItemId | undefined;
@@ -887,6 +897,11 @@ type RecipeIngredientsItemCommentsItemSnapshot =
   RecipeIngredientsItemCommentsItem;
 type RecipeIngredientsItemCommentsItemDestructured =
   RecipeIngredientsItemCommentsItem;
+type RecipeIngredientsItemNote = string | null;
+type RecipeIngredientsItemNoteInit = RecipeIngredientsItemNote | undefined;
+type RecipeIngredientsItemNoteSnapshot = RecipeIngredientsItemNote;
+type RecipeIngredientsItemNoteDestructured = RecipeIngredientsItemNote;
+
 type RecipeInstructions = any;
 type RecipeInstructionsInit = RecipeInstructions | undefined;
 type RecipeInstructionsSnapshot = RecipeInstructions;

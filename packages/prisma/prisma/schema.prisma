@@ -176,9 +176,11 @@ model PublishedRecipe {
   title         String
   version       Int       @default(1)
 
-  ingredients  PublishedRecipeIngredient[]
-  instructions PublishedRecipeInstruction[]
-  publisher    Profile?                     @relation(fields: [publisherId], references: [id])
+  ingredients       PublishedRecipeIngredient[]
+  instructions      PublishedRecipeInstruction[]
+  preludeSerialized String?                      @map("prelude_serialized")
+  mainImageUrl      String?                      @map("main_image_url")
+  publisher         Profile?                     @relation(fields: [publisherId], references: [id])
 
   @@unique([recipeId, libraryId])
   @@map("published_recipes")
@@ -195,6 +197,7 @@ model PublishedRecipeIngredient {
   quantity Float   @default(1)
   // JSON type
   comments String  @default("[]")
+  note     String?
 
   index Int
 
@@ -208,6 +211,7 @@ model PublishedRecipeInstruction {
 
   type    String
   content String
+  note    String?
 
   index Int
 

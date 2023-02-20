@@ -10,5 +10,9 @@ export function IngredientList({ children }: IngredientListProps) {
 }
 
 export function IngredientListItem({ children }: IngredientListProps) {
-	return <li className={classes.item}>{children}</li>;
+	return (
+		<li>
+			<div className={classes.item}>{children}</div>
+		</li>
+	);
 }

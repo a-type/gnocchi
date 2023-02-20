@@ -26,3 +26,5 @@ export * from './select/Select.jsx';
 export * from './layouts/index.jsx';
 export * from './imageUploader/ImageUploader.jsx';
 export * from './spinner/Spinner.jsx';
+export * from './note/Note.jsx';
+export * from './peek/Peek.jsx';

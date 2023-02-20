@@ -26,6 +26,7 @@ export type LiveUpdateTextFieldProps = {
 	autoFocus?: InputProps['autoFocus'];
 	required?: boolean;
 	placeholder?: string;
+	type?: InputProps['type'];
 };
 
 /**
@@ -39,7 +40,16 @@ export const LiveUpdateTextField = forwardRef<
 	HTMLInputElement | HTMLTextAreaElement,
 	LiveUpdateTextFieldProps
 >(function LiveUpdateTextField(
-	{ value, onChange, debounceMs = 500, onFocus, onBlur, textArea, ...rest },
+	{
+		value,
+		onChange,
+		debounceMs = 500,
+		onFocus,
+		onBlur,
+		textArea,
+		type,
+		...rest
+	},
 	ref,
 ) {
 	const [displayValue, setDisplayValue] = useState(value || '');
@@ -113,6 +123,7 @@ export const LiveUpdateTextField = forwardRef<
 				onBlur={handleBlur}
 				value={displayValue}
 				onChange={handleChange}
+				type={type}
 				{...rest}
 			/>
 		);

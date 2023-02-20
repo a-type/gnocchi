@@ -12,7 +12,14 @@ import {
 	LiveUpdateTextField,
 	NumberStepper,
 } from '@aglio/ui';
-import { Box, Button, ButtonProps, Tooltip } from '@aglio/ui';
+import {
+	Box,
+	Button,
+	ButtonProps,
+	Tooltip,
+	useSize,
+	useSizeCssVars,
+} from '@aglio/ui';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -21,7 +28,6 @@ import { PersonAvatar } from '@/components/sync/people/PersonAvatar.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
-import { useSize, useSizeCssVars } from '@/hooks/useSize.js';
 import {
 	groceries,
 	hooks,

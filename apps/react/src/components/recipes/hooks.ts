@@ -1,9 +1,15 @@
-import { ObjectEntity, Recipe } from '@aglio/groceries-client';
+import {
+	Entity,
+	ObjectEntity,
+	Recipe,
+	RecipeDestructured,
+} from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
-import { useEditor } from '@tiptap/react';
+import { ExtensionConfig, useEditor } from '@tiptap/react';
 import { useEffect, useRef, useState } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import { useDebouncedCallback } from '@/hooks/useDebouncedCallback.js';
+import StarterKit from '@tiptap/starter-kit';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -46,26 +52,40 @@ export function useCurrentRecipeSession(recipe: Recipe) {
 }
 
 export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
-	const live = hooks.useWatch(recipe);
-	const instructions = live.instructions as ObjectEntity<any, any>;
 	useCurrentRecipeSession(recipe);
+	return useSyncedEditor(
+		recipe,
+		'instructions',
+		readonly,
+		createTiptapExtensions(recipe, readonly),
+	);
+}
 
+export function useSyncedPreludeEditor(recipe: Recipe, readonly = false) {
+	return useSyncedEditor(recipe, 'prelude', readonly, [StarterKit]);
+}
+
+function useSyncedEditor(
+	recipe: Recipe,
+	fieldName: keyof RecipeDestructured,
+	readonly: boolean,
+	extensions: ExtensionConfig[],
+) {
+	const live = hooks.useWatch(recipe);
+	const field = live[fieldName] as ObjectEntity<any, any>;
 	const updatingRef = useRef(false);
-
 	const update = useDebouncedCallback((editor) => {
-		if (updatingRef.current) return;
+		if (updatingRef.current) {
+			return;
+		}
 
-		console.log('Updating recipe instructions to sync');
 		const newData = editor.getJSON();
-		const instructions = recipe.get('instructions');
-		if (!instructions) {
-			recipe.set('instructions', newData);
+		const value = recipe.get(fieldName);
+		if (!value) {
+			recipe.set(fieldName, newData);
 		} else {
-			instructions.update(newData, {
-				// disable merge - items missing in new data should be removed
+			value.update(newData, {
 				merge: false,
-				// disable replaceSubObjects - subobjects should be merged with the
-				// same identity rather than overwritten (this is default anyway)
 				replaceSubObjects: false,
 			});
 		}
@@ -73,39 +93,34 @@ export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
 
 	const editor = useEditor(
 		{
-			extensions: createTiptapExtensions(recipe, readonly),
-			content: instructions?.getSnapshot() || {
+			extensions,
+			content: field?.getSnapshot() ?? {
 				type: 'doc',
 				content: [],
 			},
 			editable: !readonly,
-			// onTransaction({ editor, transaction }) {
-			// 	if (transaction.docChanged) {
-			// 		update(editor);
-			// 	}
-			// },
-			onUpdate({ editor }) {
+			onUpdate: ({ editor }) => {
 				update(editor);
 			},
 		},
-		[instructions],
+		[field],
 	);
 
 	useEffect(() => {
-		if (editor && !editor.isDestroyed && instructions) {
+		if (editor && !editor.isDestroyed && field) {
 			updatingRef.current = true;
-			editor.commands.setContent(instructions.getSnapshot(), false);
+			editor.commands.setContent(field.getSnapshot(), false);
 			updatingRef.current = false;
 		}
 
-		return instructions?.subscribe('changeDeep', (target, info) => {
-			if (!info.isLocal || target === instructions) {
+		return field?.subscribe('changeDeep', (target, info) => {
+			if (!info.isLocal || target === field) {
 				updatingRef.current = true;
-				editor?.commands.setContent(instructions.getSnapshot(), false);
+				editor?.commands.setContent(field.getSnapshot(), false);
 				updatingRef.current = false;
 			}
 		});
-	}, [instructions, editor]);
+	}, [field, editor]);
 
 	return editor;
 }

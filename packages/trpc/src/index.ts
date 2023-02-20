@@ -26,3 +26,4 @@ export const appRouter = t.router({
 export type AppRouter = typeof appRouter;
 
 export { createContext } from './common.js';
+export type { HubPublishedRecipeInfo } from './hub.js';

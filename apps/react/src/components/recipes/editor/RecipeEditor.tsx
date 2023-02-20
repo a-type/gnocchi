@@ -21,6 +21,7 @@ import {
 	TitleAndImageLayout,
 	TitleContainer,
 } from '../layout/TitleAndImageLayout.jsx';
+import { RecipePreludeEditor } from './RecipePreludeEditor.jsx';
 
 export interface RecipeEditorProps {
 	slug: string;
@@ -53,6 +54,10 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 			</Box>
 			<RecipeTagsEditor recipe={recipe} />
 			<div>
+				<H2 gutterBottom>Description</H2>
+				<RecipePreludeEditor recipe={recipe} />
+			</div>
+			<div>
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsEditor recipe={recipe} />
 			</div>
@@ -62,10 +67,13 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 					<RecipeInstructionsField recipe={recipe} />
 				</InstructionsProvider>
 			</div>
-			<RecipeDeleteButton
-				className={sprinkles({ alignSelf: 'flex-start' })}
-				recipe={recipe}
-			/>
+			<div>
+				<H2>Danger zone</H2>
+				<RecipeDeleteButton
+					className={sprinkles({ alignSelf: 'flex-start' })}
+					recipe={recipe}
+				/>
+			</div>
 		</Box>
 	);
 }

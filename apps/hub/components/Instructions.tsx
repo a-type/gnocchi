@@ -1,13 +1,13 @@
-import { HubRecipeInfo } from '@aglio/tools';
+import { HubPublishedRecipeInfo } from '@/../../packages/trpc/src';
 import { H3, P } from '@aglio/ui';
 
 export interface InstructionsProps {
-	instructions: HubRecipeInfo['instructions'];
+	instructions: HubPublishedRecipeInfo['instructions'];
 }
 
 export function Instructions({ instructions }: InstructionsProps) {
 	return (
-		<div>
+		<div className="e-instructions" itemProp="recipeInstructions">
 			{instructions.map((item) => (
 				<InstructionsItem key={item.id} item={item} />
 			))}
@@ -18,7 +18,7 @@ export function Instructions({ instructions }: InstructionsProps) {
 function InstructionsItem({
 	item,
 }: {
-	item: HubRecipeInfo['instructions'][0];
+	item: HubPublishedRecipeInfo['instructions'][0];
 }) {
 	if (item.type === 'sectionTitle') {
 		return <H3>{item.content}</H3>;

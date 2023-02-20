@@ -1,4 +1,4 @@
-import { vars } from '@aglio/ui';
+import { mediaQueries, vars } from '@aglio/ui';
 import { style, styleVariants } from '@vanilla-extract/css';
 
 export const fixedContent = style({
@@ -97,6 +97,12 @@ export const title = style({
 	color: vars.colors.black,
 	fontWeight: 'black',
 	textShadow: `0 0 4px ${vars.colors.white}`,
+
+	'@media': {
+		[mediaQueries.md]: {
+			fontSize: '7vmin',
+		},
+	},
 });
 
 export const demo = style({});

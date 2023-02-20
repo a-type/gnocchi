@@ -19,7 +19,7 @@
 		"scope": "typescriptreact",
 		"prefix": "css",
 		"body": [
-			"import classnames from 'classnames';\nimport * as classes from './${1:${TM_FILENAME/(.*)\\..+$/$1/}}.css.js';"
+			"import classNames from 'classnames';\nimport * as classes from './${1:${TM_FILENAME/(.*)\\..+$/$1/}}.css.js';"
 		]
 	}
 }

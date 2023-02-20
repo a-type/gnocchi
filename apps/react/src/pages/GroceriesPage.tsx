@@ -7,7 +7,7 @@ import { MainMenu } from '@/components/menu/MainMenu.js';
 import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
 import { PageContent, PageFixedArea, PageRoot } from '@aglio/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 import { Box } from '@aglio/ui';
@@ -20,13 +20,16 @@ import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSaveProm
 
 export function GroceriesPage() {
 	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
+	const [params] = useSearchParams();
 	const navigate = useNavigate();
 
+	const redirectToWelcome = !params.get('recipeUrl') && !hasSeenWelcome;
+
 	useEffect(() => {
-		if (!hasSeenWelcome) {
+		if (redirectToWelcome) {
 			navigate('/welcome');
 		}
-	}, [hasSeenWelcome]);
+	}, [redirectToWelcome]);
 
 	const onListChange = useCallback(
 		(listId: string | null | undefined) => {

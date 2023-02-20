@@ -20,5 +20,10 @@
 	"devDependencies": {
 		"turbo": "^1.6.1",
 		"typescript": "^4.8.4"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"@tiptap/react@2.0.0-beta.218": "patches/@tiptap__react@2.0.0-beta.218.patch"
+		}
 	}
 }

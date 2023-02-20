@@ -36,52 +36,95 @@ export async function addIngredients(
 
 async function getScannedRecipe(url: string) {
 	try {
-		const scanned = await trpcClient.scans.recipe.query({
+		const scanResult = await trpcClient.scans.recipe.query({
 			url,
 		});
 		let ingredients: RecipeIngredientsItemInit[] = [];
-		if (scanned.rawIngredients?.length) {
-			ingredients = scanned.rawIngredients.map((line: string) => {
-				const parsed = parseIngredient(line);
-				return {
-					text: parsed.original,
-					food: parsed.food,
-					unit: parsed.unit,
-					comments: parsed.comments,
-					quantity: parsed.quantity,
-				};
-			});
-		} else if (scanned.detailedIngredients?.length) {
-			ingredients = scanned.detailedIngredients.map(
-				(i: {
-					original: string;
-					quantity: number;
-					foodName: string;
-					unit?: string | null;
-					comments?: string[];
-					preparations?: string[];
-				}) => ({
-					food: i.foodName,
-					quantity: i.quantity,
-					unit: i.unit || '',
-					comments: i.comments || [],
-					text: i.original,
-				}),
-			);
+		if (scanResult.type === 'web') {
+			const scanned = scanResult.data;
+			if (scanned.detailedIngredients?.length) {
+				ingredients = scanned.detailedIngredients.map(
+					(i: {
+						original: string;
+						quantity: number;
+						foodName: string;
+						unit?: string | null;
+						comments?: string[];
+						preparations?: string[];
+					}) => ({
+						food: i.foodName,
+						quantity: i.quantity,
+						unit: i.unit || '',
+						comments: i.comments || [],
+						text: i.original,
+					}),
+				);
+			} else if (scanned.rawIngredients?.length) {
+				ingredients = scanned.rawIngredients.map((line: string) => {
+					const parsed = parseIngredient(line);
+					return {
+						text: parsed.original,
+						food: parsed.food,
+						unit: parsed.unit,
+						comments: parsed.comments,
+						quantity: parsed.quantity,
+					};
+				});
+			}
+			return {
+				url: scanned.url,
+				title: scanned.title || 'Web Recipe',
+				ingredients: ingredients.length ? ingredients : undefined,
+				instructions: scanned.steps?.length
+					? generateJSON(
+							(scanned.steps || [])
+								.map((line: string) => `<p>${line}</p>`)
+								.join('\n'),
+							createTiptapExtensions(),
+					  )
+					: undefined,
+			};
+		} else if (scanResult.type === 'hub') {
+			const scanned = scanResult.data;
+			ingredients = scanned.ingredients.map((i) => ({
+				food: i.food,
+				text: i.text,
+				unit: i.unit,
+				quantity: i.quantity,
+				comments: (() => {
+					try {
+						return JSON.parse(i.comments || '[]');
+					} catch (err) {
+						return [];
+					}
+				})(),
+				id: i.id,
+				note: i.note,
+			}));
+			return {
+				url: scanResult.url,
+				title: scanned.title,
+				ingredients,
+				instructions: {
+					type: 'doc',
+					content: scanned.instructions.map((i) => ({
+						type: i.type,
+						content: [
+							{
+								type: 'text',
+								text: i.content,
+							},
+						],
+						attrs: {
+							id: i.id,
+							note: i.note,
+						},
+					})),
+				},
+			};
+		} else {
+			throw new Error('Unrecognized scan result type');
 		}
-		return {
-			url: scanned.url,
-			title: scanned.title || 'Web Recipe',
-			ingredients: ingredients.length ? ingredients : undefined,
-			instructions: scanned.steps?.length
-				? generateJSON(
-						(scanned.steps || [])
-							.map((line: string) => `<p>${line}</p>`)
-							.join('\n'),
-						createTiptapExtensions(),
-				  )
-				: undefined,
-		};
 	} catch (err) {
 		if (err instanceof TRPCClientError && err.message === 'FORBIDDEN') {
 			signupDialogState.status = 'open';

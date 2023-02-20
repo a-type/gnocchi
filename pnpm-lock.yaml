@@ -1,5 +1,10 @@
 lockfileVersion: 5.4
 
+patchedDependencies:
+  '@tiptap/react@2.0.0-beta.218':
+    hash: emzgm7lnt4pxb7aoe4havufrqe
+    path: patches/@tiptap__react@2.0.0-beta.218.patch
+
 importers:
 
   .:

@@ -20,7 +20,10 @@ type RecipeMicrodata = {
 };
 
 export async function microdata($: CheerioAPI): Promise<ExtractorData | null> {
-	var elems = $('[itemscope][itemtype="http://schema.org/Recipe"]');
+	let elems = $('[itemscope][itemtype="http://schema.org/Recipe"]');
+	if (elems.length === 0) {
+		elems = $('[itemscope][itemtype="https://schema.org/Recipe"]');
+	}
 	if (elems.length === 0) {
 		return null;
 	}

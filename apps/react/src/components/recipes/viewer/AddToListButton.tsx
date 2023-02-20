@@ -5,6 +5,7 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
+	Note,
 } from '@aglio/ui';
 import { Button, Checkbox } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
@@ -16,6 +17,7 @@ import { groceries } from '@/stores/groceries/index.js';
 import { groceriesState } from '@/components/groceries/state.js';
 import { IngredientText } from './IngredientText.jsx';
 import { MultiplierStepper } from './MultiplierStepper.jsx';
+import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 
 export interface AddToListButtonProps {
 	recipe: Recipe;
@@ -63,9 +65,13 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 											return next;
 										});
 									}}
+									id={`ingredient-${index}`}
 								/>
-								<label>
-									<IngredientText
+								<label
+									htmlFor={`ingredient-${index}`}
+									className={classes.itemContent}
+								>
+									<RecipeIngredientViewer
 										ingredient={ingredient}
 										multiplier={multiplier}
 									/>

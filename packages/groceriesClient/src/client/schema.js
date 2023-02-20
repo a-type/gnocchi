@@ -272,6 +272,13 @@ const recipes = collection({
             default: ()=>Date.now(),
             indexed: true
         },
+        prelude: {
+            type: 'any',
+            default: {
+                type: 'doc',
+                content: []
+            }
+        },
         ingredients: {
             type: 'array',
             items: {
@@ -300,6 +307,10 @@ const recipes = collection({
                         items: {
                             type: 'string'
                         }
+                    },
+                    note: {
+                        type: 'string',
+                        nullable: true
                     }
                 }
             }
@@ -395,7 +406,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 21,
+    version: 22,
     collections: {
         categories,
         items,

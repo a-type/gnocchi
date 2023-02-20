@@ -35,6 +35,7 @@ export const recipesRouter = t.router({
 					quantity: number;
 					comments: string[];
 					food: string;
+					note: string | null;
 				}[];
 				instructions: {
 					type: string;
@@ -45,10 +46,20 @@ export const recipesRouter = t.router({
 							type: string;
 							text?: string;
 						}[];
-						attrs: {
+						attrs?: {
 							id: string;
+							note?: string | null;
 						};
 					}[];
+				};
+				prelude: {
+					type: string;
+					content: {
+						type: string;
+					}[];
+					attrs?: {
+						[key: string]: any;
+					};
 				};
 			};
 
@@ -66,12 +77,17 @@ export const recipesRouter = t.router({
 				quantity: i.quantity,
 				food: i.food,
 				comments: JSON.stringify(i.comments),
+				note: i.note,
 			}));
 			const instructions = snapshot.instructions.content.map((i) => ({
-				id: i.attrs.id,
+				id: i.attrs?.id ?? cuid(),
+				note: i.attrs?.note ?? null,
 				type: i.type,
 				content: i.content?.reduce((text, i) => text + i.text ?? '', '') ?? '',
 			}));
+			const preludeSerialized = snapshot.prelude?.content?.length
+				? JSON.stringify(snapshot.prelude)
+				: null;
 
 			const saved = await prisma.publishedRecipe.upsert({
 				where: {
@@ -83,6 +99,8 @@ export const recipesRouter = t.router({
 				update: {
 					publishedAt: new Date(),
 					title: snapshot.title,
+					preludeSerialized,
+					unpublishedAt: null,
 				},
 				create: {
 					recipeId: input.recipeId,
@@ -90,6 +108,7 @@ export const recipesRouter = t.router({
 					title: snapshot.title,
 					publisherId: ctx.session.userId,
 					slug: cuid.slug(),
+					preludeSerialized,
 				},
 				include: {
 					ingredients: true,

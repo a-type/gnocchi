@@ -15,19 +15,29 @@ export const listContainer = style({
 
 export const item = style({
 	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space[2],
+	alignItems: 'stretch',
+	padding: vars.space[2],
+});
+
+export const itemMainLine = style({
+	display: 'flex',
 	flexDirection: 'row',
 	gap: vars.space[2],
 	alignItems: 'flex-start',
-	padding: vars.space[2],
 });
+
+export const itemNote = style({});
 
 export const itemText = style({
 	flex: 1,
 	minWidth: 40,
+	marginTop: 4,
 });
 
 export const dragHandle = style({
 	touchAction: 'none',
 	position: 'relative',
-	top: 4,
+	top: 8,
 });

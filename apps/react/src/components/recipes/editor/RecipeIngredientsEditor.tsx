@@ -25,6 +25,8 @@ import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { Formik } from 'formik';
 import * as classes from './RecipeIngredientsEditor.css.js';
+import { AddNoteIcon } from '@/components/icons/AddNoteIcon.jsx';
+import { NoteEditor } from './NoteEditor.jsx';
 
 export interface RecipeIngredientsEditorProps {
 	recipe: Recipe;
@@ -89,6 +91,10 @@ function RecipeIngredientItem({
 			id: ingredient.get('id'),
 		});
 
+	const addNote = () => {
+		ingredient.set('note', '');
+	};
+
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
@@ -101,13 +107,32 @@ function RecipeIngredientItem({
 			{...attributes}
 			style={style}
 		>
-			<DragHandleDots2Icon className={classes.dragHandle} {...listeners} />
+			<div className={classes.itemMainLine}>
+				<DragHandleDots2Icon className={classes.dragHandle} {...listeners} />
 
-			<span className={classes.itemText}>{ingredient.get('text')}</span>
-			<Button color="ghostDestructive" onClick={onDelete}>
-				<TrashIcon />
-			</Button>
+				<span className={classes.itemText}>{ingredient.get('text')}</span>
+				<Button color="ghost" onClick={addNote}>
+					<AddNoteIcon />
+				</Button>
+				<Button color="ghostDestructive" onClick={onDelete}>
+					<TrashIcon />
+				</Button>
+			</div>
+			<IngredientNote ingredient={ingredient} />
 		</div>
+	);
+}
+
+function IngredientNote({ ingredient }: { ingredient: RecipeIngredientsItem }) {
+	const { note } = hooks.useWatch(ingredient);
+
+	if (note === undefined || note === null) return null;
+
+	return (
+		<NoteEditor
+			value={note}
+			onChange={(value) => ingredient.set('note', value)}
+		/>
 	);
 }
 

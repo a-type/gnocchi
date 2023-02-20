@@ -1,7 +1,9 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { Recipe } from '@aglio/groceries-client';
+import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
 import { IngredientText } from './IngredientText.jsx';
+import { Box, Note, sprinkles } from '@aglio/ui';
+import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 
 export interface RecipeIngredientsViewerProps {
 	recipe: Recipe;
@@ -16,14 +18,39 @@ export const RecipeIngredientsViewer = forwardRef<
 	hooks.useWatch(ingredients);
 
 	return (
-		<ul ref={ref}>
+		<ul
+			ref={ref}
+			className={sprinkles({
+				pl: 4,
+			})}
+		>
 			{ingredients
 				.filter((i) => !!i)
 				.map((ingredient) => (
-					<li key={ingredient.get('id')}>
-						<IngredientText ingredient={ingredient} multiplier={multiplier} />
-					</li>
+					<IngredientViewerItem
+						key={ingredient.get('id')}
+						ingredient={ingredient}
+						multiplier={multiplier}
+					/>
 				))}
 		</ul>
 	);
 });
+
+function IngredientViewerItem({
+	ingredient,
+	multiplier,
+}: {
+	ingredient: RecipeIngredientsItem;
+	multiplier: number;
+}) {
+	return (
+		<li
+			className={sprinkles({
+				mb: 3,
+			})}
+		>
+			<RecipeIngredientViewer ingredient={ingredient} multiplier={multiplier} />
+		</li>
+	);
+}

@@ -3,6 +3,7 @@ import * as z from 'zod';
 import { scanWebRecipe } from '@aglio/scanning';
 import { isSubscribed } from '@aglio/auth';
 import { TRPCError } from '@trpc/server';
+import { prisma } from '@aglio/prisma';
 
 export const scansRouter = t.router({
 	recipe: t.procedure
@@ -12,13 +13,45 @@ export const scansRouter = t.router({
 			}),
 		)
 		.query(async ({ ctx, input: { url } }) => {
-			const ok = await isSubscribed(ctx.session);
-			if (!ok) {
-				throw new TRPCError({
-					code: 'FORBIDDEN',
+			if (url.startsWith(ctx.deployedContext.hubHost)) {
+				const slugBase = url.split('/').pop();
+				if (!slugBase) {
+					throw new TRPCError({
+						code: 'BAD_REQUEST',
+						message: 'Invalid recipe URL',
+					});
+				}
+				const slug = slugBase.split('-').pop();
+				const recipe = await prisma.publishedRecipe.findUnique({
+					where: { slug },
+					include: {
+						ingredients: true,
+						instructions: true,
+					},
 				});
+				if (!recipe) {
+					throw new TRPCError({
+						code: 'NOT_FOUND',
+						message: 'Recipe not found',
+					});
+				}
+				return {
+					type: 'hub',
+					data: recipe,
+					url,
+				} as const;
+			} else {
+				const ok = await isSubscribed(ctx.session);
+				if (!ok) {
+					throw new TRPCError({
+						code: 'FORBIDDEN',
+					});
+				}
+				const result = await scanWebRecipe(url);
+				return {
+					type: 'web',
+					data: result,
+				} as const;
 			}
-			const result = await scanWebRecipe(url);
-			return result;
 		}),
 });

@@ -1,0 +1,73 @@
+diff --git a/dist/packages/react/src/Editor.d.ts b/dist/packages/react/src/Editor.d.ts
+index ee8843241a25d200b329b978a98d63807fbc6f52..10af4a3b38dd1b11099b30d014a1695873a0b04e 100644
+--- a/dist/packages/react/src/Editor.d.ts
++++ b/dist/packages/react/src/Editor.d.ts
+@@ -1,7 +1,7 @@
+ import { Editor as CoreEditor } from '@tiptap/core';
+ import React from 'react';
+-import { EditorContentProps, EditorContentState } from './EditorContent';
+-import { ReactRenderer } from './ReactRenderer';
++import { EditorContentProps, EditorContentState } from './EditorContent.js';
++import { ReactRenderer } from './ReactRenderer.js';
+ declare type ContentComponent = React.Component<EditorContentProps, EditorContentState> & {
+     setRenderer(id: string, renderer: ReactRenderer): void;
+     removeRenderer(id: string): void;
+diff --git a/dist/packages/react/src/EditorContent.d.ts b/dist/packages/react/src/EditorContent.d.ts
+index 15a8e232a0c4da1eba590a0b25bf7b6b7dd5a06d..b5f7487850805f850bbfaf5a1834bc4b34c591f0 100644
+--- a/dist/packages/react/src/EditorContent.d.ts
++++ b/dist/packages/react/src/EditorContent.d.ts
+@@ -1,6 +1,6 @@
+ import React, { HTMLProps } from 'react';
+-import { Editor } from './Editor';
+-import { ReactRenderer } from './ReactRenderer';
++import { Editor } from './Editor.js';
++import { ReactRenderer } from './ReactRenderer.js';
+ export interface EditorContentProps extends HTMLProps<HTMLDivElement> {
+     editor: Editor | null;
+ }
+diff --git a/dist/packages/react/src/ReactRenderer.d.ts b/dist/packages/react/src/ReactRenderer.d.ts
+index 52bf20fad8b141b7be4a98074a97375ceed5bfeb..11052d003372373e1763f40c811b727bbb75ab6e 100644
+--- a/dist/packages/react/src/ReactRenderer.d.ts
++++ b/dist/packages/react/src/ReactRenderer.d.ts
+@@ -1,6 +1,6 @@
+ import { Editor } from '@tiptap/core';
+ import React from 'react';
+-import { Editor as ExtendedEditor } from './Editor';
++import { Editor as ExtendedEditor } from './Editor.js';
+ export interface ReactRendererOptions {
+     editor: Editor;
+     props?: Record<string, any>;
+diff --git a/dist/packages/react/src/index.d.ts b/dist/packages/react/src/index.d.ts
+index c5109e270d61dd65940befbd8ce29dcb06332f6c..f876b84f0961f827eb534d1e11d61e835261d9a8 100644
+--- a/dist/packages/react/src/index.d.ts
++++ b/dist/packages/react/src/index.d.ts
+@@ -1,10 +1,10 @@
+-export * from './BubbleMenu';
+-export { Editor } from './Editor';
+-export * from './EditorContent';
+-export * from './FloatingMenu';
+-export * from './NodeViewContent';
+-export * from './NodeViewWrapper';
+-export * from './ReactNodeViewRenderer';
+-export * from './ReactRenderer';
+-export * from './useEditor';
++export * from './BubbleMenu.js';
++export { Editor } from './Editor.js';
++export * from './EditorContent.js';
++export * from './FloatingMenu.js';
++export * from './NodeViewContent.js';
++export * from './NodeViewWrapper.js';
++export * from './ReactNodeViewRenderer.js';
++export * from './ReactRenderer.js';
++export * from './useEditor.js';
+ export * from '@tiptap/core';
+diff --git a/dist/packages/react/src/useEditor.d.ts b/dist/packages/react/src/useEditor.d.ts
+index 7a8bbe468d57dca1b5091fabba6e9781a3496f51..76c86da161b8773aa1aa47cddb3ec27f74c2046f 100644
+--- a/dist/packages/react/src/useEditor.d.ts
++++ b/dist/packages/react/src/useEditor.d.ts
+@@ -1,4 +1,4 @@
+ import { EditorOptions } from '@tiptap/core';
+ import { DependencyList } from 'react';
+-import { Editor } from './Editor';
++import { Editor } from './Editor.js';
+ export declare const useEditor: (options?: Partial<EditorOptions>, deps?: DependencyList) => Editor | null;

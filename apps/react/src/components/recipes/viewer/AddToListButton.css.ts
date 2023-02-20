@@ -14,9 +14,12 @@ export const checklist = style({
 export const item = style({
 	display: 'flex',
 	flexDirection: 'row',
-	alignItems: 'center',
+	alignItems: 'flex-start',
 	gap: vars.space[2],
 });
+
+export const itemContent = style({});
+
 export const actions = style({
 	display: 'flex',
 	flexDirection: 'row',

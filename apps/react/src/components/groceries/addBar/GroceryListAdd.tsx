@@ -9,14 +9,13 @@ import {
 } from 'react';
 import { groceries, hooks } from '@/stores/groceries/index.js';
 import { isUrl } from '@aglio/tools';
-import { Popover, PopoverAnchor, PopoverContent } from '@aglio/ui';
+import { Popover, PopoverAnchor, PopoverContent, useSize } from '@aglio/ui';
 import {
 	default as Downshift,
 	useCombobox,
 	UseComboboxState,
 	UseComboboxStateChangeOptions,
 } from 'downshift';
-import { useSize } from '@/hooks/useSize.js';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import * as classes from './GroceryListAdd.css.js';
 import { clsx } from 'clsx';
