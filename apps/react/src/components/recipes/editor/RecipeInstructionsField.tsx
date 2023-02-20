@@ -52,8 +52,8 @@ function Toolbar({ editor }: { editor: Editor }) {
 			align="center"
 			position="sticky"
 			zIndex="menu"
-			style={{ top: 38 }}
-			background="white"
+			style={{ top: 44, zIndex: 1 }}
+			background="light"
 		>
 			<Button
 				color="ghost"

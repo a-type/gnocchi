@@ -35,13 +35,18 @@ export function RecipeEditor({ slug }: RecipeEditorProps) {
 	return <RecipeEditorContent recipe={recipe} />;
 }
 
+const fixedAreaStyle = { zIndex: 10 };
+
 function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	return (
 		<Box direction="column" gap={8}>
+			<PageFixedArea
+				className={sprinkles({ px: 0, py: 1 })}
+				style={fixedAreaStyle}
+			>
+				<RecipeEditActions />
+			</PageFixedArea>
 			<Box direction="column" gap={2}>
-				<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
-					<RecipeEditActions />
-				</PageFixedArea>
 				<TitleAndImageLayout>
 					<TitleContainer>
 						<RecipeTitleField recipe={recipe} />
