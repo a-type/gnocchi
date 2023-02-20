@@ -13,6 +13,7 @@ import {
 	DialogTrigger,
 	P,
 	TextLink,
+	sprinkles,
 } from '@aglio/ui';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -133,14 +134,18 @@ function UnpublishedContent({
 					<Checkbox
 						checked={consent}
 						onCheckedChange={(c) => setConsent(c !== false)}
+						id="publish-consent"
 					/>
-					<P size="xs">
+					<label
+						htmlFor="publish-consent"
+						className={sprinkles({ fontSize: 'xs' })}
+					>
 						I confirm that I own and have the right to publish this recipe, in
 						accordance with the{' '}
 						<TextLink href="https://www.aglio.com/terms" target="_blank">
 							Aglio Terms of Service
 						</TextLink>
-					</P>
+					</label>
 				</Box>
 			</Box>
 			<DialogActions>
