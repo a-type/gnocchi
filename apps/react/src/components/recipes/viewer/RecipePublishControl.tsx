@@ -1,7 +1,20 @@
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
-import { Box, Button } from '@aglio/ui';
+import {
+	Box,
+	Button,
+	Checkbox,
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+	P,
+	TextLink,
+} from '@aglio/ui';
+import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 export interface RecipePublishControlProps {
@@ -19,24 +32,35 @@ export function RecipePublishControl({ recipeId }: RecipePublishControlProps) {
 	if (!enabled || !isSubscribed) return null;
 
 	if (isLoading) {
-		return <Button disabled>Publish</Button>;
+		return (
+			<Button size="small" disabled>
+				Publish
+			</Button>
+		);
 	}
 
-	if (data) {
-		return (
-			<PublishedButton
-				recipeId={recipeId}
-				publishedAt={data.publishedAt}
-				onChange={refetch}
-				url={data.url}
-			/>
-		);
-	} else {
-		return <UnpublishedButton recipeId={recipeId} onChange={refetch} />;
-	}
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button color={data ? 'accent' : 'default'} size="small">
+					{data ? 'Published' : 'Publish'}
+				</Button>
+			</DialogTrigger>
+			{data ? (
+				<PublishedContent
+					recipeId={recipeId}
+					publishedAt={data.publishedAt}
+					onChange={refetch}
+					url={data.url}
+				/>
+			) : (
+				<UnpublishedContent recipeId={recipeId} onChange={refetch} />
+			)}
+		</Dialog>
+	);
 }
 
-function PublishedButton({
+function PublishedContent({
 	recipeId,
 	publishedAt,
 	onChange,
@@ -52,55 +76,94 @@ function PublishedButton({
 	});
 
 	return (
-		<Box direction="column" gap={2} align="flex-start">
-			<a href={url} target="_blank">
+		<DialogContent>
+			<DialogTitle>Manage publication</DialogTitle>
+			<P>
 				Published {new Date(publishedAt).toLocaleDateString()}
-			</a>
-			<Button
-				color="destructive"
-				onClick={async () => {
-					try {
-						await unpublish.mutateAsync({
-							recipeId,
-						});
-					} catch (err) {
-						console.error(err);
-						toast.error('Failed to unpublish recipe');
-					}
-				}}
-			>
-				Unpublish
-			</Button>
-		</Box>
+				<span>&nbsp;&nbsp;</span>
+				<TextLink href={url} target="_blank">
+					View on the web
+				</TextLink>
+			</P>
+			<DialogActions>
+				<DialogClose asChild>
+					<Button>Close</Button>
+				</DialogClose>
+				<Button
+					color="destructive"
+					onClick={async () => {
+						try {
+							await unpublish.mutateAsync({
+								recipeId,
+							});
+						} catch (err) {
+							console.error(err);
+							toast.error('Failed to unpublish recipe');
+						}
+					}}
+				>
+					Unpublish
+				</Button>
+			</DialogActions>
+		</DialogContent>
 	);
 }
 
-function UnpublishedButton({
+function UnpublishedContent({
 	recipeId,
 	onChange,
 }: {
 	recipeId: string;
 	onChange?: () => void;
 }) {
+	const [consent, setConsent] = useState(false);
 	const publish = trpc.recipes.publish.useMutation({
 		onSuccess: onChange,
 	});
 
 	return (
-		<Button
-			color="default"
-			onClick={async () => {
-				try {
-					await publish.mutateAsync({
-						recipeId,
-					});
-				} catch (err) {
-					console.error(err);
-					toast.error('Failed to publish recipe');
-				}
-			}}
-		>
-			Publish
-		</Button>
+		<DialogContent>
+			<DialogTitle>Publish your recipe</DialogTitle>
+			<Box direction="column" gap={4}>
+				<P>
+					Published recipes can be shared with others on the web. You retain
+					full rights to your recipe and can unpublish anytime
+				</P>
+				<Box direction="row" align="flex-start" gap={2}>
+					<Checkbox
+						checked={consent}
+						onCheckedChange={(c) => setConsent(c !== false)}
+					/>
+					<P size="xs">
+						I affirm that I own and have the right to publish this recipe, in
+						conformity with the{' '}
+						<a href="https://www.aglio.com/terms" target="_blank">
+							Aglio Terms of Service
+						</a>
+					</P>
+				</Box>
+			</Box>
+			<DialogActions>
+				<DialogClose asChild>
+					<Button>Cancel</Button>
+				</DialogClose>
+				<Button
+					color="primary"
+					disabled={!consent}
+					onClick={async () => {
+						try {
+							await publish.mutateAsync({
+								recipeId,
+							});
+						} catch (err) {
+							console.error(err);
+							toast.error('Failed to publish recipe');
+						}
+					}}
+				>
+					Publish
+				</Button>
+			</DialogActions>
+		</DialogContent>
 	);
 }

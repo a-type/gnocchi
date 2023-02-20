@@ -31,7 +31,10 @@ export function FirstTimeScanOnboarding() {
 			<H2>This is your copy!</H2>
 			<P>Feel free to make changes, add notes, etc.</P>
 			<H3>Get ready for grocery day</H3>
-			<P>Tap the button below to add it to your grocery list.</P>
+			<P>
+				Tap the button below to add this recipe's ingredients to your grocery
+				list.
+			</P>
 			<Box>
 				<Button align="end" onClick={() => setShow(false)}>
 					Got it!

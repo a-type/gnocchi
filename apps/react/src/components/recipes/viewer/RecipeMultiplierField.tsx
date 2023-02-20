@@ -12,6 +12,7 @@ export function RecipeMultiplierField({ recipe }: RecipeMultiplierFieldProps) {
 		<MultiplierStepper
 			value={multiplier}
 			onChange={(val) => recipe.set('multiplier', val)}
+			highlightChange
 		/>
 	);
 }

@@ -29,6 +29,7 @@ import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 import { RecipePreludeViewer } from './RecipePreludeViewer.jsx';
 import { FirstTimeScanOnboarding } from './FirstTimeScanOnboarding.jsx';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
+import { RecipeTagsEditor } from '../editor/RecipeTagsEditor.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -49,6 +50,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 
 	return (
 		<Box direction="column" gap={6} align="flex-start" width="full">
+			<FirstTimeScanOnboarding />
 			<TitleAndImageLayout>
 				<TitleContainer>
 					<Box
@@ -69,11 +71,10 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							<p className={sprinkles({ m: 0, flex: 1 })}>
 								Created on {format(createdAt, 'LLL do, yyyy')}
 							</p>
-							<RecipeViewerEditButton
-								recipe={recipe}
-								className={sprinkles({ ml: 4 })}
-								color="primary"
-							/>
+							<Box direction="row" gap={1}>
+								<RecipePublishControl recipeId={recipe.get('id')} />
+								<RecipeViewerEditButton recipe={recipe} color="primary" />
+							</Box>
 						</Box>
 						{url && (
 							<a
@@ -86,6 +87,17 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							</a>
 						)}
 					</Box>
+					<Box
+						width="auto"
+						alignSelf="flex-start"
+						gap={2}
+						direction="row"
+						align="center"
+					>
+						<RecipeMultiplierField recipe={recipe} />
+						<AddToListButton recipe={recipe} />
+					</Box>
+					<RecipeTagsEditor className={sprinkles({ mt: 3 })} recipe={recipe} />
 				</TitleContainer>
 				{mainImage && (
 					<ImageContainer>
@@ -93,19 +105,6 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					</ImageContainer>
 				)}
 			</TitleAndImageLayout>
-			<RecipePublishControl recipeId={recipe.get('id')} />
-			<RecipeTagsViewer recipe={recipe} />
-			<FirstTimeScanOnboarding />
-			<Box
-				width="auto"
-				alignSelf="flex-start"
-				gap={2}
-				direction="row"
-				align="center"
-			>
-				<RecipeMultiplierField recipe={recipe} />
-				<AddToListButton recipe={recipe} />
-			</Box>
 			<PreludeSection recipe={recipe} />
 			<div>
 				<H2 gutterBottom>Ingredients</H2>

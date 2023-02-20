@@ -21,17 +21,18 @@ import * as classes from './RecipeTagsEditor.css.js';
 
 export interface RecipeTagsEditorProps {
 	recipe: Recipe;
+	className?: string;
 }
 
 // shows a list of applied tags with X buttons and a dropdown at the end
 // which allows you to add a new tag
-export function RecipeTagsEditor({ recipe }: RecipeTagsEditorProps) {
+export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 	const { tags } = hooks.useWatch(recipe);
 	hooks.useWatch(tags);
 	const removeTag = (name: string) => tags.removeAll(name);
 
 	return (
-		<div className={classes.root}>
+		<div className={classnames(classes.root, className)}>
 			<H2>Tags</H2>
 			<div className={classes.list}>
 				{tags?.map((tag) => (
@@ -39,7 +40,7 @@ export function RecipeTagsEditor({ recipe }: RecipeTagsEditorProps) {
 						<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
 					</Suspense>
 				))}
-				<TagAdd recipe={recipe} />
+				<TagAdd recipe={recipe} empty={tags?.length === 0} />
 			</div>
 		</div>
 	);
@@ -73,7 +74,15 @@ function TagDisplay({
 	);
 }
 
-function TagAdd({ recipe, onAdd }: { recipe: Recipe; onAdd?: () => void }) {
+function TagAdd({
+	recipe,
+	onAdd,
+	empty,
+}: {
+	recipe: Recipe;
+	onAdd?: () => void;
+	empty?: boolean;
+}) {
 	const [open, setOpen] = useState(false);
 	const addTag = (tagName: string | null) => {
 		if (tagName === null) return;
@@ -90,6 +99,7 @@ function TagAdd({ recipe, onAdd }: { recipe: Recipe; onAdd?: () => void }) {
 			<PopoverTrigger asChild>
 				<Button size="small">
 					<PlusIcon />
+					<span>{empty && 'Add tag'}</span>
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className={classes.popover}>

@@ -5,5 +5,5 @@ export const root = style({
 	fontWeight: 'bold',
 	cursor: 'pointer',
 	fontSize: 'inherit',
-	color: vars.colors.primaryDarker,
+	color: vars.colors.gray90,
 });

@@ -1,7 +1,7 @@
 import { sprinkles } from '../../styles/sprinkles.css.js';
 import { vars } from '../../theme.css.js';
-import { createVar, style, styleVariants } from '@vanilla-extract/css';
-import { recipe, RecipeVariants } from '@vanilla-extract/recipes';
+import { createVar } from '@vanilla-extract/css';
+import { recipe } from '@vanilla-extract/recipes';
 
 const bgVar = createVar('button-bg');
 const hoverVar = createVar('button-hover');
@@ -29,6 +29,7 @@ export const root = recipe({
 			fontWeight: 'bold',
 			display: 'flex',
 			flexDirection: 'row',
+			gap: vars.space[1],
 			alignItems: 'center',
 			position: 'relative',
 			overflow: 'visible',
