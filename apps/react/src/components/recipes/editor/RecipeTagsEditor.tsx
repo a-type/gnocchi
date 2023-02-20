@@ -99,7 +99,7 @@ function TagAdd({
 			<PopoverTrigger asChild>
 				<Button size="small">
 					<PlusIcon />
-					<span>{empty && 'Add tag'}</span>
+					{empty && <span>Add tag</span>}
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className={classes.popover}>
