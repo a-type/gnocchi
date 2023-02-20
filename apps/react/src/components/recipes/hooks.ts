@@ -112,14 +112,18 @@ function useSyncedEditor(
 	useEffect(() => {
 		if (editor && !editor.isDestroyed && field) {
 			updatingRef.current = true;
+			const { from, to } = editor.state.selection;
 			editor.commands.setContent(field.getSnapshot(), false);
+			editor.commands.setTextSelection({ from, to });
 			updatingRef.current = false;
 		}
 
 		return field?.subscribe('changeDeep', (target, info) => {
 			if (!info.isLocal || target === field) {
 				updatingRef.current = true;
+				const { from, to } = editor.state.selection;
 				editor?.commands.setContent(field.getSnapshot(), false);
+				editor?.commands?.setTextSelection({ from, to });
 				updatingRef.current = false;
 			}
 		});
