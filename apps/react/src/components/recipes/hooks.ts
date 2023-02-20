@@ -6,7 +6,7 @@ import {
 } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
 import { ExtensionConfig, useEditor } from '@tiptap/react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import { useDebouncedCallback } from '@/hooks/useDebouncedCallback.js';
 import StarterKit from '@tiptap/starter-kit';
@@ -74,22 +74,25 @@ function useSyncedEditor(
 	const live = hooks.useWatch(recipe);
 	const field = live[fieldName] as ObjectEntity<any, any>;
 	const updatingRef = useRef(false);
-	const update = useDebouncedCallback((editor) => {
-		if (updatingRef.current) {
-			return;
-		}
+	const update = useCallback(
+		(editor) => {
+			if (updatingRef.current) {
+				return;
+			}
 
-		const newData = editor.getJSON();
-		const value = recipe.get(fieldName);
-		if (!value) {
-			recipe.set(fieldName, newData);
-		} else {
-			value.update(newData, {
-				merge: false,
-				replaceSubObjects: false,
-			});
-		}
-	}, 300);
+			const newData = editor.getJSON();
+			const value = recipe.get(fieldName);
+			if (!value) {
+				recipe.set(fieldName, newData);
+			} else {
+				value.update(newData, {
+					merge: false,
+					replaceSubObjects: false,
+				});
+			}
+		},
+		[recipe],
+	);
 
 	const editor = useEditor(
 		{
