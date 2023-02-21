@@ -20,7 +20,7 @@
 		"@aws-sdk/client-s3": "^3.267.0",
 		"@aws-sdk/lib-storage": "^3.267.0",
 		"@lo-fi/common": "^1.10.2",
-		"@lo-fi/server": "^1.7.2",
+		"@lo-fi/server": "^1.7.3",
 		"@prisma/client": "^4.0.0",
 		"@trpc/server": "^10.5.0",
 		"@types/better-sqlite3": "^7.6.0",
