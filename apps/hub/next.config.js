@@ -30,6 +30,9 @@ const nextConfig = {
 		// '@aglio/prisma',
 		'@aglio/trpc',
 	],
+	images: {
+		domains: ['localhost', 's3.amazonaws.com'],
+	},
 };
 
 // export default withVanillaExtract(nextConfig);

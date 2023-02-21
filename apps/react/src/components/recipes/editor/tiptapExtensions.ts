@@ -4,8 +4,7 @@ import Document from '@tiptap/extension-document';
 import { Recipe } from '@aglio/groceries-client';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import { InstructionStepNodeView } from './InstructionStepNodeView.jsx';
-// @ts-ignore
-import { Plugin, PluginKey } from 'prosemirror-state';
+import { Plugin, PluginKey } from '@tiptap/pm/state';
 import cuid from 'cuid';
 
 declare module '@tiptap/core' {

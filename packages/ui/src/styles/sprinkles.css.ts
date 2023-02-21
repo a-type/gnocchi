@@ -187,6 +187,7 @@ const unresponsiveProperties = defineProperties({
 		fontFamily: vars.fonts,
 		fontStyle: ['normal', 'italic'],
 		textDecoration: ['none', 'underline', 'line-through'],
+		boxShadow: vars.shadows,
 	},
 	shorthands: {
 		inset: ['top', 'bottom', 'left', 'right'],

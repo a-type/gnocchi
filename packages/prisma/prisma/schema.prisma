@@ -176,11 +176,11 @@ model PublishedRecipe {
   title         String
   version       Int       @default(1)
 
-  ingredients       PublishedRecipeIngredient[]
-  instructions      PublishedRecipeInstruction[]
-  preludeSerialized String?                      @map("prelude_serialized")
-  mainImageUrl      String?                      @map("main_image_url")
-  publisher         Profile?                     @relation(fields: [publisherId], references: [id])
+  ingredients            PublishedRecipeIngredient[]
+  preludeSerialized      String?                     @map("prelude_serialized")
+  mainImageUrl           String?                     @map("main_image_url")
+  instructionsSerialized String?                     @map("instructions_serialized")
+  publisher              Profile?                    @relation(fields: [publisherId], references: [id])
 
   @@unique([recipeId, libraryId])
   @@map("published_recipes")
@@ -202,18 +202,4 @@ model PublishedRecipeIngredient {
   index Int
 
   @@map("published_recipe_ingredients")
-}
-
-model PublishedRecipeInstruction {
-  id                String          @id @default(cuid())
-  publishedRecipeId String          @map("published_recipe_id")
-  publishedRecipe   PublishedRecipe @relation(fields: [publishedRecipeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  type    String
-  content String
-  note    String?
-
-  index Int
-
-  @@map("published_recipe_instructions")
 }

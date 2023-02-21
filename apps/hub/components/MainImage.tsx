@@ -1,0 +1,23 @@
+import classNames from 'classnames';
+import * as classes from './MainImage.css.js';
+import Image from 'next/image';
+import { TopLineImage } from './layout.jsx';
+
+export interface MainImageProps {
+	url: string;
+	title: string;
+}
+
+export function MainImage({ url, title }: MainImageProps) {
+	return (
+		<TopLineImage className={classes.root}>
+			<Image
+				src={url}
+				fill
+				itemProp="image"
+				className="u-photo"
+				alt={`A photo of ${title}`}
+			/>
+		</TopLineImage>
+	);
+}

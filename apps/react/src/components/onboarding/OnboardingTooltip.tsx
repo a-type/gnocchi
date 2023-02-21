@@ -7,9 +7,10 @@ import {
 	PopoverContent,
 	leekTheme,
 } from '@aglio/ui';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import * as classes from './OnboardingTooltip.css.js';
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 export interface OnboardingTooltipProps<O extends Onboarding<any>> {
 	onboarding: O;
@@ -18,6 +19,8 @@ export interface OnboardingTooltipProps<O extends Onboarding<any>> {
 	className?: string;
 	disableNext?: boolean;
 	content: ReactNode;
+	/** Pass a filter to ignore interactions for auto-next */
+	ignoreOutsideInteraction?: (target: HTMLElement) => boolean;
 }
 
 export const OnboardingTooltip = function OnboardingTooltip<
@@ -29,34 +32,46 @@ export const OnboardingTooltip = function OnboardingTooltip<
 	className,
 	disableNext,
 	content,
+	ignoreOutsideInteraction,
 }: OnboardingTooltipProps<O>) {
-	const skip = onboarding.useSkip();
 	const [show, next, isLast] = onboarding.useStep(step);
 
+	// delay
+	const [delayedOpen, setDelayedOpen] = useState(false);
+	useEffect(() => {
+		if (show) {
+			const timeout = setTimeout(() => {
+				setDelayedOpen(true);
+			}, 500);
+			return () => clearTimeout(timeout);
+		}
+	}, [show]);
+
 	return (
-		<Popover
-			open={show}
-			modal={false}
-			onOpenChange={(open) => {
-				if (show && !open) {
-					next();
-				}
-			}}
-		>
+		<Popover open={delayedOpen && show} modal={false}>
 			<PopoverAnchor asChild>{children}</PopoverAnchor>
 			<PopoverContent
 				disableBlur
 				className={classNames(leekTheme, classes.content)}
+				onInteractOutside={(event) => {
+					// if the user interacts outside the popover,
+					// and it's with anything besides a button or input,
+					// go to the next step
+					const target = event.target as HTMLElement;
+					if (!ignoreOutsideInteraction || !ignoreOutsideInteraction(target)) {
+						next();
+					}
+				}}
 			>
 				<PopoverArrow className={classes.arrow} />
-				<div>{content}</div>
-				{!disableNext && (
-					<div className={classes.buttons}>
-						<Button color="primary" onClick={next}>
-							{isLast ? 'Finish' : 'Next'}
+				<div className={classes.innerContent}>
+					{content}
+					{!disableNext && (
+						<Button color={isLast ? 'primary' : 'ghost'} onClick={next}>
+							{isLast ? 'Finish' : <Cross2Icon />}
 						</Button>
-					</div>
-				)}
+					)}
+				</div>
 			</PopoverContent>
 		</Popover>
 	);

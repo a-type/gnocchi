@@ -85,12 +85,7 @@ export const recipesRouter = t.router({
 				comments: JSON.stringify(i.comments),
 				note: i.note,
 			}));
-			const instructions = snapshot.instructions.content.map((i) => ({
-				id: i.attrs?.id ?? cuid(),
-				note: i.attrs?.note ?? null,
-				type: i.type,
-				content: i.content?.reduce((text, i) => text + i.text ?? '', '') ?? '',
-			}));
+			const instructions = snapshot.instructions;
 			const preludeSerialized = snapshot.prelude?.content?.length
 				? JSON.stringify(snapshot.prelude)
 				: null;
@@ -108,6 +103,7 @@ export const recipesRouter = t.router({
 					preludeSerialized,
 					unpublishedAt: null,
 					mainImageUrl: snapshot.mainImage?.url ?? null,
+					instructionsSerialized: JSON.stringify(instructions),
 				},
 				create: {
 					recipeId: input.recipeId,
@@ -117,16 +113,13 @@ export const recipesRouter = t.router({
 					slug: cuid.slug(),
 					preludeSerialized,
 					mainImageUrl: snapshot.mainImage?.url ?? null,
+					instructionsSerialized: JSON.stringify(instructions),
 				},
 				include: {
 					ingredients: true,
-					instructions: true,
 				},
 			});
 
-			const instructonsToDelete = saved.instructions
-				.filter((i) => !instructions.some((i2) => i2.id === i.id))
-				.map((i) => i.id);
 			const ingredientsToDelete = saved.ingredients
 				.filter((i) => !ingredients.some((i2) => i2.id === i.id))
 				.map((i) => i.id);
@@ -144,25 +137,6 @@ export const recipesRouter = t.router({
 							publishedRecipeId: saved.id,
 							index,
 						},
-					}),
-				),
-				...instructions.map((i, index) =>
-					prisma.publishedRecipeInstruction.upsert({
-						where: { id: i.id },
-						update: {
-							...i,
-							index,
-						},
-						create: {
-							...i,
-							publishedRecipeId: saved.id,
-							index,
-						},
-					}),
-				),
-				...instructonsToDelete.map((i) =>
-					prisma.publishedRecipeInstruction.delete({
-						where: { id: i },
 					}),
 				),
 				...ingredientsToDelete.map((i) =>

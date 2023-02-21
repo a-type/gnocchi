@@ -2,6 +2,10 @@ import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const root = style({
+	width: '100%',
+});
+
+export const content = style({
 	display: 'flex',
 	flexDirection: 'column',
 	width: '100%',
@@ -14,5 +18,6 @@ export const root = style({
 
 export const buttons = style({
 	display: 'flex',
-	justifyContent: 'space-between',
+	justifyContent: 'flex-end',
+	gap: vars.space[3],
 });

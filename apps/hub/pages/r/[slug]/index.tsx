@@ -12,6 +12,7 @@ import {
 	Note,
 	PageFixedArea,
 	Button,
+	Divider,
 } from '@aglio/ui';
 import { trpc } from '@/lib/tprc';
 import {
@@ -27,6 +28,8 @@ import { Instructions } from '@/components/Instructions';
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
 import { Prelude } from '@/components/Prelude';
 import Head from 'next/head';
+import { MainImage } from '@/components/MainImage';
+import { TopLineRoot, TopLineTitle } from '@/components/layout';
 
 export default function RecipePage({
 	data,
@@ -62,20 +65,26 @@ export default function RecipePage({
 						itemType="https://schema.org/Recipe"
 						className="h-recipe"
 					>
-						<Box mb={6}>
-							<H1 itemProp="name" className="p-name">
-								{data.title}
-							</H1>
-							<P itemProp="author" className="p-author">
-								Published by {data.publisher?.fullName ?? 'Anonymous'}
-							</P>
-						</Box>
+						<TopLineRoot>
+							{data.mainImageUrl && (
+								<MainImage url={data.mainImageUrl} title={data.title} />
+							)}
+							<TopLineTitle>
+								<H1 itemProp="name" className="p-name">
+									{data.title}
+								</H1>
+								<P itemProp="author" className="p-author">
+									Published by {data.publisher?.fullName ?? 'Anonymous'}
+								</P>
+							</TopLineTitle>
+						</TopLineRoot>
 						{data.prelude && (
-							<Box mb={6}>
+							<Box>
 								<Prelude content={data.prelude} />
 							</Box>
 						)}
-						<Box mb={6}>
+						<Divider />
+						<Box mb={4} mt={4}>
 							<H2 gutterBottom>Ingredients</H2>
 							<IngredientList>
 								{data.ingredients.map((ingredient) => (
@@ -88,19 +97,37 @@ export default function RecipePage({
 								))}
 							</IngredientList>
 						</Box>
-						<Box mb={12}>
+						<Divider />
+						<Box mb={12} mt={4}>
 							<H2 gutterBottom>Instructions</H2>
 							<Instructions instructions={data.instructions} />
 						</Box>
 						<PageFixedArea
-							style={{ bottom: 16, top: 'auto', marginBottom: 16 }}
+							className={sprinkles({
+								display: 'flex',
+								flexDirection: 'row',
+								justifyContent: 'flex-end',
+							})}
+							style={{
+								bottom: 16,
+								top: 'auto',
+								marginBottom: 16,
+								background: 'transparent',
+							}}
 						>
 							<a
 								href={`${
 									process.env.NEXT_APP_GROCERIES_HOST
 								}?recipeUrl=${encodeURIComponent(url)}&hub=true`}
 							>
-								<Button color="primary">Save to your Collection</Button>
+								<Button
+									color="primary"
+									className={sprinkles({
+										boxShadow: 'lg',
+									})}
+								>
+									Save to your Collection
+								</Button>
 							</a>
 						</PageFixedArea>
 						<P size="xs" className={sprinkles({ color: 'gray70' })}>

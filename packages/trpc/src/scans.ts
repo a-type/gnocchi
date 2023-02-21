@@ -26,7 +26,6 @@ export const scansRouter = t.router({
 					where: { slug },
 					include: {
 						ingredients: true,
-						instructions: true,
 					},
 				});
 				if (!recipe) {

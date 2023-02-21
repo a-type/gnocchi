@@ -39,6 +39,7 @@ import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 import { groceriesState } from './state.js';
 import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
+import { SubscribeButton } from '../sync/SubscribeButton.jsx';
 
 export interface GroceryListProps {
 	className?: string;
@@ -71,7 +72,9 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 					<P>Sync between devices and other members of your household,</P>
 					<P>collaborate in real time while shopping or cooking,</P>
 					<P>and make copies of recipes from anywhere on the web.</P>
-					<P>All just $3/month!</P>
+					<Box direction="row">
+						<SubscribeButton />
+					</Box>
 				</OnboardingBanner>
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />

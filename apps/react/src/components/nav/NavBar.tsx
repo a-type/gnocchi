@@ -154,7 +154,6 @@ function GroceriesNavBarLink({ active }: { active: boolean }) {
 			content={<div>You'll find your groceries here.</div>}
 			onboarding={saveHubRecipeOnboarding}
 			step="viewList"
-			disableNext
 		>
 			<NavBarLink
 				to="/"

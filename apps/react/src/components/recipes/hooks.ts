@@ -8,7 +8,6 @@ import { hooks } from '@/stores/groceries/index.js';
 import { ExtensionConfig, useEditor } from '@tiptap/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
-import { useDebouncedCallback } from '@/hooks/useDebouncedCallback.js';
 import StarterKit from '@tiptap/starter-kit';
 
 export function useRecipeFromSlugUrl(url: string) {

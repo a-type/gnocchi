@@ -7,6 +7,7 @@ import {
 	Recipe,
 	RecipeIngredientsItemInit,
 	RecipeIngredients,
+	RecipeInit,
 } from '@aglio/groceries-client';
 import { groceriesDescriptor } from './index.js';
 import { generateJSON } from '@tiptap/html';
@@ -34,7 +35,7 @@ export async function addIngredients(
 	}
 }
 
-async function getScannedRecipe(url: string) {
+async function getScannedRecipe(url: string): Promise<RecipeInit> {
 	try {
 		const scanResult = await trpcClient.scans.recipe.query({
 			url,
@@ -105,22 +106,12 @@ async function getScannedRecipe(url: string) {
 				url: scanResult.url,
 				title: scanned.title,
 				ingredients,
-				instructions: {
-					type: 'doc',
-					content: scanned.instructions.map((i) => ({
-						type: i.type,
-						content: [
-							{
-								type: 'text',
-								text: i.content,
-							},
-						],
-						attrs: {
-							id: i.id,
-							note: i.note,
-						},
-					})),
-				},
+				instructions: scanned.instructionsSerialized
+					? JSON.parse(scanned.instructionsSerialized)
+					: undefined,
+				prelude: scanned.preludeSerialized
+					? JSON.parse(scanned.preludeSerialized)
+					: undefined,
 			};
 		} else {
 			throw new Error('Unrecognized scan result type');

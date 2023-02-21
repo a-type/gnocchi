@@ -60,15 +60,9 @@ export const hubRouter = t.router({
 							note: true,
 						},
 					},
-					instructions: {
-						select: {
-							id: true,
-							type: true,
-							content: true,
-							note: true,
-						},
-					},
 					preludeSerialized: true,
+					instructionsSerialized: true,
+					mainImageUrl: true,
 				},
 			});
 
@@ -76,10 +70,14 @@ export const hubRouter = t.router({
 				return null;
 			}
 
-			const { preludeSerialized, ...rest } = publishedRecipe;
+			const { preludeSerialized, instructionsSerialized, ...rest } =
+				publishedRecipe;
 			const formattedRecipe = {
 				prelude: preludeSerialized
 					? (JSON.parse(preludeSerialized) as PreludeShape)
+					: null,
+				instructions: instructionsSerialized
+					? (JSON.parse(instructionsSerialized) as InstructionsShape)
 					: null,
 				...rest,
 			};
@@ -115,6 +113,41 @@ type PreludeNode =
 				},
 			];
 	  };
+
+type InstructionsShape = {
+	type: string;
+	content: InstructionNode[];
+	attrs?: {
+		[key: string]: any;
+	};
+};
+type InstructionNode =
+	| {
+			type: 'step';
+			content: [
+				{
+					type: 'text';
+					text: string;
+				},
+			];
+			attrs: {
+				id: string;
+				note?: string | null;
+			};
+	  }
+	| {
+			type: 'sectionTitle';
+			content: [
+				{
+					type: 'text';
+					text: string;
+				},
+			];
+			attrs: {
+				id: string;
+			};
+	  };
+
 export type HubPublishedRecipeInfo = Exclude<
 	typeof hubRouter.recipeRenderData extends BuildProcedure<any, any, infer C>
 		? C
