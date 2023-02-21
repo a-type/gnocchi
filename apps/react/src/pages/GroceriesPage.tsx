@@ -19,17 +19,7 @@ import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/
 import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
 
 export function GroceriesPage() {
-	const [hasSeenWelcome] = useLocalStorage('hasSeenWelcome', false);
-	const [params] = useSearchParams();
 	const navigate = useNavigate();
-
-	const redirectToWelcome = !params.get('recipeUrl') && !hasSeenWelcome;
-
-	useEffect(() => {
-		if (redirectToWelcome) {
-			navigate('/welcome');
-		}
-	}, [redirectToWelcome]);
 
 	const onListChange = useCallback(
 		(listId: string | null | undefined) => {

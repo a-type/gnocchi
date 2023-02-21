@@ -75,6 +75,9 @@ function PublishedContent({
 	const unpublish = trpc.recipes.unpublish.useMutation({
 		onSuccess: onChange,
 	});
+	const publish = trpc.recipes.publish.useMutation({
+		onSuccess: onChange,
+	});
 
 	return (
 		<DialogContent>
@@ -104,6 +107,21 @@ function PublishedContent({
 					}}
 				>
 					Unpublish
+				</Button>
+				<Button
+					color="primary"
+					onClick={async () => {
+						try {
+							await publish.mutateAsync({
+								recipeId,
+							});
+						} catch (err) {
+							console.error(err);
+							toast.error('Failed to publish recipe');
+						}
+					}}
+				>
+					Republish
 				</Button>
 			</DialogActions>
 		</DialogContent>

@@ -61,6 +61,12 @@ export const recipesRouter = t.router({
 						[key: string]: any;
 					};
 				};
+				mainImage?: {
+					id: string;
+					name: string;
+					type: string;
+					url: string | null;
+				};
 			};
 
 			if (!snapshot) {
@@ -101,6 +107,7 @@ export const recipesRouter = t.router({
 					title: snapshot.title,
 					preludeSerialized,
 					unpublishedAt: null,
+					mainImageUrl: snapshot.mainImage?.url ?? null,
 				},
 				create: {
 					recipeId: input.recipeId,
@@ -109,6 +116,7 @@ export const recipesRouter = t.router({
 					publisherId: ctx.session.userId,
 					slug: cuid.slug(),
 					preludeSerialized,
+					mainImageUrl: snapshot.mainImage?.url ?? null,
 				},
 				include: {
 					ingredients: true,

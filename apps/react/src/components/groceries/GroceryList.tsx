@@ -1,7 +1,7 @@
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { groceries, hooks } from '@/stores/groceries/index.js';
-import { sprinkles } from '@aglio/ui';
+import { H3, sprinkles } from '@aglio/ui';
 import { Item } from '@aglio/groceries-client';
 import {
 	DndContext,
@@ -37,6 +37,8 @@ import {
 } from './hooks.js';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 import { groceriesState } from './state.js';
+import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
+import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -64,6 +66,13 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				sensors={sensors}
 				modifiers={[snapCenterToCursor]}
 			>
+				<OnboardingBanner onboarding={saveHubRecipeOnboarding} step="subscribe">
+					<H3>Subscribe for sync and more</H3>
+					<P>Sync between devices and other members of your household,</P>
+					<P>collaborate in real time while shopping or cooking,</P>
+					<P>and make copies of recipes from anywhere on the web.</P>
+					<P>All just $3/month!</P>
+				</OnboardingBanner>
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />
 			</DndContext>

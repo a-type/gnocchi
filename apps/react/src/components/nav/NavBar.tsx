@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import {
 	ReactNode,
 	Suspense,
+	forwardRef,
 	memo,
 	useCallback,
 	useEffect,
@@ -19,6 +20,8 @@ import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
+import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 
 export interface NavBarProps {}
 
@@ -89,43 +92,43 @@ export function NavBar({}: NavBarProps) {
 	);
 }
 
-const NavBarLink = memo(function NavBarLink({
-	to,
-	children,
-	icon,
-	animate,
-	active,
-}: {
-	to: string;
-	children: ReactNode;
-	icon: ReactNode;
-	animate?: boolean;
-	active: boolean;
-}) {
-	// reset undo history when navigating
-	const client = hooks.useClient();
-	const onClick = useCallback(() => {
-		client.undoHistory.clear();
-	}, [client]);
+const NavBarLink = memo(
+	forwardRef<
+		HTMLAnchorElement,
+		{
+			to: string;
+			children: ReactNode;
+			icon: ReactNode;
+			animate?: boolean;
+			active: boolean;
+		}
+	>(function NavBarLink({ to, children, icon, animate, active }, ref) {
+		// reset undo history when navigating
+		const client = hooks.useClient();
+		const onClick = useCallback(() => {
+			client.undoHistory.clear();
+		}, [client]);
 
-	return (
-		<Link
-			to={to}
-			className={clsx(classes.button, {
-				[classes.buttonActive]: active,
-			})}
-			onClick={onClick}
-		>
-			<div className={classes.iconContainer}>
-				<PopEffect active={animate} />
-				{icon}
-			</div>
-			<span className={classes.buttonText} data-active={!!active}>
-				{children}
-			</span>
-		</Link>
-	);
-});
+		return (
+			<Link
+				to={to}
+				className={clsx(classes.button, {
+					[classes.buttonActive]: active,
+				})}
+				onClick={onClick}
+				ref={ref}
+			>
+				<div className={classes.iconContainer}>
+					<PopEffect active={animate} />
+					{icon}
+				</div>
+				<span className={classes.buttonText} data-active={!!active}>
+					{children}
+				</span>
+			</Link>
+		);
+	}),
+);
 
 function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);
@@ -147,13 +150,20 @@ function GroceriesNavBarLink({ active }: { active: boolean }) {
 	const addedRecipe = useSnapshot(groceriesState).justAddedRecipe;
 
 	return (
-		<NavBarLink
-			to="/"
-			icon={<CartIcon />}
-			active={active}
-			animate={addedRecipe}
+		<OnboardingTooltip
+			content={<div>You'll find your groceries here.</div>}
+			onboarding={saveHubRecipeOnboarding}
+			step="viewList"
+			disableNext
 		>
-			Groceries
-		</NavBarLink>
+			<NavBarLink
+				to="/"
+				icon={<CartIcon />}
+				active={active}
+				animate={addedRecipe}
+			>
+				Groceries
+			</NavBarLink>
+		</OnboardingTooltip>
 	);
 }

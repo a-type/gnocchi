@@ -98,7 +98,7 @@ export default function RecipePage({
 							<a
 								href={`${
 									process.env.NEXT_APP_GROCERIES_HOST
-								}?recipeUrl=${encodeURIComponent(url)}&skipPrompt=true`}
+								}?recipeUrl=${encodeURIComponent(url)}&hub=true`}
 							>
 								<Button color="primary">Save to your Collection</Button>
 							</a>

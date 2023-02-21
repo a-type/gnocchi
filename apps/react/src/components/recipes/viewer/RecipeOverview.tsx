@@ -5,6 +5,7 @@ import {
 	H1,
 	H2,
 	LinkButton,
+	P,
 	PageNowPlaying,
 	Peek,
 	sprinkles,
@@ -24,12 +25,12 @@ import { RecipeMainImageViewer } from './RecipeMainImageViewer.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
 import * as classes from './RecipeOverview.css.js';
 import { RecipePublishControl } from './RecipePublishControl.jsx';
-import { RecipeTagsViewer } from './RecipeTagsViewer.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 import { RecipePreludeViewer } from './RecipePreludeViewer.jsx';
-import { FirstTimeScanOnboarding } from './FirstTimeScanOnboarding.jsx';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { RecipeTagsEditor } from '../editor/RecipeTagsEditor.jsx';
+import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
+import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -50,7 +51,11 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 
 	return (
 		<Box direction="column" gap={6} align="flex-start" width="full">
-			<FirstTimeScanOnboarding />
+			<OnboardingBanner onboarding={saveHubRecipeOnboarding} step="recipe">
+				<H2>This is your copy!</H2>
+				<P>Feel free to make changes, add notes, etc.</P>
+			</OnboardingBanner>
+
 			<TitleAndImageLayout>
 				<TitleContainer>
 					<Box

@@ -1,7 +1,9 @@
 import { Cart } from '../graphics/Cart.jsx';
-import { Box, P } from '@aglio/ui';
+import { Box, H3, P } from '@aglio/ui';
 import { InfrequentSubscriptionHint } from '../promotional/InfrequentSubscriptionHint.jsx';
 import { InstallHint } from '../promotional/InstallHint.jsx';
+import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
+import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 
 export function GroceryEmptyContent() {
 	return (
@@ -22,7 +24,7 @@ export function GroceryEmptyContent() {
 					Your list is empty
 				</P>
 				<P size="inherit" gutterBottom={false}>
-					Use the search bar above to add items
+					Use the bar above to add items
 				</P>
 			</Box>
 			<InstallHint />
