@@ -266,6 +266,7 @@ export const groceries = {
 								isStaple: !!remoteLookup.isStaple,
 								alternateNames: remoteLookup.alternateNames,
 							});
+							categoryId = remoteLookup.categoryId;
 						}
 					} catch (err) {
 						console.error(err);
