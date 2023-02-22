@@ -100,7 +100,7 @@ export function attachSocketServer(httpServer: HttpServer) {
 		databaseFile: storageDbFile!,
 		tokenSecret: process.env.LOFI_SECRET!,
 		profiles: new Profiles(),
-		replicaTruancyMinutes: 30 * 60 * 24,
+		replicaTruancyMinutes: 14 * 60 * 24,
 		log: console.debug,
 		fileStorage: new S3FileBackend(),
 		fileConfig: {
