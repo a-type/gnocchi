@@ -151,6 +151,7 @@ export const recipesRouter = t.router({
 				method: 'POST',
 				headers: {
 					Authorization: `Bearer ${process.env.HUB_TOKEN}`,
+					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
 					slug: saved.slug,
