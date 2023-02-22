@@ -130,7 +130,14 @@ export default function RecipePage({
 								</Button>
 							</a>
 						</PageFixedArea>
-						<P size="xs" className={sprinkles({ color: 'gray70' })}>
+						<P
+							size="xs"
+							className={sprinkles({
+								color: 'gray70',
+								alignSelf: 'flex-end',
+								textAlign: 'right',
+							})}
+						>
 							Powered by{' '}
 							<a
 								className={sprinkles({ fontWeight: 'bold', color: 'black' })}
