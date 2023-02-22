@@ -15,7 +15,7 @@ export function MainImage({ url, title }: MainImageProps) {
 				src={url}
 				fill
 				itemProp="image"
-				className="u-photo"
+				className={classNames('u-photo', classes.img)}
 				alt={`A photo of ${title}`}
 			/>
 		</TopLineImage>

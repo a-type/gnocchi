@@ -1,4 +1,4 @@
-import { vars } from '@/../../packages/ui/src';
+import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
 
 export const root = style({
@@ -8,4 +8,9 @@ export const root = style({
 	height: '30vh',
 	borderRadius: vars.radii.lg,
 	overflow: 'hidden',
+});
+
+export const img = style({
+	objectFit: 'cover',
+	objectPosition: 'center',
 });

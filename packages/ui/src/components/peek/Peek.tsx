@@ -55,7 +55,7 @@ export function Peek({ peekHeight = 120, children, className }: PeekProps) {
 		<div
 			className={classNames(classes.root, className)}
 			ref={containerRef}
-			data-state={open ? 'open' : 'closed'}
+			data-state={isPeekable ? (open ? 'open' : 'closed') : undefined}
 		>
 			<div className={classes.content} ref={contentRef} id={id}>
 				{children}
