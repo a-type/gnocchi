@@ -19,7 +19,7 @@ export const trigger = style({
 			borderBottom: `1px solid ${vars.colors.primary}`,
 		},
 		'&::after': {
-			content: '"- click to expand -"',
+			content: '"- tap to expand -"',
 			padding: vars.space[3],
 			color: vars.colors.gray90,
 			fontSize: vars.fontSizes.xs,
@@ -36,7 +36,7 @@ export const trigger = style({
 				'linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))',
 		},
 		'&[data-state="open"]::after': {
-			content: '"- click to collapse -"',
+			content: '"- tap to collapse -"',
 		},
 	},
 });
@@ -58,7 +58,7 @@ export const content = style({});
 
 export const root = style({
 	position: 'relative',
-	animationTimingFunction: vars.transitions.springy,
+	animationTimingFunction: vars.transitions.default,
 	animationFillMode: 'forwards',
 	overflow: 'hidden',
 
