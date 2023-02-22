@@ -134,7 +134,7 @@ export default function RecipePage({
 							size="xs"
 							className={sprinkles({
 								color: 'gray70',
-								alignSelf: 'flex-end',
+								marginLeft: 'auto',
 								textAlign: 'right',
 							})}
 						>
