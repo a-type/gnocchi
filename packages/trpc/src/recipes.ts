@@ -146,6 +146,8 @@ export const recipesRouter = t.router({
 				),
 			]);
 
+			console.log('Published recipe', saved);
+
 			// revalidate the hub page
 			fetch(`${ctx.deployedContext.hubHost}/api/revalidate`, {
 				method: 'POST',
