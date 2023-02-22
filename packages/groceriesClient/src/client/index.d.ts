@@ -397,6 +397,7 @@ export type ItemInputsItemInit = {
   title?: string | null;
   multiplier?: number | null;
   recipeId?: string | null;
+  quantity?: number | null;
 };
 export type ItemInputsItemDestructured = {
   text: string;
@@ -404,6 +405,7 @@ export type ItemInputsItemDestructured = {
   title: string | null;
   multiplier: number | null;
   recipeId: string | null;
+  quantity: number | null;
 };
 export type ItemInputsItemSnapshot = {
   text: string;
@@ -411,6 +413,7 @@ export type ItemInputsItemSnapshot = {
   title: string | null;
   multiplier: number | null;
   recipeId: string | null;
+  quantity: number | null;
 };
 type ItemInputsItemText = string;
 type ItemInputsItemTextInit = ItemInputsItemText;
@@ -432,6 +435,10 @@ type ItemInputsItemRecipeId = string | null;
 type ItemInputsItemRecipeIdInit = ItemInputsItemRecipeId | undefined;
 type ItemInputsItemRecipeIdSnapshot = ItemInputsItemRecipeId;
 type ItemInputsItemRecipeIdDestructured = ItemInputsItemRecipeId;
+type ItemInputsItemQuantity = number | null;
+type ItemInputsItemQuantityInit = ItemInputsItemQuantity | undefined;
+type ItemInputsItemQuantitySnapshot = ItemInputsItemQuantity;
+type ItemInputsItemQuantityDestructured = ItemInputsItemQuantity;
 
 type ItemPurchasedAt = number | null;
 type ItemPurchasedAtInit = ItemPurchasedAt | undefined;

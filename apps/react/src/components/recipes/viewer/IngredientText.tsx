@@ -24,5 +24,12 @@ export function IngredientText({
 		);
 	}
 
-	return <span>{text}</span>;
+	return <span>{replaceNumbersWithFractions(text)}</span>;
+}
+
+function replaceNumbersWithFractions(text: string) {
+	// include decimals
+	return text.replace(/(\d+\.\d+)/g, (match) =>
+		fractionToText(parseFloat(match)),
+	);
 }

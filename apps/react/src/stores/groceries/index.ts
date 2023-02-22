@@ -114,7 +114,7 @@ export const groceries = {
 							canonicalName: remoteLookup.canonicalName,
 							categoryId,
 							isPerishable: remoteLookup.isPerishable,
-							isStaple: remoteLookup.isStaple,
+							isStaple: !!remoteLookup.isStaple,
 							alternateNames: remoteLookup.alternateNames,
 						},
 						{ undoable: false },
@@ -210,7 +210,6 @@ export const groceries = {
 					quantity: number;
 					unit: string | null;
 					food: string;
-					comments?: string[];
 			  }
 		)[],
 		{
@@ -218,7 +217,7 @@ export const groceries = {
 			listId = null,
 		}: {
 			listId?: string | null;
-			sourceInfo?: Omit<ItemInputsItemInit, 'text'>;
+			sourceInfo?: Omit<ItemInputsItemInit, 'text' | 'quantity'>;
 		},
 	) => {
 		const storage = await _groceries;
@@ -264,7 +263,7 @@ export const groceries = {
 								canonicalName: remoteLookup.canonicalName,
 								categoryId: remoteLookup.categoryId,
 								isPerishable: remoteLookup.isPerishable,
-								isStaple: remoteLookup.isStaple,
+								isStaple: !!remoteLookup.isStaple,
 								alternateNames: remoteLookup.alternateNames,
 							});
 						}
@@ -292,6 +291,7 @@ export const groceries = {
 						{
 							...sourceInfo,
 							text: parsed.original,
+							quantity: parsed.quantity,
 						},
 					],
 				});
@@ -326,47 +326,6 @@ export const groceries = {
 			storage.sync.presence.update({
 				lastInteractedItem: lastItemId,
 			});
-		}
-	},
-	addRecipe: async (url: string, listId: string | null = null) => {
-		try {
-			const scanned = await trpcClient.scans.recipe.query({
-				url,
-			});
-			if (scanned.rawIngredients?.length) {
-				await groceries.addItems(scanned.rawIngredients, {
-					listId,
-					sourceInfo: {
-						url,
-						title: scanned.title || 'Recipe',
-					},
-				});
-			} else if (scanned.detailedIngredients?.length) {
-				await groceries.addItems(
-					scanned.detailedIngredients.map((i) => i.original),
-					{
-						listId,
-						sourceInfo: {
-							url,
-							title: scanned.title || 'Recipe',
-						},
-					},
-				);
-			} else {
-				toast.error(
-					"Bummer, we couldn't detect the ingredients in this recipe.",
-				);
-			}
-		} catch (err) {
-			if (err instanceof TRPCClientError && err.message === 'FORBIDDEN') {
-				// TODO: pop subscription prompt
-				toast.error('You must subscribe to add recipe URLs');
-			} else {
-				console.error(err);
-				toast.error(
-					"Bummer, we couldn't detect the ingredients in this recipe.",
-				);
-			}
 		}
 	},
 	deleteCategory: async (categoryId: string) => {

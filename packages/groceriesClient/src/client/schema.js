@@ -131,6 +131,10 @@ const items = collection({
                     recipeId: {
                         type: 'string',
                         nullable: true
+                    },
+                    quantity: {
+                        type: 'number',
+                        nullable: true
                     }
                 }
             }
@@ -406,7 +410,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 22,
+    version: 23,
     collections: {
         categories,
         items,

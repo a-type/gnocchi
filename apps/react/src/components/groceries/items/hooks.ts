@@ -15,15 +15,17 @@ export function useItemDisplayText(item: Item) {
 		item.get('totalQuantity') === 1 || item.get('unit')
 			? item.get('food')
 			: pluralize(item.get('food'));
+	// try as much as we can to show the original text, not parsed.
+	// If there's only one input and no multiplier or quantity editing
+	// has happened, we can do that.
 	const showOnlyInput =
-		quantity === 1 &&
 		inputs.length === 1 &&
 		(inputs.get(0).get('multiplier') === null ||
-			inputs.get(0).get('multiplier') === 1);
+			inputs.get(0).get('multiplier') === 1) &&
+		(inputs.get(0).get('quantity') === null ||
+			inputs.get(0).get('quantity') === quantity);
 	const displayString = showOnlyInput
-		? `${quantity === 1 ? '' : `${fractionToText(quantity)} `}${inputs
-				.get(0)
-				.get('text')}`
+		? `${inputs.get(0).get('text')}`
 		: `${fractionToText(quantity)} ${
 				pluralizedUnit && `${pluralizedUnit} `
 		  }${pluralizedName}`;

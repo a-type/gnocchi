@@ -25,6 +25,8 @@ import { signupDialogState as signupState } from '@/components/sync/StartSignupD
 import { Box } from '@aglio/ui';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { sprinkles } from '@aglio/ui';
+import { addRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
+import { recipeSavePromptState } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
 
 export interface GroceryListAddProps {
 	className?: string;
@@ -142,7 +144,7 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 					if (isUrl(selectedItem)) {
 						if (isSubscribed) {
 							setHasPastedAUrl(true);
-							await groceries.addRecipe(selectedItem);
+							recipeSavePromptState.url = selectedItem;
 						} else {
 							signupState.status = 'open';
 						}
