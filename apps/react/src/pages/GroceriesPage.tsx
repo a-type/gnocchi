@@ -17,6 +17,8 @@ import { sprinkles } from '@aglio/ui';
 import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
 import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';
 import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
+import { UnsubscribedOnly } from '@/components/auth/UnsubscribedOnly.jsx';
+import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -47,7 +49,7 @@ export function GroceriesPage() {
 						justify="space-between"
 						align="center"
 						gap={2}
-						px={4}
+						px={2}
 						py={2}
 						mt={1}
 					>
@@ -58,6 +60,12 @@ export function GroceriesPage() {
 								{listId && <ListEdit listId={listId} />}
 							</Suspense>
 						</Box>
+
+						<UnsubscribedOnly>
+							<PromoteSubscriptionButton size="small" color="accent">
+								Upgrade
+							</PromoteSubscriptionButton>
+						</UnsubscribedOnly>
 					</Box>
 					<PageFixedArea
 						className={sprinkles({

@@ -40,6 +40,7 @@ import { groceriesState } from './state.js';
 import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { SubscribeButton } from '../sync/SubscribeButton.jsx';
+import { PromoteSubscriptionButton } from '../promotional/PromoteSubscriptionButton.jsx';
 
 export interface GroceryListProps {
 	className?: string;
@@ -68,12 +69,12 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				modifiers={[snapCenterToCursor]}
 			>
 				<OnboardingBanner onboarding={saveHubRecipeOnboarding} step="subscribe">
-					<H3>Subscribe for sync and more</H3>
+					<H3>Upgrade for sync and more</H3>
 					<P>Sync between devices and other members of your household,</P>
 					<P>collaborate in real time while shopping or cooking,</P>
 					<P>and make copies of recipes from anywhere on the web.</P>
 					<Box direction="row">
-						<SubscribeButton />
+						<PromoteSubscriptionButton>Upgrade now</PromoteSubscriptionButton>
 					</Box>
 				</OnboardingBanner>
 				<GroceryListCategories {...rest} ref={ref} />
