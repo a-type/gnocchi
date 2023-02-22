@@ -126,7 +126,7 @@ export default function RecipePage({
 										boxShadow: 'lg',
 									})}
 								>
-									Save to your Collection
+									Save Recipe
 								</Button>
 							</a>
 						</PageFixedArea>
