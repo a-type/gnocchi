@@ -141,7 +141,7 @@ export default function RecipePage({
 							Powered by{' '}
 							<a
 								className={sprinkles({ fontWeight: 'bold', color: 'black' })}
-								href="https://gnocchi.club"
+								href="https://gnocchi.club/welcome"
 							>
 								Gnocchi.club
 							</a>
