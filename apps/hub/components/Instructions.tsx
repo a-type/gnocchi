@@ -13,7 +13,6 @@ export function Instructions({ instructions }: InstructionsProps) {
 		extensions: [
 			StarterKit.configure({
 				history: false,
-				document: true,
 			}),
 			Step,
 			SectionTitle,
