@@ -39,7 +39,7 @@ export function OnboardingBanner<O extends Onboarding<any>>({
 					<div>{children}</div>
 					<div className={classes.buttons}>
 						{!disableNext && (
-							<Button color="primary" onClick={next}>
+							<Button color="ghost" onClick={next}>
 								{isLast ? 'Finish' : 'Next'}
 							</Button>
 						)}
