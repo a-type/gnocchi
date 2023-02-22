@@ -12,6 +12,7 @@ export interface NumberStepperProps {
 	steps?: number[];
 	increment?: number;
 	renderValue?: (value: number) => ReactNode;
+	className?: string;
 }
 
 export function NumberStepper({
@@ -21,6 +22,8 @@ export function NumberStepper({
 	steps,
 	increment: incrementAmount = 1,
 	renderValue = fractionToText,
+	className,
+	...rest
 }: NumberStepperProps) {
 	const index = steps?.indexOf(value) ?? 0;
 
@@ -51,9 +54,14 @@ export function NumberStepper({
 
 	return (
 		<div
-			className={clsx(classes.container, {
-				[classes.highlightChange]: !!highlightChange && value !== 1,
-			})}
+			className={clsx(
+				classes.container,
+				{
+					[classes.highlightChange]: !!highlightChange && value !== 1,
+				},
+				className,
+			)}
+			{...rest}
 		>
 			<Button
 				className={classes.button}

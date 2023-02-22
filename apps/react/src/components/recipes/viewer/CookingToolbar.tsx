@@ -2,13 +2,20 @@ import { PageNowPlaying } from '@aglio/ui';
 import { Button, H5 } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
-import { ListBulletIcon } from '@radix-ui/react-icons';
+import {
+	DragHandleVerticalIcon,
+	ListBulletIcon,
+	StretchVerticallyIcon,
+	ViewVerticalIcon,
+} from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import classnames from 'classnames';
 import { useRef } from 'react';
 import * as classes from './CookingToolbar.css.js';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
+import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
+import { DragVerticalIcon } from '@/components/icons/DragVerticalIcon.jsx';
 
 export interface CookingToolbarProps {
 	recipe: Recipe;
@@ -36,7 +43,10 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 	};
 
 	const bind = useDrag(({ down, delta: [, dy], tap }) => {
-		const target = Math.min(MAX_HEIGHT, containerStyle.height.goal - dy);
+		let target = Math.min(MAX_HEIGHT, containerStyle.height.goal - dy);
+		if (target < 24) {
+			target = 0;
+		}
 		if (target >= PEEK_HEIGHT) {
 			lastExpandedHeightRef.current = target;
 		}
@@ -52,7 +62,24 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 	return (
 		<PageNowPlaying unstyled className={classes.root}>
 			<Button className={classes.toggleButton} {...bind()}>
-				<ListBulletIcon />
+				<animated.span
+					style={{
+						display: containerStyle.height.to((h) =>
+							h > 0 ? 'none' : 'block',
+						),
+					}}
+				>
+					<ListBulletIcon />
+				</animated.span>
+				<animated.span
+					style={{
+						display: containerStyle.height.to((h) =>
+							h > 0 ? 'block' : 'none',
+						),
+					}}
+				>
+					<DragVerticalIcon />
+				</animated.span>
 			</Button>
 			<animated.div
 				ref={containerRef}
@@ -65,6 +92,10 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 				}}
 			>
 				<div className={classes.containerScroll}>
+					<RecipeMultiplierField
+						recipe={recipe}
+						className={classes.multiplier}
+					/>
 					<H5 className={sprinkles({ mx: 2 })}>Ingredients</H5>
 					<IngredientCheckoffView recipe={recipe} className={classes.list} />
 				</div>

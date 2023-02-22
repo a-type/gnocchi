@@ -1,4 +1,4 @@
-import { getIsHubAuthorizedRequest } from '@/../../packages/tools/src';
+import { getIsHubAuthorizedRequest } from '@aglio/tools';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -13,8 +13,8 @@ export default async function handler(
 	try {
 		// This should be the actual path not a rewritten path
 		// e.g. for "/blog/[slug]" this should be "/blog/post-1"
-		await res.revalidate(`/r/${req.body.slug}`);
-		console.info(`Revalidated ${req.body.slug}`);
+		await res.revalidate(`/r/${req.body.publisherId}/${req.body.slug}`);
+		console.info(`Revalidated /r/${req.body.publisherId}/${req.body.slug}`);
 		return res.json({ revalidated: true });
 	} catch (err) {
 		// If there was an error, Next.js will continue

@@ -170,7 +170,7 @@ model PublishedRecipe {
   publishedAt   DateTime  @default(now()) @map("published_at")
   recipeId      String    @map("recipe_id")
   libraryId     String    @map("library_id")
-  publisherId   String?   @map("publisher_id")
+  publisherId   String    @map("publisher_id")
   unpublishedAt DateTime? @map("unpublished_at")
   slug          String    @unique
   title         String
@@ -180,7 +180,7 @@ model PublishedRecipe {
   preludeSerialized      String?                     @map("prelude_serialized")
   mainImageUrl           String?                     @map("main_image_url")
   instructionsSerialized String?                     @map("instructions_serialized")
-  publisher              Profile?                    @relation(fields: [publisherId], references: [id])
+  publisher              Profile                     @relation(fields: [publisherId], references: [id])
 
   @@unique([recipeId, libraryId])
   @@map("published_recipes")

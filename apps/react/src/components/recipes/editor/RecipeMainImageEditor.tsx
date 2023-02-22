@@ -20,7 +20,10 @@ export function RecipeMainImageEditor({ recipe }: RecipeMainImageEditorProps) {
 			className={classes.imageEditor}
 			value={mainImage?.url ?? null}
 			onChange={(file) => {
-				recipe.set('mainImage', file);
+				recipe.update({
+					mainImage: file,
+					updatedAt: Date.now(),
+				});
 			}}
 		/>
 	);

@@ -44,3 +44,8 @@ export const toggleButton = style({
 export const list = style({
 	padding: `${vars.space[2]} !important`,
 });
+
+export const multiplier = style({
+	alignSelf: 'flex-start',
+	marginBottom: vars.space[2],
+});

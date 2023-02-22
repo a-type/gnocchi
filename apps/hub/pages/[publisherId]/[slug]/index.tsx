@@ -157,7 +157,9 @@ export default function RecipePage({
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
 	const all = await trpc.hub.allPublishedSlugs.query();
 	return {
-		paths: all.map((slug) => ({ params: { slug } })),
+		paths: all.map((info) => ({
+			params: { slug: info.slug, publisherId: info.publisherId },
+		})),
 		fallback: 'blocking',
 	};
 }
@@ -176,7 +178,7 @@ export async function getStaticProps(
 	return {
 		props: {
 			data,
-			url: `${process.env.HOST}/r/${slugBase}`,
+			url: `${process.env.HOST}/${slugBase}`,
 		},
 	};
 }

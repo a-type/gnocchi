@@ -156,6 +156,7 @@ export const recipesRouter = t.router({
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
+					publisherId: saved.publisherId,
 					slug: saved.slug,
 				}),
 			});
@@ -221,9 +222,9 @@ export const recipesRouter = t.router({
 			return {
 				publishedAt: publishedRecipe.publishedAt,
 				slug: publishedRecipe.slug,
-				url: `${ctx.deployedContext.hubHost}/r/${urlify(
-					publishedRecipe.title,
-				)}-${publishedRecipe.slug}`,
+				url: `${ctx.deployedContext.hubHost}/${
+					publishedRecipe.publisherId
+				}/${urlify(publishedRecipe.title)}-${publishedRecipe.slug}`,
 			};
 		}),
 });

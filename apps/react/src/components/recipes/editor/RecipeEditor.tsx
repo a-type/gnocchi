@@ -22,6 +22,8 @@ import {
 	TitleContainer,
 } from '../layout/TitleAndImageLayout.jsx';
 import { RecipePreludeEditor } from './RecipePreludeEditor.jsx';
+import { hooks } from '@/stores/groceries/index.js';
+import { useEffect } from 'react';
 
 export interface RecipeEditorProps {
 	slug: string;
@@ -38,6 +40,8 @@ export function RecipeEditor({ slug }: RecipeEditorProps) {
 const fixedAreaStyle = { zIndex: 10 };
 
 function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
+	useWatchChanges(recipe);
+
 	return (
 		<Box direction="column" gap={8}>
 			<PageFixedArea
@@ -81,4 +85,25 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 			</div>
 		</Box>
 	);
+}
+
+/**
+ * Updates the updatedAt timestamp for any changes to
+ * instructions, ingredients, or prelude.
+ */
+function useWatchChanges(recipe: Recipe) {
+	const { ingredients, instructions, prelude } = hooks.useWatch(recipe);
+
+	useEffect(() => {
+		const unsubs = new Array<() => void>();
+		const updateTime = () => {
+			recipe.set('updatedAt', Date.now());
+		};
+		unsubs.push(ingredients.subscribe('changeDeep', updateTime));
+		unsubs.push(instructions.subscribe('changeDeep', updateTime));
+		unsubs.push(prelude.subscribe('changeDeep', updateTime));
+		return () => {
+			unsubs.forEach((unsub) => unsub());
+		};
+	}, [ingredients, instructions, prelude]);
 }

@@ -130,3 +130,7 @@ function useSyncedEditor(
 
 	return editor;
 }
+
+export function useRecipeContentUpdatedAt(recipe: Recipe) {
+	const { instructions, ingredients } = hooks.useWatch(recipe);
+}

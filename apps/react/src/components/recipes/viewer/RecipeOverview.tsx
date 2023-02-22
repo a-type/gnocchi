@@ -64,20 +64,26 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						align="flex-start"
 						fontSize="xs"
 						my={3}
+						gap={4}
 					>
 						<H1>{title}</H1>
 						<Box
 							direction="row"
 							justify="space-between"
-							align="center"
+							align="flex-start"
 							width="full"
 							gap={3}
 						>
-							<p className={sprinkles({ m: 0, flex: 1 })}>
+							<p className={sprinkles({ m: 0, flex: 1, mt: 2 })}>
 								Created on {format(createdAt, 'LLL do, yyyy')}
 							</p>
-							<Box direction="row" gap={1}>
-								<RecipePublishControl recipeId={recipe.get('id')} />
+							<Box
+								direction="row"
+								gap={1}
+								flexWrap="wrap"
+								justifyContent="flex-end"
+							>
+								<RecipePublishControl recipe={recipe} />
 								<RecipeViewerEditButton recipe={recipe} color="primary" />
 							</Box>
 						</Box>
@@ -92,17 +98,6 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							</a>
 						)}
 					</Box>
-					<Box
-						width="auto"
-						alignSelf="flex-start"
-						gap={2}
-						direction="row"
-						align="center"
-					>
-						<RecipeMultiplierField recipe={recipe} />
-						<AddToListButton recipe={recipe} />
-					</Box>
-					<RecipeTagsEditor className={sprinkles({ mt: 3 })} recipe={recipe} />
 				</TitleContainer>
 				{mainImage && (
 					<ImageContainer>
@@ -110,6 +105,17 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					</ImageContainer>
 				)}
 			</TitleAndImageLayout>
+			<Box
+				width="auto"
+				alignSelf="flex-end"
+				gap={2}
+				direction="row"
+				align="center"
+			>
+				<RecipeMultiplierField recipe={recipe} />
+				<AddToListButton recipe={recipe} />
+			</Box>
+			<RecipeTagsEditor className={sprinkles({ mt: 3 })} recipe={recipe} />
 			<PreludeSection recipe={recipe} />
 			<div>
 				<H2 gutterBottom>Ingredients</H2>

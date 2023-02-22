@@ -16,7 +16,10 @@ export function RecipeTitleField({ recipe }: RecipeTitleFieldProps) {
 			textArea
 			value={title}
 			onChange={(value) => {
-				recipe.set('title', value);
+				recipe.update({
+					title: value,
+					updatedAt: Date.now(),
+				});
 			}}
 			className={classes.root}
 		/>

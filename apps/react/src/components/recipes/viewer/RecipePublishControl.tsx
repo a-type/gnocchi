@@ -1,6 +1,8 @@
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
+import { Recipe } from '@aglio/groceries-client';
 import {
 	Box,
 	Button,
@@ -15,20 +17,25 @@ import {
 	TextLink,
 	sprinkles,
 } from '@aglio/ui';
+import format from 'date-fns/format';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
 export interface RecipePublishControlProps {
-	recipeId: string;
+	recipe: Recipe;
 }
 
-export function RecipePublishControl({ recipeId }: RecipePublishControlProps) {
+export function RecipePublishControl({ recipe }: RecipePublishControlProps) {
 	const enabled = useFeatureFlag('hub');
 	const isSubscribed = useIsSubscribed();
+
+	const recipeId = recipe.get('id');
 
 	const { data, isLoading, refetch } = trpc.recipes.publishedInfo.useQuery({
 		recipeId,
 	});
+
+	const updatedAt = hooks.useWatch(recipe, 'updatedAt');
 
 	if (!enabled || !isSubscribed) return null;
 
@@ -40,17 +47,26 @@ export function RecipePublishControl({ recipeId }: RecipePublishControlProps) {
 		);
 	}
 
+	const isPublished = !!data;
+	const isOutOfDate =
+		isPublished && new Date(data.publishedAt).getTime() < updatedAt;
+
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button color={data ? 'accent' : 'default'} size="small">
-					{data ? 'Published' : 'Publish'}
+				<Button color={isOutOfDate ? 'accent' : 'default'} size="small">
+					{isOutOfDate
+						? 'Republish changes'
+						: isPublished
+						? 'Published'
+						: 'Publish'}
 				</Button>
 			</DialogTrigger>
 			{data ? (
 				<PublishedContent
 					recipeId={recipeId}
 					publishedAt={data.publishedAt}
+					updatedAt={updatedAt}
 					onChange={refetch}
 					url={data.url}
 				/>
@@ -66,9 +82,11 @@ function PublishedContent({
 	publishedAt,
 	onChange,
 	url,
+	updatedAt,
 }: {
 	recipeId: string;
 	publishedAt: string;
+	updatedAt: number;
 	onChange?: () => void;
 	url: string;
 }) {
@@ -79,16 +97,25 @@ function PublishedContent({
 		onSuccess: onChange,
 	});
 
+	const publishDate = new Date(publishedAt);
+	const outOfDate = updatedAt > publishDate.getTime();
+
 	return (
 		<DialogContent>
 			<DialogTitle>Manage publication</DialogTitle>
-			<P>
-				Published {new Date(publishedAt).toLocaleDateString()}
-				<span>&nbsp;&nbsp;</span>
-				<TextLink href={url} target="_blank">
-					View on the web
-				</TextLink>
-			</P>
+			<P>Published {format(publishDate, 'PPp')}</P>
+			{outOfDate && (
+				<P
+					className={sprinkles({
+						color: 'attentionDark',
+					})}
+				>
+					Updated {format(new Date(updatedAt), 'PPp')}
+				</P>
+			)}
+			<TextLink href={url} target="_blank">
+				View on the web
+			</TextLink>
 			<DialogActions>
 				<DialogClose asChild>
 					<Button>Close</Button>
@@ -108,21 +135,23 @@ function PublishedContent({
 				>
 					Unpublish
 				</Button>
-				<Button
-					color="primary"
-					onClick={async () => {
-						try {
-							await publish.mutateAsync({
-								recipeId,
-							});
-						} catch (err) {
-							console.error(err);
-							toast.error('Failed to publish recipe');
-						}
-					}}
-				>
-					Republish
-				</Button>
+				{outOfDate && (
+					<Button
+						color="primary"
+						onClick={async () => {
+							try {
+								await publish.mutateAsync({
+									recipeId,
+								});
+							} catch (err) {
+								console.error(err);
+								toast.error('Failed to publish recipe');
+							}
+						}}
+					>
+						Publish latest changes
+					</Button>
+				)}
 			</DialogActions>
 		</DialogContent>
 	);

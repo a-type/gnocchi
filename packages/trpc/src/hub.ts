@@ -19,10 +19,15 @@ export const hubRouter = t.router({
 			select: {
 				slug: true,
 				title: true,
+				publisherId: true,
 			},
 		});
 
-		return publishedRecipes.map((r) => `${urlify(r.title)}-${r.slug}`);
+		return publishedRecipes.map((r) => ({
+			slug: r.slug,
+			publisherId: r.publisherId,
+			title: r.title,
+		}));
 	}),
 	recipeRenderData: t.procedure
 		.input(

@@ -7,7 +7,7 @@ export const container = style({
 	border: `1px solid ${vars.colors.black}`,
 	borderRadius: vars.radii.lg,
 	overflow: 'hidden',
-	width: 'auto',
+	width: 'min-content',
 });
 
 export const button = style({});
@@ -18,5 +18,6 @@ export const display = style({
 });
 
 export const highlightChange = style({
-	backgroundColor: vars.colors.accentLight,
+	backgroundColor: vars.colors.accentLighter,
+	color: vars.colors.accentDarker,
 });

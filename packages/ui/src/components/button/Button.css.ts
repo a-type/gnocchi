@@ -36,6 +36,7 @@ export const root = recipe({
 			userSelect: 'none',
 			transition:
 				'box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out',
+			whiteSpace: 'nowrap',
 
 			selectors: {
 				'&:hover:not(:disabled):not([data-disabled="true"])': {

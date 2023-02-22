@@ -6,8 +6,9 @@ export const root = style({
 	gridTemplateColumns: '1fr',
 	gridTemplateRows: 'auto auto',
 	gridTemplateAreas: '"image" "title"',
-	gap: vars.space[2],
+	gap: vars.space[4],
 	width: '100%',
+	alignItems: 'stretch',
 
 	'@media': {
 		[mediaQueries.lg]: {
@@ -15,6 +16,7 @@ export const root = style({
 			gridTemplateRows: '1fr',
 			gridTemplateAreas: '"title image"',
 			gap: vars.space[4],
+			alignItems: 'center',
 		},
 	},
 });
@@ -24,7 +26,7 @@ export const title = style({
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'flex-start',
-	gap: vars.space[2],
+	gap: vars.space[4],
 	minWidth: 300,
 });
 

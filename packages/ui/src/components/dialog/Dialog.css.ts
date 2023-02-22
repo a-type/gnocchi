@@ -144,4 +144,5 @@ export const actions = style({
 	paddingBottom: vars.space[3],
 	paddingTop: vars.space[3],
 	transform: `translateY(${vars.space[6]})`,
+	flexWrap: 'wrap',
 });
