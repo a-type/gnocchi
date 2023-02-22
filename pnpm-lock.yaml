@@ -1,10 +1,5 @@
 lockfileVersion: 5.4
 
-patchedDependencies:
-  '@tiptap/react@2.0.0-beta.218':
-    hash: emzgm7lnt4pxb7aoe4havufrqe
-    path: patches/@tiptap__react@2.0.0-beta.218.patch
-
 importers:
 
   .:
@@ -137,7 +132,7 @@ importers:
       '@tiptap/extension-document': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
       '@tiptap/extension-paragraph': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
       '@tiptap/pm': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
-      '@tiptap/react': 2.0.0-beta.218_emzgm7lnt4pxb7aoe4havufrqe_ynkdswu7kzhcpt3m24myhvxkoy
+      '@tiptap/react': 2.0.0-beta.218_ynkdswu7kzhcpt3m24myhvxkoy
       '@tiptap/starter-kit': 2.0.0-beta.218_@tiptap+pm@2.0.0-beta.218
       '@trpc/client': 10.5.0_@trpc+server@10.5.0
       '@trpc/next': 10.10.0_habo4gukwwmhew4mrvoyxgamd4
@@ -289,7 +284,7 @@ importers:
       '@tiptap/extension-paragraph': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
       '@tiptap/html': 2.0.0-beta.218_p7b6nzxe7qctmzbzapdik3nr64
       '@tiptap/pm': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
-      '@tiptap/react': 2.0.0-beta.218_emzgm7lnt4pxb7aoe4havufrqe_ynkdswu7kzhcpt3m24myhvxkoy
+      '@tiptap/react': 2.0.0-beta.218_ynkdswu7kzhcpt3m24myhvxkoy
       '@tiptap/starter-kit': 2.0.0-beta.218_@tiptap+pm@2.0.0-beta.218
       '@trpc/client': 10.5.0_@trpc+server@10.5.0
       '@trpc/react-query': 10.5.0_i3ykvnz4igoclzsim3lzrnoi4y
@@ -540,7 +535,7 @@ importers:
       '@tiptap/extension-document': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
       '@tiptap/extension-paragraph': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
       '@tiptap/pm': 2.0.0-beta.218_xixjdlstfbsoyvyes7aewz3ng4
-      '@tiptap/react': 2.0.0-beta.218_emzgm7lnt4pxb7aoe4havufrqe_ynkdswu7kzhcpt3m24myhvxkoy
+      '@tiptap/react': 2.0.0-beta.218_ynkdswu7kzhcpt3m24myhvxkoy
       '@tiptap/starter-kit': 2.0.0-beta.218_@tiptap+pm@2.0.0-beta.218
       '@vanilla-extract/css': 1.9.1
       '@vanilla-extract/css-utils': 0.1.3
@@ -4980,7 +4975,7 @@ packages:
       prosemirror-view: 1.29.1
     dev: false
 
-  /@tiptap/react/2.0.0-beta.218_emzgm7lnt4pxb7aoe4havufrqe_ynkdswu7kzhcpt3m24myhvxkoy:
+  /@tiptap/react/2.0.0-beta.218_ynkdswu7kzhcpt3m24myhvxkoy:
     resolution: {integrity: sha512-DNOltJ0t0zZTuOu4/6a3qLN3D/z6T92o+UfOg6f/pxuID+57lSTWGA7YFrmOmkWS0yvD8KBMNG1ADLEVKWnCjg==}
     peerDependencies:
       '@tiptap/core': ^2.0.0-beta.209
@@ -4995,7 +4990,6 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: false
-    patched: true
 
   /@tiptap/starter-kit/2.0.0-beta.218_@tiptap+pm@2.0.0-beta.218:
     resolution: {integrity: sha512-oe0+xe05tj94sn3z3QM+U6cBF6psMxh3JCleKXm8c1hTj3fMK2VOhn8RJKfAF7RtOQYA8pZ0+02adEyX7nKWzw==}
