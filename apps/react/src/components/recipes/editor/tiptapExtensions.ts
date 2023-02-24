@@ -64,6 +64,17 @@ export function createTiptapExtensions(
 						};
 					},
 				},
+				note: {
+					default: undefined,
+					keepOnSplit: false,
+					rendered: false,
+					parseHTML: (element) => element.getAttribute('data-note'),
+					renderHTML: (attributes) => {
+						return {
+							'data-note': attributes.note,
+						};
+					},
+				},
 			};
 		},
 
@@ -91,13 +102,16 @@ export function createTiptapExtensions(
 			};
 		},
 
-		...(interactiveSteps
-			? {
-					addNodeView() {
-						return ReactNodeViewRenderer(InstructionStepNodeView);
-					},
-			  }
-			: {}),
+		// ...(interactiveSteps
+		// 	? {
+		// 			addNodeView() {
+		// 				return ReactNodeViewRenderer(InstructionStepNodeView);
+		// 			},
+		// 	  }
+		// 	: {}),
+		addNodeView() {
+			return ReactNodeViewRenderer(InstructionStepNodeView);
+		},
 	});
 
 	const SectionTitle = Node.create<SectionTitleOptions>({

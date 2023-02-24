@@ -2,7 +2,7 @@ import { PageFixedArea } from '@aglio/ui';
 import { H2, Box, LiveUpdateTextField } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
-import { useRecipeFromSlugUrl } from '../hooks.js';
+import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
 import { RecipeNotFound } from '../RecipeNotFound.jsx';
 import {
 	InstructionsContext,
@@ -71,7 +71,7 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 				<RecipeIngredientsEditor recipe={recipe} />
 			</div>
 			<div>
-				<InstructionsProvider isEditing recipeId={recipe.get('id')}>
+				<InstructionsProvider isEditing showTools recipeId={recipe.get('id')}>
 					<H2 gutterBottom>Instructions</H2>
 					<RecipeInstructionsField recipe={recipe} />
 				</InstructionsProvider>
@@ -85,25 +85,4 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 			</div>
 		</Box>
 	);
-}
-
-/**
- * Updates the updatedAt timestamp for any changes to
- * instructions, ingredients, or prelude.
- */
-function useWatchChanges(recipe: Recipe) {
-	const { ingredients, instructions, prelude } = hooks.useWatch(recipe);
-
-	useEffect(() => {
-		const unsubs = new Array<() => void>();
-		const updateTime = () => {
-			recipe.set('updatedAt', Date.now());
-		};
-		unsubs.push(ingredients.subscribe('changeDeep', updateTime));
-		unsubs.push(instructions.subscribe('changeDeep', updateTime));
-		unsubs.push(prelude.subscribe('changeDeep', updateTime));
-		return () => {
-			unsubs.forEach((unsub) => unsub());
-		};
-	}, [ingredients, instructions, prelude]);
 }

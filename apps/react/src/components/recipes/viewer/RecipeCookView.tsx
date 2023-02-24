@@ -1,16 +1,12 @@
-import { useRecipeFromSlugUrl } from '../hooks.js';
-import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
+import { H1, PageFixedArea, sprinkles } from '@aglio/ui';
 import { clsx } from 'clsx';
-import * as classes from './RecipeCookView.css.js';
-import { H1 } from '@aglio/ui';
-import { useEffect } from 'react';
-import { hooks } from '@/stores/groceries/index.js';
-import { CookingToolbar } from './CookingToolbar.jsx';
-import { CookingActionBar } from './CookingActionBar.jsx';
-import { PageFixedArea } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
 import { InstructionsProvider } from '../editor/InstructionStepNodeView.jsx';
+import { useWatchChanges } from '../hooks.js';
+import { CookingActionBar } from './CookingActionBar.jsx';
+import { CookingToolbar } from './CookingToolbar.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
+import * as classes from './RecipeCookView.css.js';
+import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 
 export interface RecipeCookViewProps {
 	slug: string;
@@ -19,13 +15,18 @@ export interface RecipeCookViewProps {
 
 export function RecipeCookView({ className }: { className?: string }) {
 	const recipe = useCookingRecipe();
+	useWatchChanges(recipe);
 	return (
 		<div className={clsx(classes.container, className)}>
 			<H1 gutterBottom={false}>{recipe.get('title')}</H1>
 			<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
 				<CookingActionBar recipe={recipe} />
 			</PageFixedArea>
-			<InstructionsProvider isEditing={false} recipeId={recipe.get('id')}>
+			<InstructionsProvider
+				isEditing={false}
+				showTools
+				recipeId={recipe.get('id')}
+			>
 				<RecipeInstructionsViewer recipe={recipe} />
 			</InstructionsProvider>
 			<CookingToolbar recipe={recipe} />

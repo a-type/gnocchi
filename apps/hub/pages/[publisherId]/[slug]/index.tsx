@@ -92,7 +92,11 @@ export default function RecipePage({
 										<div itemProp="recipeIngredient" className="p-ingredient">
 											{ingredient.text}
 										</div>
-										{ingredient.note && <Note>{ingredient.note}</Note>}
+										{ingredient.note && (
+											<Note className={sprinkles({ ml: 4 })}>
+												{ingredient.note}
+											</Note>
+										)}
 									</IngredientListItem>
 								))}
 							</IngredientList>

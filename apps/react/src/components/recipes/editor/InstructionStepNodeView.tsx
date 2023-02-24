@@ -1,35 +1,53 @@
-import { Checkbox } from '@aglio/ui';
-import { Recipe } from '@aglio/groceries-client';
+import { AddNoteIcon } from '@/components/icons/AddNoteIcon.jsx';
+import { PersonSelect } from '@/components/sync/people/PersonSelect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import { Recipe } from '@aglio/groceries-client';
+import {
+	Button,
+	Checkbox,
+	CollapsibleContent,
+	CollapsibleRoot,
+	Note,
+	TextArea,
+	Tooltip,
+	useToggle,
+} from '@aglio/ui';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import classnames from 'classnames';
-import * as classes from './InstructionStepNodeView.css.js';
-import { PersonSelect } from '@/components/sync/people/PersonSelect.jsx';
 import {
-	createContext,
+	ChangeEvent,
 	ReactNode,
+	createContext,
 	useCallback,
 	useContext,
 	useMemo,
+	useState,
 } from 'react';
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import * as classes from './InstructionStepNodeView.css.js';
+import { NoteIcon } from '@/components/icons/NoteIcon.jsx';
 
 export interface InstructionStepNodeViewProps {
 	node: {
-		attrs: { id: string };
+		attrs: { id: string; note?: string };
 	};
 	extension: {
 		storage: { recipe?: Recipe };
 	};
+	updateAttributes: (attrs: { id?: string; note?: string }) => void;
 }
 
 export function InstructionStepNodeView({
 	node,
 	extension,
+	updateAttributes,
 	...rest
 }: InstructionStepNodeViewProps) {
 	const self = hooks.useSelf();
-	const { isEditing, hasPeers } = useContext(InstructionsContext);
+	const { isEditing, hasPeers, showTools } = useContext(InstructionsContext);
+
+	const { id, note } = node.attrs;
+
+	const [showNote, toggleShowNote] = useToggle(false);
 
 	const maybeRecipe = extension.storage.recipe;
 	hooks.useWatch(maybeRecipe || null);
@@ -44,22 +62,39 @@ export function InstructionStepNodeView({
 		: null;
 	hooks.useWatch(maybeAssignments);
 
-	const completed = maybeCompletedSteps?.has(node.attrs.id);
+	const completed = maybeCompletedSteps?.has(id);
 
-	const assignedPersonId = maybeAssignments?.get(node.attrs.id) ?? null;
+	const assignedPersonId = maybeAssignments?.get(id) ?? null;
 
 	const assignPersonId = useCallback(
 		(personId: string | null) => {
 			if (personId) {
-				maybeAssignments?.set(node.attrs.id, personId);
+				maybeAssignments?.set(id, personId);
 			} else {
-				maybeAssignments?.delete(node.attrs.id);
+				maybeAssignments?.delete(id);
 			}
 		},
-		[maybeAssignments, node.attrs.id],
+		[maybeAssignments, id],
 	);
 
 	const isAssignedToMe = hasPeers && assignedPersonId === self.id;
+
+	const onNoteButtonClick = useCallback(() => {
+		updateAttributes({ note: '' });
+	}, [updateAttributes]);
+
+	const updateNote = useCallback(
+		(event: ChangeEvent<HTMLTextAreaElement>) => {
+			updateAttributes({ note: event.target.value });
+		},
+		[updateAttributes],
+	);
+
+	const onNoteBlur = useCallback(() => {
+		if (note === '') {
+			updateAttributes({ note: undefined });
+		}
+	}, [note, updateAttributes]);
 
 	return (
 		<NodeViewWrapper
@@ -74,39 +109,69 @@ export function InstructionStepNodeView({
 			<div className={classes.content}>
 				<NodeViewContent />
 			</div>
+			<CollapsibleRoot open={showNote} className={classes.noteContainer}>
+				<CollapsibleContent>
+					<Note className={classes.note} contentEditable={false}>
+						<TextArea
+							className={classes.noteEditor}
+							value={note || ''}
+							onChange={updateNote}
+							onBlur={onNoteBlur}
+							autoSize
+							autoFocus={note === ''}
+						/>
+					</Note>
+				</CollapsibleContent>
+			</CollapsibleRoot>
 			{!isEditing && isAssignedToMe && (
 				<label contentEditable={false} className={classes.label}>
 					Assigned to you
 				</label>
 			)}
-			<div className={classes.tools} contentEditable={false}>
-				<Checkbox
-					checked={!isEditing && completed}
-					disabled={isEditing}
-					tabIndex={-1}
-					contentEditable={false}
-					onCheckedChange={(checked) => {
-						if (!maybeCompletedSteps) return;
-						if (!node.attrs.id) {
-							return;
-						}
+			{showTools && (
+				<div className={classes.tools} contentEditable={false}>
+					{!isEditing && (
+						<Checkbox
+							checked={!isEditing && completed}
+							tabIndex={-1}
+							contentEditable={false}
+							onCheckedChange={(checked) => {
+								if (!maybeCompletedSteps) return;
+								if (!id) {
+									return;
+								}
 
-						if (checked) {
-							maybeCompletedSteps.add(node.attrs.id);
-						} else {
-							maybeCompletedSteps.removeAll(node.attrs.id);
-						}
-					}}
-				/>
-				{!isEditing && hasPeers && (
-					<PersonSelect
-						includeSelf
-						allowNone
-						value={assignedPersonId}
-						onChange={assignPersonId}
-						label="Assign to:"
-					/>
-				)}
+								if (checked) {
+									maybeCompletedSteps.add(id);
+								} else {
+									maybeCompletedSteps.removeAll(id);
+								}
+							}}
+						/>
+					)}
+					{!isEditing && hasPeers && (
+						<PersonSelect
+							includeSelf
+							allowNone
+							value={assignedPersonId}
+							onChange={assignPersonId}
+							label="Assign to:"
+						/>
+					)}
+				</div>
+			)}
+			<div className={classes.endTools} contentEditable={false}>
+				<Tooltip content={note === undefined ? 'Add a note' : 'Show note'}>
+					<Button color="ghost" size="icon" onClick={toggleShowNote}>
+						{!!note ? (
+							<NoteIcon
+								className={showNote ? undefined : classes.noteIconWithNote}
+							/>
+						) : (
+							<AddNoteIcon />
+						)}
+					</Button>
+				</Tooltip>
 			</div>
 		</NodeViewWrapper>
 	);
@@ -115,24 +180,31 @@ export function InstructionStepNodeView({
 export const InstructionsContext = createContext<{
 	isEditing: boolean;
 	hasPeers: boolean;
+	showTools: boolean;
 }>({
 	isEditing: false,
 	hasPeers: false,
+	showTools: false,
 });
 
 export const InstructionsProvider = ({
 	isEditing,
 	recipeId,
 	children,
+	showTools,
 }: {
 	recipeId: string;
 	isEditing: boolean;
+	showTools: boolean;
 	children: ReactNode;
 }) => {
 	const hasPeers =
 		hooks.useFindPeers((peer) => peer.presence.viewingRecipeId === recipeId)
 			.length > 0;
-	const value = useMemo(() => ({ isEditing, hasPeers }), [isEditing, hasPeers]);
+	const value = useMemo(
+		() => ({ isEditing, hasPeers, showTools }),
+		[isEditing, hasPeers, showTools],
+	);
 	return (
 		<InstructionsContext.Provider value={value}>
 			{children}

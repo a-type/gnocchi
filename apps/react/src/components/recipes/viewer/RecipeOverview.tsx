@@ -2,6 +2,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import {
 	Box,
+	Divider,
 	H1,
 	H2,
 	LinkButton,
@@ -11,7 +12,7 @@ import {
 	sprinkles,
 } from '@aglio/ui';
 import { format } from 'date-fns/esm';
-import { useRecipeFromSlugUrl } from '../hooks.js';
+import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
 import {
 	ImageContainer,
 	TitleAndImageLayout,
@@ -48,6 +49,7 @@ export function RecipeOverview({ slug }: RecipeOverviewProps) {
 
 function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	const { title, createdAt, url, mainImage } = hooks.useWatch(recipe);
+	useWatchChanges(recipe);
 
 	return (
 		<Box direction="column" gap={6} align="flex-start" width="full">
@@ -117,10 +119,12 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 			</Box>
 			<RecipeTagsEditor className={sprinkles({ mt: 3 })} recipe={recipe} />
 			<PreludeSection recipe={recipe} />
-			<div>
+			<Divider />
+			<Box width="full">
 				<H2 gutterBottom>Ingredients</H2>
 				<RecipeIngredientsViewer recipe={recipe} />
-			</div>
+			</Box>
+			<Divider />
 			<Box width="full">
 				<H2 gutterBottom>Instructions</H2>
 				<Peek>

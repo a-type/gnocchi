@@ -131,6 +131,23 @@ function useSyncedEditor(
 	return editor;
 }
 
-export function useRecipeContentUpdatedAt(recipe: Recipe) {
-	const { instructions, ingredients } = hooks.useWatch(recipe);
+/**
+ * Updates the updatedAt timestamp for any changes to
+ * instructions, ingredients, or prelude.
+ */
+export function useWatchChanges(recipe: Recipe) {
+	const { ingredients, instructions, prelude } = hooks.useWatch(recipe);
+
+	useEffect(() => {
+		const unsubs = new Array<() => void>();
+		const updateTime = () => {
+			recipe.set('updatedAt', Date.now());
+		};
+		unsubs.push(ingredients.subscribe('changeDeep', updateTime));
+		unsubs.push(instructions.subscribe('changeDeep', updateTime));
+		unsubs.push(prelude.subscribe('changeDeep', updateTime));
+		return () => {
+			unsubs.forEach((unsub) => unsub());
+		};
+	}, [ingredients, instructions, prelude]);
 }

@@ -8,12 +8,18 @@ export const list = style({
 	flexDirection: 'column',
 	gap: vars.space[4],
 	padding: 0,
+	width: '100%',
 });
 
 export const item = style({
 	display: 'flex',
 	flexDirection: 'row',
 	gap: vars.space[2],
+	width: '100%',
 });
 
 export const itemChecked = style({});
+
+export const ingredientContent = style({
+	flex: 1,
+});

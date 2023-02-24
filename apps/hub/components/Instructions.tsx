@@ -1,8 +1,15 @@
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
-import { H3, P, RichEditor } from '@aglio/ui';
-import { useEditor } from '@tiptap/react';
+import { H3, Note, P, RichEditor } from '@aglio/ui';
+import {
+	useEditor,
+	ReactNodeViewRenderer,
+	NodeViewContent,
+	NodeViewWrapper,
+} from '@tiptap/react';
 import { mergeAttributes, Node } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
+import classNames from 'classnames';
+import * as classes from './Instructions.css.js';
 
 export interface InstructionsProps {
 	instructions: HubPublishedRecipeInfo['instructions'];
@@ -47,6 +54,17 @@ const Step = Node.create({
 					};
 				},
 			},
+			note: {
+				default: undefined,
+				keepOnSplit: false,
+				rendered: false,
+				parseHTML: (element) => element.getAttribute('data-note'),
+				renderHTML: (attributes) => {
+					return {
+						'data-note': attributes.note,
+					};
+				},
+			},
 		};
 	},
 
@@ -68,6 +86,10 @@ const Step = Node.create({
 			}),
 			0,
 		];
+	},
+
+	addNodeView() {
+		return ReactNodeViewRenderer(InstructionStepView);
 	},
 });
 
@@ -105,3 +127,29 @@ const SectionTitle = Node.create({
 		];
 	},
 });
+
+function InstructionStepView({
+	node,
+}: {
+	node: {
+		attrs: {
+			id: string;
+			note?: string;
+		};
+	};
+}) {
+	return (
+		<NodeViewWrapper
+			data-id={node.attrs.id}
+			className={classes.step}
+			contentEditable={false}
+		>
+			<div className={classes.content}>
+				<NodeViewContent />
+			</div>
+			{node.attrs.note && (
+				<Note className={classes.note}>{node.attrs.note}</Note>
+			)}
+		</NodeViewWrapper>
+	);
+}

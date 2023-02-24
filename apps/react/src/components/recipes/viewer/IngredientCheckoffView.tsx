@@ -60,7 +60,11 @@ function IngredientCheckoffItem({
 				checked={checked}
 				onCheckedChange={(checked) => onCheckedChange(checked === true)}
 			/>
-			<RecipeIngredientViewer ingredient={ingredient} multiplier={multiplier} />
+			<RecipeIngredientViewer
+				className={classes.ingredientContent}
+				ingredient={ingredient}
+				multiplier={multiplier}
+			/>
 		</li>
 	);
 }

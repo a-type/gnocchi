@@ -6,9 +6,17 @@ export interface NoteEditorProps {
 	value: string;
 	onChange: (value: string) => void;
 	className?: string;
+	autoFocus?: boolean;
+	onBlur?: () => void;
 }
 
-export function NoteEditor({ className, value, onChange }: NoteEditorProps) {
+export function NoteEditor({
+	className,
+	autoFocus,
+	value,
+	onChange,
+	onBlur,
+}: NoteEditorProps) {
 	return (
 		<Note className={classNames(classes.note, className)}>
 			<LiveUpdateTextField
@@ -16,6 +24,8 @@ export function NoteEditor({ className, value, onChange }: NoteEditorProps) {
 				textArea
 				value={value}
 				onChange={onChange}
+				autoFocus={autoFocus}
+				onBlur={onBlur}
 			/>
 		</Note>
 	);

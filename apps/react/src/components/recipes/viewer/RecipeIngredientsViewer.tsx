@@ -22,6 +22,7 @@ export const RecipeIngredientsViewer = forwardRef<
 			ref={ref}
 			className={sprinkles({
 				pl: 4,
+				width: 'full',
 			})}
 		>
 			{ingredients
@@ -48,6 +49,7 @@ function IngredientViewerItem({
 		<li
 			className={sprinkles({
 				mb: 3,
+				width: 'full',
 			})}
 		>
 			<RecipeIngredientViewer ingredient={ingredient} multiplier={multiplier} />

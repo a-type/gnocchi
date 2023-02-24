@@ -172,6 +172,11 @@ export const root = recipe({
 				fontSize: vars.fontSizes.sm,
 				borderRadius: vars.radii.lg,
 			},
+			icon: {
+				padding: vars.space[1],
+				fontSize: vars.fontSizes.sm,
+				borderRadius: vars.radii.lg,
+			},
 		},
 		toggled: {
 			true: {

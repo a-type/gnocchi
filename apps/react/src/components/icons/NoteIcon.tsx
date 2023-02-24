@@ -1,8 +1,8 @@
-export interface AddNoteIconProps {
+export interface NoteIconProps {
 	className?: string;
 }
 
-export function AddNoteIcon(props: AddNoteIconProps) {
+export function NoteIcon(props: NoteIconProps) {
 	return (
 		<svg
 			width="15"
@@ -12,15 +12,14 @@ export function AddNoteIcon(props: AddNoteIconProps) {
 			xmlns="http://www.w3.org/2000/svg"
 			{...props}
 		>
-			<g clipPath="url(#clip0_604_45)">
+			<g clipPath="url(#clip0_610_45)">
 				<path
-					d="M9.5 0.5H0.5V14.5H14.5V5.5M9.5 0.5L14.5 5.5M9.5 0.5V5.5H14.5M7.5 3.5V11.5M3.5 7.5H11.5"
+					d="M9.5 0.5H0.5V14.5H14.5V5.5M9.5 0.5L14.5 5.5M9.5 0.5V5.5H14.5"
 					stroke="currentColor"
-					strokeLinecap="round"
 				/>
 			</g>
 			<defs>
-				<clipPath id="clip0_604_45">
+				<clipPath id="clip0_610_45">
 					<rect width="15" height="15" fill="white" />
 				</clipPath>
 			</defs>
