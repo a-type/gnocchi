@@ -76,6 +76,8 @@ export const recipesRouter = t.router({
 				});
 			}
 
+			console.debug('snapshot', JSON.stringify(snapshot, null, 2));
+
 			const ingredients = snapshot.ingredients.map((i) => ({
 				id: i.id,
 				text: i.text,
@@ -145,8 +147,6 @@ export const recipesRouter = t.router({
 					}),
 				),
 			]);
-
-			console.log('Published recipe', saved);
 
 			// revalidate the hub page
 			fetch(`${ctx.deployedContext.hubHost}/api/revalidate`, {
