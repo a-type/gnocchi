@@ -76,8 +76,6 @@ export const recipesRouter = t.router({
 				});
 			}
 
-			console.debug('snapshot', JSON.stringify(snapshot, null, 2));
-
 			const ingredients = snapshot.ingredients.map((i) => ({
 				id: i.id,
 				text: i.text,
