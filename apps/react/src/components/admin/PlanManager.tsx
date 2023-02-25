@@ -77,7 +77,9 @@ function FeatureFlagPlanManager({
 		>
 			<div>
 				<div>
-					{!plan.members.some((m) => m.role === 'admin') && <b>🚩 no admin</b>}
+					{!plan.members.some((m) => m.role === 'admin') && (
+						<b style={{ marginRight: 8 }}>🚩 no admin</b>
+					)}
 					<span>{plan.id}</span>
 				</div>
 				<P size="xs">
@@ -89,8 +91,10 @@ function FeatureFlagPlanManager({
 				{plan.subscriptionStatus !== 'active' &&
 				plan.subscriptionStatus === 'trialing' ? (
 					<i>📈 Trial</i>
-				) : (
+				) : plan.subscriptionStatus ? (
 					<b>🚩 Subscription {plan.subscriptionStatus}</b>
+				) : (
+					<i>📉 No subscription</i>
 				)}
 			</div>
 			<Dialog>

@@ -19,12 +19,14 @@ export interface RecipeIngredientViewerProps {
 	ingredient: RecipeIngredientsItem;
 	multiplier?: number;
 	className?: string;
+	disableAddNote?: boolean;
 }
 
 export function RecipeIngredientViewer({
 	ingredient,
 	multiplier = 1,
 	className,
+	disableAddNote,
 }: RecipeIngredientViewerProps) {
 	const note = hooks.useWatch(ingredient, 'note');
 
@@ -44,15 +46,17 @@ export function RecipeIngredientViewer({
 					multiplier={multiplier}
 					ingredient={ingredient}
 				/>
-				<Button size="icon" color="ghost" onClick={toggleShowNote}>
-					{!!note ? (
-						<NoteIcon
-							className={showNote ? undefined : classes.noteIconWithNote}
-						/>
-					) : (
-						<AddNoteIcon />
-					)}
-				</Button>
+				{!disableAddNote && (
+					<Button size="icon" color="ghost" onClick={toggleShowNote}>
+						{!!note ? (
+							<NoteIcon
+								className={showNote ? undefined : classes.noteIconWithNote}
+							/>
+						) : (
+							<AddNoteIcon />
+						)}
+					</Button>
+				)}
 			</div>
 			<CollapsibleRoot open={showNote}>
 				<CollapsibleContent>

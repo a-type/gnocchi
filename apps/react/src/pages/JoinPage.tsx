@@ -11,7 +11,9 @@ export interface JoinPageProps {}
 export function JoinPage({}: JoinPageProps) {
 	const [params] = useSearchParams({ returnTo: '/', inviteId: '' });
 
-	const returnTo = params.get('returnTo') || undefined;
+	let returnTo = params.get('returnTo') || undefined;
+	// idk where this is coming from
+	if (returnTo === 'undefined') returnTo = undefined;
 
 	return (
 		<PageRoot color="lemon">

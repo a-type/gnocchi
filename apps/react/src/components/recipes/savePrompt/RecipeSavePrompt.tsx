@@ -5,6 +5,8 @@ import {
 	DialogContent,
 	DialogTitle,
 	H2,
+	Span,
+	TextLink,
 } from '@aglio/ui';
 import { Button, P } from '@aglio/ui';
 import { addRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
@@ -90,6 +92,12 @@ export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 					<P style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{url}</P>
 				)}
 
+				<Span size="sm">
+					By continuing you agree to{' '}
+					<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
+						the terms and conditions of usage.
+					</TextLink>
+				</Span>
 				<DialogActions>
 					<DialogClose asChild>
 						<Button onClick={cancelOnboarding}>Cancel</Button>

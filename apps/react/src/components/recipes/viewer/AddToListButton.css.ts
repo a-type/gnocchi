@@ -16,9 +16,12 @@ export const item = style({
 	flexDirection: 'row',
 	alignItems: 'flex-start',
 	gap: vars.space[2],
+	width: '100%',
 });
 
-export const itemContent = style({});
+export const itemContent = style({
+	flex: 1,
+});
 
 export const actions = style({
 	display: 'flex',
