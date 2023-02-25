@@ -1,4 +1,8 @@
-import { APP_NAME } from '@/config.js';
+import {
+	APP_NAME,
+	PRICE_MONTHLY_DOLLARS,
+	PRICE_YEARLY_DOLLARS,
+} from '@/config.js';
 import { sprinkles } from '@aglio/ui';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { proxy, useSnapshot } from 'valtio';
@@ -70,8 +74,8 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 						Start your subscription
 					</LoginButton>
 					<Span size="xs">
-						$3 / month ($36 / year). 14 days free. Unlimited devices and
-						collaborators.
+						${PRICE_MONTHLY_DOLLARS} / month (${PRICE_YEARLY_DOLLARS} / year).
+						14 days free. Unlimited devices and collaborators.
 					</Span>
 				</Box>
 			</DialogContent>
