@@ -65,7 +65,7 @@ export function SplashPage() {
 						style={{ gridArea: 'multiplayer' }}
 					/>
 					<Section style={{ gridArea: 'multiplayerText' }}>
-						<H2>Sign up for superpowers</H2>
+						<H2>Upgrade for superpowers</H2>
 						<p>
 							An affordable account keeps things running and nets you some cool
 							stuff:
@@ -73,7 +73,7 @@ export function SplashPage() {
 						<p className={classes.item}>
 							<span className={classes.emoji}>☁️</span>
 							<span className={classes.itemText}>
-								Sync your list to all your devices.
+								Sync your list and recipes to all your devices.
 							</span>
 						</p>
 						<p className={classes.item}>
@@ -85,7 +85,7 @@ export function SplashPage() {
 						<p className={classes.item}>
 							<span className={classes.emoji}>📌</span>
 							<span className={classes.itemText}>
-								In-store superpowers, like claiming sections and planning a
+								In-store collaboration, like claiming sections and planning a
 								place to meet up
 							</span>
 						</p>
@@ -95,6 +95,12 @@ export function SplashPage() {
 								Scan a recipe page directly to the app to add all the
 								ingredients to your list.{' '}
 								<span className={classes.beta}>BETA</span>
+							</span>
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>🧑🏻‍🍳</span>
+							<span className={classes.itemText}>
+								Coordinate with other chefs while cooking
 							</span>
 						</p>
 					</Section>
