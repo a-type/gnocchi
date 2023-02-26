@@ -8,3 +8,6 @@ export const HUB_ORIGIN = import.meta.env.VITE_HUB_ORIGIN || 'localhost:4446';
 export const HUB_HOST_HTTP = (SECURE ? 'https://' : 'http://') + HUB_ORIGIN;
 
 export const APP_NAME = 'Gnocchi';
+
+export const PRICE_MONTHLY_DOLLARS = 4;
+export const PRICE_YEARLY_DOLLARS = 48;

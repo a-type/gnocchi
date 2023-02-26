@@ -6,6 +6,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 	Note,
+	sprinkles,
 } from '@aglio/ui';
 import { Button, Checkbox } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
@@ -89,6 +90,8 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 											<RecipeIngredientViewer
 												ingredient={ingredient}
 												multiplier={multiplier}
+												className={sprinkles({ width: 'full' })}
+												disableAddNote
 											/>
 										</label>
 									</li>
