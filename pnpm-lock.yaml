@@ -494,6 +494,7 @@ importers:
       '@radix-ui/react-menu': ^1.0.0
       '@radix-ui/react-popover': ^1.0.0
       '@radix-ui/react-select': ^1.1.2
+      '@radix-ui/react-switch': ^1.0.1
       '@radix-ui/react-toast': ^1.0.0
       '@radix-ui/react-tooltip': ^1.0.0
       '@tiptap/core': ^2.0.0-beta.218
@@ -531,6 +532,7 @@ importers:
       '@radix-ui/react-menu': 1.0.0_ib3m5ricvtkl2cll7qpr2f6lvq
       '@radix-ui/react-popover': 1.0.0_ib3m5ricvtkl2cll7qpr2f6lvq
       '@radix-ui/react-select': 1.1.2_ib3m5ricvtkl2cll7qpr2f6lvq
+      '@radix-ui/react-switch': 1.0.1_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-toast': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-tooltip': 1.0.0_ib3m5ricvtkl2cll7qpr2f6lvq
       '@tiptap/core': 2.0.0-beta.218_@tiptap+pm@2.0.0-beta.218
@@ -4056,6 +4058,24 @@ packages:
       '@babel/runtime': 7.20.13
       '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
       react: 18.2.0
+    dev: false
+
+  /@radix-ui/react-switch/1.0.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-tTxGluMtwrc5ffgAiOSMrYIx0r3vSTcgM4Vl8rqfpXcHt6ryB9B0OlFKUOiDpKASXlhvzfHf4Y0AYKJdpzjL8w==}
+    peerDependencies:
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.20.13
+      '@radix-ui/primitive': 1.0.0
+      '@radix-ui/react-compose-refs': 1.0.0_react@18.2.0
+      '@radix-ui/react-context': 1.0.0_react@18.2.0
+      '@radix-ui/react-primitive': 1.0.1_biqbaboplfbrettd7655fr4n2y
+      '@radix-ui/react-use-controllable-state': 1.0.0_react@18.2.0
+      '@radix-ui/react-use-previous': 1.0.0_react@18.2.0
+      '@radix-ui/react-use-size': 1.0.0_react@18.2.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /@radix-ui/react-toast/1.0.0_biqbaboplfbrettd7655fr4n2y:

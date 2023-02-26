@@ -28,3 +28,4 @@ export * from './imageUploader/ImageUploader.jsx';
 export * from './spinner/Spinner.jsx';
 export * from './note/Note.jsx';
 export * from './peek/Peek.jsx';
+export * from './switch/Switch.jsx';

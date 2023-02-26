@@ -17,6 +17,7 @@ export const list = style({
 	maxWidth: '100%',
 	overflow: 'hidden',
 	display: 'inline-flex',
+	flexDirection: 'column',
 });
 
 export const label = style({

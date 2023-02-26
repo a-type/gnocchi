@@ -24,3 +24,7 @@ export const wordBought = style({
 export const mainContent = style({
 	paddingLeft: vars.space[2],
 });
+
+export const expiredWarning = style({
+	color: vars.colors.attentionDark,
+});

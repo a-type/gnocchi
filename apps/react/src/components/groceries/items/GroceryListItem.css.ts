@@ -146,10 +146,11 @@ export const secondaryContent = style({
 export const controls = style({
 	display: 'flex',
 	flexDirection: 'row',
-	gap: vars.space[2],
+	gap: vars.space[3],
 	flexWrap: 'wrap',
 	justifyContent: 'flex-end',
 	width: '100%',
+	alignItems: 'center',
 });
 
 const expand = keyframes({

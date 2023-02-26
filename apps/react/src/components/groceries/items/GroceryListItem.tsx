@@ -67,6 +67,7 @@ import * as classes from './GroceryListItem.css.js';
 import { useItemDisplayText } from './hooks.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemSources } from './ItemSources.js';
+import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -90,7 +91,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		{ item, isDragActive, menuProps, className, ...rest },
 		ref,
 	) {
-		const { purchasedAt, comment, id } = hooks.useWatch(item);
+		const { purchasedAt, comment, id, food } = hooks.useWatch(item);
 
 		const isPurchased = !!purchasedAt;
 		const { purchasedHidingItems } = useSnapshot(groceriesState);
@@ -206,8 +207,13 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 								value={item.get('listId')}
 								onChange={(listId) => item.set('listId', listId)}
 							/>
-							<CategoryPicker item={item} />
-							<ItemDeleteButton color="ghostDestructive" item={item}>
+							<FoodDetailDialog foodName={food} />
+							{/* <CategoryPicker item={item} /> */}
+							<ItemDeleteButton
+								size="icon"
+								color="ghostDestructive"
+								item={item}
+							>
 								<TrashIcon />
 							</ItemDeleteButton>
 						</div>

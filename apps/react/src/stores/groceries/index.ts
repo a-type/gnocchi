@@ -139,12 +139,12 @@ export const groceries = {
 	},
 	purchaseItem: async (item: Item) => {
 		const storage = await _groceries;
-		// also set expiration based on food category
-		const categoryId = item.get('categoryId');
-		const category = categoryId
-			? await storage.categories.get(categoryId).resolved
-			: null;
-		const expirationDays = category?.get('expirationDays');
+		// also set expiration based on food info
+		const food = await storage.foods.findOne({
+			where: 'nameLookup',
+			equals: item.get('food'),
+		}).resolved;
+		const expirationDays = food?.get('expiresAfterDays');
 		item.set('purchasedAt', Date.now());
 		if (expirationDays) {
 			item.set('expiredAt', Date.now() + expirationDays * 24 * 60 * 60 * 1000);

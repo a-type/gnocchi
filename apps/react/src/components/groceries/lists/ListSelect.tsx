@@ -51,14 +51,12 @@ export function ListSelect({ value, onChange, includeAll }: ListSelectProps) {
 				</SelectTrigger>
 				<SelectContent>
 					{includeAll && <SelectItem value="undefined">All lists</SelectItem>}
-					{lists.length > 0 && (
-						<SelectItem value={'null'}>
-							<Box direction="row" gap={2} align="center">
-								<TagIcon fill className={themeMap.lemon} />
-								<span>Default</span>
-							</Box>
-						</SelectItem>
-					)}
+					<SelectItem value={'null'}>
+						<Box direction="row" gap={2} align="center">
+							<TagIcon fill className={themeMap.lemon} />
+							<span>Default</span>
+						</Box>
+					</SelectItem>
 					{lists.map((list) => (
 						<SelectItem key={list.get('id')} value={list.get('id')}>
 							<Box direction="row" gap={2} align="center">
