@@ -18,3 +18,4 @@ export * from './hooks/useSize.js';
 export * from './hooks/useStableCallback.js';
 export * from './hooks/useToggle.jsx';
 export * from './withClassName.jsx';
+export * from './hooks/useVisualViewportOffset.js';

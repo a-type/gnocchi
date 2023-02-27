@@ -46,11 +46,11 @@ export const content = recipe({
 		zIndex: vars.zIndices.dialog,
 		position: 'fixed',
 
-		bottom: 0,
+		bottom: 'var(--viewport-bottom-offset, 0px)',
 		left: 0,
 		right: 0,
 		height: 'min-content',
-		maxHeight: '85vh',
+		maxHeight: 'calc(0.85 * var(--viewport-height, 100vh))',
 
 		transform: 'translate(0, 0, 0)',
 

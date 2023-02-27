@@ -6,7 +6,15 @@ import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import * as classes from './App.css.js';
 
-import { Box, Button, ErrorBoundary, H1, P, TooltipProvider } from '@aglio/ui';
+import {
+	Box,
+	Button,
+	ErrorBoundary,
+	H1,
+	P,
+	TooltipProvider,
+	useVisualViewportOffset,
+} from '@aglio/ui';
 
 import { lemonTheme } from '@aglio/ui';
 import { Pages } from './pages/Pages.jsx';
@@ -21,6 +29,8 @@ export function App() {
 			document.body.className = lemonTheme;
 		}
 	}, []);
+
+	useVisualViewportOffset();
 
 	return (
 		<div className={clsx(classes.wrapper, lemonTheme)}>

@@ -76,7 +76,7 @@ function CategoryList() {
 
 	return (
 		<SortableContext items={categoryIds}>
-			<Box direction="column" gap={3}>
+			<Box direction="column" minHeight={0} mb={3} overflowY="auto">
 				{categories.map((category) => {
 					const { prev, next } = getNextAndPrevSortKeys(
 						categoryKeys,
@@ -93,8 +93,8 @@ function CategoryList() {
 						/>
 					);
 				})}
-				<AddCategoryForm />
 			</Box>
+			<AddCategoryForm />
 		</SortableContext>
 	);
 }
