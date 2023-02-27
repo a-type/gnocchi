@@ -14,9 +14,9 @@ export function GroceriesActionBar({}: GroceriesActionBarProps) {
 	return (
 		<ActionBar>
 			<People avatarClassName={classes.avatar} hideIfAlone />
-			<MeetupAction />
 			<UndoAction />
 			<RedoAction />
+			<MeetupAction />
 			<PurchaseAllAction />
 			<DeleteAllAction />
 		</ActionBar>
