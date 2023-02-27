@@ -43,3 +43,12 @@ export function useItemsGroupedAndSorted() {
 		return { groupedItems: categoryGroups, empty: items.length === 0 };
 	}, [items, categories]);
 }
+
+export function useExpiresSoonItems() {
+	return hooks.useAllItems({
+		index: {
+			where: 'purchasedAndExpiresAt',
+			lt: Date.now() + 1000 * 60 * 60 * 24 * 3,
+		},
+	});
+}

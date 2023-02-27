@@ -302,6 +302,22 @@ export interface ItemListIdStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+
+export interface ItemPurchasedAndExpiresAtMatchFilter {
+  where: "purchasedAndExpiresAt";
+  equals: number;
+  order?: "asc" | "desc";
+}
+
+export interface ItemPurchasedAndExpiresAtRangeFilter {
+  where: "purchasedAndExpiresAt";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
+}
+
 export type ItemFilter =
   | ItemCategoryIdMatchFilter
   | ItemCategoryIdRangeFilter
@@ -316,7 +332,9 @@ export type ItemFilter =
   | ItemPurchasedStartsWithFilter
   | ItemListIdMatchFilter
   | ItemListIdRangeFilter
-  | ItemListIdStartsWithFilter;
+  | ItemListIdStartsWithFilter
+  | ItemPurchasedAndExpiresAtMatchFilter
+  | ItemPurchasedAndExpiresAtRangeFilter;
 
 export type ItemDestructured = {
   id: string;
@@ -327,7 +345,7 @@ export type ItemDestructured = {
   food: string;
   inputs: ItemInputs;
   purchasedAt: number | null;
-  expiredAt: number | null;
+  expiresAt: number | null;
   listId: string | null;
   comment: string | null;
 };
@@ -340,7 +358,7 @@ export type ItemInit = {
   food: string;
   inputs?: ItemInputsInit;
   purchasedAt?: number | null;
-  expiredAt?: number | null;
+  expiresAt?: number | null;
   listId?: string | null;
   comment?: string | null;
 };
@@ -353,7 +371,7 @@ export type ItemSnapshot = {
   food: string;
   inputs: ItemInputsSnapshot;
   purchasedAt: number | null;
-  expiredAt: number | null;
+  expiresAt: number | null;
   listId: string | null;
   comment: string | null;
 };
@@ -444,10 +462,10 @@ type ItemPurchasedAt = number | null;
 type ItemPurchasedAtInit = ItemPurchasedAt | undefined;
 type ItemPurchasedAtSnapshot = ItemPurchasedAt;
 type ItemPurchasedAtDestructured = ItemPurchasedAt;
-type ItemExpiredAt = number | null;
-type ItemExpiredAtInit = ItemExpiredAt | undefined;
-type ItemExpiredAtSnapshot = ItemExpiredAt;
-type ItemExpiredAtDestructured = ItemExpiredAt;
+type ItemExpiresAt = number | null;
+type ItemExpiresAtInit = ItemExpiresAt | undefined;
+type ItemExpiresAtSnapshot = ItemExpiresAt;
+type ItemExpiresAtDestructured = ItemExpiresAt;
 type ItemListId = string | null;
 type ItemListIdInit = ItemListId | undefined;
 type ItemListIdSnapshot = ItemListId;

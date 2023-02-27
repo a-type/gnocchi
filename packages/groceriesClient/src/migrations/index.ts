@@ -21,6 +21,7 @@ import v20 from "./v20.js";
 import v21 from "./v21.js";
 import v22 from "./v22.js";
 import v23 from "./v23.js";
+import v24 from "./v24.js";
 
 export default [
   v1,
@@ -46,4 +47,5 @@ export default [
   v21,
   v22,
   v23,
+  v24,
 ];

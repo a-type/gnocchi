@@ -147,7 +147,7 @@ export const groceries = {
 		const expirationDays = food?.get('expiresAfterDays');
 		item.set('purchasedAt', Date.now());
 		if (expirationDays) {
-			item.set('expiredAt', Date.now() + expirationDays * 24 * 60 * 60 * 1000);
+			item.set('expiresAt', Date.now() + expirationDays * 24 * 60 * 60 * 1000);
 		}
 	},
 	purchaseItems: async (items: Item[]) => {
@@ -329,6 +329,12 @@ export const groceries = {
 			});
 		}
 	},
+	cloneItem: async (item: Item) => {
+		const storage = await _groceries;
+		const { id, ...snapshot } = item.getSnapshot();
+		const newItem = await storage.items.put(snapshot);
+		return newItem;
+	},
 	deleteCategory: async (categoryId: string) => {
 		const storage = await _groceries;
 		const matchingItems = await storage.items.findAll({
@@ -349,6 +355,17 @@ export const groceries = {
 		}
 
 		storage.categories.delete(categoryId);
+	},
+	deleteList: async (listId: string) => {
+		const storage = await _groceries;
+		const matchingItems = await storage.items.findAll({
+			where: 'listId',
+			equals: listId,
+		}).resolved;
+		for (const item of matchingItems) {
+			item.set('listId', null);
+		}
+		storage.lists.delete(listId);
 	},
 };
 

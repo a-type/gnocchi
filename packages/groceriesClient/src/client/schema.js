@@ -148,7 +148,7 @@ const items = collection({
         /**
 		 * This can be, and is, set in the future at the time of purchase
 		 * based on category expiration settings.
-		 */ expiredAt: {
+		 */ expiresAt: {
             type: 'number',
             nullable: true
         },
@@ -174,6 +174,13 @@ const items = collection({
         listId: {
             type: 'string',
             compute: (doc)=>doc.listId
+        },
+        purchasedAndExpiresAt: {
+            type: 'number',
+            compute: (doc)=>{
+                if (!doc.purchasedAt || !doc.expiresAt) return Number.MAX_SAFE_INTEGER;
+                return doc.expiresAt;
+            }
         }
     },
     compounds: {
@@ -410,7 +417,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 23,
+    version: 24,
     collections: {
         categories,
         items,

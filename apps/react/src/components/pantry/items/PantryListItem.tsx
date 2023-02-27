@@ -15,8 +15,7 @@ export interface PantryListItemProps {
 }
 
 export function PantryListItem({ item, ...rest }: PantryListItemProps) {
-	const { id, purchasedAt, inputs, totalQuantity, food, expiredAt } =
-		hooks.useWatch(item);
+	const { id, purchasedAt, food, expiresAt } = hooks.useWatch(item);
 
 	const deleteItem = () => {
 		groceries.deleteItem(item);
@@ -24,7 +23,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 
 	// within 3 days
 	const isAlmostOrExpired =
-		expiredAt && expiredAt < Date.now() + 1000 * 60 * 60 * 24 * 3;
+		expiresAt && expiresAt < Date.now() + 1000 * 60 * 60 * 24 * 3;
 
 	return (
 		<div className={groceryItemClasses.root} data-id={id} {...rest}>

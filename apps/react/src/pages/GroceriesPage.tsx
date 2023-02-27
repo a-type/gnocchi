@@ -19,6 +19,7 @@ import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/
 import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
 import { UnsubscribedOnly } from '@/components/auth/UnsubscribedOnly.jsx';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
+import { hooks } from '@/stores/groceries/index.js';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -86,6 +87,9 @@ export function GroceriesPage() {
 					<SubscriptionExpiredDialog />
 					<CompleteSignupDialog />
 					<SignupSuccessBanner />
+					<Suspense>
+						{listId && <UnknownListRedirect listId={listId} />}
+					</Suspense>
 				</PageContent>
 				<RecipePresenceNotification />
 			</ThemedPageRoot>
@@ -121,4 +125,17 @@ function ThemedPageRootInner({
 			<PageRoot className={theme}>{children}</PageRoot>
 		</Suspense>
 	);
+}
+
+function UnknownListRedirect({ listId }: { listId: string }) {
+	const list = hooks.useList(listId);
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!list) {
+			navigate('/');
+		}
+	}, [list, navigate]);
+
+	return null;
 }
