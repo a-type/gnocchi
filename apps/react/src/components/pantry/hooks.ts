@@ -1,5 +1,7 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Category, Item } from '@aglio/groceries-client';
+import addDays from 'date-fns/addDays';
+import endOfDay from 'date-fns/endOfDay';
 import { useMemo } from 'react';
 
 export function useItemsGroupedAndSorted() {
@@ -44,11 +46,13 @@ export function useItemsGroupedAndSorted() {
 	}, [items, categories]);
 }
 
+// keeping this static to make the query reusable
+const THREE_DAYS_FROM_NOW = addDays(endOfDay(new Date()), 3).getTime();
 export function useExpiresSoonItems() {
 	return hooks.useAllItems({
 		index: {
 			where: 'purchasedAndExpiresAt',
-			lt: Date.now() + 1000 * 60 * 60 * 24 * 3,
+			lt: THREE_DAYS_FROM_NOW,
 		},
 	});
 }

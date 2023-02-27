@@ -331,8 +331,11 @@ export const groceries = {
 	},
 	cloneItem: async (item: Item) => {
 		const storage = await _groceries;
-		const { id, ...snapshot } = item.getSnapshot();
-		const newItem = await storage.items.put(snapshot);
+		const { id, purchasedAt, expiresAt, ...snapshot } = item.getSnapshot();
+		// make a clone of the remaining data
+		// FIXME: lo-fi should not reuse oids on puts
+		const clone = JSON.parse(JSON.stringify(snapshot));
+		const newItem = await storage.items.put(clone);
 		return newItem;
 	},
 	deleteCategory: async (categoryId: string) => {

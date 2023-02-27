@@ -4,6 +4,7 @@ import { style } from '@vanilla-extract/css';
 export const root = style({
 	display: 'flex',
 	flexDirection: 'column',
+	marginBottom: vars.space[6],
 });
 
 export const list = style({
@@ -16,20 +17,32 @@ export const item = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[2],
-	padding: vars.space[2],
+	padding: vars.space[3],
 	borderRadius: vars.radii.lg,
-	backgroundColor: vars.colors.gray10,
+	backgroundColor: vars.colors.white,
+	border: `1px solid ${vars.colors.gray60}`,
 });
 
 export const itemContent = style({
 	display: 'flex',
 	flexDirection: 'row',
-	alignItems: 'center',
+	alignItems: 'flex-start',
 	gap: vars.space[2],
 });
 
 export const itemText = style({
 	flex: 1,
+});
+
+export const dateStack = style({
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space[1],
+	fontSize: vars.fontSizes.sm,
+});
+
+export const purchasedAt = style({
+	color: vars.colors.gray80,
 });
 
 export const expiresAt = style({
@@ -41,6 +54,10 @@ export const itemActions = style({
 	display: 'flex',
 	flexDirection: 'row',
 	alignItems: 'center',
-	justifyContent: 'stretch',
+	width: '100%',
 	gap: vars.space[2],
+});
+
+export const itemFoodInfo = style({
+	marginLeft: 'auto',
 });
