@@ -20,7 +20,7 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 	if (expiresSoonItems.length === 0) return null;
 
 	return (
-		<div>
+		<div className={classes.root}>
 			<H2 gutterBottom>Expiring Soon</H2>
 			<div className={classNames(classes.list, className)}>
 				{expiresSoonItems.map((item) => (

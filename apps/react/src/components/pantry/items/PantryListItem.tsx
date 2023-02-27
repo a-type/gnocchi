@@ -10,6 +10,7 @@ import { Item } from '@aglio/groceries-client';
 import classNames from 'classnames';
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
+import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -27,13 +28,15 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 		expiresAt && expiresAt < Date.now() + 1000 * 60 * 60 * 24 * 3;
 
 	let expiresAtText = '';
-	if (expiresAt) {
+	if (expiresAt && purchasedAt) {
 		if (expiresAt && expiresAt < Date.now()) {
 			expiresAtText = 'Expired ';
 		} else {
 			expiresAtText = 'Expires ';
 		}
-		expiresAtText += formatDistanceToNowStrict(expiresAt, { addSuffix: true });
+		expiresAtText += formatDistanceStrict(expiresAt, purchasedAt, {
+			addSuffix: true,
+		});
 	}
 
 	return (
