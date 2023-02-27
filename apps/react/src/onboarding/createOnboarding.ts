@@ -14,6 +14,7 @@ export type Onboarding<Steps extends StringTuple> = {
 export function createOnboarding<Steps extends StringTuple>(
 	name: string,
 	steps: Steps,
+	startImmediately?: boolean,
 ): Onboarding<Steps> {
 	const stepUnmounted: Record<string, boolean> = {};
 
@@ -21,7 +22,9 @@ export function createOnboarding<Steps extends StringTuple>(
 		typeof window !== 'undefined'
 			? localStorage.getItem(`onboarding-${name}`)
 			: null;
-	let activeState: Steps[number] | 'complete' | null = null;
+	let activeState: Steps[number] | 'complete' | null = startImmediately
+		? steps[0]
+		: null;
 	if (activeStateStr) {
 		if (activeStateStr === 'complete') activeState = 'complete';
 		else activeState = steps.find((step) => step === activeStateStr) ?? null;

@@ -107,12 +107,13 @@ const GroceryListCategories = forwardRef<
 			ref={ref}
 			{...props}
 		>
-			{categoryGroups.map(({ category, items }) => {
+			{categoryGroups.map(({ category, items }, i) => {
 				return (
 					<MemoizedCategory
 						key={category?.get('id') || 'null'}
 						items={items}
 						category={category}
+						first={i === 0}
 					/>
 				);
 			})}

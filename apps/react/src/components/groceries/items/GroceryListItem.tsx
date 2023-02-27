@@ -68,6 +68,8 @@ import { useItemDisplayText } from './hooks.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemSources } from './ItemSources.js';
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
+import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
+import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -77,6 +79,7 @@ export interface GroceryListItemProps {
 	menuProps?: Omit<ButtonProps, 'item'> & {
 		ref?: Ref<HTMLButtonElement>;
 	};
+	first?: boolean;
 }
 
 function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
@@ -88,7 +91,7 @@ function preventDefault(e: React.MouseEvent | React.PointerEvent) {
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 	function GroceryListItem(
-		{ item, isDragActive, menuProps, className, ...rest },
+		{ item, isDragActive, menuProps, className, first, ...rest },
 		ref,
 	) {
 		const { purchasedAt, comment, id, food } = hooks.useWatch(item);
@@ -188,7 +191,18 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							onContextMenu={preventDefault}
 							{...menuProps}
 						>
-							<HamburgerMenuIcon />
+							{first ? (
+								<OnboardingTooltip
+									onboarding={categorizeOnboarding}
+									step="categorize"
+									content="Tap and hold to change category"
+									disableNext
+								>
+									<HamburgerMenuIcon />
+								</OnboardingTooltip>
+							) : (
+								<HamburgerMenuIcon />
+							)}
 						</Button>
 					</CollapsibleTrigger>
 				</div>
@@ -248,7 +262,13 @@ function useDidQuantityJustChange(item: Item) {
 
 const touchActionNoneStyle = { touchAction: 'none' };
 
-export function GroceryListItemDraggable({ item, ...rest }: { item: Item }) {
+export function GroceryListItemDraggable({
+	item,
+	...rest
+}: {
+	item: Item;
+	first?: boolean;
+}) {
 	const {
 		attributes,
 		listeners,
