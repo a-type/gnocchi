@@ -203,7 +203,7 @@ importers:
       '@types/react': ^18.0.14
       '@types/react-dom': ^18.0.5
       '@types/three': ^0.146.0
-      '@use-gesture/react': ^10.2.23
+      '@use-gesture/react': ^10.2.24
       '@vanilla-extract/css': ^1.9.1
       '@vanilla-extract/css-utils': ^0.1.3
       '@vanilla-extract/recipes': ^0.2.5
@@ -291,7 +291,7 @@ importers:
       '@trpc/client': 10.5.0_@trpc+server@10.5.0
       '@trpc/react-query': 10.5.0_i3ykvnz4igoclzsim3lzrnoi4y
       '@trpc/server': 10.5.0
-      '@use-gesture/react': 10.2.23_react@18.2.0
+      '@use-gesture/react': 10.2.24_react@18.2.0
       '@vanilla-extract/css': 1.9.1
       '@vanilla-extract/css-utils': 0.1.3
       '@vanilla-extract/recipes': 0.2.5_@vanilla-extract+css@1.9.1
@@ -4357,7 +4357,7 @@ packages:
       '@babel/runtime': 7.18.9
       '@react-spring/three': 9.5.5_aj5kj473hsgheg4miwvuwybosy
       '@react-three/fiber': 8.9.1_mjlgqb43i6mvslmnwgzrdumoh4
-      '@use-gesture/react': 10.2.23_react@18.2.0
+      '@use-gesture/react': 10.2.24_react@18.2.0
       detect-gpu: 4.0.47
       glsl-noise: 0.0.0
       lodash.clamp: 4.0.3
@@ -5432,16 +5432,16 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: false
 
-  /@use-gesture/core/10.2.23:
-    resolution: {integrity: sha512-Ynap/Uh6RX1Vgn3zNmFTyKapapdf7Av+GzAe6h+RsBZaxMF1z3cK6aohHPJP6T1hLrPyH/yehxa7RBqyESG9RA==}
+  /@use-gesture/core/10.2.24:
+    resolution: {integrity: sha512-ZL7F9mgOn3Qlnp6QLI9jaOfcvqrx6JPE/BkdVSd8imveaFTm/a3udoO6f5Us/1XtqnL4347PsIiK6AtCvMHk2Q==}
     dev: false
 
-  /@use-gesture/react/10.2.23_react@18.2.0:
-    resolution: {integrity: sha512-anj9j3Lm4l+/s60Jv1FD2m13r+T+aYstSHUT62hTugojM64LPe9XatfEVHRyWOrGjRU2buQhlm03xN8oxkg/OQ==}
+  /@use-gesture/react/10.2.24_react@18.2.0:
+    resolution: {integrity: sha512-rAZ8Nnpu1g4eFzqCPlaq+TppJpMy0dTpYOQx5KpfoBF4P3aWnCqwj7eKxcmdIb1NJKpIJj50DPugUH4mq5cpBg==}
     peerDependencies:
       react: '>= 16.8.0'
     dependencies:
-      '@use-gesture/core': 10.2.23
+      '@use-gesture/core': 10.2.24
       react: 18.2.0
     dev: false
 
