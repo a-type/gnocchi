@@ -7,6 +7,7 @@ import { CookingToolbar } from './CookingToolbar.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
 import * as classes from './RecipeCookView.css.js';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
+import { AddImagePrompt } from './AddImagePrompt.jsx';
 
 export interface RecipeCookViewProps {
 	slug: string;
@@ -29,6 +30,7 @@ export function RecipeCookView({ className }: { className?: string }) {
 			>
 				<RecipeInstructionsViewer recipe={recipe} />
 			</InstructionsProvider>
+			<AddImagePrompt recipe={recipe} />
 			<CookingToolbar recipe={recipe} />
 		</div>
 	);

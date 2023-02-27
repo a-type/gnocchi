@@ -17,7 +17,7 @@ export const fileInput = style({
 });
 
 export const dragging = style({
-	backgroundColor: 'rgba(0, 0, 0, 0.1)',
+	backgroundColor: 'rgba(30, 20, 0, 0.1)',
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',

@@ -1,7 +1,5 @@
 import { globalStyle, style } from '@vanilla-extract/css';
 
-export const root = style({
-	marginBottom: 300,
-});
+export const root = style({});
 
 globalStyle(`${root} .ProseMirror`, {});

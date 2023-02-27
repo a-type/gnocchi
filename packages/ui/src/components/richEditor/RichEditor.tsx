@@ -9,7 +9,9 @@ import { clsx } from 'clsx';
 import { forwardRef, Ref } from 'react';
 import * as classes from './RichEditor.css.js';
 
-export interface RichEditorProps extends EditorContentProps {}
+export interface RichEditorProps extends EditorContentProps {
+	className?: string;
+}
 
 export const RichEditor = forwardRef<PureEditorContent, RichEditorProps>(
 	function RichEditor({ className, ...rest }, ref) {
