@@ -1,5 +1,4 @@
 import { Button, Dialog, DialogContent } from '@aglio/ui';
-// @ts-ignore
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import * as classes from './UpdatePrompt.css.js';
 import { StarIcon } from '@radix-ui/react-icons';
@@ -10,23 +9,17 @@ const TEST = false;
 
 export function UpdatePrompt({}: UpdatePromptProps) {
 	const {
-		offlineReady: [offlineReady, setOfflineReady],
-		needRefresh: [needRefresh, setNeedRefresh],
+		needRefresh: [needRefresh],
 		updateServiceWorker,
 	} = useRegisterSW({
 		// @ts-ignore
 		onRegisteredSW(swUrl, r) {
 			console.log('Service worker registered', swUrl);
-			// @ts-ignore
-			if (reloadSW === 'true') {
-				r &&
-					setInterval(() => {
-						r.update();
-						// hourly
-					}, 60 * 60 * 1000);
-			} else {
-				console.log('Service worker registered: ' + r);
-			}
+			r &&
+				setInterval(() => {
+					r.update();
+					// hourly
+				}, 60 * 60 * 1000);
 		},
 		// @ts-ignore
 		onRegisterError(error) {

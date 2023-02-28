@@ -1,19 +1,26 @@
-import { PageContent, PageRoot } from '@aglio/ui';
-import { Box } from '@aglio/ui';
-import { Button, ButtonProps, H1, Span, TextLink } from '@aglio/ui';
-import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
-import { API_HOST_HTTP } from '@/config.js';
-import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
-import { Link } from 'react-router-dom';
-import { ManageCategoriesDialog } from '@/components/menu/ManageCategoriesDialog.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
-import { ReactNode } from 'react';
+import { ManageCategoriesDialog } from '@/components/menu/ManageCategoriesDialog.jsx';
+import { InstallHint } from '@/components/promotional/InstallHint.jsx';
+import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
+import { LoginButton } from '@/components/sync/LoginButton.jsx';
+import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
+import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
+import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
-import { LoginButton } from '@/components/sync/LoginButton.jsx';
-import { InstallHint } from '@/components/promotional/InstallHint.jsx';
-import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
+import {
+	Box,
+	Button,
+	ButtonProps,
+	H1,
+	PageContent,
+	PageRoot,
+	Span,
+	TextLink,
+} from '@aglio/ui';
+import { ArrowRightIcon } from '@radix-ui/react-icons';
+import { ReactNode } from 'react';
 
 const contents = {
 	offline: OfflineContents,
@@ -146,6 +153,7 @@ function OnlineContents() {
 			<ManageCategories />
 			<MemberManager />
 			<BugButton />
+			<ResetToServer />
 			<LogoutButton>Sign out</LogoutButton>
 		</MainContainer>
 	);

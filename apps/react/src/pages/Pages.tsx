@@ -1,39 +1,38 @@
-import { lazy, Suspense, useEffect } from 'react';
-import {
-	createBrowserRouter,
-	Navigate,
-	Outlet,
-	Route,
-	RouterProvider,
-	Routes,
-	useLocation,
-	useMatches,
-	useNavigation,
-} from 'react-router-dom';
-import { GroceriesPage } from './GroceriesPage.jsx';
-import { PantryPage } from './PantryPage.jsx';
-import { NotFoundPage } from './NotFoundPage.jsx';
-import {
-	FullScreenSpinner,
-	NavContextProvider,
-	NowPlayingProvider,
-	PageContent,
-	PageNav,
-	PageRoot,
-} from '@aglio/ui';
-import { atom, useAtomValue } from 'jotai';
-import { Box, Button, H1, LinkButton, P, ThemeName } from '@aglio/ui';
-import RecipesPage from './recipe/RecipesPage.jsx';
-import { NavBar } from '@/components/nav/NavBar.jsx';
-import { VerifyPasswordResetPage } from './VerifyPasswordReset.jsx';
-import { StartSignupDialog } from '@/components/sync/StartSignupDialog.jsx';
-import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
 import { DomainChangeDialog } from '@/components/auth/DomainChangeDialog.jsx';
 import { LogoutNotice } from '@/components/auth/LogoutNotice.jsx';
+import { SubscribedOnly } from '@/components/auth/SubscribedOnly.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
-import { PrivacyPolicy } from './PrivacyPolicy.jsx';
-import { TermsAndConditions } from './TermsAndConditions.jsx';
-import { hooks } from '@/stores/groceries/index.js';
+import { NavBar } from '@/components/nav/NavBar.jsx';
+import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
+import { StartSignupDialog } from '@/components/sync/StartSignupDialog.jsx';
+import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
+import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useLocalStorage } from '@/hooks/useLocalStorage.js';
+import {
+	Box,
+	Button,
+	FullScreenSpinner,
+	H1,
+	LinkButton,
+	NavContextProvider,
+	NowPlayingProvider,
+	P,
+	PageContent,
+	PageRoot,
+} from '@aglio/ui';
+import { lazy, Suspense } from 'react';
+import {
+	createBrowserRouter,
+	Outlet,
+	RouterProvider,
+	useMatches,
+} from 'react-router-dom';
+import { useRegisterSW } from 'virtual:pwa-register/react';
+import { GroceriesPage } from './GroceriesPage.jsx';
+import { NotFoundPage } from './NotFoundPage.jsx';
+import { PantryPage } from './PantryPage.jsx';
+import RecipesPage from './recipe/RecipesPage.jsx';
+import { VerifyPasswordResetPage } from './VerifyPasswordReset.jsx';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -262,18 +261,41 @@ function PageLayoutRoot() {
 }
 
 function ErrorFallback() {
+	const isSubscribed = useIsSubscribed();
+	const [lastErrorReload, setLastErrorReload] = useLocalStorage(
+		'lastErrorReload',
+		0,
+	);
+
+	const hadRecentError = lastErrorReload > Date.now() - 1000 * 60 * 60;
+
+	const { updateServiceWorker } = useRegisterSW();
+
+	const refresh = () => {
+		setLastErrorReload(Date.now());
+		updateServiceWorker();
+		window.location.reload();
+	};
+
 	return (
 		<Box align="center" justify="center" p={4}>
 			<Box align="flex-start" justify="center" gap={4} maxWidth="content">
 				<H1>Something went wrong</H1>
 				<P>
-					Sorry about this. The app has crashed. You can try refreshing, but if
-					that doesn't work,{' '}
-					<a href="mailto:gaforres@gmail.com">let me know about it.</a>
+					Sorry about this. The app has crashed.{' '}
+					{hadRecentError
+						? `Looks like refreshing didn't work either... I recommend reporting a bug using the button below.`
+						: `You can try refreshing, but if
+					that doesn't work, use the button below to report the issue.`}
 				</P>
 				<LinkButton to="/">Go Home</LinkButton>
-				<Button onClick={() => window.location.reload()}>Refresh</Button>
+				<Button onClick={refresh}>Refresh</Button>
 				<BugButton />
+				{hadRecentError && isSubscribed && (
+					<SubscribedOnly>
+						<ResetToServer />
+					</SubscribedOnly>
+				)}
 			</Box>
 		</Box>
 	);
