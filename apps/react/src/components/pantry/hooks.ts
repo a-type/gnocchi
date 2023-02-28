@@ -1,8 +1,9 @@
+import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Category, Item } from '@aglio/groceries-client';
 import addDays from 'date-fns/addDays';
 import endOfDay from 'date-fns/endOfDay';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export function useItemsGroupedAndSorted() {
 	const items =
@@ -55,4 +56,25 @@ export function useExpiresSoonItems() {
 			lt: THREE_DAYS_FROM_NOW,
 		},
 	});
+}
+
+export function useHasNewExpirations() {
+	const [latestSeen, setLatestSeen] = useLocalStorage(
+		'latestSeenExpiration',
+		Date.now(),
+	);
+	const expiresSoonItems = useExpiresSoonItems();
+	const newerExpireTime = useMemo(() => {
+		if (!expiresSoonItems) return false;
+		const latestExpiration = expiresSoonItems.reduce((latest, item) => {
+			const expiresAt = item.get('expiresAt')!;
+			if (expiresAt > latest) return expiresAt;
+			return latest;
+		}, 0);
+		return latestExpiration > latestSeen ? latestExpiration : undefined;
+	}, [expiresSoonItems, latestSeen]);
+	const onSeen = useCallback(() => {
+		setLatestSeen(newerExpireTime);
+	}, [setLatestSeen, newerExpireTime]);
+	return [!!newerExpireTime, onSeen] as const;
 }

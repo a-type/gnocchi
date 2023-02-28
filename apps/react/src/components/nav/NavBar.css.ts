@@ -56,6 +56,7 @@ export const button = style({
 	transition: `background-color 0.2s ease-out, color 0.2s ease-out`,
 	height: '100%',
 	gap: 6,
+	position: 'relative',
 
 	'@media': {
 		[mediaQueries.sm]: {
@@ -162,4 +163,15 @@ export const logoText = style({
 	fontSize: vars.fontSizes.md,
 	fontFamily: vars.fonts.title,
 	fontWeight: vars.fontWeights.medium,
+});
+
+export const pip = style({
+	position: 'absolute',
+	top: 6,
+	right: 6,
+	width: 6,
+	height: 6,
+	borderRadius: '100%',
+	backgroundColor: vars.colors.attention,
+	boxShadow: vars.shadows.sm,
 });

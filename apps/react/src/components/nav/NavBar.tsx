@@ -22,6 +22,7 @@ import { PopEffect } from './PopEffect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
+import { useHasNewExpirations } from '../pantry/hooks.js';
 
 export interface NavBarProps {}
 
@@ -101,12 +102,14 @@ const NavBarLink = memo(
 			icon: ReactNode;
 			animate?: boolean;
 			active: boolean;
+			onClick?: () => void;
 		}
-	>(function NavBarLink({ to, children, icon, animate, active }, ref) {
+	>(function NavBarLink({ to, children, icon, animate, active, onClick }, ref) {
 		// reset undo history when navigating
 		const client = hooks.useClient();
-		const onClick = useCallback(() => {
+		const handleClick = useCallback(() => {
 			client.undoHistory.clear();
+			onClick?.();
 		}, [client]);
 
 		return (
@@ -115,7 +118,7 @@ const NavBarLink = memo(
 				className={clsx(classes.button, {
 					[classes.buttonActive]: active,
 				})}
-				onClick={onClick}
+				onClick={handleClick}
 				ref={ref}
 			>
 				<div className={classes.iconContainer}>
@@ -134,14 +137,18 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);
 	const recent = !!purchasedHidingItems.size;
 
+	const [hasNewExpired, onSeen] = useHasNewExpirations();
+
 	return (
 		<NavBarLink
 			to="/purchased"
 			icon={<FridgeIcon />}
 			animate={recent}
 			active={active}
+			onClick={onSeen}
 		>
-			Purchased
+			<span>Purchased</span>
+			{hasNewExpired && <div className={classes.pip} />}
 		</NavBarLink>
 	);
 }
