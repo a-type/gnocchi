@@ -149,7 +149,7 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);
 	const recent = !!purchasedHidingItems.size;
 
-	const [hasNewExpired, onSeen] = useHasNewExpirations();
+	const [newExpiredTime, onSeen] = useHasNewExpirations();
 
 	return (
 		<NavBarLink
@@ -160,7 +160,7 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 			onClick={onSeen}
 		>
 			<span>Purchased</span>
-			{hasNewExpired && <div className={classes.pip} />}
+			{newExpiredTime && <div className={classes.pip} />}
 		</NavBarLink>
 	);
 }

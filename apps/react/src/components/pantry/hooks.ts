@@ -58,25 +58,27 @@ export function useExpiresSoonItems() {
 	});
 }
 
+// something weird is going on in this hook, or the
+// way it's being called... I have to store this in
+// module scope to keep it alive.
+let newerExpireTime: number | undefined = undefined;
 export function useHasNewExpirations() {
 	const [latestSeen, setLatestSeen] = useLocalStorage(
 		'latestSeenExpiration',
 		Date.now(),
 	);
 	const expiresSoonItems = useExpiresSoonItems();
-	const newerExpireTime = useMemo(() => {
-		if (!expiresSoonItems) return undefined;
-		const latestExpiration = expiresSoonItems.reduce((latest, item) => {
-			const expiresAt = item.get('expiresAt')!;
-			if (expiresAt > latest) return expiresAt;
-			return latest;
-		}, 0);
-		return latestExpiration > latestSeen ? latestExpiration : undefined;
-	}, [expiresSoonItems, latestSeen]);
-	const onSeen = useCallback(() => {
+	const latestExpiration = expiresSoonItems.reduce((latest, item) => {
+		const expiresAt = item.get('expiresAt')!;
+		if (expiresAt > latest) return expiresAt;
+		return latest;
+	}, 0);
+	newerExpireTime =
+		latestExpiration > latestSeen ? latestExpiration : undefined;
+	const onSeen = () => {
 		if (newerExpireTime) {
 			setLatestSeen(newerExpireTime);
 		}
-	}, [setLatestSeen, newerExpireTime]);
+	};
 	return [!!newerExpireTime, onSeen] as const;
 }
