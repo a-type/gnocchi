@@ -67,6 +67,7 @@ export const label = style({
 	animationName: fadeUp,
 	animationDuration: '0.3s',
 	animationTimingFunction: 'ease-out',
+	marginBottom: vars.space[1],
 });
 
 export const noteContainer = style({

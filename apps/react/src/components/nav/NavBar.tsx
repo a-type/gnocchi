@@ -52,10 +52,6 @@ export function NavBar({}: NavBarProps) {
 		end: false,
 	});
 
-	const showRecipesOverride = useFeatureFlag('recipes');
-
-	const finalShowRecipes = showRecipesOverride;
-
 	if (matchesWelcome) {
 		return null;
 	}
@@ -72,15 +68,7 @@ export function NavBar({}: NavBarProps) {
 				</div>
 				<GroceriesNavBarLink active={matchGroceries} />
 				<PantryNavBarLink active={matchPurchased} />
-				{finalShowRecipes && (
-					<NavBarLink
-						to="/recipes"
-						icon={<RecipesIcon />}
-						active={matchRecipes}
-					>
-						Recipes
-					</NavBarLink>
-				)}
+				<RecipesNavBarLink active={matchRecipes} />
 				<NavBarLink
 					to="/settings"
 					icon={<HamburgerMenuIcon />}
@@ -103,8 +91,12 @@ const NavBarLink = memo(
 			animate?: boolean;
 			active: boolean;
 			onClick?: () => void;
+			onHover?: () => void;
 		}
-	>(function NavBarLink({ to, children, icon, animate, active, onClick }, ref) {
+	>(function NavBarLink(
+		{ to, children, icon, animate, active, onClick, onHover },
+		ref,
+	) {
 		// reset undo history when navigating
 		const client = hooks.useClient();
 		const handleClick = useCallback(() => {
@@ -119,6 +111,7 @@ const NavBarLink = memo(
 					[classes.buttonActive]: active,
 				})}
 				onClick={handleClick}
+				onMouseOver={onHover}
 				ref={ref}
 			>
 				<div className={classes.iconContainer}>
@@ -132,6 +125,25 @@ const NavBarLink = memo(
 		);
 	}),
 );
+
+function RecipesNavBarLink({ active }: { active: boolean }) {
+	const client = hooks.useClient();
+	const preload = useCallback(() => {
+		// fire off the query to preload it
+		client.recipes.findAll();
+	}, []);
+
+	return (
+		<NavBarLink
+			to="/recipes"
+			icon={<RecipesIcon />}
+			active={active}
+			onHover={preload}
+		>
+			Recipes
+		</NavBarLink>
+	);
+}
 
 function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);

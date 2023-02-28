@@ -16,10 +16,11 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/tools': workspace:*
       '@aglio/trpc': workspace:*
+      '@aws-sdk/abort-controller': ^3.267.0
       '@aws-sdk/client-s3': ^3.267.0
       '@aws-sdk/lib-storage': ^3.267.0
-      '@lo-fi/common': ^1.10.2
-      '@lo-fi/server': ^1.7.3
+      '@lo-fi/common': ^1.10.3
+      '@lo-fi/server': ^1.7.4
       '@prisma/client': ^4.0.0
       '@trpc/server': ^10.5.0
       '@types/better-sqlite3': ^7.6.0
@@ -57,10 +58,11 @@ importers:
       '@aglio/prisma': link:../../packages/prisma
       '@aglio/tools': link:../../packages/tools
       '@aglio/trpc': link:../../packages/trpc
+      '@aws-sdk/abort-controller': 3.267.0
       '@aws-sdk/client-s3': 3.267.0
-      '@aws-sdk/lib-storage': 3.267.0_@aws-sdk+client-s3@3.267.0
-      '@lo-fi/common': 1.10.2
-      '@lo-fi/server': 1.7.3_utf-8-validate@5.0.9
+      '@aws-sdk/lib-storage': 3.267.0_4sp6evxti3wex2d544n3z4w4vm
+      '@lo-fi/common': 1.10.3
+      '@lo-fi/server': 1.7.4_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 10.5.0
       '@types/better-sqlite3': 7.6.0
@@ -167,9 +169,9 @@ importers:
       '@dnd-kit/sortable': ^7.0.1
       '@dnd-kit/utilities': ^3.2.0
       '@lo-fi/cli': ^1.12.0
-      '@lo-fi/common': ^1.10.2
-      '@lo-fi/react': ^13.0.2
-      '@lo-fi/web': ^1.12.7
+      '@lo-fi/common': ^1.10.3
+      '@lo-fi/react': ^13.0.3
+      '@lo-fi/web': ^1.12.10
       '@radix-ui/colors': ^0.1.8
       '@radix-ui/react-accordion': ^1.0.0
       '@radix-ui/react-checkbox': ^1.0.0
@@ -261,9 +263,9 @@ importers:
       '@dnd-kit/sortable': 7.0.1_vvd3dzag27tc7rclyb2whqqnpe
       '@dnd-kit/utilities': 3.2.0_react@18.2.0
       '@lo-fi/cli': 1.12.0
-      '@lo-fi/common': 1.10.2
-      '@lo-fi/react': 13.0.2_wmpvjepzjiwhrgyslalx7djfl4
-      '@lo-fi/web': 1.12.7
+      '@lo-fi/common': 1.10.3
+      '@lo-fi/react': 13.0.3_buxbo5dw7nrg5cmqe4b37343he
+      '@lo-fi/web': 1.12.10
       '@radix-ui/colors': 0.1.8
       '@radix-ui/react-accordion': 1.0.0_biqbaboplfbrettd7655fr4n2y
       '@radix-ui/react-checkbox': 1.0.0_biqbaboplfbrettd7655fr4n2y
@@ -398,18 +400,18 @@ importers:
     specifiers:
       '@aglio/trpc': workspace:*
       '@lo-fi/cli': ^1.12.0
-      '@lo-fi/common': ^1.10.2
-      '@lo-fi/react': ^13.0.2
-      '@lo-fi/web': ^1.12.7
+      '@lo-fi/common': ^1.10.3
+      '@lo-fi/react': ^13.0.3
+      '@lo-fi/web': ^1.12.10
       '@trpc/client': ^10.5.0
       '@trpc/server': ^10.5.0
       cuid: ^2.1.8
     dependencies:
       '@aglio/trpc': link:../trpc
       '@lo-fi/cli': 1.12.0
-      '@lo-fi/common': 1.10.2
-      '@lo-fi/react': 13.0.2_@lo-fi+web@1.12.7
-      '@lo-fi/web': 1.12.7
+      '@lo-fi/common': 1.10.3
+      '@lo-fi/react': 13.0.3_@lo-fi+web@1.12.10
+      '@lo-fi/web': 1.12.10
       '@trpc/client': 10.5.0_@trpc+server@10.5.0
       '@trpc/server': 10.5.0
       cuid: 2.1.8
@@ -457,8 +459,8 @@ importers:
       '@aglio/prisma': workspace:*
       '@aglio/scanning': workspace:*
       '@aglio/tools': workspace:*
-      '@lo-fi/common': ^1.10.2
-      '@lo-fi/server': ^1.7.3
+      '@lo-fi/common': ^1.10.3
+      '@lo-fi/server': ^1.7.4
       '@trpc/server': ^10.5.0
       '@types/express': ^4.17.14
       cuid: ^3.0.0
@@ -471,8 +473,8 @@ importers:
       '@aglio/prisma': link:../prisma
       '@aglio/scanning': link:../scanning
       '@aglio/tools': link:../tools
-      '@lo-fi/common': 1.10.2
-      '@lo-fi/server': 1.7.3
+      '@lo-fi/common': 1.10.3
+      '@lo-fi/server': 1.7.4
       '@trpc/server': 10.5.0
       cuid: 3.0.0
       superjson: 1.12.0
@@ -1063,13 +1065,14 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@aws-sdk/lib-storage/3.267.0_@aws-sdk+client-s3@3.267.0:
+  /@aws-sdk/lib-storage/3.267.0_4sp6evxti3wex2d544n3z4w4vm:
     resolution: {integrity: sha512-MljL0PavGZ3Yc1kkSjWIAzY6TWTWi7iuCpAi/DQKs0TyjSuX5vtxLmSVv1Wlx3ywrI8HDlo2xG7bvhjDQDN3gw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@aws-sdk/abort-controller': ^3.0.0
       '@aws-sdk/client-s3': ^3.0.0
     dependencies:
+      '@aws-sdk/abort-controller': 3.267.0
       '@aws-sdk/client-s3': 3.267.0
       '@aws-sdk/middleware-endpoint': 3.267.0
       '@aws-sdk/smithy-client': 3.267.0
@@ -3089,48 +3092,48 @@ packages:
     resolution: {integrity: sha512-MWJcB62VFP4L2BPqq0hopiR6fxOJq1AtBn6DfjxDeyjCZvsfoAKUHJcaGPZLgasy5uZKGON6lY0JPzB2FvXYsg==}
     hasBin: true
     dependencies:
-      '@swc/core': 1.3.36
+      '@swc/core': 1.3.37
       change-case: 4.1.2
       prettier: 2.8.4
       yargs: 17.7.1
     dev: false
 
-  /@lo-fi/common/1.10.2:
-    resolution: {integrity: sha512-SXatXZBVdBvK6bNogTGF550whWcou6aX7UeDbjyTE/Df3yi5c2Fmlrl+PHEmMIxqvJk6aDWM+A3dUwawf6GjJA==}
+  /@lo-fi/common/1.10.3:
+    resolution: {integrity: sha512-3C125UR+RvUphodsa37THom9PyjTaAcDxDtzb1Q883J+1yE4zjGPsQ04FWQewg3NsR3ik3kiJUD1IjOF41oTdA==}
     dependencies:
       cuid: 2.1.8
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react/13.0.2_@lo-fi+web@1.12.7:
-    resolution: {integrity: sha512-CI6iGnFDhzH1cpMiw4GStM7wzjwtKec5+ogwbcvV7A0csEfSad6hR7Fyx8ABmrkW82P16TuVO92k5dB77YEBFA==}
+  /@lo-fi/react/13.0.3_@lo-fi+web@1.12.10:
+    resolution: {integrity: sha512-ClGZ+Kgzurukev6UWCZ7o7A7U8AXHC7S8UlaVEYy5a2p1Bd/cNdxyzypEAUlIrfAqMAA7cEGY0WMA2V/MOJJRQ==}
     peerDependencies:
-      '@lo-fi/web': ^1.12.6
+      '@lo-fi/web': ^1.12.10
       react: ^18.2.0
     dependencies:
-      '@lo-fi/common': 1.10.2
-      '@lo-fi/web': 1.12.7
+      '@lo-fi/common': 1.10.3
+      '@lo-fi/web': 1.12.10
       suspend-react: 0.0.8
       use-sync-external-store: 1.2.0
     dev: false
 
-  /@lo-fi/react/13.0.2_wmpvjepzjiwhrgyslalx7djfl4:
-    resolution: {integrity: sha512-CI6iGnFDhzH1cpMiw4GStM7wzjwtKec5+ogwbcvV7A0csEfSad6hR7Fyx8ABmrkW82P16TuVO92k5dB77YEBFA==}
+  /@lo-fi/react/13.0.3_buxbo5dw7nrg5cmqe4b37343he:
+    resolution: {integrity: sha512-ClGZ+Kgzurukev6UWCZ7o7A7U8AXHC7S8UlaVEYy5a2p1Bd/cNdxyzypEAUlIrfAqMAA7cEGY0WMA2V/MOJJRQ==}
     peerDependencies:
-      '@lo-fi/web': ^1.12.6
+      '@lo-fi/web': ^1.12.10
       react: ^18.2.0
     dependencies:
-      '@lo-fi/common': 1.10.2
-      '@lo-fi/web': 1.12.7
+      '@lo-fi/common': 1.10.3
+      '@lo-fi/web': 1.12.10
       react: 18.2.0
       suspend-react: 0.0.8_react@18.2.0
       use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
-  /@lo-fi/server/1.7.3:
-    resolution: {integrity: sha512-HAag/faqUIF4DsPMD+bsU0XiVvhssDRoE5HAkwi7qF0SziEILUY8JxXWIRkDcCKB1bf4JRUNPLgpdJKPA+KaGQ==}
+  /@lo-fi/server/1.7.4:
+    resolution: {integrity: sha512-CHxz5raiiD0qnnoQnG09+clrZiHSRXCMiDymkF5KTtLfYR0gdGSM8CzECFvkL5q5mE6RpZ6xy9hPKUp/4W9i9w==}
     dependencies:
-      '@lo-fi/common': 1.10.2
+      '@lo-fi/common': 1.10.3
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       busboy: 1.6.0
@@ -3141,10 +3144,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/server/1.7.3_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-HAag/faqUIF4DsPMD+bsU0XiVvhssDRoE5HAkwi7qF0SziEILUY8JxXWIRkDcCKB1bf4JRUNPLgpdJKPA+KaGQ==}
+  /@lo-fi/server/1.7.4_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-CHxz5raiiD0qnnoQnG09+clrZiHSRXCMiDymkF5KTtLfYR0gdGSM8CzECFvkL5q5mE6RpZ6xy9hPKUp/4W9i9w==}
     dependencies:
-      '@lo-fi/common': 1.10.2
+      '@lo-fi/common': 1.10.3
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       busboy: 1.6.0
@@ -3155,10 +3158,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/web/1.12.7:
-    resolution: {integrity: sha512-PDTJVQ8q8fcrTZDhLUKwsrj3cET3pk9MtNRwMXrxWriCuI4hkBtEzPcavCFYJXdxjESvC05+920JTzd5vtDkfg==}
+  /@lo-fi/web/1.12.10:
+    resolution: {integrity: sha512-FReS5HJeSr1sDiSjua7tL5/OyaJxQIaVCbLPDpgsdwnxtTzHa6Tfq2YtQPpu2sF8fg2ZFj5hlC2hiLN7MRT59w==}
     dependencies:
-      '@lo-fi/common': 1.10.2
+      '@lo-fi/common': 1.10.3
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false
@@ -4542,8 +4545,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-darwin-arm64/1.3.36:
-    resolution: {integrity: sha512-lsP+C8p9cC/Vd9uAbtxpEnM8GoJI/MMnVuXak7OlxOtDH9/oTwmAcAQTfNGNaH19d2FAIRwf+5RbXCPnxa2Zjw==}
+  /@swc/core-darwin-arm64/1.3.37:
+    resolution: {integrity: sha512-iIyVqqioUpVeT/hbBVfkrsjfCyL4idNH+LVKGmoTAWaTTSB0+UNhNuA7Wh2CqIHWh1Mv7IlumitWPcqsVDdoEw==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [darwin]
@@ -4560,8 +4563,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-darwin-x64/1.3.36:
-    resolution: {integrity: sha512-jaLXsozWN5xachl9fPxDMi5nbWq1rRxPAt6ISeiYB6RJk0MQKH1634pOweBBem2pUDDzwDFXFw6f22LTm/cFvA==}
+  /@swc/core-darwin-x64/1.3.37:
+    resolution: {integrity: sha512-dao5nXPWKxtaxqak4ZkRyBoApNIelW/glantQhPhj0FjMjuIQc+v03ldJ8XDByWOG+6xuVUTheANCtEccxoQBw==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [darwin]
@@ -4578,8 +4581,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-linux-arm-gnueabihf/1.3.36:
-    resolution: {integrity: sha512-vcBdTHjoEpvJDbFlgto+S6VwAHzLA9GyCiuNcTU2v4KNQlFzhbO4A4PMfMCb/Z0RLJEr16tirfHdWIxjU3h8nw==}
+  /@swc/core-linux-arm-gnueabihf/1.3.37:
+    resolution: {integrity: sha512-/mVrc8H/f062CUkqKGmBiil2VIYu4mKawHxERfeP1y38X5K/OwjG5s9MgO9TVxy+Ly6vejwj70kRhSa3hVp1Bw==}
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux]
@@ -4596,8 +4599,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-linux-arm64-gnu/1.3.36:
-    resolution: {integrity: sha512-o7f5OsvwWppJo+qIZmrGO5+XC6DPt6noecSbRHjF6o1YAcR13ETPC14k1eC9H1YbQwpyCFNVAFXyNcUbCeQyrQ==}
+  /@swc/core-linux-arm64-gnu/1.3.37:
+    resolution: {integrity: sha512-eRQ3KaZI0j5LidTfOIi/kUVOOMuVmw1HCdt/Z1TAUKoHMLVxY8xcJ3pEE3/+ednI60EmHpwpJRs6LelXyL6uzQ==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
@@ -4614,8 +4617,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-linux-arm64-musl/1.3.36:
-    resolution: {integrity: sha512-FSHPngMi3c0fuGt9yY2Ubn5UcELi3EiPLJxBSC3X8TF9atI/WHZzK9PE9Gtn0C/LyRh4CoyOugDtSOPzGYmLQg==}
+  /@swc/core-linux-arm64-musl/1.3.37:
+    resolution: {integrity: sha512-w2BRLODyxNQY2rfHZMZ5ir6QrrnGBPlnIslTrgKmVbn1OjZoxUCtuqhrYnCmybaAc4DOkeH02TqynEFXrm+EMw==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
@@ -4632,8 +4635,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-linux-x64-gnu/1.3.36:
-    resolution: {integrity: sha512-PHSsH2rek5pr3e0K09VgWAbrWK2vJhaI7MW9TPoTjyACYjcs3WwjcjQ30MghXUs2Dc/bXjWAOi9KFTjq/uCyFg==}
+  /@swc/core-linux-x64-gnu/1.3.37:
+    resolution: {integrity: sha512-CfoH8EsZJZ9kunjMUjBNYD5fFuO86zw+K/o4wEw72Yg6ZEiqPmeIlCKU8tpTv4sK+CbhUXrmVzMB5tqsb2jALQ==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
@@ -4650,8 +4653,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-linux-x64-musl/1.3.36:
-    resolution: {integrity: sha512-4LfMYQHzozHCKkIcmQy83b+4SpI+mOp6sYNbXqSRz5dYvTVjegKZXe596P1U/87cK2cgR4uYvkgkgBXquaWvwQ==}
+  /@swc/core-linux-x64-musl/1.3.37:
+    resolution: {integrity: sha512-9YPrHYNdoG7PK11gV51GfL45biI2dic+YTqHUDKyykemsD7Ot1zUFX7Ty//pdvpKcKSff6SrHbfFACD5ziNirA==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
@@ -4668,8 +4671,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-win32-arm64-msvc/1.3.36:
-    resolution: {integrity: sha512-7y3dDcun79TAjCyk3Iv0eOMw1X/KNQbkVyKOGqnEgq9g22F8F1FoUGKHNTzUqVdzpHeJSsHgW5PlkEkl3c/d9w==}
+  /@swc/core-win32-arm64-msvc/1.3.37:
+    resolution: {integrity: sha512-h17Ek8/wCDje6BrXOvCXBM80oBRmTSMMdLyt87whTl5xqYlWYYs9oQIzZndNRTlNpTgjGO8Ns2eo4kwVxIkBIA==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [win32]
@@ -4686,8 +4689,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-win32-ia32-msvc/1.3.36:
-    resolution: {integrity: sha512-zK0VR3B4LX5hzQ+7eD+K+FkxJlJg5Lo36BeahMzQ+/i0IURpnuyFlW88sdkFkMsc2swdU6bpvxLZeIRQ3W4OUg==}
+  /@swc/core-win32-ia32-msvc/1.3.37:
+    resolution: {integrity: sha512-1BR175E1olGy/zdt94cgdb6ps/lBNissAOaxyBk8taFpcjy3zpdP30yAoH0GIsC6isnZ5JfArbOJNRXXO5tE0Q==}
     engines: {node: '>=10'}
     cpu: [ia32]
     os: [win32]
@@ -4704,8 +4707,8 @@ packages:
     dev: true
     optional: true
 
-  /@swc/core-win32-x64-msvc/1.3.36:
-    resolution: {integrity: sha512-2bIjr9DhAckGiXZEvj6z2z7ECPcTimG+wD0VuQTvr+wkx46uAJKl5Kq+Zk+dd15ErL7JGUtCet1T7bf1k4FwvQ==}
+  /@swc/core-win32-x64-msvc/1.3.37:
+    resolution: {integrity: sha512-1siDQ7dccQ1pesJmgAL3BUBbRPtfbNInOWnZOkiie/DfFqGQ117QKnCVyjUvwFKfTQx1+3UUTDmMSlRd00SlXg==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
@@ -4730,21 +4733,21 @@ packages:
       '@swc/core-win32-x64-msvc': 1.3.35
     dev: true
 
-  /@swc/core/1.3.36:
-    resolution: {integrity: sha512-Ogrd9uRNIj7nHjXxG66UlKBIcXESUenJ7OD6K2a8p82qlg6ne7Ne5Goiipm/heHYhSfVmjcnRWL9ZJ4gv+YCPA==}
+  /@swc/core/1.3.37:
+    resolution: {integrity: sha512-VOFlEQ1pReOM73N9A7R8rt561GU8Rxsq833jiimWDUB2sXEN3V6n6wFTgYmZuMz2T4/R0cQA1nV48KkaT4gkFw==}
     engines: {node: '>=10'}
     requiresBuild: true
     optionalDependencies:
-      '@swc/core-darwin-arm64': 1.3.36
-      '@swc/core-darwin-x64': 1.3.36
-      '@swc/core-linux-arm-gnueabihf': 1.3.36
-      '@swc/core-linux-arm64-gnu': 1.3.36
-      '@swc/core-linux-arm64-musl': 1.3.36
-      '@swc/core-linux-x64-gnu': 1.3.36
-      '@swc/core-linux-x64-musl': 1.3.36
-      '@swc/core-win32-arm64-msvc': 1.3.36
-      '@swc/core-win32-ia32-msvc': 1.3.36
-      '@swc/core-win32-x64-msvc': 1.3.36
+      '@swc/core-darwin-arm64': 1.3.37
+      '@swc/core-darwin-x64': 1.3.37
+      '@swc/core-linux-arm-gnueabihf': 1.3.37
+      '@swc/core-linux-arm64-gnu': 1.3.37
+      '@swc/core-linux-arm64-musl': 1.3.37
+      '@swc/core-linux-x64-gnu': 1.3.37
+      '@swc/core-linux-x64-musl': 1.3.37
+      '@swc/core-win32-arm64-msvc': 1.3.37
+      '@swc/core-win32-ia32-msvc': 1.3.37
+      '@swc/core-win32-x64-msvc': 1.3.37
     dev: false
 
   /@swc/helpers/0.4.14:

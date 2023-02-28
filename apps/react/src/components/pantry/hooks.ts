@@ -65,7 +65,7 @@ export function useHasNewExpirations() {
 	);
 	const expiresSoonItems = useExpiresSoonItems();
 	const newerExpireTime = useMemo(() => {
-		if (!expiresSoonItems) return false;
+		if (!expiresSoonItems) return undefined;
 		const latestExpiration = expiresSoonItems.reduce((latest, item) => {
 			const expiresAt = item.get('expiresAt')!;
 			if (expiresAt > latest) return expiresAt;
@@ -74,7 +74,9 @@ export function useHasNewExpirations() {
 		return latestExpiration > latestSeen ? latestExpiration : undefined;
 	}, [expiresSoonItems, latestSeen]);
 	const onSeen = useCallback(() => {
-		setLatestSeen(newerExpireTime);
+		if (newerExpireTime) {
+			setLatestSeen(newerExpireTime);
+		}
 	}, [setLatestSeen, newerExpireTime]);
 	return [!!newerExpireTime, onSeen] as const;
 }
