@@ -10,12 +10,16 @@ import {
 	DialogTrigger,
 	LiveUpdateTextField,
 	P,
+	Span,
 	Switch,
 	useToggle,
 } from '@aglio/ui';
 import { ReactNode, Suspense } from 'react';
 import { FoodIcon } from '../icons/FoodIcon.jsx';
 import { capitalize } from '@aglio/tools';
+import { CategoryPicker } from '../groceries/items/CategoryPicker.jsx';
+import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
+import * as classes from './FoodDetailDialog.css.js';
 
 export interface FoodDetailDialogProps {
 	foodName: string;
@@ -74,22 +78,41 @@ function FoodDetailView({
 	).join(', ');
 
 	return (
-		<div>
+		<Box gap={3}>
 			<DialogTitle>{capitalize(food.get('canonicalName'))}</DialogTitle>
 			<P>Alternate names: {alternateNames}</P>
 			<Box gap={1} direction="row" alignItems="center">
-				<span>Expires after</span>
-				<LiveUpdateTextField
-					type="number"
-					value={food.get('expiresAfterDays')?.toString() ?? ''}
-					onChange={(val) => {
-						const v = parseInt(val);
-						if (isNaN(v)) return;
-						food.set('expiresAfterDays', v);
-					}}
+				<span>Category:</span>
+				<CategorySelect
+					value={food.get('categoryId')}
+					onChange={(val) => food.set('categoryId', val)}
+					contentClassName={classes.categoryContent}
 				/>
-				<span>days</span>
 			</Box>
-		</div>
+			<Box gap={1} direction="column">
+				<Box gap={1} direction="row" alignItems="center">
+					<span>Expires after</span>
+					<LiveUpdateTextField
+						type="number"
+						value={food.get('expiresAfterDays')?.toString() ?? ''}
+						onChange={(val) => {
+							if (val === '') {
+								food.set('expiresAfterDays', null);
+								return;
+							} else {
+								const v = parseInt(val);
+								if (isNaN(v)) return;
+								food.set('expiresAfterDays', v);
+							}
+						}}
+					/>
+					<span>days</span>
+				</Box>
+				<Span size="xs">
+					Set this and the app will remind you when something is about to
+					expire. Only affects newly purchased items.
+				</Span>
+			</Box>
+		</Box>
 	);
 }
