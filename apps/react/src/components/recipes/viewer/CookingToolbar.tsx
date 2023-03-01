@@ -2,12 +2,7 @@ import { PageNowPlaying } from '@aglio/ui';
 import { Button, H5 } from '@aglio/ui';
 import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
-import {
-	DragHandleVerticalIcon,
-	ListBulletIcon,
-	StretchVerticallyIcon,
-	ViewVerticalIcon,
-} from '@radix-ui/react-icons';
+import { ListBulletIcon } from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import classnames from 'classnames';
@@ -15,7 +10,7 @@ import { useRef } from 'react';
 import * as classes from './CookingToolbar.css.js';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
-import { DragVerticalIcon } from '@/components/icons/DragVerticalIcon.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export interface CookingToolbarProps {
 	recipe: Recipe;
@@ -78,7 +73,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 						),
 					}}
 				>
-					<DragVerticalIcon />
+					<Icon name="drag_vertical" />
 				</animated.span>
 			</Button>
 			<animated.div

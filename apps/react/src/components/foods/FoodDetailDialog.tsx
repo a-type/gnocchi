@@ -15,11 +15,11 @@ import {
 	useToggle,
 } from '@aglio/ui';
 import { ReactNode, Suspense } from 'react';
-import { FoodIcon } from '../icons/FoodIcon.jsx';
 import { capitalize } from '@aglio/tools';
 import { CategoryPicker } from '../groceries/items/CategoryPicker.jsx';
 import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
 import * as classes from './FoodDetailDialog.css.js';
+import { Icon } from '../icons/Icon.jsx';
 
 export interface FoodDetailDialogProps {
 	foodName: string;
@@ -37,7 +37,7 @@ export function FoodDetailDialog({
 			<DialogTrigger asChild>
 				{children || (
 					<Button size="icon" color="ghost">
-						<FoodIcon />
+						<Icon name="food" />
 					</Button>
 				)}
 			</DialogTrigger>

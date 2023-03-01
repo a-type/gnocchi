@@ -41,6 +41,8 @@ import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { SubscribeButton } from '../sync/SubscribeButton.jsx';
 import { PromoteSubscriptionButton } from '../promotional/PromoteSubscriptionButton.jsx';
+import { GrocerySuggestions } from './suggestions/GrocerySuggestions.jsx';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -58,6 +60,8 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 		const sensors = useGroceryDndSensors();
 
 		useTransitionPurchasedItems();
+
+		const showSuggestions = useFeatureFlag('suggestions');
 
 		return (
 			<DndContext
@@ -77,6 +81,7 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 						<PromoteSubscriptionButton>Upgrade now</PromoteSubscriptionButton>
 					</Box>
 				</OnboardingBanner>
+				{showSuggestions && <GrocerySuggestions />}
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />
 			</DndContext>

@@ -1,4 +1,3 @@
-import { TagIcon } from '@/components/icons/TagIcon.jsx';
 import { Form, SubmitButton, TextField } from '@aglio/ui';
 import { Dialog, DialogContent, Box, ColorSwatch, ThemeName } from '@aglio/ui';
 import {
@@ -16,6 +15,8 @@ import { themeMap } from '@aglio/ui';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import * as classes from './ListSelect.css.js';
+import { Icon } from '@/components/icons/Icon.jsx';
+import classNames from 'classnames';
 
 function getRandomColor(): ThemeName {
 	const colors = Object.keys(themeMap);
@@ -53,18 +54,22 @@ export function ListSelect({ value, onChange, includeAll }: ListSelectProps) {
 					{includeAll && <SelectItem value="undefined">All lists</SelectItem>}
 					<SelectItem value={'null'}>
 						<Box direction="row" gap={2} align="center">
-							<TagIcon fill className={themeMap.lemon} />
+							<Icon
+								name="tag"
+								className={classNames(themeMap.lemon, classes.filledIcon)}
+							/>
 							<span>Default</span>
 						</Box>
 					</SelectItem>
 					{lists.map((list) => (
 						<SelectItem key={list.get('id')} value={list.get('id')}>
 							<Box direction="row" gap={2} align="center">
-								<TagIcon
-									fill
-									className={
-										themeMap[(list.get('color') as ThemeName) || 'lemon']
-									}
+								<Icon
+									name="tag"
+									className={classNames(
+										themeMap[(list.get('color') as ThemeName) || 'lemon'],
+										classes.filledIcon,
+									)}
 								/>
 								<span className={classes.itemText}>{list.get('name')}</span>
 							</Box>

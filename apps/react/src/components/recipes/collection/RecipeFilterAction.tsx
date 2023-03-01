@@ -1,4 +1,3 @@
-import { FilterIcon } from '@/components/icons/FilterIcon.jsx';
 import { ActionButton } from '@aglio/ui';
 import {
 	Popover,
@@ -14,6 +13,7 @@ import { forwardRef, Suspense, useState } from 'react';
 import { useRecipeTagFilter } from './hooks.js';
 import * as classes from './RecipeFilterAction.css.js';
 import { RecipeTagsList } from './RecipeTagsList.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export interface RecipeFilterActionProps {}
 
@@ -57,7 +57,7 @@ const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 					{...props}
 					color="default"
 					ref={ref}
-					icon={<FilterIcon />}
+					icon={<Icon name="filter" />}
 				>
 					Filter
 				</ActionButton>
@@ -68,7 +68,7 @@ const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 			<ActionButton
 				color="primary"
 				{...props}
-				icon={selectedTag.get('icon') ?? <FilterIcon />}
+				icon={selectedTag.get('icon') ?? <Icon name="filter" />}
 				onClick={() => {
 					setTagFilter(null);
 				}}

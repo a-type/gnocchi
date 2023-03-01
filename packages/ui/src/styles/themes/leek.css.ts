@@ -7,6 +7,7 @@ export const leekTheme = createTheme(contract, {
 		attentionLight: '#ffc0c0',
 		attention: '#fd7e4d',
 		attentionDark: '#732207',
+		accentWash: '#fff9e7',
 		accentLighter: '#fff1ba',
 		accentLight: '#f9e794',
 		accent: '#f9e794',

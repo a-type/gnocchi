@@ -145,9 +145,24 @@ export const groceries = {
 			equals: item.get('food'),
 		}).resolved;
 		const expirationDays = food?.get('expiresAfterDays');
-		item.set('purchasedAt', Date.now());
+		const now = Date.now();
+		item.set('purchasedAt', now);
 		if (expirationDays) {
-			item.set('expiresAt', Date.now() + expirationDays * 24 * 60 * 60 * 1000);
+			item.set('expiresAt', now + expirationDays * 24 * 60 * 60 * 1000);
+		}
+		if (food) {
+			storage
+				.batch({ undoable: false })
+				.run(() => {
+					const previousPurchasedAt = food.get('lastPurchasedAt');
+					food.set('lastPurchasedAt', now);
+					const currentGuess = food.get('purchaseIntervalGuess') || 0;
+					if (previousPurchasedAt) {
+						const newGuess = (currentGuess + now - previousPurchasedAt) / 2;
+						food.set('purchaseIntervalGuess', newGuess);
+					}
+				})
+				.flush();
 		}
 	},
 	purchaseItems: async (items: Item[]) => {
@@ -265,12 +280,17 @@ export const groceries = {
 								isPerishable: remoteLookup.isPerishable,
 								isStaple: !!remoteLookup.isStaple,
 								alternateNames: remoteLookup.alternateNames,
+								lastAddedAt: Date.now(),
+								purchaseCount: 1,
 							});
 							categoryId = remoteLookup.categoryId;
 						}
 					} catch (err) {
 						console.error(err);
 					}
+				} else {
+					lookup.set('lastAddedAt', Date.now());
+					lookup.set('purchaseCount', lookup.get('purchaseCount') + 1);
 				}
 
 				// verify the category exists locally

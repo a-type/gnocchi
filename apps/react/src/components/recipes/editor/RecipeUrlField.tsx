@@ -1,11 +1,9 @@
-import { ScanIcon } from '@/components/icons/ScanIcon.jsx';
-import { Box, Button } from '@aglio/ui';
-import { LiveUpdateTextField } from '@aglio/ui';
+import { Icon } from '@/components/icons/Icon.jsx';
 import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { updateRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { Recipe } from '@aglio/groceries-client';
-import { sprinkles } from '@aglio/ui';
+import { Box, Button, LiveUpdateTextField, sprinkles } from '@aglio/ui';
 import { useState } from 'react';
 
 export interface RecipeUrlFieldProps {
@@ -39,7 +37,7 @@ export function RecipeUrlField({ recipe }: RecipeUrlFieldProps) {
 			/>
 			{isSubscribed && url && (
 				<Button color="primary" onClick={scan} disabled={!url || scanning}>
-					<ScanIcon style={{ width: 15, height: 15 }} />
+					<Icon name="scan" style={{ width: 15, height: 15 }} />
 					<span className={sprinkles({ ml: 2 })}>Scan</span>
 				</Button>
 			)}

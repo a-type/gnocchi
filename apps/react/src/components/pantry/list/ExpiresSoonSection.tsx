@@ -1,14 +1,14 @@
-import { groceries, hooks } from '@/stores/groceries/index.js';
-import { useExpiresSoonItems } from '../hooks.js';
-import { Item } from '@aglio/groceries-client';
-import classNames from 'classnames';
-import * as classes from './ExpiresSoonSection.css.js';
-import { Button, H2, RelativeTime } from '@aglio/ui';
-import { useCallback } from 'react';
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
-import { FoodIcon } from '@/components/icons/FoodIcon.jsx';
-import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
+import { Icon } from '@/components/icons/Icon.jsx';
+import { groceries, hooks } from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
+import { Button, H2 } from '@aglio/ui';
 import { ClockIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
+import classNames from 'classnames';
+import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
+import { useCallback } from 'react';
+import { useExpiresSoonItems } from '../hooks.js';
+import * as classes from './ExpiresSoonSection.css.js';
 
 export interface ExpiresSoonSectionProps {
 	className?: string;
@@ -83,7 +83,7 @@ function ExpiresSoonItem({ item }: { item: Item }) {
 				</Button>
 				<FoodDetailDialog foodName={food}>
 					<Button color="ghost" size="icon" className={classes.itemFoodInfo}>
-						<FoodIcon />
+						<Icon name="food" />
 					</Button>
 				</FoodDetailDialog>
 			</div>

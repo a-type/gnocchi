@@ -1,5 +1,27 @@
-import { TagIcon } from '@/components/icons/TagIcon.jsx';
+import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
+import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
 import {
+	PeopleList,
+	PeopleListItem,
+} from '@/components/sync/people/People.jsx';
+import { PersonAvatar } from '@/components/sync/people/PersonAvatar.js';
+import { useListId } from '@/contexts/ListContext.jsx';
+import useMergedRef from '@/hooks/useMergedRef.js';
+import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
+import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
+import {
+	Presence,
+	Profile,
+	groceries,
+	hooks,
+} from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
+import {
+	Box,
+	Button,
+	ButtonProps,
+	Checkbox,
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
@@ -11,65 +33,37 @@ import {
 	DialogTrigger,
 	LiveUpdateTextField,
 	NumberStepper,
-} from '@aglio/ui';
-import {
-	Box,
-	Button,
-	ButtonProps,
 	Tooltip,
-	useSize,
+	sprinkles,
 	useSizeCssVars,
 } from '@aglio/ui';
-import {
-	PeopleList,
-	PeopleListItem,
-} from '@/components/sync/people/People.jsx';
-import { PersonAvatar } from '@/components/sync/people/PersonAvatar.js';
-import { useListId } from '@/contexts/ListContext.jsx';
-import useMergedRef from '@/hooks/useMergedRef.js';
-import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
-import {
-	groceries,
-	hooks,
-	Presence,
-	Profile,
-} from '@/stores/groceries/index.js';
-import { sprinkles } from '@aglio/ui';
-import { Item } from '@aglio/groceries-client';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';
 import {
 	HamburgerMenuIcon,
-	ListBulletIcon,
 	Pencil1Icon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import React, {
 	CSSProperties,
-	forwardRef,
 	Ref,
+	forwardRef,
 	useCallback,
 	useEffect,
 	useMemo,
-	useRef,
 	useState,
 } from 'react';
 import { Link } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
-import { Checkbox } from '@aglio/ui';
-import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
 import { ListSelect } from '../lists/ListSelect.jsx';
+import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
 import { groceriesState } from '../state.js';
-import { CategoryPicker } from './CategoryPicker.js';
 import * as classes from './GroceryListItem.css.js';
-import { useItemDisplayText } from './hooks.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemSources } from './ItemSources.js';
-import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
-import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
-import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
+import { useItemDisplayText } from './hooks.js';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -381,7 +375,7 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 				<CollapsibleContent data-horizontal>
 					<Link to={`/list/${list.get('id')}`}>
 						<div className={clsx(listThemeClass, classes.listTag)}>
-							<TagIcon className={classes.listTagIcon} />
+							<Icon name="tag" className={classes.listTagIcon} />
 							<span className={classes.listTagName}>{name}</span>
 							<span className={classes.listTagNameSmall}>
 								{getInitials(name)}

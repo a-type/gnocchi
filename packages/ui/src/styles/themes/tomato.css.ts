@@ -8,6 +8,7 @@ export const tomatoTheme = createTheme(contract, {
 		attentionLight: '#d4fff8',
 		attention: '#2cdbbe',
 		attentionDark: '#035754',
+		accentWash: '#e8faf1',
 		accentLighter: '#DCFCE7',
 		accentLight: '#86EFAC',
 		accent: '#34D399',

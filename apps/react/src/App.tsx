@@ -19,6 +19,7 @@ import {
 import { lemonTheme } from '@aglio/ui';
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
+import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -43,6 +44,7 @@ export function App() {
 									<GroceriesProvider>
 										<Pages />
 										<Toaster position="bottom-center" />
+										<IconSpritesheet />
 									</GroceriesProvider>
 								</AuthProvider>
 							</QueryClientProvider>

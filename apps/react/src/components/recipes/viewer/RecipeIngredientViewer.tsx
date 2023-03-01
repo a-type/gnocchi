@@ -1,19 +1,17 @@
-import { RecipeIngredientsItem } from '@aglio/groceries-client';
-import { IngredientText } from './IngredientText.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import { RecipeIngredientsItem } from '@aglio/groceries-client';
 import {
 	Button,
 	CollapsibleContent,
 	CollapsibleRoot,
-	Note,
 	useToggle,
 } from '@aglio/ui';
 import classNames from 'classnames';
-import * as classes from './RecipeIngredientViewer.css.js';
-import { NoteIcon } from '@/components/icons/NoteIcon.jsx';
-import { AddNoteIcon } from '@/components/icons/AddNoteIcon.jsx';
-import { NoteEditor } from '../editor/NoteEditor.jsx';
 import { useCallback } from 'react';
+import { NoteEditor } from '../editor/NoteEditor.jsx';
+import { IngredientText } from './IngredientText.jsx';
+import * as classes from './RecipeIngredientViewer.css.js';
 
 export interface RecipeIngredientViewerProps {
 	ingredient: RecipeIngredientsItem;
@@ -49,11 +47,12 @@ export function RecipeIngredientViewer({
 				{!disableAddNote && (
 					<Button size="icon" color="ghost" onClick={toggleShowNote}>
 						{!!note ? (
-							<NoteIcon
+							<Icon
+								name="note"
 								className={showNote ? undefined : classes.noteIconWithNote}
 							/>
 						) : (
-							<AddNoteIcon />
+							<Icon name="add_note" />
 						)}
 					</Button>
 				)}

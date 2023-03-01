@@ -5,6 +5,7 @@ import { themeMap } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import classnames from 'classnames';
 import * as classes from './RecipeTagsViewer.css.js';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export interface RecipeTagsViewerProps {
 	recipe: Recipe;
@@ -36,7 +37,7 @@ function RecipeTagViewer({ tag }: { tag: string }) {
 				data?.get('color') && themeMap[data.get('color') as ThemeName],
 			)}
 		>
-			<span>{data?.get('icon') ?? <TagIcon />}</span>
+			<span>{data?.get('icon') ?? <Icon name="tag" />}</span>
 			<span>{tag}</span>
 		</div>
 	);

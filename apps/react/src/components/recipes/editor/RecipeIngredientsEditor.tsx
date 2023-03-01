@@ -22,11 +22,10 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
-import { clsx } from 'clsx';
 import { Formik } from 'formik';
 import * as classes from './RecipeIngredientsEditor.css.js';
-import { AddNoteIcon } from '@/components/icons/AddNoteIcon.jsx';
 import { NoteEditor } from './NoteEditor.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export interface RecipeIngredientsEditorProps {
 	recipe: Recipe;
@@ -112,7 +111,7 @@ function RecipeIngredientItem({
 
 				<span className={classes.itemText}>{ingredient.get('text')}</span>
 				<Button color="ghost" onClick={addNote}>
-					<AddNoteIcon />
+					<Icon name="add_note" />
 				</Button>
 				<Button color="ghostDestructive" onClick={onDelete}>
 					<TrashIcon />

@@ -1,9 +1,9 @@
-import { TagIcon } from '@/components/icons/TagIcon.jsx';
 import { Button, ButtonProps, ThemeName } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import { themeMap } from '@aglio/ui';
 import classnames from 'classnames';
 import * as classes from './RecipeTagsList.css.js';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export function RecipeTagsList({
 	onSelect,
@@ -42,7 +42,7 @@ export function RecipeTagsList({
 						tag.get('color') && themeMap[tag.get('color') as ThemeName],
 					)}
 				>
-					<span>{tag.get('icon') ?? <TagIcon />}</span>
+					<span>{tag.get('icon') ?? <Icon name="tag" />}</span>
 					<span>{tag.get('name')}</span>
 				</TagButtonBase>
 			))}

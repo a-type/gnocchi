@@ -513,12 +513,29 @@ export interface FoodNameLookupRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface FoodRepurchaseAfterMatchFilter {
+  where: "repurchaseAfter";
+  equals: number;
+  order?: "asc" | "desc";
+}
+
+export interface FoodRepurchaseAfterRangeFilter {
+  where: "repurchaseAfter";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
+}
+
 export type FoodFilter =
   | FoodCategoryIdMatchFilter
   | FoodCategoryIdRangeFilter
   | FoodCategoryIdStartsWithFilter
   | FoodNameLookupMatchFilter
-  | FoodNameLookupRangeFilter;
+  | FoodNameLookupRangeFilter
+  | FoodRepurchaseAfterMatchFilter
+  | FoodRepurchaseAfterRangeFilter;
 
 export type FoodDestructured = {
   canonicalName: string;
@@ -527,6 +544,10 @@ export type FoodDestructured = {
   isPerishable: boolean | null;
   isStaple: boolean;
   expiresAfterDays: number | null;
+  lastPurchasedAt: number | null;
+  purchaseIntervalGuess: number | null;
+  lastAddedAt: number | null;
+  purchaseCount: number;
 };
 export type FoodInit = {
   canonicalName: string;
@@ -535,6 +556,10 @@ export type FoodInit = {
   isPerishable?: boolean | null;
   isStaple: boolean;
   expiresAfterDays?: number | null;
+  lastPurchasedAt?: number | null;
+  purchaseIntervalGuess?: number | null;
+  lastAddedAt?: number | null;
+  purchaseCount?: number;
 };
 export type FoodSnapshot = {
   canonicalName: string;
@@ -543,6 +568,10 @@ export type FoodSnapshot = {
   isPerishable: boolean | null;
   isStaple: boolean;
   expiresAfterDays: number | null;
+  lastPurchasedAt: number | null;
+  purchaseIntervalGuess: number | null;
+  lastAddedAt: number | null;
+  purchaseCount: number;
 };
 /** Food sub-object types */
 
@@ -577,6 +606,22 @@ type FoodExpiresAfterDays = number | null;
 type FoodExpiresAfterDaysInit = FoodExpiresAfterDays | undefined;
 type FoodExpiresAfterDaysSnapshot = FoodExpiresAfterDays;
 type FoodExpiresAfterDaysDestructured = FoodExpiresAfterDays;
+type FoodLastPurchasedAt = number | null;
+type FoodLastPurchasedAtInit = FoodLastPurchasedAt | undefined;
+type FoodLastPurchasedAtSnapshot = FoodLastPurchasedAt;
+type FoodLastPurchasedAtDestructured = FoodLastPurchasedAt;
+type FoodPurchaseIntervalGuess = number | null;
+type FoodPurchaseIntervalGuessInit = FoodPurchaseIntervalGuess | undefined;
+type FoodPurchaseIntervalGuessSnapshot = FoodPurchaseIntervalGuess;
+type FoodPurchaseIntervalGuessDestructured = FoodPurchaseIntervalGuess;
+type FoodLastAddedAt = number | null;
+type FoodLastAddedAtInit = FoodLastAddedAt | undefined;
+type FoodLastAddedAtSnapshot = FoodLastAddedAt;
+type FoodLastAddedAtDestructured = FoodLastAddedAt;
+type FoodPurchaseCount = number;
+type FoodPurchaseCountInit = FoodPurchaseCount | undefined;
+type FoodPurchaseCountSnapshot = FoodPurchaseCount;
+type FoodPurchaseCountDestructured = FoodPurchaseCount;
 
 export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
 

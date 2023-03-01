@@ -1,4 +1,3 @@
-import { TagIcon } from '@/components/icons/TagIcon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import {
@@ -18,6 +17,7 @@ import { Suspense, useState } from 'react';
 import { RecipeTagsList } from '../collection/RecipeTagsList.jsx';
 import { NewTagForm } from './NewTagForm.jsx';
 import * as classes from './RecipeTagsEditor.css.js';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export interface RecipeTagsEditorProps {
 	recipe: Recipe;
@@ -60,7 +60,7 @@ function TagDisplay({
 
 	return (
 		<div className={classnames(classes.tag, color && themeMap[color])}>
-			<span>{icon ?? <TagIcon />}</span>
+			<span>{icon ?? <Icon name="tag" />}</span>
 			<span>{tag}</span>
 			<Button
 				size="small"

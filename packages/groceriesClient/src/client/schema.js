@@ -72,12 +72,36 @@ const foods = collection({
         expiresAfterDays: {
             type: 'number',
             nullable: true
+        },
+        lastPurchasedAt: {
+            type: 'number',
+            nullable: true
+        },
+        purchaseIntervalGuess: {
+            type: 'number',
+            nullable: true
+        },
+        lastAddedAt: {
+            type: 'number',
+            nullable: true
+        },
+        purchaseCount: {
+            type: 'number',
+            default: 0
         }
     },
     synthetics: {
         nameLookup: {
             type: 'string[]',
             compute: (food)=>food.alternateNames
+        },
+        repurchaseAfter: {
+            type: 'number',
+            compute: (food)=>{
+                if (!food.lastPurchasedAt || !food.purchaseIntervalGuess || food.purchaseCount < 4) return Number.MAX_SAFE_INTEGER;
+                const lastAdded = food.lastAddedAt || 0;
+                return Math.max(food.lastPurchasedAt, lastAdded) + food.purchaseIntervalGuess;
+            }
         }
     }
 });
@@ -417,7 +441,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 24,
+    version: 25,
     collections: {
         categories,
         items,

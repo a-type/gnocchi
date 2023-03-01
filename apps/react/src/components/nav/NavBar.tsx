@@ -1,28 +1,17 @@
-import { useIsLoggedIn } from '@/contexts/AuthContext.jsx';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
-import { trpc } from '@/trpc.js';
+import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
+import { hooks } from '@/stores/groceries/index.js';
+import { PageNav } from '@aglio/ui';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
-import {
-	ReactNode,
-	Suspense,
-	forwardRef,
-	memo,
-	useCallback,
-	useEffect,
-	useState,
-} from 'react';
+import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
 import { Link, useMatch } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
-import { PageNav } from '@aglio/ui';
-import { CartIcon, FridgeIcon, RecipesIcon } from './icons.jsx';
+import { Icon } from '../icons/Icon.jsx';
+import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
+import { useHasNewExpirations } from '../pantry/hooks.js';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
-import { hooks } from '@/stores/groceries/index.js';
-import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
-import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
-import { useHasNewExpirations } from '../pantry/hooks.js';
 
 export interface NavBarProps {}
 
@@ -136,7 +125,7 @@ function RecipesNavBarLink({ active }: { active: boolean }) {
 	return (
 		<NavBarLink
 			to="/recipes"
-			icon={<RecipesIcon />}
+			icon={<Icon name="book" />}
 			active={active}
 			onHover={preload}
 		>
@@ -154,7 +143,7 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 	return (
 		<NavBarLink
 			to="/purchased"
-			icon={<FridgeIcon />}
+			icon={<Icon name="fridge" />}
 			animate={recent}
 			active={active}
 			onClick={onSeen}
@@ -176,7 +165,7 @@ function GroceriesNavBarLink({ active }: { active: boolean }) {
 		>
 			<NavBarLink
 				to="/"
-				icon={<CartIcon />}
+				icon={<Icon name="cart" />}
 				active={active}
 				animate={addedRecipe}
 			>

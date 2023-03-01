@@ -1,4 +1,4 @@
-import { AddNoteIcon } from '@/components/icons/AddNoteIcon.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
 import { PersonSelect } from '@/components/sync/people/PersonSelect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
@@ -21,10 +21,8 @@ import {
 	useCallback,
 	useContext,
 	useMemo,
-	useState,
 } from 'react';
 import * as classes from './InstructionStepNodeView.css.js';
-import { NoteIcon } from '@/components/icons/NoteIcon.jsx';
 
 export interface InstructionStepNodeViewProps {
 	node: {
@@ -164,11 +162,12 @@ export function InstructionStepNodeView({
 				<Tooltip content={note === undefined ? 'Add a note' : 'Show note'}>
 					<Button color="ghost" size="icon" onClick={toggleShowNote}>
 						{!!note ? (
-							<NoteIcon
+							<Icon
+								name="note"
 								className={showNote ? undefined : classes.noteIconWithNote}
 							/>
 						) : (
-							<AddNoteIcon />
+							<Icon name="add_note" />
 						)}
 					</Button>
 				</Tooltip>

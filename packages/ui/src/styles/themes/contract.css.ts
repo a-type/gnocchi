@@ -10,6 +10,7 @@ export const vars = createThemeContract({
 		attention: '',
 		attentionDark: '',
 		accent: '',
+		accentWash: '',
 		accentLight: '',
 		accentDark: '',
 		accentLighter: '',
