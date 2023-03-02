@@ -102,12 +102,15 @@ export function InstructionStepNodeView({
 				completed && classes.completed,
 				isAssignedToMe && classes.assignedToMe,
 			)}
-			contentEditable={false}
 		>
 			<div className={classes.content}>
 				<NodeViewContent />
 			</div>
-			<CollapsibleRoot open={showNote} className={classes.noteContainer}>
+			<CollapsibleRoot
+				open={showNote}
+				className={classes.noteContainer}
+				contentEditable={false}
+			>
 				<CollapsibleContent>
 					<Note className={classes.note} contentEditable={false}>
 						<TextArea
