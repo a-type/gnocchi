@@ -34,7 +34,7 @@ jobs:
   deploy:
     needs: [changed_files]
     runs-on: ubuntu-latest
-    name: Deploy to production (app.popstage.com)
+    name: Deploy to production
     steps:
       - uses: actions/checkout@v2
       - uses: superfly/flyctl-actions/setup-flyctl@master
