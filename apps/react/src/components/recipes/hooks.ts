@@ -50,13 +50,17 @@ export function useCurrentRecipeSession(recipe: Recipe) {
 	return session!;
 }
 
-export function useSyncedInstructionsEditor(recipe: Recipe, readonly = false) {
+export function useSyncedInstructionsEditor(
+	recipe: Recipe,
+	readonly = false,
+	useBasicEditor = false,
+) {
 	useCurrentRecipeSession(recipe);
 	return useSyncedEditor(
 		recipe,
 		'instructions',
 		readonly,
-		createTiptapExtensions(recipe, readonly),
+		createTiptapExtensions(recipe, useBasicEditor),
 	);
 }
 
