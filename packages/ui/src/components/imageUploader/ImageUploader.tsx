@@ -105,7 +105,7 @@ export function ImageUploader({
 			>
 				<UploadIcon className={classes.draggingIcon} />
 				<div className={classes.draggingText}>
-					{dragging ? 'Drop' : 'Click'} to upload image
+					{dragging ? 'Drop' : 'Tap'} to upload image
 				</div>
 			</div>
 			{value && (
