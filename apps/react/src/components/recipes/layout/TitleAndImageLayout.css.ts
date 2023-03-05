@@ -16,7 +16,7 @@ export const root = style({
 			gridTemplateRows: '1fr',
 			gridTemplateAreas: '"title image"',
 			gap: vars.space[4],
-			alignItems: 'center',
+			alignItems: 'flex-start',
 		},
 	},
 });

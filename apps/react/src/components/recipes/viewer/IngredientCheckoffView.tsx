@@ -54,12 +54,15 @@ function IngredientCheckoffItem({
 	onCheckedChange: (checked: boolean) => void;
 	multiplier?: number;
 }) {
+	const isSectionHeader = hooks.useWatch(ingredient, 'isSectionHeader');
 	return (
 		<li className={classnames(classes.item, checked && classes.itemChecked)}>
-			<Checkbox
-				checked={checked}
-				onCheckedChange={(checked) => onCheckedChange(checked === true)}
-			/>
+			{!isSectionHeader && (
+				<Checkbox
+					checked={checked}
+					onCheckedChange={(checked) => onCheckedChange(checked === true)}
+				/>
+			)}
 			<RecipeIngredientViewer
 				className={classes.ingredientContent}
 				ingredient={ingredient}

@@ -16,8 +16,8 @@ export interface CookingToolbarProps {
 	recipe: Recipe;
 }
 
-const PEEK_HEIGHT = 110;
-const MAX_HEIGHT = 300;
+const PEEK_HEIGHT = 150;
+const MAX_HEIGHT = 400;
 
 export function CookingToolbar({ recipe }: CookingToolbarProps) {
 	const lastExpandedHeightRef = useRef(PEEK_HEIGHT);

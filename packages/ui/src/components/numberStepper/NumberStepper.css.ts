@@ -8,6 +8,7 @@ export const container = style({
 	borderRadius: vars.radii.lg,
 	overflow: 'hidden',
 	width: 'min-content',
+	flexShrink: 0,
 });
 
 export const button = style({});

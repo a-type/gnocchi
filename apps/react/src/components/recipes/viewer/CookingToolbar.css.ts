@@ -28,6 +28,11 @@ export const containerScroll = style({
 	height: '100%',
 	marginTop: vars.space[3],
 	paddingBottom: `calc(${vars.space[3]} + env(safe-area-inset-bottom, 0px))`,
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	paddingLeft: vars.space[1],
+	paddingRight: vars.space[1],
 });
 
 export const toggleButton = style({
@@ -46,6 +51,5 @@ export const list = style({
 });
 
 export const multiplier = style({
-	alignSelf: 'flex-start',
 	marginBottom: vars.space[2],
 });

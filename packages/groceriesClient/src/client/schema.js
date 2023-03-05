@@ -331,7 +331,8 @@ const recipes = collection({
                         nullable: true
                     },
                     food: {
-                        type: 'string'
+                        type: 'string',
+                        nullable: true
                     },
                     quantity: {
                         type: 'number',
@@ -346,6 +347,10 @@ const recipes = collection({
                     note: {
                         type: 'string',
                         nullable: true
+                    },
+                    isSectionHeader: {
+                        type: 'boolean',
+                        default: false
                     }
                 }
             }
@@ -441,7 +446,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 25,
+    version: 26,
     collections: {
         categories,
         items,

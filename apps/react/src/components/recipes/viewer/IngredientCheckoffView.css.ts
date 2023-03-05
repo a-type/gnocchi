@@ -9,6 +9,7 @@ export const list = style({
 	gap: vars.space[4],
 	padding: 0,
 	width: '100%',
+	maxWidth: 600,
 });
 
 export const item = style({

@@ -906,28 +906,31 @@ export type RecipeIngredientsItemInit = {
   id?: string;
   text: string;
   unit?: string | null;
-  food: string;
+  food?: string | null;
   quantity?: number;
   comments?: RecipeIngredientsItemCommentsInit;
   note?: string | null;
+  isSectionHeader?: boolean;
 };
 export type RecipeIngredientsItemDestructured = {
   id: string;
   text: string;
   unit: string | null;
-  food: string;
+  food: string | null;
   quantity: number;
   comments: RecipeIngredientsItemComments;
   note: string | null;
+  isSectionHeader: boolean;
 };
 export type RecipeIngredientsItemSnapshot = {
   id: string;
   text: string;
   unit: string | null;
-  food: string;
+  food: string | null;
   quantity: number;
   comments: RecipeIngredientsItemCommentsSnapshot;
   note: string | null;
+  isSectionHeader: boolean;
 };
 type RecipeIngredientsItemId = string;
 type RecipeIngredientsItemIdInit = RecipeIngredientsItemId | undefined;
@@ -941,8 +944,8 @@ type RecipeIngredientsItemUnit = string | null;
 type RecipeIngredientsItemUnitInit = RecipeIngredientsItemUnit | undefined;
 type RecipeIngredientsItemUnitSnapshot = RecipeIngredientsItemUnit;
 type RecipeIngredientsItemUnitDestructured = RecipeIngredientsItemUnit;
-type RecipeIngredientsItemFood = string;
-type RecipeIngredientsItemFoodInit = RecipeIngredientsItemFood;
+type RecipeIngredientsItemFood = string | null;
+type RecipeIngredientsItemFoodInit = RecipeIngredientsItemFood | undefined;
 type RecipeIngredientsItemFoodSnapshot = RecipeIngredientsItemFood;
 type RecipeIngredientsItemFoodDestructured = RecipeIngredientsItemFood;
 type RecipeIngredientsItemQuantity = number;
@@ -971,6 +974,14 @@ type RecipeIngredientsItemNote = string | null;
 type RecipeIngredientsItemNoteInit = RecipeIngredientsItemNote | undefined;
 type RecipeIngredientsItemNoteSnapshot = RecipeIngredientsItemNote;
 type RecipeIngredientsItemNoteDestructured = RecipeIngredientsItemNote;
+type RecipeIngredientsItemIsSectionHeader = boolean;
+type RecipeIngredientsItemIsSectionHeaderInit =
+  | RecipeIngredientsItemIsSectionHeader
+  | undefined;
+type RecipeIngredientsItemIsSectionHeaderSnapshot =
+  RecipeIngredientsItemIsSectionHeader;
+type RecipeIngredientsItemIsSectionHeaderDestructured =
+  RecipeIngredientsItemIsSectionHeader;
 
 type RecipeInstructions = any;
 type RecipeInstructionsInit = RecipeInstructions | undefined;

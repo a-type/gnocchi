@@ -1,6 +1,7 @@
 import { vars } from '../../theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
+import { recipe } from '@vanilla-extract/recipes';
 
 const slideUpAndFade = keyframes({
 	'0%': { opacity: 0, transform: 'translateY(2px)' },
@@ -26,11 +27,9 @@ export const content = style({
 	minWidth: 220,
 	backgroundColor: vars.colors.white,
 	zIndex: vars.zIndices.menu,
-	boxShadow:
-		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
-	border: '1px solid $black',
-	borderRadius: vars.radii.xl,
-	padding: vars.space[5],
+	boxShadow: vars.shadows.lg,
+	borderRadius: vars.radii.lg,
+	padding: vars.space[2],
 	'@media': {
 		'(prefers-reduced-motion: no-preference)': {
 			animationDuration: '400ms',
@@ -55,31 +54,48 @@ export const content = style({
 	},
 });
 
-export const item = style({
-	all: 'unset',
-	fontSize: 13,
-	lineHeight: 1,
-	color: vars.colors.black,
-	borderRadius: 3,
-	display: 'flex',
-	alignItems: 'center',
-	height: 25,
-	padding: '0 5px',
-	position: 'relative',
-	paddingLeft: vars.space[4],
-	textAlign: 'left',
-	userSelect: 'none',
-	cursor: 'pointer',
+export const item = recipe({
+	base: {
+		all: 'unset',
+		fontSize: vars.fontSizes.md,
+		lineHeight: 1,
+		color: vars.colors.black,
+		borderRadius: vars.radii.sm,
+		display: 'flex',
+		alignItems: 'center',
+		height: 25,
+		padding: '0 5px',
+		position: 'relative',
+		paddingLeft: vars.space[6],
+		textAlign: 'left',
+		userSelect: 'none',
+		cursor: 'pointer',
 
-	selectors: {
-		'&[data-disabled]': {
-			color: vars.colors.gray90,
-			pointerEvents: 'none',
+		selectors: {
+			'&[data-disabled]': {
+				color: vars.colors.gray90,
+				pointerEvents: 'none',
+			},
+
+			'&:focus': {
+				backgroundColor: vars.colors.gray20,
+				color: vars.colors.gray90,
+			},
 		},
+	},
+	variants: {
+		color: {
+			default: {},
+			destructive: {
+				color: vars.colors.attentionDark,
 
-		'&:focus': {
-			backgroundColor: vars.colors.gray20,
-			color: vars.colors.gray90,
+				selectors: {
+					'&:focus': {
+						backgroundColor: vars.colors.attentionLight,
+						color: vars.colors.black,
+					},
+				},
+			},
 		},
 	},
 });
@@ -119,4 +135,8 @@ export const trigger = style({
 			zIndex: calc(vars.zIndices.menu).add(1).toString(),
 		},
 	},
+});
+
+export const rightSlot = style({
+	marginLeft: 'auto',
 });

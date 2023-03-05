@@ -41,3 +41,11 @@ export const mainContent = style({
 	alignItems: 'flex-start',
 	gap: vars.space[3],
 });
+
+export const hidden = style({
+	visibility: 'hidden',
+});
+
+export const sectionHeader = style({
+	fontWeight: vars.fontWeights.bold,
+});

@@ -34,11 +34,14 @@ export function parseIngredient(source: string): {
 	unit: string;
 	food: string;
 	comments: string[];
+	isSectionHeader: boolean;
 } {
 	const numberResult = greedyMatchNumber(source);
 	const unitResult = greedyMatchUnit(numberResult.remaining);
 	const ofResult = greedyMatchOf(unitResult.remaining);
 	const commentResult = reverseGreedyMatchComment(ofResult.remaining);
+	const isSectionHeader =
+		source.endsWith(':') || source.toLocaleLowerCase().startsWith('for the');
 
 	return {
 		original: source,
@@ -52,5 +55,6 @@ export function parseIngredient(source: string): {
 		comments: commentResult.matched
 			? commentsParser(commentResult.matched.trim())
 			: [],
+		isSectionHeader,
 	};
 }

@@ -21,6 +21,7 @@ import { MultiplierStepper } from './MultiplierStepper.jsx';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
+import classNames from 'classnames';
 
 export interface AddToListButtonProps {
 	recipe: Recipe;
@@ -32,7 +33,9 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 	const [multiplier, setMultiplier] = useState(defaultMultiplier);
 	const [adding, setAdding] = useState(false);
 	const [checkedItems, setCheckedItems] = useState<boolean[]>(() => {
-		return new Array(ingredients.length).fill(true);
+		return new Array(ingredients.length).fill(false).map((_, i) => {
+			return !ingredients.get(i).get('isSectionHeader');
+		});
 	});
 	const items = hooks.useWatch(ingredients);
 	const [_, next] = saveHubRecipeOnboarding.useStep('addToList');
@@ -70,32 +73,40 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 								onChange={setMultiplier}
 							/>
 							<ul className={classes.checklist}>
-								{items.map((ingredient, index) => (
-									<li key={index} className={classes.item}>
-										<Checkbox
-											checked={checkedItems[index]}
-											onCheckedChange={(checked) => {
-												setCheckedItems((prev) => {
-													const next = [...prev];
-													next[index] = checked === true;
-													return next;
-												});
-											}}
-											id={`ingredient-${index}`}
-										/>
-										<label
-											htmlFor={`ingredient-${index}`}
-											className={classes.itemContent}
-										>
-											<RecipeIngredientViewer
-												ingredient={ingredient}
-												multiplier={multiplier}
-												className={sprinkles({ width: 'full' })}
-												disableAddNote
+								{items.map((ingredient, index) => {
+									const isSectionHeader = ingredient.get('isSectionHeader');
+									return (
+										<li key={index} className={classes.item}>
+											<Checkbox
+												checked={checkedItems[index]}
+												onCheckedChange={(checked) => {
+													setCheckedItems((prev) => {
+														const next = [...prev];
+														next[index] = checked === true;
+														return next;
+													});
+												}}
+												className={isSectionHeader ? classes.hidden : undefined}
+												disabled={isSectionHeader}
+												id={`ingredient-${index}`}
 											/>
-										</label>
-									</li>
-								))}
+											<label
+												htmlFor={`ingredient-${index}`}
+												className={classNames(
+													classes.itemContent,
+													isSectionHeader ? classes.sectionHeader : undefined,
+												)}
+											>
+												<RecipeIngredientViewer
+													ingredient={ingredient}
+													multiplier={multiplier}
+													className={sprinkles({ width: 'full' })}
+													disableAddNote
+												/>
+											</label>
+										</li>
+									);
+								})}
 							</ul>
 						</div>
 						<DialogActions>
@@ -112,7 +123,7 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 												multiplier
 													? {
 															original: item.get('text'),
-															food: item.get('food'),
+															food: item.get('food') || 'Unknown',
 															quantity: item.get('quantity') * multiplier,
 															unit: item.get('unit'),
 															comments: item.get('comments').getAll(),

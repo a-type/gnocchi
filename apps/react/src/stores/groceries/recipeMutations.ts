@@ -29,6 +29,7 @@ export async function addIngredients(
 				comments: parsedItem.comments,
 				quantity: parsedItem.quantity,
 				unit: parsedItem.unit,
+				isSectionHeader: parsedItem.isSectionHeader,
 			};
 		});
 	for (const item of parsed) {

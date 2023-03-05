@@ -4,6 +4,8 @@ import { forwardRef } from 'react';
 import { IngredientText } from './IngredientText.jsx';
 import { Box, Note, sprinkles } from '@aglio/ui';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
+import classNames from 'classnames';
+import * as classes from './RecipeIngredientsViewer.css.js';
 
 export interface RecipeIngredientsViewerProps {
 	recipe: Recipe;
@@ -45,12 +47,19 @@ function IngredientViewerItem({
 	ingredient: RecipeIngredientsItem;
 	multiplier: number;
 }) {
+	const isSectionHeader = hooks.useWatch(ingredient, 'isSectionHeader');
+
 	return (
 		<li
-			className={sprinkles({
-				mb: 3,
-				width: 'full',
-			})}
+			className={classNames(
+				sprinkles({
+					mb: 3,
+					width: 'full',
+				}),
+				{
+					[classes.sectionHeader]: isSectionHeader,
+				},
+			)}
 		>
 			<RecipeIngredientViewer ingredient={ingredient} multiplier={multiplier} />
 		</li>

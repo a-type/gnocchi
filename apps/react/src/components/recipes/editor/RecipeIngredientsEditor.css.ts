@@ -41,3 +41,7 @@ export const dragHandle = style({
 	position: 'relative',
 	top: 8,
 });
+
+export const itemHeader = style({
+	fontWeight: vars.fontWeights.bold,
+});

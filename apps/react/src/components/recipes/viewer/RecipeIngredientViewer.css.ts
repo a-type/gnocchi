@@ -28,3 +28,7 @@ export const noteIconWithNote = style({
 	fill: vars.colors.primary,
 	stroke: vars.colors.primaryDark,
 });
+
+export const sectionHeader = style({
+	fontWeight: vars.fontWeights.bold,
+});

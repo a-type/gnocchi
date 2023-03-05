@@ -27,6 +27,7 @@ export function RecipeIngredientViewer({
 	disableAddNote,
 }: RecipeIngredientViewerProps) {
 	const note = hooks.useWatch(ingredient, 'note');
+	const isSectionHeader = hooks.useWatch(ingredient, 'isSectionHeader');
 
 	const [showNote, toggleShowNote] = useToggle(false);
 
@@ -37,7 +38,13 @@ export function RecipeIngredientViewer({
 	}, [note, toggleShowNote]);
 
 	return (
-		<div className={classNames(classes.root, className)}>
+		<div
+			className={classNames(
+				classes.root,
+				isSectionHeader && classes.sectionHeader,
+				className,
+			)}
+		>
 			<div className={classes.mainRow}>
 				<IngredientText
 					className={classes.text}

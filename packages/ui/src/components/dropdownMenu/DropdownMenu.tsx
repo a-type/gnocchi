@@ -11,14 +11,18 @@ const StyledContent = withClassName(
 	DropdownMenuPrimitive.Content,
 	classes.content,
 );
-const StyledItem = withClassName(DropdownMenuPrimitive.Item, classes.item);
+const StyledItem = withClassName(DropdownMenuPrimitive.Item, classes.item, [
+	'color',
+]);
 const StyledCheckboxItem = withClassName(
 	DropdownMenuPrimitive.CheckboxItem,
 	classes.item,
+	['color'],
 );
 const StyledRadioItem = withClassName(
 	DropdownMenuPrimitive.RadioItem,
 	classes.item,
+	['color'],
 );
 
 const StyledLabel = withClassName(DropdownMenuPrimitive.Label, classes.label);
@@ -74,3 +78,8 @@ export const DropdownMenuContent = ({
 		</StyledPortal>
 	);
 };
+
+export const DropdownMenuItemRightSlot = withClassName(
+	'div',
+	classes.rightSlot,
+);

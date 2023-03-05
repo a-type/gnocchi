@@ -1,4 +1,21 @@
-import { Form, SubmitButton, TextAreaField } from '@aglio/ui';
+import {
+	Box,
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuItemIndicator,
+	DropdownMenuTrigger,
+	Form,
+	DropdownMenuItemRightSlot,
+	SubmitButton,
+	TextAreaField,
+	TextField,
+} from '@aglio/ui';
 import { Button } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import * as mutations from '@/stores/groceries/recipeMutations.js';
@@ -21,11 +38,18 @@ import {
 	verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
+import {
+	CheckIcon,
+	DotsVerticalIcon,
+	DragHandleDots2Icon,
+	TrashIcon,
+} from '@radix-ui/react-icons';
 import { Formik } from 'formik';
 import * as classes from './RecipeIngredientsEditor.css.js';
 import { NoteEditor } from './NoteEditor.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { useState } from 'react';
+import classNames from 'classnames';
 
 export interface RecipeIngredientsEditorProps {
 	recipe: Recipe;
@@ -99,6 +123,8 @@ function RecipeIngredientItem({
 		transition,
 	};
 
+	const { text, isSectionHeader } = hooks.useWatch(ingredient);
+
 	return (
 		<div
 			ref={setNodeRef}
@@ -109,16 +135,122 @@ function RecipeIngredientItem({
 			<div className={classes.itemMainLine}>
 				<DragHandleDots2Icon className={classes.dragHandle} {...listeners} />
 
-				<span className={classes.itemText}>{ingredient.get('text')}</span>
-				<Button color="ghost" onClick={addNote}>
-					<Icon name="add_note" />
-				</Button>
-				<Button color="ghostDestructive" onClick={onDelete}>
-					<TrashIcon />
-				</Button>
+				<span
+					className={classNames(
+						classes.itemText,
+						isSectionHeader && classes.itemHeader,
+					)}
+				>
+					{text}
+				</span>
+				<Box direction="row" gap={1} alignItems="center">
+					<Button color="ghost" onClick={addNote}>
+						<Icon name="add_note" />
+					</Button>
+					<IngredientMenu ingredient={ingredient} onDelete={onDelete} />
+				</Box>
 			</div>
 			<IngredientNote ingredient={ingredient} />
 		</div>
+	);
+}
+
+function IngredientMenu({
+	ingredient,
+	onDelete,
+}: {
+	ingredient: RecipeIngredientsItem;
+	onDelete: () => void;
+}) {
+	const { isSectionHeader } = hooks.useWatch(ingredient);
+	const [detailsOpen, setDetailsOpen] = useState(false);
+
+	return (
+		<>
+			<DropdownMenu>
+				<DropdownMenuTrigger asChild>
+					<Button size="icon" color="ghost">
+						<DotsVerticalIcon />
+					</Button>
+				</DropdownMenuTrigger>
+				<DropdownMenuContent>
+					<DropdownMenuCheckboxItem
+						checked={isSectionHeader}
+						onCheckedChange={(v) => ingredient.set('isSectionHeader', !!v)}
+					>
+						<DropdownMenuItemIndicator>
+							<CheckIcon />
+						</DropdownMenuItemIndicator>
+						Section header
+					</DropdownMenuCheckboxItem>
+					<DropdownMenuItem onSelect={() => setDetailsOpen(true)}>
+						Edit details
+					</DropdownMenuItem>
+					<DropdownMenuItem onSelect={onDelete} color="destructive">
+						<span>Delete</span>
+						<DropdownMenuItemRightSlot>
+							<TrashIcon />
+						</DropdownMenuItemRightSlot>
+					</DropdownMenuItem>
+				</DropdownMenuContent>
+			</DropdownMenu>
+			<IngredientDetailsDialog
+				ingredient={ingredient}
+				open={detailsOpen}
+				onOpenChange={setDetailsOpen}
+			/>
+		</>
+	);
+}
+
+function IngredientDetailsDialog({
+	ingredient,
+	...rest
+}: {
+	ingredient: RecipeIngredientsItem;
+	open: boolean;
+	onOpenChange: (open: boolean) => void;
+}) {
+	return (
+		<Dialog {...rest}>
+			<DialogContent>
+				<Formik
+					initialValues={{
+						text: ingredient.get('text'),
+						food: ingredient.get('food'),
+						quantity: `${ingredient.get('quantity')}`,
+						unit: ingredient.get('unit'),
+					}}
+					onSubmit={(values, bag) => {
+						let quantity: number | undefined = parseFloat(values.quantity);
+						if (isNaN(quantity)) {
+							quantity = undefined;
+						}
+						ingredient.update({
+							text: values.text,
+							food: values.food,
+							quantity,
+							unit: values.unit,
+						});
+						bag.setSubmitting(false);
+						rest.onOpenChange?.(false);
+					}}
+				>
+					<Form>
+						<TextField name="text" label="Text" />
+						<TextField name="food" label="Food" />
+						<TextField name="quantity" label="Quantity" type="number" />
+						<TextField name="unit" label="Unit" />
+						<DialogActions>
+							<DialogClose asChild>
+								<Button>Cancel</Button>
+							</DialogClose>
+							<SubmitButton color="primary">Save</SubmitButton>
+						</DialogActions>
+					</Form>
+				</Formik>
+			</DialogContent>
+		</Dialog>
 	);
 }
 
