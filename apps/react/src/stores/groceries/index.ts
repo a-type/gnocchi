@@ -47,7 +47,6 @@ export const groceriesDescriptor = new ClientDescriptor<Presence, Profile>({
 	log: import.meta.env.DEV
 		? (...args) => console.debug('🎧', ...args)
 		: undefined,
-	disableRebasing: true,
 });
 (window as any).groceriesDescriptor = groceriesDescriptor;
 const _groceries = groceriesDescriptor.open();

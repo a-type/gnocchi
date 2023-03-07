@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"@aglio/trpc": "workspace:*",
-		"@lo-fi/cli": "^1.12.0",
+		"@lo-fi/cli": "^1.12.1",
 		"@lo-fi/common": "^1.10.3",
 		"@lo-fi/react": "^13.0.3",
 		"@lo-fi/web": "^1.12.10",
