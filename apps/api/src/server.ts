@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { attachSocketServer } from './socketServer.js';
+import { attachSocketServer } from './lofi/lofi.js';
 import { createServer } from 'http';
 import cors from 'cors';
 import apiRouter from './api/index.js';

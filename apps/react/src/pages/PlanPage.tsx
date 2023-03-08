@@ -6,6 +6,7 @@ import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
 import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
 import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
+import { PushSubscriptionToggle } from '@/components/sync/push/PushSubscriptionToggle.jsx';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
@@ -13,6 +14,7 @@ import {
 	Box,
 	Button,
 	ButtonProps,
+	Divider,
 	H1,
 	PageContent,
 	PageRoot,
@@ -150,10 +152,14 @@ function OnlineContents() {
 		<MainContainer>
 			<InstallHint />
 			<Invite />
+			<PushSubscriptionToggle />
+			<Divider />
 			<ManageCategories />
 			<MemberManager />
+			<Divider />
 			<BugButton />
 			<ResetToServer />
+			<Divider />
 			<LogoutButton>Sign out</LogoutButton>
 		</MainContainer>
 	);

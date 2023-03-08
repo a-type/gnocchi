@@ -4,6 +4,7 @@ export const featureFlags = {
 	hub: false,
 	recipeImages: true,
 	suggestions: false,
+	pushNotifications: false,
 };
 
 export type FeatureFlagName = keyof typeof featureFlags;

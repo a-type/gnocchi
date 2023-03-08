@@ -5,3 +5,7 @@ export function getGroceryLibraryName(planId: string) {
 export function getRecipesLibraryName(planId: string) {
 	return `${planId}_recipes`;
 }
+
+export function getPlanIdFromGroceryLibraryId(libraryId: string) {
+	return libraryId;
+}

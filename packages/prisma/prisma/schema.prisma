@@ -12,21 +12,22 @@ datasource db {
 }
 
 model Profile {
-  id               String            @id @default(cuid())
-  fullName         String            @map("full_name")
-  friendlyName     String            @map("friendly_name")
-  email            String            @unique
-  imageUrl         String?
-  createdAt        DateTime          @default(now()) @map("created_at")
-  updatedAt        DateTime          @updatedAt @map("updated_at")
-  planId           String            @map("plan_id")
-  password         String?
-  role             String            @default("user")
-  plan             Plan              @relation(fields: [planId], references: [id])
-  invitations      PlanInvitation[]
-  accounts         Account[]
-  logs             ActivityLog[]
-  publishedRecipes PublishedRecipe[]
+  id                String             @id @default(cuid())
+  fullName          String             @map("full_name")
+  friendlyName      String             @map("friendly_name")
+  email             String             @unique
+  imageUrl          String?
+  createdAt         DateTime           @default(now()) @map("created_at")
+  updatedAt         DateTime           @updatedAt @map("updated_at")
+  planId            String             @map("plan_id")
+  password          String?
+  role              String             @default("user")
+  plan              Plan               @relation(fields: [planId], references: [id])
+  invitations       PlanInvitation[]
+  accounts          Account[]
+  logs              ActivityLog[]
+  publishedRecipes  PublishedRecipe[]
+  pushSubscriptions PushSubscription[]
 
   isProductAdmin Boolean @default(false) @map("is_product_admin")
 
@@ -202,4 +203,17 @@ model PublishedRecipeIngredient {
   index Int
 
   @@map("published_recipe_ingredients")
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  endpoint  String   @unique
+  auth      String?
+  p256dh    String?
+  profileId String?  @map("profile_id")
+  profile   Profile? @relation(fields: [profileId], references: [id])
+
+  @@map("push_subscriptions")
 }

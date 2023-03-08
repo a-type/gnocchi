@@ -12,16 +12,15 @@ export function UpdatePrompt({}: UpdatePromptProps) {
 		needRefresh: [needRefresh],
 		updateServiceWorker,
 	} = useRegisterSW({
-		// @ts-ignore
-		onRegisteredSW(swUrl, r) {
+		onRegisteredSW(swUrl, registration) {
 			console.log('Service worker registered', swUrl);
-			r &&
+			if (registration) {
 				setInterval(() => {
-					r.update();
+					registration.update();
 					// hourly
 				}, 60 * 60 * 1000);
+			}
 		},
-		// @ts-ignore
 		onRegisterError(error) {
 			console.error('Service worker registration error', error);
 		},

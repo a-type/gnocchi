@@ -8,6 +8,7 @@
 // You can also remove this file if you'd prefer not to use a
 // service worker, and the Workbox build step will be skipped.
 
+import { ListChangesPushData, capitalize } from '@aglio/tools';
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import {
@@ -130,3 +131,115 @@ self.addEventListener('message', (event) => {
 		for (const resolve of resolvers) resolve();
 	}
 });
+
+self.addEventListener('push', (event) => {
+	if (event.data) {
+		const pushData = event.data.json() as ListChangesPushData;
+		console.debug(`Push notification received: ${JSON.stringify(pushData)}`);
+		event.waitUntil(
+			(async function () {
+				const isActive = await isClientFocused();
+
+				if (isActive) {
+					console.log('Skipping push notification since app is open');
+					return;
+				}
+
+				const existingNotifications =
+					await self.registration.getNotifications();
+				let currentNotification;
+
+				for (let i = 0; i < existingNotifications.length; i++) {
+					if (
+						existingNotifications[i].data &&
+						existingNotifications[i].data.userName === pushData.userName
+					) {
+						currentNotification = existingNotifications[i];
+					}
+				}
+
+				const commonOptions = {
+					tag: 'list-change',
+					icon: 'https://gnocchi.club/android-chrome-192x192.png',
+				};
+
+				if (!currentNotification) {
+					self.registration.showNotification(
+						`${pushData.userName} updated your list`,
+						{
+							...commonOptions,
+							body: makeListChangeBody(
+								pushData.addedItemCount,
+								pushData.purchasedItemCount,
+							),
+							data: pushData,
+						},
+					);
+				} else {
+					currentNotification.close();
+					const newData = {
+						...pushData,
+						addedItemCount:
+							pushData.addedItemCount +
+							(currentNotification.data.addedItemCount ?? 0),
+						purchasedItemCount:
+							pushData.purchasedItemCount +
+							(currentNotification.data.purchasedItemCount ?? 0),
+					};
+					self.registration.showNotification(
+						`${pushData.userName} updated your list`,
+						{
+							...commonOptions,
+							body: makeListChangeBody(
+								newData.addedItemCount,
+								newData.purchasedItemCount,
+							),
+							data: newData,
+						},
+					);
+				}
+			})(),
+		);
+	}
+});
+
+function makeListChangeBody(
+	addedItemCount: number,
+	purchasedItemCount: number,
+) {
+	const addedItems =
+		addedItemCount > 0
+			? `added ${addedItemCount} item${addedItemCount > 1 ? 's' : ''}`
+			: '';
+	const purchasedItems =
+		purchasedItemCount > 0
+			? `purchased ${purchasedItemCount} item${
+					purchasedItemCount > 1 ? 's' : ''
+			  }`
+			: '';
+	if (addedItems && purchasedItems) {
+		return capitalize(`${addedItems} and ${purchasedItems}`);
+	} else if (addedItems) {
+		return capitalize(addedItems);
+	} else if (purchasedItems) {
+		return capitalize(purchasedItems);
+	} else {
+		return '';
+	}
+}
+
+async function isClientFocused() {
+	const windowClients = await self.clients.matchAll({
+		type: 'window',
+		includeUncontrolled: true,
+	});
+	let clientIsFocused = false;
+	for (let i = 0; i < windowClients.length; i++) {
+		const windowClient = windowClients[i];
+		if (windowClient.focused) {
+			clientIsFocused = true;
+			break;
+		}
+	}
+	return clientIsFocused;
+}

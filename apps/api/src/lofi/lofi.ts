@@ -9,6 +9,7 @@ import {
 	PutObjectCommand,
 } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
+import { handleLofiChanges } from 'src/lofi/handleChanges.js';
 
 const storageDbFile = process.env.STORAGE_DATABASE_URL;
 assert(!!storageDbFile, 'STORAGE_DATABASE_URL is not set');
@@ -101,7 +102,7 @@ export function attachSocketServer(httpServer: HttpServer) {
 		tokenSecret: process.env.LOFI_SECRET!,
 		profiles: new Profiles(),
 		replicaTruancyMinutes: 14 * 60 * 24,
-		log: console.debug,
+		//log: console.debug,
 		fileStorage: new S3FileBackend(),
 		fileConfig: {
 			deleteExpirationDays: 3,
@@ -109,6 +110,14 @@ export function attachSocketServer(httpServer: HttpServer) {
 	});
 
 	server.on('error', console.error);
+	server.on('changes', (info, operations, baselines) => {
+		handleLofiChanges({
+			libraryId: info.libraryId,
+			userId: info.userId,
+			operations,
+			baselines,
+		});
+	});
 
 	return server;
 }

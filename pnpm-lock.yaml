@@ -20,7 +20,7 @@ importers:
       '@aws-sdk/client-s3': ^3.267.0
       '@aws-sdk/lib-storage': ^3.267.0
       '@lo-fi/common': ^1.10.3
-      '@lo-fi/server': ^1.7.5
+      '@lo-fi/server': ^1.7.6
       '@prisma/client': ^4.0.0
       '@trpc/server': ^10.5.0
       '@types/better-sqlite3': ^7.6.0
@@ -31,6 +31,7 @@ importers:
       '@types/express-requests-logger': ^3.0.1
       '@types/jsonwebtoken': ^8.5.8
       '@types/node': ^18.0.0
+      '@types/web-push': ^3.3.2
       '@types/ws': ^8.5.3
       better-sqlite3: ^7.6.2
       body-parser: ^1.20.0
@@ -51,6 +52,7 @@ importers:
       tsx: ^3.8.2
       typescript: ^4.9.5
       utf-8-validate: ^5.0.9
+      web-push: ^3.5.0
       ws: ^8.8.1
       zod: ^3.19.0
     dependencies:
@@ -62,7 +64,7 @@ importers:
       '@aws-sdk/client-s3': 3.267.0
       '@aws-sdk/lib-storage': 3.267.0_4sp6evxti3wex2d544n3z4w4vm
       '@lo-fi/common': 1.10.3
-      '@lo-fi/server': 1.7.5_utf-8-validate@5.0.9
+      '@lo-fi/server': 1.7.6_utf-8-validate@5.0.9
       '@prisma/client': 4.2.1_prisma@4.2.1
       '@trpc/server': 10.5.0
       '@types/better-sqlite3': 7.6.0
@@ -93,8 +95,11 @@ importers:
       tsx: 3.8.2
       typescript: 4.9.5
       utf-8-validate: 5.0.9
+      web-push: 3.5.0
       ws: 8.8.1_utf-8-validate@5.0.9
       zod: 3.19.0
+    devDependencies:
+      '@types/web-push': 3.3.2
 
   apps/hub:
     specifiers:
@@ -468,7 +473,7 @@ importers:
       '@aglio/scanning': workspace:*
       '@aglio/tools': workspace:*
       '@lo-fi/common': ^1.10.3
-      '@lo-fi/server': ^1.7.5
+      '@lo-fi/server': ^1.7.6
       '@trpc/server': ^10.5.0
       '@types/express': ^4.17.14
       cuid: ^3.0.0
@@ -482,7 +487,7 @@ importers:
       '@aglio/scanning': link:../scanning
       '@aglio/tools': link:../tools
       '@lo-fi/common': 1.10.3
-      '@lo-fi/server': 1.7.5
+      '@lo-fi/server': 1.7.6
       '@trpc/server': 10.5.0
       cuid: 3.0.0
       superjson: 1.12.0
@@ -3138,8 +3143,8 @@ packages:
       use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
-  /@lo-fi/server/1.7.5:
-    resolution: {integrity: sha512-0yyEgrNko9rIp6RiKsuyP5GPEc1vER5ofIdPrtCiMahfwuzfOXT6M/mqaxENnC3/+IE1D90PEZ5GB+3NZ+6fVA==}
+  /@lo-fi/server/1.7.6:
+    resolution: {integrity: sha512-3tSQbYz5kNgdqmIf7yU+5mTJhirCb1CtQ/y6pgK39S7Luk+EF2S1Ml2iM82CnP079+PBkvBF7H+VE6eanqEjCA==}
     dependencies:
       '@lo-fi/common': 1.10.3
       async-lock: 1.4.0
@@ -3152,8 +3157,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@lo-fi/server/1.7.5_utf-8-validate@5.0.9:
-    resolution: {integrity: sha512-0yyEgrNko9rIp6RiKsuyP5GPEc1vER5ofIdPrtCiMahfwuzfOXT6M/mqaxENnC3/+IE1D90PEZ5GB+3NZ+6fVA==}
+  /@lo-fi/server/1.7.6_utf-8-validate@5.0.9:
+    resolution: {integrity: sha512-3tSQbYz5kNgdqmIf7yU+5mTJhirCb1CtQ/y6pgK39S7Luk+EF2S1Ml2iM82CnP079+PBkvBF7H+VE6eanqEjCA==}
     dependencies:
       '@lo-fi/common': 1.10.3
       async-lock: 1.4.0
@@ -5363,6 +5368,12 @@ packages:
   /@types/trusted-types/2.0.2:
     resolution: {integrity: sha512-F5DIZ36YVLE+PN+Zwws4kJogq47hNgX3Nx6WyDJ3kcplxyke3XIzB8uK5n/Lpm1HBsbGzd6nmGehL8cPekP+Tg==}
 
+  /@types/web-push/3.3.2:
+    resolution: {integrity: sha512-JxWGVL/m7mWTIg4mRYO+A6s0jPmBkr4iJr39DqJpRJAc+jrPiEe1/asmkwerzRon8ZZDxaZJpsxpv0Z18Wo9gw==}
+    dependencies:
+      '@types/node': 18.13.0
+    dev: true
+
   /@types/webxr/0.5.0:
     resolution: {integrity: sha512-IUMDPSXnYIbEO2IereEFcgcqfDREOgmbGqtrMpVPpACTU6pltYLwHgVkrnYv0XhWEcjio9sYEfIEzgn3c7nDqA==}
     dev: true
@@ -5812,6 +5823,15 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
+  /asn1.js/5.4.1:
+    resolution: {integrity: sha512-+I//4cYPccV8LdmBLiX8CYvf9Sp3vQsrqu2QNXRcrbiWvcx/UdlFiqUJJzxRQxgsZmvhXhn4cSKeSmoFjVdupA==}
+    dependencies:
+      bn.js: 4.12.0
+      inherits: 2.0.4
+      minimalistic-assert: 1.0.1
+      safer-buffer: 2.1.2
+    dev: false
+
   /asn1/0.2.6:
     resolution: {integrity: sha512-ix/FxPn0MDjeyJ7i/yoHGFt/EX6LyNbxSEhPPXODPL+KB0VPk86UYfL0lMdy+KCnv+fmvIzySwaK5COwqVbWTQ==}
     dependencies:
@@ -5996,6 +6016,10 @@ packages:
 
   /bluebird/3.7.2:
     resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
+    dev: false
+
+  /bn.js/4.12.0:
+    resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
     dev: false
 
   /body-parser/1.20.0:
@@ -8435,6 +8459,13 @@ packages:
       sshpk: 1.17.0
     dev: false
 
+  /http_ece/1.1.0:
+    resolution: {integrity: sha512-bptAfCDdPJxOs5zYSe7Y3lpr772s1G346R4Td5LgRUeCwIGpCGDUTJxRrhTNcAXbx37spge0kWEIH7QAYWNTlA==}
+    engines: {node: '>=4'}
+    dependencies:
+      urlsafe-base64: 1.0.0
+    dev: false
+
   /https-proxy-agent/5.0.1:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
     engines: {node: '>= 6'}
@@ -9271,6 +9302,10 @@ packages:
   /mimic-response/3.1.0:
     resolution: {integrity: sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==}
     engines: {node: '>=10'}
+    dev: false
+
+  /minimalistic-assert/1.0.1:
+    resolution: {integrity: sha512-UtJcAD4yEaGtjPezWuO9wC4nwUnVH/8/Im3yEHQP4b67cXlD/Qr9hdITCU1xDbSEXg2XKNaP8jsReV7vQd00/A==}
     dev: false
 
   /minimatch/3.1.2:
@@ -11567,6 +11602,10 @@ packages:
     resolution: {integrity: sha512-XdVKMF4SJ0nP/O7XIPB0JwAEuT9lDIYnNsK8yGVe43y0AWoKeJNdv3ZNWh7ksJ6KqQFjOO6ox/VEitLnaVNufw==}
     dev: false
 
+  /urlsafe-base64/1.0.0:
+    resolution: {integrity: sha512-RtuPeMy7c1UrHwproMZN9gN6kiZ0SvJwRaEzwZY0j9MypEkFqyBaKv176jvlPtg58Zh36bOkS0NFABXMHvvGCA==}
+    dev: false
+
   /use-callback-ref/1.3.0_kzbn2opkn2327fwg5yzwzya5o4:
     resolution: {integrity: sha512-3FT9PRuRdbB9HfXhEq35u4oZkvpJ5kuYbpqhCfmiZyReuRgpnhDlbr2ZEnnuS0RrJAPn6l23xjFg9kpDM+Ms7w==}
     engines: {node: '>=10'}
@@ -11941,6 +11980,21 @@ packages:
 
   /w3c-keyname/2.2.6:
     resolution: {integrity: sha512-f+fciywl1SJEniZHD6H+kUO8gOnwIr7f4ijKA6+ZvJFjeGi1r4PDLl53Ayud9O/rk64RqgoQine0feoeOU0kXg==}
+    dev: false
+
+  /web-push/3.5.0:
+    resolution: {integrity: sha512-JC0V9hzKTqlDYJ+LTZUXtW7B175qwwaqzbbMSWDxHWxZvd3xY0C2rcotMGDavub2nAAFw+sXTsqR65/KY2A5AQ==}
+    engines: {node: '>= 6'}
+    hasBin: true
+    dependencies:
+      asn1.js: 5.4.1
+      http_ece: 1.1.0
+      https-proxy-agent: 5.0.1
+      jws: 4.0.0
+      minimist: 1.2.6
+      urlsafe-base64: 1.0.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /webgl-constants/1.1.1:

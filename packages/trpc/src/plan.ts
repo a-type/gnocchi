@@ -155,4 +155,72 @@ export const planRouter = t.router({
 			isProductAdmin: ctx.session.isProductAdmin,
 		});
 	}),
+	subscribeToPushNotifications: t.procedure
+		.input(
+			z.object({
+				endpoint: z.string(),
+				keys: z.object({
+					p256dh: z.string(),
+					auth: z.string(),
+				}),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.session) {
+				throw new RequestError(401, 'Unauthorized');
+			}
+
+			const plan = await prisma.plan.findUnique({
+				where: {
+					id: ctx.session.planId,
+				},
+			});
+
+			if (!plan) {
+				throw new RequestError(404, 'Plan not found');
+			}
+
+			await prisma.pushSubscription.upsert({
+				where: { endpoint: input.endpoint },
+				update: {
+					endpoint: input.endpoint,
+					p256dh: input.keys.p256dh,
+					auth: input.keys.auth,
+					profileId: ctx.session.userId,
+				},
+				create: {
+					endpoint: input.endpoint,
+					p256dh: input.keys.p256dh,
+					auth: input.keys.auth,
+					profileId: ctx.session.userId,
+				},
+			});
+		}),
+	unsubscribeFromPushNotifications: t.procedure
+		.input(
+			z.object({
+				endpoint: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.session) {
+				throw new RequestError(401, 'Unauthorized');
+			}
+
+			const plan = await prisma.plan.findUnique({
+				where: {
+					id: ctx.session.planId,
+				},
+			});
+
+			if (!plan) {
+				throw new RequestError(404, 'Plan not found');
+			}
+
+			await prisma.pushSubscription.delete({
+				where: {
+					endpoint: input.endpoint,
+				},
+			});
+		}),
 });

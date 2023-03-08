@@ -11,6 +11,7 @@ import * as classes from './RichEditor.css.js';
 
 export interface RichEditorProps extends EditorContentProps {
 	className?: string;
+	readOnly?: boolean;
 }
 
 export const RichEditor = forwardRef<PureEditorContent, RichEditorProps>(
