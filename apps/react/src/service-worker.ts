@@ -243,3 +243,31 @@ async function isClientFocused() {
 	}
 	return clientIsFocused;
 }
+
+self.addEventListener('notificationclick', (event) => {
+	const notification = event.notification;
+	const data = notification.data as ListChangesPushData;
+	event.notification.close();
+	event.waitUntil(
+		(async function () {
+			const allClients = await self.clients.matchAll({
+				includeUncontrolled: true,
+			});
+			let client = allClients.find(
+				(c) => c.url === '/' && 'focus' in c,
+			) as WindowClient | null;
+			if (client) {
+				client.postMessage({
+					type: 'pwa-notification-click',
+					data,
+				});
+				return client.focus();
+			}
+			client = await self.clients.openWindow('/');
+			client?.postMessage({
+				type: 'pwa-notification-click',
+				data,
+			});
+		})(),
+	);
+}
