@@ -44,6 +44,14 @@ export function GroceryListCategory({
 
 	const finalRef = useMergedRef(internalRef, setNodeRef, measureRef);
 
+	if (category?.get('name') === 'Produce')
+		console.log({
+			empty,
+			isDragging,
+			isOver,
+			mountedEmpty,
+		});
+
 	return (
 		<div
 			className={clsx('groceryCategory', classes.root)}

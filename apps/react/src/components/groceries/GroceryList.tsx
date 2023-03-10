@@ -18,7 +18,14 @@ import {
 	useSensors,
 } from '@dnd-kit/core';
 import { snapCenterToCursor } from '@dnd-kit/modifiers';
-import { forwardRef, memo, useCallback, useEffect, useState } from 'react';
+import {
+	Suspense,
+	forwardRef,
+	memo,
+	useCallback,
+	useEffect,
+	useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
 import { Cart } from '../graphics/Cart.jsx';
@@ -81,7 +88,11 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 						<PromoteSubscriptionButton>Upgrade now</PromoteSubscriptionButton>
 					</Box>
 				</OnboardingBanner>
-				{showSuggestions && <GrocerySuggestions />}
+				{showSuggestions && (
+					<Suspense>
+						<GrocerySuggestions />
+					</Suspense>
+				)}
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />
 			</DndContext>

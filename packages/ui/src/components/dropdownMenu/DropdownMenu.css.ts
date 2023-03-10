@@ -63,7 +63,7 @@ export const item = recipe({
 		borderRadius: vars.radii.sm,
 		display: 'flex',
 		alignItems: 'center',
-		height: 25,
+		height: 36,
 		padding: '0 5px',
 		position: 'relative',
 		paddingLeft: vars.space[6],

@@ -1,4 +1,4 @@
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed, useIsUnsubscribed } from '@/contexts/AuthContext.jsx';
 import { ReactNode } from 'react';
 
 export interface UnsubscribedOnlyProps {
@@ -6,9 +6,9 @@ export interface UnsubscribedOnlyProps {
 }
 
 export function UnsubscribedOnly({ children }: UnsubscribedOnlyProps) {
-	const isSubscribed = useIsSubscribed();
+	const isUnsubscribed = useIsUnsubscribed();
 
-	if (isSubscribed) {
+	if (!isUnsubscribed) {
 		return null;
 	}
 

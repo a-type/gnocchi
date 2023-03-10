@@ -217,9 +217,9 @@ function IngredientDetailsDialog({
 				<Formik
 					initialValues={{
 						text: ingredient.get('text'),
-						food: ingredient.get('food'),
+						food: ingredient.get('food') || '',
 						quantity: `${ingredient.get('quantity')}`,
-						unit: ingredient.get('unit'),
+						unit: ingredient.get('unit') || '',
 					}}
 					onSubmit={(values, bag) => {
 						let quantity: number | undefined = parseFloat(values.quantity);
@@ -228,9 +228,9 @@ function IngredientDetailsDialog({
 						}
 						ingredient.update({
 							text: values.text,
-							food: values.food,
+							food: values.food?.toLocaleLowerCase() || undefined,
 							quantity,
-							unit: values.unit,
+							unit: values.unit || undefined,
 						});
 						bag.setSubmitting(false);
 						rest.onOpenChange?.(false);

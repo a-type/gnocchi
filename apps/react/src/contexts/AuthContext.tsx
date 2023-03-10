@@ -117,6 +117,11 @@ export function useIsSubscribed() {
 	return isSubscribed;
 }
 
+export function useIsUnsubscribed() {
+	const { isSubscribed, error, initializing } = React.useContext(AuthContext);
+	return !initializing && !isSubscribed && !error;
+}
+
 export function useIsLoggedIn() {
 	const { session, initializing } = React.useContext(AuthContext);
 	return !initializing && !!session;

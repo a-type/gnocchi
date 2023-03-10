@@ -12,7 +12,6 @@ import classNames from 'classnames';
 import * as classes from './GrocerySuggestions.css.js';
 import { Food } from '@aglio/groceries-client';
 import { CaretDownIcon, PlusIcon } from '@radix-ui/react-icons';
-import { MagicIcon } from '@/components/icons/MagicIcon.jsx';
 import addDays from 'date-fns/addDays';
 import { Icon } from '@/components/icons/Icon.jsx';
 

@@ -49,6 +49,7 @@ import { clsx } from 'clsx';
 import React, {
 	CSSProperties,
 	Ref,
+	Suspense,
 	forwardRef,
 	useCallback,
 	useEffect,
@@ -201,31 +202,33 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					</CollapsibleTrigger>
 				</div>
 				<CollapsibleContent className={classes.secondaryCollapse}>
-					<div className={classes.secondaryContent}>
-						<ItemSources item={item} />
+					<Suspense>
+						<div className={classes.secondaryContent}>
+							<ItemSources item={item} />
 
-						<div className={classes.controls}>
-							<LiveUpdateTextField
-								value={comment || ''}
-								onChange={(val) => item.set('comment', val)}
-								placeholder="Add a comment"
-								className={classes.commentBox}
-							/>
-							<ListSelect
-								value={item.get('listId')}
-								onChange={(listId) => item.set('listId', listId)}
-							/>
-							<FoodDetailDialog foodName={food} />
-							{/* <CategoryPicker item={item} /> */}
-							<ItemDeleteButton
-								size="icon"
-								color="ghostDestructive"
-								item={item}
-							>
-								<TrashIcon />
-							</ItemDeleteButton>
+							<div className={classes.controls}>
+								<LiveUpdateTextField
+									value={comment || ''}
+									onChange={(val) => item.set('comment', val)}
+									placeholder="Add a comment"
+									className={classes.commentBox}
+								/>
+								<ListSelect
+									value={item.get('listId')}
+									onChange={(listId) => item.set('listId', listId)}
+								/>
+								<FoodDetailDialog foodName={food} />
+								{/* <CategoryPicker item={item} /> */}
+								<ItemDeleteButton
+									size="icon"
+									color="ghostDestructive"
+									item={item}
+								>
+									<TrashIcon />
+								</ItemDeleteButton>
+							</div>
 						</div>
-					</div>
+					</Suspense>
 				</CollapsibleContent>
 			</CollapsibleRoot>
 		);

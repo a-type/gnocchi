@@ -27,7 +27,7 @@ export const containerScroll = style({
 	overflow: 'overlay',
 	height: '100%',
 	marginTop: vars.space[3],
-	paddingBottom: `calc(${vars.space[3]} + env(safe-area-inset-bottom, 0px))`,
+	paddingBottom: `calc(${vars.space[10]} + env(safe-area-inset-bottom, 0px))`,
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
