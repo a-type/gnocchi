@@ -81,7 +81,11 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 		const [randomPlaceholder, setRandomPlaceholder] =
 			useState(getRandomPlaceholder);
 		const placeholder =
-			isSubscribed && !hasPastedAUrl ? 'Try pasting a URL!' : randomPlaceholder;
+			isSubscribed &&
+			!hasPastedAUrl &&
+			Math.random() < 1 / randomPlaceholders.length
+				? 'Try pasting a URL!'
+				: randomPlaceholder;
 
 		// all suggestions are loaded. filtering is done in-memory.
 		const suggestions = hooks.useAllSuggestions({
