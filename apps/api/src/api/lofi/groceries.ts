@@ -11,29 +11,30 @@ const tokenProvider = new TokenProvider({
 });
 
 export default async function groceriesHandler(req: Request, res: Response) {
-	let planId;
-	let userId;
+	let token;
+
 	const session = await getLoginSession(req);
 	if (!session) {
 		const tempAccess = await getTemporaryAccessSession(req);
 		if (!tempAccess) {
 			return res.status(401).send('Please log in');
 		} else {
-			planId = tempAccess.planId;
-			userId = tempAccess.temporaryAccessId;
+			token = tokenProvider.getToken({
+				userId: tempAccess.temporaryAccessId,
+				libraryId: getGroceryLibraryName(tempAccess.planId),
+				syncEndpoint: `${DEPLOYED_HOST}/lofi`,
+				type: ReplicaType.PassiveRealtime,
+			});
 		}
 	} else {
-		planId = session.planId;
-		userId = session.userId;
 		await verifySubscription(session);
+		token = tokenProvider.getToken({
+			userId: session.userId,
+			libraryId: getGroceryLibraryName(session.planId),
+			syncEndpoint: `${DEPLOYED_HOST}/lofi`,
+			type: ReplicaType.Realtime,
+		});
 	}
-
-	const token = tokenProvider.getToken({
-		userId,
-		libraryId: getGroceryLibraryName(planId),
-		syncEndpoint: `${DEPLOYED_HOST}/lofi`,
-		type: ReplicaType.Realtime,
-	});
 
 	res.status(200).json({
 		accessToken: token,

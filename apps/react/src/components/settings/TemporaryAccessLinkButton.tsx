@@ -20,11 +20,11 @@ export function TemporaryAccessLinkButton(
 ) {
 	return (
 		<Dialog>
-			<Box>
+			<Box gap={1}>
 				<DialogTrigger asChild>
 					<Button {...props}>Invite a temporary collaborator</Button>
 				</DialogTrigger>
-				<Span size="sm">Let someone shop with you for 24 hours</Span>
+				<Span size="xs">Let someone shop with you for 24 hours</Span>
 			</Box>
 			<DialogContent>
 				<DialogTitle>Temporary collaborator link</DialogTitle>

@@ -17,6 +17,7 @@ import {
 	ButtonProps,
 	Divider,
 	H1,
+	H2,
 	PageContent,
 	PageRoot,
 	Span,
@@ -152,13 +153,16 @@ function OnlineContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
+			<H2>Collaborate</H2>
 			<Invite />
 			<TemporaryAccessLinkButton />
 			<PushSubscriptionToggle />
 			<Divider />
+			<H2>Manage</H2>
 			<ManageCategories />
 			<MemberManager />
 			<Divider />
+			<H2>Troubleshoot</H2>
 			<BugButton />
 			<ResetToServer />
 			<Divider />

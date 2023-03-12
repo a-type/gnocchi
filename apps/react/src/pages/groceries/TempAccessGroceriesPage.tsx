@@ -25,7 +25,7 @@ import {
 	TextLink,
 } from '@aglio/ui';
 import { Formik } from 'formik';
-import { useCallback, useMemo } from 'react';
+import { Suspense, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -85,6 +85,12 @@ export function TempAccessGroceriesPage() {
 						<Form>
 							<TextField name="name" required placeholder="Your name" />
 							<SubmitButton>Join in</SubmitButton>
+							<Box fontSize="sm">
+								By continuing you agree to the{' '}
+								<TextLink href="/tos" target="_blank">
+									Terms of Service
+								</TextLink>
+							</Box>
 						</Form>
 					</Formik>
 				</PageContent>
@@ -101,11 +107,11 @@ function TempAccessGroceriesView({ code }: { code: string }) {
 	const onListChange = useCallback(
 		(listId: string | null | undefined) => {
 			if (listId === undefined) {
-				navigate('/');
+				navigate(`/temp/${code}`);
 			} else if (listId === null) {
-				navigate('/list/null');
+				navigate(`/temp/${code}/null`);
 			} else {
-				navigate(`/list/${listId}`);
+				navigate(`/temp/${code}/${listId}`);
 			}
 		},
 		[navigate],
@@ -123,31 +129,39 @@ function TempAccessGroceriesView({ code }: { code: string }) {
 
 	return (
 		<hooks.Provider value={clientDescriptor} sync>
-			<ListContext.Provider value={listId}>
-				<ThemedPageRoot listId={listId}>
-					<PageContent fullHeight noPadding nav={false}>
-						<Box
-							p={2}
-							gap={2}
-							direction="column"
-							align="flex-end"
-							background="accentWash"
-							color="accentDarker"
-						>
-							<P>This link lets you view someone else's list.</P>
-							<LinkButton size="small" to="/" target="_blank" color="accent">
-								Go to your personal list
-							</LinkButton>
-						</Box>
-						<TopControls>
-							<ListSelect includeAll value={listId} onChange={onListChange} />
-						</TopControls>
-						<AddBar />
-						<List />
-						<UnknownListRedirect listId={listId} />
-					</PageContent>
-				</ThemedPageRoot>
-			</ListContext.Provider>
+			<Suspense>
+				<ListContext.Provider value={listId}>
+					<ThemedPageRoot listId={listId}>
+						<PageContent fullHeight noPadding nav={false}>
+							<Box
+								p={3}
+								gap={1}
+								direction="column"
+								align="flex-start"
+								background="accentWash"
+								color="accentDarker"
+								borderRadius="lg"
+							>
+								<P>This link lets you view someone else's list.</P>
+								<LinkButton
+									size="small"
+									to="/welcome"
+									target="_blank"
+									color="accent"
+								>
+									Start your own list
+								</LinkButton>
+							</Box>
+							<TopControls>
+								<ListSelect includeAll value={listId} onChange={onListChange} />
+							</TopControls>
+							<AddBar />
+							<List />
+							<UnknownListRedirect listId={listId} />
+						</PageContent>
+					</ThemedPageRoot>
+				</ListContext.Provider>
+			</Suspense>
 		</hooks.Provider>
 	);
 }
