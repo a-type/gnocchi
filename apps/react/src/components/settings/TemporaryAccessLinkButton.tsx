@@ -1,4 +1,5 @@
 import { ShareLink } from '@/components/settings/ShareLink.jsx';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
 import {
 	Box,
@@ -18,6 +19,9 @@ export interface TemporaryAccessLinkButtonProps extends ButtonProps {}
 export function TemporaryAccessLinkButton(
 	props: TemporaryAccessLinkButtonProps,
 ) {
+	const enabled = useFeatureFlag('temporaryAccess');
+	if (!enabled) return null;
+
 	return (
 		<Dialog>
 			<Box gap={1}>
