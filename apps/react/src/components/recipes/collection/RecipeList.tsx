@@ -110,14 +110,14 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 			<div className={classes.itemActions}>
 				<div className={classes.itemActionsStart}>
 					<AddToListButton recipe={recipe} color="ghost" size="icon">
-						<PlusCircledIcon />
+						<PlusCircledIcon className={classes.actionIcon} />
 					</AddToListButton>
 				</div>
 				<div className={classes.itemActionsEnd}>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
 							<Button size="icon" color="ghost">
-								<DotsVerticalIcon />
+								<DotsVerticalIcon className={classes.actionIcon} />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>

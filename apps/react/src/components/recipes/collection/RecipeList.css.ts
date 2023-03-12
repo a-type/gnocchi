@@ -12,7 +12,7 @@ export const root = style({
 export const list = style({
 	display: 'grid',
 	gridTemplateColumns: '1fr',
-	gridAutoRows: '1fr',
+	gridAutoRows: 'auto',
 	gap: vars.space[4],
 	padding: 0,
 	margin: 0,
@@ -20,6 +20,7 @@ export const list = style({
 	'@media': {
 		[mediaQueries.md]: {
 			gridTemplateColumns: 'repeat(2, 1fr)',
+			gridAutoRows: '1fr',
 		},
 	},
 });
@@ -32,11 +33,10 @@ export const item = style({
 	borderRadius: vars.radii.lg,
 	fontSize: vars.fontSizes.lg,
 	overflow: 'hidden',
+	height: 'max-content',
 
 	'@media': {
-		[mediaQueries.md]: {
-			height: 'max-content',
-		},
+		[mediaQueries.md]: {},
 	},
 });
 
@@ -111,4 +111,9 @@ export const itemActionsEnd = style({
 	flexDirection: 'row',
 	gap: vars.space[1],
 	alignItems: 'center',
+});
+
+export const actionIcon = style({
+	width: 20,
+	height: 20,
 });
