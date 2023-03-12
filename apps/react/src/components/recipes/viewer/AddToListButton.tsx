@@ -1,4 +1,5 @@
 import {
+	ButtonProps,
 	Dialog,
 	DialogActions,
 	DialogClose,
@@ -22,11 +23,15 @@ import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import classNames from 'classnames';
 
-export interface AddToListButtonProps {
+export interface AddToListButtonProps extends ButtonProps {
 	recipe: Recipe;
 }
 
-export function AddToListButton({ recipe }: AddToListButtonProps) {
+export function AddToListButton({
+	recipe,
+	children,
+	...rest
+}: AddToListButtonProps) {
 	// set local multiplier from recipe default
 	const { ingredients, multiplier: defaultMultiplier } = hooks.useWatch(recipe);
 	const [multiplier, setMultiplier] = useState(defaultMultiplier);
@@ -63,7 +68,9 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 			<div>
 				<Dialog open={adding} onOpenChange={setAdding}>
 					<DialogTrigger asChild>
-						<Button color="default">Add to list</Button>
+						<Button color="default" {...rest}>
+							{children || 'Add to list'}
+						</Button>
 					</DialogTrigger>
 					<DialogContent>
 						<DialogTitle>Add to list</DialogTitle>

@@ -274,6 +274,13 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 			},
 			[client],
 		),
+	useDeleteRecipe: (client) =>
+		useCallback(
+			async (recipeId: string) => {
+				await client.recipes.delete(recipeId);
+			},
+			[client],
+		),
 });
 
 export function createClientDescriptor(options: { namespace: string }) {
