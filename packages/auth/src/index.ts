@@ -1,7 +1,13 @@
 import { IncomingMessage } from 'http';
 import { assert } from '@aglio/tools';
-import { MAX_AGE, setTokenCookie, getTokenCookie } from './cookies.js';
-import { Session } from './session.js';
+import {
+	MAX_AGE,
+	setSessionCookie,
+	getTokenCookie,
+	setTemporaryAccessCookie,
+	getTemporaryAccessCookie,
+} from './cookies.js';
+import { Session, TemporaryAccessSession } from './session.js';
 import jwt from 'jsonwebtoken';
 import { Response } from 'express';
 
@@ -12,10 +18,10 @@ export {
 	getTokenCookie,
 	setInviteIdCookie,
 	setReturnToCookie,
-	setTokenCookie,
+	setSessionCookie as setTokenCookie,
 	removeInviteIdCookie,
 	removeReturnToCookie,
-	removeTokenCookie,
+	removeSessionCookie as removeTokenCookie,
 } from './cookies.js';
 export * from './subscription.js';
 export * from './join.js';
@@ -38,7 +44,7 @@ export async function setLoginSession(res: Response, session: Session) {
 		expiresIn: MAX_AGE,
 	});
 
-	setTokenCookie(res, token);
+	setSessionCookie(res, token);
 }
 
 export async function getLoginSession(
@@ -78,4 +84,45 @@ export async function authenticatedProfile(req: IncomingMessage) {
 	} catch (e) {
 		return null;
 	}
+}
+
+export async function setTemporaryAccessSession(
+	res: Response,
+	session: TemporaryAccessSession,
+) {
+	// create a session object with a max age we can validate later
+	const sessionObject = {
+		sub: session.temporaryAccessId,
+		iat: Date.now(),
+		pid: session.planId,
+		nam: session.name,
+		role: 'temporary',
+	};
+	const token = jwt.sign(sessionObject, SESSION_SECRET!, {
+		expiresIn: '24h',
+	});
+
+	setTemporaryAccessCookie(res, token);
+}
+
+export async function getTemporaryAccessSession(
+	req: IncomingMessage,
+): Promise<TemporaryAccessSession | null> {
+	const token = getTemporaryAccessCookie(req);
+
+	if (!token) return null;
+
+	const data = jwt.verify(token, SESSION_SECRET!) as {
+		sub: string;
+		iat: number;
+		pid: string;
+		nam: string | null;
+		role: 'temporary';
+	};
+
+	return {
+		temporaryAccessId: data.sub,
+		planId: data.pid,
+		name: data.nam,
+	};
 }

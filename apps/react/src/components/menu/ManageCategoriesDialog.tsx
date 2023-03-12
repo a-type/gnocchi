@@ -1,4 +1,4 @@
-import { groceries } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { ReactNode, Suspense } from 'react';
 import { CategoryManager } from '../groceries/categories/CategoryManager.js';
 import {
@@ -13,9 +13,8 @@ import {
 import { menuState } from './state.js';
 
 export function ManageCategoriesDialog({ children }: { children: ReactNode }) {
-	const resetToDefaults = async () => {
-		await groceries.resetCategoriesToDefault();
-	};
+	const resetToDefaults = hooks.useResetCategoriesToDefault();
+
 	return (
 		<Dialog
 			onOpenChange={(isOpen) => {

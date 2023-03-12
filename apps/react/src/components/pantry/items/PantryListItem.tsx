@@ -1,4 +1,4 @@
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import * as groceryItemClasses from '@/components/groceries/items/GroceryListItem.css.js';
 import { useItemDisplayText } from '@/components/groceries/items/hooks.js';
 import { Button, Tooltip } from '@aglio/ui';
@@ -18,10 +18,7 @@ export interface PantryListItemProps {
 
 export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 	const { id, purchasedAt, food, expiresAt } = hooks.useWatch(item);
-
-	const deleteItem = () => {
-		groceries.deleteItem(item);
-	};
+	const deleteItem = hooks.useDeleteItem();
 
 	// within 3 days
 	const isAlmostOrExpired =
@@ -47,7 +44,11 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 					classes.mainContent,
 				)}
 			>
-				<Button size="small" color="ghostDestructive" onClick={deleteItem}>
+				<Button
+					size="small"
+					color="ghostDestructive"
+					onClick={() => deleteItem(item)}
+				>
 					<TrashIcon />
 				</Button>
 				<div className={groceryItemClasses.textContent}>{food}</div>

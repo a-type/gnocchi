@@ -1,6 +1,6 @@
 import { People } from '@/components/sync/people/People.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { ActionBar, ActionButton } from '@aglio/ui';
 import { CheckboxIcon, TrashIcon } from '@radix-ui/react-icons';
 import * as classes from './GroceriesActionBar.css.js';
@@ -24,6 +24,7 @@ export function GroceriesActionBar({}: GroceriesActionBarProps) {
 }
 
 function PurchaseAllAction() {
+	const purchaseItems = hooks.usePurchaseItems();
 	const listId = useListId();
 	const items = hooks
 		.useAllItems({
@@ -40,7 +41,7 @@ function PurchaseAllAction() {
 			visible={items.length > 0}
 			size="small"
 			onClick={() => {
-				groceries.purchaseItems(items);
+				purchaseItems(items);
 			}}
 			icon={<CheckboxIcon />}
 		>
@@ -50,6 +51,7 @@ function PurchaseAllAction() {
 }
 
 function DeleteAllAction() {
+	const deleteItems = hooks.useDeleteItems();
 	const listId = useListId();
 	const items = hooks
 		.useAllItems({
@@ -66,7 +68,7 @@ function DeleteAllAction() {
 			visible={items.length > 0}
 			size="small"
 			onClick={() => {
-				groceries.deleteItems(items.map((i) => i.get('id')));
+				deleteItems(items.map((i) => i.get('id')));
 			}}
 			icon={<TrashIcon />}
 		>

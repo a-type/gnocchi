@@ -2,6 +2,7 @@ import { LogoutButton } from '@/components/auth/LogoutButton.js';
 import { BugButton } from '@/components/menu/BugButton.jsx';
 import { ManageCategoriesDialog } from '@/components/menu/ManageCategoriesDialog.jsx';
 import { InstallHint } from '@/components/promotional/InstallHint.jsx';
+import { TemporaryAccessLinkButton } from '@/components/settings/TemporaryAccessLinkButton.jsx';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
 import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
@@ -152,6 +153,7 @@ function OnlineContents() {
 		<MainContainer>
 			<InstallHint />
 			<Invite />
+			<TemporaryAccessLinkButton />
 			<PushSubscriptionToggle />
 			<Divider />
 			<ManageCategories />

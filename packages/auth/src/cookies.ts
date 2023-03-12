@@ -2,12 +2,12 @@ import { parse, serialize } from 'cookie';
 import { Request, Response } from 'express';
 import { IncomingMessage, OutgoingMessage } from 'http';
 
-const TOKEN_NAME = 'ag-session';
+const SESSION_COOKIE_NAME = 'ag-session';
 
 export const MAX_AGE = 60 * 60 * 24 * 14; // 2 weeks
 
-export function setTokenCookie(res: OutgoingMessage, token: string) {
-	const cookie = serialize(TOKEN_NAME, token, {
+export function setSessionCookie(res: OutgoingMessage, token: string) {
+	const cookie = serialize(SESSION_COOKIE_NAME, token, {
 		maxAge: MAX_AGE,
 		expires: new Date(Date.now() + MAX_AGE * 1000),
 		httpOnly: true,
@@ -19,8 +19,8 @@ export function setTokenCookie(res: OutgoingMessage, token: string) {
 	res.setHeader('Set-Cookie', cookie);
 }
 
-export function removeTokenCookie(res: OutgoingMessage) {
-	const cookie = serialize(TOKEN_NAME, '', {
+export function removeSessionCookie(res: OutgoingMessage) {
+	const cookie = serialize(SESSION_COOKIE_NAME, '', {
 		maxAge: -1,
 		path: '/',
 	});
@@ -36,7 +36,7 @@ export function parseCookies(req: IncomingMessage) {
 }
 
 export function getTokenCookie(req: IncomingMessage) {
-	return parseCookies(req)[TOKEN_NAME];
+	return parseCookies(req)[SESSION_COOKIE_NAME];
 }
 
 export function setReturnToCookie(req: Request, res: Response) {
@@ -97,6 +97,32 @@ export function getInviteIdCookie(req: IncomingMessage) {
 
 export function removeInviteIdCookie(res: OutgoingMessage) {
 	const cookie = serialize('ag-invite-id', '', {
+		maxAge: -1,
+		path: '/',
+	});
+
+	res.setHeader('Set-Cookie', cookie);
+}
+
+export function setTemporaryAccessCookie(res: OutgoingMessage, token: string) {
+	const cookie = serialize('ag-temp-access', token, {
+		maxAge: MAX_AGE,
+		expires: new Date(Date.now() + MAX_AGE * 1000),
+		httpOnly: true,
+		secure: true,
+		sameSite: 'lax',
+		path: '/',
+	});
+
+	res.setHeader('Set-Cookie', cookie);
+}
+
+export function getTemporaryAccessCookie(req: IncomingMessage) {
+	return parseCookies(req)['ag-temp-access'];
+}
+
+export function removeTemporaryAccessCookie(res: OutgoingMessage) {
+	const cookie = serialize('ag-temp-access', '', {
 		maxAge: -1,
 		path: '/',
 	});

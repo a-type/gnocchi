@@ -1,6 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext.js';
 import { useListId } from '@/contexts/ListContext.jsx';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { H3, sprinkles } from '@aglio/ui';
 import { Item } from '@aglio/groceries-client';
 import {
@@ -207,25 +207,31 @@ function useOnDragStart() {
 }
 
 function useOnDragEnd() {
-	return useCallback(async ({ over, active }: DragEndEvent) => {
-		const item = (active.data.current as GroceryDnDDrag).value;
+	const setItemCategory = hooks.useSetItemCategory();
+	const deleteItem = hooks.useDeleteItem();
 
-		if (!over) {
-			// they dropped on nothing... cancel any movement
-			item.set('categoryId', groceriesState.draggedItemOriginalCategory);
-		} else {
-			const dropZone = over.data.current as GroceryDnDDrop;
-			if (dropZone.type === 'category') {
-				await groceries.setItemCategory(item, dropZone.value, true);
-			} else if (dropZone.type === 'new') {
-				groceriesState.newCategoryPendingItem = valtioRef(item);
-			} else if (dropZone.type === 'delete') {
-				await groceries.deleteItem(item);
+	return useCallback(
+		async ({ over, active }: DragEndEvent) => {
+			const item = (active.data.current as GroceryDnDDrag).value;
+
+			if (!over) {
+				// they dropped on nothing... cancel any movement
+				item.set('categoryId', groceriesState.draggedItemOriginalCategory);
+			} else {
+				const dropZone = over.data.current as GroceryDnDDrop;
+				if (dropZone.type === 'category') {
+					await setItemCategory(item, dropZone.value, true);
+				} else if (dropZone.type === 'new') {
+					groceriesState.newCategoryPendingItem = valtioRef(item);
+				} else if (dropZone.type === 'delete') {
+					await deleteItem(item);
+				}
 			}
-		}
-		groceriesState.draggedItemOriginalCategory = null;
-		groceriesState.isAnyItemDragged = false;
-	}, []);
+			groceriesState.draggedItemOriginalCategory = null;
+			groceriesState.isAnyItemDragged = false;
+		},
+		[setItemCategory, deleteItem],
+	);
 }
 
 function useOnDragOver() {

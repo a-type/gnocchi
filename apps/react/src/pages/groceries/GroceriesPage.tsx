@@ -20,6 +20,14 @@ import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSaveProm
 import { UnsubscribedOnly } from '@/components/auth/UnsubscribedOnly.jsx';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import {
+	AddBar,
+	List,
+	ListSelectWrapper,
+	ThemedPageRoot,
+	TopControls,
+	UnknownListRedirect,
+} from '@/pages/groceries/layout.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -44,98 +52,27 @@ export function GroceriesPage() {
 			<RecipeSavePrompt />
 			<ThemedPageRoot listId={listId}>
 				<PageContent fullHeight noPadding nav>
-					<Box
-						width="full"
-						flexDirection="row"
-						justify="space-between"
-						align="center"
-						gap={2}
-						px={2}
-						py={2}
-						mt={1}
-					>
-						{/* Suspended state approximates final height */}
-						<Box flexDirection="row" align="center" gap={2}>
-							<Suspense fallback={<div style={{ height: 28 }} />}>
-								<ListSelect includeAll value={listId} onChange={onListChange} />
-								{listId && <ListEdit listId={listId} />}
-							</Suspense>
-						</Box>
+					<TopControls>
+						<ListSelectWrapper>
+							<ListSelect includeAll value={listId} onChange={onListChange} />
+							{listId && <ListEdit listId={listId} />}
+						</ListSelectWrapper>
 
 						<UnsubscribedOnly>
 							<PromoteSubscriptionButton size="small" color="accent">
 								Upgrade
 							</PromoteSubscriptionButton>
 						</UnsubscribedOnly>
-					</Box>
-					<PageFixedArea
-						className={sprinkles({
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 2,
-							p: 2,
-						})}
-					>
-						<Suspense fallback={<div style={{ height: 41 }} />}>
-							<GroceryListAdd />
-						</Suspense>
-						<GroceriesActionBar />
-					</PageFixedArea>
-					<Suspense fallback={null}>
-						<GroceryList />
-					</Suspense>
+					</TopControls>
+					<AddBar />
+					<List />
 					<SubscriptionExpiredDialog />
 					<CompleteSignupDialog />
 					<SignupSuccessBanner />
-					<Suspense>
-						{listId && <UnknownListRedirect listId={listId} />}
-					</Suspense>
+					<UnknownListRedirect listId={listId} />
 				</PageContent>
 				<RecipePresenceNotification />
 			</ThemedPageRoot>
 		</ListContext.Provider>
 	);
-}
-
-function ThemedPageRoot({
-	children,
-	listId,
-}: {
-	children: ReactNode;
-	listId: string | null | undefined;
-}) {
-	return (
-		<Suspense fallback={<PageRoot>{children}</PageRoot>}>
-			<ThemedPageRootInner listId={listId}>{children}</ThemedPageRootInner>
-		</Suspense>
-	);
-}
-
-function ThemedPageRootInner({
-	children,
-	listId,
-}: {
-	children: ReactNode;
-	listId: string | null | undefined;
-}) {
-	const theme = useListThemeClass(listId);
-
-	return (
-		<Suspense fallback={children}>
-			<PageRoot className={theme}>{children}</PageRoot>
-		</Suspense>
-	);
-}
-
-function UnknownListRedirect({ listId }: { listId: string }) {
-	const list = hooks.useList(listId);
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if (!list) {
-			navigate('/');
-		}
-	}, [list, navigate]);
-
-	return null;
 }

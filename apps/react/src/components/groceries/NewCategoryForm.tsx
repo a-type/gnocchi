@@ -1,4 +1,4 @@
-import { groceries } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
 import { Box, Form, sprinkles, SubmitButton, TextField } from '@aglio/ui';
 import { Formik } from 'formik';
@@ -10,13 +10,14 @@ export function NewCategoryForm({
 	onDone: (category: Category) => void;
 	autoFocus?: boolean;
 }) {
+	const createCategory = hooks.useCreateCategory();
 	return (
 		<Box flexDirection="column" gap={2} align="stretch" width="full">
 			<Formik
 				initialValues={{ name: '' }}
 				onSubmit={async ({ name }) => {
 					// create the category
-					const category = await groceries.createCategory(name);
+					const category = await createCategory(name);
 					onDone(category);
 				}}
 			>

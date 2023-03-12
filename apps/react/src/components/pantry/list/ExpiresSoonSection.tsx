@@ -1,6 +1,6 @@
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
 import { Button, H2 } from '@aglio/ui';
 import { ClockIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
@@ -33,15 +33,17 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 
 function ExpiresSoonItem({ item }: { item: Item }) {
 	const { food, expiresAt, purchasedAt } = hooks.useWatch(item);
+	const deleteItem = hooks.useDeleteItem();
+	const cloneItem = hooks.useCloneItem();
 
-	const deleteItem = useCallback(() => {
-		groceries.deleteItem(item);
-	}, [item]);
+	const deleteThisItem = useCallback(() => {
+		deleteItem(item);
+	}, [item, deleteItem]);
 
 	const repurchaseItem = useCallback(async () => {
-		await groceries.cloneItem(item);
-		deleteItem();
-	}, [deleteItem, item]);
+		await cloneItem(item);
+		deleteThisItem();
+	}, [deleteThisItem, cloneItem, item]);
 
 	const snooze = useCallback(() => {
 		item.set('expiresAt', Date.now() + 6 * 24 * 60 * 60 * 1000);

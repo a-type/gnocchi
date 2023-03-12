@@ -1,6 +1,6 @@
 import { ActionBar } from '@aglio/ui';
 import { ActionButton } from '@aglio/ui';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { ResetIcon, TrashIcon } from '@radix-ui/react-icons';
 import { UndoAction } from '@/components/groceries/actions/UndoAction.jsx';
 import { RedoAction } from '@/components/groceries/actions/RedoAction.jsx';
@@ -24,6 +24,7 @@ function DeleteAllAction() {
 			equals: 'yes',
 		},
 	});
+	const deleteItems = hooks.useDeleteItems();
 
 	if (!items.length) {
 		return null;
@@ -33,7 +34,7 @@ function DeleteAllAction() {
 		<ActionButton
 			size="small"
 			onClick={() => {
-				groceries.deleteItems(items.map((i) => i.get('id')));
+				deleteItems(items.map((i) => i.get('id')));
 			}}
 			icon={<TrashIcon />}
 		>

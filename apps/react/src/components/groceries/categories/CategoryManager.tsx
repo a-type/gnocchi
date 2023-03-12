@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { Button, Form, SubmitButton, TextField } from '@aglio/ui';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { DndContext, DragOverlay, useDndMonitor } from '@dnd-kit/core';
 import { SortableContext, useSortable } from '@dnd-kit/sortable';
@@ -109,6 +109,7 @@ function CategoryManagerItem({
 	nodeProps?: any;
 }) {
 	hooks.useWatch(category);
+	const deleteCategory = hooks.useDeleteCategory();
 
 	return (
 		<Box flexDirection="row" align="center" gap={3} width="full" {...nodeProps}>
@@ -119,7 +120,7 @@ function CategoryManagerItem({
 				onClick={() => {
 					const ok = confirm('Delete category ' + category.get('name') + '?');
 					if (ok) {
-						groceries.deleteCategory(category.get('id'));
+						deleteCategory(category.get('id'));
 					}
 				}}
 			>
@@ -194,11 +195,12 @@ function CategoryDragOverlay() {
 }
 
 function AddCategoryForm() {
+	const createCategory = hooks.useCreateCategory();
 	return (
 		<Formik
 			initialValues={{ name: '' }}
 			onSubmit={(values, bag) => {
-				groceries.createCategory(values.name);
+				createCategory(values.name);
 				bag.resetForm();
 			}}
 		>

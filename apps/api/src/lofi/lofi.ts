@@ -24,6 +24,17 @@ class Profiles implements UserProfiles<any> {
 				imageUrl: profile.imageUrl,
 			};
 		} else {
+			const tempAccess = await prisma.temporaryAccess.findUnique({
+				where: { id: userId },
+			});
+			if (tempAccess) {
+				return {
+					id: userId,
+					name: tempAccess.name || 'Anonymous',
+					imageUrl: null,
+				};
+			}
+
 			return {
 				id: userId,
 				name: 'Anonymous',

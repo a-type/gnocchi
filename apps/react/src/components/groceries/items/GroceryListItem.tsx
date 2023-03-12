@@ -10,12 +10,7 @@ import { useListId } from '@/contexts/ListContext.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
 import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
-import {
-	Presence,
-	Profile,
-	groceries,
-	hooks,
-} from '@/stores/groceries/index.js';
+import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
 import {
 	Box,
@@ -119,8 +114,9 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		const isPartiallyPurchased = false;
 		const displayString = useItemDisplayText(item);
 
+		const toggleItemPurchased = hooks.useToggleItemPurchased();
 		const togglePurchased = useCallback(async () => {
-			await groceries.toggleItemPurchased(item);
+			await toggleItemPurchased(item);
 		}, [item]);
 
 		const quantityJustChanged = useDidQuantityJustChange(item);

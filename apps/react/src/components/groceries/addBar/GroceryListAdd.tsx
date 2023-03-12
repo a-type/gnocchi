@@ -7,7 +7,7 @@ import {
 	useCallback,
 	useMemo,
 } from 'react';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { isUrl } from '@aglio/tools';
 import { Popover, PopoverAnchor, PopoverContent, useSize } from '@aglio/ui';
 import {
@@ -119,6 +119,8 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 			}
 		}, [suggestionPrompt]);
 
+		const addItems = hooks.useAddItems();
+
 		const {
 			isOpen,
 			getMenuProps,
@@ -149,7 +151,7 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 							signupState.status = 'open';
 						}
 					} else {
-						await groceries.addItems([selectedItem], {
+						await addItems([selectedItem], {
 							listId,
 						});
 					}
@@ -167,7 +169,7 @@ export const GroceryListAdd = forwardRef<HTMLDivElement, GroceryListAddProps>(
 				const lines = text.split(/\r?\n/).map((t) => t.trim());
 				const items = lines.filter(Boolean);
 				if (items.length > 1) {
-					await groceries.addItems(items, {
+					await addItems(items, {
 						listId,
 					});
 					reset();

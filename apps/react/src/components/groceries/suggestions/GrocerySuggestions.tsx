@@ -1,11 +1,10 @@
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import {
 	Button,
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
 } from '@aglio/ui';
-import addWeeks from 'date-fns/addWeeks';
 import startOfDay from 'date-fns/startOfDay';
 import { title, titleRow } from '../categories/GroceryListCategory.css.js';
 import classNames from 'classnames';
@@ -52,6 +51,8 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 }
 
 function SuggestionItem({ food }: { food: Food }) {
+	const addItems = hooks.useAddItems();
+
 	return (
 		<div className={classes.item}>
 			<div className={classes.name}>{food.get('canonicalName')}</div>
@@ -60,7 +61,7 @@ function SuggestionItem({ food }: { food: Food }) {
 				color="ghost"
 				className={classes.addButton}
 				onClick={async () => {
-					await groceries.addItems([food.get('canonicalName')], {});
+					await addItems([food.get('canonicalName')], {});
 				}}
 			>
 				<PlusIcon />
