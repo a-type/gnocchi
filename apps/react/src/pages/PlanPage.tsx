@@ -2,12 +2,14 @@ import { LogoutButton } from '@/components/auth/LogoutButton.js';
 import { BugButton } from '@/components/menu/BugButton.jsx';
 import { ManageCategoriesDialog } from '@/components/menu/ManageCategoriesDialog.jsx';
 import { InstallHint } from '@/components/promotional/InstallHint.jsx';
+import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
+import { TemporaryAccessLinkButton } from '@/components/settings/TemporaryAccessLinkButton.jsx';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
 import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
 import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
 import { PushSubscriptionToggle } from '@/components/sync/push/PushSubscriptionToggle.jsx';
-import { API_HOST_HTTP } from '@/config.js';
+import { API_HOST_HTTP, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
 import {
@@ -16,6 +18,7 @@ import {
 	ButtonProps,
 	Divider,
 	H1,
+	H2,
 	PageContent,
 	PageRoot,
 	Span,
@@ -116,10 +119,16 @@ function AnonymousContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
-			<LoginButton color="primary" returnTo="/">
-				<ArrowRightIcon />
-				&nbsp;Subscribe (or sign in)
-			</LoginButton>
+			<Box direction="row" align="center" gap={2}>
+				<PromoteSubscriptionButton color="primary">
+					Upgrade for ${PRICE_MONTHLY_DOLLARS}/mo
+				</PromoteSubscriptionButton>
+				<LoginButton color="default" returnTo="/">
+					<ArrowRightIcon />
+					<span>Sign in</span>
+				</LoginButton>
+			</Box>
+			<Divider />
 			<ManageCategories />
 			<BugButton />
 		</MainContainer>
@@ -151,12 +160,16 @@ function OnlineContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
+			<H2>Collaborate</H2>
 			<Invite />
+			<TemporaryAccessLinkButton />
 			<PushSubscriptionToggle />
 			<Divider />
+			<H2>Manage</H2>
 			<ManageCategories />
 			<MemberManager />
 			<Divider />
+			<H2>Troubleshoot</H2>
 			<BugButton />
 			<ResetToServer />
 			<Divider />

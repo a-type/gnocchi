@@ -14,7 +14,6 @@ import { Recipe } from '@aglio/groceries-client';
 import { useEffect, useState } from 'react';
 import { clsx } from 'clsx';
 import * as classes from './AddToListButton.css.js';
-import { groceries } from '@/stores/groceries/index.js';
 import { groceriesState } from '@/components/groceries/state.js';
 import { IngredientText } from './IngredientText.jsx';
 import { MultiplierStepper } from './MultiplierStepper.jsx';
@@ -46,6 +45,8 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 			setMultiplier(defaultMultiplier);
 		}
 	}, [adding]);
+
+	const addItems = hooks.useAddItems();
 
 	return (
 		<OnboardingTooltip
@@ -116,7 +117,7 @@ export function AddToListButton({ recipe }: AddToListButtonProps) {
 							<Button
 								color="primary"
 								onClick={() => {
-									groceries.addItems(
+									addItems(
 										items
 											.filter((_, index) => checkedItems[index])
 											.map((item) =>

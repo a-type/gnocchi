@@ -28,7 +28,7 @@ import {
 	useMatches,
 } from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { GroceriesPage } from './GroceriesPage.jsx';
+import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import { PantryPage } from './PantryPage.jsx';
 import RecipesPage from './recipe/RecipesPage.jsx';
@@ -65,6 +65,9 @@ const SubscriberFeaturesPage = lazy(
 );
 const PrivacyPolicyPage = lazy(() => import('./PrivacyPolicy.jsx'));
 const TermsAndConditionsPage = lazy(() => import('./TermsAndConditions.jsx'));
+const TempAccessGroceriesPage = lazy(
+	() => import('./groceries/TempAccessGroceriesPage.jsx'),
+);
 
 const router = createBrowserRouter([
 	{
@@ -187,6 +190,14 @@ const router = createBrowserRouter([
 					},
 				],
 				hasErrorBoundary: false,
+			},
+			{
+				path: '/temp/:code/:listId',
+				element: <TempAccessGroceriesPage />,
+			},
+			{
+				path: '/temp/:code',
+				element: <TempAccessGroceriesPage />,
 			},
 			{
 				path: '/subscriber-features',

@@ -15,6 +15,7 @@ import {
 import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
 import copy from 'copy-to-clipboard';
 import { toast } from 'react-hot-toast';
+import { ShareLink } from '@/components/settings/ShareLink.jsx';
 
 export interface InviteLinkButtonProps extends ButtonProps {}
 
@@ -59,7 +60,7 @@ export function InviteLinkButton(props: InviteLinkButtonProps) {
 }
 
 function LinkContent() {
-	const [link, setLink] = useState('');
+	const [link, setLink] = useState<string | null>(null);
 	useEffect(() => {
 		generateLink()
 			.then((link) => setLink(link))
@@ -74,35 +75,7 @@ function LinkContent() {
 				Send this link to someone you want to join your plan. The link only
 				works for one person.
 			</P>
-			<Input disabled value={link} />
-			<Box direction="row" gap={2}>
-				{'share' in (navigator || {}) && (
-					<Button
-						color="primary"
-						onClick={() => {
-							navigator.share({
-								title: 'Join my grocery list',
-								text: 'Join my grocery list',
-								url: link,
-							});
-						}}
-					>
-						Share link
-					</Button>
-				)}
-				<Button
-					onClick={() => {
-						try {
-							copy(link);
-							toast.success('The link was copied to your clipboard.');
-						} catch (err) {
-							toast.error('Failed to copy link to clipboard.');
-						}
-					}}
-				>
-					Copy link
-				</Button>
-			</Box>
+			<ShareLink onGenerate={generateLink} shareTitle="Join my grocery list" />
 		</Box>
 	);
 }

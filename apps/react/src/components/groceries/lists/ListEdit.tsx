@@ -3,7 +3,7 @@ import { Dialog, DialogClose, DialogContent, DialogTrigger } from '@aglio/ui';
 import { Box } from '@aglio/ui';
 import { LiveUpdateTextField } from '@aglio/ui';
 import { Button, H2 } from '@aglio/ui';
-import { groceries, hooks } from '@/stores/groceries/index.js';
+import { hooks } from '@/stores/groceries/index.js';
 import { GearIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 
@@ -14,6 +14,7 @@ export interface ListEditProps {
 export function ListEdit({ listId }: ListEditProps) {
 	const list = hooks.useList(listId);
 	hooks.useWatch(list);
+	const deleteList = hooks.useDeleteList();
 
 	const [open, setOpen] = useState(false);
 
@@ -45,7 +46,7 @@ export function ListEdit({ listId }: ListEditProps) {
 					<Button
 						color="destructive"
 						onClick={async () => {
-							await groceries.deleteList(list.get('id'));
+							await deleteList(list.get('id'));
 							setOpen(false);
 						}}
 					>

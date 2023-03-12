@@ -103,8 +103,10 @@ export const Box = forwardRef<any, BoxProps>(function Box(
 	ref,
 ) {
 	const atomClasses = clsx(
-		resetStyles.base,
-		resetStyles.element[asProp as keyof typeof resetStyles.element],
+		resetStyles.baseResetStyle,
+		resetStyles.elementResetStyles[
+			asProp as keyof typeof resetStyles.elementResetStyles
+		],
 		sprinkles({
 			padding: p ?? padding,
 			paddingX: px ?? paddingX,

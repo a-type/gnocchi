@@ -9,6 +9,7 @@ import {
 	DialogContent,
 	P,
 	TextLink,
+	sprinkles,
 } from '@aglio/ui';
 import { useAuth } from '@/contexts/AuthContext.js';
 import { LogoutButton } from '../auth/LogoutButton.js';
@@ -25,7 +26,7 @@ export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
 
 	return (
 		<Dialog open={open}>
-			<DialogContent>
+			<DialogContent className={sprinkles({ gap: 2 })}>
 				<H2>Complete Signup</H2>
 				<P>
 					Now that you're signed in, finish creating your subscription to start

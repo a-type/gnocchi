@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-export const base = style({
+export const baseResetStyle = style({
 	margin: 0,
 	padding: 0,
 	border: 0,
@@ -11,7 +11,7 @@ export const base = style({
 	verticalAlign: 'baseline',
 });
 
-export const button = style({
+const button = style({
 	background: 0,
 	border: 0,
 	WebkitTapHighlightColor: 'rgba(0, 0, 0, 0)',
@@ -59,7 +59,7 @@ const select = style({
 	},
 });
 
-export const element = {
+export const elementResetStyles = {
 	article: block,
 	aside: block,
 	button,

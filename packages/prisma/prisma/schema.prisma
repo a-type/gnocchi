@@ -52,18 +52,19 @@ model Account {
 }
 
 model Plan {
-  id                     String           @id @default(cuid())
-  createdAt              DateTime         @default(now()) @map("created_at")
-  updatedAt              DateTime         @updatedAt @map("updated_at")
-  deletedAt              DateTime?        @map("deleted_at")
-  stripeCustomerId       String?          @map("stripe_customer_id")
-  stripeSubscriptionId   String?          @map("stripe_subscription_id")
-  subscriptionExpiresAt  DateTime?        @map("subscription_expires_at")
-  subscriptionCanceledAt DateTime?        @map("subscription_canceled_at")
-  subscriptionStatus     String?          @map("subscription_status")
-  featureFlags           String           @default("{}") @map("feature_flags")
+  id                     String            @id @default(cuid())
+  createdAt              DateTime          @default(now()) @map("created_at")
+  updatedAt              DateTime          @updatedAt @map("updated_at")
+  deletedAt              DateTime?         @map("deleted_at")
+  stripeCustomerId       String?           @map("stripe_customer_id")
+  stripeSubscriptionId   String?           @map("stripe_subscription_id")
+  subscriptionExpiresAt  DateTime?         @map("subscription_expires_at")
+  subscriptionCanceledAt DateTime?         @map("subscription_canceled_at")
+  subscriptionStatus     String?           @map("subscription_status")
+  featureFlags           String            @default("{}") @map("feature_flags")
   members                Profile[]
   invitations            PlanInvitation[]
+  temporaryAccesses      TemporaryAccess[]
 
   @@unique([stripeSubscriptionId])
   @@map("plans")
@@ -216,4 +217,18 @@ model PushSubscription {
   profile   Profile? @relation(fields: [profileId], references: [id])
 
   @@map("push_subscriptions")
+}
+
+model TemporaryAccess {
+  id        String    @id @default(cuid())
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  expiresAt DateTime  @map("expires_at")
+  claimedAt DateTime? @map("claimed_at")
+  code      String    @unique
+  name      String?
+  planId    String    @map("plan_id")
+  plan      Plan      @relation(fields: [planId], references: [id])
+
+  @@map("temporary_accesses")
 }
