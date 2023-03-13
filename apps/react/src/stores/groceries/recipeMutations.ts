@@ -13,6 +13,7 @@ import { groceriesDescriptor } from './index.js';
 // @ts-ignore
 import { generateJSON } from '@tiptap/html';
 import { createTiptapExtensions } from '@/components/recipes/editor/tiptapExtensions.js';
+import cuid from 'cuid';
 
 export async function addIngredients(
 	ingredients: RecipeIngredients,
@@ -78,14 +79,7 @@ async function getScannedRecipe(url: string): Promise<RecipeInit> {
 				url: scanned.url,
 				title: scanned.title || 'Web Recipe',
 				ingredients: ingredients.length ? ingredients : undefined,
-				instructions: scanned.steps?.length
-					? generateJSON(
-							(scanned.steps || [])
-								.map((line: string) => `<p>${line}</p>`)
-								.join('\n'),
-							createTiptapExtensions(),
-					  )
-					: undefined,
+				instructions: instructionsToDoc(scanned.steps || []),
 			};
 		} else if (scanResult.type === 'hub') {
 			const scanned = scanResult.data;
@@ -161,4 +155,24 @@ export async function updateRecipeFromUrl(recipe: Recipe, url: string) {
 			toast.error('Something went wrong.');
 		}
 	}
+}
+
+function instructionsToDoc(lines: string[]) {
+	return lines?.length
+		? {
+				type: 'doc',
+				content: (lines || []).map((line: string) => ({
+					type: 'step',
+					attrs: {
+						id: cuid(),
+					},
+					content: [
+						{
+							type: 'text',
+							text: line,
+						},
+					],
+				})),
+		  }
+		: undefined;
 }
