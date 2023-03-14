@@ -1,5 +1,6 @@
 import { vars } from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
+import { calc } from '@vanilla-extract/css-utils';
 
 export const root = style({
 	display: 'flex',
@@ -31,4 +32,19 @@ export const noteIconWithNote = style({
 
 export const sectionHeader = style({
 	fontWeight: vars.fontWeights.bold,
+});
+
+export const convertContent = style({
+	zIndex: calc(vars.zIndices.dialog).add(1).toString(),
+});
+
+export const conversion = style({
+	marginRight: 'auto',
+	alignSelf: 'flex-start',
+	fontStyle: 'italic',
+	color: vars.colors.gray70,
+});
+
+export const conversionContent = style({
+	paddingRight: vars.space[2],
 });

@@ -1,7 +1,9 @@
 import { depluralize } from './depluralize.js';
 import { articles, unitAbbreviations } from './lists.js';
 
-export function unitParser(input: string) {
+export function unitParser(rawInput: string) {
+	let input = normalizeInput(rawInput);
+
 	// expand known abbreviations
 	const matchingAbbreviation = unitAbbreviations.find(([abbreviation]) => {
 		if (
@@ -27,4 +29,10 @@ export function unitParser(input: string) {
 	}
 
 	return input.trim();
+}
+
+function normalizeInput(input: string) {
+	// remove any trailing punctuation
+	// and convert to lowercase
+	return input.replace(/[\.,;:]$/, '').toLowerCase();
 }

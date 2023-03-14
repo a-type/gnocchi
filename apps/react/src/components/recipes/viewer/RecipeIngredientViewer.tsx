@@ -2,16 +2,40 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { RecipeIngredientsItem } from '@aglio/groceries-client';
 import {
+	Box,
 	Button,
 	CollapsibleContent,
 	CollapsibleRoot,
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuTrigger,
+	Select,
+	SelectContent,
+	SelectIcon,
+	SelectItem,
+	SelectItemText,
+	SelectTrigger,
+	SelectValue,
+	Span,
+	Tooltip,
 	useToggle,
 } from '@aglio/ui';
 import classNames from 'classnames';
-import { useCallback } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { NoteEditor } from '../editor/NoteEditor.jsx';
 import { IngredientText } from './IngredientText.jsx';
 import * as classes from './RecipeIngredientViewer.css.js';
+import { convertUnits, lookupUnit } from '@aglio/conversion';
+import { fractionToText } from '@aglio/tools';
+
+(window as any).convertUnits = convertUnits;
 
 export interface RecipeIngredientViewerProps {
 	ingredient: RecipeIngredientsItem;
@@ -26,8 +50,8 @@ export function RecipeIngredientViewer({
 	className,
 	disableAddNote,
 }: RecipeIngredientViewerProps) {
-	const note = hooks.useWatch(ingredient, 'note');
-	const isSectionHeader = hooks.useWatch(ingredient, 'isSectionHeader');
+	const { note, isSectionHeader, quantity, unit } = hooks.useWatch(ingredient);
+	const officialUnit = lookupUnit(unit);
 
 	const [showNote, toggleShowNote] = useToggle(false);
 
@@ -36,6 +60,40 @@ export function RecipeIngredientViewer({
 			toggleShowNote();
 		}
 	}, [note, toggleShowNote]);
+
+	const [conversion, setConversion] = useState<string>();
+	const [showConversionDialog, setShowConversionDialog] = useState(false);
+	const toggleConversion = useCallback(() => {
+		if (conversion) {
+			setConversion(undefined);
+		} else {
+			setShowConversionDialog(true);
+		}
+	}, [conversion]);
+
+	const convertedValue = useMemo(() => {
+		if (!conversion || !officialUnit) return undefined;
+		const result = convertUnits(quantity)
+			.from(officialUnit.abbr)
+			.to(conversion);
+		return `${fractionToText(result)} ${friendlyUnit(conversion, result <= 1)}`;
+	}, [conversion, officialUnit, quantity]);
+
+	const convertOptions: string[] = useMemo(() => {
+		if (!officialUnit) return [];
+		try {
+			return convertUnits()
+				.from(officialUnit.abbr)
+				.possibilities()
+				.filter((opt: string) => usefulUnits.includes(opt))
+				.filter((opt: string) => opt !== officialUnit.abbr);
+		} catch {
+			return [];
+		}
+	}, [officialUnit]);
+
+	const conversionEnabled =
+		!!officialUnit && !!convertOptions.length && !isSectionHeader;
 
 	return (
 		<div
@@ -51,19 +109,47 @@ export function RecipeIngredientViewer({
 					multiplier={multiplier}
 					ingredient={ingredient}
 				/>
-				{!disableAddNote && (
-					<Button size="icon" color="ghost" onClick={toggleShowNote}>
-						{!!note ? (
-							<Icon
-								name="note"
-								className={showNote ? undefined : classes.noteIconWithNote}
-							/>
-						) : (
-							<Icon name="add_note" />
-						)}
-					</Button>
-				)}
+				<Box direction="row" gap={2} align="center">
+					{conversionEnabled && (
+						<>
+							<DropdownMenu>
+								<Tooltip content="Convert">
+									<DropdownMenuTrigger asChild>
+										<Button size="icon" color="ghost">
+											<Icon name="convert" />
+										</Button>
+									</DropdownMenuTrigger>
+								</Tooltip>
+								<DropdownMenuContent>
+									<DropdownMenuLabel>Convert to:</DropdownMenuLabel>
+									{convertOptions.map((opt) => (
+										<DropdownMenuItem onSelect={() => setConversion(opt)}>
+											{friendlyUnit(opt)}
+										</DropdownMenuItem>
+									))}
+								</DropdownMenuContent>
+							</DropdownMenu>
+						</>
+					)}
+					{!disableAddNote && (
+						<Button size="icon" color="ghost" onClick={toggleShowNote}>
+							{!!note ? (
+								<Icon
+									name="note"
+									className={showNote ? undefined : classes.noteIconWithNote}
+								/>
+							) : (
+								<Icon name="add_note" />
+							)}
+						</Button>
+					)}
+				</Box>
 			</div>
+			<CollapsibleRoot open={!!conversion} className={classes.conversion}>
+				<CollapsibleContent className={classes.conversionContent}>
+					<Span size="sm">Converted: {convertedValue}</Span>
+				</CollapsibleContent>
+			</CollapsibleRoot>
 			<CollapsibleRoot open={showNote}>
 				<CollapsibleContent>
 					<NoteEditor
@@ -77,3 +163,29 @@ export function RecipeIngredientViewer({
 		</div>
 	);
 }
+
+const defaultConvert = convertUnits();
+function friendlyUnit(abbr: string, singular = false) {
+	const details = defaultConvert.describe(abbr);
+	if (!details) return '';
+	return singular ? details.singular : details.plural;
+}
+
+const usefulUnits = [
+	'ml',
+	'g',
+	'kg',
+	'oz',
+	'lb',
+	'cup',
+	'tsp',
+	'tbsp',
+	'pt',
+	'qt',
+	'gal',
+	'fl oz',
+	'cm',
+	'm',
+	'in',
+	'ft',
+];

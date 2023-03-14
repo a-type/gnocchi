@@ -88,7 +88,7 @@ export function greedyMatchUnit(
 
 	// lookahead for a known word
 	const knownWord = knownUnitSingulars.find((word) =>
-		input.startsWith(word + ' '),
+		input.toLowerCase().startsWith(word + ' '),
 	);
 
 	if (knownWord) {
@@ -97,7 +97,7 @@ export function greedyMatchUnit(
 	}
 
 	const knownWordPlural = knownUnitPlurals.find((word) =>
-		input.startsWith(word + ' '),
+		input.toLowerCase().startsWith(word + ' '),
 	);
 
 	if (knownWordPlural) {
@@ -108,7 +108,11 @@ export function greedyMatchUnit(
 	const knownAbbreviation = [
 		...unitAbbreviations,
 		...unitAbbreviationPlurals,
-	].find(([word]) => input.startsWith(word + ' '));
+	].find(
+		([word]) =>
+			input.toLowerCase().startsWith(word + ' ') ||
+			input.toLowerCase().startsWith(word + '.'),
+	);
 
 	if (knownAbbreviation) {
 		ctx.runningText += knownAbbreviation[0];
@@ -119,6 +123,13 @@ export function greedyMatchUnit(
 	if (articleMatch) {
 		ctx.runningText += articleMatch;
 		return greedyMatchUnit(input.slice(articleMatch.length), ctx);
+	}
+
+	// match but ignore trailing .
+	const trailingDotMatch = /^\./.exec(input);
+	if (trailingDotMatch) {
+		ctx.runningText += trailingDotMatch[0];
+		return greedyMatchUnit(input.slice(trailingDotMatch[0].length), ctx);
 	}
 
 	// if there's trailing space on the result,

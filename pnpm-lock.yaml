@@ -385,18 +385,16 @@ importers:
 
   packages/conversion:
     specifiers:
-      '@types/convert-units': 2.3.5
       '@types/pluralize': ^0.0.29
-      convert-units: 3.0.0-beta.4
+      convert-units: 3.0.0-beta.5
       parse-fraction: ^1.2.1
       pluralize: ^8.0.0
       vitest: ^0.22.1
     dependencies:
-      convert-units: 3.0.0-beta.4
+      convert-units: 3.0.0-beta.5
       parse-fraction: 1.2.1
       pluralize: 8.0.0
     devDependencies:
-      '@types/convert-units': 2.3.5
       '@types/pluralize': 0.0.29
       vitest: 0.22.1
 
@@ -6457,6 +6455,10 @@ packages:
 
   /convert-units/3.0.0-beta.4:
     resolution: {integrity: sha512-n/hYi+a2bj5PU0PJRn96Nv2wnJozXlWsVCpWTfbc2Yrl3M293u9Z/2NI5LelYpfyWpGTZaouZkOzHpBFGdk/UQ==}
+    dev: false
+
+  /convert-units/3.0.0-beta.5:
+    resolution: {integrity: sha512-qCy+1W8CqfK8TDuJTdT2E9hNBpG9kDub6rYsrVXOVfdmuFOLqj8RQnW8o26MFCz2XdD3beyOYZYoh9Nh7jSABA==}
     dev: false
 
   /cookie-signature/1.0.6:

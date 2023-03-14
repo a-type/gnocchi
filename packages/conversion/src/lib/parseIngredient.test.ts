@@ -45,6 +45,14 @@ describe('ingredient parsing', () => {
 			['divided', 'or more to taste', 'I prefer kosher sea salt'],
 		],
 		['2-3 lbs salmon', 3, 'pound', 'salmon', []],
+		['2 tsp. mirin (optional)', 2, 'teaspoon', 'mirin', ['optional']],
+		[
+			'2 Tbsp. unseasoned rice vinegar',
+			2,
+			'tablespoon',
+			'unseasoned rice vinegar',
+			[],
+		],
 		/*
     TODO:
     ["3 12oz cans of tomato paste", 3, "12oz can", "tomato paste", []],

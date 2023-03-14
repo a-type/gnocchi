@@ -6,13 +6,12 @@ import configureMeasurements, {
 	volume,
 } from 'convert-units';
 
-// @ts-ignore
 export const convert = configureMeasurements({
 	volume,
 	mass,
 	pieces,
 	length,
-} as any);
+});
 
 export function lookupUnit(unitName: string | null): UnitDescription | null {
 	if (!unitName) return null;
