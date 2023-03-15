@@ -22,6 +22,7 @@ import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import {
 	DotsVerticalIcon,
 	PlusCircledIcon,
+	PlusIcon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
@@ -99,24 +100,33 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 	return (
 		<div className={classes.item}>
 			<Link className={classes.itemContent} to={makeRecipeLink(recipe)}>
+				<div className={classes.tags}>
+					<RecipeTagsViewer recipe={recipe} />
+				</div>
 				<div className={classes.itemTitle}>
 					<span>{title}</span>
-					<div className={classes.tags}>
-						<RecipeTagsViewer recipe={recipe} />
-					</div>
 				</div>
-				<RecipeMainImageViewer recipe={recipe} className={classes.itemImage} />
 			</Link>
+			<RecipeMainImageViewer recipe={recipe} className={classes.itemImage} />
 			<div className={classes.itemActions}>
 				<div className={classes.itemActionsStart}>
-					<AddToListButton recipe={recipe} color="ghost" size="icon">
+					<AddToListButton
+						recipe={recipe}
+						color="ghost"
+						size="icon"
+						className={classes.itemActionButton}
+					>
 						<PlusCircledIcon className={classes.actionIcon} />
 					</AddToListButton>
 				</div>
 				<div className={classes.itemActionsEnd}>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button size="icon" color="ghost">
+							<Button
+								size="icon"
+								color="ghost"
+								className={classes.itemActionButton}
+							>
 								<DotsVerticalIcon className={classes.actionIcon} />
 							</Button>
 						</DropdownMenuTrigger>

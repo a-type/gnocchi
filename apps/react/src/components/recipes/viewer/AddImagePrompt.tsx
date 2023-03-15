@@ -51,6 +51,7 @@ export function AddImagePrompt({ recipe }: AddImagePromptProps) {
 					});
 				}}
 				className={classes.uploader}
+				maxDimension={1080}
 			/>
 		</animated.div>
 	);

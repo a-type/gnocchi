@@ -1,5 +1,5 @@
 import { mediaQueries, vars } from '@aglio/ui';
-import { style } from '@vanilla-extract/css';
+import { createVar, style } from '@vanilla-extract/css';
 
 export const root = style({
 	display: 'flex',
@@ -21,6 +21,7 @@ export const list = style({
 		[mediaQueries.md]: {
 			gridTemplateColumns: 'repeat(2, 1fr)',
 			gridAutoRows: '1fr',
+			alignItems: 'end',
 		},
 	},
 });
@@ -28,15 +29,18 @@ export const list = style({
 export const item = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[1],
 	border: `1px solid ${vars.colors.gray50}`,
 	borderRadius: vars.radii.lg,
 	fontSize: vars.fontSizes.lg,
 	overflow: 'hidden',
 	height: 'max-content',
+	position: 'relative',
+	backgroundColor: vars.colors.gray10,
 
 	'@media': {
-		[mediaQueries.md]: {},
+		[mediaQueries.md]: {
+			height: '30vh',
+		},
 	},
 });
 
@@ -46,23 +50,27 @@ export const tags = style({
 
 export const itemContent = style({
 	display: 'flex',
-	flexDirection: 'row',
+	flexDirection: 'column',
 	gap: vars.space[1],
 	cursor: 'pointer',
 	transition: `0.2s ${vars.transitions.default}`,
 	padding: vars.space[4],
+	paddingBottom: vars.space[2],
 	flex: 1,
+	position: 'relative',
+	zIndex: 1,
+	paddingTop: vars.space[8],
 
 	selectors: {
 		'&:hover': {
-			backgroundColor: vars.colors.gray20,
+			backgroundColor: vars.colors.lightBlend,
 			color: vars.colors.black,
 		},
 	},
 
 	'@media': {
 		[mediaQueries.md]: {
-			flexDirection: 'column-reverse',
+			paddingTop: vars.space[4],
 		},
 	},
 });
@@ -71,18 +79,36 @@ export const itemTitle = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[1],
-	flex: 1,
-});
-
-export const itemImage = style({
-	width: '80px !important',
-	height: '80px !important',
-	flexShrink: 0,
+	marginTop: 'auto',
+	backgroundColor: vars.colors.white,
+	padding: vars.space[2],
+	borderRadius: vars.radii.lg,
+	width: 'auto',
+	marginRight: 'auto',
+	border: `1px solid ${vars.colors.grayDarkBlend}`,
 
 	'@media': {
 		[mediaQueries.md]: {
-			width: '100% !important',
-			height: `130px !important`,
+			// borderBottomRightRadius: 0,
+			// borderTopLeftRadius: vars.radii.lg,
+		},
+	},
+});
+
+export const itemImage = style({
+	selectors: {
+		'&&': {
+			position: 'absolute',
+			zIndex: 0,
+			right: 0,
+			top: 0,
+			bottom: 0,
+			width: '100%',
+			height: '100%',
+
+			'@media': {
+				[mediaQueries.md]: {},
+			},
 		},
 	},
 });
@@ -93,7 +119,12 @@ export const itemActions = style({
 	flexDirection: 'row',
 	padding: vars.space[2],
 	paddingTop: vars.space[2],
+	backgroundColor: vars.colors.white,
+	position: 'relative',
+	zIndex: 1,
 });
+
+export const itemActionButton = style({});
 
 export const itemActionsStart = style({
 	marginLeft: 0,

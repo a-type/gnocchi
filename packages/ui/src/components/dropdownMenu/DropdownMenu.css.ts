@@ -30,6 +30,8 @@ export const content = style({
 	boxShadow: vars.shadows.lg,
 	borderRadius: vars.radii.lg,
 	padding: vars.space[2],
+	border: `1px solid ${vars.colors.black}`,
+
 	'@media': {
 		'(prefers-reduced-motion: no-preference)': {
 			animationDuration: '400ms',

@@ -9,6 +9,7 @@ export interface ImageUploaderProps {
 	value: string | null;
 	onChange: (value: File | null) => void;
 	className?: string;
+	maxDimension?: number;
 }
 
 /**
@@ -18,7 +19,8 @@ export interface ImageUploaderProps {
  */
 export function ImageUploader({
 	value,
-	onChange,
+	onChange: handleChange,
+	maxDimension,
 	...rest
 }: ImageUploaderProps) {
 	const [dragging, setDragging] = useState(false);
@@ -41,6 +43,25 @@ export function ImageUploader({
 		e.stopPropagation();
 		setDraggingOver(true);
 	}, []);
+
+	const onChange = useCallback(
+		async (file: File | null) => {
+			if (!file) {
+				handleChange(null);
+			} else if (maxDimension) {
+				const { readAndCompressImage } = await import('browser-image-resizer');
+				const resizedImage = await readAndCompressImage(file, {
+					maxWidth: maxDimension,
+					maxHeight: maxDimension,
+					mimeType: file.type,
+				});
+				handleChange(new File([resizedImage], file.name, { type: file.type }));
+			} else {
+				handleChange(file);
+			}
+		},
+		[handleChange, maxDimension],
+	);
 
 	const onDrop = useCallback(
 		(e: React.DragEvent<HTMLDivElement>) => {

@@ -175,7 +175,7 @@ export const root = recipe({
 			icon: {
 				padding: vars.space[1],
 				fontSize: vars.fontSizes.sm,
-				borderRadius: vars.radii.lg,
+				borderRadius: '100%',
 			},
 		},
 		toggled: {

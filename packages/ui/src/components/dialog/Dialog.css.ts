@@ -3,7 +3,6 @@ import { vars } from '../../theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 import { recipe } from '@vanilla-extract/recipes';
-import { spread } from '../blurLayer/BlurLayer.css.js';
 
 const overlayShow = keyframes({
 	'0%': { opacity: 0 },
@@ -27,20 +26,6 @@ export const overlay = style({
 	},
 });
 
-export const blurLayer = style({
-	vars: {
-		[spread]: '60px',
-	},
-
-	'@media': {
-		[mediaQueries.sm]: {
-			vars: {
-				[spread]: '240px',
-			},
-		},
-	},
-});
-
 export const content = recipe({
 	base: {
 		zIndex: vars.zIndices.dialog,
@@ -53,6 +38,8 @@ export const content = recipe({
 		maxHeight: 'calc(0.85 * var(--viewport-height, 100vh))',
 
 		transform: 'translate(0, 0, 0)',
+
+		boxShadow: vars.shadows.xl,
 
 		'@media': {
 			[mediaQueries.sm]: {

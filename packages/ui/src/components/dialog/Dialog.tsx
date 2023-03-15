@@ -1,22 +1,11 @@
 'use client';
 
-import React, {
-	ComponentPropsWithoutRef,
-	forwardRef,
-	ReactNode,
-	useEffect,
-	useState,
-} from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { BlurLayer } from '../blurLayer/BlurLayer.js';
+import { ComponentPropsWithoutRef, forwardRef } from 'react';
 import { withClassName } from '../../withClassName.jsx';
 import * as classes from './Dialog.css.js';
-import { createPortal } from 'react-dom';
-import useMergedRef from '../../hooks/useMergedRef.js';
 
 const StyledOverlay = withClassName(DialogPrimitive.Overlay, classes.overlay);
-
-const StyledBlurLayer = withClassName(BlurLayer, classes.blurLayer);
 
 const StyledContent = withClassName('div', classes.content, ['width']);
 
@@ -36,23 +25,14 @@ export const Content = forwardRef<
 	{ children, width, outerClassName, disableBlur, ...props },
 	ref,
 ) {
-	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
-	const mergedRef = useMergedRef(ref, contentRef);
-
 	return (
 		<DialogPrimitive.Portal>
 			<StyledOverlay />
-			<>
-				<StyledContent width={width} className={outerClassName}>
-					<StyledContentContent ref={mergedRef} {...props}>
-						{children}
-					</StyledContentContent>
-					<StyledBlurLayer />
-				</StyledContent>
-				{!disableBlur &&
-					contentElement &&
-					createPortal(<BlurLayer />, contentElement.parentElement!)}
-			</>
+			<StyledContent width={width} className={outerClassName}>
+				<StyledContentContent ref={ref} {...props}>
+					{children}
+				</StyledContentContent>
+			</StyledContent>
 		</DialogPrimitive.Portal>
 	);
 });

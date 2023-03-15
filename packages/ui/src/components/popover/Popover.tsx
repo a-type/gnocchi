@@ -1,12 +1,9 @@
 'use client';
 
 import * as PopoverPrimitive from '@radix-ui/react-popover';
-import { ComponentPropsWithoutRef, forwardRef, useState } from 'react';
+import { ComponentPropsWithoutRef, forwardRef } from 'react';
 
 import { withClassName } from '../../withClassName.jsx';
-import useMergedRef from '../../hooks/useMergedRef.js';
-import { createPortal } from 'react-dom';
-import { BlurLayer } from '../blurLayer/BlurLayer.js';
 import * as classes from './Popover.css.js';
 
 const StyledContent = withClassName(PopoverPrimitive.Content, classes.content, [
@@ -41,21 +38,14 @@ export const PopoverContent = forwardRef<
 	{ children, forceMount, disableBlur, containerClassName, ...props },
 	ref,
 ) {
-	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
-	const mergedRef = useMergedRef(ref, contentRef);
 	return (
 		<PopoverPrimitive.Portal
 			forceMount={forceMount}
 			className={containerClassName}
 		>
-			<>
-				<StyledContent {...props} forceMount={forceMount} ref={mergedRef}>
-					{children}
-				</StyledContent>
-				{!disableBlur &&
-					contentElement &&
-					createPortal(<BlurLayer />, contentElement.parentElement!)}
-			</>
+			<StyledContent {...props} forceMount={forceMount} ref={ref}>
+				{children}
+			</StyledContent>
 		</PopoverPrimitive.Portal>
 	);
 });

@@ -1,9 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import { createPortal } from 'react-dom';
-import { BlurLayer } from '../blurLayer/BlurLayer.js';
 import { withClassName } from '../../withClassName.jsx';
 import * as classes from './DropdownMenu.css.js';
 
@@ -65,16 +62,9 @@ export const DropdownMenuContent = ({
 }: DropdownMenuPrimitive.DropdownMenuContentProps & {
 	forceMount?: boolean;
 }) => {
-	const [contentElement, contentRef] = useState<HTMLDivElement | null>(null);
 	return (
 		<StyledPortal forceMount={forceMount}>
-			<>
-				<StyledContent {...props} ref={contentRef}>
-					{children}
-				</StyledContent>
-				{contentElement?.parentElement &&
-					createPortal(<BlurLayer />, contentElement.parentElement)}
-			</>
+			<StyledContent {...props}>{children}</StyledContent>
 		</StyledPortal>
 	);
 };

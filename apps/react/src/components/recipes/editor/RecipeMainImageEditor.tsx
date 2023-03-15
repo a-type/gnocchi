@@ -25,6 +25,7 @@ export function RecipeMainImageEditor({ recipe }: RecipeMainImageEditorProps) {
 					updatedAt: Date.now(),
 				});
 			}}
+			maxDimension={1080}
 		/>
 	);
 }
