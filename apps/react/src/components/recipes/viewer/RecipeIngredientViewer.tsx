@@ -1,28 +1,18 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import { convertUnits, lookupUnit } from '@aglio/conversion';
 import { RecipeIngredientsItem } from '@aglio/groceries-client';
+import { fractionToText } from '@aglio/tools';
 import {
 	Box,
 	Button,
 	CollapsibleContent,
 	CollapsibleRoot,
-	Dialog,
-	DialogActions,
-	DialogClose,
-	DialogContent,
-	DialogTitle,
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
-	Select,
-	SelectContent,
-	SelectIcon,
-	SelectItem,
-	SelectItemText,
-	SelectTrigger,
-	SelectValue,
 	Span,
 	Tooltip,
 	useToggle,
@@ -32,8 +22,6 @@ import { useCallback, useMemo, useState } from 'react';
 import { NoteEditor } from '../editor/NoteEditor.jsx';
 import { IngredientText } from './IngredientText.jsx';
 import * as classes from './RecipeIngredientViewer.css.js';
-import { convertUnits, lookupUnit } from '@aglio/conversion';
-import { fractionToText } from '@aglio/tools';
 
 (window as any).convertUnits = convertUnits;
 
@@ -139,7 +127,7 @@ export function RecipeIngredientViewer({
 									className={showNote ? undefined : classes.noteIconWithNote}
 								/>
 							) : (
-								<Icon name="add_note" />
+								<Icon name="add_note" className={classes.addNoteIcon} />
 							)}
 						</Button>
 					)}

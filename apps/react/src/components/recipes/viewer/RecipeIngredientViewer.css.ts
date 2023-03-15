@@ -30,6 +30,10 @@ export const noteIconWithNote = style({
 	stroke: vars.colors.primaryDark,
 });
 
+export const addNoteIcon = style({
+	color: vars.colors.gray70,
+});
+
 export const sectionHeader = style({
 	fontWeight: vars.fontWeights.bold,
 });

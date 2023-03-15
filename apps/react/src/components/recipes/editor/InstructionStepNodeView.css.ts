@@ -109,3 +109,7 @@ export const noteIconWithNote = style({
 	stroke: vars.colors.primaryDark,
 	color: vars.colors.primaryDark,
 });
+
+export const addNoteIcon = style({
+	color: vars.colors.gray70,
+});

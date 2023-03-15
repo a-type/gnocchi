@@ -37,7 +37,8 @@ export function RecipePublishControl({ recipe }: RecipePublishControlProps) {
 
 	const updatedAt = hooks.useWatch(recipe, 'updatedAt');
 
-	if (!enabled || !isSubscribed) return null;
+	// forbid publishing for non-subscribers or recipes with a source URL
+	if (!enabled || !isSubscribed || recipe.get('url')) return null;
 
 	if (isLoading) {
 		return (

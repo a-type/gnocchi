@@ -170,7 +170,7 @@ export function InstructionStepNodeView({
 								className={showNote ? undefined : classes.noteIconWithNote}
 							/>
 						) : (
-							<Icon name="add_note" />
+							<Icon name="add_note" className={classes.addNoteIcon} />
 						)}
 					</Button>
 				</Tooltip>
