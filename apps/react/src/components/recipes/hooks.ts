@@ -43,6 +43,8 @@ export function useCurrentRecipeSession(recipe: Recipe) {
 					instructionAssignments: {},
 					startedAt: Date.now(),
 				});
+				recipe.set('cookCount', recipe.get('cookCount') + 1);
+				recipe.set('lastCookedAt', Date.now());
 				session = recipe.get('session')!;
 			})
 			.flush();

@@ -44,6 +44,29 @@ export const name = style({
 	flex: 1,
 });
 
+export const recipeTitle = style({
+	flex: 1,
+	display: 'flex',
+	flexDirection: 'column',
+});
+
+export const recipeNote = style({
+	fontSize: vars.fontSizes.xs,
+	color: vars.colors.darkBlend,
+	fontStyle: 'italic',
+});
+
+export const recipeImage = style({
+	selectors: {
+		'&&': {
+			flex: '0 0 auto',
+			width: 48,
+			height: 48,
+			borderRadius: vars.radii.md,
+		},
+	},
+});
+
 export const addButton = style({
 	flex: '0 0 auto',
 });

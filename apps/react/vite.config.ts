@@ -10,17 +10,17 @@ export default defineConfig({
 	plugins: [
 		react(),
 		vanillaExtractPlugin(),
-		checker({
-			typescript: {
-				tsconfigPath: './tsconfig.json',
-				buildMode: true,
-			},
-			overlay: {
-				initialIsOpen: false,
-				badgeStyle: 'display: none',
-			},
-			enableBuild: false,
-		}),
+		// checker({
+		// 	typescript: {
+		// 		tsconfigPath: './tsconfig.json',
+		// 		buildMode: true,
+		// 	},
+		// 	overlay: {
+		// 		initialIsOpen: false,
+		// 		badgeStyle: 'display: none',
+		// 	},
+		// 	enableBuild: false,
+		// }),
 		VitePWA({
 			includeManifestIcons: true,
 			strategies: 'injectManifest',

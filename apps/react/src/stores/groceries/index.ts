@@ -1,20 +1,16 @@
-import cuid from 'cuid';
+import { API_HOST_HTTP } from '@/config.js';
+import { trpcClient } from '@/trpc.js';
 import { parseIngredient } from '@aglio/conversion';
 import {
-	EntityShape,
+	Client,
 	ClientDescriptor,
 	Item,
-	ItemInputsItemInit,
 	ItemDestructured,
+	ItemInputsItemInit,
+	UserInfo,
 	createHooks,
 	migrations,
-	UserInfo,
-	Client,
 } from '@aglio/groceries-client';
-import { API_HOST_HTTP, API_ORIGIN, SECURE } from '@/config.js';
-import { trpcClient } from '@/trpc.js';
-import { TRPCClientError } from '@trpc/client';
-import { toast } from 'react-hot-toast';
 import { useCallback } from 'react';
 
 export interface Presence {
@@ -132,22 +128,19 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 								const newInterval = now - previousPurchasedAt;
 								// reject outliers ... if we've established a baseline
 								if (
-									previousPurchaseCount > 5 &&
-									(newInterval > 4 * currentGuess ||
-										newInterval < currentGuess / 4)
+									previousPurchaseCount < 5 ||
+									(newInterval <= 4 * currentGuess &&
+										newInterval >= currentGuess / 4)
 								) {
-									return;
+									// minium 1 week
+									const newGuess = Math.max(
+										(currentGuess + newInterval) / 2,
+										7 * 24 * 60 * 60 * 1000,
+									);
+									food.set('purchaseIntervalGuess', newGuess);
 								}
-
-								// minium 1 week
-								const newGuess = Math.max(
-									(currentGuess + newInterval) / 2,
-									7 * 24 * 60 * 60 * 1000,
-								);
-								food.set('purchaseIntervalGuess', newGuess);
-
-								food.set('purchaseCount', previousPurchaseCount + 1);
 							}
+							food.set('purchaseCount', previousPurchaseCount + 1);
 						}
 					})
 					.flush();
@@ -408,7 +401,9 @@ export async function addItems(
 					console.error(err);
 				}
 			} else {
-				lookup.set('lastAddedAt', Date.now());
+				client.batch({ undoable: false }).run(() => {
+					lookup.set('lastAddedAt', Date.now());
+				});
 			}
 
 			// verify the category exists locally
@@ -458,6 +453,34 @@ export async function addItems(
 				},
 				{ undoable: false },
 			);
+		}
+	}
+
+	if (sourceInfo?.recipeId) {
+		// record usage for this recipe
+		const recipe = await client.recipes.get(sourceInfo.recipeId).resolved;
+		if (recipe) {
+			client.batch({ undoable: false }).run(() => {
+				const previousAddedAt = recipe.get('lastAddedAt');
+				if (previousAddedAt) {
+					const interval = Date.now() - previousAddedAt;
+					const currentGuess = recipe.get('addIntervalGuess');
+
+					// reject outliers... if we've established a baseline
+					if (
+						!currentGuess ||
+						(interval <= currentGuess * 2 && interval >= currentGuess / 2)
+					) {
+						const newGuess = Math.max(
+							((currentGuess ?? 0) + interval) / 2,
+							1000 * 60 * 60 * 24 * 7, // 1 week
+						);
+						recipe.set('addIntervalGuess', newGuess);
+					}
+				}
+
+				recipe.set('lastAddedAt', Date.now());
+			});
 		}
 	}
 

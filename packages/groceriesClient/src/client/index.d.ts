@@ -157,22 +157,22 @@ export type CategorySnapshot = {
 };
 /** Category sub-object types */
 
-type CategoryId = string;
-type CategoryIdInit = CategoryId | undefined;
-type CategoryIdSnapshot = CategoryId;
-type CategoryIdDestructured = CategoryId;
-type CategoryName = string;
-type CategoryNameInit = CategoryName;
-type CategoryNameSnapshot = CategoryName;
-type CategoryNameDestructured = CategoryName;
-type CategorySortKey = string;
-type CategorySortKeyInit = CategorySortKey | undefined;
-type CategorySortKeySnapshot = CategorySortKey;
-type CategorySortKeyDestructured = CategorySortKey;
-type CategoryExpirationDays = number | null;
-type CategoryExpirationDaysInit = CategoryExpirationDays | undefined;
-type CategoryExpirationDaysSnapshot = CategoryExpirationDays;
-type CategoryExpirationDaysDestructured = CategoryExpirationDays;
+export type CategoryId = string;
+export type CategoryIdInit = CategoryId | undefined;
+export type CategoryIdSnapshot = CategoryId;
+export type CategoryIdDestructured = CategoryId;
+export type CategoryName = string;
+export type CategoryNameInit = CategoryName;
+export type CategoryNameSnapshot = CategoryName;
+export type CategoryNameDestructured = CategoryName;
+export type CategorySortKey = string;
+export type CategorySortKeyInit = CategorySortKey | undefined;
+export type CategorySortKeySnapshot = CategorySortKey;
+export type CategorySortKeyDestructured = CategorySortKey;
+export type CategoryExpirationDays = number | null;
+export type CategoryExpirationDaysInit = CategoryExpirationDays | undefined;
+export type CategoryExpirationDaysSnapshot = CategoryExpirationDays;
+export type CategoryExpirationDaysDestructured = CategoryExpirationDays;
 export type CategoryClaim = ObjectEntity<
   CategoryClaimInit,
   CategoryClaimDestructured
@@ -189,14 +189,14 @@ export type CategoryClaimSnapshot = {
   claimedBy: string;
   claimedAt: number;
 };
-type CategoryClaimClaimedBy = string;
-type CategoryClaimClaimedByInit = CategoryClaimClaimedBy;
-type CategoryClaimClaimedBySnapshot = CategoryClaimClaimedBy;
-type CategoryClaimClaimedByDestructured = CategoryClaimClaimedBy;
-type CategoryClaimClaimedAt = number;
-type CategoryClaimClaimedAtInit = CategoryClaimClaimedAt;
-type CategoryClaimClaimedAtSnapshot = CategoryClaimClaimedAt;
-type CategoryClaimClaimedAtDestructured = CategoryClaimClaimedAt;
+export type CategoryClaimClaimedBy = string;
+export type CategoryClaimClaimedByInit = CategoryClaimClaimedBy;
+export type CategoryClaimClaimedBySnapshot = CategoryClaimClaimedBy;
+export type CategoryClaimClaimedByDestructured = CategoryClaimClaimedBy;
+export type CategoryClaimClaimedAt = number;
+export type CategoryClaimClaimedAtInit = CategoryClaimClaimedAt;
+export type CategoryClaimClaimedAtSnapshot = CategoryClaimClaimedAt;
+export type CategoryClaimClaimedAtDestructured = CategoryClaimClaimedAt;
 
 export type Item = ObjectEntity<ItemInit, ItemDestructured>;
 
@@ -377,30 +377,30 @@ export type ItemSnapshot = {
 };
 /** Item sub-object types */
 
-type ItemId = string;
-type ItemIdInit = ItemId | undefined;
-type ItemIdSnapshot = ItemId;
-type ItemIdDestructured = ItemId;
-type ItemCategoryId = string | null;
-type ItemCategoryIdInit = ItemCategoryId | undefined;
-type ItemCategoryIdSnapshot = ItemCategoryId;
-type ItemCategoryIdDestructured = ItemCategoryId;
-type ItemCreatedAt = number;
-type ItemCreatedAtInit = ItemCreatedAt | undefined;
-type ItemCreatedAtSnapshot = ItemCreatedAt;
-type ItemCreatedAtDestructured = ItemCreatedAt;
-type ItemTotalQuantity = number;
-type ItemTotalQuantityInit = ItemTotalQuantity;
-type ItemTotalQuantitySnapshot = ItemTotalQuantity;
-type ItemTotalQuantityDestructured = ItemTotalQuantity;
-type ItemUnit = string;
-type ItemUnitInit = ItemUnit;
-type ItemUnitSnapshot = ItemUnit;
-type ItemUnitDestructured = ItemUnit;
-type ItemFood = string;
-type ItemFoodInit = ItemFood;
-type ItemFoodSnapshot = ItemFood;
-type ItemFoodDestructured = ItemFood;
+export type ItemId = string;
+export type ItemIdInit = ItemId | undefined;
+export type ItemIdSnapshot = ItemId;
+export type ItemIdDestructured = ItemId;
+export type ItemCategoryId = string | null;
+export type ItemCategoryIdInit = ItemCategoryId | undefined;
+export type ItemCategoryIdSnapshot = ItemCategoryId;
+export type ItemCategoryIdDestructured = ItemCategoryId;
+export type ItemCreatedAt = number;
+export type ItemCreatedAtInit = ItemCreatedAt | undefined;
+export type ItemCreatedAtSnapshot = ItemCreatedAt;
+export type ItemCreatedAtDestructured = ItemCreatedAt;
+export type ItemTotalQuantity = number;
+export type ItemTotalQuantityInit = ItemTotalQuantity;
+export type ItemTotalQuantitySnapshot = ItemTotalQuantity;
+export type ItemTotalQuantityDestructured = ItemTotalQuantity;
+export type ItemUnit = string;
+export type ItemUnitInit = ItemUnit;
+export type ItemUnitSnapshot = ItemUnit;
+export type ItemUnitDestructured = ItemUnit;
+export type ItemFood = string;
+export type ItemFoodInit = ItemFood;
+export type ItemFoodSnapshot = ItemFood;
+export type ItemFoodDestructured = ItemFood;
 export type ItemInputs = ListEntity<ItemInputsInit, ItemInputsDestructured>;
 export type ItemInputsInit = Array<ItemInputsItemInit>;
 export type ItemInputsDestructured = Array<ItemInputsItem>;
@@ -433,47 +433,47 @@ export type ItemInputsItemSnapshot = {
   recipeId: string | null;
   quantity: number | null;
 };
-type ItemInputsItemText = string;
-type ItemInputsItemTextInit = ItemInputsItemText;
-type ItemInputsItemTextSnapshot = ItemInputsItemText;
-type ItemInputsItemTextDestructured = ItemInputsItemText;
-type ItemInputsItemUrl = string | null;
-type ItemInputsItemUrlInit = ItemInputsItemUrl | undefined;
-type ItemInputsItemUrlSnapshot = ItemInputsItemUrl;
-type ItemInputsItemUrlDestructured = ItemInputsItemUrl;
-type ItemInputsItemTitle = string | null;
-type ItemInputsItemTitleInit = ItemInputsItemTitle | undefined;
-type ItemInputsItemTitleSnapshot = ItemInputsItemTitle;
-type ItemInputsItemTitleDestructured = ItemInputsItemTitle;
-type ItemInputsItemMultiplier = number | null;
-type ItemInputsItemMultiplierInit = ItemInputsItemMultiplier | undefined;
-type ItemInputsItemMultiplierSnapshot = ItemInputsItemMultiplier;
-type ItemInputsItemMultiplierDestructured = ItemInputsItemMultiplier;
-type ItemInputsItemRecipeId = string | null;
-type ItemInputsItemRecipeIdInit = ItemInputsItemRecipeId | undefined;
-type ItemInputsItemRecipeIdSnapshot = ItemInputsItemRecipeId;
-type ItemInputsItemRecipeIdDestructured = ItemInputsItemRecipeId;
-type ItemInputsItemQuantity = number | null;
-type ItemInputsItemQuantityInit = ItemInputsItemQuantity | undefined;
-type ItemInputsItemQuantitySnapshot = ItemInputsItemQuantity;
-type ItemInputsItemQuantityDestructured = ItemInputsItemQuantity;
+export type ItemInputsItemText = string;
+export type ItemInputsItemTextInit = ItemInputsItemText;
+export type ItemInputsItemTextSnapshot = ItemInputsItemText;
+export type ItemInputsItemTextDestructured = ItemInputsItemText;
+export type ItemInputsItemUrl = string | null;
+export type ItemInputsItemUrlInit = ItemInputsItemUrl | undefined;
+export type ItemInputsItemUrlSnapshot = ItemInputsItemUrl;
+export type ItemInputsItemUrlDestructured = ItemInputsItemUrl;
+export type ItemInputsItemTitle = string | null;
+export type ItemInputsItemTitleInit = ItemInputsItemTitle | undefined;
+export type ItemInputsItemTitleSnapshot = ItemInputsItemTitle;
+export type ItemInputsItemTitleDestructured = ItemInputsItemTitle;
+export type ItemInputsItemMultiplier = number | null;
+export type ItemInputsItemMultiplierInit = ItemInputsItemMultiplier | undefined;
+export type ItemInputsItemMultiplierSnapshot = ItemInputsItemMultiplier;
+export type ItemInputsItemMultiplierDestructured = ItemInputsItemMultiplier;
+export type ItemInputsItemRecipeId = string | null;
+export type ItemInputsItemRecipeIdInit = ItemInputsItemRecipeId | undefined;
+export type ItemInputsItemRecipeIdSnapshot = ItemInputsItemRecipeId;
+export type ItemInputsItemRecipeIdDestructured = ItemInputsItemRecipeId;
+export type ItemInputsItemQuantity = number | null;
+export type ItemInputsItemQuantityInit = ItemInputsItemQuantity | undefined;
+export type ItemInputsItemQuantitySnapshot = ItemInputsItemQuantity;
+export type ItemInputsItemQuantityDestructured = ItemInputsItemQuantity;
 
-type ItemPurchasedAt = number | null;
-type ItemPurchasedAtInit = ItemPurchasedAt | undefined;
-type ItemPurchasedAtSnapshot = ItemPurchasedAt;
-type ItemPurchasedAtDestructured = ItemPurchasedAt;
-type ItemExpiresAt = number | null;
-type ItemExpiresAtInit = ItemExpiresAt | undefined;
-type ItemExpiresAtSnapshot = ItemExpiresAt;
-type ItemExpiresAtDestructured = ItemExpiresAt;
-type ItemListId = string | null;
-type ItemListIdInit = ItemListId | undefined;
-type ItemListIdSnapshot = ItemListId;
-type ItemListIdDestructured = ItemListId;
-type ItemComment = string | null;
-type ItemCommentInit = ItemComment | undefined;
-type ItemCommentSnapshot = ItemComment;
-type ItemCommentDestructured = ItemComment;
+export type ItemPurchasedAt = number | null;
+export type ItemPurchasedAtInit = ItemPurchasedAt | undefined;
+export type ItemPurchasedAtSnapshot = ItemPurchasedAt;
+export type ItemPurchasedAtDestructured = ItemPurchasedAt;
+export type ItemExpiresAt = number | null;
+export type ItemExpiresAtInit = ItemExpiresAt | undefined;
+export type ItemExpiresAtSnapshot = ItemExpiresAt;
+export type ItemExpiresAtDestructured = ItemExpiresAt;
+export type ItemListId = string | null;
+export type ItemListIdInit = ItemListId | undefined;
+export type ItemListIdSnapshot = ItemListId;
+export type ItemListIdDestructured = ItemListId;
+export type ItemComment = string | null;
+export type ItemCommentInit = ItemComment | undefined;
+export type ItemCommentSnapshot = ItemComment;
+export type ItemCommentDestructured = ItemComment;
 
 export type Food = ObjectEntity<FoodInit, FoodDestructured>;
 
@@ -575,10 +575,10 @@ export type FoodSnapshot = {
 };
 /** Food sub-object types */
 
-type FoodCanonicalName = string;
-type FoodCanonicalNameInit = FoodCanonicalName;
-type FoodCanonicalNameSnapshot = FoodCanonicalName;
-type FoodCanonicalNameDestructured = FoodCanonicalName;
+export type FoodCanonicalName = string;
+export type FoodCanonicalNameInit = FoodCanonicalName;
+export type FoodCanonicalNameSnapshot = FoodCanonicalName;
+export type FoodCanonicalNameDestructured = FoodCanonicalName;
 export type FoodAlternateNames = ListEntity<
   FoodAlternateNamesInit,
   FoodAlternateNamesDestructured
@@ -586,42 +586,44 @@ export type FoodAlternateNames = ListEntity<
 export type FoodAlternateNamesInit = Array<FoodAlternateNamesItemInit>;
 export type FoodAlternateNamesDestructured = Array<FoodAlternateNamesItem>;
 export type FoodAlternateNamesSnapshot = Array<FoodAlternateNamesItemSnapshot>;
-type FoodAlternateNamesItem = string;
-type FoodAlternateNamesItemInit = FoodAlternateNamesItem;
-type FoodAlternateNamesItemSnapshot = FoodAlternateNamesItem;
-type FoodAlternateNamesItemDestructured = FoodAlternateNamesItem;
-type FoodCategoryId = string | null;
-type FoodCategoryIdInit = FoodCategoryId | undefined;
-type FoodCategoryIdSnapshot = FoodCategoryId;
-type FoodCategoryIdDestructured = FoodCategoryId;
-type FoodIsPerishable = boolean | null;
-type FoodIsPerishableInit = FoodIsPerishable | undefined;
-type FoodIsPerishableSnapshot = FoodIsPerishable;
-type FoodIsPerishableDestructured = FoodIsPerishable;
-type FoodIsStaple = boolean;
-type FoodIsStapleInit = FoodIsStaple;
-type FoodIsStapleSnapshot = FoodIsStaple;
-type FoodIsStapleDestructured = FoodIsStaple;
-type FoodExpiresAfterDays = number | null;
-type FoodExpiresAfterDaysInit = FoodExpiresAfterDays | undefined;
-type FoodExpiresAfterDaysSnapshot = FoodExpiresAfterDays;
-type FoodExpiresAfterDaysDestructured = FoodExpiresAfterDays;
-type FoodLastPurchasedAt = number | null;
-type FoodLastPurchasedAtInit = FoodLastPurchasedAt | undefined;
-type FoodLastPurchasedAtSnapshot = FoodLastPurchasedAt;
-type FoodLastPurchasedAtDestructured = FoodLastPurchasedAt;
-type FoodPurchaseIntervalGuess = number | null;
-type FoodPurchaseIntervalGuessInit = FoodPurchaseIntervalGuess | undefined;
-type FoodPurchaseIntervalGuessSnapshot = FoodPurchaseIntervalGuess;
-type FoodPurchaseIntervalGuessDestructured = FoodPurchaseIntervalGuess;
-type FoodLastAddedAt = number | null;
-type FoodLastAddedAtInit = FoodLastAddedAt | undefined;
-type FoodLastAddedAtSnapshot = FoodLastAddedAt;
-type FoodLastAddedAtDestructured = FoodLastAddedAt;
-type FoodPurchaseCount = number;
-type FoodPurchaseCountInit = FoodPurchaseCount | undefined;
-type FoodPurchaseCountSnapshot = FoodPurchaseCount;
-type FoodPurchaseCountDestructured = FoodPurchaseCount;
+export type FoodAlternateNamesItem = string;
+export type FoodAlternateNamesItemInit = FoodAlternateNamesItem;
+export type FoodAlternateNamesItemSnapshot = FoodAlternateNamesItem;
+export type FoodAlternateNamesItemDestructured = FoodAlternateNamesItem;
+export type FoodCategoryId = string | null;
+export type FoodCategoryIdInit = FoodCategoryId | undefined;
+export type FoodCategoryIdSnapshot = FoodCategoryId;
+export type FoodCategoryIdDestructured = FoodCategoryId;
+export type FoodIsPerishable = boolean | null;
+export type FoodIsPerishableInit = FoodIsPerishable | undefined;
+export type FoodIsPerishableSnapshot = FoodIsPerishable;
+export type FoodIsPerishableDestructured = FoodIsPerishable;
+export type FoodIsStaple = boolean;
+export type FoodIsStapleInit = FoodIsStaple;
+export type FoodIsStapleSnapshot = FoodIsStaple;
+export type FoodIsStapleDestructured = FoodIsStaple;
+export type FoodExpiresAfterDays = number | null;
+export type FoodExpiresAfterDaysInit = FoodExpiresAfterDays | undefined;
+export type FoodExpiresAfterDaysSnapshot = FoodExpiresAfterDays;
+export type FoodExpiresAfterDaysDestructured = FoodExpiresAfterDays;
+export type FoodLastPurchasedAt = number | null;
+export type FoodLastPurchasedAtInit = FoodLastPurchasedAt | undefined;
+export type FoodLastPurchasedAtSnapshot = FoodLastPurchasedAt;
+export type FoodLastPurchasedAtDestructured = FoodLastPurchasedAt;
+export type FoodPurchaseIntervalGuess = number | null;
+export type FoodPurchaseIntervalGuessInit =
+  | FoodPurchaseIntervalGuess
+  | undefined;
+export type FoodPurchaseIntervalGuessSnapshot = FoodPurchaseIntervalGuess;
+export type FoodPurchaseIntervalGuessDestructured = FoodPurchaseIntervalGuess;
+export type FoodLastAddedAt = number | null;
+export type FoodLastAddedAtInit = FoodLastAddedAt | undefined;
+export type FoodLastAddedAtSnapshot = FoodLastAddedAt;
+export type FoodLastAddedAtDestructured = FoodLastAddedAt;
+export type FoodPurchaseCount = number;
+export type FoodPurchaseCountInit = FoodPurchaseCount | undefined;
+export type FoodPurchaseCountSnapshot = FoodPurchaseCount;
+export type FoodPurchaseCountDestructured = FoodPurchaseCount;
 
 export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
 
@@ -658,14 +660,14 @@ export type SuggestionSnapshot = {
 };
 /** Suggestion sub-object types */
 
-type SuggestionText = string;
-type SuggestionTextInit = SuggestionText;
-type SuggestionTextSnapshot = SuggestionText;
-type SuggestionTextDestructured = SuggestionText;
-type SuggestionUsageCount = number;
-type SuggestionUsageCountInit = SuggestionUsageCount | undefined;
-type SuggestionUsageCountSnapshot = SuggestionUsageCount;
-type SuggestionUsageCountDestructured = SuggestionUsageCount;
+export type SuggestionText = string;
+export type SuggestionTextInit = SuggestionText;
+export type SuggestionTextSnapshot = SuggestionText;
+export type SuggestionTextDestructured = SuggestionText;
+export type SuggestionUsageCount = number;
+export type SuggestionUsageCountInit = SuggestionUsageCount | undefined;
+export type SuggestionUsageCountSnapshot = SuggestionUsageCount;
+export type SuggestionUsageCountDestructured = SuggestionUsageCount;
 
 export type List = ObjectEntity<ListInit, ListDestructured>;
 
@@ -687,18 +689,18 @@ export type ListSnapshot = {
 };
 /** List sub-object types */
 
-type ListId = string;
-type ListIdInit = ListId | undefined;
-type ListIdSnapshot = ListId;
-type ListIdDestructured = ListId;
-type ListName = string;
-type ListNameInit = ListName;
-type ListNameSnapshot = ListName;
-type ListNameDestructured = ListName;
-type ListColor = string;
-type ListColorInit = ListColor;
-type ListColorSnapshot = ListColor;
-type ListColorDestructured = ListColor;
+export type ListId = string;
+export type ListIdInit = ListId | undefined;
+export type ListIdSnapshot = ListId;
+export type ListIdDestructured = ListId;
+export type ListName = string;
+export type ListNameInit = ListName;
+export type ListNameSnapshot = ListName;
+export type ListNameDestructured = ListName;
+export type ListColor = string;
+export type ListColorInit = ListColor;
+export type ListColorSnapshot = ListColor;
+export type ListColorDestructured = ListColor;
 
 export type CollaborationInfo = ObjectEntity<
   CollaborationInfoInit,
@@ -720,10 +722,10 @@ export type CollaborationInfoSnapshot = {
 };
 /** CollaborationInfo sub-object types */
 
-type CollaborationInfoId = string;
-type CollaborationInfoIdInit = CollaborationInfoId | undefined;
-type CollaborationInfoIdSnapshot = CollaborationInfoId;
-type CollaborationInfoIdDestructured = CollaborationInfoId;
+export type CollaborationInfoId = string;
+export type CollaborationInfoIdInit = CollaborationInfoId | undefined;
+export type CollaborationInfoIdSnapshot = CollaborationInfoId;
+export type CollaborationInfoIdDestructured = CollaborationInfoId;
 export type CollaborationInfoMeetup = ObjectEntity<
   CollaborationInfoMeetupInit,
   CollaborationInfoMeetupDestructured
@@ -740,18 +742,20 @@ export type CollaborationInfoMeetupSnapshot = {
   createdAt: number;
   location: string;
 };
-type CollaborationInfoMeetupCreatedAt = number;
-type CollaborationInfoMeetupCreatedAtInit =
+export type CollaborationInfoMeetupCreatedAt = number;
+export type CollaborationInfoMeetupCreatedAtInit =
   | CollaborationInfoMeetupCreatedAt
   | undefined;
-type CollaborationInfoMeetupCreatedAtSnapshot =
+export type CollaborationInfoMeetupCreatedAtSnapshot =
   CollaborationInfoMeetupCreatedAt;
-type CollaborationInfoMeetupCreatedAtDestructured =
+export type CollaborationInfoMeetupCreatedAtDestructured =
   CollaborationInfoMeetupCreatedAt;
-type CollaborationInfoMeetupLocation = string;
-type CollaborationInfoMeetupLocationInit = CollaborationInfoMeetupLocation;
-type CollaborationInfoMeetupLocationSnapshot = CollaborationInfoMeetupLocation;
-type CollaborationInfoMeetupLocationDestructured =
+export type CollaborationInfoMeetupLocation = string;
+export type CollaborationInfoMeetupLocationInit =
+  CollaborationInfoMeetupLocation;
+export type CollaborationInfoMeetupLocationSnapshot =
+  CollaborationInfoMeetupLocation;
+export type CollaborationInfoMeetupLocationDestructured =
   CollaborationInfoMeetupLocation;
 
 export type Recipe = ObjectEntity<RecipeInit, RecipeDestructured>;
@@ -807,6 +811,21 @@ export interface RecipeTagRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipeSuggestAfterMatchFilter {
+  where: "suggestAfter";
+  equals: number;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeSuggestAfterRangeFilter {
+  where: "suggestAfter";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
+}
+
 export type RecipeFilter =
   | RecipeSlugMatchFilter
   | RecipeSlugRangeFilter
@@ -814,7 +833,9 @@ export type RecipeFilter =
   | RecipeUpdatedAtMatchFilter
   | RecipeUpdatedAtRangeFilter
   | RecipeTagMatchFilter
-  | RecipeTagRangeFilter;
+  | RecipeTagRangeFilter
+  | RecipeSuggestAfterMatchFilter
+  | RecipeSuggestAfterRangeFilter;
 
 export type RecipeDestructured = {
   id: string;
@@ -830,6 +851,10 @@ export type RecipeDestructured = {
   session: RecipeSession | null;
   tags: RecipeTags;
   mainImage: RecipeMainImage | null;
+  cookCount: number;
+  lastCookedAt: number | null;
+  lastAddedAt: number | null;
+  addIntervalGuess: number | null;
 };
 export type RecipeInit = {
   id?: string;
@@ -845,6 +870,10 @@ export type RecipeInit = {
   session?: RecipeSessionInit | null;
   tags?: RecipeTagsInit;
   mainImage?: RecipeMainImageInit | null;
+  cookCount?: number;
+  lastCookedAt?: number | null;
+  lastAddedAt?: number | null;
+  addIntervalGuess?: number | null;
 };
 export type RecipeSnapshot = {
   id: string;
@@ -860,37 +889,41 @@ export type RecipeSnapshot = {
   session: RecipeSessionSnapshot | null;
   tags: RecipeTagsSnapshot;
   mainImage: RecipeMainImageSnapshot | null;
+  cookCount: number;
+  lastCookedAt: number | null;
+  lastAddedAt: number | null;
+  addIntervalGuess: number | null;
 };
 /** Recipe sub-object types */
 
-type RecipeId = string;
-type RecipeIdInit = RecipeId | undefined;
-type RecipeIdSnapshot = RecipeId;
-type RecipeIdDestructured = RecipeId;
-type RecipeSlug = string;
-type RecipeSlugInit = RecipeSlug | undefined;
-type RecipeSlugSnapshot = RecipeSlug;
-type RecipeSlugDestructured = RecipeSlug;
-type RecipeMultiplier = number;
-type RecipeMultiplierInit = RecipeMultiplier | undefined;
-type RecipeMultiplierSnapshot = RecipeMultiplier;
-type RecipeMultiplierDestructured = RecipeMultiplier;
-type RecipeTitle = string;
-type RecipeTitleInit = RecipeTitle | undefined;
-type RecipeTitleSnapshot = RecipeTitle;
-type RecipeTitleDestructured = RecipeTitle;
-type RecipeCreatedAt = number;
-type RecipeCreatedAtInit = RecipeCreatedAt | undefined;
-type RecipeCreatedAtSnapshot = RecipeCreatedAt;
-type RecipeCreatedAtDestructured = RecipeCreatedAt;
-type RecipeUpdatedAt = number;
-type RecipeUpdatedAtInit = RecipeUpdatedAt | undefined;
-type RecipeUpdatedAtSnapshot = RecipeUpdatedAt;
-type RecipeUpdatedAtDestructured = RecipeUpdatedAt;
-type RecipePrelude = any;
-type RecipePreludeInit = RecipePrelude | undefined;
-type RecipePreludeSnapshot = RecipePrelude;
-type RecipePreludeDestructured = RecipePrelude;
+export type RecipeId = string;
+export type RecipeIdInit = RecipeId | undefined;
+export type RecipeIdSnapshot = RecipeId;
+export type RecipeIdDestructured = RecipeId;
+export type RecipeSlug = string;
+export type RecipeSlugInit = RecipeSlug | undefined;
+export type RecipeSlugSnapshot = RecipeSlug;
+export type RecipeSlugDestructured = RecipeSlug;
+export type RecipeMultiplier = number;
+export type RecipeMultiplierInit = RecipeMultiplier | undefined;
+export type RecipeMultiplierSnapshot = RecipeMultiplier;
+export type RecipeMultiplierDestructured = RecipeMultiplier;
+export type RecipeTitle = string;
+export type RecipeTitleInit = RecipeTitle | undefined;
+export type RecipeTitleSnapshot = RecipeTitle;
+export type RecipeTitleDestructured = RecipeTitle;
+export type RecipeCreatedAt = number;
+export type RecipeCreatedAtInit = RecipeCreatedAt | undefined;
+export type RecipeCreatedAtSnapshot = RecipeCreatedAt;
+export type RecipeCreatedAtDestructured = RecipeCreatedAt;
+export type RecipeUpdatedAt = number;
+export type RecipeUpdatedAtInit = RecipeUpdatedAt | undefined;
+export type RecipeUpdatedAtSnapshot = RecipeUpdatedAt;
+export type RecipeUpdatedAtDestructured = RecipeUpdatedAt;
+export type RecipePrelude = any;
+export type RecipePreludeInit = RecipePrelude | undefined;
+export type RecipePreludeSnapshot = RecipePrelude;
+export type RecipePreludeDestructured = RecipePrelude;
 export type RecipeIngredients = ListEntity<
   RecipeIngredientsInit,
   RecipeIngredientsDestructured
@@ -932,28 +965,34 @@ export type RecipeIngredientsItemSnapshot = {
   note: string | null;
   isSectionHeader: boolean;
 };
-type RecipeIngredientsItemId = string;
-type RecipeIngredientsItemIdInit = RecipeIngredientsItemId | undefined;
-type RecipeIngredientsItemIdSnapshot = RecipeIngredientsItemId;
-type RecipeIngredientsItemIdDestructured = RecipeIngredientsItemId;
-type RecipeIngredientsItemText = string;
-type RecipeIngredientsItemTextInit = RecipeIngredientsItemText;
-type RecipeIngredientsItemTextSnapshot = RecipeIngredientsItemText;
-type RecipeIngredientsItemTextDestructured = RecipeIngredientsItemText;
-type RecipeIngredientsItemUnit = string | null;
-type RecipeIngredientsItemUnitInit = RecipeIngredientsItemUnit | undefined;
-type RecipeIngredientsItemUnitSnapshot = RecipeIngredientsItemUnit;
-type RecipeIngredientsItemUnitDestructured = RecipeIngredientsItemUnit;
-type RecipeIngredientsItemFood = string | null;
-type RecipeIngredientsItemFoodInit = RecipeIngredientsItemFood | undefined;
-type RecipeIngredientsItemFoodSnapshot = RecipeIngredientsItemFood;
-type RecipeIngredientsItemFoodDestructured = RecipeIngredientsItemFood;
-type RecipeIngredientsItemQuantity = number;
-type RecipeIngredientsItemQuantityInit =
+export type RecipeIngredientsItemId = string;
+export type RecipeIngredientsItemIdInit = RecipeIngredientsItemId | undefined;
+export type RecipeIngredientsItemIdSnapshot = RecipeIngredientsItemId;
+export type RecipeIngredientsItemIdDestructured = RecipeIngredientsItemId;
+export type RecipeIngredientsItemText = string;
+export type RecipeIngredientsItemTextInit = RecipeIngredientsItemText;
+export type RecipeIngredientsItemTextSnapshot = RecipeIngredientsItemText;
+export type RecipeIngredientsItemTextDestructured = RecipeIngredientsItemText;
+export type RecipeIngredientsItemUnit = string | null;
+export type RecipeIngredientsItemUnitInit =
+  | RecipeIngredientsItemUnit
+  | undefined;
+export type RecipeIngredientsItemUnitSnapshot = RecipeIngredientsItemUnit;
+export type RecipeIngredientsItemUnitDestructured = RecipeIngredientsItemUnit;
+export type RecipeIngredientsItemFood = string | null;
+export type RecipeIngredientsItemFoodInit =
+  | RecipeIngredientsItemFood
+  | undefined;
+export type RecipeIngredientsItemFoodSnapshot = RecipeIngredientsItemFood;
+export type RecipeIngredientsItemFoodDestructured = RecipeIngredientsItemFood;
+export type RecipeIngredientsItemQuantity = number;
+export type RecipeIngredientsItemQuantityInit =
   | RecipeIngredientsItemQuantity
   | undefined;
-type RecipeIngredientsItemQuantitySnapshot = RecipeIngredientsItemQuantity;
-type RecipeIngredientsItemQuantityDestructured = RecipeIngredientsItemQuantity;
+export type RecipeIngredientsItemQuantitySnapshot =
+  RecipeIngredientsItemQuantity;
+export type RecipeIngredientsItemQuantityDestructured =
+  RecipeIngredientsItemQuantity;
 export type RecipeIngredientsItemComments = ListEntity<
   RecipeIngredientsItemCommentsInit,
   RecipeIngredientsItemCommentsDestructured
@@ -964,33 +1003,36 @@ export type RecipeIngredientsItemCommentsDestructured =
   Array<RecipeIngredientsItemCommentsItem>;
 export type RecipeIngredientsItemCommentsSnapshot =
   Array<RecipeIngredientsItemCommentsItemSnapshot>;
-type RecipeIngredientsItemCommentsItem = string;
-type RecipeIngredientsItemCommentsItemInit = RecipeIngredientsItemCommentsItem;
-type RecipeIngredientsItemCommentsItemSnapshot =
+export type RecipeIngredientsItemCommentsItem = string;
+export type RecipeIngredientsItemCommentsItemInit =
   RecipeIngredientsItemCommentsItem;
-type RecipeIngredientsItemCommentsItemDestructured =
+export type RecipeIngredientsItemCommentsItemSnapshot =
   RecipeIngredientsItemCommentsItem;
-type RecipeIngredientsItemNote = string | null;
-type RecipeIngredientsItemNoteInit = RecipeIngredientsItemNote | undefined;
-type RecipeIngredientsItemNoteSnapshot = RecipeIngredientsItemNote;
-type RecipeIngredientsItemNoteDestructured = RecipeIngredientsItemNote;
-type RecipeIngredientsItemIsSectionHeader = boolean;
-type RecipeIngredientsItemIsSectionHeaderInit =
+export type RecipeIngredientsItemCommentsItemDestructured =
+  RecipeIngredientsItemCommentsItem;
+export type RecipeIngredientsItemNote = string | null;
+export type RecipeIngredientsItemNoteInit =
+  | RecipeIngredientsItemNote
+  | undefined;
+export type RecipeIngredientsItemNoteSnapshot = RecipeIngredientsItemNote;
+export type RecipeIngredientsItemNoteDestructured = RecipeIngredientsItemNote;
+export type RecipeIngredientsItemIsSectionHeader = boolean;
+export type RecipeIngredientsItemIsSectionHeaderInit =
   | RecipeIngredientsItemIsSectionHeader
   | undefined;
-type RecipeIngredientsItemIsSectionHeaderSnapshot =
+export type RecipeIngredientsItemIsSectionHeaderSnapshot =
   RecipeIngredientsItemIsSectionHeader;
-type RecipeIngredientsItemIsSectionHeaderDestructured =
+export type RecipeIngredientsItemIsSectionHeaderDestructured =
   RecipeIngredientsItemIsSectionHeader;
 
-type RecipeInstructions = any;
-type RecipeInstructionsInit = RecipeInstructions | undefined;
-type RecipeInstructionsSnapshot = RecipeInstructions;
-type RecipeInstructionsDestructured = RecipeInstructions;
-type RecipeUrl = string | null;
-type RecipeUrlInit = RecipeUrl | undefined;
-type RecipeUrlSnapshot = RecipeUrl;
-type RecipeUrlDestructured = RecipeUrl;
+export type RecipeInstructions = any;
+export type RecipeInstructionsInit = RecipeInstructions | undefined;
+export type RecipeInstructionsSnapshot = RecipeInstructions;
+export type RecipeInstructionsDestructured = RecipeInstructions;
+export type RecipeUrl = string | null;
+export type RecipeUrlInit = RecipeUrl | undefined;
+export type RecipeUrlSnapshot = RecipeUrl;
+export type RecipeUrlDestructured = RecipeUrl;
 export type RecipeSession = ObjectEntity<
   RecipeSessionInit,
   RecipeSessionDestructured
@@ -1016,10 +1058,10 @@ export type RecipeSessionSnapshot = {
   instructionAssignments: RecipeSessionInstructionAssignmentsSnapshot;
   ingredientAssignments: RecipeSessionIngredientAssignmentsSnapshot;
 };
-type RecipeSessionStartedAt = number;
-type RecipeSessionStartedAtInit = RecipeSessionStartedAt | undefined;
-type RecipeSessionStartedAtSnapshot = RecipeSessionStartedAt;
-type RecipeSessionStartedAtDestructured = RecipeSessionStartedAt;
+export type RecipeSessionStartedAt = number;
+export type RecipeSessionStartedAtInit = RecipeSessionStartedAt | undefined;
+export type RecipeSessionStartedAtSnapshot = RecipeSessionStartedAt;
+export type RecipeSessionStartedAtDestructured = RecipeSessionStartedAt;
 export type RecipeSessionCompletedInstructions = ListEntity<
   RecipeSessionCompletedInstructionsInit,
   RecipeSessionCompletedInstructionsDestructured
@@ -1030,12 +1072,12 @@ export type RecipeSessionCompletedInstructionsDestructured =
   Array<RecipeSessionCompletedInstructionsItem>;
 export type RecipeSessionCompletedInstructionsSnapshot =
   Array<RecipeSessionCompletedInstructionsItemSnapshot>;
-type RecipeSessionCompletedInstructionsItem = string;
-type RecipeSessionCompletedInstructionsItemInit =
+export type RecipeSessionCompletedInstructionsItem = string;
+export type RecipeSessionCompletedInstructionsItemInit =
   RecipeSessionCompletedInstructionsItem;
-type RecipeSessionCompletedInstructionsItemSnapshot =
+export type RecipeSessionCompletedInstructionsItemSnapshot =
   RecipeSessionCompletedInstructionsItem;
-type RecipeSessionCompletedInstructionsItemDestructured =
+export type RecipeSessionCompletedInstructionsItemDestructured =
   RecipeSessionCompletedInstructionsItem;
 export type RecipeSessionCompletedIngredients = ListEntity<
   RecipeSessionCompletedIngredientsInit,
@@ -1047,12 +1089,12 @@ export type RecipeSessionCompletedIngredientsDestructured =
   Array<RecipeSessionCompletedIngredientsItem>;
 export type RecipeSessionCompletedIngredientsSnapshot =
   Array<RecipeSessionCompletedIngredientsItemSnapshot>;
-type RecipeSessionCompletedIngredientsItem = string;
-type RecipeSessionCompletedIngredientsItemInit =
+export type RecipeSessionCompletedIngredientsItem = string;
+export type RecipeSessionCompletedIngredientsItemInit =
   RecipeSessionCompletedIngredientsItem;
-type RecipeSessionCompletedIngredientsItemSnapshot =
+export type RecipeSessionCompletedIngredientsItemSnapshot =
   RecipeSessionCompletedIngredientsItem;
-type RecipeSessionCompletedIngredientsItemDestructured =
+export type RecipeSessionCompletedIngredientsItemDestructured =
   RecipeSessionCompletedIngredientsItem;
 export type RecipeSessionInstructionAssignments = ObjectEntity<
   RecipeSessionInstructionAssignmentsInit,
@@ -1069,12 +1111,12 @@ export type RecipeSessionInstructionAssignmentsSnapshot = Record<
   string,
   RecipeSessionInstructionAssignmentsValueSnapshot
 >;
-type RecipeSessionInstructionAssignmentsValue = string;
-type RecipeSessionInstructionAssignmentsValueInit =
+export type RecipeSessionInstructionAssignmentsValue = string;
+export type RecipeSessionInstructionAssignmentsValueInit =
   RecipeSessionInstructionAssignmentsValue;
-type RecipeSessionInstructionAssignmentsValueSnapshot =
+export type RecipeSessionInstructionAssignmentsValueSnapshot =
   RecipeSessionInstructionAssignmentsValue;
-type RecipeSessionInstructionAssignmentsValueDestructured =
+export type RecipeSessionInstructionAssignmentsValueDestructured =
   RecipeSessionInstructionAssignmentsValue;
 
 export type RecipeSessionIngredientAssignments = ObjectEntity<
@@ -1092,26 +1134,42 @@ export type RecipeSessionIngredientAssignmentsSnapshot = Record<
   string,
   RecipeSessionIngredientAssignmentsValueSnapshot
 >;
-type RecipeSessionIngredientAssignmentsValue = string;
-type RecipeSessionIngredientAssignmentsValueInit =
+export type RecipeSessionIngredientAssignmentsValue = string;
+export type RecipeSessionIngredientAssignmentsValueInit =
   RecipeSessionIngredientAssignmentsValue;
-type RecipeSessionIngredientAssignmentsValueSnapshot =
+export type RecipeSessionIngredientAssignmentsValueSnapshot =
   RecipeSessionIngredientAssignmentsValue;
-type RecipeSessionIngredientAssignmentsValueDestructured =
+export type RecipeSessionIngredientAssignmentsValueDestructured =
   RecipeSessionIngredientAssignmentsValue;
 
 export type RecipeTags = ListEntity<RecipeTagsInit, RecipeTagsDestructured>;
 export type RecipeTagsInit = Array<RecipeTagsItemInit>;
 export type RecipeTagsDestructured = Array<RecipeTagsItem>;
 export type RecipeTagsSnapshot = Array<RecipeTagsItemSnapshot>;
-type RecipeTagsItem = string;
-type RecipeTagsItemInit = RecipeTagsItem;
-type RecipeTagsItemSnapshot = RecipeTagsItem;
-type RecipeTagsItemDestructured = RecipeTagsItem;
+export type RecipeTagsItem = string;
+export type RecipeTagsItemInit = RecipeTagsItem;
+export type RecipeTagsItemSnapshot = RecipeTagsItem;
+export type RecipeTagsItemDestructured = RecipeTagsItem;
 export type RecipeMainImage = EntityFile;
 export type RecipeMainImageInit = File;
 export type RecipeMainImageDestructured = EntityFile;
 export type RecipeMainImageSnapshot = string;
+export type RecipeCookCount = number;
+export type RecipeCookCountInit = RecipeCookCount | undefined;
+export type RecipeCookCountSnapshot = RecipeCookCount;
+export type RecipeCookCountDestructured = RecipeCookCount;
+export type RecipeLastCookedAt = number | null;
+export type RecipeLastCookedAtInit = RecipeLastCookedAt | undefined;
+export type RecipeLastCookedAtSnapshot = RecipeLastCookedAt;
+export type RecipeLastCookedAtDestructured = RecipeLastCookedAt;
+export type RecipeLastAddedAt = number | null;
+export type RecipeLastAddedAtInit = RecipeLastAddedAt | undefined;
+export type RecipeLastAddedAtSnapshot = RecipeLastAddedAt;
+export type RecipeLastAddedAtDestructured = RecipeLastAddedAt;
+export type RecipeAddIntervalGuess = number | null;
+export type RecipeAddIntervalGuessInit = RecipeAddIntervalGuess | undefined;
+export type RecipeAddIntervalGuessSnapshot = RecipeAddIntervalGuess;
+export type RecipeAddIntervalGuessDestructured = RecipeAddIntervalGuess;
 
 export type RecipeTagMetadata = ObjectEntity<
   RecipeTagMetadataInit,
@@ -1136,15 +1194,15 @@ export type RecipeTagMetadataSnapshot = {
 };
 /** RecipeTagMetadata sub-object types */
 
-type RecipeTagMetadataName = string;
-type RecipeTagMetadataNameInit = RecipeTagMetadataName;
-type RecipeTagMetadataNameSnapshot = RecipeTagMetadataName;
-type RecipeTagMetadataNameDestructured = RecipeTagMetadataName;
-type RecipeTagMetadataColor = string | null;
-type RecipeTagMetadataColorInit = RecipeTagMetadataColor | undefined;
-type RecipeTagMetadataColorSnapshot = RecipeTagMetadataColor;
-type RecipeTagMetadataColorDestructured = RecipeTagMetadataColor;
-type RecipeTagMetadataIcon = string | null;
-type RecipeTagMetadataIconInit = RecipeTagMetadataIcon | undefined;
-type RecipeTagMetadataIconSnapshot = RecipeTagMetadataIcon;
-type RecipeTagMetadataIconDestructured = RecipeTagMetadataIcon;
+export type RecipeTagMetadataName = string;
+export type RecipeTagMetadataNameInit = RecipeTagMetadataName;
+export type RecipeTagMetadataNameSnapshot = RecipeTagMetadataName;
+export type RecipeTagMetadataNameDestructured = RecipeTagMetadataName;
+export type RecipeTagMetadataColor = string | null;
+export type RecipeTagMetadataColorInit = RecipeTagMetadataColor | undefined;
+export type RecipeTagMetadataColorSnapshot = RecipeTagMetadataColor;
+export type RecipeTagMetadataColorDestructured = RecipeTagMetadataColor;
+export type RecipeTagMetadataIcon = string | null;
+export type RecipeTagMetadataIconInit = RecipeTagMetadataIcon | undefined;
+export type RecipeTagMetadataIconSnapshot = RecipeTagMetadataIcon;
+export type RecipeTagMetadataIconDestructured = RecipeTagMetadataIcon;

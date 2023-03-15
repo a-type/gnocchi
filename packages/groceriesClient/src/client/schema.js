@@ -412,6 +412,22 @@ const recipes = collection({
         mainImage: {
             type: 'file',
             nullable: true
+        },
+        cookCount: {
+            type: 'number',
+            default: 0
+        },
+        lastCookedAt: {
+            type: 'number',
+            nullable: true
+        },
+        lastAddedAt: {
+            type: 'number',
+            nullable: true
+        },
+        addIntervalGuess: {
+            type: 'number',
+            nullable: true
         }
     },
     synthetics: {
@@ -420,6 +436,15 @@ const recipes = collection({
             type: 'string[]',
             compute: (recipe)=>{
                 return recipe.tags;
+            }
+        },
+        // similar algorithm to food recommendation engine,
+        // but only tracking adding to shopping list
+        suggestAfter: {
+            type: 'number',
+            compute: (recipe)=>{
+                if (!recipe.lastAddedAt || !recipe.addIntervalGuess || recipe.cookCount < 2) return Number.MAX_SAFE_INTEGER;
+                return recipe.lastAddedAt + recipe.addIntervalGuess;
             }
         }
     }
@@ -446,7 +471,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 26,
+    version: 27,
     collections: {
         categories,
         items,

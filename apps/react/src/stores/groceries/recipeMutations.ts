@@ -10,9 +10,6 @@ import {
 	RecipeInit,
 } from '@aglio/groceries-client';
 import { groceriesDescriptor } from './index.js';
-// @ts-ignore
-import { generateJSON } from '@tiptap/html';
-import { createTiptapExtensions } from '@/components/recipes/editor/tiptapExtensions.js';
 import cuid from 'cuid';
 
 export async function addIngredients(

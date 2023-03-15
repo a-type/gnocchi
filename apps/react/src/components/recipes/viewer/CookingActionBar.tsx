@@ -1,4 +1,3 @@
-import { ActionBar, ActionButton, ErrorBoundary } from '@aglio/ui';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -6,8 +5,8 @@ import {
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
+import { ActionBar, ActionButton, ErrorBoundary } from '@aglio/ui';
 import { ResetIcon } from '@radix-ui/react-icons';
-import * as classes from './CookingActionBar.css.js';
 
 export interface CookingActionBarProps {
 	recipe: Recipe;
