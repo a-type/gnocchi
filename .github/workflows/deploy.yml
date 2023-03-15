@@ -23,9 +23,12 @@ jobs:
           since_last_remote_commit: true
           files: |
             **/apps/api/src/**/*.ts
-            **/apps/api/src/**/*.tsx
-            **/packages/**/src/**/*.ts
-            **/packages/**/src/**/*.tsx
+            **/packages/auth/src/**/*.ts
+            **/packages/email/src/**/*.ts
+            **/packages/prisma/**/*
+            **/packages/scanning/**/*.ts
+            **/packages/tools/**/*.ts
+            **/packages/trpc/**/*.ts
             ./Dockerfile
             ./fly.toml
             **/apps/api/package.json
