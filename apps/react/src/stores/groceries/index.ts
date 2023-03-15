@@ -114,24 +114,43 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				}).resolved;
 				const expirationDays = food?.get('expiresAfterDays');
 				const now = Date.now();
-				item.set('purchasedAt', now);
-				if (expirationDays) {
-					item.set('expiresAt', now + expirationDays * 24 * 60 * 60 * 1000);
-				}
-				if (food) {
-					client
-						.batch({ undoable: false })
-						.run(() => {
+
+				client
+					.batch()
+					.run(() => {
+						item.set('purchasedAt', now);
+						if (expirationDays) {
+							item.set('expiresAt', now + expirationDays * 24 * 60 * 60 * 1000);
+						}
+
+						if (food) {
+							const previousPurchaseCount = food.get('purchaseCount');
 							const previousPurchasedAt = food.get('lastPurchasedAt');
 							food.set('lastPurchasedAt', now);
 							const currentGuess = food.get('purchaseIntervalGuess') || 0;
 							if (previousPurchasedAt) {
-								const newGuess = (currentGuess + now - previousPurchasedAt) / 2;
+								const newInterval = now - previousPurchasedAt;
+								// reject outliers ... if we've established a baseline
+								if (
+									previousPurchaseCount > 5 &&
+									(newInterval > 4 * currentGuess ||
+										newInterval < currentGuess / 4)
+								) {
+									return;
+								}
+
+								// minium 1 week
+								const newGuess = Math.max(
+									(currentGuess + newInterval) / 2,
+									7 * 24 * 60 * 60 * 1000,
+								);
 								food.set('purchaseIntervalGuess', newGuess);
+
+								food.set('purchaseCount', previousPurchaseCount + 1);
 							}
-						})
-						.flush();
-				}
+						}
+					})
+					.flush();
 			},
 			[client],
 		),
@@ -390,7 +409,6 @@ export async function addItems(
 				}
 			} else {
 				lookup.set('lastAddedAt', Date.now());
-				lookup.set('purchaseCount', lookup.get('purchaseCount') + 1);
 			}
 
 			// verify the category exists locally
