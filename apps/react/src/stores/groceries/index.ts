@@ -311,7 +311,7 @@ export function createClientDescriptor(options: { namespace: string }) {
 		migrations,
 		namespace: options.namespace,
 		log: import.meta.env.DEV
-			? (...args) => console.debug('🎧', ...args)
+			? (...args: any[]) => console.debug('🎧', ...args)
 			: undefined,
 	});
 }
@@ -350,111 +350,155 @@ export async function addItems(
 ) {
 	if (!lines.length) return;
 
-	let lastItemId: string | null = null;
-
-	for (const line of lines) {
-		if (typeof line === 'string' && !line.trim()) continue;
-		const parsed = typeof line === 'string' ? parseIngredient(line) : line;
-		const firstMatch = await client.items.findOne({
-			where: 'purchased_food_listId',
-			match: {
-				purchased: 'no',
-				food: parsed.food,
-				listId: listId || 'null',
-			},
-			order: 'asc',
-		}).resolved;
-		if (firstMatch) {
-			const itemId = firstMatch.get('id');
-			const totalQuantity = firstMatch.get('totalQuantity') + parsed.quantity;
-			firstMatch.set('totalQuantity', totalQuantity);
-			// add the source, too
-			const inputs = firstMatch.get('inputs');
-			inputs.push({
-				...sourceInfo,
-				text: parsed.original,
-			});
-			lastItemId = itemId;
-		} else {
-			const lookup = await client.foods.findOne({
-				where: 'nameLookup',
-				equals: parsed.food,
-			}).resolved;
-			let categoryId: string | null = lookup?.get('categoryId') ?? null;
-
-			if (!categoryId) {
-				try {
-					const remoteLookup = await trpcClient.food.data.query(parsed.food);
-					if (remoteLookup) {
-						await client.foods.put({
-							canonicalName: remoteLookup.canonicalName,
-							categoryId: remoteLookup.categoryId,
-							isPerishable: remoteLookup.isPerishable,
-							isStaple: !!remoteLookup.isStaple,
-							alternateNames: remoteLookup.alternateNames,
-							lastAddedAt: Date.now(),
-							purchaseCount: 1,
-						});
-						categoryId = remoteLookup.categoryId;
-					}
-				} catch (err) {
-					console.error(err);
-				}
-			} else {
-				client.batch({ undoable: false }).run(() => {
-					lookup.set('lastAddedAt', Date.now());
-				});
-			}
-
-			// verify the category exists locally
-			const category = categoryId
-				? await client.categories.get(categoryId).resolved
-				: null;
-			if (!category) {
-				categoryId = null;
-			}
-
-			const item = await client.items.put({
-				categoryId,
-				listId: listId || null,
-				createdAt: Date.now(),
-				totalQuantity: parsed.quantity,
-				unit: parsed.unit || '',
-				food: parsed.food,
-				inputs: [
-					{
-						...sourceInfo,
-						text: parsed.original,
-						quantity: parsed.quantity,
-					},
-				],
-			});
-			lastItemId = item.get('id');
-		}
-
-		// increment usage count for this food
-		const matchingSuggestion = await client.suggestions.get(parsed.food)
-			.resolved;
-		if (matchingSuggestion) {
-			client
-				.batch({ undoable: false })
-				.run(() => {
-					matchingSuggestion.set(
-						'usageCount',
-						matchingSuggestion.get('usageCount') + 1,
-					);
-				})
-				.flush();
-		} else {
-			await client.suggestions.put(
-				{
-					text: parsed.food,
-					usageCount: 1,
+	const results = await Promise.allSettled(
+		lines.map(async (line) => {
+			if (typeof line === 'string' && !line.trim()) return;
+			const parsed = typeof line === 'string' ? parseIngredient(line) : line;
+			const firstMatch = await client.items.findOne({
+				where: 'purchased_food_listId',
+				match: {
+					purchased: 'no',
+					food: parsed.food,
+					listId: listId || 'null',
 				},
-				{ undoable: false },
-			);
-		}
-	}
+				order: 'asc',
+			}).resolved;
+			if (firstMatch) {
+				const totalQuantity = firstMatch.get('totalQuantity') + parsed.quantity;
+				firstMatch.set('totalQuantity', totalQuantity);
+				// add the source, too
+				const inputs = firstMatch.get('inputs');
+				inputs.push({
+					...sourceInfo,
+					text: parsed.original,
+				});
+			} else {
+				const lookup = await client.foods.findOne({
+					where: 'nameLookup',
+					equals: parsed.food,
+				}).resolved;
+				let categoryId: string | null = lookup?.get('categoryId') ?? null;
+
+				if (categoryId) {
+					client.batch({ undoable: false }).run(() => {
+						lookup.set('lastAddedAt', Date.now());
+					});
+				}
+
+				// verify the category exists locally
+				const category = categoryId
+					? await client.categories.get(categoryId).resolved
+					: null;
+				if (!category) {
+					categoryId = null;
+				}
+
+				let item: Item;
+
+				const baseItemData = {
+					listId: listId || null,
+					createdAt: Date.now(),
+					totalQuantity: parsed.quantity,
+					unit: parsed.unit || '',
+					food: parsed.food,
+					inputs: [
+						{
+							...sourceInfo,
+							text: parsed.original,
+							quantity: parsed.quantity,
+						},
+					],
+				};
+
+				if (!categoryId && navigator.onLine) {
+					// race between a timeout and fetching food metadata... don't block adding the item too long if offline,
+					// but attempt to prevent a pop-in of remote data changes
+
+					const createItemPromise = new Promise((resolve) =>
+						setTimeout(resolve, 200),
+					).then(() => {
+						return client.items.put({
+							categoryId,
+							...baseItemData,
+						});
+					});
+
+					// in parallel, attempt to get the food data
+
+					async function lookupFoodFromApi() {
+						const remoteLookup = await trpcClient.food.data.query(parsed.food);
+						if (remoteLookup) {
+							await client.foods.put({
+								canonicalName: remoteLookup.canonicalName,
+								categoryId: remoteLookup.categoryId,
+								isPerishable: remoteLookup.isPerishable,
+								isStaple: !!remoteLookup.isStaple,
+								alternateNames: remoteLookup.alternateNames,
+								lastAddedAt: Date.now(),
+								purchaseCount: 1,
+							});
+							// verify the category exists locally
+							const category = remoteLookup.categoryId
+								? await client.categories.get(remoteLookup.categoryId).resolved
+								: null;
+
+							if (category) {
+								// now find the item we created and update it. this is not undoable since it was not
+								// user-initiated.
+								if (item) {
+									client.batch({ undoable: false }).run(() => {
+										item.set('categoryId', remoteLookup.categoryId);
+									});
+								}
+								categoryId = remoteLookup.categoryId;
+							}
+						}
+					}
+
+					// if this promise chain resolves before the other one, the categoryId variable will be
+					// set and the item will be created with the correct category.
+					// if it doesn't resolve first, the "if (item)" branch above will be taken and
+					// the existing item will be updated.
+					lookupFoodFromApi();
+					item = await createItemPromise;
+				} else {
+					item = await client.items.put({
+						categoryId,
+						...baseItemData,
+					});
+				}
+			}
+
+			// increment usage count for this food
+			const matchingSuggestion = await client.suggestions.get(parsed.food)
+				.resolved;
+			if (matchingSuggestion) {
+				client
+					.batch({ undoable: false })
+					.run(() => {
+						matchingSuggestion.set(
+							'usageCount',
+							matchingSuggestion.get('usageCount') + 1,
+						);
+					})
+					.flush();
+			} else {
+				await client.suggestions.put(
+					{
+						text: parsed.food,
+						usageCount: 1,
+					},
+					{ undoable: false },
+				);
+			}
+		}),
+	);
+
+	const lastItemId =
+		results
+			.reverse()
+			.find((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+			?.value?.get('id') ?? null;
 
 	if (sourceInfo?.recipeId) {
 		// record usage for this recipe
