@@ -36,6 +36,7 @@ export const item = style({
 	height: 'max-content',
 	position: 'relative',
 	backgroundColor: vars.colors.gray10,
+	minHeight: 200,
 
 	'@media': {
 		[mediaQueries.md]: {
@@ -59,7 +60,6 @@ export const itemContent = style({
 	flex: 1,
 	position: 'relative',
 	zIndex: 1,
-	paddingTop: vars.space[8],
 
 	selectors: {
 		'&:hover': {
@@ -122,6 +122,7 @@ export const itemActions = style({
 	backgroundColor: vars.colors.white,
 	position: 'relative',
 	zIndex: 1,
+	borderTop: `1px solid ${vars.colors.grayDarkBlend}`,
 });
 
 export const itemActionButton = style({});
