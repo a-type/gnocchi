@@ -4,7 +4,7 @@ import { vars } from '../../theme.css.js';
 export const fixedArea = style({
 	position: 'sticky',
 	top: 0,
-	zIndex: 1,
+	zIndex: vars.zIndices.nav,
 	backgroundColor: vars.colors.light,
 	width: '100%',
 	alignItems: 'stretch',
