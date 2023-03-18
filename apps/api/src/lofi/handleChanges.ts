@@ -104,10 +104,10 @@ class ListChangeNotifier {
 		);
 		for (const member of members) {
 			if (member.id === notification.userId) continue;
-			await Promise.all(
+			await Promise.allSettled(
 				member.pushSubscriptions.map(async (sub) => {
 					if (sub.auth && sub.p256dh) {
-						sendPush(sub, {
+						await sendPush(sub, {
 							userName: senderName,
 							addedItemCount: notification.createdItemCount,
 							purchasedItemCount: notification.purchasedItemCount,
