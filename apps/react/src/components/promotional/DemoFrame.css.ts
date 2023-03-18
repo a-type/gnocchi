@@ -12,4 +12,5 @@ export const root = style({
 export const image = style({
 	width: '100%',
 	height: 'auto',
+	objectFit: 'cover',
 });

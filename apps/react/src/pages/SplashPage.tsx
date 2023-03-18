@@ -1,12 +1,23 @@
-import { PageContent, PageRoot } from '@aglio/ui';
+import { leekTheme } from '@aglio/ui';
 import { Box, Button, H2, LinkButton, P, Span, TextLink } from '@aglio/ui';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';
 import { sprinkles } from '@aglio/ui';
-import { CSSProperties, lazy, ReactNode, Suspense, useEffect } from 'react';
+import {
+	CSSProperties,
+	forwardRef,
+	lazy,
+	ReactNode,
+	Suspense,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import * as classes from './SplashPage.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
-import { APP_NAME } from '@/config.js';
+import { APP_NAME, PRICE_MONTHLY_DOLLARS } from '@/config.js';
+import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
+import { useOnVisible } from '@/hooks/useOnVisible.js';
 
 // dynamically import Scene
 const Scene = lazy(() => import('@/components/3d/Scene.jsx'));
@@ -17,31 +28,32 @@ export function SplashPage() {
 		setHasSeen(true);
 	}, []);
 
+	const upgradeSectionRef = useRef<HTMLDivElement>(null);
+	const [staticSectionAccent, setStaticSectionAccent] = useState(false);
+	useOnVisible(upgradeSectionRef, setStaticSectionAccent, {
+		threshold: 0.05,
+	});
+
 	return (
-		<PageRoot color="lemon">
+		<div className={classes.root}>
 			<div className={classes.backgroundSceneContainer}>
 				<Suspense>
 					<Scene />
 				</Suspense>
 			</div>
-			<PageContent nav={false}>
+			<Content className={classes.mainContent}>
 				<div className={classes.demoGrid}>
 					<div className={classes.titleWrap}>
 						<h2 className={classes.appName}>{APP_NAME}</h2>
 						<Title>Your weekly cooking, in one place.</Title>
 					</div>
-					<DemoFrame
-						demo="basics"
-						className={classes.demo}
-						style={{ gridArea: 'basic' }}
-					/>
-					<Section style={{ gridArea: 'basicText' }}>
+					<DemoFrame demo="groceries" className={classes.demo} />
+					<Section>
 						<H2>How it works</H2>
 						<p className={classes.item}>
 							<span className={classes.emoji}>🧾</span>
 							<span className={classes.itemText}>
-								Copy, paste, or share ingredients from recipes directly into the
-								app.
+								Copy, paste, or share items directly into the app.
 							</span>
 						</p>
 						<p className={classes.item}>
@@ -54,21 +66,80 @@ export function SplashPage() {
 						<p className={classes.item}>
 							<span className={classes.emoji}>🛒</span>
 							<span className={classes.itemText}>
-								Y'know, grocery stuff. All of this works without even signing
-								in.
+								Get helpful suggestions based on your past purchases.
 							</span>
 						</p>
 					</Section>
 					<DemoFrame
-						demo="multiplayer"
+						demo="recipe"
 						className={classes.demo}
-						style={{ gridArea: 'multiplayer' }}
+						// style={{
+						// 	gridArea: 'recipes',
+						// }}
 					/>
-					<Section style={{ gridArea: 'multiplayerText' }}>
-						<H2>Upgrade for superpowers</H2>
+					<Section>
+						<H2>Collect recipes</H2>
 						<p>
-							An affordable account keeps things running and nets you some cool
-							stuff:
+							{APP_NAME} is a recipe app, too. You can save recipes from the
+							web, or add your own.
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>📝</span>
+							<span className={classes.itemText}>
+								Edit recipes to your liking. Add notes, change the serving size,
+								or even swap out your own ingredients.
+							</span>
+						</p>
+						<p className={classes.item}>
+							<span className={classes.emoji}>➕</span>
+							<span className={classes.itemText}>
+								Add recipe ingredients directly to your grocery list.
+							</span>
+						</p>
+					</Section>
+					<DemoFrame
+						demo="groceries-lists"
+						className={classes.demo}
+						// style={{ gridArea: 'lists' }}
+					/>
+					<Section color="white">
+						<H2>Less improv at the grocery store</H2>
+						<p>
+							If you're like me, you usually leave the grocery store with some
+							foods you didn't plan on buying. But you also get home, start
+							loading the fridge, and realize you forgot something, too.
+						</p>
+						<p>
+							I built {APP_NAME} to plan grocery trips better, as a solo shopper
+							or a family. It may seem like any old list app, but under the
+							surface I've tried to design intentionally for the task at hand.
+							Give it a shot this week (no account needed!) and let me know what
+							you think.
+						</p>
+						<p>&ndash; Grant</p>
+					</Section>
+				</div>
+			</Content>
+			<Content
+				className={clsx(classes.upgradeContent, leekTheme)}
+				ref={upgradeSectionRef}
+			>
+				<div className={classes.upgradeSection}>
+					<div className={classes.upgradeTitleWrap}>
+						<H2 className={classes.upgradeTitle}>
+							Upgrade to the world's most collaborative cooking app
+						</H2>
+						<P>
+							For ${PRICE_MONTHLY_DOLLARS}/mo, you can sync your list and
+							recipes to all your devices, share your list with anyone you shop
+							with, and coordinate with other chefs while cooking.
+						</P>
+					</div>
+					<DemoFrame demo="multiplayer-groceries" className={classes.demo} />
+					<Section>
+						<H2>Collaborative groceries</H2>
+						<p>
+							Team up with your family, roommates, or friends to plan and shop
 						</p>
 						<p className={classes.item}>
 							<span className={classes.emoji}>☁️</span>
@@ -86,67 +157,65 @@ export function SplashPage() {
 							<span className={classes.emoji}>📌</span>
 							<span className={classes.itemText}>
 								In-store collaboration, like claiming sections and planning a
-								place to meet up
+								place to meet up.
 							</span>
 						</p>
+					</Section>
+					<DemoFrame demo="multiplayer-cooking" className={classes.demo} />
+					<Section>
+						<H2>Sous chef mode</H2>
+						<p>Stay on task when cooking together</p>
 						<p className={classes.item}>
 							<span className={classes.emoji}>🖨️</span>
 							<span className={classes.itemText}>
 								Scan a recipe page directly to the app to add all the
-								ingredients to your list.{' '}
-								<span className={classes.beta}>BETA</span>
+								ingredients to your list.
 							</span>
 						</p>
 						<p className={classes.item}>
 							<span className={classes.emoji}>🧑🏻‍🍳</span>
 							<span className={classes.itemText}>
-								Coordinate with other chefs while cooking
+								Assign tasks to each chef, and see who's done what.
 							</span>
 						</p>
 					</Section>
-					<DemoFrame
-						demo="lists"
-						className={classes.demo}
-						style={{ gridArea: 'lists' }}
-					/>
-					<Section color="white" style={{ gridArea: 'outroText' }}>
-						<H2>Less improv at the grocery store</H2>
-						<p>
-							If you're like me, you usually leave the grocery store with some
-							foods you didn't plan on buying. But you also get home, start
-							loading the fridge, and realize you forgot something, too.
-						</p>
-						<p>
-							I built {APP_NAME} to plan grocery trips better, as a solo shopper
-							or a family. It may seem like any old list app, but under the
-							surface I've tried to design intentionally for the task at hand.
-							Give it a shot this week (no account needed!) and let me know what
-							you think.
-						</p>
-						<p>&ndash; Grant</p>
-					</Section>
-					<Box mt={6} gap={4}>
-						<TextLink
-							href="/privacy-policy"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Read the privacy policy
-						</TextLink>
-						<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
-							Terms and Conditions of usage
-						</TextLink>
-						<TextLink
-							href="https://github.com/a-type/gnocchi"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Gnocchi is open source
-						</TextLink>
-					</Box>
+					<div className={classes.upgradeCta}>
+						<PromoteSubscriptionButton color="primary">
+							Upgrade now
+						</PromoteSubscriptionButton>
+					</div>
 				</div>
-			</PageContent>
-			<div className={classes.fixedContent}>
+			</Content>
+			<Content
+				className={clsx(leekTheme, classes.endContent)}
+				style={{ paddingBottom: '20vh' }}
+			>
+				<Box mt={6} gap={4}>
+					<TextLink
+						href="/privacy-policy"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Read the privacy policy
+					</TextLink>
+					<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
+						Terms and Conditions of usage
+					</TextLink>
+					<TextLink
+						href="https://github.com/a-type/gnocchi"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Gnocchi is open source
+					</TextLink>
+				</Box>
+			</Content>
+			<div
+				className={clsx(
+					classes.fixedContent,
+					staticSectionAccent ? leekTheme : undefined,
+				)}
+			>
 				<LinkButton
 					to="/"
 					data-test="get-started"
@@ -167,7 +236,7 @@ export function SplashPage() {
 					</TextLink>
 				</Span>
 			</div>
-		</PageRoot>
+		</div>
 	);
 }
 
@@ -191,3 +260,18 @@ function Section({
 function Title({ children }: { children: string }) {
 	return <h1 className={classes.title}>{children}</h1>;
 }
+
+const Content = forwardRef<
+	HTMLDivElement,
+	{
+		children: ReactNode;
+		className?: string;
+		style?: CSSProperties;
+	}
+>(function Content({ children, className, ...rest }, ref) {
+	return (
+		<div ref={ref} className={clsx(classes.content, className)} {...rest}>
+			<div className={classes.contentInner}>{children}</div>
+		</div>
+	);
+});

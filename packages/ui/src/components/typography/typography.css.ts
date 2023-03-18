@@ -6,6 +6,7 @@ export const heading = recipe({
 	base: {
 		marginTop: 0,
 		marginBottom: 0,
+		color: 'inherit',
 
 		selectors: {
 			'h1&': {

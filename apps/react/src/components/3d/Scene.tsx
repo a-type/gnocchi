@@ -1,12 +1,13 @@
 import {
 	Bounds,
 	Float,
+	PerformanceMonitor,
 	PerspectiveCamera,
 	Plane,
 	softShadows,
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { FryingPan } from './foods/FryingPan.jsx';
 import { FryingPanLid } from './foods/FryingPanLid.jsx';
 import { OnionHalf } from './foods/OnionHalf.jsx';
@@ -31,9 +32,16 @@ import {
 softShadows();
 
 export function Scene(props: { className?: string }) {
+	const [dpr, setDpr] = useState(1.5);
 	return (
-		<Canvas linear dpr={[0, 2]} shadows className="Scene" {...props}>
+		<Canvas linear dpr={dpr} shadows className="Scene" {...props}>
 			<Suspense fallback={null}>
+				<PerformanceMonitor
+					onDecline={() => setDpr(1)}
+					onIncline={() => setDpr(2)}
+					flipflops={3}
+					onFallback={() => setDpr(1)}
+				/>
 				<Selection>
 					{/* <fog attach="fog" args={['white', 0, 40]} /> */}
 					<ambientLight color="white" intensity={0.5} />
