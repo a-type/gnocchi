@@ -20,7 +20,7 @@ export function ShareLink({ onGenerate, ...rest }: ShareLinkProps) {
 	};
 
 	return (
-		<Box direction="row" gap={2}>
+		<Box className={classes.root}>
 			{value && (
 				<button
 					onClick={() => {

@@ -1,5 +1,24 @@
-import { vars, elementResetStyles, baseResetStyle } from '@aglio/ui';
+import {
+	vars,
+	elementResetStyles,
+	baseResetStyle,
+	mediaQueries,
+} from '@aglio/ui';
 import { style } from '@vanilla-extract/css';
+
+export const root = style({
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'flex-end',
+	gap: vars.space[2],
+
+	'@media': {
+		[mediaQueries.md]: {
+			flexDirection: 'row',
+			alignItems: 'center',
+		},
+	},
+});
 
 export const wrapperButton = style([
 	baseResetStyle,
@@ -7,6 +26,13 @@ export const wrapperButton = style([
 	{
 		position: 'relative',
 		cursor: 'pointer',
+		width: '100%',
+
+		'@media': {
+			[mediaQueries.md]: {
+				width: 'auto',
+			},
+		},
 
 		selectors: {
 			'&::after': {
@@ -30,4 +56,5 @@ export const wrapperButton = style([
 
 export const input = style({
 	cursor: 'pointer',
+	width: '100%',
 });
