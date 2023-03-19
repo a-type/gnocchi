@@ -30,9 +30,11 @@ const popIn = keyframes({
 const collapse = keyframes({
 	'0%': {
 		height: 'var(--height)',
+		opacity: 1,
 	},
 	'100%': {
 		height: 0,
+		opacity: 0,
 	},
 });
 
