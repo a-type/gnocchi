@@ -120,7 +120,7 @@ function IOSTutorial() {
 					groceries.
 				</P>
 				<video
-					src="/videos/ios-install.mp4"
+					src="/videos/iphone-install.mp4"
 					controls
 					autoPlay
 					loop
