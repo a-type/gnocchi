@@ -1,6 +1,6 @@
-import { useEffectOnce } from '@/hooks/useEffectOnce.js';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { useIsPwa } from '@/hooks/useIsPwa.js';
+import { useIsServiceWorkerRegistered } from '@/hooks/useIsServiceWorkerRegistered.js';
 import {
 	getIsSubscribedToPush,
 	subscribeToPush,
@@ -46,8 +46,8 @@ export function PushSubscriptionToggle({}: PushSubscriptionToggleProps) {
 		}
 	};
 	const toggle = subscribed ? unsubscribe : subscribe;
-	const isPwa = useIsPwa();
-	if (!isPwa || !enabled) {
+	const canSubscribe = useIsServiceWorkerRegistered();
+	if (!canSubscribe || !enabled) {
 		return null;
 	}
 
