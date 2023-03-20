@@ -50,14 +50,6 @@ export function RecipeIngredientViewer({
 	}, [note, toggleShowNote]);
 
 	const [conversion, setConversion] = useState<string>();
-	const [showConversionDialog, setShowConversionDialog] = useState(false);
-	const toggleConversion = useCallback(() => {
-		if (conversion) {
-			setConversion(undefined);
-		} else {
-			setShowConversionDialog(true);
-		}
-	}, [conversion]);
 
 	const convertedValue = useMemo(() => {
 		if (!conversion || !officialUnit) return undefined;
@@ -111,7 +103,10 @@ export function RecipeIngredientViewer({
 								<DropdownMenuContent>
 									<DropdownMenuLabel>Convert to:</DropdownMenuLabel>
 									{convertOptions.map((opt) => (
-										<DropdownMenuItem onSelect={() => setConversion(opt)}>
+										<DropdownMenuItem
+											key={opt}
+											onSelect={() => setConversion(opt)}
+										>
 											{friendlyUnit(opt)}
 										</DropdownMenuItem>
 									))}
