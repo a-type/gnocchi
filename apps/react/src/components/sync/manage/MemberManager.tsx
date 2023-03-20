@@ -23,7 +23,8 @@ import { ManageSubscriptionButton } from '../ManageSubscriptionButton.jsx';
 export interface MemberManagerProps {}
 
 export function MemberManager({}: MemberManagerProps) {
-	const { session } = useAuth();
+	const { data } = useAuth();
+	const { session } = data || {};
 
 	if (!session) return null;
 
@@ -57,7 +58,8 @@ export function MemberManager({}: MemberManagerProps) {
 
 function AdminMemberManager() {
 	const { data: members, refetch } = trpc.plan.members.useQuery();
-	const { session } = useAuth();
+	const { data } = useAuth();
+	const { session } = data || {};
 
 	return (
 		<Box gap={2}>

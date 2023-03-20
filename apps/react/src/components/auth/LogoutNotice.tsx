@@ -16,7 +16,8 @@ export interface LogoutNoticeProps {}
 
 export function LogoutNotice({}: LogoutNoticeProps) {
 	const [wasLoggedIn, setWasLoggedIn] = useLocalStorage('wasLoggedIn', false);
-	const { session, error, initializing } = useAuth();
+	const { data, error, isInitialLoading: initializing } = useAuth();
+	const session = data?.session;
 
 	const wasLoggedInButNowLoggedOut =
 		wasLoggedIn && !session && !error && !initializing;

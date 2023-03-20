@@ -1,4 +1,3 @@
-import { AuthProvider } from '@/contexts/AuthContext.js';
 import { trpc, trpcClientOptions } from '@/trpc.js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { clsx } from 'clsx';
@@ -40,13 +39,11 @@ export function App() {
 					<Suspense fallback={null}>
 						<trpc.Provider client={trpcClient} queryClient={queryClient}>
 							<QueryClientProvider client={queryClient}>
-								<AuthProvider>
-									<GroceriesProvider>
-										<Pages />
-										<Toaster position="bottom-center" />
-										<IconSpritesheet />
-									</GroceriesProvider>
-								</AuthProvider>
+								<GroceriesProvider>
+									<Pages />
+									<Toaster position="bottom-center" />
+									<IconSpritesheet />
+								</GroceriesProvider>
 							</QueryClientProvider>
 						</trpc.Provider>
 					</Suspense>

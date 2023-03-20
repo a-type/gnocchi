@@ -1,4 +1,3 @@
-import { DomainChangeDialog } from '@/components/auth/DomainChangeDialog.jsx';
 import { LogoutNotice } from '@/components/auth/LogoutNotice.jsx';
 import { SubscribedOnly } from '@/components/auth/SubscribedOnly.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
@@ -264,7 +263,6 @@ function PageLayoutRoot() {
 				<StartSignupDialog />
 				<UpdatePrompt />
 				<LogoutNotice />
-				<DomainChangeDialog />
 			</Suspense>
 			{showNav && <NavBar />}
 		</>

@@ -19,7 +19,8 @@ import { H2 } from '@aglio/ui';
 export interface CompleteSignupDialogProps {}
 
 export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
-	const { session, subscriptionStatus } = useAuth();
+	const { data } = useAuth();
+	const { session, subscriptionStatus } = data || {};
 
 	const open =
 		!!session && subscriptionStatus === SubscriptionError.NoSubscription;

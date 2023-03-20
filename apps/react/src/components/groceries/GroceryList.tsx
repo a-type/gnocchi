@@ -1,7 +1,6 @@
-import { useAuth } from '@/contexts/AuthContext.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { H3, sprinkles } from '@aglio/ui';
+import { H3 } from '@aglio/ui';
 import { Item } from '@aglio/groceries-client';
 import {
 	DndContext,

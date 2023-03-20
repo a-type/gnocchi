@@ -1,31 +1,5 @@
 import { API_ORIGIN, SECURE } from '@/config.js';
-import React, {
-	createContext,
-	ReactNode,
-	useCallback,
-	useEffect,
-	useState,
-} from 'react';
 import { useQuery } from '@tanstack/react-query';
-
-export const AuthContext = createContext<{
-	session?: {
-		userId: string;
-		name: string;
-		planId?: string;
-		role: 'admin' | 'member';
-	} | null;
-	error?: Error;
-	refetch: () => void;
-	isSubscribed: boolean;
-	subscriptionStatus: string | null;
-	initializing: boolean;
-}>({
-	refetch: () => {},
-	isSubscribed: false,
-	subscriptionStatus: null,
-	initializing: true,
-});
 
 async function getSession(): Promise<{
 	session: { userId: string; name: string; role: 'admin' | 'member' } | null;
@@ -80,49 +54,21 @@ async function getSession(): Promise<{
 	}
 }
 
-export function AuthProvider(props: { children: ReactNode }) {
-	const { data, refetch, isInitialLoading } = useQuery(
-		['session'],
-		getSession,
-		{},
-	);
-
-	useEffect(() => {
-		// yes, this will run twice in dev mode...
-		refetch();
-	}, []);
-
-	return (
-		<AuthContext.Provider
-			value={{
-				isSubscribed: false,
-				session: undefined,
-				error: undefined,
-				subscriptionStatus: null,
-				...data,
-				refetch,
-				initializing: isInitialLoading,
-			}}
-			{...props}
-		/>
-	);
-}
-
 export function useAuth() {
-	return React.useContext(AuthContext);
+	return useQuery(['session'], getSession);
 }
 
 export function useIsSubscribed() {
-	const { isSubscribed } = React.useContext(AuthContext);
-	return isSubscribed;
+	const { data } = useAuth();
+	return data?.isSubscribed;
 }
 
 export function useIsUnsubscribed() {
-	const { isSubscribed, error, initializing } = React.useContext(AuthContext);
-	return !initializing && !isSubscribed && !error;
+	const { data, error, isInitialLoading } = useAuth();
+	return !isInitialLoading && !data?.isSubscribed && !error;
 }
 
 export function useIsLoggedIn() {
-	const { session, initializing } = React.useContext(AuthContext);
-	return !initializing && !!session;
+	const { data, isInitialLoading } = useAuth();
+	return !isInitialLoading && !!data?.session;
 }

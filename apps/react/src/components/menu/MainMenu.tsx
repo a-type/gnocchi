@@ -19,7 +19,8 @@ import { useInterval } from '@/hooks/useInterval.js';
 import * as classes from './MainMenu.css.js';
 
 export function MainMenu() {
-	const { session, isSubscribed, error } = useAuth();
+	const { data, error } = useAuth();
+	const { session, isSubscribed } = data || {};
 
 	const snap = useSnapshot(menuState);
 
@@ -71,7 +72,7 @@ function OfflineContents() {
 				<div className={classes.banner}>
 					<Span size="sm">Offline</Span>
 				</div>
-				<Button size="small" color="default" onClick={refetch}>
+				<Button size="small" color="default" onClick={() => refetch()}>
 					Retry connection
 				</Button>
 				<ManageCategoriesDialog>

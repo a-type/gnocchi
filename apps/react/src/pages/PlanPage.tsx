@@ -35,7 +35,8 @@ const contents = {
 } as const;
 
 export function PlanPage() {
-	const { session, isSubscribed, error } = useAuth();
+	const { data, error } = useAuth();
+	const { session, isSubscribed } = data || {};
 
 	let state: keyof typeof contents = 'online';
 	if (error) {
@@ -106,7 +107,7 @@ function OfflineContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
-			<Button size="small" color="default" onClick={refetch}>
+			<Button size="small" color="default" onClick={() => refetch()}>
 				Retry connection
 			</Button>
 			<ManageCategories />

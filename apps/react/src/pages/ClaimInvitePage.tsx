@@ -8,7 +8,8 @@ import { trpc } from '@/trpc.js';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function ClaimInvitePage() {
-	const { session, isSubscribed, refetch } = useAuth();
+	const { data, refetch } = useAuth();
+	const { session, isSubscribed } = data || {};
 
 	const navigate = useNavigate();
 

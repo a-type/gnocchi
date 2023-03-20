@@ -8,7 +8,8 @@ import { H2 } from '@aglio/ui';
 export interface SubscriptionExpiredDialogProps {}
 
 export function SubscriptionExpiredDialog({}: SubscriptionExpiredDialogProps) {
-	const { session, subscriptionStatus } = useAuth();
+	const { data } = useAuth();
+	const { session, subscriptionStatus } = data || {};
 
 	const open =
 		!!session && subscriptionStatus === SubscriptionError.SubscriptionExpired;
