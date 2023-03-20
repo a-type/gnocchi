@@ -1,4 +1,4 @@
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';

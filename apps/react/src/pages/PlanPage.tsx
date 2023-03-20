@@ -10,7 +10,7 @@ import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
 import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
 import { PushSubscriptionToggle } from '@/components/sync/push/PushSubscriptionToggle.jsx';
 import { API_HOST_HTTP, PRICE_MONTHLY_DOLLARS } from '@/config.js';
-import { useAuth } from '@/contexts/AuthContext.jsx';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
 import {
 	Box,

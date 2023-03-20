@@ -8,7 +8,7 @@ import {
 import { H1, H2, P } from '@aglio/ui';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
 import { APP_NAME } from '@/config.js';
-import { useIsLoggedIn } from '@/contexts/AuthContext.jsx';
+import { useIsLoggedIn } from '@/hooks/useAuth.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { sprinkles } from '@aglio/ui';
 

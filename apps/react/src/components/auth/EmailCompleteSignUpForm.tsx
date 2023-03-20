@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext.jsx';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
 import { Form, SubmitButton, TextField } from '@aglio/ui';

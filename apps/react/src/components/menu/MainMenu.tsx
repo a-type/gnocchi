@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext.js';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import {
 	Popover,

@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext.jsx';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useEffect } from 'react';
 import {

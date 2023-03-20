@@ -20,7 +20,7 @@ import {
 import useMergedRef from '@/hooks/useMergedRef.js';
 import * as classes from './GroceryListAdd.css.js';
 import { clsx } from 'clsx';
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { signupDialogState as signupState } from '@/components/sync/StartSignupDialog.jsx';
 import { Box } from '@aglio/ui';

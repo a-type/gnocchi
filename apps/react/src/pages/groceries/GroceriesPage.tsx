@@ -1,25 +1,14 @@
-import GroceryList from '@/components/groceries/GroceryList.js';
-import { GroceryListAdd } from '@/components/groceries/addBar/GroceryListAdd.js';
-import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js';
-import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
-import { ReactNode, Suspense, useCallback, useEffect } from 'react';
-import { MainMenu } from '@/components/menu/MainMenu.js';
-import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
-import { PageContent, PageFixedArea, PageRoot } from '@aglio/ui';
-import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
-import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
-import { Box } from '@aglio/ui';
-import { ListContext } from '@/contexts/ListContext.jsx';
-import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
-import { sprinkles } from '@aglio/ui';
-import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
-import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';
-import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
 import { UnsubscribedOnly } from '@/components/auth/UnsubscribedOnly.jsx';
+import { ListEdit } from '@/components/groceries/lists/ListEdit.jsx';
+import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
-import { hooks } from '@/stores/groceries/index.js';
+import { RecipeSavePrompt } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
+import { CompleteSignupDialog } from '@/components/sync/CompleteSignupDialog.js';
+import { OfflineIndicator } from '@/components/sync/OfflineIndicator.jsx';
+import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
+import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
+import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';
+import { ListContext } from '@/contexts/ListContext.jsx';
 import {
 	AddBar,
 	List,
@@ -28,6 +17,9 @@ import {
 	TopControls,
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
+import { Box, PageContent } from '@aglio/ui';
+import { useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -58,11 +50,14 @@ export function GroceriesPage() {
 							{listId && <ListEdit listId={listId} />}
 						</ListSelectWrapper>
 
-						<UnsubscribedOnly>
-							<PromoteSubscriptionButton size="small" color="accent">
-								Upgrade
-							</PromoteSubscriptionButton>
-						</UnsubscribedOnly>
+						<Box direction="row" gap={1} align="center">
+							<UnsubscribedOnly>
+								<PromoteSubscriptionButton size="small" color="accent">
+									Upgrade
+								</PromoteSubscriptionButton>
+							</UnsubscribedOnly>
+							<OfflineIndicator />
+						</Box>
 					</TopControls>
 					<AddBar />
 					<List />

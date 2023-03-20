@@ -12,7 +12,7 @@ import {
 	P,
 	Span,
 } from '@aglio/ui';
-import { useAuth } from '@/contexts/AuthContext.jsx';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { useState } from 'react';

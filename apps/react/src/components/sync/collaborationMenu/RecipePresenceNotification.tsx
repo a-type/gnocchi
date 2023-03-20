@@ -1,5 +1,5 @@
 import { Button, LinkButton } from '@aglio/ui';
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { hooks, Presence, Profile } from '@/stores/groceries/index.js';
 import { UserInfo } from '@lo-fi/common';
 import { Suspense, useContext, useEffect, useState } from 'react';

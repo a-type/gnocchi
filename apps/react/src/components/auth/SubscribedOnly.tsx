@@ -1,4 +1,4 @@
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { ReactNode } from 'react';
 
 export interface SubscribedOnlyProps {

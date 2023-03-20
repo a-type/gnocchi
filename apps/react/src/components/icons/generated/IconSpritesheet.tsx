@@ -222,6 +222,34 @@ export const IconSpritesheet = (props: any) => (
 					strokeLinecap="round"
 				/>
 			</symbol>
+			<symbol id="icon-offline" viewBox="0 0 15 15">
+				<g clipPath="url(#clip0_701_39)">
+					<mask
+						id="mask0_701_39"
+						style={{ maskType: 'alpha' }}
+						maskUnits="userSpaceOnUse"
+						x="0"
+						y="0"
+						width="15"
+						height="15"
+					>
+						<circle cx="7.5" cy="7.5" r="7" fill="#D9D9D9" />
+					</mask>
+					<g mask="url(#mask0_701_39)">
+						<path
+							d="M14 7.5C14 11.0899 11.0899 14 7.5 14M14 7.5C14 3.91015 11.0899 1 7.5 1M14 7.5H1M7.5 14C3.91015 14 1 11.0899 1 7.5M7.5 14C9.433 14 11 11.0899 11 7.5C11 3.91015 9.433 1 7.5 1M7.5 14C5.567 14 4 11.0899 4 7.5C4 3.91015 5.567 1 7.5 1M7.5 14V1M1 7.5C1 3.91015 3.91015 1 7.5 1M15 7.5C15 9.433 11.6421 11 7.5 11C3.35786 11 0 9.433 0 7.5C0 5.567 3.35786 4 7.5 4C11.6421 4 15 5.567 15 7.5Z"
+							stroke="currentColor"
+						/>
+					</g>
+					<circle cx="10.5" cy="10.5" r="4" fill="#FD7E4D" />
+					<path d="M8 13L13 8M8 8L13 13" stroke="currentColor" />
+				</g>
+				<defs>
+					<clipPath id="clip0_701_39">
+						<rect width="15" height="15" fill="white" />
+					</clipPath>
+				</defs>
+			</symbol>
 		</defs>
 	</svg>
 );

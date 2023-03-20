@@ -3,7 +3,7 @@ import { Box } from '@aglio/ui';
 import { Button, H1, P } from '@aglio/ui';
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
-import { useAuth } from '@/contexts/AuthContext.js';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
 import { useNavigate, useParams } from 'react-router-dom';
 

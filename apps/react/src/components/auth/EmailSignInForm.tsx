@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext.jsx';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { sprinkles } from '@aglio/ui';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';

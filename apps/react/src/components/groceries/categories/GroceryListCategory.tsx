@@ -1,7 +1,7 @@
 import { CollapsibleContent, CollapsibleRoot } from '@aglio/ui';
 import { Button, H2, useSizeCssVars } from '@aglio/ui';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { vars } from '@aglio/ui';

@@ -17,12 +17,13 @@ async function getSession(): Promise<{
 		);
 		if (meResult.ok) {
 			const json = await meResult.json();
-			if (json.session)
+			if (json.session) {
 				return {
 					session: json.session,
 					isSubscribed: !json.planStatus,
 					subscriptionStatus: json.planStatus || null,
 				};
+			}
 			return {
 				session: null,
 				isSubscribed: false,
@@ -36,21 +37,11 @@ async function getSession(): Promise<{
 					subscriptionStatus: null,
 				};
 			}
-			return {
-				session: null,
-				error: new Error(`Failed to get session: ${meResult.status}`),
-				isSubscribed: false,
-				subscriptionStatus: null,
-			};
+			throw new Error(`Failed to get session: ${meResult.status}`);
 		}
 	} catch (e) {
 		console.error(e);
-		return {
-			session: null,
-			error: e as Error,
-			isSubscribed: false,
-			subscriptionStatus: null,
-		};
+		throw e;
 	}
 }
 

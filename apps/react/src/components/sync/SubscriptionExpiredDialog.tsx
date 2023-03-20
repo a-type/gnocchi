@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent } from '@aglio/ui';
-import { useAuth } from '@/contexts/AuthContext.js';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { SubscriptionError } from '@aglio/tools';
 import { LogoutButton } from '../auth/LogoutButton.js';
 import { H2 } from '@aglio/ui';

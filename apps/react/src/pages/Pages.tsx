@@ -5,7 +5,7 @@ import { NavBar } from '@/components/nav/NavBar.jsx';
 import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
 import { StartSignupDialog } from '@/components/sync/StartSignupDialog.jsx';
 import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import {
 	Box,

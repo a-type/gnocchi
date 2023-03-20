@@ -1,4 +1,4 @@
-import { useIsLoggedIn } from '@/contexts/AuthContext.jsx';
+import { useIsLoggedIn } from '@/hooks/useAuth.jsx';
 import { featureFlags } from '@/featureFlags.js';
 import { trpc } from '@/trpc.js';
 

@@ -99,7 +99,7 @@ const responsiveProperties = defineProperties({
 		marginLeft: margins,
 		gap: vars.space,
 		pointerEvents: ['auto', 'none'],
-		opacity: [0, 1],
+		opacity: [0, 0.5, 0.75, 1],
 		textAlign: ['left', 'right', 'center', 'justify'],
 		minWidth: [0, '100%'],
 		minHeight: [0, '100%'],

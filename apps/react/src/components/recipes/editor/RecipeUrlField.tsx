@@ -1,5 +1,5 @@
 import { Icon } from '@/components/icons/Icon.jsx';
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { updateRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { Recipe } from '@aglio/groceries-client';

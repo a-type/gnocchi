@@ -1,5 +1,5 @@
 import { APP_NAME } from '@/config.js';
-import { useIsSubscribed } from '@/contexts/AuthContext.jsx';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { Box, Button, P } from '@aglio/ui';
 import { PromoteSubscriptionButton } from './PromoteSubscriptionButton.jsx';

@@ -11,7 +11,7 @@ import {
 	TextLink,
 	sprinkles,
 } from '@aglio/ui';
-import { useAuth } from '@/contexts/AuthContext.js';
+import { useAuth } from '@/hooks/useAuth.jsx';
 import { LogoutButton } from '../auth/LogoutButton.js';
 import { SubscribeButton } from './SubscribeButton.js';
 import { H2 } from '@aglio/ui';
