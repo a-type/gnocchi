@@ -36,7 +36,7 @@ export function App() {
 		<div className={clsx(classes.wrapper, lemonTheme)}>
 			<ErrorBoundary fallback={<ErrorFallback />}>
 				<TooltipProvider>
-					<Suspense fallback={null}>
+					<Suspense fallback={<GlobalSuspended />}>
 						<trpc.Provider client={trpcClient} queryClient={queryClient}>
 							<QueryClientProvider client={queryClient}>
 								<GroceriesProvider>
@@ -66,5 +66,13 @@ function ErrorFallback() {
 				<Button onClick={() => window.location.reload()}>Refresh</Button>
 			</Box>
 		</Box>
+	);
+}
+
+function GlobalSuspended() {
+	return (
+		<div className={classes.fullSize}>
+			<img src="/icon.png" className={classes.loaderIcon} />
+		</div>
 	);
 }

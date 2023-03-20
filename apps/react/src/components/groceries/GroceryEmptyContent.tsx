@@ -19,7 +19,12 @@ export function GroceryEmptyContent() {
 				gap={3}
 				p={4}
 			>
-				<Cart width="15vmax" />
+				<Cart
+					width="15vmax"
+					style={{
+						maxWidth: 200,
+					}}
+				/>
 				<P size="inherit" gutterBottom={false}>
 					Your list is empty
 				</P>

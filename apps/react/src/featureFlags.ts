@@ -3,8 +3,8 @@ export const featureFlags = {
 	recipePresence: true,
 	hub: false,
 	recipeImages: true,
-	suggestions: false,
-	pushNotifications: false,
+	suggestions: true,
+	pushNotifications: true,
 	temporaryAccess: false,
 };
 

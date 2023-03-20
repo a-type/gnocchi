@@ -1,9 +1,12 @@
+import { CSSProperties } from 'react';
+
 export function Cart({
 	width,
 	...rest
 }: {
 	width: number | string;
 	className?: string;
+	style?: CSSProperties;
 }) {
 	return (
 		<svg
