@@ -13,7 +13,8 @@
 		"prisma": "pnpm --filter @aglio/prisma run prisma",
 		"link-lofi": "turbo run link-lofi && pnpm -r run clear",
 		"up-lofi": "pnpm --recursive update \"@lo-fi/*\" --latest",
-		"generate": "pnpm --filter @aglio/groceries-client generate"
+		"generate": "pnpm --filter @aglio/groceries-client generate",
+		"stripe": "stripe listen --forward-to localhost:4445/api/stripe/webhook"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",

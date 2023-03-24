@@ -70,7 +70,11 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 				</P> */}
 
 				<Box gap={2} align="center" m="auto" mt={8}>
-					<LoginButton color="primary" returnTo="/">
+					<LoginButton
+						color="primary"
+						returnTo="/"
+						onClick={() => (signupDialogState.status = 'closed')}
+					>
 						Start your subscription
 					</LoginButton>
 					<Span size="xs">
