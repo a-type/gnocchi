@@ -7,7 +7,7 @@ import * as classes from './Dialog.css.js';
 
 const StyledOverlay = withClassName(DialogPrimitive.Overlay, classes.overlay);
 
-const StyledContent = withClassName('div', classes.content, ['width']);
+const StyledContent = withClassName('div', classes.content);
 
 const StyledContentContent = withClassName(
 	DialogPrimitive.Content,

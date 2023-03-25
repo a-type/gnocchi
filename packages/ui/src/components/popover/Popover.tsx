@@ -6,10 +6,7 @@ import { ComponentPropsWithoutRef, forwardRef } from 'react';
 import { withClassName } from '../../withClassName.jsx';
 import * as classes from './Popover.css.js';
 
-const StyledContent = withClassName(PopoverPrimitive.Content, classes.content, [
-	'padding',
-	'radius',
-]);
+const StyledContent = withClassName(PopoverPrimitive.Content, classes.content);
 
 const StyledArrow = withClassName(PopoverPrimitive.Arrow, classes.arrow);
 

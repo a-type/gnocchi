@@ -8,18 +8,14 @@ const StyledContent = withClassName(
 	DropdownMenuPrimitive.Content,
 	classes.content,
 );
-const StyledItem = withClassName(DropdownMenuPrimitive.Item, classes.item, [
-	'color',
-]);
+const StyledItem = withClassName(DropdownMenuPrimitive.Item, classes.item);
 const StyledCheckboxItem = withClassName(
 	DropdownMenuPrimitive.CheckboxItem,
 	classes.item,
-	['color'],
 );
 const StyledRadioItem = withClassName(
 	DropdownMenuPrimitive.RadioItem,
 	classes.item,
-	['color'],
 );
 
 const StyledLabel = withClassName(DropdownMenuPrimitive.Label, classes.label);
