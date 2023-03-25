@@ -1,6 +1,5 @@
-import { mediaQueries } from '@aglio/ui';
-import { vars } from '@aglio/ui';
-import { keyframes, style } from '@vanilla-extract/css';
+import { vars, mediaQueries } from '@aglio/ui';
+import { style } from '@vanilla-extract/css';
 
 export const root = style({
 	display: 'flex',

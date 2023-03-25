@@ -1,9 +1,10 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"jsx": "preserve",
+		"jsx": "react-jsx",
 		"outDir": "./dist",
-		"lib": ["es2017", "dom", "dom.iterable", "ES2021"]
+		"lib": ["es2017", "dom", "dom.iterable", "ES2021"],
+		"composite": true
 	},
 	"include": ["src"]
 }

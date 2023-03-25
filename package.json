@@ -20,6 +20,6 @@
 	"author": "Grant Forrest <gaforres@gmail.com>",
 	"devDependencies": {
 		"turbo": "^1.6.1",
-		"typescript": "^4.8.4"
+		"typescript": "^5.0.2"
 	}
 }

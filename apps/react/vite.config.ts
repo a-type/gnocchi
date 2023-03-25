@@ -8,8 +8,8 @@ import checker from 'vite-plugin-checker';
 // https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
-		vanillaExtractPlugin(),
 		react(),
+		vanillaExtractPlugin(),
 		// checker({
 		// 	typescript: {
 		// 		tsconfigPath: './tsconfig.json',
