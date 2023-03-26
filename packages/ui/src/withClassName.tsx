@@ -1,12 +1,20 @@
-import { ComponentType, ElementType, forwardRef } from 'react';
+import { RuntimeFn } from '@vanilla-extract/recipes';
 import { clsx } from 'clsx';
-import { RecipeVariants, RuntimeFn } from '@vanilla-extract/recipes';
+import {
+	ComponentPropsWithRef,
+	ComponentType,
+	ElementType,
+	FunctionComponent,
+	forwardRef,
+} from 'react';
 
 type VariantDef = RuntimeFn<any> & { variants: () => string[] };
 
-type VariantProps<V extends string | VariantDef> = V extends VariantDef
-	? RecipeVariants<V>
-	: {};
+type VariantProps<Base, V extends string | VariantDef> = V extends (
+	...args: any[]
+) => any
+	? Base & Parameters<V>[0]
+	: Base;
 
 export function withClassName<
 	T extends ComponentType<any> | ElementType<any>,
@@ -14,7 +22,7 @@ export function withClassName<
 >(
 	Component: T,
 	cs: V,
-): ComponentType<React.ComponentProps<T> & VariantProps<V>> {
+): FunctionComponent<VariantProps<ComponentPropsWithRef<T>, V>> {
 	const variants: string[] =
 		typeof cs === 'function' ? (cs.variants() as string[]) : [];
 

@@ -6,6 +6,7 @@ import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubsc
 import { TemporaryAccessLinkButton } from '@/components/settings/TemporaryAccessLinkButton.jsx';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
+import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
 import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
 import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
 import { PushSubscriptionToggle } from '@/components/sync/push/PushSubscriptionToggle.jsx';
@@ -111,7 +112,9 @@ function OfflineContents() {
 				Retry connection
 			</Button>
 			<ManageCategories />
+			<Divider />
 			<BugButton />
+			<ReloadButton />
 		</MainContainer>
 	);
 }
@@ -131,7 +134,9 @@ function AnonymousContents() {
 			</Box>
 			<Divider />
 			<ManageCategories />
+			<Divider />
 			<BugButton />
+			<ReloadButton />
 		</MainContainer>
 	);
 }
@@ -152,7 +157,9 @@ function UnsubscribedContents() {
 			<MemberManager />
 			<ManageCategories />
 			<LogoutButton>Sign out</LogoutButton>
+			<Divider />
 			<BugButton />
+			<ReloadButton />
 		</MainContainer>
 	);
 }
@@ -173,6 +180,7 @@ function OnlineContents() {
 			<H2>Troubleshoot</H2>
 			<BugButton />
 			<ResetToServer />
+			<ReloadButton />
 			<Divider />
 			<LogoutButton>Sign out</LogoutButton>
 		</MainContainer>

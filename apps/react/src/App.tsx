@@ -19,6 +19,7 @@ import { lemonTheme } from '@aglio/ui';
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';
+import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -63,7 +64,7 @@ function ErrorFallback() {
 					that doesn't work,{' '}
 					<a href="mailto:gaforres@gmail.com">let me know about it.</a>
 				</P>
-				<Button onClick={() => window.location.reload()}>Refresh</Button>
+				<ReloadButton />
 			</Box>
 		</Box>
 	);
