@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { forwardRef, ButtonHTMLAttributes } from 'react';
 import * as classes from './Button.css.js';
+import { Spinner } from '../index.js';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	color?:
@@ -14,23 +15,39 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	toggled?: boolean;
 	align?: 'start' | 'stretch' | 'end';
 	visuallyDisabled?: boolean;
+	loading?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 	function Button(
-		{ className, color, size, toggled, align, visuallyDisabled, ...props },
+		{
+			className,
+			color,
+			size,
+			toggled,
+			align,
+			visuallyDisabled,
+			loading,
+			children,
+			disabled,
+			...props
+		},
 		ref,
 	) {
 		return (
 			<button
 				ref={ref}
 				{...props}
+				disabled={disabled || loading}
 				data-disabled={visuallyDisabled}
 				className={clsx(
 					classes.root({ color, size, toggled, align }),
 					className,
 				)}
-			/>
+			>
+				{loading && <Spinner size={16} className={classes.spinner} />}
+				{children}
+			</button>
 		);
 	},
 );

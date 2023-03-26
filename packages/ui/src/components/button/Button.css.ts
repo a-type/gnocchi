@@ -1,6 +1,6 @@
 import { sprinkles } from '../../styles/sprinkles.css.js';
 import { vars } from '../../theme.css.js';
-import { createVar } from '@vanilla-extract/css';
+import { createVar, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 
 const bgVar = createVar('button-bg');
@@ -217,4 +217,10 @@ export const root = recipe({
 		color: 'default',
 		size: 'default',
 	},
+});
+
+export const spinner = style({
+	display: 'inline-block',
+	width: '1em',
+	height: '1em',
 });

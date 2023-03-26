@@ -2,6 +2,7 @@ import { Button, Dialog, DialogContent } from '@aglio/ui';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import * as classes from './UpdatePrompt.css.js';
 import { StarIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
 
 export interface UpdatePromptProps {}
 
@@ -25,6 +26,7 @@ export function UpdatePrompt({}: UpdatePromptProps) {
 			console.error('Service worker registration error', error);
 		},
 	});
+	const [loading, setLoading] = useState(false);
 
 	return (
 		<Dialog modal={false} open={needRefresh || TEST}>
@@ -35,9 +37,15 @@ export function UpdatePrompt({}: UpdatePromptProps) {
 						&nbsp;App update available!
 					</div>
 					<Button
+						loading={loading}
 						color="primary"
-						onClick={() => {
-							updateServiceWorker(true);
+						onClick={async () => {
+							try {
+								setLoading(true);
+								await updateServiceWorker(true);
+							} finally {
+								setLoading(false);
+							}
 						}}
 					>
 						Get the latest
