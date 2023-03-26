@@ -29,9 +29,6 @@ import {
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
-import { PantryPage } from './PantryPage.jsx';
-import RecipesPage from './recipe/RecipesPage.jsx';
-import { VerifyPasswordResetPage } from './VerifyPasswordReset.jsx';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -67,6 +64,9 @@ const TermsAndConditionsPage = lazy(() => import('./TermsAndConditions.jsx'));
 const TempAccessGroceriesPage = lazy(
 	() => import('./groceries/TempAccessGroceriesPage.jsx'),
 );
+const PantryPage = lazy(() => import('./PantryPage.jsx'));
+const RecipesPage = lazy(() => import('./recipe/RecipesPage.jsx'));
+const VerifyPasswordResetPage = lazy(() => import('./VerifyPasswordReset.jsx'));
 
 const router = createBrowserRouter([
 	{

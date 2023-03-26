@@ -64,3 +64,5 @@ export function VerifyPasswordResetPage({}: VerifyPasswordResetProps) {
 		</PageRoot>
 	);
 }
+
+export default VerifyPasswordResetPage;

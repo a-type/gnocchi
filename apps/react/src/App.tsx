@@ -7,15 +7,14 @@ import * as classes from './App.css.js';
 
 import {
 	Box,
-	Button,
 	ErrorBoundary,
 	H1,
 	P,
 	TooltipProvider,
 	useVisualViewportOffset,
+	lemonTheme,
 } from '@aglio/ui';
 
-import { lemonTheme } from '@aglio/ui';
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';

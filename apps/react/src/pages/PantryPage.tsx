@@ -25,3 +25,5 @@ export function PantryPage({}: PantryPageProps) {
 		</PageRoot>
 	);
 }
+
+export default PantryPage;
