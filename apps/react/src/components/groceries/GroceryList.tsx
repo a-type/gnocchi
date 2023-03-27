@@ -49,6 +49,7 @@ import { SubscribeButton } from '../sync/SubscribeButton.jsx';
 import { PromoteSubscriptionButton } from '../promotional/PromoteSubscriptionButton.jsx';
 import { GrocerySuggestions } from './suggestions/GrocerySuggestions.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
+import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 
 export interface GroceryListProps {
 	className?: string;
@@ -78,6 +79,13 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 				sensors={sensors}
 				modifiers={[snapCenterToCursor]}
 			>
+				<OnboardingBanner onboarding={firstTimeOnboarding} step="welcome">
+					<H3>Welcome to Gnocchi!</H3>
+					<P>
+						This is your grocery list. Add items by typing in the box above.
+					</P>
+					<P>Give it a shot! What do you want to be eating soon?</P>
+				</OnboardingBanner>
 				<OnboardingBanner onboarding={saveHubRecipeOnboarding} step="subscribe">
 					<H3>Upgrade for sync and more</H3>
 					<P>Sync between devices and other members of your household,</P>

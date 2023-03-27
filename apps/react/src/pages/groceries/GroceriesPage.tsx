@@ -9,6 +9,8 @@ import { SignupSuccessBanner } from '@/components/sync/SignupSuccessBanner.js';
 import { SubscriptionExpiredDialog } from '@/components/sync/SubscriptionExpiredDialog.js';
 import { RecipePresenceNotification } from '@/components/sync/collaborationMenu/RecipePresenceNotification.jsx';
 import { ListContext } from '@/contexts/ListContext.jsx';
+import { useNeverSeenBefore } from '@/hooks/useNeverSeenBefore.js';
+import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import {
 	AddBar,
 	List,
@@ -38,6 +40,9 @@ export function GroceriesPage() {
 	);
 	const { listId: listIdParam } = useParams();
 	const listId = listIdParam === 'null' ? null : listIdParam;
+
+	const start = firstTimeOnboarding.useBegin();
+	useNeverSeenBefore(start);
 
 	return (
 		<ListContext.Provider value={listId}>

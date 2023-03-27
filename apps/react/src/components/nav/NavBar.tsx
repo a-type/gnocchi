@@ -12,6 +12,7 @@ import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
 import { useHasNewExpirations } from '../pantry/hooks.js';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
+import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 
 export interface NavBarProps {}
 
@@ -58,13 +59,7 @@ export function NavBar({}: NavBarProps) {
 				<GroceriesNavBarLink active={matchGroceries} />
 				<PantryNavBarLink active={matchPurchased} />
 				<RecipesNavBarLink active={matchRecipes} />
-				<NavBarLink
-					to="/settings"
-					icon={<HamburgerMenuIcon />}
-					active={matchSettings}
-				>
-					Settings
-				</NavBarLink>
+				<SettingsNavBarLink active={matchSettings} />
 			</Suspense>
 		</PageNav>
 	);
@@ -123,14 +118,22 @@ function RecipesNavBarLink({ active }: { active: boolean }) {
 	}, []);
 
 	return (
-		<NavBarLink
-			to="/recipes"
-			icon={<Icon name="book" className={classes.icon} />}
-			active={active}
-			onHover={preload}
+		<OnboardingTooltip
+			content={
+				<div>Add your favorite recipes to always have them on hand.</div>
+			}
+			onboarding={firstTimeOnboarding}
+			step="recipes"
 		>
-			Recipes
-		</NavBarLink>
+			<NavBarLink
+				to="/recipes"
+				icon={<Icon name="book" className={classes.icon} />}
+				active={active}
+				onHover={preload}
+			>
+				Recipes
+			</NavBarLink>
+		</OnboardingTooltip>
 	);
 }
 
@@ -141,16 +144,22 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 	const [newExpiredTime, onSeen] = useHasNewExpirations();
 
 	return (
-		<NavBarLink
-			to="/purchased"
-			icon={<Icon name="fridge" className={classes.icon} />}
-			animate={recent}
-			active={active}
-			onClick={onSeen}
+		<OnboardingTooltip
+			content={<div>When you purchase items, they'll show up here.</div>}
+			onboarding={firstTimeOnboarding}
+			step="pantry"
 		>
-			<span>Purchased</span>
-			{newExpiredTime && <div className={classes.pip} />}
-		</NavBarLink>
+			<NavBarLink
+				to="/purchased"
+				icon={<Icon name="fridge" className={classes.icon} />}
+				animate={recent}
+				active={active}
+				onClick={onSeen}
+			>
+				<span>Purchased</span>
+				{newExpiredTime && <div className={classes.pip} />}
+			</NavBarLink>
+		</OnboardingTooltip>
 	);
 }
 
@@ -170,6 +179,22 @@ function GroceriesNavBarLink({ active }: { active: boolean }) {
 				animate={addedRecipe}
 			>
 				Groceries
+			</NavBarLink>
+		</OnboardingTooltip>
+	);
+}
+
+function SettingsNavBarLink({ active }: { active: boolean }) {
+	return (
+		<OnboardingTooltip
+			content={
+				<div>Tap here to manage categories and upgrade your experience</div>
+			}
+			onboarding={firstTimeOnboarding}
+			step="settings"
+		>
+			<NavBarLink to="/settings" icon={<HamburgerMenuIcon />} active={active}>
+				Settings
 			</NavBarLink>
 		</OnboardingTooltip>
 	);

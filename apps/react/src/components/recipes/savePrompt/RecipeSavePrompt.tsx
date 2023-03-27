@@ -17,6 +17,7 @@ import { HUB_HOST_HTTP } from '@/config.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
+import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 
 export interface RecipeSavePromptProps {}
 
@@ -51,11 +52,14 @@ export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 
 	const beginOnboarding = saveHubRecipeOnboarding.useBegin();
 	const cancelOnboarding = saveHubRecipeOnboarding.useCancel();
+	const cancelFirstTimeOnboarding = firstTimeOnboarding.useCancel();
 	useEffect(() => {
 		if (isGnocchi && !hasScannedBefore) {
 			beginOnboarding();
+			// abort first-time onboarding; superseded by this flow.
+			cancelFirstTimeOnboarding();
 		}
-	}, [isGnocchi, hasScannedBefore, beginOnboarding]);
+	}, [isGnocchi, hasScannedBefore, beginOnboarding, cancelFirstTimeOnboarding]);
 
 	const save = async () => {
 		const recipe = await addRecipeFromUrl(url);
