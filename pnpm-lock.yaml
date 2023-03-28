@@ -455,10 +455,12 @@ importers:
       '@aglio/tools': workspace:*
       cheerio: ^1.0.0-rc.12
       iso8601-duration: ^2.1.1
+      robots-parser: ^3.0.1
     dependencies:
       '@aglio/tools': link:../tools
       cheerio: 1.0.0-rc.12
       iso8601-duration: 2.1.1
+      robots-parser: 3.0.1
 
   packages/tools:
     specifiers:
@@ -10956,6 +10958,11 @@ packages:
     hasBin: true
     dependencies:
       glob: 7.2.3
+    dev: false
+
+  /robots-parser/3.0.1:
+    resolution: {integrity: sha512-s+pyvQeIKIZ0dx5iJiQk1tPLJAWln39+MI5jtM8wnyws+G5azk+dMnMX0qfbqNetKKNgcWWOdi0sfm+FbQbgdQ==}
+    engines: {node: '>=10.0.0'}
     dev: false
 
   /rollup-plugin-terser/7.0.2_rollup@2.78.1:
