@@ -56,6 +56,7 @@ export const itemActions = style({
 	alignItems: 'center',
 	width: '100%',
 	gap: vars.space[2],
+	flexWrap: 'wrap',
 });
 
 export const itemFoodInfo = style({

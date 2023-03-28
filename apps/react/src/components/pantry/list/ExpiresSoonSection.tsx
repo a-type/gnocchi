@@ -77,7 +77,7 @@ function ExpiresSoonItem({ item }: { item: Item }) {
 				</Button>
 				<Button size="small" color="default" onClick={repurchaseItem}>
 					<PlusIcon />
-					<span>Repurchase</span>
+					<span>Add to list</span>
 				</Button>
 				<Button size="small" color="ghost" onClick={snooze}>
 					<ClockIcon />
