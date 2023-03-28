@@ -13,6 +13,7 @@ import { useHasNewExpirations } from '../pantry/hooks.js';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
+import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
 
 export interface NavBarProps {}
 
@@ -61,6 +62,7 @@ export function NavBar({}: NavBarProps) {
 				<RecipesNavBarLink active={matchRecipes} />
 				<SettingsNavBarLink active={matchSettings} />
 			</Suspense>
+			<ProductHunt className={classes.productHunt} />
 		</PageNav>
 	);
 }

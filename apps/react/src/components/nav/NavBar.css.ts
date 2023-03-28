@@ -174,3 +174,14 @@ export const pip = style({
 	backgroundColor: vars.colors.attention,
 	boxShadow: vars.shadows.sm,
 });
+
+export const productHunt = style({
+	display: 'none',
+
+	'@media': {
+		[mediaQueries.md]: {
+			display: 'block',
+			width: 160,
+		},
+	},
+});

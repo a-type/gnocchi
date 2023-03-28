@@ -19,6 +19,7 @@ import { APP_NAME, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
 import { useOnVisible } from '@/hooks/useOnVisible.js';
 import { useSearchParams } from 'react-router-dom';
+import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
 
 // dynamically import Scene
 const Scene = lazy(() => import('@/components/3d/Scene.jsx'));
@@ -53,6 +54,8 @@ export function SplashPage() {
 			<Content className={classes.mainContent}>
 				<div className={classes.demoGrid}>
 					<div className={classes.titleWrap}>
+						<ProductHunt className={classes.productHunt} />
+
 						<h2 className={classes.appName}>{APP_NAME}</h2>
 						<Title>Your weekly cooking, in one place.</Title>
 					</div>

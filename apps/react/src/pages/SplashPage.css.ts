@@ -229,3 +229,18 @@ export const endContent = style([
 		backgroundColor: vars.colors.primaryLight,
 	},
 ]);
+
+export const productHunt = style({
+	marginBottom: vars.space[8],
+	width: 250,
+	display: 'block',
+
+	'@media': {
+		[mediaQueries.md]: {
+			position: 'fixed',
+			top: vars.space[4],
+			right: vars.space[4],
+			zIndex: 1000000,
+		},
+	},
+});
