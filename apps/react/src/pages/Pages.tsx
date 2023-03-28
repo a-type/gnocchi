@@ -29,6 +29,7 @@ import {
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
+import { GlobalLoader } from '@/GlobalLoader.jsx';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -254,7 +255,7 @@ function PageLayoutRoot() {
 				fallback={
 					<PageRoot>
 						<PageContent>
-							<FullScreenSpinner />
+							<GlobalLoader />
 						</PageContent>
 					</PageRoot>
 				}

@@ -19,6 +19,7 @@ import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';
 import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
+import { GlobalLoader } from '@/GlobalLoader.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -36,7 +37,7 @@ export function App() {
 		<div className={clsx(classes.wrapper, lemonTheme)}>
 			<ErrorBoundary fallback={<ErrorFallback />}>
 				<TooltipProvider>
-					<Suspense fallback={<GlobalSuspended />}>
+					<Suspense fallback={<GlobalLoader />}>
 						<trpc.Provider client={trpcClient} queryClient={queryClient}>
 							<QueryClientProvider client={queryClient}>
 								<GroceriesProvider>
@@ -66,13 +67,5 @@ function ErrorFallback() {
 				<ReloadButton />
 			</Box>
 		</Box>
-	);
-}
-
-function GlobalSuspended() {
-	return (
-		<div className={classes.fullSize}>
-			<img src="/icon.png" className={classes.loaderIcon} />
-		</div>
 	);
 }

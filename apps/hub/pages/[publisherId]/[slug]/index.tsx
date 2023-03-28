@@ -122,7 +122,9 @@ export default function RecipePage({
 							<a
 								href={`${
 									process.env.NEXT_APP_GROCERIES_HOST
-								}?recipeUrl=${encodeURIComponent(url)}&hub=true`}
+								}?recipeUrl=${encodeURIComponent(
+									url,
+								)}&hub=true&skipWelcome=true`}
 							>
 								<Button
 									color="primary"

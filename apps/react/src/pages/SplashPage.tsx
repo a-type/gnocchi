@@ -18,6 +18,7 @@ import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 import { APP_NAME, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
 import { useOnVisible } from '@/hooks/useOnVisible.js';
+import { useSearchParams } from 'react-router-dom';
 
 // dynamically import Scene
 const Scene = lazy(() => import('@/components/3d/Scene.jsx'));
@@ -33,6 +34,14 @@ export function SplashPage() {
 	useOnVisible(upgradeSectionRef, setStaticSectionAccent, {
 		threshold: 0.05,
 	});
+
+	const [params] = useSearchParams();
+	const jumpToUpgrade = params.get('upgrade') === 'true';
+	useEffect(() => {
+		if (jumpToUpgrade && upgradeSectionRef.current) {
+			window.scrollTo(0, upgradeSectionRef.current.offsetTop);
+		}
+	}, [jumpToUpgrade]);
 
 	return (
 		<div className={classes.root}>
@@ -242,20 +251,23 @@ export function SplashPage() {
 
 export default SplashPage;
 
-function Section({
-	color = 'default',
-	className,
-	...rest
-}: {
-	color?: 'white' | 'default';
-	className?: string;
-	children: ReactNode;
-	style?: CSSProperties;
-}) {
+const Section = forwardRef<
+	HTMLDivElement,
+	{
+		color?: 'white' | 'default';
+		className?: string;
+		children: ReactNode;
+		style?: CSSProperties;
+	}
+>(function Section({ color = 'default', className, ...rest }, ref) {
 	return (
-		<section className={clsx(classes.section[color], className)} {...rest} />
+		<section
+			ref={ref}
+			className={clsx(classes.section[color], className)}
+			{...rest}
+		/>
 	);
-}
+});
 
 function Title({ children }: { children: string }) {
 	return <h1 className={classes.title}>{children}</h1>;

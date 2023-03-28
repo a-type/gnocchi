@@ -20,8 +20,8 @@ import {
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
 import { Box, PageContent } from '@aglio/ui';
-import { useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -42,7 +42,16 @@ export function GroceriesPage() {
 	const listId = listIdParam === 'null' ? null : listIdParam;
 
 	const start = firstTimeOnboarding.useBegin();
-	useNeverSeenBefore(start);
+	const neverSeenBefore = useNeverSeenBefore(start);
+
+	const [search] = useSearchParams();
+	const skipWelcome = search.get('skipWelcome') === 'true';
+
+	useEffect(() => {
+		if (!skipWelcome && neverSeenBefore) {
+			navigate('/welcome');
+		}
+	}, [neverSeenBefore, navigate, skipWelcome]);
 
 	return (
 		<ListContext.Provider value={listId}>

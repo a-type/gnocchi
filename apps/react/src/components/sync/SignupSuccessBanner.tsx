@@ -30,7 +30,7 @@ export function SignupSuccessBanner({}: SignupSuccessBannerProps) {
 						target="_blank"
 						rel="noopener noreferrer"
 						className={sprinkles({ fontWeight: 'bold' })}
-						to="/subscriber-features"
+						to="/welcome?upgrade=true"
 					>
 						Click here
 					</Link>{' '}

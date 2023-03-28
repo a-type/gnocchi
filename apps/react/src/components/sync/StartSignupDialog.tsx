@@ -3,7 +3,7 @@ import {
 	PRICE_MONTHLY_DOLLARS,
 	PRICE_YEARLY_DOLLARS,
 } from '@/config.js';
-import { sprinkles } from '@aglio/ui';
+import { DialogActions, sprinkles } from '@aglio/ui';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { proxy, useSnapshot } from 'valtio';
 import {
@@ -19,6 +19,9 @@ import {
 	DialogTrigger,
 } from '@aglio/ui';
 import { LoginButton } from './LoginButton.js';
+import classNames from 'classnames';
+import * as classes from './StartSignupDialog.css.js';
+import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 
 export interface StartSignupDialogProps {}
 
@@ -38,7 +41,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 				}
 			}}
 		>
-			<DialogContent width="md">
+			<DialogContent width="lg">
 				<Box flexDirection="row" align="flex-start" gap={2}>
 					<DialogTitle className={sprinkles({ flex: 1 })}>
 						Upgrade for sync &amp; more
@@ -50,38 +53,47 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 					</DialogClose>
 				</Box>
 				<P>Make {APP_NAME} your household's new grocery list.</P>
-				<H2>Sync with family or friends so everyone's on the same page</H2>
-				<P>Everyone you invite can add items to the list.</P>
-				<H2>Team up at the store with live collaboration</H2>
-				<P>
-					New items show up on everyone's phone as they're added to the list.
-					See who bought what as you go.
-				</P>
-				<H2>Add recipes from the web</H2>
-				<P>
-					Unlock the recipe scanner &mdash; just paste a URL and we'll add the
-					ingredients for you.
-				</P>
-				{/* <H2>Coordinate with folks at home</H2>
-				<P>
-					Has the milk gone bad? Ask a question right in the app, and a friend
-					or partner will get a push notification to check the fridge for you
-					while you're at the store.
-				</P> */}
+				<div className={classes.grid}>
+					<div>
+						<H2>Sync with family or friends so everyone's on the same page</H2>
+						<P>Everyone you invite can add items to the list.</P>
+						<H2>Team up at the store with live collaboration</H2>
+						<P>
+							New items show up on everyone's phone as they're added to the
+							list. See who bought what as you go, and claim aisles to shop
+							together efficiently.
+						</P>
+					</div>
+					<DemoFrame demo="multiplayer-groceries" />
+					<div>
+						<H2>More recipe tools</H2>
+						<P>
+							Unlock the recipe scanner &mdash; just paste a URL and Gnocchi
+							will create a copy of the recipe for you.
+						</P>
+						<P>
+							Collaborate on cooking in real-time, assign steps to each cook,
+							and stay on the same page.
+						</P>
+					</div>
+					<DemoFrame demo="multiplayer-cooking" />
+				</div>
 
-				<Box gap={2} align="center" m="auto" mt={8}>
-					<LoginButton
-						color="primary"
-						returnTo="/"
-						onClick={() => (signupDialogState.status = 'closed')}
-					>
-						Start your subscription
-					</LoginButton>
-					<Span size="xs">
-						${PRICE_MONTHLY_DOLLARS} / month (${PRICE_YEARLY_DOLLARS} / year).
-						14 days free. Unlimited devices and collaborators.
-					</Span>
-				</Box>
+				<DialogActions>
+					<Box gap={2} align="center" m="auto" mt={1}>
+						<LoginButton
+							color="primary"
+							returnTo="/"
+							onClick={() => (signupDialogState.status = 'closed')}
+						>
+							Start your subscription
+						</LoginButton>
+						<Span size="xs">
+							${PRICE_MONTHLY_DOLLARS} / month (${PRICE_YEARLY_DOLLARS} / year).
+							14 days free. Unlimited devices and collaborators.
+						</Span>
+					</Box>
+				</DialogActions>
 			</DialogContent>
 		</Dialog>
 	);

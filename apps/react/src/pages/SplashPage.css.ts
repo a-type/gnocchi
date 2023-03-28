@@ -103,7 +103,11 @@ export const backgroundSceneContainer = style({
 });
 
 export const titleWrap = style({
-	gridColumnEnd: 'span 2',
+	'@media': {
+		[mediaQueries.md]: {
+			gridColumnEnd: 'span 2',
+		},
+	},
 });
 
 export const appName = style({
@@ -212,7 +216,11 @@ export const upgradeCta = style({
 	justifyContent: 'center',
 	gap: vars.space[4],
 	width: '100%',
-	gridColumnEnd: 'span 2',
+	'@media': {
+		[mediaQueries.md]: {
+			gridColumnEnd: 'span 2',
+		},
+	},
 });
 
 export const endContent = style([
