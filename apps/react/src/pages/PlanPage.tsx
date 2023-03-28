@@ -179,8 +179,8 @@ function OnlineContents() {
 			<Divider />
 			<H2>Troubleshoot</H2>
 			<BugButton />
-			<ResetToServer />
 			<ReloadButton />
+			<ResetToServer />
 			<Divider />
 			<LogoutButton>Sign out</LogoutButton>
 		</MainContainer>

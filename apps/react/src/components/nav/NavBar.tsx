@@ -1,7 +1,7 @@
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { PageNav } from '@aglio/ui';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { HamburgerMenuIcon, PersonIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
 import { Link, useMatch } from 'react-router-dom';
@@ -193,7 +193,7 @@ function SettingsNavBarLink({ active }: { active: boolean }) {
 			onboarding={firstTimeOnboarding}
 			step="settings"
 		>
-			<NavBarLink to="/settings" icon={<HamburgerMenuIcon />} active={active}>
+			<NavBarLink to="/settings" icon={<PersonIcon />} active={active}>
 				Settings
 			</NavBarLink>
 		</OnboardingTooltip>
