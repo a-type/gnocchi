@@ -1,3 +1,4 @@
+import { calc } from '@vanilla-extract/css-utils';
 import { vars } from '../../theme.css.js';
 import { style } from '@vanilla-extract/css';
 
@@ -41,6 +42,10 @@ export const content = style({
 	zIndex: vars.zIndices.menu,
 	boxShadow:
 		'0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2)',
+});
+
+export const contentInDialog = style({
+	zIndex: calc(vars.zIndices.dialog).add(1).toString(),
 });
 
 export const viewport = style({

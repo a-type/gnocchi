@@ -79,12 +79,16 @@ export const SelectIcon = forwardRef<
 
 export const SelectContent = forwardRef<
 	HTMLDivElement,
-	SelectPrimitive.SelectContentProps
->(({ children, className, ...props }, forwardedRef) => {
+	SelectPrimitive.SelectContentProps & { inDialog?: boolean }
+>(({ children, inDialog, className, ...props }, forwardedRef) => {
 	return (
 		<SelectPrimitive.Portal>
 			<SelectPrimitive.Content
-				className={clsx(classes.content, className)}
+				className={clsx(
+					classes.content,
+					inDialog && classes.contentInDialog,
+					className,
+				)}
 				{...props}
 				ref={forwardedRef}
 			>

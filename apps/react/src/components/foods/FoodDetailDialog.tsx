@@ -20,6 +20,7 @@ import { CategoryPicker } from '../groceries/items/CategoryPicker.jsx';
 import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
 import * as classes from './FoodDetailDialog.css.js';
 import { Icon } from '../icons/Icon.jsx';
+import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 
 export interface FoodDetailDialogProps {
 	foodName: string;
@@ -87,6 +88,15 @@ function FoodDetailView({
 					value={food.get('categoryId')}
 					onChange={(val) => food.set('categoryId', val)}
 					contentClassName={classes.categoryContent}
+				/>
+			</Box>
+			<Box gap={1} direction="row" alignItems="center">
+				<span>Default list:</span>
+				<ListSelect
+					value={food.get('defaultListId')}
+					onChange={(val) => food.set('defaultListId', val)}
+					includeAll={false}
+					inDialog
 				/>
 			</Box>
 			<Box gap={1} direction="column">

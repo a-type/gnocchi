@@ -70,8 +70,6 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 								{
 									canonicalName: remoteLookup.canonicalName,
 									categoryId,
-									isPerishable: remoteLookup.isPerishable,
-									isStaple: !!remoteLookup.isStaple,
 									alternateNames: remoteLookup.alternateNames,
 								},
 								{ undoable: false },
@@ -379,7 +377,7 @@ export async function addItems(
 				}).resolved;
 				let categoryId: string | null = lookup?.get('categoryId') ?? null;
 
-				if (categoryId) {
+				if (lookup) {
 					client.batch({ undoable: false }).run(() => {
 						lookup.set('lastAddedAt', Date.now());
 					});
@@ -396,7 +394,7 @@ export async function addItems(
 				let item: Item;
 
 				const baseItemData = {
-					listId: listId || null,
+					listId: listId || lookup?.get('defaultListId') || null,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
 					unit: parsed.unit || '',
@@ -426,16 +424,21 @@ export async function addItems(
 					// in parallel, attempt to get the food data
 
 					async function lookupFoodFromApi() {
-						const remoteLookup = await trpcClient.food.data.query(parsed.food);
+						let remoteLookup: Awaited<
+							ReturnType<typeof trpcClient.food.data.query>
+						> = null;
+						try {
+							remoteLookup = await trpcClient.food.data.query(parsed.food);
+						} catch (err) {
+							console.error('Failed to lookup food', err);
+						}
 						if (remoteLookup) {
 							await client.foods.put({
 								canonicalName: remoteLookup.canonicalName,
 								categoryId: remoteLookup.categoryId,
-								isPerishable: remoteLookup.isPerishable,
-								isStaple: !!remoteLookup.isStaple,
 								alternateNames: remoteLookup.alternateNames,
 								lastAddedAt: Date.now(),
-								purchaseCount: 1,
+								defaultListId: baseItemData.listId,
 							});
 							// verify the category exists locally
 							const category = remoteLookup.categoryId
@@ -447,11 +450,20 @@ export async function addItems(
 								// user-initiated.
 								if (item) {
 									client.batch({ undoable: false }).run(() => {
-										item.set('categoryId', remoteLookup.categoryId);
+										item.set('categoryId', remoteLookup?.categoryId);
 									});
 								}
 								categoryId = remoteLookup.categoryId;
 							}
+						} else if (!lookup) {
+							await client.foods.put({
+								canonicalName: parsed.food,
+								categoryId: null,
+								alternateNames: [],
+								lastAddedAt: Date.now(),
+								purchaseCount: 1,
+								defaultListId: baseItemData.listId,
+							});
 						}
 					}
 

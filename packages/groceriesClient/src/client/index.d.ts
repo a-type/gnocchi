@@ -541,37 +541,34 @@ export type FoodDestructured = {
   canonicalName: string;
   alternateNames: FoodAlternateNames;
   categoryId: string | null;
-  isPerishable: boolean | null;
-  isStaple: boolean;
   expiresAfterDays: number | null;
   lastPurchasedAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
   purchaseCount: number;
+  defaultListId: string | null;
 };
 export type FoodInit = {
   canonicalName: string;
   alternateNames?: FoodAlternateNamesInit;
   categoryId?: string | null;
-  isPerishable?: boolean | null;
-  isStaple: boolean;
   expiresAfterDays?: number | null;
   lastPurchasedAt?: number | null;
   purchaseIntervalGuess?: number | null;
   lastAddedAt?: number | null;
   purchaseCount?: number;
+  defaultListId?: string | null;
 };
 export type FoodSnapshot = {
   canonicalName: string;
   alternateNames: FoodAlternateNamesSnapshot;
   categoryId: string | null;
-  isPerishable: boolean | null;
-  isStaple: boolean;
   expiresAfterDays: number | null;
   lastPurchasedAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
   purchaseCount: number;
+  defaultListId: string | null;
 };
 /** Food sub-object types */
 
@@ -594,14 +591,6 @@ export type FoodCategoryId = string | null;
 export type FoodCategoryIdInit = FoodCategoryId | undefined;
 export type FoodCategoryIdSnapshot = FoodCategoryId;
 export type FoodCategoryIdDestructured = FoodCategoryId;
-export type FoodIsPerishable = boolean | null;
-export type FoodIsPerishableInit = FoodIsPerishable | undefined;
-export type FoodIsPerishableSnapshot = FoodIsPerishable;
-export type FoodIsPerishableDestructured = FoodIsPerishable;
-export type FoodIsStaple = boolean;
-export type FoodIsStapleInit = FoodIsStaple;
-export type FoodIsStapleSnapshot = FoodIsStaple;
-export type FoodIsStapleDestructured = FoodIsStaple;
 export type FoodExpiresAfterDays = number | null;
 export type FoodExpiresAfterDaysInit = FoodExpiresAfterDays | undefined;
 export type FoodExpiresAfterDaysSnapshot = FoodExpiresAfterDays;
@@ -624,6 +613,10 @@ export type FoodPurchaseCount = number;
 export type FoodPurchaseCountInit = FoodPurchaseCount | undefined;
 export type FoodPurchaseCountSnapshot = FoodPurchaseCount;
 export type FoodPurchaseCountDestructured = FoodPurchaseCount;
+export type FoodDefaultListId = string | null;
+export type FoodDefaultListIdInit = FoodDefaultListId | undefined;
+export type FoodDefaultListIdSnapshot = FoodDefaultListId;
+export type FoodDefaultListIdDestructured = FoodDefaultListId;
 
 export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
 

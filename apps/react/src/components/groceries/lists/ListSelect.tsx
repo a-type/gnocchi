@@ -27,9 +27,15 @@ export interface ListSelectProps {
 	includeAll?: boolean;
 	value: string | null | undefined;
 	onChange: (value: string | null | undefined) => void;
+	inDialog?: boolean;
 }
 
-export function ListSelect({ value, onChange, includeAll }: ListSelectProps) {
+export function ListSelect({
+	value,
+	onChange,
+	includeAll,
+	inDialog,
+}: ListSelectProps) {
 	const lists = hooks.useAllLists();
 	const [isCreating, setIsCreating] = useState(false);
 	const client = hooks.useClient();
@@ -50,7 +56,7 @@ export function ListSelect({ value, onChange, includeAll }: ListSelectProps) {
 					<SelectValue />
 					<SelectIcon />
 				</SelectTrigger>
-				<SelectContent>
+				<SelectContent inDialog={inDialog}>
 					{includeAll && <SelectItem value="undefined">All lists</SelectItem>}
 					<SelectItem value={'null'}>
 						<Box direction="row" gap={2} align="center">

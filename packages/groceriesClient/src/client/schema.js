@@ -61,14 +61,6 @@ const foods = collection({
             indexed: true,
             nullable: true
         },
-        isPerishable: {
-            type: 'boolean',
-            // null means unknown
-            nullable: true
-        },
-        isStaple: {
-            type: 'boolean'
-        },
         expiresAfterDays: {
             type: 'number',
             nullable: true
@@ -88,12 +80,19 @@ const foods = collection({
         purchaseCount: {
             type: 'number',
             default: 0
+        },
+        defaultListId: {
+            type: 'string',
+            nullable: true
         }
     },
     synthetics: {
         nameLookup: {
             type: 'string[]',
-            compute: (food)=>food.alternateNames
+            compute: (food)=>[
+                    food.canonicalName,
+                    ...food.alternateNames
+                ]
         },
         repurchaseAfter: {
             type: 'number',
@@ -471,7 +470,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 27,
+    version: 28,
     collections: {
         categories,
         items,
