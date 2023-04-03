@@ -6,6 +6,7 @@ import * as classes from './RecipeInstructionsField.css.js';
 import { Box } from '@aglio/ui/components/box';
 import { P } from '@aglio/ui/components/typography';
 import { Button } from '@aglio/ui/components/button';
+import { RichEditor } from '@aglio/ui/components/richEditor';
 
 export interface RecipeInstructionsFieldProps {
 	recipe: Recipe;

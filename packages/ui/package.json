@@ -7,7 +7,8 @@
 	"exports": {
 		"./components/*": "./src/components/*.ts",
 		"./styles": "./src/styles.ts",
-		"./hooks": "./src/hooks.ts"
+		"./hooks": "./src/hooks.ts",
+		"./src/*": "./src/*.ts"
 	},
 	"scripts": {},
 	"dependencies": {

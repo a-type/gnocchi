@@ -18,6 +18,7 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
 import { Checkbox } from '@aglio/ui/components/checkbox';
+import { sprinkles } from '@aglio/ui/styles';
 
 export interface AddToListButtonProps extends ButtonProps {
 	recipe: Recipe;
