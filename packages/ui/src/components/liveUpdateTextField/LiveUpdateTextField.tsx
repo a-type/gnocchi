@@ -11,8 +11,8 @@ import {
 	useState,
 } from 'react';
 import { debounce } from '@a-type/utils';
-import { Input, InputProps } from './input/Input.jsx';
-import { TextArea } from './textArea/TextArea.jsx';
+import { Input, InputProps } from '../input/Input.js';
+import { TextArea } from '../textArea/TextArea.js';
 
 export type LiveUpdateTextFieldProps = {
 	value: string;

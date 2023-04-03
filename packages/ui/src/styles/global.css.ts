@@ -3,7 +3,7 @@ import {
 	globalFontFace,
 	globalStyle,
 } from '@vanilla-extract/css';
-import { vars } from './styles/themes/contract.css.js';
+import { vars } from './themes/contract.css.js';
 
 globalStyle('html, body', {
 	margin: 0,

@@ -5,7 +5,7 @@ import {
 	forwardRef,
 } from 'react';
 import { clsx } from 'clsx';
-import * as resetStyles from '../../reset.css.js';
+import * as resetStyles from '../../styles/reset.css.js';
 import { sprinkles, Sprinkles } from '../../styles/sprinkles.css.js';
 
 export interface BoxProps

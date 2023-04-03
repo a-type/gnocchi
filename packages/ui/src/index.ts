@@ -1,11 +1,11 @@
-import './global.css.js';
-import './reset.css.js';
+import './styles/global.css.js';
+import './styles/reset.css.js';
 
 export * from './components/index.js';
 export * from './styles/sprinkles.css.js';
 export * from './theme.css.js';
 export * from './styles/themes/map.js';
-export * from './reset.css.js';
+export * from './styles/reset.css.js';
 export * from './styles/themes/lemon.css.js';
 export * from './styles/themes/blueberry.css.js';
 export * from './styles/themes/eggplant.css.js';

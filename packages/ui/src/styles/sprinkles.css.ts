@@ -8,7 +8,7 @@ import {
 } from '@vanilla-extract/sprinkles';
 import { calc } from '@vanilla-extract/css-utils';
 // for specificity's sake...
-import '../reset.css.js';
+import './reset.css.js';
 
 function mapValues<In, Out>(
 	values: Record<string, In>,
