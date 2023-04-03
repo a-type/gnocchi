@@ -1,5 +1,5 @@
 import { calc } from '@vanilla-extract/css-utils';
-import { vars } from '../../theme.css.js';
+import { vars } from '../../styles/theme.css.js';
 import { style } from '@vanilla-extract/css';
 
 export const trigger = style({

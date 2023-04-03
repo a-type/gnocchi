@@ -1,4 +1,4 @@
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import {
 	ComponentProps,
 	ComponentPropsWithRef,

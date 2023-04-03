@@ -1,5 +1,5 @@
 import { mediaQueries } from '../../styles/media.js';
-import { vars } from '../../theme.css.js';
+import { vars } from '../../styles/theme.css.js';
 import { keyframes, style } from '@vanilla-extract/css';
 
 const slideUpAndFade = keyframes({

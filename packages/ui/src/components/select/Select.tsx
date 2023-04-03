@@ -9,7 +9,7 @@ import * as SelectPrimitive from '@radix-ui/react-select';
 import { forwardRef } from 'react';
 import { clsx } from 'clsx';
 import * as classes from './Select.css.js';
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 
 export const SelectItem = forwardRef<
 	HTMLDivElement,

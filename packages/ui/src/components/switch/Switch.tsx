@@ -1,4 +1,4 @@
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import { Root, SwitchProps, Thumb } from '@radix-ui/react-switch';
 import * as classes from './Switch.css.js';
 import { forwardRef } from 'react';

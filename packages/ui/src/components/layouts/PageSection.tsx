@@ -1,7 +1,7 @@
 import { HTMLAttributes } from 'react';
 import classnames from 'classnames';
 import * as classes from './PageSection.css.js';
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 
 export function PageSection({
 	className,

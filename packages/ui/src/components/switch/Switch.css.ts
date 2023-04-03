@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '../../theme.css.js';
+import { vars } from '../../styles/theme.css.js';
 
 export const root = style({
 	all: 'unset',

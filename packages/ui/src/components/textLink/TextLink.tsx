@@ -1,6 +1,6 @@
 'use client';
 
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import { Link } from 'react-router-dom';
 import * as classes from './TextLink.css.js';
 

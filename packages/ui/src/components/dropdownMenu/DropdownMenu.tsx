@@ -1,7 +1,7 @@
 'use client';
 
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import * as classes from './DropdownMenu.css.js';
 
 const StyledContent = withClassName(

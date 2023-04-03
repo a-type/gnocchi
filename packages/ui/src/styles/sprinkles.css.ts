@@ -1,4 +1,4 @@
-import { vars } from '../theme.css.js';
+import { vars } from './theme.css.js';
 import {
 	defineProperties,
 	createSprinkles,

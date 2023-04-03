@@ -3,7 +3,7 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import { ComponentPropsWithoutRef, forwardRef } from 'react';
 
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import * as classes from './Popover.css.js';
 
 const StyledContent = withClassName(PopoverPrimitive.Content, classes.content);

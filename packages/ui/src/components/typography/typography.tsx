@@ -1,4 +1,4 @@
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import { clsx } from 'clsx';
 import { forwardRef, HTMLProps } from 'react';
 import * as classes from './typography.css.js';

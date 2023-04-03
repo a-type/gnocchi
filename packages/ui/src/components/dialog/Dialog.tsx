@@ -2,7 +2,7 @@
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { ComponentPropsWithoutRef, forwardRef } from 'react';
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import * as classes from './Dialog.css.js';
 
 const StyledOverlay = withClassName(DialogPrimitive.Overlay, classes.overlay);

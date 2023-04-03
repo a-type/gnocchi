@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { mediaQueries } from '../../styles/media.js';
-import { vars } from '../../theme.css.js';
+import { vars } from '../../styles/theme.css.js';
 
 export const content = style({
 	gridArea: 'content',

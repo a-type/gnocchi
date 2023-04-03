@@ -1,4 +1,4 @@
-import { vars } from '../../theme.css.js';
+import { vars } from '../../styles/theme.css.js';
 import { globalStyle, style } from '@vanilla-extract/css';
 
 export const root = style({

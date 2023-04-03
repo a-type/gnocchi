@@ -1,6 +1,6 @@
 'use client';
 
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import * as CollapsiblePrimitive from '@radix-ui/react-collapsible';
 import * as classes from './Collapsible.css.js';
 

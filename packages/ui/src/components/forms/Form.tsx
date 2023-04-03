@@ -1,7 +1,7 @@
 'use client';
 
 import { Form as FormikForm } from 'formik';
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 import * as classes from './Form.css.js';
 import '../../styles/sprinkles.css.js';
 

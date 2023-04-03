@@ -5,7 +5,7 @@ import { ComponentProps, forwardRef } from 'react';
 import { CheckIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import * as classes from './Checkbox.css.js';
-import { withClassName } from '../../withClassName.jsx';
+import { withClassName } from '../../styles/withClassName.js';
 
 const CheckboxRoot = withClassName(CheckboxPrimitive.Root, classes.root);
 

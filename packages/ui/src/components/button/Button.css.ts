@@ -1,5 +1,5 @@
 import { sprinkles } from '../../styles/sprinkles.css.js';
-import { vars } from '../../theme.css.js';
+import { vars } from '../../styles/theme.css.js';
 import { createVar, style } from '@vanilla-extract/css';
 import { recipe } from '@vanilla-extract/recipes';
 
