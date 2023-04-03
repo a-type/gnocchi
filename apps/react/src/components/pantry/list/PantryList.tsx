@@ -3,7 +3,6 @@ import { useItemsGroupedAndSorted } from '../hooks.js';
 import * as classes from './PantryList.css.js';
 import { PantryListCategory } from './PantryListCategory.jsx';
 import { ExpiresSoonSection } from './ExpiresSoonSection.jsx';
-import { H2 } from '@aglio/ui';
 import { Suspense } from 'react';
 
 export interface PantryListProps {

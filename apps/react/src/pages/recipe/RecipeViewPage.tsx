@@ -1,9 +1,8 @@
-import { PageContent, PageRoot } from '@aglio/ui';
-import { NavBar } from '@/components/nav/NavBar.jsx';
-import { Button } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
+import { Button } from '@aglio/ui/components/button';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { sprinkles } from '@aglio/ui/styles';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 export interface RecipeViewPageProps {}
 

@@ -1,7 +1,7 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
-import { Form, SubmitButton, TextField } from '@aglio/ui';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 
 export interface EmailCompleteSignUpFormProps {
 	code: string;

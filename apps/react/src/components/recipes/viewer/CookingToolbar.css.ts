@@ -1,4 +1,4 @@
-import { vars } from '@aglio/ui';
+import { vars } from '@aglio/ui/styles';
 import { style } from '@vanilla-extract/css';
 import { calc } from '@vanilla-extract/css-utils';
 

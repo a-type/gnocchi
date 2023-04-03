@@ -1,8 +1,7 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
-import { IngredientText } from './IngredientText.jsx';
-import { Box, Note, sprinkles } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui/styles';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 import classNames from 'classnames';
 import * as classes from './RecipeIngredientsViewer.css.js';

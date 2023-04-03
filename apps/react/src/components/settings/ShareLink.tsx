@@ -1,10 +1,11 @@
-import { Box, Button, Input } from '@aglio/ui';
 import { Share1Icon } from '@radix-ui/react-icons';
 import copy from 'copy-to-clipboard';
 import { useState } from 'react';
-import classNames from 'classnames';
 import * as classes from './ShareLink.css.js';
 import { toast } from 'react-hot-toast';
+import { Box } from '@aglio/ui/components/box';
+import { Input } from '@aglio/ui/components/input';
+import { Button } from '@aglio/ui/components/button';
 
 export interface ShareLinkProps {
 	onGenerate: () => Promise<string>;

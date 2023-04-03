@@ -2,13 +2,14 @@ import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
-import { Button, H2 } from '@aglio/ui';
 import { ClockIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import { useCallback } from 'react';
 import { useExpiresSoonItems } from '../hooks.js';
 import * as classes from './ExpiresSoonSection.css.js';
+import { Button } from '@aglio/ui/components/button';
+import { H2 } from '@aglio/ui/components/typography';
 
 export interface ExpiresSoonSectionProps {
 	className?: string;

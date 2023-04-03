@@ -1,8 +1,8 @@
-import { PageContent, PageRoot } from '@aglio/ui';
-import { Box } from '@aglio/ui';
 import { trpc } from '@/trpc.js';
 import { Link, Outlet } from 'react-router-dom';
 import { NotFoundPage } from './NotFoundPage.jsx';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { Box } from '@aglio/ui/components/box';
 
 export function AdminPage() {
 	const { data: isAdmin, isLoading } = trpc.auth.isProductAdmin.useQuery();

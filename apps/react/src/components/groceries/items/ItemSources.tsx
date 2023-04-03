@@ -1,27 +1,22 @@
 import { ItemInputsItem, Item } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
 import * as classes from './ItemSources.css.js';
+import { fractionToText } from '@aglio/tools';
+import { IngredientText } from '@/components/recipes/viewer/IngredientText.jsx';
+import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
+import { Suspense } from 'react';
 import {
-	Box,
-	Button,
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-	H2,
-	H3,
-	P,
-	Span,
-	TextLink,
-	TextLocalLink,
-} from '@aglio/ui';
-import { fractionToText } from '@aglio/tools';
-import { IngredientText } from '@/components/recipes/viewer/IngredientText.jsx';
-import { Link } from 'react-router-dom';
-import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
-import { sprinkles } from '@aglio/ui';
-import { Suspense } from 'react';
+} from '@aglio/ui/components/dialog';
+import { TextLink, TextLocalLink } from '@aglio/ui/components/textLink';
+import { Button } from '@aglio/ui/components/button';
+import { Box } from '@aglio/ui/components/box';
+import { H2, H3, P } from '@aglio/ui/components/typography';
+import { sprinkles } from '@aglio/ui/styles';
 
 export interface ItemSourcesProps {
 	item: Item;

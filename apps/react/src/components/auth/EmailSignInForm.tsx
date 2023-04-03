@@ -1,17 +1,15 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
-import { sprinkles } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui/styles';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 import {
 	Dialog,
 	DialogContent,
 	DialogTrigger,
-	P,
-	Form,
-	SubmitButton,
-	TextField,
-} from '@aglio/ui';
+} from '@aglio/ui/components/dialog';
+import { P } from '@aglio/ui/components/typography';
 
 export interface EmailSignInFormProps {
 	returnTo?: string;

@@ -1,22 +1,3 @@
-import {
-	Box,
-	Dialog,
-	DialogActions,
-	DialogClose,
-	DialogContent,
-	DropdownMenu,
-	DropdownMenuCheckboxItem,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuItemIndicator,
-	DropdownMenuTrigger,
-	Form,
-	DropdownMenuItemRightSlot,
-	SubmitButton,
-	TextAreaField,
-	TextField,
-} from '@aglio/ui';
-import { Button } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
 import * as mutations from '@/stores/groceries/recipeMutations.js';
 import {
@@ -50,6 +31,29 @@ import { NoteEditor } from './NoteEditor.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { useState } from 'react';
 import classNames from 'classnames';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuItemIndicator,
+	DropdownMenuItemRightSlot,
+	DropdownMenuTrigger,
+} from '@aglio/ui/components/dropdownMenu';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+} from '@aglio/ui/components/dialog';
+import {
+	Form,
+	SubmitButton,
+	TextAreaField,
+	TextField,
+} from '@aglio/ui/components/forms';
 
 export interface RecipeIngredientsEditorProps {
 	recipe: Recipe;

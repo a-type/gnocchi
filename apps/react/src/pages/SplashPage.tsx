@@ -1,8 +1,6 @@
-import { leekTheme } from '@aglio/ui';
-import { Box, Button, H2, LinkButton, P, Span, TextLink } from '@aglio/ui';
+import { leekTheme, sprinkles } from '@aglio/ui/styles';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { clsx } from 'clsx';
-import { sprinkles } from '@aglio/ui';
 import {
 	CSSProperties,
 	forwardRef,
@@ -20,6 +18,10 @@ import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubsc
 import { useOnVisible } from '@/hooks/useOnVisible.js';
 import { useSearchParams } from 'react-router-dom';
 import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
+import { H2, P, Span } from '@aglio/ui/components/typography';
+import { Box } from '@aglio/ui/components/box';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { LinkButton } from '@aglio/ui/components/button';
 
 // dynamically import Scene
 const Scene = lazy(() => import('@/components/3d/Scene.jsx'));

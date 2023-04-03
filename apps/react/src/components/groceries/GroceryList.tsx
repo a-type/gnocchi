@@ -1,7 +1,11 @@
 import { useListId } from '@/contexts/ListContext.jsx';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
+import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
+import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { H3 } from '@aglio/ui';
 import { Item } from '@aglio/groceries-client';
+import { Box } from '@aglio/ui/components/box';
+import { H3, P } from '@aglio/ui/components/typography';
 import {
 	DndContext,
 	DragCancelEvent,
@@ -17,39 +21,25 @@ import {
 	useSensors,
 } from '@dnd-kit/core';
 import { snapCenterToCursor } from '@dnd-kit/modifiers';
-import {
-	Suspense,
-	forwardRef,
-	memo,
-	useCallback,
-	useEffect,
-	useState,
-} from 'react';
+import { Suspense, forwardRef, memo, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
-import { Cart } from '../graphics/Cart.jsx';
-import { Box } from '@aglio/ui';
-import { P } from '@aglio/ui';
+import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
+import { PromoteSubscriptionButton } from '../promotional/PromoteSubscriptionButton.jsx';
+import { GroceryEmptyContent } from './GroceryEmptyContent.jsx';
 import { GroceryListCategory } from './categories/GroceryListCategory.js';
 import {
 	DESKTOP_DRAG_ACTIVATION_DELAY,
 	MOBILE_DRAG_ACTIVATION_DELAY,
 } from './constants.js';
 import { GroceryDnDDrag, GroceryDnDDrop } from './dndTypes.js';
-import { GroceryEmptyContent } from './GroceryEmptyContent.jsx';
 import {
 	useItemsGroupedAndSorted,
 	useTransitionPurchasedItems,
 } from './hooks.js';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 import { groceriesState } from './state.js';
-import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
-import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
-import { SubscribeButton } from '../sync/SubscribeButton.jsx';
-import { PromoteSubscriptionButton } from '../promotional/PromoteSubscriptionButton.jsx';
 import { GrocerySuggestions } from './suggestions/GrocerySuggestions.jsx';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
-import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 
 export interface GroceryListProps {
 	className?: string;

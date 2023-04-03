@@ -1,5 +1,5 @@
-import { vars } from '@aglio/ui';
-import { keyframes, style } from '@vanilla-extract/css';
+import { vars } from '@aglio/ui/styles';
+import { style } from '@vanilla-extract/css';
 
 export const root = style({
 	backgroundColor: vars.colors.attention,

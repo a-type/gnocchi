@@ -1,16 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import {
-	Box,
-	Button,
-	H2,
-	Popover,
-	PopoverArrow,
-	PopoverContent,
-	PopoverTrigger,
-	themeMap,
-	ThemeName,
-} from '@aglio/ui';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
 import classnames from 'classnames';
 import { Suspense, useState } from 'react';
@@ -18,6 +7,17 @@ import { RecipeTagsList } from '../collection/RecipeTagsList.jsx';
 import { NewTagForm } from './NewTagForm.jsx';
 import * as classes from './RecipeTagsEditor.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { ThemeName } from '@aglio/ui/components/colorPicker';
+import { themeMap } from '@aglio/ui/styles';
+import {
+	Popover,
+	PopoverArrow,
+	PopoverContent,
+	PopoverTrigger,
+} from '@aglio/ui/components/popover';
+import { Button } from '@aglio/ui/components/button';
+import { Box } from '@aglio/ui/components/box';
+import { H2 } from '@aglio/ui/components/typography';
 
 export interface RecipeTagsEditorProps {
 	recipe: Recipe;

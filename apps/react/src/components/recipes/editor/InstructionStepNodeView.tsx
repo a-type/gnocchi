@@ -2,16 +2,6 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { PersonSelect } from '@/components/sync/people/PersonSelect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import {
-	Button,
-	Checkbox,
-	CollapsibleContent,
-	CollapsibleRoot,
-	Note,
-	TextArea,
-	Tooltip,
-	useToggle,
-} from '@aglio/ui';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import classnames from 'classnames';
 import {
@@ -23,6 +13,16 @@ import {
 	useMemo,
 } from 'react';
 import * as classes from './InstructionStepNodeView.css.js';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+} from '@aglio/ui/components/collapsible';
+import { TextArea } from '@aglio/ui/components/textArea';
+import { Note } from '@aglio/ui/components/note';
+import { Checkbox } from '@aglio/ui/components/checkbox';
+import { Tooltip } from '@aglio/ui/components/tooltip';
+import { Button } from '@aglio/ui/components/button';
+import { useToggle } from '@aglio/ui/hooks';
 
 export interface InstructionStepNodeViewProps {
 	node: {

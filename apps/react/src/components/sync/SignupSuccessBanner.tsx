@@ -1,18 +1,16 @@
-import { sprinkles } from '@aglio/ui';
-import { HamburgerMenuIcon } from '@radix-ui/react-icons';
-import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
 import {
 	Dialog,
+	DialogActions,
 	DialogClose,
 	DialogContent,
-	Button,
-	H1,
-	H2,
-	P,
-	DialogActions,
-} from '@aglio/ui';
+} from '@aglio/ui/components/dialog';
+import { H1, P } from '@aglio/ui/components/typography';
+import { sprinkles } from '@aglio/ui/styles';
+import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import { useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { InviteLinkButton } from './InviteLinkButton.jsx';
+import { Button } from '@aglio/ui/components/button';
 
 export interface SignupSuccessBannerProps {}
 

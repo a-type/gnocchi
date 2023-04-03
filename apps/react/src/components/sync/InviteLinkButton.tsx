@@ -1,21 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { ShareLink } from '@/components/settings/ShareLink.jsx';
+import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
+import { Box } from '@aglio/ui/components/box';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
 import {
-	Box,
-	Button,
-	ButtonProps,
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-	Input,
-	P,
-	Span,
-} from '@aglio/ui';
-import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
-import copy from 'copy-to-clipboard';
+} from '@aglio/ui/components/dialog';
+import { P, Span } from '@aglio/ui/components/typography';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { ShareLink } from '@/components/settings/ShareLink.jsx';
 
 export interface InviteLinkButtonProps extends ButtonProps {}
 

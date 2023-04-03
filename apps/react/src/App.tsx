@@ -4,22 +4,17 @@ import { clsx } from 'clsx';
 import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import * as classes from './App.css.js';
-
-import {
-	Box,
-	ErrorBoundary,
-	H1,
-	P,
-	TooltipProvider,
-	useVisualViewportOffset,
-	lemonTheme,
-} from '@aglio/ui';
-
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';
 import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
 import { GlobalLoader } from '@/GlobalLoader.jsx';
+import { lemonTheme } from '@aglio/ui/styles';
+import { useVisualViewportOffset } from '@aglio/ui/hooks';
+import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
+import { TooltipProvider } from '@aglio/ui/components/tooltip';
+import { Box } from '@aglio/ui/components/box';
+import { P, H1 } from '@aglio/ui/components/typography';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());

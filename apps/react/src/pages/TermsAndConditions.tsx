@@ -1,5 +1,6 @@
-import { PageContent, PageRoot } from '@aglio/ui';
-import { H1, H2, P, TextLink } from '@aglio/ui';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { H1, H2, P } from '@aglio/ui/components/typography';
 
 export function TermsAndConditions() {
 	return (

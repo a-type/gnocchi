@@ -13,18 +13,12 @@ import { PushSubscriptionToggle } from '@/components/sync/push/PushSubscriptionT
 import { API_HOST_HTTP, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
-import {
-	Box,
-	Button,
-	ButtonProps,
-	Divider,
-	H1,
-	H2,
-	PageContent,
-	PageRoot,
-	Span,
-	TextLink,
-} from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Divider } from '@aglio/ui/components/divider';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { H1, H2, Span } from '@aglio/ui/components/typography';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 

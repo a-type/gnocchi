@@ -1,9 +1,8 @@
+import { Box } from '@aglio/ui/components/box';
+import { P } from '@aglio/ui/components/typography';
 import { Cart } from '../graphics/Cart.jsx';
-import { Box, H3, P } from '@aglio/ui';
 import { InfrequentSubscriptionHint } from '../promotional/InfrequentSubscriptionHint.jsx';
 import { InstallHint } from '../promotional/InstallHint.jsx';
-import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
-import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 
 export function GroceryEmptyContent() {
 	return (

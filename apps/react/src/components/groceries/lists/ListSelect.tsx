@@ -1,5 +1,4 @@
-import { Form, SubmitButton, TextField } from '@aglio/ui';
-import { Dialog, DialogContent, Box, ColorSwatch, ThemeName } from '@aglio/ui';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 import {
 	Select,
 	SelectContent,
@@ -8,15 +7,17 @@ import {
 	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
-} from '@aglio/ui';
+} from '@aglio/ui/components/select';
 import { hooks } from '@/stores/groceries/index.js';
-import { sprinkles } from '@aglio/ui';
-import { themeMap } from '@aglio/ui';
+import { sprinkles, themeMap } from '@aglio/ui/styles';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import * as classes from './ListSelect.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import classNames from 'classnames';
+import { ThemeName } from '@aglio/ui/components/colorPicker';
+import { Box } from '@aglio/ui/components/box';
+import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
 
 function getRandomColor(): ThemeName {
 	const colors = Object.keys(themeMap);

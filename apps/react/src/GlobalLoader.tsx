@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import * as classes from './GlobalLoader.css.js';
 export function GlobalLoader() {
 	return (

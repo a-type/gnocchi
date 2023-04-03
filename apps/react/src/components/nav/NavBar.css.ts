@@ -1,4 +1,4 @@
-import { vars, mediaQueries } from '@aglio/ui';
+import { vars, mediaQueries } from '@aglio/ui/styles';
 import { style } from '@vanilla-extract/css';
 
 export const root = style({

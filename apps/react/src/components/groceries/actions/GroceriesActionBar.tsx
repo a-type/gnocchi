@@ -1,7 +1,7 @@
 import { People } from '@/components/sync/people/People.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { ActionBar, ActionButton } from '@aglio/ui';
+import { ActionBar, ActionButton } from '@aglio/ui/components/actions';
 import { CheckboxIcon, TrashIcon } from '@radix-ui/react-icons';
 import * as classes from './GroceriesActionBar.css.js';
 import { MeetupAction } from './MeetupAction.jsx';

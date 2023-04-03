@@ -1,16 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import {
-	Box,
-	Divider,
-	H1,
-	H2,
-	LinkButton,
-	P,
-	PageNowPlaying,
-	Peek,
-	sprinkles,
-} from '@aglio/ui';
 import { format } from 'date-fns/esm';
 import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
 import {
@@ -32,6 +21,13 @@ import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { RecipeTagsEditor } from '../editor/RecipeTagsEditor.jsx';
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
+import { Box } from '@aglio/ui/components/box';
+import { H1, H2, P } from '@aglio/ui/components/typography';
+import { sprinkles } from '@aglio/ui/styles';
+import { Divider } from '@aglio/ui/components/divider';
+import { Peek } from '@aglio/ui/components/peek';
+import { PageNowPlaying } from '@aglio/ui/components/layouts';
+import { LinkButton } from '@aglio/ui/components/button';
 
 export interface RecipeOverviewProps {
 	slug: string;

@@ -1,21 +1,19 @@
+import { Person, hooks } from '@/stores/groceries/index.js';
 import {
 	Select,
 	SelectContent,
+	SelectGroup,
 	SelectItemRoot as SelectItem,
+	SelectItemIndicator,
+	SelectItemText,
+	SelectLabel,
+	SelectProps,
 	SelectTrigger,
 	SelectValue,
-	SelectItemText,
-	SelectItemIndicator,
-	SelectLabel,
-	SelectGroup,
-	SelectProps,
-} from '@aglio/ui';
-import { hooks, Person } from '@/stores/groceries/index.js';
+} from '@aglio/ui/components/select';
 import { useCallback } from 'react';
 import { PersonAvatar } from './PersonAvatar.jsx';
-import classnames from 'classnames';
 import * as classes from './PersonSelect.css.js';
-import {} from '@radix-ui/react-select';
 
 export interface PersonSelectProps
 	extends Omit<SelectProps, 'value' | 'onChange'> {

@@ -1,12 +1,12 @@
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
-import { useIsPwa } from '@/hooks/useIsPwa.js';
 import { useIsServiceWorkerRegistered } from '@/hooks/useIsServiceWorkerRegistered.js';
 import {
 	getIsSubscribedToPush,
 	subscribeToPush,
 	unsubscribeFromPush,
 } from '@/push.js';
-import { Box, Switch } from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
+import { Switch } from '@aglio/ui/components/switch';
 import { useEffect, useState } from 'react';
 
 export interface PushSubscriptionToggleProps {}

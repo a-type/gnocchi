@@ -1,7 +1,7 @@
 import { HTMLAttributes, forwardRef } from 'react';
 import classnames from 'classnames';
 import * as classes from './Spinner.css.js';
-import { Box } from '../index.js';
+import { Box } from '../box.js';
 
 const CIRCLE_SIZE = 44;
 

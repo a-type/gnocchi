@@ -3,7 +3,10 @@ import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { updateRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Box, Button, LiveUpdateTextField, sprinkles } from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
+import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
+import { sprinkles } from '@aglio/ui/styles';
 import { useState } from 'react';
 
 export interface RecipeUrlFieldProps {

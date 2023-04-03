@@ -1,5 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@aglio/ui';
+import { themeMap } from '@aglio/ui/styles';
 import { useSyncExternalStore } from 'react';
 
 // TODO: add optional/skippable query hooks to lo-fi/react

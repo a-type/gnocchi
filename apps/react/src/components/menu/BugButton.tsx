@@ -1,5 +1,4 @@
-import React from 'react';
-import { Button, ButtonProps } from '@aglio/ui';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
 
 export interface BugButtonProps extends ButtonProps {}
 

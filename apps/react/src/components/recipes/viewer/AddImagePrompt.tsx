@@ -1,9 +1,11 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Box, ImageUploader, P, useToggle } from '@aglio/ui';
 import * as classes from './AddImagePrompt.css.js';
 import { animated, useSpring } from '@react-spring/web';
 import { useScroll } from '@use-gesture/react';
+import { useToggle } from '@aglio/ui/hooks';
+import { ImageUploader } from '@aglio/ui/components/imageUploader';
+import { P } from '@aglio/ui/components/typography';
 
 export interface AddImagePromptProps {
 	recipe: Recipe;

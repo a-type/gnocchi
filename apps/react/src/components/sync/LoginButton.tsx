@@ -1,4 +1,4 @@
-import { LinkButton, LinkButtonProps } from '@aglio/ui';
+import { LinkButton, LinkButtonProps } from '@aglio/ui/components/button';
 import { ReactNode } from 'react';
 
 export function LoginButton({

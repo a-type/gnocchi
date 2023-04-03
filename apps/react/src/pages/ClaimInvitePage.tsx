@@ -1,10 +1,11 @@
-import { PageContent, PageRoot } from '@aglio/ui';
-import { Box } from '@aglio/ui';
-import { Button, H1, P } from '@aglio/ui';
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { H1, P } from '@aglio/ui/components/typography';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function ClaimInvitePage() {

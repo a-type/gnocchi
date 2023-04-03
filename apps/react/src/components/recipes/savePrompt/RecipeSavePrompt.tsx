@@ -4,11 +4,7 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-	H2,
-	Span,
-	TextLink,
-} from '@aglio/ui';
-import { Button, P } from '@aglio/ui';
+} from '@aglio/ui/components/dialog';
 import { addRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -18,6 +14,9 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
+import { H2, P, Span } from '@aglio/ui/components/typography';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { Button } from '@aglio/ui/components/button';
 
 export interface RecipeSavePromptProps {}
 

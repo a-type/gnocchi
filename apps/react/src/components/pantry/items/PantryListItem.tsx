@@ -1,16 +1,14 @@
-import { hooks } from '@/stores/groceries/index.js';
-import * as groceryItemClasses from '@/components/groceries/items/GroceryListItem.css.js';
-import { useItemDisplayText } from '@/components/groceries/items/hooks.js';
-import { Button, Tooltip } from '@aglio/ui';
-import { ClockIcon, TrashIcon } from '@radix-ui/react-icons';
-import { RelativeTime } from '@aglio/ui';
-import { clsx } from 'clsx';
-import * as classes from './PantryListItem.css.js';
-import { Item } from '@aglio/groceries-client';
-import classNames from 'classnames';
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
-import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
+import * as groceryItemClasses from '@/components/groceries/items/GroceryListItem.css.js';
+import { hooks } from '@/stores/groceries/index.js';
+import { Item } from '@aglio/groceries-client';
+import { RelativeTime } from '@aglio/ui/components/relativeTime';
+import { ClockIcon, TrashIcon } from '@radix-ui/react-icons';
+import classNames from 'classnames';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
+import * as classes from './PantryListItem.css.js';
+import { Button } from '@aglio/ui/components/button';
+import { Tooltip } from '@aglio/ui/components/tooltip';
 
 export interface PantryListItemProps {
 	item: Item;

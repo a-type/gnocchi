@@ -3,7 +3,7 @@ import {
 	elementResetStyles,
 	baseResetStyle,
 	mediaQueries,
-} from '@aglio/ui';
+} from '@aglio/ui/styles';
 import { style } from '@vanilla-extract/css';
 
 export const root = style({

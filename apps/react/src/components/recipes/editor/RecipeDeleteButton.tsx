@@ -1,4 +1,4 @@
-import { Button } from '@aglio/ui';
+import { Button } from '@aglio/ui/components/button';
 import { hooks } from '@/stores/groceries/index.js';
 import { useNavigate } from 'react-router-dom';
 import { Recipe } from '@aglio/groceries-client';

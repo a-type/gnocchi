@@ -1,6 +1,6 @@
 import { ReactNode, Suspense, useEffect } from 'react';
 import * as classes from './layout.css.js';
-import { PageFixedArea, PageRoot } from '@aglio/ui';
+import { PageFixedArea, PageRoot } from '@aglio/ui/components/layouts';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
 import { GroceryListAdd } from '@/components/groceries/addBar/GroceryListAdd.jsx';
 import GroceryList from '@/components/groceries/GroceryList.jsx';

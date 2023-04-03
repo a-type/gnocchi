@@ -3,25 +3,23 @@ import {
 	PRICE_MONTHLY_DOLLARS,
 	PRICE_YEARLY_DOLLARS,
 } from '@/config.js';
-import { DialogActions, sprinkles } from '@aglio/ui';
+import { sprinkles } from '@aglio/ui/styles';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { proxy, useSnapshot } from 'valtio';
-import {
-	Box,
-	Button,
-	H2,
-	P,
-	Span,
-	Dialog,
-	DialogClose,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-} from '@aglio/ui';
 import { LoginButton } from './LoginButton.js';
 import classNames from 'classnames';
 import * as classes from './StartSignupDialog.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+} from '@aglio/ui/components/dialog';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
+import { H2, P, Span } from '@aglio/ui/components/typography';
 
 export interface StartSignupDialogProps {}
 

@@ -3,25 +3,27 @@ import { hooks } from '@/stores/groceries/index.js';
 import { convertUnits, lookupUnit } from '@aglio/conversion';
 import { RecipeIngredientsItem } from '@aglio/groceries-client';
 import { fractionToText } from '@aglio/tools';
-import {
-	Box,
-	Button,
-	CollapsibleContent,
-	CollapsibleRoot,
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuLabel,
-	DropdownMenuTrigger,
-	Span,
-	Tooltip,
-	useToggle,
-} from '@aglio/ui';
 import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import { NoteEditor } from '../editor/NoteEditor.jsx';
 import { IngredientText } from './IngredientText.jsx';
 import * as classes from './RecipeIngredientViewer.css.js';
+import { Box } from '@aglio/ui/components/box';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuTrigger,
+} from '@aglio/ui/components/dropdownMenu';
+import { Tooltip } from '@aglio/ui/components/tooltip';
+import { Button } from '@aglio/ui/components/button';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+} from '@aglio/ui/components/collapsible';
+import { Span } from '@aglio/ui/components/typography';
+import { useToggle } from '@aglio/ui/hooks';
 
 (window as any).convertUnits = convertUnits;
 

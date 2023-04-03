@@ -1,29 +1,25 @@
-import { PageFixedArea } from '@aglio/ui';
-import { H2, Box, LiveUpdateTextField } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
-import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
+import { PageFixedArea } from '@aglio/ui/components/layouts';
+import { sprinkles } from '@aglio/ui/styles';
 import { RecipeNotFound } from '../RecipeNotFound.jsx';
-import {
-	InstructionsContext,
-	InstructionsProvider,
-} from './InstructionStepNodeView.jsx';
-import { RecipeDeleteButton } from './RecipeDeleteButton.jsx';
-import { RecipeEditActions } from './RecipeEditActions.jsx';
-import { RecipeIngredientsEditor } from './RecipeIngredientsEditor.jsx';
-import { RecipeInstructionsField } from './RecipeInstructionsField.jsx';
-import { RecipeTagsEditor } from './RecipeTagsEditor.jsx';
-import { RecipeTitleField } from './RecipeTitleField.jsx';
-import { RecipeUrlField } from './RecipeUrlField.jsx';
-import { RecipeMainImageEditor } from './RecipeMainImageEditor.jsx';
+import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
 import {
 	ImageContainer,
 	TitleAndImageLayout,
 	TitleContainer,
 } from '../layout/TitleAndImageLayout.jsx';
+import { InstructionsProvider } from './InstructionStepNodeView.jsx';
+import { RecipeDeleteButton } from './RecipeDeleteButton.jsx';
+import { RecipeEditActions } from './RecipeEditActions.jsx';
+import { RecipeIngredientsEditor } from './RecipeIngredientsEditor.jsx';
+import { RecipeInstructionsField } from './RecipeInstructionsField.jsx';
+import { RecipeMainImageEditor } from './RecipeMainImageEditor.jsx';
 import { RecipePreludeEditor } from './RecipePreludeEditor.jsx';
-import { hooks } from '@/stores/groceries/index.js';
-import { useEffect } from 'react';
+import { RecipeTagsEditor } from './RecipeTagsEditor.jsx';
+import { RecipeTitleField } from './RecipeTitleField.jsx';
+import { RecipeUrlField } from './RecipeUrlField.jsx';
+import { Box } from '@aglio/ui/components/box';
+import { H2 } from '@aglio/ui/components/typography';
 
 export interface RecipeEditorProps {
 	slug: string;

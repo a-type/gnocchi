@@ -1,6 +1,7 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { useAuth } from '@/hooks/useAuth.jsx';
-import { Tooltip, sprinkles } from '@aglio/ui';
+import { Tooltip } from '@aglio/ui/components/tooltip';
+import { sprinkles } from '@aglio/ui/styles';
 
 export function OfflineIndicator() {
 	const { error } = useAuth();

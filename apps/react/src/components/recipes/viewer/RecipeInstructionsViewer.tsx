@@ -1,7 +1,7 @@
 import { Recipe } from '@aglio/groceries-client';
 import { useSyncedInstructionsEditor } from '../hooks.js';
 import * as classes from './RecipeInstructionsViewer.css.js';
-import { RichEditor } from '@aglio/ui';
+import { RichEditor } from '@aglio/ui/components/richEditor';
 import classNames from 'classnames';
 
 export interface RecipeInstructionsViewerProps {

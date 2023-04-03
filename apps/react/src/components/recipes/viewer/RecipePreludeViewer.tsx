@@ -1,7 +1,8 @@
 import { Recipe } from '@aglio/groceries-client';
-import { Peek, RichEditor } from '@aglio/ui';
 import { useSyncedPreludeEditor } from '../hooks.js';
 import * as classes from './RecipePreludeViewer.css.js';
+import { Peek } from '@aglio/ui/components/peek';
+import { RichEditor } from '@aglio/ui/components/richEditor';
 
 export interface RecipePreludeViewerProps {
 	recipe: Recipe;

@@ -1,12 +1,11 @@
 import {
-	Entity,
 	ObjectEntity,
 	Recipe,
 	RecipeDestructured,
 } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
 import { ExtensionConfig, useEditor } from '@tiptap/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import StarterKit from '@tiptap/starter-kit';
 

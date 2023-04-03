@@ -1,4 +1,4 @@
-import { withClassName } from '@aglio/ui';
+import { withClassName } from '@aglio/ui/styles';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import classnames from 'classnames';
 import { HTMLAttributes } from 'react';

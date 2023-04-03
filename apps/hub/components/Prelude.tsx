@@ -1,4 +1,5 @@
-import { H4, H2, H3, P, Peek, RichEditor } from '@aglio/ui';
+import { Peek } from '@aglio/ui/components/peek';
+import { RichEditor } from '@aglio/ui/components/richEditor';
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';

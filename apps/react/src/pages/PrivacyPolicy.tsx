@@ -1,7 +1,6 @@
-import { PageContent, PageRoot } from '@aglio/ui';
-import { TextLink } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
-import { vars } from '@aglio/ui';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { sprinkles } from '@aglio/ui/styles';
 
 export function PrivacyPolicy() {
 	return (

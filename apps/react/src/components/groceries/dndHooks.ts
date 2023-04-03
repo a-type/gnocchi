@@ -1,4 +1,3 @@
-import { useStableCallback } from '@aglio/ui';
 import { useDndMonitor } from '@dnd-kit/core';
 import { useEffect, useRef, useState } from 'react';
 

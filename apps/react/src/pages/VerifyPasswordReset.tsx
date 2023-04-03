@@ -1,8 +1,8 @@
-import { PageContent, PageRoot } from '@aglio/ui';
-import { Form, SubmitButton, TextField } from '@aglio/ui';
-import { H1, P } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
 import { trpc } from '@/trpc.js';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { H1, P } from '@aglio/ui/components/typography';
+import { sprinkles } from '@aglio/ui/styles';
 import { Formik } from 'formik';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 

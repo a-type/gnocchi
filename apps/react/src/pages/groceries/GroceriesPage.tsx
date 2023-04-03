@@ -19,7 +19,8 @@ import {
 	TopControls,
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
-import { Box, PageContent } from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
+import { PageContent } from '@aglio/ui/components/layouts';
 import { useCallback, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 

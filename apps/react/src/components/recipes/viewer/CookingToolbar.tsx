@@ -1,6 +1,3 @@
-import { PageNowPlaying } from '@aglio/ui';
-import { Button, H5 } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import { ListBulletIcon } from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';
@@ -11,6 +8,10 @@ import * as classes from './CookingToolbar.css.js';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { PageNowPlaying } from '@aglio/ui/components/layouts';
+import { Button } from '@aglio/ui/components/button';
+import { sprinkles } from '@aglio/ui/styles';
+import { H5 } from '@aglio/ui/components/typography';
 
 export interface CookingToolbarProps {
 	recipe: Recipe;

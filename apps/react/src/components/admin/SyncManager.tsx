@@ -1,5 +1,5 @@
 import { trpc, RouterOutputs } from '@/trpc.js';
-import { H2 } from '@aglio/ui';
+import { H2 } from '@aglio/ui/components/typography';
 
 export interface SyncManagerProps {}
 

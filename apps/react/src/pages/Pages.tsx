@@ -7,18 +7,6 @@ import { StartSignupDialog } from '@/components/sync/StartSignupDialog.jsx';
 import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import {
-	Box,
-	Button,
-	FullScreenSpinner,
-	H1,
-	LinkButton,
-	NavContextProvider,
-	NowPlayingProvider,
-	P,
-	PageContent,
-	PageRoot,
-} from '@aglio/ui';
 import { lazy, Suspense } from 'react';
 import {
 	createBrowserRouter,
@@ -30,6 +18,16 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import { GlobalLoader } from '@/GlobalLoader.jsx';
+import {
+	NavContextProvider,
+	NowPlayingProvider,
+	PageContent,
+	PageRoot,
+} from '@aglio/ui/components/layouts';
+import { FullScreenSpinner } from '@aglio/ui/components/spinner';
+import { Box } from '@aglio/ui/components/box';
+import { H1, P } from '@aglio/ui/components/typography';
+import { Button, LinkButton } from '@aglio/ui/components/button';
 
 const PlanPage = lazy(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -56,9 +54,6 @@ const RecipeCookStepsPage = lazy(
 );
 const RecipeOverviewPage = lazy(
 	() => import('./recipe/RecipeOverviewPage.jsx'),
-);
-const SubscriberFeaturesPage = lazy(
-	() => import('./SubscriberFeaturesPage.jsx'),
 );
 const PrivacyPolicyPage = lazy(() => import('./PrivacyPolicy.jsx'));
 const TermsAndConditionsPage = lazy(() => import('./TermsAndConditions.jsx'));
@@ -198,12 +193,6 @@ const router = createBrowserRouter([
 			{
 				path: '/temp/:code',
 				element: <TempAccessGroceriesPage />,
-			},
-			{
-				path: '/subscriber-features',
-				element: <SubscriberFeaturesPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
 			},
 			{
 				path: '/reset-password',

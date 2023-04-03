@@ -1,6 +1,7 @@
 import classNames from 'classnames';
 import * as classes from './NoteEditor.css.js';
-import { LiveUpdateTextField, Note } from '@aglio/ui';
+import { Note } from '@aglio/ui/components/note';
+import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
 
 export interface NoteEditorProps {
 	value: string;

@@ -1,5 +1,4 @@
-import { mediaQueries } from '@aglio/ui';
-import { vars } from '@aglio/ui';
+import { mediaQueries, vars } from '@aglio/ui/styles';
 import { style } from '@vanilla-extract/css';
 
 export const menu = style({

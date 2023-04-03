@@ -1,4 +1,6 @@
-import { Box, H1, LinkButton, P } from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
+import { LinkButton } from '@aglio/ui/components/button';
+import { H1, P } from '@aglio/ui/components/typography';
 
 export interface RecipeNotFoundProps {}
 

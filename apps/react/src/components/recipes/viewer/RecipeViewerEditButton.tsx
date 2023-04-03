@@ -1,4 +1,4 @@
-import { LinkButton, LinkButtonProps } from '@aglio/ui';
+import { LinkButton, LinkButtonProps } from '@aglio/ui/components/button';
 import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from '../makeRecipeLink.js';
 

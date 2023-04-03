@@ -5,7 +5,8 @@ import {
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { ActionBar, ActionButton, ErrorBoundary } from '@aglio/ui';
+import { ActionBar, ActionButton } from '@aglio/ui/components/actions';
+import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
 import { ResetIcon } from '@radix-ui/react-icons';
 
 export interface CookingActionBarProps {

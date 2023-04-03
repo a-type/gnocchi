@@ -1,4 +1,4 @@
-import { vars } from '@aglio/ui';
+import { vars } from '@aglio/ui/styles';
 import { keyframes, style } from '@vanilla-extract/css';
 
 export const root = style({

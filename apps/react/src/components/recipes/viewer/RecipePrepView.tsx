@@ -1,11 +1,12 @@
-import { PageFixedArea, PageNowPlaying } from '@aglio/ui';
-import { H1, H2, LinkButton, P } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
+import { H1, H2, P } from '@aglio/ui/components/typography';
 import { makeRecipeLink } from '../makeRecipeLink.js';
 import { CookingActionBar } from './CookingActionBar.jsx';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
 import * as classes from './RecipePrepView.css.js';
+import { PageFixedArea, PageNowPlaying } from '@aglio/ui/components/layouts';
+import { sprinkles } from '@aglio/ui/styles';
+import { LinkButton } from '@aglio/ui/components/button';
 
 export interface RecipePrepViewProps {}
 

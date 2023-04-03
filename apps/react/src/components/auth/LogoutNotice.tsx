@@ -1,16 +1,16 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useEffect } from 'react';
+import { LoginButton } from '../sync/LoginButton.jsx';
 import {
-	Box,
-	Button,
-	P,
 	Dialog,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@aglio/ui';
-import { LoginButton } from '../sync/LoginButton.jsx';
+} from '@aglio/ui/components/dialog';
+import { P } from '@aglio/ui/components/typography';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
 
 export interface LogoutNoticeProps {}
 

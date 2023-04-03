@@ -1,16 +1,15 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
+import * as classes from './InstallHint.css.js';
+import { Box } from '@aglio/ui/components/box';
+import { H2, P } from '@aglio/ui/components/typography';
+import { Button } from '@aglio/ui/components/button';
 import {
-	Box,
-	Button,
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-	H2,
-	P,
-} from '@aglio/ui';
-import * as classes from './InstallHint.css.js';
+} from '@aglio/ui/components/dialog';
 
 export interface InstallHintProps {}
 

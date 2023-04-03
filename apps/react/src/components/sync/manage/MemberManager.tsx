@@ -1,17 +1,3 @@
-import {
-	Box,
-	Button,
-	Checkbox,
-	Dialog,
-	DialogActions,
-	DialogClose,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-	H2,
-	P,
-	Span,
-} from '@aglio/ui';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
@@ -19,6 +5,18 @@ import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { InviteLinkButton } from '../InviteLinkButton.jsx';
 import { ManageSubscriptionButton } from '../ManageSubscriptionButton.jsx';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+} from '@aglio/ui/components/dialog';
+import { Button } from '@aglio/ui/components/button';
+import { H2, P, Span } from '@aglio/ui/components/typography';
+import { Box } from '@aglio/ui/components/box';
+import { Checkbox } from '@aglio/ui/components/checkbox';
 
 export interface MemberManagerProps {}
 

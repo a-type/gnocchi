@@ -1,14 +1,14 @@
 import { hooks } from '@/stores/groceries/index.js';
+import { Button } from '@aglio/ui/components/button';
 import {
-	Button,
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-	P,
-} from '@aglio/ui';
+} from '@aglio/ui/components/dialog';
+import { P } from '@aglio/ui/components/typography';
 import { ReactNode, useState } from 'react';
 
 export function ResetToServer({ children }: { children?: ReactNode }) {

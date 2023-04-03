@@ -1,7 +1,7 @@
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { PageNav } from '@aglio/ui';
-import { HamburgerMenuIcon, PersonIcon } from '@radix-ui/react-icons';
+import { PageNav } from '@aglio/ui/components/layouts';
+import { PersonIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
 import { Link, useMatch } from 'react-router-dom';

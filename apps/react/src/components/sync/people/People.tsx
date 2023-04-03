@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '@aglio/ui';
+import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
 import { hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
 import * as classes from './People.css.js';

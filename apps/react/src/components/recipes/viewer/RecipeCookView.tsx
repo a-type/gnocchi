@@ -1,4 +1,3 @@
-import { H1, PageFixedArea, sprinkles } from '@aglio/ui';
 import { clsx } from 'clsx';
 import { InstructionsProvider } from '../editor/InstructionStepNodeView.jsx';
 import { useWatchChanges } from '../hooks.js';
@@ -8,6 +7,9 @@ import { useCookingRecipe } from './RecipeCookContext.jsx';
 import * as classes from './RecipeCookView.css.js';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { AddImagePrompt } from './AddImagePrompt.jsx';
+import { H1 } from '@aglio/ui/components/typography';
+import { PageFixedArea } from '@aglio/ui/components/layouts';
+import { sprinkles } from '@aglio/ui/styles';
 
 export interface RecipeCookViewProps {
 	slug: string;

@@ -1,8 +1,9 @@
-import { Button, Dialog, DialogContent } from '@aglio/ui';
+import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import * as classes from './UpdatePrompt.css.js';
 import { StarIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
+import { Button } from '@aglio/ui/components/button';
 
 export interface UpdatePromptProps {}
 

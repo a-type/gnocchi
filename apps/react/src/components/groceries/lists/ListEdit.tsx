@@ -1,11 +1,18 @@
-import { ColorPicker, DialogActions, ThemeName, useToggle } from '@aglio/ui';
-import { Dialog, DialogClose, DialogContent, DialogTrigger } from '@aglio/ui';
-import { Box } from '@aglio/ui';
-import { LiveUpdateTextField } from '@aglio/ui';
-import { Button, H2 } from '@aglio/ui';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTrigger,
+} from '@aglio/ui/components/dialog';
+import { Box } from '@aglio/ui/components/box';
+import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
 import { hooks } from '@/stores/groceries/index.js';
 import { GearIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
+import { Button } from '@aglio/ui/components/button';
+import { H2 } from '@aglio/ui/components/typography';
+import { ColorPicker, ThemeName } from '@aglio/ui/components/colorPicker';
 
 export interface ListEditProps {
 	listId: string;

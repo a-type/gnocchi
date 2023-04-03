@@ -1,16 +1,16 @@
 import { Onboarding } from '@/onboarding/createOnboarding.js';
-import {
-	Button,
-	Popover,
-	PopoverAnchor,
-	PopoverArrow,
-	PopoverContent,
-	leekTheme,
-} from '@aglio/ui';
 import { ReactNode, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import * as classes from './OnboardingTooltip.css.js';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import {
+	Popover,
+	PopoverAnchor,
+	PopoverArrow,
+	PopoverContent,
+} from '@aglio/ui/components/popover';
+import { leekTheme } from '@aglio/ui/styles';
+import { Button } from '@aglio/ui/components/button';
 
 export interface OnboardingTooltipProps<O extends Onboarding<any>> {
 	onboarding: O;

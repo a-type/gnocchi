@@ -1,9 +1,10 @@
-import { Button, ButtonProps, ThemeName } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@aglio/ui';
+import { themeMap } from '@aglio/ui/styles';
 import classnames from 'classnames';
 import * as classes from './RecipeTagsList.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { ThemeName } from '@aglio/ui/components/colorPicker';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
 
 export function RecipeTagsList({
 	onSelect,

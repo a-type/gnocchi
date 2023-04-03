@@ -1,31 +1,30 @@
-import { hooks } from '@/stores/groceries/index.js';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import {
-	Button,
-	Box,
-	DropdownMenu,
-	DropdownMenuTrigger,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuItemRightSlot,
-} from '@aglio/ui';
-import * as classes from './RecipeList.css.js';
-import { sprinkles } from '@aglio/ui';
-import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
-import { Suspense } from 'react';
-import { RecipeListActions } from './RecipeListActions.jsx';
-import { PageFixedArea } from '@aglio/ui';
-import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
-import { useRecipeTagFilter } from './hooks.js';
-import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
+import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
+import { hooks } from '@/stores/groceries/index.js';
+import { Recipe } from '@aglio/groceries-client';
+import { sprinkles } from '@aglio/ui/styles';
 import {
 	DotsVerticalIcon,
 	PlusCircledIcon,
-	PlusIcon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
-import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
+import { Suspense } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
+import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
+import * as classes from './RecipeList.css.js';
+import { RecipeListActions } from './RecipeListActions.jsx';
+import { useRecipeTagFilter } from './hooks.js';
+import { Button } from '@aglio/ui/components/button';
+import { PageFixedArea } from '@aglio/ui/components/layouts';
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuItemRightSlot,
+	DropdownMenuTrigger,
+} from '@aglio/ui/components/dropdownMenu';
+import { Box } from '@aglio/ui/components/box';
 
 export interface RecipeListProps {}
 

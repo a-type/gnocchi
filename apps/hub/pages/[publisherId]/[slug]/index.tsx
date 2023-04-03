@@ -1,19 +1,3 @@
-import {
-	Checkbox,
-	H1,
-	H2,
-	P,
-	lemonTheme,
-	PageContent,
-	PageRoot,
-	sprinkles,
-	PageSection,
-	Box,
-	Note,
-	PageFixedArea,
-	Button,
-	Divider,
-} from '@aglio/ui';
 import { trpc } from '@/lib/tprc';
 import {
 	GetStaticPathsResult,
@@ -30,6 +14,17 @@ import { Prelude } from '@/components/Prelude';
 import Head from 'next/head';
 import { MainImage } from '@/components/MainImage';
 import { TopLineRoot, TopLineTitle } from '@/components/layout';
+import {
+	PageRoot,
+	PageContent,
+	PageFixedArea,
+} from '@aglio/ui/components/layouts';
+import { H1, P, H2 } from '@aglio/ui/components/typography';
+import { lemonTheme, sprinkles } from '@aglio/ui/styles';
+import { Box } from '@aglio/ui/components/box';
+import { Divider } from '@aglio/ui/components/divider';
+import { Note } from '@aglio/ui/components/note';
+import { Button } from '@aglio/ui/components/button';
 
 export default function RecipePage({
 	data,

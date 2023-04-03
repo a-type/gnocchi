@@ -1,14 +1,14 @@
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
-import { H3, Note, P, RichEditor } from '@aglio/ui';
+import { Note } from '@aglio/ui/components/note';
+import { RichEditor } from '@aglio/ui/components/richEditor';
+import { Node, mergeAttributes } from '@tiptap/core';
 import {
-	useEditor,
-	ReactNodeViewRenderer,
 	NodeViewContent,
 	NodeViewWrapper,
+	ReactNodeViewRenderer,
+	useEditor,
 } from '@tiptap/react';
-import { mergeAttributes, Node } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
-import classNames from 'classnames';
 import * as classes from './Instructions.css.js';
 
 export interface InstructionsProps {

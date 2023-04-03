@@ -1,14 +1,14 @@
-import { Button, LinkButton } from '@aglio/ui';
-import { useIsSubscribed } from '@/hooks/useAuth.jsx';
-import { hooks, Presence, Profile } from '@/stores/groceries/index.js';
-import { UserInfo } from '@lo-fi/common';
-import { Suspense, useContext, useEffect, useState } from 'react';
-import * as classes from './RecipePresenceNotification.css.js';
-import { PageNowPlaying } from '@aglio/ui';
-import { Cross2Icon } from '@radix-ui/react-icons';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
-import { PersonAvatar } from '../people/PersonAvatar.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
+import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
+import { Button, LinkButton } from '@aglio/ui/components/button';
+import { PageNowPlaying } from '@aglio/ui/components/layouts';
+import { UserInfo } from '@lo-fi/common';
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { Suspense, useState } from 'react';
+import { PersonAvatar } from '../people/PersonAvatar.jsx';
+import * as classes from './RecipePresenceNotification.css.js';
 
 export interface RecipePresenceNotificationProps {}
 

@@ -1,10 +1,7 @@
-import { CollapsibleContent, CollapsibleRoot } from '@aglio/ui';
-import { Button, H2, useSizeCssVars } from '@aglio/ui';
 import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { vars } from '@aglio/ui';
 import { Category, Item } from '@aglio/groceries-client';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { clsx } from 'clsx';
@@ -12,6 +9,13 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useIsDragging } from '../dndHooks.js';
 import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
 import * as classes from './GroceryListCategory.css.js';
+import { useSizeCssVars } from '@aglio/ui/hooks';
+import { vars } from '@aglio/ui/styles';
+import { Button } from '@aglio/ui/components/button';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+} from '@aglio/ui/components/collapsible';
 
 const EMPTY_DROPPABLE_SIZE = 48;
 

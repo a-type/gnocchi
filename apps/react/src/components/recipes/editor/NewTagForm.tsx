@@ -1,7 +1,8 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { Form, randomTheme, SubmitButton, TextField } from '@aglio/ui';
 import { Formik } from 'formik';
 import * as classes from './NewTagForm.css.js';
+import { randomTheme } from '@aglio/ui/styles';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 
 export interface NewTagFormProps {
 	onCreate: (tag: string) => void;

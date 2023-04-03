@@ -4,7 +4,11 @@
 	"private": true,
 	"main": "src/index.ts",
 	"type": "module",
-	"module": "src/index.ts",
+	"exports": {
+		"./components/*": "./src/components/*.ts",
+		"./styles": "./src/styles.ts",
+		"./hooks": "./src/hooks.ts"
+	},
 	"scripts": {},
 	"dependencies": {
 		"@a-type/utils": "^1.0.2",

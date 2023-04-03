@@ -1,7 +1,6 @@
 import { RedoAction } from '@/components/groceries/actions/RedoAction.jsx';
 import { UndoAction } from '@/components/groceries/actions/UndoAction.jsx';
-import { ActionBar } from '@aglio/ui';
-import { Recipe } from '@aglio/groceries-client';
+import { ActionBar } from '@aglio/ui/components/actions';
 
 export interface RecipeEditActionsProps {}
 

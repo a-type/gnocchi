@@ -1,5 +1,4 @@
-import { withClassName } from '@aglio/ui';
-import classNames from 'classnames';
+import { withClassName } from '@aglio/ui/styles';
 import * as classes from './layout.css.js';
 
 export const TopLineRoot = withClassName('div', classes.topLineRoot);

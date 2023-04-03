@@ -1,9 +1,12 @@
-import { PageContent, PageFixedArea, PageRoot } from '@aglio/ui';
-import { NavBar } from '@/components/nav/NavBar.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';
-import { H1 } from '@aglio/ui';
-import { sprinkles } from '@aglio/ui';
+import {
+	PageContent,
+	PageFixedArea,
+	PageRoot,
+} from '@aglio/ui/components/layouts';
+import { H1 } from '@aglio/ui/components/typography';
+import { sprinkles } from '@aglio/ui/styles';
 import { Suspense } from 'react';
 
 export interface PantryPageProps {}

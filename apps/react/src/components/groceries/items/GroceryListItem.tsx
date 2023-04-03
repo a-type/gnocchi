@@ -12,26 +12,6 @@ import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
 import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
 import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
-import {
-	Box,
-	Button,
-	ButtonProps,
-	Checkbox,
-	CollapsibleContent,
-	CollapsibleRoot,
-	CollapsibleTrigger,
-	Dialog,
-	DialogActions,
-	DialogClose,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-	LiveUpdateTextField,
-	NumberStepper,
-	Tooltip,
-	sprinkles,
-	useSizeCssVars,
-} from '@aglio/ui';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';
@@ -60,6 +40,27 @@ import * as classes from './GroceryListItem.css.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemSources } from './ItemSources.js';
 import { useItemDisplayText } from './hooks.js';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { useSizeCssVars } from '@aglio/ui/hooks';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+	CollapsibleTrigger,
+} from '@aglio/ui/components/collapsible';
+import { Checkbox } from '@aglio/ui/components/checkbox';
+import { Box } from '@aglio/ui/components/box';
+import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
+import { Tooltip } from '@aglio/ui/components/tooltip';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+} from '@aglio/ui/components/dialog';
+import { NumberStepper } from '@aglio/ui/components/numberStepper';
+import { sprinkles } from '@aglio/ui/styles';
 
 export interface GroceryListItemProps {
 	className?: string;

@@ -1,4 +1,4 @@
-import { Box } from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
 import { RecipeOverview } from '@/components/recipes/viewer/RecipeOverview.jsx';
 import { useParams } from 'react-router-dom';
 

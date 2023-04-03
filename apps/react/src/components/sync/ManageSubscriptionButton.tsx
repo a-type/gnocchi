@@ -1,6 +1,6 @@
-import { Button, ButtonProps, Span } from '@aglio/ui';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
 import { API_HOST_HTTP } from '@/config.js';
-import React from 'react';
+import { Span } from '@aglio/ui/components/typography';
 
 export interface ManageSubscriptionButtonProps extends ButtonProps {}
 

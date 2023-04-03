@@ -1,6 +1,8 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
-import { Box, Form, sprinkles, SubmitButton, TextField } from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
+import { sprinkles } from '@aglio/ui/styles';
 import { Formik } from 'formik';
 
 export function NewCategoryForm({

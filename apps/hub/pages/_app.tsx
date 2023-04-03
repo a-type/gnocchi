@@ -1,4 +1,4 @@
-import { lemonTheme } from '@aglio/ui';
+import { lemonTheme } from '@aglio/ui/styles';
 import type { AppProps } from 'next/app';
 
 if (typeof window !== 'undefined') {

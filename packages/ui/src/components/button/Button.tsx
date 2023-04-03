@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import { forwardRef, ButtonHTMLAttributes } from 'react';
 import * as classes from './Button.css.js';
-import { Spinner } from '../index.js';
+import { Spinner } from '../spinner.js';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	color?:

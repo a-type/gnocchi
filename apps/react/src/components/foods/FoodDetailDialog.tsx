@@ -1,26 +1,23 @@
 import { hooks } from '@/stores/groceries/index.js';
+import { ReactNode, Suspense } from 'react';
+import { capitalize } from '@aglio/tools';
+import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
+import * as classes from './FoodDetailDialog.css.js';
+import { Icon } from '../icons/Icon.jsx';
+import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
+import { useToggle } from '@aglio/ui/hooks';
 import {
-	Box,
-	Button,
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-	LiveUpdateTextField,
-	P,
-	Span,
-	Switch,
-	useToggle,
-} from '@aglio/ui';
-import { ReactNode, Suspense } from 'react';
-import { capitalize } from '@aglio/tools';
-import { CategoryPicker } from '../groceries/items/CategoryPicker.jsx';
-import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
-import * as classes from './FoodDetailDialog.css.js';
-import { Icon } from '../icons/Icon.jsx';
-import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
+} from '@aglio/ui/components/dialog';
+import { Button } from '@aglio/ui/components/button';
+import { Box } from '@aglio/ui/components/box';
+import { P, Span } from '@aglio/ui/components/typography';
+import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
 
 export interface FoodDetailDialogProps {
 	foodName: string;

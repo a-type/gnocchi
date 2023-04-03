@@ -2,12 +2,12 @@ import { Onboarding, OnboardingStep } from '@/onboarding/createOnboarding.js';
 import classNames from 'classnames';
 import * as classes from './OnboardingBanner.css.js';
 import { ReactNode } from 'react';
+import { leekTheme } from '@aglio/ui/styles';
 import {
-	Button,
 	CollapsibleContent,
 	CollapsibleRoot,
-	leekTheme,
-} from '@aglio/ui';
+} from '@aglio/ui/components/collapsible';
+import { Button } from '@aglio/ui/components/button';
 
 export interface OnboardingBannerProps<O extends Onboarding<any>> {
 	onboarding: O;

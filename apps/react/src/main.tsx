@@ -1,4 +1,4 @@
-import '@aglio/ui';
+import '@aglio/ui/styles';
 import './main.css.js';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

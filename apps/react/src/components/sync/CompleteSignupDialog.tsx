@@ -1,20 +1,18 @@
 import { SubscriptionError } from '@aglio/tools';
-import {
-	Box,
-	Button,
-	CollapsibleContent,
-	CollapsibleRoot,
-	CollapsibleTrigger,
-	Dialog,
-	DialogContent,
-	P,
-	TextLink,
-	sprinkles,
-} from '@aglio/ui';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { LogoutButton } from '../auth/LogoutButton.js';
 import { SubscribeButton } from './SubscribeButton.js';
-import { H2 } from '@aglio/ui';
+import { H2, P } from '@aglio/ui/components/typography';
+import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
+import { Box } from '@aglio/ui/components/box';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+	CollapsibleTrigger,
+} from '@aglio/ui/components/collapsible';
+import { Button } from '@aglio/ui/components/button';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { sprinkles } from '@aglio/ui/styles';
 
 export interface CompleteSignupDialogProps {}
 

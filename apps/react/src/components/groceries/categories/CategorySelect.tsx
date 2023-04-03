@@ -1,18 +1,17 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
+import { ReactNode, Suspense, useCallback, useState } from 'react';
+import { NewCategoryForm } from '../NewCategoryForm.js';
 import {
-	Button,
-	Dialog,
-	DialogContent,
 	Select,
 	SelectContent,
 	SelectIcon,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@aglio/ui';
-import { ReactNode, Suspense, useCallback, useState } from 'react';
-import { NewCategoryForm } from '../NewCategoryForm.js';
+} from '@aglio/ui/components/select';
+import { Button } from '@aglio/ui/components/button';
+import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
 
 export function CategorySelect({
 	value,

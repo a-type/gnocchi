@@ -10,20 +10,13 @@ import {
 } from '@/pages/groceries/layout.jsx';
 import { createClientDescriptor, hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
-import {
-	Box,
-	Button,
-	Form,
-	FullScreenSpinner,
-	H1,
-	LinkButton,
-	P,
-	PageContent,
-	PageRoot,
-	SubmitButton,
-	TextField,
-	TextLink,
-} from '@aglio/ui';
+import { Box } from '@aglio/ui/components/box';
+import { LinkButton } from '@aglio/ui/components/button';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
+import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { FullScreenSpinner } from '@aglio/ui/components/spinner';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { H1, P } from '@aglio/ui/components/typography';
 import { Formik } from 'formik';
 import { Suspense, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';

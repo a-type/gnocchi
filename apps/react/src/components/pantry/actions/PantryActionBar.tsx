@@ -1,9 +1,8 @@
-import { ActionBar } from '@aglio/ui';
-import { ActionButton } from '@aglio/ui';
-import { hooks } from '@/stores/groceries/index.js';
-import { ResetIcon, TrashIcon } from '@radix-ui/react-icons';
-import { UndoAction } from '@/components/groceries/actions/UndoAction.jsx';
 import { RedoAction } from '@/components/groceries/actions/RedoAction.jsx';
+import { UndoAction } from '@/components/groceries/actions/UndoAction.jsx';
+import { hooks } from '@/stores/groceries/index.js';
+import { ActionBar, ActionButton } from '@aglio/ui/components/actions';
+import { TrashIcon } from '@radix-ui/react-icons';
 
 export interface PantryActionBarProps {}
 

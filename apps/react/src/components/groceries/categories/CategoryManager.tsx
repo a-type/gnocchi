@@ -1,5 +1,4 @@
-import React, { useMemo, useState } from 'react';
-import { Button, Form, SubmitButton, TextField } from '@aglio/ui';
+import { useMemo, useState } from 'react';
 import { hooks } from '@/stores/groceries/index.js';
 import { DragHandleDots2Icon, TrashIcon } from '@radix-ui/react-icons';
 import { DndContext, DragOverlay, useDndMonitor } from '@dnd-kit/core';
@@ -8,9 +7,11 @@ import { CSS } from '@dnd-kit/utilities';
 import { generateKeyBetween } from 'fractional-indexing';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
-import { Box } from '@aglio/ui';
 import { Formik } from 'formik';
 import { Category } from '@aglio/groceries-client';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
+import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 
 export interface CategoryManagerProps {}
 

@@ -3,7 +3,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Category, Item } from '@aglio/groceries-client';
 import addDays from 'date-fns/addDays';
 import endOfDay from 'date-fns/endOfDay';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 export function useItemsGroupedAndSorted() {
 	const items =

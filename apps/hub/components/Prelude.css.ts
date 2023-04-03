@@ -1,4 +1,4 @@
-import { vars } from '@/../../packages/ui/src';
+import { vars } from '@aglio/ui/styles';
 import { style } from '@vanilla-extract/css';
 
 export const container = style({

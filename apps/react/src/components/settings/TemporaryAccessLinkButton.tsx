@@ -1,18 +1,15 @@
 import { ShareLink } from '@/components/settings/ShareLink.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
+import { Box } from '@aglio/ui/components/box';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
 import {
-	Box,
-	Button,
-	ButtonProps,
 	Dialog,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-	Input,
-	P,
-	Span,
-} from '@aglio/ui';
+} from '@aglio/ui/components/dialog';
+import { P, Span } from '@aglio/ui/components/typography';
 
 export interface TemporaryAccessLinkButtonProps extends ButtonProps {}
 

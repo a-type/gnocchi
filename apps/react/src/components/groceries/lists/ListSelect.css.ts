@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { vars } from '@aglio/ui';
+import { vars } from '@aglio/ui/styles';
 
 export const itemText = style({
 	whiteSpace: 'nowrap',

@@ -1,21 +1,16 @@
+import { hooks } from '@/stores/groceries/index.js';
 import {
 	Select,
 	SelectContent,
 	SelectGroup,
 	SelectIcon,
 	SelectItem,
-	SelectItemRoot,
-	SelectItemText,
 	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 	UnstyledSelectTrigger,
-} from '@aglio/ui';
-import { hooks } from '@/stores/groceries/index.js';
+} from '@aglio/ui/components/select';
 import { ReactNode, useCallback, useEffect } from 'react';
-import * as classes from './MeetupSelect.css.js';
-import { Button } from '@aglio/ui';
-import { Cross2Icon } from '@radix-ui/react-icons';
 
 export interface MeetupSelectProps {
 	children?: (value: string | undefined) => ReactNode;

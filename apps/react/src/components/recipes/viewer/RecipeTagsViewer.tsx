@@ -1,11 +1,10 @@
-import { TagIcon } from '@/components/icons/TagIcon.jsx';
-import { ThemeName } from '@aglio/ui';
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@aglio/ui';
 import { Recipe } from '@aglio/groceries-client';
 import classnames from 'classnames';
 import * as classes from './RecipeTagsViewer.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { ThemeName } from '@aglio/ui/components/colorPicker';
+import { themeMap } from '@aglio/ui/styles';
 
 export interface RecipeTagsViewerProps {
 	recipe: Recipe;

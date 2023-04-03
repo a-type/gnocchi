@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { HTMLAttributes } from 'react';
-import { Box, BoxProps } from '../index.js';
+import { Box, BoxProps } from '../box.js';
 import * as classes from './PageContent.css.js';
 import { NavOutlet } from './PageNav.jsx';
 

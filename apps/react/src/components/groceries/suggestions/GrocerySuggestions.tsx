@@ -1,25 +1,21 @@
-import { hooks } from '@/stores/groceries/index.js';
-import {
-	Button,
-	CollapsibleContent,
-	CollapsibleRoot,
-	CollapsibleTrigger,
-	Span,
-} from '@aglio/ui';
-import startOfDay from 'date-fns/startOfDay';
-import { title, titleRow } from '../categories/GroceryListCategory.css.js';
-import classNames from 'classnames';
-import * as classes from './GrocerySuggestions.css.js';
-import { Food, Recipe } from '@aglio/groceries-client';
-import {
-	CaretDownIcon,
-	PlusCircledIcon,
-	PlusIcon,
-} from '@radix-ui/react-icons';
-import addDays from 'date-fns/addDays';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
 import { RecipeMainImageViewer } from '@/components/recipes/viewer/RecipeMainImageViewer.jsx';
+import { hooks } from '@/stores/groceries/index.js';
+import { Food, Recipe } from '@aglio/groceries-client';
+import { Button } from '@aglio/ui/components/button';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+	CollapsibleTrigger,
+} from '@aglio/ui/components/collapsible';
+import { Span } from '@aglio/ui/components/typography';
+import { CaretDownIcon, PlusCircledIcon } from '@radix-ui/react-icons';
+import classNames from 'classnames';
+import addDays from 'date-fns/addDays';
+import startOfDay from 'date-fns/startOfDay';
+import { title, titleRow } from '../categories/GroceryListCategory.css.js';
+import * as classes from './GrocerySuggestions.css.js';
 
 export interface GrocerySuggestionsProps {}
 

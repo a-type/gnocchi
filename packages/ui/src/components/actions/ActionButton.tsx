@@ -1,14 +1,10 @@
 'use client';
 
-import {
-	Button,
-	ButtonProps,
-	CollapsibleContent,
-	CollapsibleRoot,
-} from '../index.js';
 import { clsx } from 'clsx';
 import { forwardRef, ReactNode, useEffect, useRef, useState } from 'react';
 import * as classes from './ActionButton.css.js';
+import { Button, ButtonProps } from '../button/Button.js';
+import { CollapsibleContent, CollapsibleRoot } from '../collapsible.js';
 
 export interface ActionButtonProps extends ButtonProps {
 	icon?: ReactNode;

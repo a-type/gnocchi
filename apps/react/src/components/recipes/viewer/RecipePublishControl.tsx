@@ -3,20 +3,20 @@ import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { Recipe } from '@aglio/groceries-client';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
+import { Checkbox } from '@aglio/ui/components/checkbox';
 import {
-	Box,
-	Button,
-	Checkbox,
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-	P,
-	TextLink,
-	sprinkles,
-} from '@aglio/ui';
+} from '@aglio/ui/components/dialog';
+import { TextLink } from '@aglio/ui/components/textLink';
+import { P } from '@aglio/ui/components/typography';
+import { sprinkles } from '@aglio/ui/styles';
 import format from 'date-fns/format';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
