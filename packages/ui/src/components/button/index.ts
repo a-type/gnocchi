@@ -1,2 +1,2 @@
 export * from './Button.js';
-export * from './LinkButton.js';
+export * as buttonClassNames from './Button.css.js';

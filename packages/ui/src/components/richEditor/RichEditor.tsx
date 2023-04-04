@@ -1,10 +1,10 @@
 'use client';
 
-// @ts-ignore
-import { EditorContent } from '@tiptap/react';
 import { clsx } from 'clsx';
-import { forwardRef } from 'react';
+import { forwardRef, lazy } from 'react';
 import * as classes from './RichEditor.css.js';
+
+const EditorContent = lazy(() => import('./EditorContent.js'));
 
 export interface RichEditorProps {
 	editor: any;

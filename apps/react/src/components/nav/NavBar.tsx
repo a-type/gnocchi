@@ -4,7 +4,7 @@ import { PageNav } from '@aglio/ui/components/layouts';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
-import { Link, useMatch } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
 import { Icon } from '../icons/Icon.jsx';
@@ -14,6 +14,7 @@ import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
+import { Link } from '@/components/nav/Link.jsx';
 
 export interface NavBarProps {}
 

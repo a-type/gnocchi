@@ -9,7 +9,7 @@ import {
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import { Suspense } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import * as classes from './RecipeList.css.js';
@@ -25,6 +25,7 @@ import {
 	DropdownMenuTrigger,
 } from '@aglio/ui/components/dropdownMenu';
 import { Box } from '@aglio/ui/components/box';
+import { Link } from '@/components/nav/Link.jsx';
 
 export interface RecipeListProps {}
 

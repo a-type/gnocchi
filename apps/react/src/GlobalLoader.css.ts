@@ -46,6 +46,7 @@ const fadeAndPop = keyframes({
 });
 
 export const loaderIcon = style({
+	opacity: 0,
 	width: '20vmax',
 	height: '20vmax',
 	margin: 'auto',
@@ -54,4 +55,5 @@ export const loaderIcon = style({
 	animationDuration: '5s',
 	animationIterationCount: 'infinite',
 	animationTimingFunction: 'ease-in-out',
+	animationDelay: '500ms',
 });

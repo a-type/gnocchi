@@ -1,5 +1,5 @@
 import { Box } from '@aglio/ui/components/box';
-import { LinkButton } from '@aglio/ui/components/button';
+import { LinkButton } from '@/components/nav/Link.jsx';
 import { H1, P } from '@aglio/ui/components/typography';
 
 export interface RecipeNotFoundProps {}

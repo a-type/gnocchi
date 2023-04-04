@@ -27,7 +27,7 @@ import { sprinkles } from '@aglio/ui/styles';
 import { Divider } from '@aglio/ui/components/divider';
 import { Peek } from '@aglio/ui/components/peek';
 import { PageNowPlaying } from '@aglio/ui/components/layouts';
-import { LinkButton } from '@aglio/ui/components/button';
+import { LinkButton } from '@/components/nav/Link.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;

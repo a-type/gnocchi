@@ -1,4 +1,4 @@
-import { LinkButton, LinkButtonProps } from '@aglio/ui/components/button';
+import { LinkButton, LinkButtonProps } from '@/components/nav/Link.jsx';
 
 export function ManagePlanButton(props: Omit<LinkButtonProps, 'to'>) {
 	return (

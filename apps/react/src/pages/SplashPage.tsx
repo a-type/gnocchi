@@ -21,7 +21,7 @@ import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
 import { H2, P, Span } from '@aglio/ui/components/typography';
 import { Box } from '@aglio/ui/components/box';
 import { TextLink } from '@aglio/ui/components/textLink';
-import { LinkButton } from '@aglio/ui/components/button';
+import { LinkButton } from '@/components/nav/Link.jsx';
 
 // dynamically import Scene
 const Scene = lazy(() => import('@/components/3d/Scene.jsx'));

@@ -31,7 +31,7 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/components/nav/Link.jsx';
 import { useSnapshot } from 'valtio';
 import { ListSelect } from '../lists/ListSelect.jsx';
 import { useListOrNull, useListThemeClass } from '../lists/hooks.js';

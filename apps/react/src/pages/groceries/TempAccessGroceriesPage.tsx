@@ -11,7 +11,7 @@ import {
 import { createClientDescriptor, hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { Box } from '@aglio/ui/components/box';
-import { LinkButton } from '@aglio/ui/components/button';
+import { LinkButton } from '@/components/nav/Link.jsx';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { FullScreenSpinner } from '@aglio/ui/components/spinner';

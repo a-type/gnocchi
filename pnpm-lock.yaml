@@ -240,6 +240,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0
       react-hot-toast: ^2.3.0
+      react-lazy-with-preload: ^2.2.1
       react-router-dom: ^6.6.2
       react-use-measure: ^2.1.1
       superjson: ^1.12.0
@@ -311,6 +312,7 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-hot-toast: 2.3.0_vt6aeitzauirmcdhimiad2yjxy
+      react-lazy-with-preload: 2.2.1
       react-router-dom: 6.6.2_biqbaboplfbrettd7655fr4n2y
       react-use-measure: 2.1.1_biqbaboplfbrettd7655fr4n2y
       superjson: 1.12.0
@@ -10385,6 +10387,10 @@ packages:
 
   /react-is/17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
+    dev: false
+
+  /react-lazy-with-preload/2.2.1:
+    resolution: {integrity: sha512-ONSb8gizLE5jFpdHAclZ6EAAKuFX2JydnFXPPPjoUImZlLjGtKzyBS8SJgJq7CpLgsGKh9QCZdugJyEEOVC16Q==}
     dev: false
 
   /react-merge-refs/1.1.0:

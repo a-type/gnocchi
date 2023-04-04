@@ -27,9 +27,11 @@ import {
 import { FullScreenSpinner } from '@aglio/ui/components/spinner';
 import { Box } from '@aglio/ui/components/box';
 import { H1, P } from '@aglio/ui/components/typography';
-import { Button, LinkButton } from '@aglio/ui/components/button';
+import { Button } from '@aglio/ui/components/button';
+import { LinkButton } from '@/components/nav/Link.jsx';
+import { lazyWithPreload } from 'react-lazy-with-preload';
 
-const PlanPage = lazy(() => import('./PlanPage.jsx'));
+const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
 const NevermindPage = lazy(() => import('./NevermindPage.jsx'));
 const SplashPage = lazy(() => import('./SplashPage.jsx'));
@@ -43,16 +45,22 @@ const AdminPlanManagerPage = lazy(
 	() => import('./admin/AdminPlanManagerPage.js'),
 );
 const AdminSyncPage = lazy(() => import('./admin/AdminSyncPage.jsx'));
-const RecipeViewPage = lazy(() => import('./recipe/RecipeViewPage.jsx'));
-const RecipeEditPage = lazy(() => import('./recipe/RecipeEditPage.jsx'));
-const RecipeCookPage = lazy(() => import('./recipe/cook/RecipeCookPage.jsx'));
-const RecipeCookPrepPage = lazy(
+const RecipeViewPage = lazyWithPreload(
+	() => import('./recipe/RecipeViewPage.jsx'),
+);
+const RecipeEditPage = lazyWithPreload(
+	() => import('./recipe/RecipeEditPage.jsx'),
+);
+const RecipeCookPage = lazyWithPreload(
+	() => import('./recipe/cook/RecipeCookPage.jsx'),
+);
+const RecipeCookPrepPage = lazyWithPreload(
 	() => import('./recipe/cook/RecipeCookPrepPage.jsx'),
 );
-const RecipeCookStepsPage = lazy(
+const RecipeCookStepsPage = lazyWithPreload(
 	() => import('./recipe/cook/RecipeCookStepsPage.jsx'),
 );
-const RecipeOverviewPage = lazy(
+const RecipeOverviewPage = lazyWithPreload(
 	() => import('./recipe/RecipeOverviewPage.jsx'),
 );
 const PrivacyPolicyPage = lazy(() => import('./PrivacyPolicy.jsx'));
@@ -60,9 +68,14 @@ const TermsAndConditionsPage = lazy(() => import('./TermsAndConditions.jsx'));
 const TempAccessGroceriesPage = lazy(
 	() => import('./groceries/TempAccessGroceriesPage.jsx'),
 );
-const PantryPage = lazy(() => import('./PantryPage.jsx'));
-const RecipesPage = lazy(() => import('./recipe/RecipesPage.jsx'));
+const PantryPage = lazyWithPreload(() => import('./PantryPage.jsx'));
+const RecipesPage = lazyWithPreload(() => import('./recipe/RecipesPage.jsx'));
 const VerifyPasswordResetPage = lazy(() => import('./VerifyPasswordReset.jsx'));
+
+// preload all the root pages
+PlanPage.preload();
+PantryPage.preload();
+RecipesPage.preload();
 
 const router = createBrowserRouter([
 	{

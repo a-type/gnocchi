@@ -6,7 +6,7 @@ import { useCookingRecipe } from './RecipeCookContext.jsx';
 import * as classes from './RecipePrepView.css.js';
 import { PageFixedArea, PageNowPlaying } from '@aglio/ui/components/layouts';
 import { sprinkles } from '@aglio/ui/styles';
-import { LinkButton } from '@aglio/ui/components/button';
+import { LinkButton } from '@/components/nav/Link.jsx';
 
 export interface RecipePrepViewProps {}
 
