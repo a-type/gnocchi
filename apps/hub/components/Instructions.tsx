@@ -1,11 +1,16 @@
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
 import { Note } from '@aglio/ui/components/note';
 import { RichEditor } from '@aglio/ui/components/richEditor';
+// @ts-ignore
 import { Node, mergeAttributes } from '@tiptap/core';
 import {
+	// @ts-ignore
 	NodeViewContent,
+	// @ts-ignore
 	NodeViewWrapper,
+	// @ts-ignore
 	ReactNodeViewRenderer,
+	// @ts-ignore
 	useEditor,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -47,8 +52,8 @@ const Step = Node.create({
 				default: null,
 				keepOnSplit: false,
 				rendered: false,
-				parseHTML: (element) => element.getAttribute('data-id'),
-				renderHTML: (attributes) => {
+				parseHTML: (element: HTMLElement) => element.getAttribute('data-id'),
+				renderHTML: (attributes: any) => {
 					return {
 						'data-id': attributes.id,
 					};
@@ -58,8 +63,8 @@ const Step = Node.create({
 				default: undefined,
 				keepOnSplit: false,
 				rendered: false,
-				parseHTML: (element) => element.getAttribute('data-note'),
-				renderHTML: (attributes) => {
+				parseHTML: (element: HTMLElement) => element.getAttribute('data-note'),
+				renderHTML: (attributes: any) => {
 					return {
 						'data-note': attributes.note,
 					};
@@ -78,7 +83,7 @@ const Step = Node.create({
 		return [{ tag: 'p' }];
 	},
 
-	renderHTML({ node, HTMLAttributes }) {
+	renderHTML({ node, HTMLAttributes }: any) {
 		return [
 			'p',
 			mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
@@ -105,8 +110,8 @@ const SectionTitle = Node.create({
 				default: null,
 				keepOnSplit: false,
 				rendered: false,
-				parseHTML: (element) => element.getAttribute('data-id'),
-				renderHTML: (attributes) => {
+				parseHTML: (element: HTMLElement) => element.getAttribute('data-id'),
+				renderHTML: (attributes: any) => {
 					return {
 						'data-id': attributes.id,
 					};
@@ -119,7 +124,7 @@ const SectionTitle = Node.create({
 		return [{ tag: 'h2' }, { tag: 'h1' }, { tag: 'h3' }];
 	},
 
-	renderHTML({ HTMLAttributes }) {
+	renderHTML({ HTMLAttributes }: any) {
 		return [
 			'h2',
 			mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),

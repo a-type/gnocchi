@@ -2,6 +2,7 @@
 	"name": "@aglio/hub",
 	"version": "0.1.0",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"dev": "next dev --port 4446",
 		"build": "next build",
@@ -12,14 +13,14 @@
 		"@aglio/tools": "workspace:*",
 		"@aglio/trpc": "workspace:*",
 		"@aglio/ui": "workspace:*",
-		"@next/font": "13.1.6",
+		"@next/font": "13.2.4",
 		"@tanstack/react-query": "^4.3.8",
-		"@tiptap/core": "^2.0.0-beta.218",
-		"@tiptap/extension-document": "2.0.0-beta.218",
-		"@tiptap/extension-paragraph": "2.0.0-beta.218",
-		"@tiptap/pm": "^2.0.0-beta.218",
-		"@tiptap/react": "^2.0.0-beta.218",
-		"@tiptap/starter-kit": "^2.0.0-beta.218",
+		"@tiptap/core": "^2.0.2",
+		"@tiptap/extension-document": "^2.0.2",
+		"@tiptap/extension-paragraph": "^2.0.2",
+		"@tiptap/pm": "^2.0.2",
+		"@tiptap/react": "^2.0.2",
+		"@tiptap/starter-kit": "^2.0.2",
 		"@trpc/client": "^10.10.0",
 		"@trpc/next": "^10.10.0",
 		"@trpc/react-query": "^10.10.0",
@@ -32,11 +33,16 @@
 		"@vanilla-extract/next-plugin": "^2.1.1",
 		"classnames": "^2.3.2",
 		"eslint": "8.33.0",
-		"eslint-config-next": "13.1.6",
-		"next": "13.1.6",
+		"eslint-config-next": "13.2.4",
+		"next": "13.2.4",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"sharp": "^0.31.3",
 		"typescript": "5.0.2"
+	},
+	"pnpm": {
+		"patchedDependencies": {
+			"@tiptap/react@2.0.2": "patches/@tiptap__react@2.0.2.patch"
+		}
 	}
 }

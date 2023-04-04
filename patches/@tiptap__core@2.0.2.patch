@@ -1,0 +1,500 @@
+diff --git a/dist/packages/core/src/CommandManager.d.ts b/dist/packages/core/src/CommandManager.d.ts
+index 226fc9ac182bf10c3fba6c9100da13f1403286f2..92fbd94e8902dc2cbed77b6746286fa524e6c9f7 100644
+--- a/dist/packages/core/src/CommandManager.d.ts
++++ b/dist/packages/core/src/CommandManager.d.ts
+@@ -1,6 +1,6 @@
+ import { EditorState, Transaction } from '@tiptap/pm/state';
+-import { Editor } from './Editor';
+-import { AnyCommands, CanCommands, ChainedCommands, CommandProps, SingleCommands } from './types';
++import { Editor } from './Editor.js';
++import { AnyCommands, CanCommands, ChainedCommands, CommandProps, SingleCommands } from './types.js';
+ export declare class CommandManager {
+     editor: Editor;
+     rawCommands: AnyCommands;
+diff --git a/dist/packages/core/src/Editor.d.ts b/dist/packages/core/src/Editor.d.ts
+index 7fe4a773ebf205e94f200e6edae8838b3d336084..a9900aaebf13aec4e7407364ad5ac21851e68d17 100644
+--- a/dist/packages/core/src/Editor.d.ts
++++ b/dist/packages/core/src/Editor.d.ts
+@@ -1,10 +1,10 @@
+ import { MarkType, NodeType, Schema } from '@tiptap/pm/model';
+ import { EditorState, Plugin, PluginKey, Transaction } from '@tiptap/pm/state';
+ import { EditorView } from '@tiptap/pm/view';
+-import { EventEmitter } from './EventEmitter';
+-import { ExtensionManager } from './ExtensionManager';
+-import * as extensions from './extensions';
+-import { CanCommands, ChainedCommands, EditorEvents, EditorOptions, JSONContent, SingleCommands, TextSerializer } from './types';
++import { EventEmitter } from './EventEmitter.js';
++import { ExtensionManager } from './ExtensionManager.js';
++import * as extensions from './extensions/index.js';
++import { CanCommands, ChainedCommands, EditorEvents, EditorOptions, JSONContent, SingleCommands, TextSerializer } from './types.js';
+ export { extensions };
+ export interface HTMLElement {
+     editor?: Editor;
+diff --git a/dist/packages/core/src/Extension.d.ts b/dist/packages/core/src/Extension.d.ts
+index b0e06e536c8c9c4325271e54185425b14956a756..7dafe1e61f398f93f6d82ce7f1d7c21644b6ac2a 100644
+--- a/dist/packages/core/src/Extension.d.ts
++++ b/dist/packages/core/src/Extension.d.ts
+@@ -1,11 +1,11 @@
+ import { Plugin, Transaction } from '@tiptap/pm/state';
+-import { ExtensionConfig } from '.';
+-import { Editor } from './Editor';
+-import { InputRule } from './InputRule';
+-import { Mark } from './Mark';
+-import { Node } from './Node';
+-import { PasteRule } from './PasteRule';
+-import { Extensions, GlobalAttributes, KeyboardShortcutCommand, ParentConfig, RawCommands } from './types';
++import { ExtensionConfig } from './index.js';
++import { Editor } from './Editor.js';
++import { InputRule } from './InputRule.js';
++import { Mark } from './Mark.js';
++import { Node } from './Node.js';
++import { PasteRule } from './PasteRule.js';
++import { Extensions, GlobalAttributes, KeyboardShortcutCommand, ParentConfig, RawCommands } from './types.js';
+ declare module '@tiptap/core' {
+     interface ExtensionConfig<Options = any, Storage = any> {
+         [key: string]: any;
+diff --git a/dist/packages/core/src/ExtensionManager.d.ts b/dist/packages/core/src/ExtensionManager.d.ts
+index 312033d990dc5c0b95e80ddb9a37780808c92f87..43974669bc98160733a069ba8699a1bd0715e433 100644
+--- a/dist/packages/core/src/ExtensionManager.d.ts
++++ b/dist/packages/core/src/ExtensionManager.d.ts
+@@ -1,7 +1,7 @@
+ import { Schema } from '@tiptap/pm/model';
+ import { Plugin } from '@tiptap/pm/state';
+-import { Editor } from './Editor';
+-import { Extensions, RawCommands } from './types';
++import { Editor } from './Editor.js';
++import { Extensions, RawCommands } from './types.js';
+ export declare class ExtensionManager {
+     editor: Editor;
+     schema: Schema;
+diff --git a/dist/packages/core/src/InputRule.d.ts b/dist/packages/core/src/InputRule.d.ts
+index 7bf58ff69e158816a14ce4bf41b7262c744f0d91..ae5838219460f44d164dc2f3ac22ecb65440d35c 100644
+--- a/dist/packages/core/src/InputRule.d.ts
++++ b/dist/packages/core/src/InputRule.d.ts
+@@ -1,6 +1,6 @@
+ import { EditorState, Plugin } from '@tiptap/pm/state';
+-import { Editor } from './Editor';
+-import { CanCommands, ChainedCommands, ExtendedRegExpMatchArray, Range, SingleCommands } from './types';
++import { Editor } from './Editor.js';
++import { CanCommands, ChainedCommands, ExtendedRegExpMatchArray, Range, SingleCommands } from './types.js';
+ export declare type InputRuleMatch = {
+     index: number;
+     text: string;
+diff --git a/dist/packages/core/src/Mark.d.ts b/dist/packages/core/src/Mark.d.ts
+index dc6e12989b9a59fbc9457b159b46699e069e8924..a43fcbb1cd04b39c25103fc3c2fdaed8eb798e0f 100644
+--- a/dist/packages/core/src/Mark.d.ts
++++ b/dist/packages/core/src/Mark.d.ts
+@@ -1,11 +1,11 @@
+ import { DOMOutputSpec, Mark as ProseMirrorMark, MarkSpec, MarkType } from '@tiptap/pm/model';
+ import { Plugin, Transaction } from '@tiptap/pm/state';
+-import { MarkConfig } from '.';
+-import { Editor } from './Editor';
+-import { InputRule } from './InputRule';
+-import { Node } from './Node';
+-import { PasteRule } from './PasteRule';
+-import { Attributes, Extensions, GlobalAttributes, KeyboardShortcutCommand, ParentConfig, RawCommands } from './types';
++import { MarkConfig } from './index.js';
++import { Editor } from './Editor.js';
++import { InputRule } from './InputRule.js';
++import { Node } from './Node.js';
++import { PasteRule } from './PasteRule.js';
++import { Attributes, Extensions, GlobalAttributes, KeyboardShortcutCommand, ParentConfig, RawCommands } from './types.js';
+ declare module '@tiptap/core' {
+     interface MarkConfig<Options = any, Storage = any> {
+         [key: string]: any;
+diff --git a/dist/packages/core/src/Node.d.ts b/dist/packages/core/src/Node.d.ts
+index 9c63032520f28d8623123658007fa4e2b37c9ff6..286e37b142c3c68e3f3d849055c4893773ca7c62 100644
+--- a/dist/packages/core/src/Node.d.ts
++++ b/dist/packages/core/src/Node.d.ts
+@@ -1,10 +1,10 @@
+ import { DOMOutputSpec, Node as ProseMirrorNode, NodeSpec, NodeType } from '@tiptap/pm/model';
+ import { Plugin, Transaction } from '@tiptap/pm/state';
+-import { NodeConfig } from '.';
+-import { Editor } from './Editor';
+-import { InputRule } from './InputRule';
+-import { PasteRule } from './PasteRule';
+-import { Attributes, Extensions, GlobalAttributes, KeyboardShortcutCommand, NodeViewRenderer, ParentConfig, RawCommands } from './types';
++import { NodeConfig } from './index.js';
++import { Editor } from './Editor.js';
++import { InputRule } from './InputRule.js';
++import { PasteRule } from './PasteRule.js';
++import { Attributes, Extensions, GlobalAttributes, KeyboardShortcutCommand, NodeViewRenderer, ParentConfig, RawCommands } from './types.js';
+ declare module '@tiptap/core' {
+     interface NodeConfig<Options = any, Storage = any> {
+         [key: string]: any;
+diff --git a/dist/packages/core/src/NodeView.d.ts b/dist/packages/core/src/NodeView.d.ts
+index 8645fb06c958c85cbeb23e7d1e6996ebc99d17c0..7790b9b78af6fdd8b5ca48cf82aa26f03faded65 100644
+--- a/dist/packages/core/src/NodeView.d.ts
++++ b/dist/packages/core/src/NodeView.d.ts
+@@ -1,8 +1,8 @@
+ import { Node as ProseMirrorNode } from '@tiptap/pm/model';
+ import { NodeView as ProseMirrorNodeView } from '@tiptap/pm/view';
+-import { Editor as CoreEditor } from './Editor';
+-import { Node } from './Node';
+-import { DecorationWithType, NodeViewRendererOptions, NodeViewRendererProps } from './types';
++import { Editor as CoreEditor } from './Editor.js';
++import { Node } from './Node.js';
++import { DecorationWithType, NodeViewRendererOptions, NodeViewRendererProps } from './types.js';
+ export declare class NodeView<Component, NodeEditor extends CoreEditor = CoreEditor, Options extends NodeViewRendererOptions = NodeViewRendererOptions> implements ProseMirrorNodeView {
+     component: Component;
+     editor: NodeEditor;
+diff --git a/dist/packages/core/src/PasteRule.d.ts b/dist/packages/core/src/PasteRule.d.ts
+index 674be62de57c6e9a837cf9e8a90450efefad53f0..3dd1c6b133069c1ed00f361d10087e757cff1133 100644
+--- a/dist/packages/core/src/PasteRule.d.ts
++++ b/dist/packages/core/src/PasteRule.d.ts
+@@ -1,6 +1,6 @@
+ import { EditorState, Plugin } from '@tiptap/pm/state';
+-import { Editor } from './Editor';
+-import { CanCommands, ChainedCommands, ExtendedRegExpMatchArray, Range, SingleCommands } from './types';
++import { Editor } from './Editor.js';
++import { CanCommands, ChainedCommands, ExtendedRegExpMatchArray, Range, SingleCommands } from './types.js';
+ export declare type PasteRuleMatch = {
+     index: number;
+     text: string;
+diff --git a/dist/packages/core/src/helpers/createDocument.d.ts b/dist/packages/core/src/helpers/createDocument.d.ts
+index 408b99b90dceed626454f1f5fd10a8030982395f..d7bfd708e345f09c3ad2021f8fb30d138c4777ee 100644
+--- a/dist/packages/core/src/helpers/createDocument.d.ts
++++ b/dist/packages/core/src/helpers/createDocument.d.ts
+@@ -1,3 +1,3 @@
+ import { Node as ProseMirrorNode, ParseOptions, Schema } from '@tiptap/pm/model';
+-import { Content } from '../types';
++import { Content } from '../types.js';
+ export declare function createDocument(content: Content, schema: Schema, parseOptions?: ParseOptions): ProseMirrorNode;
+diff --git a/dist/packages/core/src/helpers/createNodeFromContent.d.ts b/dist/packages/core/src/helpers/createNodeFromContent.d.ts
+index 8a5282a2ae52e043e245c0d3e6bc1148b85920c3..21135720bc48591cb95d519225a9859516ab52da 100644
+--- a/dist/packages/core/src/helpers/createNodeFromContent.d.ts
++++ b/dist/packages/core/src/helpers/createNodeFromContent.d.ts
+@@ -1,5 +1,5 @@
+ import { Fragment, Node as ProseMirrorNode, ParseOptions, Schema } from '@tiptap/pm/model';
+-import { Content } from '../types';
++import { Content } from '../types.js';
+ export declare type CreateNodeFromContentOptions = {
+     slice?: boolean;
+     parseOptions?: ParseOptions;
+diff --git a/dist/packages/core/src/helpers/findChildren.d.ts b/dist/packages/core/src/helpers/findChildren.d.ts
+index 417c6964a7a6aeeffaa6c96558d022c4d1f1be45..8c1919384d67d88e40ccd5a686ea47b01b83d4cb 100644
+--- a/dist/packages/core/src/helpers/findChildren.d.ts
++++ b/dist/packages/core/src/helpers/findChildren.d.ts
+@@ -1,3 +1,3 @@
+ import { Node as ProseMirrorNode } from '@tiptap/pm/model';
+-import { NodeWithPos, Predicate } from '../types';
++import { NodeWithPos, Predicate } from '../types.js';
+ export declare function findChildren(node: ProseMirrorNode, predicate: Predicate): NodeWithPos[];
+diff --git a/dist/packages/core/src/helpers/findChildrenInRange.d.ts b/dist/packages/core/src/helpers/findChildrenInRange.d.ts
+index 1dab7ffcf4def15129c8636c10d3e467415429fd..d38414303cceebe5cef94896c3a18dafac9c4158 100644
+--- a/dist/packages/core/src/helpers/findChildrenInRange.d.ts
++++ b/dist/packages/core/src/helpers/findChildrenInRange.d.ts
+@@ -1,5 +1,5 @@
+ import { Node as ProseMirrorNode } from '@tiptap/pm/model';
+-import { NodeWithPos, Predicate, Range } from '../types';
++import { NodeWithPos, Predicate, Range } from '../types.js';
+ /**
+  * Same as `findChildren` but searches only within a `range`.
+  */
+diff --git a/dist/packages/core/src/helpers/findParentNode.d.ts b/dist/packages/core/src/helpers/findParentNode.d.ts
+index 21ad97e88f816c54ee84037b78b6c1bfcf93740b..f06886ecb6f9d1d2fb814eaea775681073a80d91 100644
+--- a/dist/packages/core/src/helpers/findParentNode.d.ts
++++ b/dist/packages/core/src/helpers/findParentNode.d.ts
+@@ -1,5 +1,5 @@
+ import { Selection } from '@tiptap/pm/state';
+-import { Predicate } from '../types';
++import { Predicate } from '../types.js';
+ export declare function findParentNode(predicate: Predicate): (selection: Selection) => {
+     pos: number;
+     start: number;
+diff --git a/dist/packages/core/src/helpers/findParentNodeClosestToPos.d.ts b/dist/packages/core/src/helpers/findParentNodeClosestToPos.d.ts
+index f135a41056ad0cfcb7601949b6599d9890e28041..54560f97d2c370767a313175009d99f20e2d13a0 100644
+--- a/dist/packages/core/src/helpers/findParentNodeClosestToPos.d.ts
++++ b/dist/packages/core/src/helpers/findParentNodeClosestToPos.d.ts
+@@ -1,5 +1,5 @@
+ import { Node as ProseMirrorNode, ResolvedPos } from '@tiptap/pm/model';
+-import { Predicate } from '../types';
++import { Predicate } from '../types.js';
+ export declare function findParentNodeClosestToPos($pos: ResolvedPos, predicate: Predicate): {
+     pos: number;
+     start: number;
+diff --git a/dist/packages/core/src/helpers/generateHTML.d.ts b/dist/packages/core/src/helpers/generateHTML.d.ts
+index 7d7436e7aaba6ea63cb6c88383fe16d1bbec0624..3c7bf8017e2787b64f2a347a932e73ceecb96bda 100644
+--- a/dist/packages/core/src/helpers/generateHTML.d.ts
++++ b/dist/packages/core/src/helpers/generateHTML.d.ts
+@@ -1,2 +1,2 @@
+-import { Extensions, JSONContent } from '../types';
++import { Extensions, JSONContent } from '../types.js';
+ export declare function generateHTML(doc: JSONContent, extensions: Extensions): string;
+diff --git a/dist/packages/core/src/helpers/generateJSON.d.ts b/dist/packages/core/src/helpers/generateJSON.d.ts
+index c50c28b12b77ad8c6cf4056e9d85c3e2532a2e5b..8c68a2b9f88b0565d28f2d7f69623505515a45a0 100644
+--- a/dist/packages/core/src/helpers/generateJSON.d.ts
++++ b/dist/packages/core/src/helpers/generateJSON.d.ts
+@@ -1,2 +1,2 @@
+-import { Extensions } from '../types';
++import { Extensions } from '../types.js';
+ export declare function generateJSON(html: string, extensions: Extensions): Record<string, any>;
+diff --git a/dist/packages/core/src/helpers/generateText.d.ts b/dist/packages/core/src/helpers/generateText.d.ts
+index ec3db844f5cc250dba2c1d864d7eb7b24976de0c..29dea9646c4d4238acbd156845b60fb4d66b5fc8 100644
+--- a/dist/packages/core/src/helpers/generateText.d.ts
++++ b/dist/packages/core/src/helpers/generateText.d.ts
+@@ -1,4 +1,4 @@
+-import { Extensions, JSONContent, TextSerializer } from '../types';
++import { Extensions, JSONContent, TextSerializer } from '../types.js';
+ export declare function generateText(doc: JSONContent, extensions: Extensions, options?: {
+     blockSeparator?: string;
+     textSerializers?: Record<string, TextSerializer>;
+diff --git a/dist/packages/core/src/helpers/getAttributesFromExtensions.d.ts b/dist/packages/core/src/helpers/getAttributesFromExtensions.d.ts
+index d393182768fcda0f8765712592e1d80c71bbf204..9bfe97b9d7f122495ecf7b4d5335eb91774af8a3 100644
+--- a/dist/packages/core/src/helpers/getAttributesFromExtensions.d.ts
++++ b/dist/packages/core/src/helpers/getAttributesFromExtensions.d.ts
+@@ -1,4 +1,4 @@
+-import { ExtensionAttribute, Extensions } from '../types';
++import { ExtensionAttribute, Extensions } from '../types.js';
+ /**
+  * Get a list of all extension attributes defined in `addAttribute` and `addGlobalAttribute`.
+  * @param extensions List of extensions
+diff --git a/dist/packages/core/src/index.d.ts b/dist/packages/core/src/index.d.ts
+index 2626c14f39a197ae9eade6c09fae28a231298524..d2ad9cff0fd053db13caf687da9650c5ccf0dbe5 100644
+--- a/dist/packages/core/src/index.d.ts
++++ b/dist/packages/core/src/index.d.ts
+@@ -1,23 +1,19 @@
+-export * from './CommandManager';
+-export * from './Editor';
+-export * from './Extension';
+-export * as extensions from './extensions';
+-export * from './helpers';
+-export * from './InputRule';
+-export * from './inputRules';
+-export * from './Mark';
+-export * from './Node';
+-export * from './NodeView';
+-export * from './PasteRule';
+-export * from './pasteRules';
+-export * from './Tracker';
+-export * from './types';
+-export * from './utilities';
+-export interface Commands<ReturnType = any> {
+-}
+-export interface ExtensionConfig<Options = any, Storage = any> {
+-}
+-export interface NodeConfig<Options = any, Storage = any> {
+-}
+-export interface MarkConfig<Options = any, Storage = any> {
+-}
++export * from './CommandManager.js';
++export * from './Editor.js';
++export * from './Extension.js';
++export * as extensions from './extensions/index.js';
++export * from './helpers/index.js';
++export * from './InputRule.js';
++export * from './inputRules/index.js';
++export * from './Mark.js';
++export * from './Node.js';
++export * from './NodeView.js';
++export * from './PasteRule.js';
++export * from './pasteRules/index.js';
++export * from './Tracker.js';
++export * from './types.js';
++export * from './utilities/index.js';
++export interface Commands<ReturnType = any> {}
++export interface ExtensionConfig<Options = any, Storage = any> {}
++export interface NodeConfig<Options = any, Storage = any> {}
++export interface MarkConfig<Options = any, Storage = any> {}
+diff --git a/dist/packages/core/src/inputRules/index.d.ts b/dist/packages/core/src/inputRules/index.d.ts
+index 913e5f9769e775df7d68fd750734521b7a26df85..cbd002dcbde8eecfd06eb49c6adad86a3d56d550 100644
+--- a/dist/packages/core/src/inputRules/index.d.ts
++++ b/dist/packages/core/src/inputRules/index.d.ts
+@@ -1,5 +1,5 @@
+-export * from './markInputRule';
+-export * from './nodeInputRule';
+-export * from './textblockTypeInputRule';
+-export * from './textInputRule';
+-export * from './wrappingInputRule';
++export * from './markInputRule.js';
++export * from './nodeInputRule.js';
++export * from './textblockTypeInputRule.js';
++export * from './textInputRule.js';
++export * from './wrappingInputRule.js';
+diff --git a/dist/packages/core/src/inputRules/markInputRule.d.ts b/dist/packages/core/src/inputRules/markInputRule.d.ts
+index 815ec7b7b10d06f6b9b7c0ce96d65427d5d47b8f..9a7fa0cf6d6a3badd1ece2a2e75d27b1c3f7dcd5 100644
+--- a/dist/packages/core/src/inputRules/markInputRule.d.ts
++++ b/dist/packages/core/src/inputRules/markInputRule.d.ts
+@@ -1,6 +1,6 @@
+ import { MarkType } from '@tiptap/pm/model';
+-import { InputRule, InputRuleFinder } from '../InputRule';
+-import { ExtendedRegExpMatchArray } from '../types';
++import { InputRule, InputRuleFinder } from '../InputRule.js';
++import { ExtendedRegExpMatchArray } from '../types.js';
+ /**
+  * Build an input rule that adds a mark when the
+  * matched text is typed into it.
+diff --git a/dist/packages/core/src/inputRules/nodeInputRule.d.ts b/dist/packages/core/src/inputRules/nodeInputRule.d.ts
+index b97bffc11ca3a721276bd1983002f6a362145939..7b5cb191849fde62c31c75ea089c0777e01b031a 100644
+--- a/dist/packages/core/src/inputRules/nodeInputRule.d.ts
++++ b/dist/packages/core/src/inputRules/nodeInputRule.d.ts
+@@ -1,6 +1,6 @@
+ import { NodeType } from '@tiptap/pm/model';
+-import { InputRule, InputRuleFinder } from '../InputRule';
+-import { ExtendedRegExpMatchArray } from '../types';
++import { InputRule, InputRuleFinder } from '../InputRule.js';
++import { ExtendedRegExpMatchArray } from '../types.js';
+ /**
+  * Build an input rule that adds a node when the
+  * matched text is typed into it.
+diff --git a/dist/packages/core/src/inputRules/textInputRule.d.ts b/dist/packages/core/src/inputRules/textInputRule.d.ts
+index 830e8530a3ad5046c1bb6ccdcf93e6f84d02c6cd..fe168d1b8c81262256e5e5c40f6bec39d17761f5 100644
+--- a/dist/packages/core/src/inputRules/textInputRule.d.ts
++++ b/dist/packages/core/src/inputRules/textInputRule.d.ts
+@@ -1,4 +1,4 @@
+-import { InputRule, InputRuleFinder } from '../InputRule';
++import { InputRule, InputRuleFinder } from '../InputRule.js';
+ /**
+  * Build an input rule that replaces text when the
+  * matched text is typed into it.
+diff --git a/dist/packages/core/src/inputRules/textblockTypeInputRule.d.ts b/dist/packages/core/src/inputRules/textblockTypeInputRule.d.ts
+index ac61866b256e08fc5ec9429a3e46b5eb26c56534..9b89f2cd9dad9b0651e9dca1047c9bf4a6d1a70f 100644
+--- a/dist/packages/core/src/inputRules/textblockTypeInputRule.d.ts
++++ b/dist/packages/core/src/inputRules/textblockTypeInputRule.d.ts
+@@ -1,6 +1,6 @@
+ import { NodeType } from '@tiptap/pm/model';
+-import { InputRule, InputRuleFinder } from '../InputRule';
+-import { ExtendedRegExpMatchArray } from '../types';
++import { InputRule, InputRuleFinder } from '../InputRule.js';
++import { ExtendedRegExpMatchArray } from '../types.js';
+ /**
+  * Build an input rule that changes the type of a textblock when the
+  * matched text is typed into it. When using a regular expresion you’ll
+diff --git a/dist/packages/core/src/inputRules/wrappingInputRule.d.ts b/dist/packages/core/src/inputRules/wrappingInputRule.d.ts
+index 416d5e665fc32815bda41d4672813082c3d5fa06..2549cfef81f90ab7e444db998ec35d2a3a95bd4d 100644
+--- a/dist/packages/core/src/inputRules/wrappingInputRule.d.ts
++++ b/dist/packages/core/src/inputRules/wrappingInputRule.d.ts
+@@ -1,7 +1,7 @@
+ import { Node as ProseMirrorNode, NodeType } from '@tiptap/pm/model';
+-import { Editor } from '../Editor';
+-import { InputRule, InputRuleFinder } from '../InputRule';
+-import { ExtendedRegExpMatchArray } from '../types';
++import { Editor } from '../Editor.js';
++import { InputRule, InputRuleFinder } from '../InputRule.js';
++import { ExtendedRegExpMatchArray } from '../types.js';
+ /**
+  * Build an input rule for automatically wrapping a textblock when a
+  * given string is typed. When using a regular expresion you’ll
+diff --git a/dist/packages/core/src/pasteRules/index.d.ts b/dist/packages/core/src/pasteRules/index.d.ts
+index f63faff526f960fa6b88bf5f94d63f3dc499878d..be74e66323f6c22a8132c32c2443c3b3cba48683 100644
+--- a/dist/packages/core/src/pasteRules/index.d.ts
++++ b/dist/packages/core/src/pasteRules/index.d.ts
+@@ -1,3 +1,3 @@
+-export * from './markPasteRule';
+-export * from './nodePasteRule';
+-export * from './textPasteRule';
++export * from './markPasteRule.js';
++export * from './nodePasteRule.js';
++export * from './textPasteRule.js';
+diff --git a/dist/packages/core/src/pasteRules/markPasteRule.d.ts b/dist/packages/core/src/pasteRules/markPasteRule.d.ts
+index bd154d4fa39dccb9d58cbc4cade7d3f938c3dcdb..d74f6eb0a872ba7a68275216326272999cce83c0 100644
+--- a/dist/packages/core/src/pasteRules/markPasteRule.d.ts
++++ b/dist/packages/core/src/pasteRules/markPasteRule.d.ts
+@@ -1,6 +1,6 @@
+ import { MarkType } from '@tiptap/pm/model';
+-import { PasteRule, PasteRuleFinder } from '../PasteRule';
+-import { ExtendedRegExpMatchArray } from '../types';
++import { PasteRule, PasteRuleFinder } from '../PasteRule.js';
++import { ExtendedRegExpMatchArray } from '../types.js';
+ /**
+  * Build an paste rule that adds a mark when the
+  * matched text is pasted into it.
+diff --git a/dist/packages/core/src/pasteRules/nodePasteRule.d.ts b/dist/packages/core/src/pasteRules/nodePasteRule.d.ts
+index 1b35468bef21a7b2a048c6065ce7319453129b77..4f3d3851adb48a6023af2718c379f8bf8f1008fd 100644
+--- a/dist/packages/core/src/pasteRules/nodePasteRule.d.ts
++++ b/dist/packages/core/src/pasteRules/nodePasteRule.d.ts
+@@ -1,6 +1,6 @@
+ import { NodeType } from '@tiptap/pm/model';
+-import { PasteRule, PasteRuleFinder } from '../PasteRule';
+-import { ExtendedRegExpMatchArray } from '../types';
++import { PasteRule, PasteRuleFinder } from '../PasteRule.js';
++import { ExtendedRegExpMatchArray } from '../types.js';
+ /**
+  * Build an paste rule that adds a node when the
+  * matched text is pasted into it.
+diff --git a/dist/packages/core/src/pasteRules/textPasteRule.d.ts b/dist/packages/core/src/pasteRules/textPasteRule.d.ts
+index 44525a51762137d8b5e94f47c87398a23b61b8a7..09f83cc7ed8149c620c15a5eb5786222b5e22f5d 100644
+--- a/dist/packages/core/src/pasteRules/textPasteRule.d.ts
++++ b/dist/packages/core/src/pasteRules/textPasteRule.d.ts
+@@ -1,4 +1,4 @@
+-import { PasteRule, PasteRuleFinder } from '../PasteRule';
++import { PasteRule, PasteRuleFinder } from '../PasteRule.js';
+ /**
+  * Build an paste rule that replaces text when the
+  * matched text is pasted into it.
+diff --git a/dist/packages/core/src/types.d.ts b/dist/packages/core/src/types.d.ts
+index d7bf0186ba03787a3836bd9a4d635ea8c02ffa96..5ef193f305bdbaa41beae5e6b29703d926423bb0 100644
+--- a/dist/packages/core/src/types.d.ts
++++ b/dist/packages/core/src/types.d.ts
+@@ -1,11 +1,11 @@
+ import { Mark as ProseMirrorMark, Node as ProseMirrorNode, NodeType, ParseOptions } from '@tiptap/pm/model';
+ import { EditorState, Transaction } from '@tiptap/pm/state';
+ import { Decoration, EditorProps, EditorView, NodeView } from '@tiptap/pm/view';
+-import { Commands, ExtensionConfig, MarkConfig, NodeConfig } from '.';
+-import { Editor } from './Editor';
+-import { Extension } from './Extension';
+-import { Mark } from './Mark';
+-import { Node } from './Node';
++import { Commands, ExtensionConfig, MarkConfig, NodeConfig } from './index.js';
++import { Editor } from './Editor.js';
++import { Extension } from './Extension.js';
++import { Mark } from './Mark.js';
++import { Node } from './Node.js';
+ export declare type AnyConfig = ExtensionConfig | NodeConfig | MarkConfig;
+ export declare type AnyExtension = Extension | Node | Mark;
+ export declare type Extensions = AnyExtension[];
+diff --git a/dist/packages/core/src/utilities/callOrReturn.d.ts b/dist/packages/core/src/utilities/callOrReturn.d.ts
+index 48248f10768ea6602883154ef52ea949122706dc..413403b514bba4e6b222bac8e7f40a46d5770953 100644
+--- a/dist/packages/core/src/utilities/callOrReturn.d.ts
++++ b/dist/packages/core/src/utilities/callOrReturn.d.ts
+@@ -1,4 +1,4 @@
+-import { MaybeReturnType } from '../types';
++import { MaybeReturnType } from '../types.js';
+ /**
+  * Optionally calls `value` as a function.
+  * Otherwise it is returned directly.
+diff --git a/dist/packages/core/src/utilities/index.d.ts b/dist/packages/core/src/utilities/index.d.ts
+index 6bc8de870ad60d06eed63dd1c1c8c60bb536e545..1d8bd0c9389707f12465de621e81bb3a1fc7890b 100644
+--- a/dist/packages/core/src/utilities/index.d.ts
++++ b/dist/packages/core/src/utilities/index.d.ts
+@@ -1,20 +1,20 @@
+-export * from './callOrReturn';
+-export * from './createStyleTag';
+-export * from './deleteProps';
+-export * from './elementFromString';
+-export * from './escapeForRegEx';
+-export * from './findDuplicates';
+-export * from './fromString';
+-export * from './isEmptyObject';
+-export * from './isFunction';
+-export * from './isiOS';
+-export * from './isMacOS';
+-export * from './isNumber';
+-export * from './isPlainObject';
+-export * from './isRegExp';
+-export * from './isString';
+-export * from './mergeAttributes';
+-export * from './mergeDeep';
+-export * from './minMax';
+-export * from './objectIncludes';
+-export * from './removeDuplicates';
++export * from './callOrReturn.js';
++export * from './createStyleTag.js';
++export * from './deleteProps.js';
++export * from './elementFromString.js';
++export * from './escapeForRegEx.js';
++export * from './findDuplicates.js';
++export * from './fromString.js';
++export * from './isEmptyObject.js';
++export * from './isFunction.js';
++export * from './isiOS.js';
++export * from './isMacOS.js';
++export * from './isNumber.js';
++export * from './isPlainObject.js';
++export * from './isRegExp.js';
++export * from './isString.js';
++export * from './mergeAttributes.js';
++export * from './mergeDeep.js';
++export * from './minMax.js';
++export * from './objectIncludes.js';
++export * from './removeDuplicates.js';

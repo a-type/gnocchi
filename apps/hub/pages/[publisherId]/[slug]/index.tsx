@@ -1,4 +1,4 @@
-import { trpc } from '@/lib/tprc';
+import { trpc } from '@/lib/tprc.js';
 import {
 	GetStaticPathsResult,
 	GetStaticPropsContext,
@@ -7,13 +7,14 @@ import {
 import {
 	IngredientList,
 	IngredientListItem,
-} from '@/components/IngredientList';
-import { Instructions } from '@/components/Instructions';
+} from '@/components/IngredientList.jsx';
+import { Instructions } from '@/components/Instructions.jsx';
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
-import { Prelude } from '@/components/Prelude';
-import Head from 'next/head';
-import { MainImage } from '@/components/MainImage';
-import { TopLineRoot, TopLineTitle } from '@/components/layout';
+import { Prelude } from '@/components/Prelude.jsx';
+// @ts-ignore
+import Head from 'next/head.js';
+import { MainImage } from '@/components/MainImage.jsx';
+import { TopLineRoot, TopLineTitle } from '@/components/layout.jsx';
 import {
 	PageRoot,
 	PageContent,
@@ -36,6 +37,7 @@ export default function RecipePage({
 	if (!data) {
 		return (
 			<>
+				{/* @ts-ignore */}
 				<Head>
 					<title>Not found</title>
 				</Head>
@@ -50,6 +52,7 @@ export default function RecipePage({
 
 	return (
 		<>
+			{/* @ts-ignore */}
 			<Head>
 				<title>{data.title}</title>
 			</Head>

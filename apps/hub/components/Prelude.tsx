@@ -1,6 +1,7 @@
 import { Peek } from '@aglio/ui/components/peek';
 import { RichEditor } from '@aglio/ui/components/richEditor';
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
+// @ts-ignore
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import classNames from 'classnames';

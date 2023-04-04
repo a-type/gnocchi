@@ -1,4 +1,6 @@
+// @ts-ignore
 import { NextResponse } from 'next/server';
+// @ts-ignore
 import type { NextRequest } from 'next/server';
 
 // Rewrites /r/publisher/title-text-then-slug to /r/publisher/slug

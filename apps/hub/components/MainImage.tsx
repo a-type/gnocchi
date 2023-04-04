@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import * as classes from './MainImage.css.js';
+// @ts-ignore
 import Image from 'next/image';
 import { TopLineImage } from './layout.jsx';
 
