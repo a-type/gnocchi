@@ -1,6 +1,6 @@
 import { Recipe } from '@aglio/groceries-client';
 import { useSyncedPreludeEditor } from '../hooks.js';
-import { Box } from '@aglio/ui/components/Box';
+import { Box } from '@aglio/ui/components/box';
 import { RichEditor } from '@aglio/ui/components/richEditor';
 import * as classes from './RecipeInstructionsField.css.js';
 
