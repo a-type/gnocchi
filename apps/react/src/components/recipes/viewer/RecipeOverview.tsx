@@ -29,6 +29,7 @@ import { Peek } from '@aglio/ui/components/peek';
 import { PageNowPlaying } from '@aglio/ui/components/layouts';
 import { LinkButton } from '@/components/nav/Link.jsx';
 import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
+import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -49,110 +50,112 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	useWatchChanges(recipe);
 
 	return (
-		<Box direction="column" gap={6} align="flex-start" width="full">
+		<>
+			<HeaderBar backUrl="/recipes" />
 			<OnboardingBanner onboarding={saveHubRecipeOnboarding} step="recipe">
 				<H2>This is your copy!</H2>
 				<P>Feel free to make changes, add notes, etc.</P>
 			</OnboardingBanner>
-
-			<TitleAndImageLayout>
-				<TitleContainer>
-					<Box
-						width="full"
-						alignSelf="flex-start"
-						align="flex-start"
-						fontSize="xs"
-						my={3}
-						gap={4}
-					>
-						<H1>{title}</H1>
-						<RecipeNote recipe={recipe} />
+			<Box direction="column" gap={6} align="flex-start" width="full">
+				<TitleAndImageLayout>
+					<TitleContainer>
 						<Box
-							direction="row"
-							justify="space-between"
-							align="flex-start"
 							width="full"
-							gap={3}
+							alignSelf="flex-start"
+							align="flex-start"
+							fontSize="xs"
+							my={3}
+							gap={4}
 						>
-							<p className={sprinkles({ m: 0, flex: 1, mt: 2 })}>
-								Created on {format(createdAt, 'LLL do, yyyy')}
-							</p>
+							<H1>{title}</H1>
+							<RecipeNote recipe={recipe} />
 							<Box
 								direction="row"
-								gap={1}
-								flexWrap="wrap"
-								justifyContent="flex-end"
+								justify="space-between"
+								align="flex-start"
+								width="full"
+								gap={3}
 							>
-								<RecipePublishControl recipe={recipe} />
-								<RecipeViewerEditButton recipe={recipe} color="primary" />
+								<p className={sprinkles({ m: 0, flex: 1, mt: 2 })}>
+									Created on {format(createdAt, 'LLL do, yyyy')}
+								</p>
+								<Box
+									direction="row"
+									gap={1}
+									flexWrap="wrap"
+									justifyContent="flex-end"
+								>
+									<RecipePublishControl recipe={recipe} />
+									<RecipeViewerEditButton recipe={recipe} color="primary" />
+								</Box>
 							</Box>
+							{url && (
+								<a
+									href={url}
+									target="_blank"
+									rel="noreferrer"
+									className={sprinkles({ fontWeight: 'bold' })}
+								>
+									View original
+								</a>
+							)}
 						</Box>
-						{url && (
-							<a
-								href={url}
-								target="_blank"
-								rel="noreferrer"
-								className={sprinkles({ fontWeight: 'bold' })}
-							>
-								View original
-							</a>
-						)}
-					</Box>
-				</TitleContainer>
-				{mainImage && (
-					<ImageContainer>
-						<RecipeMainImageViewer recipe={recipe} />
-					</ImageContainer>
-				)}
-			</TitleAndImageLayout>
-			<Box
-				width="auto"
-				alignSelf="flex-end"
-				gap={2}
-				direction="row"
-				align="center"
-			>
-				<RecipeMultiplierField recipe={recipe} />
-				<AddToListButton recipe={recipe} />
-			</Box>
-			<RecipeTagsEditor className={sprinkles({ mt: 3 })} recipe={recipe} />
-			<PreludeSection recipe={recipe} />
-			<Divider />
-			<Box width="full">
-				<H2 gutterBottom>Ingredients</H2>
-				<RecipeIngredientsViewer recipe={recipe} />
-			</Box>
-			<Divider />
-			<Box width="full">
-				<H2 gutterBottom>Instructions</H2>
-				<Peek>
-					<RecipeInstructionsViewer recipe={recipe} />
-				</Peek>
-			</Box>
-			<PageNowPlaying unstyled>
+					</TitleContainer>
+					{mainImage && (
+						<ImageContainer>
+							<RecipeMainImageViewer recipe={recipe} />
+						</ImageContainer>
+					)}
+				</TitleAndImageLayout>
 				<Box
-					direction="row"
+					width="auto"
+					alignSelf="flex-end"
 					gap={2}
+					direction="row"
 					align="center"
-					justify="flex-end"
-					width="full"
 				>
-					<LinkButton
-						to={makeRecipeLink(recipe, '/cook/prep')}
-						className={classes.cookButton}
-					>
-						Start prep
-					</LinkButton>
-					<LinkButton
-						color="primary"
-						to={makeRecipeLink(recipe, '/cook/steps')}
-						className={classes.cookButton}
-					>
-						Start cooking
-					</LinkButton>
+					<RecipeMultiplierField recipe={recipe} />
+					<AddToListButton recipe={recipe} />
 				</Box>
-			</PageNowPlaying>
-		</Box>
+				<RecipeTagsEditor className={sprinkles({ mt: 3 })} recipe={recipe} />
+				<PreludeSection recipe={recipe} />
+				<Divider />
+				<Box width="full">
+					<H2 gutterBottom>Ingredients</H2>
+					<RecipeIngredientsViewer recipe={recipe} />
+				</Box>
+				<Divider />
+				<Box width="full">
+					<H2 gutterBottom>Instructions</H2>
+					<Peek>
+						<RecipeInstructionsViewer recipe={recipe} />
+					</Peek>
+				</Box>
+				<PageNowPlaying unstyled>
+					<Box
+						direction="row"
+						gap={2}
+						align="center"
+						justify="flex-end"
+						width="full"
+					>
+						<LinkButton
+							to={makeRecipeLink(recipe, '/cook/prep')}
+							className={classes.cookButton}
+						>
+							Start prep
+						</LinkButton>
+						<LinkButton
+							color="primary"
+							to={makeRecipeLink(recipe, '/cook/steps')}
+							className={classes.cookButton}
+						>
+							Start cooking
+						</LinkButton>
+					</Box>
+				</PageNowPlaying>
+			</Box>
+		</>
 	);
 }
 

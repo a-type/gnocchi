@@ -20,6 +20,8 @@ import { RecipeTitleField } from './RecipeTitleField.jsx';
 import { RecipeUrlField } from './RecipeUrlField.jsx';
 import { Box } from '@aglio/ui/components/box';
 import { H2 } from '@aglio/ui/components/typography';
+import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
+import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 
 export interface RecipeEditorProps {
 	slug: string;
@@ -33,19 +35,14 @@ export function RecipeEditor({ slug }: RecipeEditorProps) {
 	return <RecipeEditorContent recipe={recipe} />;
 }
 
-const fixedAreaStyle = { zIndex: 10 };
-
 function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	useWatchChanges(recipe);
 
 	return (
 		<Box direction="column" gap={8}>
-			<PageFixedArea
-				className={sprinkles({ px: 0, py: 1 })}
-				style={fixedAreaStyle}
-			>
+			<HeaderBar backUrl={makeRecipeLink(recipe, '')}>
 				<RecipeEditActions />
-			</PageFixedArea>
+			</HeaderBar>
 			<Box direction="column" gap={2}>
 				<TitleAndImageLayout>
 					<TitleContainer>
