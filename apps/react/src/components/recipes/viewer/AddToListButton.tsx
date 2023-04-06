@@ -19,6 +19,7 @@ import {
 } from '@aglio/ui/components/dialog';
 import { Checkbox } from '@aglio/ui/components/checkbox';
 import { sprinkles } from '@aglio/ui/styles';
+import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 
 export interface AddToListButtonProps extends ButtonProps {
 	recipe: Recipe;
@@ -72,6 +73,7 @@ export function AddToListButton({
 					<DialogContent>
 						<DialogTitle>Add to list</DialogTitle>
 						<div className={classes.mainContent}>
+							<RecipeNote recipe={recipe} readOnly />
 							<MultiplierStepper
 								highlightChange
 								value={multiplier}

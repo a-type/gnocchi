@@ -1,11 +1,10 @@
+import { AppearWithScroll } from '@/components/recipes/viewer/AppearWithScroll.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import * as classes from './AddImagePrompt.css.js';
-import { animated, useSpring } from '@react-spring/web';
-import { useScroll } from '@use-gesture/react';
-import { useToggle } from '@aglio/ui/hooks';
 import { ImageUploader } from '@aglio/ui/components/imageUploader';
 import { P } from '@aglio/ui/components/typography';
+import { useToggle } from '@aglio/ui/hooks';
+import * as classes from './AddImagePrompt.css.js';
 
 export interface AddImagePromptProps {
 	recipe: Recipe;
@@ -13,36 +12,14 @@ export interface AddImagePromptProps {
 
 export function AddImagePrompt({ recipe }: AddImagePromptProps) {
 	const { mainImage } = hooks.useWatch(recipe);
-	const [show, setShow] = useToggle(!mainImage);
-	const [style, spring] = useSpring(() => ({
-		opacity: 0,
-	}));
-
-	useScroll(
-		({ xy: [, y] }) => {
-			// fade in during the last 20% of window scroll
-			const totalScrollHeight = document.body.scrollHeight - window.innerHeight;
-			const adjusted = totalScrollHeight - 200;
-			const space = 0.3 * adjusted;
-			const threshold = Math.max(0, adjusted - space);
-			const overflow = Math.max(0, y - threshold);
-			const opacity = Math.min(1, overflow / space);
-
-			spring.start({
-				opacity,
-			});
-		},
-		{
-			target: window,
-		},
-	);
+	const [show] = useToggle(!mainImage);
 
 	if (!show) {
 		return null;
 	}
 
 	return (
-		<animated.div style={style} className={classes.root}>
+		<AppearWithScroll>
 			<P>Enjoy! Now would be a good time to add a photo to this recipe 🙂</P>
 			<ImageUploader
 				value={mainImage?.url || null}
@@ -55,6 +32,6 @@ export function AddImagePrompt({ recipe }: AddImagePromptProps) {
 				className={classes.uploader}
 				maxDimension={1080}
 			/>
-		</animated.div>
+		</AppearWithScroll>
 	);
 }

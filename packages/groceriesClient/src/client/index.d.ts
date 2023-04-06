@@ -547,6 +547,7 @@ export type FoodDestructured = {
   lastAddedAt: number | null;
   purchaseCount: number;
   defaultListId: string | null;
+  pluralizeName: boolean;
 };
 export type FoodInit = {
   canonicalName: string;
@@ -558,6 +559,7 @@ export type FoodInit = {
   lastAddedAt?: number | null;
   purchaseCount?: number;
   defaultListId?: string | null;
+  pluralizeName?: boolean;
 };
 export type FoodSnapshot = {
   canonicalName: string;
@@ -569,6 +571,7 @@ export type FoodSnapshot = {
   lastAddedAt: number | null;
   purchaseCount: number;
   defaultListId: string | null;
+  pluralizeName: boolean;
 };
 /** Food sub-object types */
 
@@ -617,6 +620,10 @@ export type FoodDefaultListId = string | null;
 export type FoodDefaultListIdInit = FoodDefaultListId | undefined;
 export type FoodDefaultListIdSnapshot = FoodDefaultListId;
 export type FoodDefaultListIdDestructured = FoodDefaultListId;
+export type FoodPluralizeName = boolean;
+export type FoodPluralizeNameInit = FoodPluralizeName | undefined;
+export type FoodPluralizeNameSnapshot = FoodPluralizeName;
+export type FoodPluralizeNameDestructured = FoodPluralizeName;
 
 export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
 
@@ -838,6 +845,7 @@ export type RecipeDestructured = {
   createdAt: number;
   updatedAt: number;
   prelude: any;
+  note: string | null;
   ingredients: RecipeIngredients;
   instructions: any;
   url: string | null;
@@ -857,6 +865,7 @@ export type RecipeInit = {
   createdAt?: number;
   updatedAt?: number;
   prelude?: any;
+  note?: string | null;
   ingredients?: RecipeIngredientsInit;
   instructions?: any;
   url?: string | null;
@@ -876,6 +885,7 @@ export type RecipeSnapshot = {
   createdAt: number;
   updatedAt: number;
   prelude: any;
+  note: string | null;
   ingredients: RecipeIngredientsSnapshot;
   instructions: any;
   url: string | null;
@@ -917,6 +927,10 @@ export type RecipePrelude = any;
 export type RecipePreludeInit = RecipePrelude | undefined;
 export type RecipePreludeSnapshot = RecipePrelude;
 export type RecipePreludeDestructured = RecipePrelude;
+export type RecipeNote = string | null;
+export type RecipeNoteInit = RecipeNote | undefined;
+export type RecipeNoteSnapshot = RecipeNote;
+export type RecipeNoteDestructured = RecipeNote;
 export type RecipeIngredients = ListEntity<
   RecipeIngredientsInit,
   RecipeIngredientsDestructured

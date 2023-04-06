@@ -84,6 +84,10 @@ const foods = collection({
         defaultListId: {
             type: 'string',
             nullable: true
+        },
+        pluralizeName: {
+            type: 'boolean',
+            default: false
         }
     },
     synthetics: {
@@ -313,6 +317,10 @@ const recipes = collection({
                 content: []
             }
         },
+        note: {
+            type: 'string',
+            nullable: true
+        },
         ingredients: {
             type: 'array',
             items: {
@@ -470,7 +478,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 28,
+    version: 29,
     collections: {
         categories,
         items,

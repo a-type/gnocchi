@@ -10,6 +10,8 @@ import { AddImagePrompt } from './AddImagePrompt.jsx';
 import { H1 } from '@aglio/ui/components/typography';
 import { PageFixedArea } from '@aglio/ui/components/layouts';
 import { sprinkles } from '@aglio/ui/styles';
+import { AddNotePrompt } from '@/components/recipes/viewer/AddNotePrompt.jsx';
+import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 
 export interface RecipeCookViewProps {
 	slug: string;
@@ -22,6 +24,7 @@ export function RecipeCookView({ className }: { className?: string }) {
 	return (
 		<div className={clsx(classes.container, className)}>
 			<H1 gutterBottom={false}>{recipe.get('title')}</H1>
+			<RecipeNote recipe={recipe} />
 			<PageFixedArea className={sprinkles({ px: 0, py: 1 })}>
 				<CookingActionBar recipe={recipe} />
 			</PageFixedArea>
@@ -33,6 +36,7 @@ export function RecipeCookView({ className }: { className?: string }) {
 				<RecipeInstructionsViewer recipe={recipe} />
 			</InstructionsProvider>
 			<AddImagePrompt recipe={recipe} />
+			<AddNotePrompt recipe={recipe} />
 			<CookingToolbar recipe={recipe} />
 		</div>
 	);

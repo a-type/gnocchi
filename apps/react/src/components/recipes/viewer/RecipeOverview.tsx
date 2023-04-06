@@ -28,6 +28,7 @@ import { Divider } from '@aglio/ui/components/divider';
 import { Peek } from '@aglio/ui/components/peek';
 import { PageNowPlaying } from '@aglio/ui/components/layouts';
 import { LinkButton } from '@/components/nav/Link.jsx';
+import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -65,6 +66,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						gap={4}
 					>
 						<H1>{title}</H1>
+						<RecipeNote recipe={recipe} />
 						<Box
 							direction="row"
 							justify="space-between"
