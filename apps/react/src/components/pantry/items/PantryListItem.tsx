@@ -9,6 +9,7 @@ import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import * as classes from './PantryListItem.css.js';
 import { Button } from '@aglio/ui/components/button';
 import { Tooltip } from '@aglio/ui/components/tooltip';
+import { FoodName } from '@/components/foods/FoodName.jsx';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -49,7 +50,9 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 				>
 					<TrashIcon />
 				</Button>
-				<div className={groceryItemClasses.textContent}>{food}</div>
+				<div className={groceryItemClasses.textContent}>
+					<PantryFoodName food={food} />
+				</div>
 				{purchasedAt && (
 					<Tooltip disabled={!expiresAt} content={expiresAtText}>
 						<div
@@ -67,4 +70,19 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 			</div>
 		</div>
 	);
+}
+
+function PantryFoodName({ food }: { food: string }) {
+	const metadata = hooks.useOneFood({
+		index: {
+			where: 'nameLookup',
+			equals: food.toLowerCase(),
+		},
+	});
+
+	if (!metadata) {
+		return <>{food}</>;
+	}
+
+	return <FoodName food={metadata} />;
 }

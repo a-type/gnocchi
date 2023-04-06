@@ -18,6 +18,8 @@ import { Button } from '@aglio/ui/components/button';
 import { Box } from '@aglio/ui/components/box';
 import { P, Span } from '@aglio/ui/components/typography';
 import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
+import { Checkbox } from '@aglio/ui/src/components/checkbox';
+import { FoodName } from '@/components/foods/FoodName.jsx';
 
 export interface FoodDetailDialogProps {
 	foodName: string;
@@ -77,8 +79,17 @@ function FoodDetailView({
 
 	return (
 		<Box gap={3}>
-			<DialogTitle>{capitalize(food.get('canonicalName'))}</DialogTitle>
+			<DialogTitle>
+				<FoodName food={food} />
+			</DialogTitle>
 			<P>Alternate names: {alternateNames}</P>
+			<Box gap={1} direction="row" alignItems="center">
+				<Checkbox
+					checked={food.get('pluralizeName')}
+					onCheckedChange={(val) => food.set('pluralizeName', val === true)}
+				/>
+				<Span>Use pluralized name</Span>
+			</Box>
 			<Box gap={1} direction="row" alignItems="center">
 				<span>Category:</span>
 				<CategorySelect
