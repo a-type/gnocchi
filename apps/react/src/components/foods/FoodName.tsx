@@ -7,10 +7,35 @@ export interface FoodNameProps {
 	food: Food;
 }
 
-export function FoodName({ food }: FoodNameProps) {
-	const { canonicalName, pluralizeName } = hooks.useWatch(food);
+export function useFoodName(food: Food | null, backupName?: string) {
+	hooks.useWatch(food);
 
-	return (
-		<>{capitalize(pluralizeName ? pluralize(canonicalName) : canonicalName)}</>
-	);
+	if (!food) {
+		return backupName || '';
+	}
+
+	const pluralizeName = food.get('pluralizeName');
+	const canonicalName = food.get('canonicalName');
+
+	return capitalize(pluralizeName ? pluralize(canonicalName) : canonicalName);
+}
+
+export function FoodName({ food }: FoodNameProps) {
+	const name = useFoodName(food);
+	return <>{name}</>;
+}
+
+export function useLookupFoodName(foodName: string) {
+	const food = hooks.useOneFood({
+		index: {
+			where: 'nameLookup',
+			equals: foodName,
+		},
+	});
+
+	return useFoodName(food, foodName);
+}
+
+export function LookupFoodName({ foodName }: { foodName: string }) {
+	return <>{useLookupFoodName(foodName)}</>;
 }

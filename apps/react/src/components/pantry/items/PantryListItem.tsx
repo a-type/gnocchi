@@ -1,15 +1,15 @@
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
+import { LookupFoodName } from '@/components/foods/FoodName.jsx';
 import * as groceryItemClasses from '@/components/groceries/items/GroceryListItem.css.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
+import { Button } from '@aglio/ui/components/button';
 import { RelativeTime } from '@aglio/ui/components/relativeTime';
+import { Tooltip } from '@aglio/ui/components/tooltip';
 import { ClockIcon, TrashIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import * as classes from './PantryListItem.css.js';
-import { Button } from '@aglio/ui/components/button';
-import { Tooltip } from '@aglio/ui/components/tooltip';
-import { FoodName } from '@/components/foods/FoodName.jsx';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -51,7 +51,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 					<TrashIcon />
 				</Button>
 				<div className={groceryItemClasses.textContent}>
-					<PantryFoodName food={food} />
+					<LookupFoodName foodName={food} />
 				</div>
 				{purchasedAt && (
 					<Tooltip disabled={!expiresAt} content={expiresAtText}>
@@ -70,19 +70,4 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 			</div>
 		</div>
 	);
-}
-
-function PantryFoodName({ food }: { food: string }) {
-	const metadata = hooks.useOneFood({
-		index: {
-			where: 'nameLookup',
-			equals: food.toLowerCase(),
-		},
-	});
-
-	if (!metadata) {
-		return <>{food}</>;
-	}
-
-	return <FoodName food={metadata} />;
 }

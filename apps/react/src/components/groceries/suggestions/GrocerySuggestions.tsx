@@ -2,7 +2,7 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
 import { RecipeMainImageViewer } from '@/components/recipes/viewer/RecipeMainImageViewer.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Food, Recipe } from '@aglio/groceries-client';
+import { Food, Item, Recipe } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
 import {
 	CollapsibleContent,
@@ -16,6 +16,12 @@ import addDays from 'date-fns/addDays';
 import startOfDay from 'date-fns/startOfDay';
 import { title, titleRow } from '../categories/GroceryListCategory.css.js';
 import * as classes from './GrocerySuggestions.css.js';
+import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
+import {
+	FoodName,
+	useFoodName,
+	useLookupFoodName,
+} from '@/components/foods/FoodName.jsx';
 
 export interface GrocerySuggestionsProps {}
 
@@ -42,8 +48,14 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 		},
 	});
 	const guessedRecipes = guessedRecipesRaw.slice(0, 5);
+	const expiresSoonItems = useExpiresSoonItems();
 
-	if (!guessedFoods.length && !guessedRecipes.length) return null;
+	if (
+		!guessedFoods.length &&
+		!guessedRecipes.length &&
+		!expiresSoonItems.length
+	)
+		return null;
 
 	return (
 		<CollapsibleRoot defaultOpen className={classes.root}>
@@ -61,6 +73,9 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 				{guessedRecipes.map((recipe) => (
 					<RecipeSuggestionItem key={recipe.get('id')} recipe={recipe} />
 				))}
+				{expiresSoonItems.map((item) => (
+					<ExpiresSoonSuggestionItem key={item.get('id')} item={item} />
+				))}
 			</CollapsibleContent>
 		</CollapsibleRoot>
 	);
@@ -68,16 +83,17 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 
 function FoodSuggestionItem({ food }: { food: Food }) {
 	const addItems = hooks.useAddItems();
+	const name = useFoodName(food);
 
 	return (
 		<div className={classes.item}>
-			<div className={classes.name}>{food.get('canonicalName')}</div>
+			<div className={classes.name}>{name}</div>
 			<Button
 				size="icon"
 				color="ghost"
 				className={classes.addButton}
 				onClick={async () => {
-					await addItems([food.get('canonicalName')], {});
+					await addItems([name], {});
 				}}
 			>
 				<PlusCircledIcon />
@@ -102,6 +118,27 @@ function RecipeSuggestionItem({ recipe }: { recipe: Recipe }) {
 			>
 				<PlusCircledIcon />
 			</AddToListButton>
+		</div>
+	);
+}
+
+function ExpiresSoonSuggestionItem({ item }: { item: Item }) {
+	const addItems = hooks.useAddItems();
+	const name = useLookupFoodName(item.get('food'));
+
+	return (
+		<div className={classes.item}>
+			<div className={classes.name}>{name}</div>
+			<Button
+				size="icon"
+				color="ghost"
+				className={classes.addButton}
+				onClick={async () => {
+					await addItems([name], {});
+				}}
+			>
+				<PlusCircledIcon />
+			</Button>
 		</div>
 	);
 }
