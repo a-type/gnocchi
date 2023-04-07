@@ -5,6 +5,7 @@ import pluralize from 'pluralize';
 
 export interface FoodNameProps {
 	food: Food;
+	capitalize?: boolean;
 }
 
 export function useFoodName(food: Food | null, backupName?: string) {
@@ -17,12 +18,12 @@ export function useFoodName(food: Food | null, backupName?: string) {
 	const pluralizeName = food.get('pluralizeName');
 	const canonicalName = food.get('canonicalName');
 
-	return capitalize(pluralizeName ? pluralize(canonicalName) : canonicalName);
+	return pluralizeName ? pluralize(canonicalName) : canonicalName;
 }
 
-export function FoodName({ food }: FoodNameProps) {
+export function FoodName({ food, capitalize: doCapitalize }: FoodNameProps) {
 	const name = useFoodName(food);
-	return <>{name}</>;
+	return <>{doCapitalize ? capitalize(name) : name}</>;
 }
 
 export function useLookupFoodName(foodName: string) {
@@ -36,6 +37,13 @@ export function useLookupFoodName(foodName: string) {
 	return useFoodName(food, foodName);
 }
 
-export function LookupFoodName({ foodName }: { foodName: string }) {
-	return <>{useLookupFoodName(foodName)}</>;
+export function LookupFoodName({
+	foodName,
+	capitalize: doCapitalize,
+}: {
+	foodName: string;
+	capitalize?: boolean;
+}) {
+	const name = useLookupFoodName(foodName);
+	return <>{doCapitalize ? capitalize(name) : name}</>;
 }

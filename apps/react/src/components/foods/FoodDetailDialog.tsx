@@ -80,9 +80,9 @@ function FoodDetailView({
 	return (
 		<Box gap={3}>
 			<DialogTitle>
-				<FoodName food={food} />
+				<FoodName food={food} capitalize />
 			</DialogTitle>
-			<P>Alternate names: {alternateNames}</P>
+			{alternateNames && <P>Alternate names: {alternateNames}</P>}
 			<Box gap={1} direction="row" alignItems="center">
 				<Checkbox
 					checked={food.get('pluralizeName')}
