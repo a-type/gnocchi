@@ -5,7 +5,6 @@ export const root = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space[1],
-	borderRadius: vars.radii.md,
 	backgroundColor: vars.colors.accentWash,
 	overflow: 'hidden',
 	transition: `box-shadow 0.2s ${vars.transitions.springy}, transform 0.2s ${vars.transitions.springy}, background-color 0.5s linear`,

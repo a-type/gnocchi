@@ -15,6 +15,7 @@ export const root = style([
 		backgroundColor: vars.colors.grayBlend,
 		userSelect: 'auto',
 		minWidth: 60,
+		color: vars.colors.black,
 
 		border: `1px solid ${vars.colors.gray90}`,
 
