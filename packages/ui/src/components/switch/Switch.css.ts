@@ -24,7 +24,7 @@ export const thumb = style({
 	display: 'block',
 	width: 21,
 	height: 21,
-	backgroundColor: 'white',
+	backgroundColor: vars.colors.white,
 	borderRadius: '9999px',
 	borderColor: vars.colors.black,
 	borderStyle: 'solid',

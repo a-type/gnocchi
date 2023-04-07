@@ -37,11 +37,10 @@ export const icon = style({
 
 export const content = style({
 	overflow: 'hidden',
-	backgroundColor: 'white',
+	backgroundColor: vars.colors.white,
 	borderRadius: 6,
 	zIndex: vars.zIndices.menu,
-	boxShadow:
-		'0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2)',
+	boxShadow: vars.shadows.lg,
 });
 
 export const contentInDialog = style({
@@ -108,7 +107,7 @@ export const scrollButton = style({
 	alignItems: 'center',
 	justifyContent: 'center',
 	height: 25,
-	backgroundColor: 'white',
+	backgroundColor: vars.colors.white,
 	color: vars.colors.primaryDark,
 	cursor: 'default',
 });

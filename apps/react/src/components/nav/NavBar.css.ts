@@ -131,7 +131,7 @@ export const icon = style({
 
 	selectors: {
 		[`${buttonActive} &`]: {
-			fill: vars.colors.primary,
+			fill: vars.colors.primaryLight,
 		},
 	},
 });

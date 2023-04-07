@@ -1,4 +1,4 @@
-import { signupDialogState } from '@/components/sync/StartSignupDialog.jsx';
+import { signupDialogState } from '@/components/sync/state.js';
 import { trpcClient } from '@/trpc.js';
 import { parseIngredient } from '@aglio/conversion';
 import { TRPCClientError } from '@trpc/client';

@@ -76,7 +76,7 @@ export const content = recipe({
 });
 
 export const contentContent = style({
-	backgroundColor: 'white',
+	backgroundColor: vars.colors.white,
 	borderTopLeftRadius: vars.radii.lg,
 	borderTopRightRadius: vars.radii.lg,
 	zIndex: vars.zIndices.dialog,

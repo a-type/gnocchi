@@ -3,6 +3,7 @@ import { BugButton } from '@/components/menu/BugButton.jsx';
 import { ManageCategoriesDialog } from '@/components/menu/ManageCategoriesDialog.jsx';
 import { InstallHint } from '@/components/promotional/InstallHint.jsx';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
+import { ColorModeSelect } from '@/components/settings/ColorModeSelect.jsx';
 import { TemporaryAccessLinkButton } from '@/components/settings/TemporaryAccessLinkButton.jsx';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.js';
 import { LoginButton } from '@/components/sync/LoginButton.jsx';
@@ -102,6 +103,7 @@ function OfflineContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
+			<ColorModeSelect />
 			<Button size="small" color="default" onClick={() => refetch()}>
 				Retry connection
 			</Button>
@@ -117,6 +119,7 @@ function AnonymousContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
+			<ColorModeSelect />
 			<Box direction="row" align="center" gap={2}>
 				<PromoteSubscriptionButton color="primary">
 					Upgrade for ${PRICE_MONTHLY_DOLLARS}/mo
@@ -139,6 +142,7 @@ function UnsubscribedContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
+			<ColorModeSelect />
 			<Box
 				background="primaryWash"
 				color="primaryDarker"
@@ -162,6 +166,7 @@ function OnlineContents() {
 	return (
 		<MainContainer>
 			<InstallHint />
+			<ColorModeSelect />
 			<H2>Collaborate</H2>
 			<Invite />
 			<TemporaryAccessLinkButton />

@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@aglio/ui/components/button';
-import { signupDialogState } from '../sync/StartSignupDialog.jsx';
+import { signupDialogState } from '../sync/state.js';
 
 export interface PromoteSubscriptionButtonProps extends ButtonProps {}
 

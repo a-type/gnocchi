@@ -84,7 +84,7 @@ export const content = recipe({
 });
 
 export const arrow = style({
-	fill: 'white',
+	fill: vars.colors.white,
 	stroke: vars.colors.black,
 });
 

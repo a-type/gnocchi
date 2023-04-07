@@ -1,5 +1,6 @@
 import '@aglio/ui/styles';
 import './main.css.js';
+import './darkMode.js';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.js';

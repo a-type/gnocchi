@@ -1,5 +1,5 @@
 import { recipeSavePromptState } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
-import { signupDialogState as signupState } from '@/components/sync/StartSignupDialog.jsx';
+import { signupDialogState as signupState } from '@/components/sync/state.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';

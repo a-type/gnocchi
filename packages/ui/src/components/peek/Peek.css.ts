@@ -14,8 +14,7 @@ export const trigger = style({
 	selectors: {
 		'&:focus, &:hover': {
 			outline: 'none',
-			background:
-				'linear-gradient(rgba(255, 255, 255, 0), rgba(249, 231, 148, 0.7))',
+			background: `linear-gradient(rgba(255, 255, 255, 0), ${vars.colors.primaryLighter})`,
 			borderBottom: `1px solid ${vars.colors.primary}`,
 		},
 		'&::after': {
@@ -32,8 +31,7 @@ export const trigger = style({
 			left: 0,
 			right: 0,
 			height: 80,
-			background:
-				'linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))',
+			background: `linear-gradient(rgba(255, 255, 255, 0), ${vars.colors.white})`,
 		},
 		'&[data-state="open"]::after': {
 			content: '"- tap to collapse -"',

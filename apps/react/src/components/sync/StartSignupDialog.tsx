@@ -5,9 +5,8 @@ import {
 } from '@/config.js';
 import { sprinkles } from '@aglio/ui/styles';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import { proxy, useSnapshot } from 'valtio';
+import { useSnapshot } from 'valtio';
 import { LoginButton } from './LoginButton.js';
-import classNames from 'classnames';
 import * as classes from './StartSignupDialog.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 import {
@@ -20,12 +19,9 @@ import {
 import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import { H2, P, Span } from '@aglio/ui/components/typography';
+import { signupDialogState } from '@/components/sync/state.js';
 
 export interface StartSignupDialogProps {}
-
-export const signupDialogState = proxy({
-	status: 'closed' as 'closed' | 'open',
-});
 
 export function StartSignupDialog({}: StartSignupDialogProps) {
 	const { status } = useSnapshot(signupDialogState);

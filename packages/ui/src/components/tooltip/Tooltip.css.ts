@@ -30,7 +30,7 @@ export const content = style({
 	fontSize: vars.fontSizes.sm,
 	lineHeight: 1,
 	color: 'inherit',
-	backgroundColor: 'white',
+	backgroundColor: vars.colors.white,
 	boxShadow:
 		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
 	userSelect: 'none',
@@ -65,7 +65,7 @@ export const content = style({
 });
 
 export const arrow = style({
-	fill: 'white',
+	fill: vars.colors.white,
 	stroke: vars.colors.black,
 	strokeWidth: 1,
 });

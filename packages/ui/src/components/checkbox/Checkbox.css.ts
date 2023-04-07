@@ -19,8 +19,8 @@ export const root = style({
 			borderWidth: 1,
 		},
 		'&[data-state="checked"]': {
-			backgroundColor: vars.colors.primaryLighter,
-			borderColor: vars.colors.primaryLight,
+			backgroundColor: vars.colors.primaryLight,
+			borderColor: vars.colors.primaryDark,
 		},
 		'&:hover:not(:disabled)': {
 			boxShadow: `0 0 0 1px currentColor`,

@@ -16,7 +16,7 @@ export const root = style([
 		userSelect: 'auto',
 		minWidth: 60,
 
-		border: '1px solid currentColor',
+		border: `1px solid ${vars.colors.gray90}`,
 
 		selectors: {
 			'&:focus': {

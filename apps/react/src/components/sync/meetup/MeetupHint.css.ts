@@ -5,7 +5,7 @@ export const root = style({
 	backgroundColor: vars.colors.attention,
 	padding: 2,
 	borderRadius: '100%',
-	color: 'white',
+	color: vars.colors.white,
 	width: 17,
 	height: 17,
 	display: 'flex',
