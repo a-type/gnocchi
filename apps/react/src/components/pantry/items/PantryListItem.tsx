@@ -44,8 +44,8 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 				)}
 			>
 				<Button
-					size="small"
-					color="ghostDestructive"
+					size="icon"
+					color="destructive"
 					onClick={() => deleteItem(item)}
 				>
 					<TrashIcon />

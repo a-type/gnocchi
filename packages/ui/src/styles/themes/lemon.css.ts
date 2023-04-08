@@ -4,7 +4,7 @@ import { vars as contract } from './contract.css.js';
 
 export const lemonTheme = createTheme(contract, {
 	colors: {
-		attentionLight: 'var(--color-red-light)',
+		attentionLight: 'var(--color-red-lighter)',
 		attention: 'var(--color-red)',
 		attentionDark: 'var(--color-red-dark)',
 		accentWash: 'var(--color-green-wash)',

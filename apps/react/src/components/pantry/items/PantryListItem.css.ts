@@ -11,6 +11,7 @@ export const purchasedAt = style({
 	flexDirection: 'row',
 	alignItems: 'center',
 	gap: vars.space[2],
+	whiteSpace: 'nowrap',
 });
 
 export const wordBought = style({
