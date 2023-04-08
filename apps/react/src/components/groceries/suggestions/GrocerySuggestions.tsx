@@ -22,6 +22,7 @@ import {
 	useFoodName,
 	useLookupFoodName,
 } from '@/components/foods/FoodName.jsx';
+import { useListId } from '@/contexts/ListContext.jsx';
 
 export interface GrocerySuggestionsProps {}
 
@@ -91,6 +92,7 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 function FoodSuggestionItem({ food }: { food: Food }) {
 	const addItems = hooks.useAddItems();
 	const name = useFoodName(food);
+	const listId = useListId() || null;
 
 	return (
 		<div className={classes.item}>
@@ -100,7 +102,7 @@ function FoodSuggestionItem({ food }: { food: Food }) {
 				color="ghost"
 				className={classes.addButton}
 				onClick={async () => {
-					await addItems([name], {});
+					await addItems([name], { listId });
 				}}
 			>
 				<PlusCircledIcon />
@@ -110,6 +112,7 @@ function FoodSuggestionItem({ food }: { food: Food }) {
 }
 
 function RecipeSuggestionItem({ recipe }: { recipe: Recipe }) {
+	const listId = useListId() || null;
 	return (
 		<div className={classes.item}>
 			<RecipeMainImageViewer recipe={recipe} className={classes.recipeImage} />
@@ -122,6 +125,7 @@ function RecipeSuggestionItem({ recipe }: { recipe: Recipe }) {
 				size="icon"
 				recipe={recipe}
 				className={classes.addButton}
+				listId={listId}
 			>
 				<PlusCircledIcon />
 			</AddToListButton>
@@ -132,6 +136,7 @@ function RecipeSuggestionItem({ recipe }: { recipe: Recipe }) {
 function ExpiresSoonSuggestionItem({ item }: { item: Item }) {
 	const addItems = hooks.useAddItems();
 	const name = useLookupFoodName(item.get('food'));
+	const listId = useListId() || null;
 
 	return (
 		<div className={classes.item}>
@@ -141,7 +146,7 @@ function ExpiresSoonSuggestionItem({ item }: { item: Item }) {
 				color="ghost"
 				className={classes.addButton}
 				onClick={async () => {
-					await addItems([name], {});
+					await addItems([name], { listId });
 				}}
 			>
 				<PlusCircledIcon />

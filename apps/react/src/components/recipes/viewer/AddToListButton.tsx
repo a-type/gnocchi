@@ -23,11 +23,13 @@ import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 
 export interface AddToListButtonProps extends ButtonProps {
 	recipe: Recipe;
+	listId?: string | null;
 }
 
 export function AddToListButton({
 	recipe,
 	children,
+	listId = null,
 	...rest
 }: AddToListButtonProps) {
 	// set local multiplier from recipe default
@@ -143,6 +145,7 @@ export function AddToListButton({
 												multiplier,
 												recipeId: recipe.get('id'),
 											},
+											listId,
 										},
 									);
 									groceriesState.justAddedRecipe = true;
