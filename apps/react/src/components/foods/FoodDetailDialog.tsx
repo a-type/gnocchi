@@ -1,5 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode, Suspense, useState } from 'react';
 import { capitalize } from '@aglio/tools';
 import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
 import * as classes from './FoodDetailDialog.css.js';
@@ -45,7 +45,11 @@ export function FoodDetailDialog({
 			</DialogTrigger>
 			<DialogContent>
 				<Suspense>
-					<FoodDetailView foodName={foodName} open={open} />
+					<FoodDetailView
+						foodName={foodName}
+						open={open}
+						toggleOpen={toggleOpen}
+					/>
 				</Suspense>
 				<DialogActions>
 					<DialogClose asChild>
@@ -60,10 +64,13 @@ export function FoodDetailDialog({
 function FoodDetailView({
 	foodName,
 	open,
+	toggleOpen,
 }: {
 	foodName: string;
 	open: boolean;
+	toggleOpen: () => void;
 }) {
+	const client = hooks.useClient();
 	const food = hooks.useOneFood({
 		index: {
 			where: 'nameLookup',
@@ -73,7 +80,19 @@ function FoodDetailView({
 	});
 	hooks.useWatch(food);
 
-	if (!food) return <div>No food data for "{foodName}"</div>;
+	const [justDeleted, setJustDeleted] = useState(false);
+
+	if (!food)
+		return (
+			<Box direction="column" align="center" gap={4}>
+				<div>No food data for "{foodName}"</div>
+				{justDeleted && (
+					<Button color="ghost" onClick={() => client.undoHistory.undo()}>
+						Undo delete
+					</Button>
+				)}
+			</Box>
+		);
 
 	return (
 		<Box gap={3}>
@@ -131,6 +150,18 @@ function FoodDetailView({
 					onCheckedChange={(val) => food.set('pluralizeName', val === true)}
 				/>
 				<Span>Use pluralized name</Span>
+			</Box>
+			<Divider />
+			<Box gap={1} direction="row" alignItems="center">
+				<Button
+					onClick={() => {
+						client.foods.delete(food.get('canonicalName'));
+						setJustDeleted(true);
+					}}
+					color="destructive"
+				>
+					Delete
+				</Button>
 			</Box>
 		</Box>
 	);
