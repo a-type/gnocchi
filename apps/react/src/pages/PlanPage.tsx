@@ -1,4 +1,5 @@
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
+import { ManageFoodsButton } from '@/components/foods/ManageFoodsButton.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
 import { ManageCategoriesDialog } from '@/components/menu/ManageCategoriesDialog.jsx';
 import { InstallHint } from '@/components/promotional/InstallHint.jsx';
@@ -95,6 +96,15 @@ const MainContainer = ({ children }: { children: ReactNode }) => (
 	</Box>
 );
 
+function ManageSection() {
+	return (
+		<>
+			<ManageCategories />
+			<ManageFoodsButton />
+		</>
+	);
+}
+
 function OfflineContents() {
 	const { refetch } = useAuth();
 
@@ -107,7 +117,7 @@ function OfflineContents() {
 			<Button size="small" color="default" onClick={() => refetch()}>
 				Retry connection
 			</Button>
-			<ManageCategories />
+			<ManageSection />
 			<Divider />
 			<BugButton />
 			<ReloadButton />
@@ -130,7 +140,7 @@ function AnonymousContents() {
 				</LoginButton>
 			</Box>
 			<Divider />
-			<ManageCategories />
+			<ManageSection />
 			<Divider />
 			<BugButton />
 			<ReloadButton />
@@ -153,7 +163,7 @@ function UnsubscribedContents() {
 			</Box>
 			<ManageSubscriptionButton />
 			<MemberManager />
-			<ManageCategories />
+			<ManageSection />
 			<LogoutButton>Sign out</LogoutButton>
 			<Divider />
 			<BugButton />
@@ -173,7 +183,7 @@ function OnlineContents() {
 			<PushSubscriptionToggle />
 			<Divider />
 			<H2>Manage</H2>
-			<ManageCategories />
+			<ManageSection />
 			<MemberManager />
 			<Divider />
 			<H2>Troubleshoot</H2>
