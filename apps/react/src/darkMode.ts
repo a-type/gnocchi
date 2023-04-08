@@ -13,6 +13,29 @@ const updateMode = () => {
 	if (mode) {
 		document.documentElement.classList.add('override-' + mode);
 	}
+
+	// determine final mode, even if it's system
+	const finalMode =
+		mode ||
+		(window.matchMedia('(prefers-color-scheme: dark)').matches
+			? 'dark'
+			: 'light');
+	// set the status bar color in pwas
+	const iosStatusBarColor = document.querySelector(
+		'meta[name=apple-mobile-web-app-status-bar-style]',
+	);
+	const androidStatusBarColor = document.querySelector(
+		'meta[name=theme-color]',
+	);
+
+	if (finalMode === 'dark') {
+		iosStatusBarColor?.setAttribute('content', 'black');
+		androidStatusBarColor?.setAttribute('content', '#000000');
+	}
+	if (finalMode === 'light') {
+		iosStatusBarColor?.setAttribute('content', 'white');
+		androidStatusBarColor?.setAttribute('content', '#ffffff');
+	}
 };
 updateMode();
 
