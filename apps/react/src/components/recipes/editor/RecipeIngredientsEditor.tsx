@@ -1,5 +1,4 @@
 import { hooks } from '@/stores/groceries/index.js';
-import * as mutations from '@/stores/groceries/recipeMutations.js';
 import {
 	Recipe,
 	RecipeIngredients,
@@ -276,11 +275,12 @@ function AddIngredientsForm({
 }: {
 	ingredients: RecipeIngredients;
 }) {
+	const addIngredients = hooks.useAddRecipeIngredients();
 	return (
 		<Formik
 			initialValues={{ text: '' }}
 			onSubmit={async ({ text }, bag) => {
-				await mutations.addIngredients(ingredients, text);
+				await addIngredients(ingredients, text);
 				bag.resetForm();
 			}}
 		>

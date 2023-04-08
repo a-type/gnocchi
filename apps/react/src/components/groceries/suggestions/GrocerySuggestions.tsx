@@ -9,7 +9,7 @@ import {
 	CollapsibleRoot,
 	CollapsibleTrigger,
 } from '@aglio/ui/components/collapsible';
-import { Span } from '@aglio/ui/components/typography';
+import { H5, Span } from '@aglio/ui/components/typography';
 import { CaretDownIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import addDays from 'date-fns/addDays';
@@ -67,12 +67,19 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 				</div>
 			</CollapsibleTrigger>
 			<CollapsibleContent className={classes.list}>
+				{!!guessedFoods.length ||
+					(!!guessedRecipes.length && (
+						<H5 className={classes.subtitle}>Favorites</H5>
+					))}
 				{guessedFoods.map((food) => (
 					<FoodSuggestionItem key={food.get('canonicalName')} food={food} />
 				))}
 				{guessedRecipes.map((recipe) => (
 					<RecipeSuggestionItem key={recipe.get('id')} recipe={recipe} />
 				))}
+				{!!expiresSoonItems.length && (
+					<H5 className={classes.subtitle}>Expiring soon</H5>
+				)}
 				{expiresSoonItems.map((item) => (
 					<ExpiresSoonSuggestionItem key={item.get('id')} item={item} />
 				))}

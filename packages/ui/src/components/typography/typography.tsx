@@ -9,20 +9,7 @@ export const H3 = withClassName('h3', classes.heading);
 export const H4 = withClassName('h4', classes.heading);
 export const H5 = withClassName('h5', classes.heading);
 
-export const Span = forwardRef<
-	HTMLSpanElement,
-	Omit<HTMLProps<HTMLSpanElement>, 'size'> & {
-		size?: 'xs' | 'sm' | 'default';
-	}
->(function Span({ size = 'default' as const, className, ...props }, ref) {
-	return (
-		<span
-			{...props}
-			className={clsx(classes.span[size], className)}
-			ref={ref}
-		/>
-	);
-});
+export const Span = withClassName('span', classes.span);
 
 export const P = forwardRef<
 	HTMLParagraphElement,

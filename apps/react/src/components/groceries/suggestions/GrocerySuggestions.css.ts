@@ -88,3 +88,10 @@ export const triggerIcon = style({
 		},
 	},
 });
+
+export const subtitle = style({
+	marginLeft: vars.space[3],
+	color: vars.colors.accentDarker,
+	marginBottom: vars.space[1],
+	marginTop: vars.space[2],
+});

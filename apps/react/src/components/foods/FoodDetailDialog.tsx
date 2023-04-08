@@ -16,10 +16,12 @@ import {
 } from '@aglio/ui/components/dialog';
 import { Button } from '@aglio/ui/components/button';
 import { Box } from '@aglio/ui/components/box';
-import { P, Span } from '@aglio/ui/components/typography';
+import { H3, P, Span } from '@aglio/ui/components/typography';
 import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
 import { Checkbox } from '@aglio/ui/src/components/checkbox';
 import { FoodName } from '@/components/foods/FoodName.jsx';
+import { FoodNamesEditor } from '@/components/foods/FoodNamesEditor.jsx';
+import { Divider } from '@aglio/ui/src/components/divider';
 
 export interface FoodDetailDialogProps {
 	foodName: string;
@@ -73,23 +75,11 @@ function FoodDetailView({
 
 	if (!food) return <div>No food data for "{foodName}"</div>;
 
-	const alternateNames = Array.from(
-		new Set(food.get('alternateNames').getAll()),
-	).join(', ');
-
 	return (
 		<Box gap={3}>
 			<DialogTitle>
 				<FoodName food={food} capitalize />
 			</DialogTitle>
-			{alternateNames && <P>Alternate names: {alternateNames}</P>}
-			<Box gap={1} direction="row" alignItems="center">
-				<Checkbox
-					checked={food.get('pluralizeName')}
-					onCheckedChange={(val) => food.set('pluralizeName', val === true)}
-				/>
-				<Span>Use pluralized name</Span>
-			</Box>
 			<Box gap={1} direction="row" alignItems="center">
 				<span>Category:</span>
 				<CategorySelect
@@ -107,9 +97,10 @@ function FoodDetailView({
 					inDialog
 				/>
 			</Box>
+			<Divider />
 			<Box gap={1} direction="column">
 				<Box gap={1} direction="row" alignItems="center">
-					<span>Expires after</span>
+					<Span noWrap>Expires after</Span>
 					<LiveUpdateTextField
 						type="number"
 						value={food.get('expiresAfterDays')?.toString() ?? ''}
@@ -130,6 +121,16 @@ function FoodDetailView({
 					Set this and the app will remind you when something is about to
 					expire. Only affects newly purchased items.
 				</Span>
+			</Box>
+			<Divider />
+			<H3>Alternate names</H3>
+			<FoodNamesEditor names={food.get('alternateNames')} />
+			<Box gap={1} direction="row" alignItems="center">
+				<Checkbox
+					checked={food.get('pluralizeName')}
+					onCheckedChange={(val) => food.set('pluralizeName', val === true)}
+				/>
+				<Span>Use pluralized name</Span>
 			</Box>
 		</Box>
 	);

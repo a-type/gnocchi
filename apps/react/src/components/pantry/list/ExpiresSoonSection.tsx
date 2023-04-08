@@ -75,7 +75,7 @@ function ExpiresSoonItem({ item }: { item: Item }) {
 				</div>
 			</div>
 			<div className={classes.itemActions}>
-				<Button size="small" color="destructive" onClick={deleteItem}>
+				<Button size="small" color="destructive" onClick={deleteThisItem}>
 					<TrashIcon />
 					<span>Delete</span>
 				</Button>

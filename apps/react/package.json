@@ -9,7 +9,8 @@
 		"preview": "vite preview",
 		"link-lofi": "pnpm link --global @lo-fi/web && pnpm link --global @lo-fi/common && pnpm link --global @lo-fi/react && pnpm link --global @lo-fi/cli",
 		"clear": "rm -rf node_modules/.vite",
-		"icons": "node ./scripts/generateIcons.js"
+		"icons": "node ./scripts/generateIcons.js",
+		"typecheck": "tsc --build tsconfig.json"
 	},
 	"dependencies": {
 		"@a-type/utils": "^1.0.2",

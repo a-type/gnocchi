@@ -1,7 +1,6 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { updateRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { Recipe } from '@aglio/groceries-client';
 import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
@@ -17,12 +16,13 @@ export function RecipeUrlField({ recipe }: RecipeUrlFieldProps) {
 	const { url } = hooks.useWatch(recipe);
 	const [scanning, setScanning] = useState(false);
 	const isSubscribed = useIsSubscribed();
+	const updateRecipeFromUrl = hooks.useUpdateRecipeFromUrl();
 
 	const scan = async () => {
 		if (url) {
 			try {
 				setScanning(true);
-				updateRecipeFromUrl(recipe, url);
+				await updateRecipeFromUrl(recipe, url);
 			} finally {
 				setScanning(false);
 			}

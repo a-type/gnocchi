@@ -1,5 +1,4 @@
 import { Recipe } from '@aglio/groceries-client';
-import { PageFixedArea } from '@aglio/ui/components/layouts';
 import { sprinkles } from '@aglio/ui/styles';
 import { RecipeNotFound } from '../RecipeNotFound.jsx';
 import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';

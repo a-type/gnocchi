@@ -1,3 +1,4 @@
+import { signupDialogState } from '@/components/sync/state.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
 import { parseIngredient } from '@aglio/conversion';
@@ -7,11 +8,18 @@ import {
 	Item,
 	ItemDestructured,
 	ItemInputsItemInit,
+	Recipe,
+	RecipeIngredients,
+	RecipeIngredientsItemInit,
+	RecipeInit,
 	UserInfo,
 	createHooks,
 	migrations,
 } from '@aglio/groceries-client';
+import { TRPCClientError } from '@trpc/client';
+import cuid from 'cuid';
 import { useCallback } from 'react';
+import { toast } from 'react-hot-toast';
 
 export interface Presence {
 	lastInteractedItem: string | null;
@@ -291,6 +299,76 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 			},
 			[client],
 		),
+
+	/** Recipes */
+	useAddRecipeFromUrl: (client) =>
+		useCallback(
+			async (url: string) => {
+				const scanned = await getScannedRecipe(url, client);
+				const recipe = await client.recipes.put(scanned);
+				return recipe;
+			},
+			[client],
+		),
+
+	useUpdateRecipeFromUrl: (client) =>
+		useCallback(
+			async (recipe: Recipe, url: string) => {
+				const scanned = await getScannedRecipe(url, client);
+				recipe.update({
+					title: scanned.title,
+					url: scanned.url,
+					ingredients: scanned.ingredients,
+				});
+
+				// set this separately - do not merge
+				if (scanned.instructions) {
+					recipe.set('instructions', scanned.instructions);
+				}
+			},
+			[client],
+		),
+
+	useAddRecipeIngredients: (client) =>
+		useCallback(
+			async (ingredients: RecipeIngredients, text: string) => {
+				const lines = text.split('\n');
+				const parsed = await Promise.all(
+					lines
+						.filter((line) => line.trim().length > 0)
+						.map(async (line): Promise<RecipeIngredientsItemInit> => {
+							const parsedItem = parseIngredient(line);
+							let food = parsedItem.food;
+							if (food) {
+								// attempt to find a matching food
+								try {
+									const lookup = await client.foods.findOne({
+										where: 'nameLookup',
+										equals: parsedItem.food,
+									}).resolved;
+									if (lookup) {
+										food = lookup.get('canonicalName');
+									}
+								} catch (err) {
+									// ignore
+								}
+							}
+							return {
+								text: line,
+								food,
+								comments: parsedItem.comments,
+								quantity: parsedItem.quantity,
+								unit: parsedItem.unit,
+								isSectionHeader: parsedItem.isSectionHeader,
+							};
+						}),
+				);
+				for (const item of parsed) {
+					ingredients.push(item);
+				}
+			},
+			[client],
+		),
 });
 
 export function createClientDescriptor(options: { namespace: string }) {
@@ -545,6 +623,138 @@ export async function addItems(
 			lastInteractedItem: lastItemId,
 		});
 	}
+}
+
+async function getScannedRecipe(
+	url: string,
+	client: Client,
+): Promise<RecipeInit> {
+	try {
+		const scanResult = await trpcClient.scans.recipe.query({
+			url,
+		});
+		let result: RecipeInit = {
+			url,
+			title: 'Web Recipe',
+		};
+		if (scanResult.type === 'web') {
+			const scanned = scanResult.data;
+			if (!scanned) {
+				toast.error('Sorry, we had trouble finding a recipe on that webpage.');
+			} else {
+				if (scanned.detailedIngredients?.length) {
+					result.ingredients = scanned.detailedIngredients.map(
+						(i: {
+							original: string;
+							quantity: number;
+							foodName: string;
+							unit?: string | null;
+							comments?: string[];
+							preparations?: string[];
+						}) => ({
+							food: i.foodName,
+							quantity: i.quantity,
+							unit: i.unit || '',
+							comments: i.comments || [],
+							text: i.original,
+						}),
+					);
+				} else if (scanned.rawIngredients?.length) {
+					result.ingredients = scanned.rawIngredients.map((line: string) => {
+						const parsed = parseIngredient(line);
+						return {
+							text: parsed.original,
+							food: parsed.food,
+							unit: parsed.unit,
+							comments: parsed.comments,
+							quantity: parsed.quantity,
+						};
+					});
+				}
+
+				// lookup foods for all ingredients
+				result.ingredients = await Promise.all(
+					(result.ingredients ?? []).map(async (ingredient) => {
+						try {
+							if (!ingredient.food) return ingredient;
+
+							const lookup = await client.foods.findOne({
+								where: 'nameLookup',
+								equals: ingredient.food,
+							}).resolved;
+							if (lookup) {
+								ingredient.food = lookup.get('canonicalName');
+							}
+							return ingredient;
+						} catch (err) {
+							// we tried...
+							return ingredient;
+						}
+					}),
+				);
+
+				result.url = scanned.url;
+				result.title = scanned.title || 'Web Recipe';
+				result.instructions = instructionsToDoc(scanned.steps || []);
+			}
+		} else if (scanResult.type === 'hub') {
+			const scanned = scanResult.data;
+			result.ingredients = scanned.ingredients.map((i) => ({
+				food: i.food,
+				text: i.text,
+				unit: i.unit,
+				quantity: i.quantity,
+				comments: (() => {
+					try {
+						return JSON.parse(i.comments || '[]');
+					} catch (err) {
+						return [];
+					}
+				})(),
+				id: i.id,
+				note: i.note,
+			}));
+			result.url = scanResult.url;
+			result.title = scanned.title || 'Web Recipe';
+			result.instructions = scanned.instructionsSerialized
+				? JSON.parse(scanned.instructionsSerialized)
+				: undefined;
+			result.prelude = scanned.preludeSerialized
+				? JSON.parse(scanned.preludeSerialized)
+				: undefined;
+		} else {
+			throw new Error('Unrecognized scan result type');
+		}
+
+		return result;
+	} catch (err) {
+		if (err instanceof TRPCClientError && err.message === 'FORBIDDEN') {
+			signupDialogState.status = 'open';
+		} else {
+			toast.error('Something went wrong.');
+		}
+		throw err;
+	}
+}
+
+function instructionsToDoc(lines: string[]) {
+	return lines?.length
+		? {
+				type: 'doc',
+				content: (lines || []).map((line: string) => ({
+					type: 'step',
+					attrs: {
+						id: cuid(),
+					},
+					content: [
+						{
+							type: 'text',
+							text: line,
+						},
+					],
+				})),
+		  }
+		: undefined;
 }
 
 // hook up undo to ctrl+z

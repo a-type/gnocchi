@@ -5,7 +5,6 @@ import {
 	DialogContent,
 	DialogTitle,
 } from '@aglio/ui/components/dialog';
-import { addRecipeFromUrl } from '@/stores/groceries/recipeMutations.js';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { proxy, useSnapshot } from 'valtio';
@@ -17,6 +16,7 @@ import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { H2, P, Span } from '@aglio/ui/components/typography';
 import { TextLink } from '@aglio/ui/components/textLink';
 import { Button } from '@aglio/ui/components/button';
+import { hooks } from '@/stores/groceries/index.js';
 
 export interface RecipeSavePromptProps {}
 
@@ -60,6 +60,7 @@ export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 		}
 	}, [isGnocchi, hasScannedBefore, beginOnboarding, cancelFirstTimeOnboarding]);
 
+	const addRecipeFromUrl = hooks.useAddRecipeFromUrl();
 	const save = async () => {
 		const recipe = await addRecipeFromUrl(url);
 		setHasScannedBefore(true);

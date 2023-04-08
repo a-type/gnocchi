@@ -72,14 +72,42 @@ export const paragraph = recipe({
 	},
 });
 
-export const span = styleVariants({
-	xs: {
-		fontSize: vars.fontSizes.xs,
-	},
-	sm: {
-		fontSize: vars.fontSizes.sm,
-	},
-	default: {
-		fontSize: vars.fontSizes.md,
+export const span = recipe({
+	base: {},
+	variants: {
+		italic: {
+			true: {
+				fontStyle: 'italic',
+			},
+			false: {},
+		},
+		bold: {
+			true: {
+				fontWeight: vars.fontWeights.bold,
+			},
+			false: {},
+		},
+		size: {
+			xs: {
+				fontSize: vars.fontSizes.xs,
+			},
+			sm: {
+				fontSize: vars.fontSizes.sm,
+			},
+			md: {
+				fontSize: vars.fontSizes.md,
+			},
+			lg: {
+				fontSize: vars.fontSizes.lg,
+			},
+			default: {
+				fontSize: 'inherit',
+			},
+		},
+		noWrap: {
+			true: {
+				whiteSpace: 'nowrap',
+			},
+		},
 	},
 });
