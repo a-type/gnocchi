@@ -453,6 +453,12 @@ const recipes = collection({
                 if (!recipe.lastAddedAt || !recipe.addIntervalGuess || recipe.cookCount < 2) return Number.MAX_SAFE_INTEGER;
                 return recipe.lastAddedAt + recipe.addIntervalGuess;
             }
+        },
+        food: {
+            type: 'string[]',
+            compute: (recipe)=>{
+                return recipe.ingredients.map((i)=>i.food).filter((f)=>!!f).map((f)=>f.toLowerCase());
+            }
         }
     }
 });
@@ -478,7 +484,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 29,
+    version: 30,
     collections: {
         categories,
         items,

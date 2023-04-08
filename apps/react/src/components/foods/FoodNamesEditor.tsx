@@ -94,7 +94,9 @@ function AddNameButton({ names }: { names: FoodAlternateNames }) {
 								);
 								return;
 							}
-							names.add(values.name);
+							if (values.name) {
+								names.add(values.name.toLowerCase());
+							}
 							setOpen(false);
 						} finally {
 							bag.setSubmitting(false);

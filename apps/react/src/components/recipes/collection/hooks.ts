@@ -24,3 +24,27 @@ export function useRecipeTagFilter() {
 
 	return [tag, setTag] as const;
 }
+
+export function useRecipeFoodFilter() {
+	const [params, setParams] = useSearchParams();
+	const food = params.get('food');
+
+	const setFood = useCallback(
+		(food: string | null) => {
+			if (food) {
+				setParams((params) => {
+					params.set('food', food);
+					return params;
+				});
+			} else {
+				setParams((params) => {
+					params.delete('food');
+					return params;
+				});
+			}
+		},
+		[setParams],
+	);
+
+	return [food, setFood] as const;
+}

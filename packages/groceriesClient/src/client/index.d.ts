@@ -826,6 +826,21 @@ export interface RecipeSuggestAfterRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipeFoodMatchFilter {
+  where: "food";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeFoodRangeFilter {
+  where: "food";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
 export type RecipeFilter =
   | RecipeSlugMatchFilter
   | RecipeSlugRangeFilter
@@ -835,7 +850,9 @@ export type RecipeFilter =
   | RecipeTagMatchFilter
   | RecipeTagRangeFilter
   | RecipeSuggestAfterMatchFilter
-  | RecipeSuggestAfterRangeFilter;
+  | RecipeSuggestAfterRangeFilter
+  | RecipeFoodMatchFilter
+  | RecipeFoodRangeFilter;
 
 export type RecipeDestructured = {
   id: string;

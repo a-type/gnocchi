@@ -23,7 +23,7 @@
 		"@dnd-kit/modifiers": "^6.0.0",
 		"@dnd-kit/sortable": "^7.0.1",
 		"@dnd-kit/utilities": "^3.2.0",
-		"@lo-fi/cli": "^1.13.1",
+		"@lo-fi/cli": "^1.13.2",
 		"@lo-fi/common": "^1.10.4",
 		"@lo-fi/react": "^14.0.1",
 		"@lo-fi/web": "^1.13.1",

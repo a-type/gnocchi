@@ -14,7 +14,7 @@ import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import * as classes from './RecipeList.css.js';
 import { RecipeListActions } from './RecipeListActions.jsx';
-import { useRecipeTagFilter } from './hooks.js';
+import { useRecipeFoodFilter, useRecipeTagFilter } from './hooks.js';
 import { Button } from '@aglio/ui/components/button';
 import { PageFixedArea } from '@aglio/ui/components/layouts';
 import {
@@ -68,10 +68,21 @@ export function RecipeList({}: RecipeListProps) {
 
 function RecipeListContent() {
 	const [tagFilter] = useRecipeTagFilter();
+	const [foodFilter] = useRecipeFoodFilter();
+
 	// just in... 'case'
-	const normalizedTagFilter = tagFilter?.toLocaleLowerCase();
+	const normalizedTagFilter = tagFilter?.toLowerCase();
+	const normalizedFoodFilter = foodFilter?.toLowerCase();
+
 	const recipes = hooks.useAllRecipes(
-		normalizedTagFilter
+		normalizedFoodFilter
+			? {
+					index: {
+						where: 'food',
+						equals: normalizedFoodFilter,
+					},
+			  }
+			: normalizedTagFilter
 			? {
 					index: {
 						where: 'tag',
