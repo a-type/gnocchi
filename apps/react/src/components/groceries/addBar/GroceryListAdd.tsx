@@ -142,6 +142,7 @@ export const GroceryListAddImpl = forwardRef<
 		inputValue,
 		setInputValue,
 		selectItem,
+		openMenu,
 	} = useCombobox({
 		onInputValueChange({ inputValue }) {
 			startTransition(() => {
@@ -214,6 +215,7 @@ export const GroceryListAddImpl = forwardRef<
 							placeholder,
 						})}
 						onPaste={onInputPaste}
+						onPointerDown={openMenu}
 					/>
 					<Button
 						data-test="grocery-list-add-button"
