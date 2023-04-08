@@ -2,6 +2,10 @@ import { numberWords } from './lists.js';
 
 export function numberParser(input: string) {
 	const groups = splitNumberGroups(input);
+	// special case : compound fraction
+	if (groups.length === 2 && groups[0] >= 1 && groups[1] < 1) {
+		return groups[0] + groups[1];
+	}
 	return groups.reduce((acc, group) => {
 		return acc * group;
 	}, 1);

@@ -53,6 +53,7 @@ describe('ingredient parsing', () => {
 			'unseasoned rice vinegar',
 			[],
 		],
+		['1 1/2 teaspoons paprika', 1.5, 'teaspoon', 'paprika', []],
 		/*
     TODO:
     ["3 12oz cans of tomato paste", 3, "12oz can", "tomato paste", []],

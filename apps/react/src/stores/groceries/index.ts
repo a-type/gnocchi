@@ -1,7 +1,7 @@
 import { signupDialogState } from '@/components/sync/state.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { trpcClient } from '@/trpc.js';
-import { parseIngredient } from '@aglio/conversion';
+import { lookupUnit, parseIngredient } from '@aglio/conversion';
 import {
 	Client,
 	ClientDescriptor,
@@ -651,13 +651,19 @@ async function getScannedRecipe(
 							unit?: string | null;
 							comments?: string[];
 							preparations?: string[];
-						}) => ({
-							food: i.foodName,
-							quantity: i.quantity,
-							unit: i.unit || '',
-							comments: i.comments || [],
-							text: i.original,
-						}),
+						}) => {
+							const unitMatch = i.unit ? lookupUnit(i.unit) : null;
+							return {
+								food: i.foodName,
+								quantity: i.quantity,
+								unit:
+									unitMatch?.singular?.toLowerCase() ||
+									i.unit?.toLowerCase() ||
+									'',
+								comments: i.comments || [],
+								text: i.original,
+							};
+						},
 					);
 				} else if (scanned.rawIngredients?.length) {
 					result.ingredients = scanned.rawIngredients.map((line: string) => {
