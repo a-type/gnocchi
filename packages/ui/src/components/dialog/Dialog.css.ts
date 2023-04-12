@@ -9,9 +9,19 @@ const overlayShow = keyframes({
 	'100%': { opacity: 1 },
 });
 
+const contentShow = keyframes({
+	'0%': { opacity: 0 },
+	'100%': { opacity: 1 },
+});
+
+const contentHide = keyframes({
+	'0%': { opacity: 1 },
+	'100%': { opacity: 0 },
+});
+
 const contentShowMobile = keyframes({
-	'0%': { opacity: 0, transform: 'translate(0, 80vh) scale(.96)' },
-	'100%': { opacity: 1, transform: 'translate(0, 0) scale(1)' },
+	'0%': { transform: 'translate(0, 80vh) scale(.96)' },
+	'100%': { transform: 'translate(0, 0) scale(1)' },
 });
 
 const overlayHide = keyframes({
@@ -20,8 +30,8 @@ const overlayHide = keyframes({
 });
 
 const contentHideMobile = keyframes({
-	'0%': { opacity: 1, transform: 'translate(0, 0) scale(1)' },
-	'100%': { opacity: 0, transform: 'translate(0, 80vh) scale(.96)' },
+	'0%': { transform: 'translate(0, 0) scale(1)' },
+	'100%': { transform: 'translate(0, 80vh) scale(.96)' },
 });
 
 export const overlay = style({
@@ -80,11 +90,19 @@ export const content = recipe({
 				borderRadius: vars.radii.lg,
 				borderBottom: `1px solid ${vars.colors.black}`,
 			},
-			'(prefers-reduced-motion: no-preference)': {
+			[`(prefers-reduced-motion: no-preference)`]: {
 				animation: `${contentShowMobile} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
 				selectors: {
 					'&[data-state="closed"]': {
 						animation: `${contentHideMobile} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
+					},
+				},
+			},
+			[`(prefers-reduced-motion: no-preference) and ${mediaQueries.md}`]: {
+				animation: `${contentShow} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
+				selectors: {
+					'&[data-state="closed"]': {
+						animation: `${contentHide} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
 					},
 				},
 			},
