@@ -1,6 +1,11 @@
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { Link } from '@/components/nav/Link.jsx';
 import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
+import {
+	circleParticleExplosion,
+	useParticles,
+} from '@aglio/ui/components/particles';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -12,6 +17,27 @@ import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
 import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
 import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
+import { Box } from '@aglio/ui/components/box';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Checkbox } from '@aglio/ui/components/checkbox';
+import {
+	CollapsibleContent,
+	CollapsibleRoot,
+	CollapsibleTrigger,
+} from '@aglio/ui/components/collapsible';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+} from '@aglio/ui/components/dialog';
+import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
+import { NumberStepper } from '@aglio/ui/components/numberStepper';
+import { Tooltip } from '@aglio/ui/components/tooltip';
+import { useSizeCssVars } from '@aglio/ui/hooks';
+import { sprinkles } from '@aglio/ui/styles';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@lo-fi/web';
@@ -29,9 +55,9 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react';
-import { Link } from '@/components/nav/Link.jsx';
 import { useSnapshot } from 'valtio';
 import { ListSelect } from '../lists/ListSelect.jsx';
 import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
@@ -40,27 +66,6 @@ import * as classes from './GroceryListItem.css.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { ItemSources } from './ItemSources.js';
 import { useItemDisplayText } from './hooks.js';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
-import { useSizeCssVars } from '@aglio/ui/hooks';
-import {
-	CollapsibleContent,
-	CollapsibleRoot,
-	CollapsibleTrigger,
-} from '@aglio/ui/components/collapsible';
-import { Checkbox } from '@aglio/ui/components/checkbox';
-import { Box } from '@aglio/ui/components/box';
-import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
-import { Tooltip } from '@aglio/ui/components/tooltip';
-import {
-	Dialog,
-	DialogActions,
-	DialogClose,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { NumberStepper } from '@aglio/ui/components/numberStepper';
-import { sprinkles } from '@aglio/ui/styles';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -144,19 +149,10 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				data-hidden-state={purchasedHiddenState}
 				data-test="grocery-list-item"
 			>
-				<Checkbox
-					checked={
-						isPurchased ? true : isPartiallyPurchased ? 'indeterminate' : false
-					}
-					onCheckedChange={togglePurchased}
-					// prevent click/tap from reaching draggable container -
-					// don't disrupt a check action
-					onMouseDown={stopPropagation}
-					onMouseUp={stopPropagation}
-					onPointerDown={stopPropagation}
-					onPointerUp={stopPropagation}
-					data-test="grocery-list-item-checkbox"
-					className={classes.checkbox}
+				<ItemCheckbox
+					isPurchased={isPurchased}
+					isPartiallyPurchased={isPartiallyPurchased}
+					togglePurchased={togglePurchased}
 				/>
 				<div className={classes.mainContent}>
 					<div className={classes.textStack}>
@@ -421,5 +417,47 @@ function QuantityEditor({ item }: { item: Item }) {
 				</DialogActions>
 			</DialogContent>
 		</Dialog>
+	);
+}
+
+function ItemCheckbox({
+	isPurchased,
+	isPartiallyPurchased,
+	togglePurchased,
+}: {
+	isPurchased: boolean;
+	isPartiallyPurchased: boolean;
+	togglePurchased: () => void;
+}) {
+	const ref = useRef<HTMLButtonElement>(null);
+	const particles = useParticles();
+
+	useEffect(() => {
+		if (isPurchased && ref.current) {
+			particles?.addParticles(
+				particles.elementExplosion({
+					element: ref.current,
+					count: 20,
+				}),
+			);
+		}
+	}, [isPurchased]);
+
+	return (
+		<Checkbox
+			ref={ref}
+			checked={
+				isPurchased ? true : isPartiallyPurchased ? 'indeterminate' : false
+			}
+			onCheckedChange={togglePurchased}
+			// prevent click/tap from reaching draggable container -
+			// don't disrupt a check action
+			onMouseDown={stopPropagation}
+			onMouseUp={stopPropagation}
+			onPointerDown={stopPropagation}
+			onPointerUp={stopPropagation}
+			data-test="grocery-list-item-checkbox"
+			className={classes.checkbox}
+		/>
 	);
 }

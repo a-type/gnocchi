@@ -15,6 +15,7 @@ import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
 import { TooltipProvider } from '@aglio/ui/components/tooltip';
 import { Box } from '@aglio/ui/components/box';
 import { P, H1 } from '@aglio/ui/components/typography';
+import { ParticleLayer } from '@aglio/ui/components/particles';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -36,9 +37,11 @@ export function App() {
 						<trpc.Provider client={trpcClient} queryClient={queryClient}>
 							<QueryClientProvider client={queryClient}>
 								<GroceriesProvider>
-									<Pages />
-									<Toaster position="bottom-center" />
-									<IconSpritesheet />
+									<ParticleLayer>
+										<Pages />
+										<Toaster position="bottom-center" />
+										<IconSpritesheet />
+									</ParticleLayer>
 								</GroceriesProvider>
 							</QueryClientProvider>
 						</trpc.Provider>

@@ -86,6 +86,7 @@ export const commonTheme = {
 		dialog: '1000',
 		dialogBackdrop: '900',
 		tooltip: '10000',
+		overdraw: '100000',
 	},
 };
 

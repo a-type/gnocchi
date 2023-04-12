@@ -14,6 +14,16 @@ const contentShowMobile = keyframes({
 	'100%': { opacity: 1, transform: 'translate(0, 0) scale(1)' },
 });
 
+const overlayHide = keyframes({
+	'0%': { opacity: 1 },
+	'100%': { opacity: 0 },
+});
+
+const contentHideMobile = keyframes({
+	'0%': { opacity: 1, transform: 'translate(0, 0) scale(1)' },
+	'100%': { opacity: 0, transform: 'translate(0, 80vh) scale(.96)' },
+});
+
 export const overlay = style({
 	backgroundColor: vars.colors.overlay,
 	position: 'fixed',
@@ -21,7 +31,13 @@ export const overlay = style({
 	zIndex: calc(vars.zIndices.dialog).subtract(1).toString(),
 	'@media': {
 		'(prefers-reduced-motion: no-preference)': {
-			animation: `${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
+			animation: `${overlayShow} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
+
+			selectors: {
+				'&[data-state="closed"]': {
+					animation: `${overlayHide} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
+				},
+			},
 		},
 	},
 });
@@ -41,6 +57,17 @@ export const content = recipe({
 
 		boxShadow: vars.shadows.xl,
 
+		backgroundColor: vars.colors.white,
+		borderTopLeftRadius: vars.radii.lg,
+		borderTopRightRadius: vars.radii.lg,
+		padding: vars.space[6],
+		border: `1px solid ${vars.colors.black}`,
+		borderBottom: 'none',
+		overflowY: 'auto',
+		display: 'flex',
+		flexDirection: 'column',
+		paddingBottom: `calc(${vars.space[6]} + env(safe-area-inset-bottom, 0px))`,
+
 		'@media': {
 			[mediaQueries.sm]: {
 				top: '50%',
@@ -49,6 +76,17 @@ export const content = recipe({
 				width: '90vw',
 				maxWidth: '450px',
 				maxHeight: '85vh',
+				paddingBottom: vars.space[6],
+				borderRadius: vars.radii.lg,
+				borderBottom: `1px solid ${vars.colors.black}`,
+			},
+			'(prefers-reduced-motion: no-preference)': {
+				animation: `${contentShowMobile} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
+				selectors: {
+					'&[data-state="closed"]': {
+						animation: `${contentHideMobile} 200ms cubic-bezier(0.16, 1, 0.3, 1)`,
+					},
+				},
 			},
 		},
 
@@ -71,35 +109,6 @@ export const content = recipe({
 			md: {
 				maxWidth: '600px',
 			},
-		},
-	},
-});
-
-export const contentContent = style({
-	backgroundColor: vars.colors.white,
-	borderTopLeftRadius: vars.radii.lg,
-	borderTopRightRadius: vars.radii.lg,
-	zIndex: vars.zIndices.dialog,
-	boxShadow:
-		'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
-	padding: vars.space[6],
-	border: `1px solid ${vars.colors.black}`,
-	borderBottom: 'none',
-	overflowY: 'auto',
-	maxHeight: 'inherit',
-	position: 'relative',
-	display: 'flex',
-	flexDirection: 'column',
-	paddingBottom: `calc(${vars.space[6]} + env(safe-area-inset-bottom, 0px))`,
-
-	'@media': {
-		'(prefers-reduced-motion: no-preference)': {
-			animation: `${contentShowMobile} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
-		},
-		[mediaQueries.sm]: {
-			paddingBottom: vars.space[6],
-			borderRadius: vars.radii.lg,
-			borderBottom: `1px solid ${vars.colors.black}`,
 		},
 	},
 });

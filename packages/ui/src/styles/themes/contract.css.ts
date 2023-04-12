@@ -120,5 +120,6 @@ export const vars = createThemeContract({
 		dialog: '',
 		dialogBackdrop: '',
 		tooltip: '',
+		overdraw: '',
 	},
 });
