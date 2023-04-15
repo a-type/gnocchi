@@ -1,5 +1,5 @@
 import { RecipeEditor } from '@/components/recipes/editor/RecipeEditor.jsx';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@lo-fi/react-router';
 
 export interface RecipeEditPageProps {}
 

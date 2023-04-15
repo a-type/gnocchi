@@ -4,7 +4,7 @@ import { PageNav } from '@aglio/ui/components/layouts';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { clsx } from 'clsx';
 import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
-import { useMatch } from 'react-router-dom';
+import { useMatch } from '@lo-fi/react-router';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
 import { Icon } from '../icons/Icon.jsx';

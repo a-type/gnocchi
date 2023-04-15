@@ -6,7 +6,7 @@ import {
 	DialogTitle,
 } from '@aglio/ui/components/dialog';
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from '@lo-fi/react-router';
 import { proxy, useSnapshot } from 'valtio';
 import { HUB_HOST_HTTP } from '@/config.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';

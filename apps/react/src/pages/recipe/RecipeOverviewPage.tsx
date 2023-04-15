@@ -1,5 +1,5 @@
 import { RecipeOverview } from '@/components/recipes/viewer/RecipeOverview.jsx';
-import { useParams } from 'react-router-dom';
+import { useParams } from '@lo-fi/react-router';
 
 export interface RecipeOverviewPageProps {}
 

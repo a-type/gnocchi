@@ -9,7 +9,7 @@ import {
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import { Suspense } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@lo-fi/react-router';
 import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import * as classes from './RecipeList.css.js';

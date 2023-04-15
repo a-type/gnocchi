@@ -1,6 +1,6 @@
 import { Button } from '@aglio/ui/components/button';
 import { hooks } from '@/stores/groceries/index.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@lo-fi/react-router';
 import { Recipe } from '@aglio/groceries-client';
 
 export interface RecipeDeleteButtonProps {

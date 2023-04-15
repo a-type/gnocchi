@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from '@lo-fi/react-router';
 
 export function useRecipeTagFilter() {
 	const [params, setParams] = useSearchParams();

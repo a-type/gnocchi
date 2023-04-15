@@ -1,7 +1,8 @@
 import { ButtonProps, buttonClassNames } from '@aglio/ui/components/button';
 import classNames from 'classnames';
 import { forwardRef } from 'react';
-import { Link, LinkProps } from 'react-router-dom';
+import { Link, LinkProps } from '@lo-fi/react-router';
+import * as classes from './Link.css.js';
 
 export { Link };
 export type { LinkProps };
@@ -22,6 +23,7 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
 						size,
 						align,
 					}),
+					classes.root,
 					className,
 				)}
 				{...props}

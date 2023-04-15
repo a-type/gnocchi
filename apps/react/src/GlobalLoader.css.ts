@@ -55,5 +55,5 @@ export const loaderIcon = style({
 	animationDuration: '5s',
 	animationIterationCount: 'infinite',
 	animationTimingFunction: 'ease-in-out',
-	animationDelay: '500ms',
+	animationDelay: '1000ms',
 });

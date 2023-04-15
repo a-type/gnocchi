@@ -1,5 +1,9 @@
 import { style } from '@vanilla-extract/css';
 
-export const transitioning = style({
-	opacity: 0.7,
+export const root = style({
+	selectors: {
+		'&[data-transitioning="true"]': {
+			opacity: 0.7,
+		},
+	},
 });

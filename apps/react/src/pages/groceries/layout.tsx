@@ -6,7 +6,7 @@ import { GroceryListAdd } from '@/components/groceries/addBar/GroceryListAdd.jsx
 import GroceryList from '@/components/groceries/GroceryList.jsx';
 import { useListThemeClass } from '@/components/groceries/lists/hooks.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '@lo-fi/react-router';
 
 export const TopControls = ({
 	children,

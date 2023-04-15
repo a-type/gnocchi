@@ -1,6 +1,6 @@
 import { EmailSignInForm } from '@/components/auth/EmailSignInForm.jsx';
 import { EmailSignUpForm } from '@/components/auth/EmailSignUpForm.jsx';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from '@lo-fi/react-router';
 import { OAuthSignInButton } from '../components/auth/OAuthSignInButton.jsx';
 import {
 	PageContent,
@@ -16,7 +16,7 @@ import { TextLink } from '@aglio/ui/components/textLink';
 export interface JoinPageProps {}
 
 export function JoinPage({}: JoinPageProps) {
-	const [params] = useSearchParams({ returnTo: '/', inviteId: '' });
+	const [params] = useSearchParams();
 
 	let returnTo = params.get('returnTo') || undefined;
 	// idk where this is coming from

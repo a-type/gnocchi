@@ -8,7 +8,7 @@ import { H1, P } from '@aglio/ui/components/typography';
 import { sprinkles } from '@aglio/ui/styles';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from '@lo-fi/react-router';
 import { InviteLinkButton } from './InviteLinkButton.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { Link } from '@/components/nav/Link.jsx';
@@ -26,8 +26,7 @@ export function SignupSuccessBanner({}: SignupSuccessBannerProps) {
 				<H1>You're subscribed!</H1>
 				<P>
 					<Link
-						target="_blank"
-						rel="noopener noreferrer"
+						newTab
 						className={sprinkles({ fontWeight: 'bold' })}
 						to="/welcome?upgrade=true"
 					>

@@ -20,7 +20,7 @@ import { H1, P } from '@aglio/ui/components/typography';
 import { Formik } from 'formik';
 import { Suspense, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from '@lo-fi/react-router';
 
 export function TempAccessGroceriesPage() {
 	const params = useParams();

@@ -1,5 +1,5 @@
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from '@lo-fi/react-router';
 
 export interface RecipeViewPageProps {}
 

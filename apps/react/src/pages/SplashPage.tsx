@@ -16,7 +16,7 @@ import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 import { APP_NAME, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
 import { useOnVisible } from '@/hooks/useOnVisible.js';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from '@lo-fi/react-router';
 import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
 import { H2, P, Span } from '@aglio/ui/components/typography';
 import { Box } from '@aglio/ui/components/box';

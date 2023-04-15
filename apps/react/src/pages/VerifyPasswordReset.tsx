@@ -4,7 +4,7 @@ import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
 import { sprinkles } from '@aglio/ui/styles';
 import { Formik } from 'formik';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from '@lo-fi/react-router';
 
 export interface VerifyPasswordResetProps {}
 

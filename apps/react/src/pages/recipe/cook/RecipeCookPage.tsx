@@ -1,6 +1,6 @@
 import { RecipeCookProvider } from '@/components/recipes/viewer/RecipeCookContext.jsx';
 import { useWakeLock } from '@/hooks/useWakeLock.js';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from '@lo-fi/react-router';
 
 export interface RecipeCookPageProps {}
 

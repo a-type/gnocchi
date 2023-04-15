@@ -1,12 +1,12 @@
 import { EmailCompleteSignUpForm } from '@/components/auth/EmailCompleteSignUpForm.jsx';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from '@lo-fi/react-router';
 
 export interface VerifyEmailPageProps {}
 
 export function VerifyEmailPage({}: VerifyEmailPageProps) {
-	const [params] = useSearchParams({ code: '' });
+	const [params] = useSearchParams();
 	const code = params.get('code');
 	const navigate = useNavigate();
 

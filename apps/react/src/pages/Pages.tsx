@@ -8,12 +8,6 @@ import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { lazy, Suspense } from 'react';
-import {
-	createBrowserRouter,
-	Outlet,
-	RouterProvider,
-	useMatches,
-} from 'react-router-dom';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
@@ -30,6 +24,9 @@ import { H1, P } from '@aglio/ui/components/typography';
 import { Button } from '@aglio/ui/components/button';
 import { LinkButton } from '@/components/nav/Link.jsx';
 import { lazyWithPreload } from 'react-lazy-with-preload';
+import { makeRoutes, Outlet, Router } from '@lo-fi/react-router';
+import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
+import { TopLoader } from '@/components/nav/TopLoader.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -72,166 +69,134 @@ const PantryPage = lazyWithPreload(() => import('./PantryPage.jsx'));
 const RecipesPage = lazyWithPreload(() => import('./recipe/RecipesPage.jsx'));
 const VerifyPasswordResetPage = lazy(() => import('./VerifyPasswordReset.jsx'));
 
-// preload all the root pages
-PlanPage.preload();
-PantryPage.preload();
-RecipesPage.preload();
-
-const router = createBrowserRouter([
+const routes = makeRoutes([
 	{
-		element: <PageLayoutRoot />,
-		errorElement: <ErrorFallback />,
+		path: '/',
+		exact: true,
+		component: GroceriesPage,
+	},
+	{
+		path: '/list/:listId',
+		component: GroceriesPage,
+	},
+	{
+		path: '/settings',
+		component: PlanPage,
+		onAccessible: PlanPage.preload,
+	},
+	{
+		path: '/claim/:inviteId',
+		component: ClaimInvitePage,
+	},
+	{
+		path: '/purchased',
+		component: PantryPage,
+		onAccessible: PantryPage.preload,
+	},
+	{
+		path: '/nevermind',
+		component: NevermindPage,
+	},
+	{
+		path: '/welcome',
+		component: SplashPage,
+	},
+	{
+		path: '/join',
+		component: JoinPage,
+	},
+	{
+		path: '/verify',
+		component: VerifyEmailPage,
+	},
+	{
+		path: '/admin',
+		component: AdminPage,
 		children: [
 			{
-				path: '/',
-				element: <GroceriesPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
+				path: 'categories',
+				component: AdminCategoriesPage,
 			},
 			{
-				path: '/list/:listId',
-				element: <GroceriesPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
+				path: 'plans',
+				component: AdminPlanManagerPage,
 			},
 			{
-				path: '/settings',
-				element: <PlanPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/claim/:inviteId',
-				element: <ClaimInvitePage />,
-				handle: { nav: false },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/purchased',
-				element: <PantryPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/nevermind',
-				element: <NevermindPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/welcome',
-				element: <SplashPage />,
-				handle: { nav: false },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/join',
-				element: <JoinPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/verify',
-				element: <VerifyEmailPage />,
-				handle: { nav: false },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/admin',
-				element: <AdminPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-				children: [
-					{
-						path: 'categories',
-						element: <AdminCategoriesPage />,
-						hasErrorBoundary: false,
-					},
-					{
-						path: 'plans',
-						element: <AdminPlanManagerPage />,
-						hasErrorBoundary: false,
-					},
-					{
-						path: 'sync',
-						element: <AdminSyncPage />,
-					},
-				],
-			},
-			{
-				path: '/recipes',
-				element: <RecipesPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/recipes/:slug',
-				element: <RecipeViewPage />,
-				handle: { nav: true },
-				children: [
-					{
-						index: true,
-						element: <RecipeOverviewPage />,
-					},
-					{
-						path: 'edit',
-						element: <RecipeEditPage />,
-					},
-					{
-						path: 'cook',
-						element: <RecipeCookPage />,
-						children: [
-							{
-								// back compat
-								index: true,
-								element: <RecipeCookStepsPage />,
-							},
-							{
-								path: 'prep',
-								element: <RecipeCookPrepPage />,
-							},
-							{
-								path: 'steps',
-								element: <RecipeCookStepsPage />,
-							},
-						],
-					},
-				],
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/temp/:code/:listId',
-				element: <TempAccessGroceriesPage />,
-			},
-			{
-				path: '/temp/:code',
-				element: <TempAccessGroceriesPage />,
-			},
-			{
-				path: '/reset-password',
-				element: <VerifyPasswordResetPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/privacy-policy',
-				element: <PrivacyPolicyPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '/tos',
-				element: <TermsAndConditionsPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
-			},
-			{
-				path: '*',
-				element: <NotFoundPage />,
-				handle: { nav: true },
-				hasErrorBoundary: false,
+				path: 'sync',
+				component: AdminSyncPage,
 			},
 		],
+	},
+	{
+		path: '/recipes',
+		exact: true,
+		component: RecipesPage,
+		onAccessible: RecipesPage.preload,
+	},
+	{
+		path: '/recipes/:slug',
+		component: RecipeViewPage,
+		onAccessible: RecipeViewPage.preload,
+		children: [
+			{
+				path: '',
+				exact: true,
+				component: RecipeOverviewPage,
+				onAccessible: RecipeOverviewPage.preload,
+			},
+			{
+				path: 'edit',
+				component: RecipeEditPage,
+				onAccessible: RecipeEditPage.preload,
+			},
+			{
+				path: 'cook',
+				component: RecipeCookPage,
+				onAccessible: RecipeCookPage.preload,
+				children: [
+					{
+						// back compat
+						path: '',
+						exact: true,
+						component: RecipeCookStepsPage,
+					},
+					{
+						path: 'prep',
+						component: RecipeCookPrepPage,
+						onAccessible: RecipeCookPrepPage.preload,
+					},
+					{
+						path: 'steps',
+						component: RecipeCookStepsPage,
+						onAccessible: RecipeCookStepsPage.preload,
+					},
+				],
+			},
+		],
+	},
+	{
+		path: '/temp/:code/:listId',
+		component: TempAccessGroceriesPage,
+	},
+	{
+		path: '/temp/:code',
+		component: TempAccessGroceriesPage,
+	},
+	{
+		path: '/reset-password',
+		component: VerifyPasswordResetPage,
+	},
+	{
+		path: '/privacy-policy',
+		component: PrivacyPolicyPage,
+	},
+	{
+		path: '/tos',
+		component: TermsAndConditionsPage,
+	},
+	{
+		path: '',
+		component: NotFoundPage,
 	},
 ]);
 
@@ -239,36 +204,22 @@ export function Pages() {
 	return (
 		<NowPlayingProvider>
 			<NavContextProvider>
-				<Suspense fallback={<FullScreenSpinner />}>
-					<RouterProvider router={router} />
-				</Suspense>
+				<ErrorBoundary fallback={<ErrorFallback />}>
+					<Suspense fallback={<GlobalLoader />}>
+						<Router routes={routes}>
+							<TopLoader />
+							<PageRoot>
+								<Outlet />
+								<StartSignupDialog />
+								<UpdatePrompt />
+								<LogoutNotice />
+							</PageRoot>
+							<NavBar />
+						</Router>
+					</Suspense>
+				</ErrorBoundary>
 			</NavContextProvider>
 		</NowPlayingProvider>
-	);
-}
-
-function PageLayoutRoot() {
-	const matches = useMatches();
-	const showNav = matches.some((match) => (match.handle as any)?.nav);
-
-	return (
-		<>
-			<Suspense
-				fallback={
-					<PageRoot>
-						<PageContent>
-							<GlobalLoader />
-						</PageContent>
-					</PageRoot>
-				}
-			>
-				<Outlet />
-				<StartSignupDialog />
-				<UpdatePrompt />
-				<LogoutNotice />
-			</Suspense>
-			{showNav && <NavBar />}
-		</>
 	);
 }
 
