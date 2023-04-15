@@ -1,4 +1,4 @@
-import { vars } from '@aglio/ui/styles';
+import { mediaQueries, vars } from '@aglio/ui/styles';
 import { style } from '@vanilla-extract/css';
 
 export const root = style({
@@ -6,7 +6,7 @@ export const root = style({
 	top: 0,
 	left: 0,
 	width: '100%',
-	height: '2px',
+	height: '4px',
 	pointerEvents: 'none',
 	opacity: 0,
 
@@ -14,6 +14,16 @@ export const root = style({
 		'&[data-state="visible"]': {
 			opacity: 1,
 			transition: 'opacity 0.3s ease-in-out',
+		},
+	},
+
+	'@media': {
+		[mediaQueries.md]: {
+			height: '2px',
+		},
+
+		'(prefers-reduced-motion: reduce)': {
+			display: 'none',
 		},
 	},
 });
