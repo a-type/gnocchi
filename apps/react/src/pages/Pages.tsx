@@ -69,49 +69,63 @@ const PantryPage = lazyWithPreload(() => import('./PantryPage.jsx'));
 const RecipesPage = lazyWithPreload(() => import('./recipe/RecipesPage.jsx'));
 const VerifyPasswordResetPage = lazy(() => import('./VerifyPasswordReset.jsx'));
 
+function scrollToTop() {
+	window.scrollTo(0, 0);
+}
+
 const routes = makeRoutes([
 	{
 		path: '/',
 		exact: true,
 		component: GroceriesPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/list/:listId',
 		component: GroceriesPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/settings',
 		component: PlanPage,
 		onAccessible: PlanPage.preload,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/claim/:inviteId',
 		component: ClaimInvitePage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/purchased',
 		component: PantryPage,
 		onAccessible: PantryPage.preload,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/nevermind',
 		component: NevermindPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/welcome',
 		component: SplashPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/join',
 		component: JoinPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/verify',
 		component: VerifyEmailPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/admin',
 		component: AdminPage,
+		onVisited: scrollToTop,
 		children: [
 			{
 				path: 'categories',
@@ -132,11 +146,13 @@ const routes = makeRoutes([
 		exact: true,
 		component: RecipesPage,
 		onAccessible: RecipesPage.preload,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/recipes/:slug',
 		component: RecipeViewPage,
 		onAccessible: RecipeViewPage.preload,
+		onVisited: scrollToTop,
 		children: [
 			{
 				path: '',
@@ -177,26 +193,32 @@ const routes = makeRoutes([
 	{
 		path: '/temp/:code/:listId',
 		component: TempAccessGroceriesPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/temp/:code',
 		component: TempAccessGroceriesPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/reset-password',
 		component: VerifyPasswordResetPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/privacy-policy',
 		component: PrivacyPolicyPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '/tos',
 		component: TermsAndConditionsPage,
+		onVisited: scrollToTop,
 	},
 	{
 		path: '',
 		component: NotFoundPage,
+		onVisited: scrollToTop,
 	},
 ]);
 

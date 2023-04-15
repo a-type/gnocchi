@@ -281,8 +281,8 @@ importers:
         specifier: ^14.0.1
         version: 14.0.1(@lo-fi/web@1.13.1)(react@18.2.0)
       '@lo-fi/react-router':
-        specifier: ^0.1.2
-        version: 0.1.2(react@18.2.0)
+        specifier: ^0.1.3
+        version: 0.1.3(react@18.2.0)
       '@lo-fi/web':
         specifier: ^1.13.1
         version: 1.13.1
@@ -3795,8 +3795,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@lo-fi/react-router@0.1.2(react@18.2.0):
-    resolution: {integrity: sha512-MHuyhYM2Jb8LFb1xaCQh0/XviT/Ir20J9ze3RA8NyT9fsJX/YWEKDtDloIYDoTWANwpcokYPeFFXr95CI64zRg==}
+  /@lo-fi/react-router@0.1.3(react@18.2.0):
+    resolution: {integrity: sha512-ptxhRXPi/e0j2ysJQG+M9Oo2ziqtMch7/dA+hz1UGNmWZ3FbAA1BXdqIDL06HUmqYhKkNFtyb/FAbRQGBJZLmA==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
