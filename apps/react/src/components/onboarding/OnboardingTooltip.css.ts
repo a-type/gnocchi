@@ -2,7 +2,7 @@ import { vars } from '@aglio/ui/styles';
 import { style } from '@vanilla-extract/css';
 
 export const content = style({
-	backgroundColor: vars.colors.primaryWash,
+	backgroundColor: `${vars.colors.primaryWash} !important`,
 	display: 'flex',
 });
 
@@ -14,5 +14,5 @@ export const innerContent = style({
 });
 
 export const arrow = style({
-	fill: vars.colors.primaryWash,
+	fill: `${vars.colors.primaryWash} !important`,
 });

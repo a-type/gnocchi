@@ -65,9 +65,14 @@ export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 		const recipe = await addRecipeFromUrl(url);
 		setHasScannedBefore(true);
 		if (recipe) {
-			navigate(`/recipes/${recipe.get('slug')}?firstTimeScanFlow=true`, {
-				replace: true,
-			});
+			navigate(
+				`/recipes/${recipe.get(
+					'slug',
+				)}?firstTimeScanFlow=true&skipWelcome=true`,
+				{
+					replace: true,
+				},
+			);
 		}
 		recipeSavePromptState.url = '';
 	};

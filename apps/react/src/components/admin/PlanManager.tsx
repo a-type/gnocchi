@@ -1,7 +1,14 @@
 import { FeatureFlagName, featureFlags } from '@/featureFlags.js';
 import { RouterOutputs, trpc } from '@/trpc.js';
 import { Box } from '@aglio/ui/components/box';
-import { H2 } from '@aglio/ui/components/typography';
+import { H2, P } from '@aglio/ui/components/typography';
+import { Button } from '@aglio/ui/src/components/button';
+import {
+	Dialog,
+	DialogContent,
+	DialogTrigger,
+} from '@aglio/ui/src/components/dialog';
+import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
 
 export interface PlanManagerProps {}
 
