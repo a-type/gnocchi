@@ -250,6 +250,10 @@ export const IconSpritesheet = (props: any) => (
 					</clipPath>
 				</defs>
 			</symbol>
+			<symbol id="icon-profile" viewBox="0 0 15 15">
+				<circle cx="7.5" cy="3.5" r="3" stroke="currentColor" />
+				<path d="M1.5 15C1.5 6.99998 13.5 7 13.5 15" stroke="currentColor" />
+			</symbol>
 		</defs>
 	</svg>
 );

@@ -19,6 +19,7 @@ export const iconNames = [
 	'magic',
 	'convert',
 	'offline',
+	'profile',
 ] as const;
 
 export type IconName = (typeof iconNames)[number];

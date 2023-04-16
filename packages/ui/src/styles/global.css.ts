@@ -28,7 +28,7 @@ globalStyle('html', {
 		'--palette-yellow-light': '#f9e794',
 		'--palette-yellow': '#f9e794',
 		'--palette-yellow-dark': '#f7d352',
-		'--palette-yellow-darker': '#996505',
+		'--palette-yellow-darker': '#7d4c01',
 		'--palette-yellow-ink': '#4d3508',
 		'--palette-yellow-black': '#261a04',
 		'--palette-blue-wash': '#F3F9FE',

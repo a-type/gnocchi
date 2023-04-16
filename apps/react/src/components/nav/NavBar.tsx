@@ -196,7 +196,11 @@ function SettingsNavBarLink({ active }: { active: boolean }) {
 			onboarding={firstTimeOnboarding}
 			step="settings"
 		>
-			<NavBarLink to="/settings" icon={<PersonIcon />} active={active}>
+			<NavBarLink
+				to="/settings"
+				icon={<Icon name="profile" className={classes.icon} />}
+				active={active}
+			>
 				Settings
 			</NavBarLink>
 		</OnboardingTooltip>
