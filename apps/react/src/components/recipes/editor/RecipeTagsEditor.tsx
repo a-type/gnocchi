@@ -1,7 +1,7 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { Suspense, useState } from 'react';
 import { RecipeTagsList } from '../collection/RecipeTagsList.jsx';
 import { NewTagForm } from './NewTagForm.jsx';
@@ -32,7 +32,7 @@ export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 	const removeTag = (name: string) => tags.removeAll(name);
 
 	return (
-		<div className={classnames(classes.root, className)}>
+		<div className={classNames(classes.root, className)}>
 			<H2>Tags</H2>
 			<div className={classes.list}>
 				{tags?.map((tag) => (
@@ -59,7 +59,7 @@ function TagDisplay({
 	const color = data?.get('color') as ThemeName | undefined;
 
 	return (
-		<div className={classnames(classes.tag, color && themeMap[color])}>
+		<div className={classNames(classes.tag, color && themeMap[color])}>
 			<span>{icon ?? <Icon name="tag" />}</span>
 			<span>{tag}</span>
 			<Button

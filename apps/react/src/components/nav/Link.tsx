@@ -33,15 +33,14 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
 	},
 );
 
-export const TextLink = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
-	{ className, ...props },
-	ref,
-) {
-	return (
-		<Link
-			{...props}
-			className={classNames(classes.root, classes.textLink, className)}
-			// ref={ref} // FIXME: in lo-fi
-		/>
-	);
-});
+export const TextLink = forwardRef<HTMLAnchorElement, LinkProps>(
+	function TextLink({ className, ...props }, ref) {
+		return (
+			<Link
+				{...props}
+				className={classNames(classes.root, classes.textLink, className)}
+				// ref={ref} // FIXME: in lo-fi
+			/>
+		);
+	},
+);

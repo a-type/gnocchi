@@ -1,6 +1,6 @@
 'use client';
 
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { forwardRef, lazy } from 'react';
 import * as classes from './RichEditor.css.js';
 
@@ -22,7 +22,7 @@ export const RichEditor = forwardRef<any, RichEditorProps>(function RichEditor(
 	return (
 		<EditorContent
 			ref={ref as any}
-			className={clsx(classes.root, className)}
+			className={classNames(classes.root, className)}
 			{...rest}
 		/>
 	);

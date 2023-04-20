@@ -1,6 +1,6 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { MeetupIcon } from './MeetupIcon.jsx';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './MeetupHint.css.js';
 
 export interface MeetupHintProps {
@@ -14,7 +14,7 @@ export function MeetupHint({ className, ...props }: MeetupHintProps) {
 
 	if (meetup && meetup.get('createdAt') > Date.now() - 1000 * 60 * 60) {
 		return (
-			<div className={clsx(classes.root, className)} {...props}>
+			<div className={classNames(classes.root, className)} {...props}>
 				<MeetupIcon />
 			</div>
 		);

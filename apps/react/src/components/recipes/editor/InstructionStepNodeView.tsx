@@ -3,7 +3,7 @@ import { PersonSelect } from '@/components/sync/people/PersonSelect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {
 	ChangeEvent,
 	ReactNode,
@@ -97,7 +97,7 @@ export function InstructionStepNodeView({
 	return (
 		<NodeViewWrapper
 			data-id={node.attrs.id}
-			className={classnames(
+			className={classNames(
 				classes.root,
 				completed && classes.completed,
 				isAssignedToMe && classes.assignedToMe,

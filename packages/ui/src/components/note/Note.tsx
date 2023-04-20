@@ -1,5 +1,5 @@
 import { HTMLAttributes, ReactNode } from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import * as classes from './Note.css.js';
 
 export interface NoteProps extends HTMLAttributes<HTMLDivElement> {
@@ -8,7 +8,7 @@ export interface NoteProps extends HTMLAttributes<HTMLDivElement> {
 
 export function Note({ className, children, ...rest }: NoteProps) {
 	return (
-		<div className={classnames(classes.root, className)} {...rest}>
+		<div className={classNames(classes.root, className)} {...rest}>
 			<div className={classes.inner}>
 				{children}
 				<div className={classes.edge}>

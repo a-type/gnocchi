@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { CSSProperties } from 'react';
 import * as classes from './DemoFrame.css.js';
 
@@ -10,7 +10,7 @@ export interface DemoFrameProps {
 
 export function DemoFrame({ demo, className, ...rest }: DemoFrameProps) {
 	return (
-		<div className={clsx(classes.root, className)} {...rest}>
+		<div className={classNames(classes.root, className)} {...rest}>
 			<video
 				autoPlay
 				loop

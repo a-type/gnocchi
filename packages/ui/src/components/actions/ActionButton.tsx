@@ -1,6 +1,6 @@
 'use client';
 
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { forwardRef, ReactNode, useEffect, useRef, useState } from 'react';
 import * as classes from './ActionButton.css.js';
 import { Button, ButtonProps } from '../button/Button.js';
@@ -43,7 +43,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 					<Button
 						ref={ref}
 						size="small"
-						className={clsx(classes.root)}
+						className={classNames(classes.root)}
 						{...rest}
 					>
 						{icon}

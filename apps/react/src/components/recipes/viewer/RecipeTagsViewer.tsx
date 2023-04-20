@@ -1,6 +1,6 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import * as classes from './RecipeTagsViewer.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
@@ -31,7 +31,7 @@ function RecipeTagViewer({ tag }: { tag: string }) {
 
 	return (
 		<div
-			className={classnames(
+			className={classNames(
 				classes.tag,
 				data?.get('color') && themeMap[data.get('color') as ThemeName],
 			)}

@@ -1,5 +1,5 @@
 import { withClassName } from '../../styles/withClassName.js';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { forwardRef, HTMLProps } from 'react';
 import * as classes from './typography.css.js';
 
@@ -24,7 +24,10 @@ export const P = forwardRef<
 	return (
 		<p
 			{...props}
-			className={clsx(classes.paragraph({ size, gutterBottom }), className)}
+			className={classNames(
+				classes.paragraph({ size, gutterBottom }),
+				className,
+			)}
 			ref={ref}
 		/>
 	);

@@ -1,6 +1,6 @@
 import { fractionToText } from '@aglio/tools';
 import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { ReactNode } from 'react';
 import { Button } from '../button.js';
 import * as classes from './NumberStepper.css.js';
@@ -54,7 +54,7 @@ export function NumberStepper({
 
 	return (
 		<div
-			className={clsx(
+			className={classNames(
 				classes.container,
 				{
 					[classes.highlightChange]: !!highlightChange && value !== 1,

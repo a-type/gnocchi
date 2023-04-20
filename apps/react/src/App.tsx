@@ -1,6 +1,6 @@
 import { trpc, trpcClientOptions } from '@/trpc.js';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import * as classes from './App.css.js';
@@ -30,7 +30,7 @@ export function App() {
 	useVisualViewportOffset();
 
 	return (
-		<div className={clsx(classes.wrapper, lemonTheme)}>
+		<div className={classNames(classes.wrapper, lemonTheme)}>
 			<ErrorBoundary fallback={<ErrorFallback />}>
 				<TooltipProvider>
 					<Suspense fallback={<GlobalLoader />}>

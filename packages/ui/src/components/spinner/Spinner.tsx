@@ -1,5 +1,5 @@
 import { HTMLAttributes, forwardRef } from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import * as classes from './Spinner.css.js';
 import { Box } from '../box.js';
 
@@ -21,7 +21,7 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
 				ref={ref}
 				role="progressbar"
 				{...props}
-				className={classnames(classes.root, className)}
+				className={classNames(classes.root, className)}
 				style={{ width: size, height: size, ...style }}
 			>
 				<svg

@@ -6,7 +6,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { isUrl } from '@aglio/tools';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import {
 	UseComboboxState,
 	UseComboboxStateChangeOptions,
@@ -242,7 +242,7 @@ export const GroceryListAddImpl = forwardRef<
 				<ul className={classes.menuList}>
 					{inputIsUrl ? (
 						<li
-							className={clsx(classes.item, classes.itemHighlighted)}
+							className={classNames(classes.item, classes.itemHighlighted)}
 							onClick={() => selectItem(inputValue)}
 						>
 							Scan web recipe
@@ -253,7 +253,7 @@ export const GroceryListAddImpl = forwardRef<
 								key={suggestion}
 								suggestion={suggestion}
 								{...getItemProps({ item: suggestion, index })}
-								className={clsx(classes.item, {
+								className={classNames(classes.item, {
 									[classes.itemHighlighted]: highlightedIndex === index,
 								})}
 							>{`${suggestion}`}</li>

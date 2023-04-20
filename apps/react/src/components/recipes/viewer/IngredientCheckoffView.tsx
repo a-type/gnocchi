@@ -3,7 +3,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
 import { useCurrentRecipeSession } from '../hooks.js';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import * as classes from './IngredientCheckoffView.css.js';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 
@@ -23,7 +23,7 @@ export const IngredientCheckoffView = forwardRef<
 	hooks.useWatch(ingredients);
 
 	return (
-		<ul ref={ref} className={classnames(classes.list, className)}>
+		<ul ref={ref} className={classNames(classes.list, className)}>
 			{ingredients.map((ingredient) => (
 				<IngredientCheckoffItem
 					key={ingredient.get('id')}
@@ -56,7 +56,7 @@ function IngredientCheckoffItem({
 }) {
 	const isSectionHeader = hooks.useWatch(ingredient, 'isSectionHeader');
 	return (
-		<li className={classnames(classes.item, checked && classes.itemChecked)}>
+		<li className={classNames(classes.item, checked && classes.itemChecked)}>
 			{!isSectionHeader && (
 				<Checkbox
 					checked={checked}

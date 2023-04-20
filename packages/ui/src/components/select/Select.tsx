@@ -7,7 +7,7 @@ import {
 } from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { forwardRef } from 'react';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './Select.css.js';
 import { withClassName } from '../../styles/withClassName.js';
 
@@ -17,7 +17,7 @@ export const SelectItem = forwardRef<
 >(({ children, className, ...props }, forwardedRef) => {
 	return (
 		<SelectPrimitive.Item
-			className={clsx(classes.item, className)}
+			className={classNames(classes.item, className)}
 			{...props}
 			ref={forwardedRef}
 		>
@@ -68,7 +68,7 @@ export const SelectIcon = forwardRef<
 >(({ className, ...props }, forwardedRef) => {
 	return (
 		<SelectPrimitive.Icon
-			className={clsx(classes.icon, className)}
+			className={classNames(classes.icon, className)}
 			{...props}
 			ref={forwardedRef}
 		>
@@ -84,7 +84,7 @@ export const SelectContent = forwardRef<
 	return (
 		<SelectPrimitive.Portal>
 			<SelectPrimitive.Content
-				className={clsx(
+				className={classNames(
 					classes.content,
 					inDialog && classes.contentInDialog,
 					className,

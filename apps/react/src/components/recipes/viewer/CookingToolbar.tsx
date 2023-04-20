@@ -2,7 +2,7 @@ import { Recipe } from '@aglio/groceries-client';
 import { ListBulletIcon } from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { useRef } from 'react';
 import * as classes from './CookingToolbar.css.js';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
@@ -79,7 +79,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 			</Button>
 			<animated.div
 				ref={containerRef}
-				className={classnames(classes.container)}
+				className={classNames(classes.container)}
 				style={{
 					height: containerStyle.height,
 					borderTop: containerStyle.height.to((h) =>

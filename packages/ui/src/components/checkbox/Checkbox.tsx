@@ -3,7 +3,7 @@
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ComponentProps, forwardRef } from 'react';
 import { CheckIcon } from '@radix-ui/react-icons';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './Checkbox.css.js';
 import { withClassName } from '../../styles/withClassName.js';
 
@@ -16,7 +16,7 @@ export function CheckboxIndicator({
 }: CheckboxPrimitive.CheckboxIndicatorProps) {
 	return (
 		<CheckboxPrimitive.Indicator
-			className={clsx(classes.indicator, className)}
+			className={classNames(classes.indicator, className)}
 			{...props}
 		>
 			{children ?? <CheckIcon width={18} height={18} />}

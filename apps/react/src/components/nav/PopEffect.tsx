@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { debounce } from '@a-type/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import * as classes from './PopEffect.css.js';
@@ -35,11 +35,11 @@ export function PopEffect({ active, className }: PopEffectProps) {
 
 	return (
 		<div
-			className={clsx(classes.root, className)}
+			className={classNames(classes.root, className)}
 			data-active={animate}
 			ref={ref}
 		>
-			<div className={clsx(classes.inner)} data-active={animate} />
+			<div className={classNames(classes.inner)} data-active={animate} />
 		</div>
 	);
 }

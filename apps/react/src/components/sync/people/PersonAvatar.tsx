@@ -1,6 +1,6 @@
 import { UserInfo } from '@lo-fi/web';
 import { Profile } from '@/stores/groceries/index.js';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './PersonAvatar.css.js';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { CSSProperties } from 'react';
@@ -19,7 +19,7 @@ export function PersonAvatar({
 	return (
 		<div
 			data-pop={popIn}
-			className={clsx(classes.root, !person && classes.empty, className)}
+			className={classNames(classes.root, !person && classes.empty, className)}
 			{...rest}
 		>
 			{person && <AvatarContent user={person} />}

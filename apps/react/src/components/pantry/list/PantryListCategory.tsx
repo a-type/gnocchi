@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as groceryCategoryClasses from '@/components/groceries/categories/GroceryListCategory.css.js';
 import { Category, Item } from '@aglio/groceries-client';
 import { PantryListItem } from '../items/PantryListItem.jsx';
@@ -15,7 +15,7 @@ export function PantryListCategory({
 }: PantryListCategoryProps) {
 	return (
 		<div
-			className={clsx('pantryListCategory', groceryCategoryClasses.root)}
+			className={classNames('pantryListCategory', groceryCategoryClasses.root)}
 			data-is-empty={!items || items?.length === 0}
 			data-do-not-animate
 			{...rest}

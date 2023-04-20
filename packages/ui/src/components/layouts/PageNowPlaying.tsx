@@ -8,7 +8,7 @@ import {
 	useMemo,
 	useState,
 } from 'react';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import * as classes from './PageNowPlaying.css.js';
 import { createPortal } from 'react-dom';
 
@@ -38,7 +38,7 @@ export function PageNowPlaying({
 		return createPortal(
 			<div
 				{...props}
-				className={classnames(
+				className={classNames(
 					unstyled ? undefined : classes.nowPlaying,
 					className,
 				)}

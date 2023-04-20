@@ -56,7 +56,6 @@
 		"@vanilla-extract/sprinkles": "^1.5.2",
 		"browser-image-resizer": "^2.4.1",
 		"classnames": "^2.3.2",
-		"clsx": "^1.2.1",
 		"color-interpolate": "^1.0.5",
 		"date-fns": "^2.29.3",
 		"formik": "^2.2.9",

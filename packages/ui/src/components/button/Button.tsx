@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { forwardRef, ButtonHTMLAttributes } from 'react';
 import * as classes from './Button.css.js';
 import { Spinner } from '../spinner.js';
@@ -40,7 +40,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 				{...props}
 				disabled={disabled || loading}
 				data-disabled={visuallyDisabled}
-				className={clsx(
+				className={classNames(
 					classes.root({ color, size, toggled, align }),
 					className,
 				)}

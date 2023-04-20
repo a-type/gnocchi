@@ -1,6 +1,6 @@
 import { withClassName } from '@aglio/ui/styles';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { HTMLAttributes } from 'react';
 import * as classes from './TitleAndImageLayout.css.js';
 
@@ -16,5 +16,5 @@ export const ImageContainer = ({
 
 	if (!enabled) return null;
 
-	return <div className={classnames(classes.image, className)} {...props} />;
+	return <div className={classNames(classes.image, className)} {...props} />;
 };

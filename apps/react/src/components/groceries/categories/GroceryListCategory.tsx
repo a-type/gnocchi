@@ -4,7 +4,7 @@ import useMergedRef from '@/hooks/useMergedRef.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Category, Item } from '@aglio/groceries-client';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useIsDragging } from '../dndHooks.js';
 import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
@@ -50,7 +50,7 @@ export function GroceryListCategory({
 
 	return (
 		<div
-			className={clsx('groceryCategory', classes.root)}
+			className={classNames('groceryCategory', classes.root)}
 			data-dragged-over={isOver}
 			data-is-item-dragging={isDragging}
 			data-is-empty={empty}
@@ -245,7 +245,7 @@ function ClaimIcon({ active }: { active?: boolean }) {
 				stroke="currentColor"
 				strokeLinecap="round"
 				strokeLinejoin="round"
-				className={clsx(classes.claimIcon, {
+				className={classNames(classes.claimIcon, {
 					[classes.claimIconActive]: active,
 				})}
 			/>

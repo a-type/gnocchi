@@ -1,6 +1,6 @@
 'use client';
 
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { useCallback, useState } from 'react';
 import * as classes from './ImageUploader.css.js';
 import { UploadIcon } from './UploadIcon.jsx';
@@ -102,7 +102,7 @@ export function ImageUploader({
 
 	return (
 		<div
-			className={classnames(classes.imageUploader, rest.className)}
+			className={classNames(classes.imageUploader, rest.className)}
 			onDragEnter={onDragEnter}
 			onDragLeave={onDragLeave}
 			onDragOver={onDragOver}
@@ -119,7 +119,7 @@ export function ImageUploader({
 				className={classes.fileInput}
 			/>
 			<div
-				className={classnames(
+				className={classNames(
 					classes.dragging,
 					draggingOver && classes.draggingOver,
 				)}

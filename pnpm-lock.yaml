@@ -355,9 +355,6 @@ importers:
       classnames:
         specifier: ^2.3.2
         version: 2.3.2
-      clsx:
-        specifier: ^1.2.1
-        version: 1.2.1
       color-interpolate:
         specifier: ^1.0.5
         version: 1.0.5
@@ -778,9 +775,6 @@ importers:
       classnames:
         specifier: ^2.3.2
         version: 2.3.2
-      clsx:
-        specifier: ^1.2.1
-        version: 1.2.1
       color-interpolate:
         specifier: ^1.0.5
         version: 1.0.5

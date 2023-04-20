@@ -4,7 +4,7 @@ import {
 	ElementType,
 	forwardRef,
 } from 'react';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as resetStyles from '../../styles/reset.css.js';
 import { sprinkles, Sprinkles } from '../../styles/sprinkles.css.js';
 
@@ -22,7 +22,7 @@ export interface BoxProps
 		>,
 		Sprinkles {
 	as?: ElementType;
-	className?: Parameters<typeof clsx>[0];
+	className?: Parameters<typeof classNames>[0];
 }
 
 export const Box = forwardRef<any, BoxProps>(function Box(
@@ -102,7 +102,7 @@ export const Box = forwardRef<any, BoxProps>(function Box(
 	},
 	ref,
 ) {
-	const atomClasses = clsx(
+	const atomClasses = classNames(
 		resetStyles.baseResetStyle,
 		resetStyles.elementResetStyles[
 			asProp as keyof typeof resetStyles.elementResetStyles

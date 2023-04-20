@@ -5,7 +5,7 @@ import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js
 import { hooks } from '@/stores/groceries/index.js';
 import { PageNav } from '@aglio/ui/components/layouts';
 import { useMatch } from '@lo-fi/react-router';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
@@ -48,7 +48,7 @@ export function NavBar({}: NavBarProps) {
 	}
 
 	return (
-		<PageNav innerClassName={clsx(classes.root)}>
+		<PageNav innerClassName={classNames(classes.root)}>
 			<Suspense>
 				<div className={classes.logo}>
 					<img
@@ -93,7 +93,7 @@ const NavBarLink = memo(
 		return (
 			<Link
 				to={to}
-				className={clsx(classes.button, {
+				className={classNames(classes.button, {
 					[classes.buttonActive]: active,
 				})}
 				onClick={handleClick}

@@ -10,7 +10,7 @@ import {
 	forwardRef,
 } from 'react';
 import useMergedRef from '../../hooks/useMergedRef.js';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './TextField.css.js';
 import { Input } from '../input/Input.js';
 import { TextArea, TextAreaProps } from '../textArea/TextArea.jsx';
@@ -63,7 +63,7 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
 		}, [autoFocusDelay]);
 
 		return (
-			<div className={clsx(classes.fieldGroup, className)} ref={ref}>
+			<div className={classNames(classes.fieldGroup, className)} ref={ref}>
 				{label && <label className={classes.fieldLabel}>{label}</label>}
 				<Input
 					{...props}
@@ -95,7 +95,7 @@ export function TextAreaField({
 }: TextAreaFieldProps) {
 	const [props] = useField(name);
 	return (
-		<div className={clsx(classes.fieldGroup, className)}>
+		<div className={classNames(classes.fieldGroup, className)}>
 			{label && <label className={classes.fieldLabel}>{label}</label>}
 			<TextArea ref={inputRef} {...props} {...rest} />
 		</div>

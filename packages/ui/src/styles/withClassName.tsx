@@ -1,5 +1,5 @@
 import { RuntimeFn } from '@vanilla-extract/recipes';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import {
 	ComponentPropsWithRef,
 	ComponentType,
@@ -33,7 +33,7 @@ export function withClassName<
 			<Component
 				{...omit(rest, variants)}
 				ref={ref}
-				className={clsx(c, className)}
+				className={classNames(c, className)}
 			/>
 		);
 	});

@@ -1,6 +1,6 @@
 'use client';
 
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './TextArea.css.js';
 import useMergedRef from '../../hooks/useMergedRef.js';
 import { forwardRef, HTMLProps, useLayoutEffect, useRef } from 'react';
@@ -42,7 +42,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 		return (
 			<textarea
 				ref={finalRef}
-				className={clsx(
+				className={classNames(
 					classes.root({
 						resizeable: !autoSize,
 					}),

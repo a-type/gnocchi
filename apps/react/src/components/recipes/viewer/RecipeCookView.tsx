@@ -3,7 +3,7 @@ import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { AddNotePrompt } from '@/components/recipes/viewer/AddNotePrompt.jsx';
 import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 import { H1 } from '@aglio/ui/components/typography';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { InstructionsProvider } from '../editor/InstructionStepNodeView.jsx';
 import { useWatchChanges } from '../hooks.js';
 import { AddImagePrompt } from './AddImagePrompt.jsx';
@@ -22,7 +22,7 @@ export function RecipeCookView({ className }: { className?: string }) {
 	const recipe = useCookingRecipe();
 	useWatchChanges(recipe);
 	return (
-		<div className={clsx(classes.container, className)}>
+		<div className={classNames(classes.container, className)}>
 			<HeaderBar backUrl={makeRecipeLink(recipe, '')}>
 				<CookingActionBar recipe={recipe} />
 			</HeaderBar>

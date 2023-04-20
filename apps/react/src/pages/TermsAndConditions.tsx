@@ -364,7 +364,7 @@ export function TermsAndConditions() {
 					As we ask others to respect our intellectual property rights, we
 					respect the intellectual property rights of others. If you believe any
 					Content violates your copyright, please{' '}
-					<TextLink href="mailto:hi@gnocchi.club">contact us</TextLink>.
+					<TextLink to="mailto:hi@gnocchi.club">contact us</TextLink>.
 				</P>
 
 				<H2>Intellectual Property</H2>

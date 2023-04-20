@@ -1,6 +1,6 @@
 import { leekTheme, sprinkles } from '@aglio/ui/styles';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import {
 	CSSProperties,
 	forwardRef,
@@ -135,7 +135,7 @@ export function SplashPage() {
 				</div>
 			</Content>
 			<Content
-				className={clsx(classes.upgradeContent, leekTheme)}
+				className={classNames(classes.upgradeContent, leekTheme)}
 				ref={upgradeSectionRef}
 			>
 				<div className={classes.upgradeSection}>
@@ -201,7 +201,7 @@ export function SplashPage() {
 				</div>
 			</Content>
 			<Content
-				className={clsx(leekTheme, classes.endContent)}
+				className={classNames(leekTheme, classes.endContent)}
 				style={{ paddingBottom: '20vh' }}
 			>
 				<Box mt={6} gap={4}>
@@ -217,7 +217,7 @@ export function SplashPage() {
 				</Box>
 			</Content>
 			<div
-				className={clsx(
+				className={classNames(
 					classes.fixedContent,
 					staticSectionAccent ? leekTheme : undefined,
 				)}
@@ -260,7 +260,7 @@ const Section = forwardRef<
 	return (
 		<section
 			ref={ref}
-			className={clsx(classes.section[color], className)}
+			className={classNames(classes.section[color], className)}
 			{...rest}
 		/>
 	);
@@ -279,7 +279,7 @@ const Content = forwardRef<
 	}
 >(function Content({ children, className, ...rest }, ref) {
 	return (
-		<div ref={ref} className={clsx(classes.content, className)} {...rest}>
+		<div ref={ref} className={classNames(classes.content, className)} {...rest}>
 			<div className={classes.contentInner}>{children}</div>
 		</div>
 	);

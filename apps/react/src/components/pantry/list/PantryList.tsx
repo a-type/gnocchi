@@ -1,4 +1,4 @@
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import { useItemsGroupedAndSorted } from '../hooks.js';
 import * as classes from './PantryList.css.js';
 import { PantryListCategory } from './PantryListCategory.jsx';
@@ -13,7 +13,7 @@ export function PantryList({ className, ...rest }: PantryListProps) {
 	const { groupedItems, empty } = useItemsGroupedAndSorted();
 
 	return (
-		<div className={clsx(classes.root)}>
+		<div className={classNames(classes.root)}>
 			<Suspense>
 				<ExpiresSoonSection />
 			</Suspense>

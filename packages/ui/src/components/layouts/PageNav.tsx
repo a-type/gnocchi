@@ -12,7 +12,7 @@ import {
 import { createPortal } from 'react-dom';
 import * as classes from './PageNav.css.js';
 import { NowPlayingContext } from './PageNowPlaying.jsx';
-import classnames from 'classnames';
+import classNames from 'classnames';
 
 const NavContext = createContext<{
 	container: HTMLDivElement | null;
@@ -45,7 +45,7 @@ export function PageNav({
 
 	return createPortal(
 		<>
-			<div className={classnames(classes.navInner, innerClassName)}>
+			<div className={classNames(classes.navInner, innerClassName)}>
 				{children}
 			</div>
 			<div ref={setContainer} className={classes.nowPlayingContainer} />

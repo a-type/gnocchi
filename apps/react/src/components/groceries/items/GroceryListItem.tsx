@@ -46,7 +46,7 @@ import {
 	Pencil1Icon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import React, {
 	CSSProperties,
 	Ref,
@@ -134,7 +134,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 
 		return (
 			<CollapsibleRoot
-				className={clsx('item', classes.root, className)}
+				className={classNames('item', classes.root, className)}
 				open={menuOpen}
 				onOpenChange={setMenuOpen}
 				hidden={sectionStateSnap.newCategoryPendingItem?.get('id') === id}
@@ -370,7 +370,7 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 			<CollapsibleRoot open={!collapsed}>
 				<CollapsibleContent data-horizontal>
 					<Link to={`/list/${list.get('id')}`}>
-						<div className={clsx(listThemeClass, classes.listTag)}>
+						<div className={classNames(listThemeClass, classes.listTag)}>
 							<Icon name="tag" className={classes.listTagIcon} />
 							<span className={classes.listTagName}>{name}</span>
 							<span className={classes.listTagNameSmall}>

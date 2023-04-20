@@ -5,7 +5,7 @@ import {
 	forwardRef,
 	HTMLProps,
 } from 'react';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './Input.css.js';
 
 export const Input = withClassName(

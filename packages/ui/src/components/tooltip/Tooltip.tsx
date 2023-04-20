@@ -2,7 +2,7 @@
 
 import React, { ComponentPropsWithoutRef } from 'react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './Tooltip.css.js';
 
 function Content({
@@ -13,7 +13,7 @@ function Content({
 	return (
 		<TooltipPrimitive.Portal>
 			<TooltipPrimitive.Content
-				className={clsx(classes.content, className)}
+				className={classNames(classes.content, className)}
 				{...props}
 			>
 				{children}

@@ -7,7 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '../select/Select.jsx';
-import { clsx } from 'clsx';
+import classNames from 'classnames';
 import * as classes from './ColorPicker.css.js';
 import { themeMap } from '../../styles/themes/map.js';
 import { ReactNode } from 'react';
@@ -63,7 +63,9 @@ export function ColorSwatch({
 	children?: ReactNode;
 }) {
 	return (
-		<div className={clsx(classes.swatch, themeMap[value] ?? themeMap.lemon)}>
+		<div
+			className={classNames(classes.swatch, themeMap[value] ?? themeMap.lemon)}
+		>
 			{children}
 		</div>
 	);

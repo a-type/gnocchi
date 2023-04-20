@@ -1,6 +1,6 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { themeMap } from '@aglio/ui/styles';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import * as classes from './RecipeTagsList.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
@@ -39,7 +39,7 @@ export function RecipeTagsList({
 					key={tag.get('name')}
 					toggled={tag.get('name') === selectedValue}
 					onClick={() => onSelect(tag.get('name'))}
-					className={classnames(
+					className={classNames(
 						tag.get('color') && themeMap[tag.get('color') as ThemeName],
 					)}
 				>
@@ -57,7 +57,7 @@ function TagButtonBase({ className, ...props }: ButtonProps) {
 			size="small"
 			color="primary"
 			{...props}
-			className={classnames(classes.tagButton, className)}
+			className={classNames(classes.tagButton, className)}
 		/>
 	);
 }

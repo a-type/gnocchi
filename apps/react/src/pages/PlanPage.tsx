@@ -60,12 +60,8 @@ export function PlanPage() {
 					<H1>Settings</H1>
 					<Contents />
 					<Box fontSize="xs" gap={2}>
-						<TextLink to="/privacy-policy" newTab>
-							Privacy policy
-						</TextLink>
-						<TextLink to="/tos" newTab>
-							Terms and conditions of use
-						</TextLink>
+						<TextLink to="/privacy-policy">Privacy policy</TextLink>
+						<TextLink to="/tos">Terms and conditions of use</TextLink>
 					</Box>
 				</Box>
 			</PageContent>
