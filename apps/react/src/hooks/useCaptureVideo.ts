@@ -2,11 +2,16 @@ import { RefObject, useCallback, useState } from 'react';
 import { Crop } from 'react-image-crop';
 
 // start webrtc capture and attach to video element
-export function useCaptureVideo(videoRef: RefObject<HTMLVideoElement>) {
+export function useCaptureVideo(
+	videoRef: RefObject<HTMLVideoElement>,
+	facingMode: 'user' | 'environment' = 'environment',
+) {
 	const [stream, setStream] = useState<MediaStream | null>(null);
 	const startCapture = useCallback(async () => {
 		const stream = await navigator.mediaDevices.getUserMedia({
-			video: true,
+			video: {
+				facingMode,
+			},
 		});
 		setStream(stream);
 
