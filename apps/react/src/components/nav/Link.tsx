@@ -4,6 +4,7 @@ import { forwardRef } from 'react';
 import { Link, LinkProps } from '@lo-fi/react-router';
 import * as classes from './Link.css.js';
 
+export { Link };
 export type { LinkProps };
 
 export interface LinkButtonProps extends LinkProps {

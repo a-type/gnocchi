@@ -1,10 +1,12 @@
+import { Link } from '@/components/nav/Link.jsx';
+import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
+import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { PageNav } from '@aglio/ui/components/layouts';
-import { PersonIcon } from '@radix-ui/react-icons';
+import { useMatch } from '@lo-fi/react-router';
 import { clsx } from 'clsx';
 import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
-import { useMatch } from '@lo-fi/react-router';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
 import { Icon } from '../icons/Icon.jsx';
@@ -12,9 +14,6 @@ import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
 import { useHasNewExpirations } from '../pantry/hooks.js';
 import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
-import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
-import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
-import { Link } from '@/components/nav/Link.jsx';
 
 export interface NavBarProps {}
 
