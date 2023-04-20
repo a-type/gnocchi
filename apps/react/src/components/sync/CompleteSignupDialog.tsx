@@ -11,7 +11,7 @@ import {
 	CollapsibleTrigger,
 } from '@aglio/ui/components/collapsible';
 import { Button } from '@aglio/ui/components/button';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { sprinkles } from '@aglio/ui/styles';
 
 export interface CompleteSignupDialogProps {}
@@ -47,8 +47,8 @@ export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
 						<CollapsibleContent>
 							<P>
 								If you're paying for a subscription and you didn't cancel,{' '}
-								<TextLink href="mailto:hi@gnocchi.club">contact me</TextLink>{' '}
-								and I'll get it sorted out.
+								<TextLink to="mailto:hi@gnocchi.club">contact me</TextLink> and
+								I'll get it sorted out.
 							</P>
 							<P>
 								If you were a member of someone else's subscription, it's
@@ -56,7 +56,7 @@ export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
 							</P>
 							<P>
 								If you think this is a mistake, please{' '}
-								<TextLink href="mailto:hi@gnocchi.club">contact me</TextLink>.
+								<TextLink to="mailto:hi@gnocchi.club">contact me</TextLink>.
 							</P>
 						</CollapsibleContent>
 					</CollapsibleRoot>

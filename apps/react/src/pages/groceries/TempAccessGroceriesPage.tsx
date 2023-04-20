@@ -15,7 +15,7 @@ import { LinkButton } from '@/components/nav/Link.jsx';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { FullScreenSpinner } from '@aglio/ui/components/spinner';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { H1, P } from '@aglio/ui/components/typography';
 import { Formik } from 'formik';
 import { Suspense, useCallback, useMemo } from 'react';
@@ -53,7 +53,7 @@ export function TempAccessGroceriesPage() {
 					<P>
 						Want to start your own list? It's already waiting for you, just
 						click{' '}
-						<TextLink href="/" target="_blank">
+						<TextLink to="/" newTab>
 							here
 						</TextLink>
 						. No signup necessary.

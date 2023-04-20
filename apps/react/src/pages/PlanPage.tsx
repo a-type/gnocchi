@@ -19,7 +19,7 @@ import { Box } from '@aglio/ui/components/box';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
 import { Divider } from '@aglio/ui/components/divider';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { H1, H2, Span } from '@aglio/ui/components/typography';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
@@ -60,14 +60,10 @@ export function PlanPage() {
 					<H1>Settings</H1>
 					<Contents />
 					<Box fontSize="xs" gap={2}>
-						<TextLink
-							href="/privacy-policy"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
+						<TextLink to="/privacy-policy" newTab>
 							Privacy policy
 						</TextLink>
-						<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
+						<TextLink to="/tos" newTab>
 							Terms and conditions of use
 						</TextLink>
 					</Box>

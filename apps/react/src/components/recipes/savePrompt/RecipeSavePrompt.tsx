@@ -14,7 +14,7 @@ import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { H2, P, Span } from '@aglio/ui/components/typography';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { hooks } from '@/stores/groceries/index.js';
 
@@ -103,7 +103,7 @@ export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 
 				<Span size="sm">
 					By continuing you agree to{' '}
-					<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
+					<TextLink to="/tos" newTab>
 						the terms and conditions of usage.
 					</TextLink>
 				</Span>

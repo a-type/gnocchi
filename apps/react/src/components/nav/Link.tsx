@@ -4,7 +4,6 @@ import { forwardRef } from 'react';
 import { Link, LinkProps } from '@lo-fi/react-router';
 import * as classes from './Link.css.js';
 
-export { Link };
 export type { LinkProps };
 
 export interface LinkButtonProps extends LinkProps {
@@ -32,3 +31,16 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
 		);
 	},
 );
+
+export const TextLink = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
+	{ className, ...props },
+	ref,
+) {
+	return (
+		<Link
+			{...props}
+			className={classNames(classes.root, classes.textLink, className)}
+			// ref={ref} // FIXME: in lo-fi
+		/>
+	);
+});

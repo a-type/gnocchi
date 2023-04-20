@@ -1,5 +1,5 @@
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { H1, H2, P } from '@aglio/ui/components/typography';
 
 export function TermsAndConditions() {
@@ -72,7 +72,7 @@ export function TermsAndConditions() {
 				<P>
 					If you'd like to learn about how we handle the data you provide us,
 					please see our{' '}
-					<TextLink href="/privacy-policy">Privacy Policy.</TextLink>
+					<TextLink to="/privacy-policy">Privacy Policy.</TextLink>
 				</P>
 
 				<H2>Minimum Age Requirements</H2>
@@ -287,7 +287,7 @@ export function TermsAndConditions() {
 						deciphering, or otherwise attempting to derive the source code for
 						the Services or any related technology that is not open source (p.s.
 						Gnocchi and the underlying data platform is{' '}
-						<TextLink href="https://github.com/a-type/gnocchi">
+						<TextLink to="https://github.com/a-type/gnocchi">
 							open source
 						</TextLink>
 						); and

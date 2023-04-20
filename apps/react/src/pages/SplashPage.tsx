@@ -20,7 +20,7 @@ import { useSearchParams } from '@lo-fi/react-router';
 import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
 import { H2, P, Span } from '@aglio/ui/components/typography';
 import { Box } from '@aglio/ui/components/box';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { LinkButton } from '@/components/nav/Link.jsx';
 
 // dynamically import Scene
@@ -205,21 +205,13 @@ export function SplashPage() {
 				style={{ paddingBottom: '20vh' }}
 			>
 				<Box mt={6} gap={4}>
-					<TextLink
-						href="/privacy-policy"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
+					<TextLink to="/privacy-policy" newTab>
 						Read the privacy policy
 					</TextLink>
-					<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
+					<TextLink to="/tos" newTab>
 						Terms and Conditions of usage
 					</TextLink>
-					<TextLink
-						href="https://github.com/a-type/gnocchi"
-						target="_blank"
-						rel="noopener noreferrer"
-					>
+					<TextLink to="https://github.com/a-type/gnocchi" newTab>
 						Gnocchi is open source
 					</TextLink>
 				</Box>
@@ -245,7 +237,7 @@ export function SplashPage() {
 
 				<Span size="sm">
 					Free, no signup required. By continuing you agree to{' '}
-					<TextLink href="/tos" target="_blank" rel="noopener noreferrer">
+					<TextLink to="/tos" newTab>
 						the terms and conditions of usage.
 					</TextLink>
 				</Span>

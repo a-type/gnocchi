@@ -11,7 +11,7 @@ import { sprinkles } from '@aglio/ui/styles';
 import { Box } from '@aglio/ui/components/box';
 import { H1, H2 } from '@aglio/ui/components/typography';
 import { Divider } from '@aglio/ui/components/divider';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 
 export interface JoinPageProps {}
 
@@ -73,8 +73,12 @@ export function JoinPage({}: JoinPageProps) {
 					<EmailSignInForm returnTo={returnTo} />
 				</PageSection>
 				<Box gap={2} mt={6}>
-					<TextLink href="/privacy-policy">Privacy Policy</TextLink>
-					<TextLink href="/tos">Terms and conditions of usage</TextLink>
+					<TextLink to="/privacy-policy" newTab>
+						Privacy Policy
+					</TextLink>
+					<TextLink to="/tos" newTab>
+						Terms and conditions of usage
+					</TextLink>
 				</Box>
 			</PageContent>
 		</PageRoot>

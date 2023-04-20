@@ -14,7 +14,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { P } from '@aglio/ui/components/typography';
 import { sprinkles } from '@aglio/ui/styles';
 import format from 'date-fns/format';
@@ -114,7 +114,7 @@ function PublishedContent({
 					Updated {format(new Date(updatedAt), 'PPp')}
 				</P>
 			)}
-			<TextLink href={url} target="_blank">
+			<TextLink to={url} newTab>
 				View on the web
 			</TextLink>
 			<DialogActions>
@@ -190,7 +190,7 @@ function UnpublishedContent({
 					>
 						I confirm that I own and have the right to publish this recipe, in
 						accordance with the{' '}
-						<TextLink href="https://www.aglio.com/terms" target="_blank">
+						<TextLink to="https://www.aglio.com/terms" newTab>
 							Aglio Terms of Service
 						</TextLink>
 					</label>

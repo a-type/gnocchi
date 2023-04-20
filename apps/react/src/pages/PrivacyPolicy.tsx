@@ -1,5 +1,5 @@
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { TextLink } from '@aglio/ui/components/textLink';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { sprinkles } from '@aglio/ui/styles';
 
 export function PrivacyPolicy() {
@@ -58,7 +58,7 @@ export function PrivacyPolicy() {
 						Additionally, all the data you put into Gnocchi will be stored,
 						including your list, categories, and recipes. This is simply
 						necessary in order to synchronize it. You still own your data, see{' '}
-						<TextLink href="/tos">the Terms and Conditions</TextLink>
+						<TextLink to="/tos">the Terms and Conditions</TextLink>
 					</p>
 				</div>
 				<h1>Interpretation and Definitions</h1>
