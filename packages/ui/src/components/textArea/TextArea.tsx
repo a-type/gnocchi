@@ -26,26 +26,18 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 			const element = innerRef.current;
 			let valueWasEmpty = false;
 			if (element) {
-				const refresh = () => {
-					if (
-						element!.value !== '' ||
-						(!valueWasEmpty && element!.value === '') ||
-						padBottomPixels
-					) {
-						element!.style.height = 'auto';
-						const baseHeight = element!.scrollHeight;
-						element!.style.height = baseHeight + padBottomPixels + 'px';
-					}
-					valueWasEmpty = element!.value === '';
-				};
-				refresh();
-
-				element.addEventListener('keyup', refresh);
-				return () => {
-					element.removeEventListener('keyup', refresh);
-				};
+				if (
+					element!.value !== '' ||
+					(!valueWasEmpty && element!.value === '') ||
+					padBottomPixels
+				) {
+					element!.style.height = 'auto';
+					const baseHeight = element!.scrollHeight;
+					element!.style.height = baseHeight + padBottomPixels + 'px';
+				}
+				valueWasEmpty = element!.value === '';
 			}
-		}, [autoSize, padBottomPixels]);
+		}, [autoSize, padBottomPixels, rest.value]);
 
 		return (
 			<textarea

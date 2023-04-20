@@ -2,6 +2,8 @@ import { useIsLoggedIn } from '@/hooks/useAuth.jsx';
 import { featureFlags } from '@/featureFlags.js';
 import { trpc } from '@/trpc.js';
 
+const IS_DEV = import.meta.env.DEV;
+
 export function useFeatureFlag(name: keyof typeof featureFlags) {
 	const globalValue = featureFlags[name];
 	const isLoggedIn = useIsLoggedIn();
@@ -11,5 +13,5 @@ export function useFeatureFlag(name: keyof typeof featureFlags) {
 		enabled: !globalValue && isLoggedIn,
 	});
 
-	return globalValue || !!remoteValue;
+	return IS_DEV || globalValue || !!remoteValue;
 }

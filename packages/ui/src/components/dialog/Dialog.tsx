@@ -19,7 +19,10 @@ export const Content = forwardRef<
 		outerClassName?: string;
 		width?: ComponentPropsWithoutRef<typeof StyledContent>['width'];
 	}
->(function Content({ children, width, outerClassName, ...props }, ref) {
+>(function Content(
+	{ children, width, outerClassName, className, ...props },
+	ref,
+) {
 	const particles = useParticles();
 	const openRef = useCallback(
 		(element: HTMLDivElement | null) => {
@@ -59,7 +62,7 @@ export const Content = forwardRef<
 				ref={finalRef}
 				{...props}
 				width={width}
-				className={outerClassName}
+				className={outerClassName || className}
 			>
 				{children}
 			</StyledContent>

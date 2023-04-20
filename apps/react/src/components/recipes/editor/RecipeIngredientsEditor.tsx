@@ -53,6 +53,8 @@ import {
 	TextAreaField,
 	TextField,
 } from '@aglio/ui/components/forms';
+import { OcrButton } from '@/components/recipes/ocr/OcrButton.jsx';
+import { FeatureFlag } from '@/components/auth/FeatureFlag.jsx';
 
 export interface RecipeIngredientsEditorProps {
 	recipe: Recipe;
@@ -284,16 +286,29 @@ function AddIngredientsForm({
 				bag.resetForm();
 			}}
 		>
-			<Form>
-				<TextAreaField
-					name="text"
-					required
-					placeholder="Add ingredient line(s)"
-					autoSize
-					padBottomPixels={40}
-				/>
-				<SubmitButton>Add</SubmitButton>
-			</Form>
+			{({ setFieldValue }) => (
+				<Form>
+					<TextAreaField
+						name="text"
+						required
+						placeholder="Add ingredient line(s)"
+						autoSize
+						padBottomPixels={40}
+					/>
+					<Box
+						direction="row"
+						gap={1}
+						justify="space-between"
+						align="center"
+						width="full"
+					>
+						<SubmitButton>Add</SubmitButton>
+						<FeatureFlag flag="ocr">
+							<OcrButton onText={(text) => setFieldValue('text', text)} />
+						</FeatureFlag>
+					</Box>
+				</Form>
+			)}
 		</Formik>
 	);
 }

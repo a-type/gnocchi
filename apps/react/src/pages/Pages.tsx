@@ -27,6 +27,7 @@ import { lazyWithPreload } from 'react-lazy-with-preload';
 import { makeRoutes, Outlet, Router } from '@lo-fi/react-router';
 import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
 import { TopLoader } from '@/components/nav/TopLoader.jsx';
+import TestPage from '@/pages/TestPage.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -214,6 +215,10 @@ const routes = makeRoutes([
 		path: '/tos',
 		component: TermsAndConditionsPage,
 		onVisited: scrollToTop,
+	},
+	{
+		path: '/test',
+		component: TestPage,
 	},
 	{
 		path: '',
