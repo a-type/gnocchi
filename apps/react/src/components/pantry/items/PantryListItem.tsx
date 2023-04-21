@@ -17,6 +17,7 @@ import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import * as classes from './PantryListItem.css.js';
 import { useCallback, useState } from 'react';
 import { groceriesState } from '@/components/groceries/state.js';
+import { TextSkeleton } from '@aglio/ui/components/skeletons';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -94,3 +95,26 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 		</div>
 	);
 }
+
+export const PantryListItemSkeleton = () => {
+	return (
+		<div className={groceryItemClasses.root}>
+			<div
+				className={classNames(
+					groceryItemClasses.mainContent,
+					classes.mainContent,
+				)}
+			>
+				<Button size="icon" color="destructive" disabled>
+					<TrashIcon />
+				</Button>
+				<Button size="icon" color="default" disabled>
+					<PlusIcon />
+				</Button>
+				<div className={groceryItemClasses.textContent}>
+					<TextSkeleton maxLength={16} />
+				</div>
+			</div>
+		</div>
+	);
+};
