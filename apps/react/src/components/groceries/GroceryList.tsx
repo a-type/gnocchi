@@ -200,6 +200,7 @@ function useOnDragStart() {
 		const item = (active.data.current as GroceryDnDDrag).value;
 		groceriesState.draggedItemOriginalCategory = item.get('categoryId');
 		groceriesState.isAnyItemDragged = true;
+		navigator.vibrate?.(100);
 	}, []);
 }
 
