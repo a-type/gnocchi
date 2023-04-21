@@ -54,10 +54,11 @@ describe('ingredient parsing', () => {
 			[],
 		],
 		['1 1/2 teaspoons paprika', 1.5, 'teaspoon', 'paprika', []],
-		/*
-    TODO:
-    ["3 12oz cans of tomato paste", 3, "12oz can", "tomato paste", []],
-    */
+		['2 t salt', 2, 'teaspoon', 'salt', []],
+		['1/2 T salt', 0.5, 'tablespoon', 'salt', []],
+
+		// TODO:
+		// ["3 12oz cans of tomato paste", 3, "12oz can", "tomato paste", []],
 	] as const;
 
 	testData.forEach((test) => {

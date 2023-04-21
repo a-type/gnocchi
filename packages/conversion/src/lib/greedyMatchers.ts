@@ -105,10 +105,15 @@ export function greedyMatchUnit(
 		return greedyMatchUnit(input.slice(knownWordPlural.length), ctx);
 	}
 
-	const knownAbbreviation = [
+	// first pass is case-specific,
+	// second is not - so we can match 't' and 'T', etc
+	let knownAbbreviation = [
 		...unitAbbreviations,
 		...unitAbbreviationPlurals,
 	].find(
+		([word]) => input.startsWith(word + ' ') || input.startsWith(word + '.'),
+	);
+	knownAbbreviation ||= [...unitAbbreviations, ...unitAbbreviationPlurals].find(
 		([word]) =>
 			input.toLowerCase().startsWith(word + ' ') ||
 			input.toLowerCase().startsWith(word + '.'),

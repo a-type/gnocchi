@@ -33,6 +33,5 @@ export function unitParser(rawInput: string) {
 
 function normalizeInput(input: string) {
 	// remove any trailing punctuation
-	// and convert to lowercase
-	return input.replace(/[\.,;:]$/, '').toLowerCase();
+	return input.replace(/[\.,;:]$/, '');
 }

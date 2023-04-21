@@ -121,6 +121,9 @@ export const unitAbbreviations = [
 	['g', 'gram'],
 	['kg', 'kilogram'],
 	['mg', 'milligram'],
+	['t', 'teaspoon'],
+	['tb', 'tablespoon'],
+	['T', 'tablespoon'],
 ];
 export const unitAbbreviationPlurals = unitAbbreviations.map(([a, s]) => [
 	pluralize(a),
