@@ -11,6 +11,7 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import { useCallback } from 'react';
 import { useExpiresSoonItems } from '../hooks.js';
 import * as classes from './ExpiresSoonSection.css.js';
+import { groceriesState } from '@/components/groceries/state.js';
 
 export interface ExpiresSoonSectionProps {
 	className?: string;
@@ -45,6 +46,7 @@ function ExpiresSoonItem({ item }: { item: Item }) {
 	const repurchaseItem = useCallback(async () => {
 		await cloneItem(item);
 		deleteThisItem();
+		groceriesState.justAddedSomething = true;
 	}, [deleteThisItem, cloneItem, item]);
 
 	const snooze = useCallback(() => {

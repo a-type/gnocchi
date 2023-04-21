@@ -6,7 +6,14 @@ import { hooks } from '@/stores/groceries/index.js';
 import { PageNav } from '@aglio/ui/components/layouts';
 import { useMatch } from '@lo-fi/react-router';
 import classNames from 'classnames';
-import { ReactNode, Suspense, forwardRef, memo, useCallback } from 'react';
+import {
+	ReactNode,
+	Suspense,
+	forwardRef,
+	memo,
+	useCallback,
+	useEffect,
+} from 'react';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
 import { Icon } from '../icons/Icon.jsx';
@@ -166,7 +173,16 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 }
 
 function GroceriesNavBarLink({ active }: { active: boolean }) {
-	const addedRecipe = useSnapshot(groceriesState).justAddedRecipe;
+	const justAddedSomething = useSnapshot(groceriesState).justAddedSomething;
+
+	useEffect(() => {
+		if (justAddedSomething) {
+			const timeout = setTimeout(() => {
+				groceriesState.justAddedSomething = false;
+			}, 1500);
+			return () => clearTimeout(timeout);
+		}
+	}, [justAddedSomething]);
 
 	return (
 		<OnboardingTooltip
@@ -178,7 +194,7 @@ function GroceriesNavBarLink({ active }: { active: boolean }) {
 				to="/"
 				icon={<Icon name="cart" className={classes.icon} />}
 				active={active}
-				animate={addedRecipe}
+				animate={justAddedSomething}
 			>
 				Groceries
 			</NavBarLink>

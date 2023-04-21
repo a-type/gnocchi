@@ -148,10 +148,7 @@ export function AddToListButton({
 											listId,
 										},
 									);
-									groceriesState.justAddedRecipe = true;
-									setTimeout(() => {
-										groceriesState.justAddedRecipe = false;
-									}, 100);
+									groceriesState.justAddedSomething = true;
 									setAdding(false);
 									next();
 								}}

@@ -6,10 +6,17 @@ import { Item } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
 import { RelativeTime } from '@aglio/ui/components/relativeTime';
 import { Tooltip } from '@aglio/ui/components/tooltip';
-import { ClockIcon, TrashIcon } from '@radix-ui/react-icons';
+import {
+	CheckIcon,
+	ClockIcon,
+	PlusIcon,
+	TrashIcon,
+} from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import * as classes from './PantryListItem.css.js';
+import { useCallback, useState } from 'react';
+import { groceriesState } from '@/components/groceries/state.js';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -35,6 +42,14 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 		});
 	}
 
+	const [wasRepurchased, setWasRepurchased] = useState(false);
+	const cloneItem = hooks.useCloneItem();
+	const repurchaseItem = useCallback(async () => {
+		await cloneItem(item);
+		groceriesState.justAddedSomething = true;
+		setWasRepurchased(true);
+	}, [cloneItem, item]);
+
 	return (
 		<div className={groceryItemClasses.root} data-id={id} {...rest}>
 			<div
@@ -49,6 +64,14 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 					onClick={() => deleteItem(item)}
 				>
 					<TrashIcon />
+				</Button>
+				<Button
+					size="icon"
+					color="default"
+					onClick={repurchaseItem}
+					disabled={wasRepurchased}
+				>
+					{wasRepurchased ? <CheckIcon /> : <PlusIcon />}
 				</Button>
 				<div className={groceryItemClasses.textContent}>
 					<LookupFoodName foodName={food} />
