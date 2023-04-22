@@ -68,7 +68,11 @@ export function LongPressAction({
 					{children}
 				</ActionButton>
 			</PopoverAnchor>
-			<PopoverContent side="top" className={classes.popoverContent}>
+			<PopoverContent
+				side="top"
+				sideOffset={12}
+				className={classes.popoverContent}
+			>
 				<PopoverArrow />
 				<div
 					className={classNames(
