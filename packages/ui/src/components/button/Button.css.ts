@@ -69,7 +69,7 @@ export const root = recipe({
 		color: {
 			primary: {
 				vars: {
-					[bgVar]: vars.colors.primaryLighter,
+					[bgVar]: vars.colors.primary,
 					[hoverVar]: vars.colors.primaryLight,
 					[activeVar]: vars.colors.primaryLight,
 				},
