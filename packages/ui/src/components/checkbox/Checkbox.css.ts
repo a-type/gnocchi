@@ -6,7 +6,7 @@ export const root = style({
 	height: 24,
 	flexShrink: 0,
 	backgroundColor: vars.colors.white,
-	border: `1px solid currentColor`,
+	border: `1px solid ${vars.colors.black}`,
 	position: 'relative',
 	borderRadius: vars.radii.sm,
 	transition: `100ms ${vars.transitions.default}`,
@@ -23,7 +23,7 @@ export const root = style({
 			borderColor: vars.colors.primaryDark,
 		},
 		'&:hover:not(:disabled)': {
-			boxShadow: `0 0 0 1px currentColor`,
+			boxShadow: `0 0 0 1px ${vars.colors.black}`,
 		},
 	},
 });
@@ -33,4 +33,5 @@ export const indicator = style({
 	left: '50%',
 	top: '50%',
 	transform: 'translate(-50%, -50%)',
+	color: vars.colors.black,
 });

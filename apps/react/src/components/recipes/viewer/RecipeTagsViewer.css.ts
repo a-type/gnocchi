@@ -9,8 +9,9 @@ export const tag = style({
 	paddingLeft: vars.space[3],
 	paddingRight: vars.space[3],
 	borderRadius: vars.radii.lg,
-	backgroundColor: vars.colors.primaryLighter,
-	color: vars.colors.primaryDarker,
+	backgroundColor: vars.colors.primaryLight,
+	color: vars.colors.black,
+	fontWeight: vars.fontWeights.bold,
 });
 
 export const list = style({

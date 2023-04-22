@@ -81,11 +81,11 @@ export const button = style({
 });
 
 export const buttonActive = style({
-	color: vars.colors.primaryDarker,
+	color: vars.colors.black,
 
 	'@media': {
 		[mediaQueries.sm]: {
-			backgroundColor: vars.colors.primaryLighter,
+			backgroundColor: vars.colors.primaryWash,
 		},
 	},
 });

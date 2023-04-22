@@ -19,6 +19,6 @@ export const display = style({
 });
 
 export const highlightChange = style({
-	backgroundColor: vars.colors.accentLighter,
-	color: vars.colors.accentDarker,
+	backgroundColor: vars.colors.accentWash,
+	color: vars.colors.black,
 });

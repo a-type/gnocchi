@@ -16,7 +16,7 @@ export const video = style({
 });
 
 export const keyword = style({
-	color: vars.colors.primaryDarker,
+	color: vars.colors.black,
 	backgroundColor: vars.colors.primaryWash,
 	// display: 'inline-block',
 });

@@ -56,7 +56,7 @@ export const root = style({
 			border: `1px solid ${vars.colors.gray50}`,
 		},
 		'&[data-highlighted="true"]': {
-			backgroundColor: vars.colors.primaryLighter,
+			backgroundColor: vars.colors.primaryWash,
 		},
 		'&[data-menu-open="true"]': {
 			backgroundColor: vars.colors.white,

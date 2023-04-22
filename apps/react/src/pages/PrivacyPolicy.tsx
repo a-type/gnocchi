@@ -29,8 +29,8 @@ export function PrivacyPolicy() {
 				</p>
 				<div
 					className={sprinkles({
-						color: 'accentDarker',
-						background: 'accentLighter',
+						color: 'accentInk',
+						background: 'accentWash',
 						padding: 3,
 						borderRadius: 'md',
 					})}

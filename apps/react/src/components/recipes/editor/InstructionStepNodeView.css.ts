@@ -63,7 +63,7 @@ export const label = style({
 	gridArea: 'label',
 	fontSize: vars.fontSizes.xs,
 	fontStyle: 'italic',
-	color: vars.colors.primaryDarker,
+	color: vars.colors.black,
 	animationName: fadeUp,
 	animationDuration: '0.3s',
 	animationTimingFunction: 'ease-out',

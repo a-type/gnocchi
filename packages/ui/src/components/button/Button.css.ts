@@ -69,9 +69,9 @@ export const root = recipe({
 		color: {
 			primary: {
 				vars: {
-					[bgVar]: vars.colors.primary,
-					[hoverVar]: vars.colors.primaryLight,
-					[activeVar]: vars.colors.primaryLight,
+					[bgVar]: vars.colors.primaryLight,
+					[hoverVar]: vars.colors.primary,
+					[activeVar]: vars.colors.primary,
 				},
 				color: vars.colors.black,
 				border: `1px solid currentColor`,
@@ -83,18 +83,18 @@ export const root = recipe({
 					// },
 					'&:focus-visible:not(:disabled):not([data-disabled="true"])': {
 						vars: {
-							[bgVar]: vars.colors.primaryLight,
+							[bgVar]: vars.colors.primary,
 						},
 					},
 				},
 			},
 			accent: {
 				vars: {
-					[bgVar]: vars.colors.accentLighter,
+					[bgVar]: vars.colors.accentWash,
 					[hoverVar]: vars.colors.accentLight,
 					[activeVar]: vars.colors.accentLight,
 				},
-				color: vars.colors.accentDarker,
+				color: vars.colors.black,
 				border: `1px solid currentColor`,
 				selectors: {
 					'&:focus-visible:not(:disabled):not([data-disabled="true"])': {
@@ -208,7 +208,7 @@ export const root = recipe({
 				toggled: true,
 			},
 			style: {
-				backgroundColor: vars.colors.primaryLighter,
+				backgroundColor: vars.colors.primaryWash,
 			},
 		},
 	],

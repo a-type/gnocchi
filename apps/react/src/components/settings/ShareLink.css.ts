@@ -42,10 +42,10 @@ export const wrapperButton = style([
 				top: '50%',
 				transform: 'translateY(-50%)',
 				background: vars.colors.primary,
-				color: vars.colors.primaryDarker,
+				color: vars.colors.black,
 				borderRadius: vars.radii.sm,
 				padding: `${vars.space[1]} ${vars.space[2]}`,
-				border: `1px solid ${vars.colors.primaryDarker}`,
+				border: `1px solid ${vars.colors.black}`,
 			},
 			'&:hover::after': {
 				background: vars.colors.primaryDark,

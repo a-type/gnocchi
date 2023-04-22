@@ -42,7 +42,7 @@ export const item = style({
 });
 
 export const itemHighlighted = style({
-	backgroundColor: vars.colors.primaryLighter,
+	backgroundColor: vars.colors.primaryWash,
 });
 
 export const itemHidden = style({

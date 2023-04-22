@@ -68,7 +68,7 @@ export const demoGrid = style({
 });
 
 export const sectionBase = style({
-	backgroundColor: vars.colors.primaryLighter,
+	backgroundColor: vars.colors.primaryWash,
 	position: 'relative',
 	display: 'flex',
 	flexDirection: 'column',
@@ -194,7 +194,7 @@ export const upgradeSection = style({
 export const upgradeTitleWrap = style([
 	titleWrap,
 	{
-		backgroundColor: vars.colors.primaryLighter,
+		backgroundColor: vars.colors.primaryWash,
 		border: `1px solid ${vars.colors.primaryDark}`,
 		borderRadius: vars.radii.lg,
 		padding: `${vars.space[4]}`,

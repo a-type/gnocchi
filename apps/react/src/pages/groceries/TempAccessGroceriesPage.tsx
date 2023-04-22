@@ -132,7 +132,7 @@ function TempAccessGroceriesView({ code }: { code: string }) {
 								direction="column"
 								align="flex-start"
 								background="accentWash"
-								color="accentDarker"
+								color="accentInk"
 								borderRadius="lg"
 							>
 								<P>This link lets you view someone else's list.</P>

@@ -10,7 +10,7 @@ export const content = style({
 	flexDirection: 'column',
 	width: '100%',
 	backgroundColor: vars.colors.primaryWash,
-	color: vars.colors.primaryDarker,
+	color: vars.colors.black,
 	padding: vars.space[4],
 	borderRadius: vars.radii.lg,
 	gap: vars.space[3],

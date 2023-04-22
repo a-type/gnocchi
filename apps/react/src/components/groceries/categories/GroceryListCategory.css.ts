@@ -50,7 +50,7 @@ export const root = style({
 
 	selectors: {
 		'&[data-dragged-over="true"]': {
-			backgroundColor: vars.colors.primaryLighter,
+			backgroundColor: vars.colors.primaryWash,
 			borderColor: vars.colors.primaryDark,
 		},
 		'&[data-is-item-dragging="true"]': {

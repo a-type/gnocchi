@@ -72,8 +72,8 @@ export const item = style({
 
 		'&[data-highlighted]': {
 			outline: 'none',
-			backgroundColor: vars.colors.primaryLighter,
-			color: vars.colors.primaryDarker,
+			backgroundColor: vars.colors.primaryWash,
+			color: vars.colors.black,
 		},
 	},
 });

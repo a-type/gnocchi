@@ -11,7 +11,7 @@ export const inner = style({
 	padding: vars.space[2],
 	border: `1px solid ${vars.colors.primaryDark}`,
 	backgroundColor: vars.colors.primaryWash,
-	color: vars.colors.primaryDarker,
+	color: vars.colors.black,
 	position: 'relative',
 	fontSize: vars.fontSizes.sm,
 	fontStyle: 'italic',

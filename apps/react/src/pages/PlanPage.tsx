@@ -145,12 +145,7 @@ function UnsubscribedContents() {
 		<MainContainer>
 			<InstallHint />
 			<ColorModeSelect />
-			<Box
-				background="primaryWash"
-				color="primaryDarker"
-				p={4}
-				borderRadius="lg"
-			>
+			<Box background="primaryWash" color="primaryInk" p={4} borderRadius="lg">
 				Subscription inactive
 			</Box>
 			<ManageSubscriptionButton />

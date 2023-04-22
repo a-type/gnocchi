@@ -14,7 +14,7 @@ export const trigger = style({
 	selectors: {
 		'&:focus, &:hover': {
 			outline: 'none',
-			background: `linear-gradient(rgba(255, 255, 255, 0), ${vars.colors.primaryLighter})`,
+			background: `linear-gradient(rgba(255, 255, 255, 0), ${vars.colors.primaryWash})`,
 			borderBottom: `1px solid ${vars.colors.primary}`,
 		},
 		'&::after': {
