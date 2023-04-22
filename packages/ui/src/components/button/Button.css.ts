@@ -73,7 +73,7 @@ export const root = recipe({
 					[hoverVar]: vars.colors.primaryLight,
 					[activeVar]: vars.colors.primaryLight,
 				},
-				color: vars.colors.primaryDarker,
+				color: vars.colors.black,
 				border: `1px solid currentColor`,
 				selectors: {
 					// '&:hover:not(:disabled):not([data-disabled="true"])': {
