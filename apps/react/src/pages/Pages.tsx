@@ -1,33 +1,34 @@
 import { LogoutNotice } from '@/components/auth/LogoutNotice.jsx';
 import { SubscribedOnly } from '@/components/auth/SubscribedOnly.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
+import { LinkButton } from '@/components/nav/Link.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
+import { TopLoader } from '@/components/nav/TopLoader.jsx';
 import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
 import { StartSignupDialog } from '@/components/sync/StartSignupDialog.jsx';
-import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
+import {
+	updateApp,
+	updateState,
+} from '@/components/updatePrompt/updateState.js';
+import { GlobalLoader } from '@/GlobalLoader.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { lazy, Suspense } from 'react';
-import { useRegisterSW } from 'virtual:pwa-register/react';
-import { GroceriesPage } from './groceries/GroceriesPage.js';
-import { NotFoundPage } from './NotFoundPage.jsx';
-import { GlobalLoader } from '@/GlobalLoader.jsx';
+import TestPage from '@/pages/TestPage.jsx';
+import { Box } from '@aglio/ui/components/box';
+import { Button } from '@aglio/ui/components/button';
 import {
 	NavContextProvider,
 	NowPlayingProvider,
-	PageContent,
 	PageRoot,
 } from '@aglio/ui/components/layouts';
-import { FullScreenSpinner } from '@aglio/ui/components/spinner';
-import { Box } from '@aglio/ui/components/box';
 import { H1, P } from '@aglio/ui/components/typography';
-import { Button } from '@aglio/ui/components/button';
-import { LinkButton } from '@/components/nav/Link.jsx';
-import { lazyWithPreload } from 'react-lazy-with-preload';
-import { makeRoutes, Outlet, Router } from '@lo-fi/react-router';
 import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
-import { TopLoader } from '@/components/nav/TopLoader.jsx';
-import TestPage from '@/pages/TestPage.jsx';
+import { makeRoutes, Outlet, Router } from '@lo-fi/react-router';
+import { lazy, Suspense, useCallback } from 'react';
+import { lazyWithPreload } from 'react-lazy-with-preload';
+import { useRegisterSW } from 'virtual:pwa-register/react';
+import { GroceriesPage } from './groceries/GroceriesPage.js';
+import { NotFoundPage } from './NotFoundPage.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -228,17 +229,23 @@ const routes = makeRoutes([
 ]);
 
 export function Pages() {
+	const handleNavigate = useCallback(() => {
+		if (updateState.updateAvailable) {
+			console.info('Update ready to install, intercepting navigation...');
+			updateApp();
+			return false;
+		}
+	}, []);
 	return (
 		<NowPlayingProvider>
 			<NavContextProvider>
 				<ErrorBoundary fallback={<ErrorFallback />}>
 					<Suspense fallback={<GlobalLoader />}>
-						<Router routes={routes}>
+						<Router routes={routes} onNavigate={handleNavigate}>
 							<TopLoader />
 							<PageRoot>
 								<Outlet />
 								<StartSignupDialog />
-								<UpdatePrompt />
 								<LogoutNotice />
 							</PageRoot>
 							<NavBar />

@@ -216,7 +216,7 @@ function SettingsNavBarLink({ active }: { active: boolean }) {
 				icon={<Icon name="profile" className={classes.icon} />}
 				active={active}
 			>
-				Settings
+				<span>Settings</span>
 			</NavBarLink>
 		</OnboardingTooltip>
 	);

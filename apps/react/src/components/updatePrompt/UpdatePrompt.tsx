@@ -4,55 +4,45 @@ import * as classes from './UpdatePrompt.css.js';
 import { StarIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { Button } from '@aglio/ui/components/button';
+import {
+	updateApp,
+	updateState,
+} from '@/components/updatePrompt/updateState.js';
+import { useSnapshot } from 'valtio';
 
 export interface UpdatePromptProps {}
 
 const TEST = false;
 
 export function UpdatePrompt({}: UpdatePromptProps) {
-	const {
-		needRefresh: [needRefresh],
-		updateServiceWorker,
-	} = useRegisterSW({
-		onRegisteredSW(swUrl, registration) {
-			console.log('Service worker registered', swUrl);
-			if (registration) {
-				setInterval(() => {
-					registration.update();
-					// hourly
-				}, 60 * 60 * 1000);
-			}
-		},
-		onRegisterError(error) {
-			console.error('Service worker registration error', error);
-		},
-	});
+	const updateAvailable = useSnapshot(updateState).updateAvailable;
+
 	const [loading, setLoading] = useState(false);
 
+	if (!updateAvailable && !TEST) {
+		return null;
+	}
+
 	return (
-		<Dialog modal={false} open={needRefresh || TEST}>
-			<DialogContent outerClassName={classes.content}>
-				<div className={classes.contentInner}>
-					<div className={classes.text}>
-						<StarIcon />
-						&nbsp;App update available!
-					</div>
-					<Button
-						loading={loading}
-						color="primary"
-						onClick={async () => {
-							try {
-								setLoading(true);
-								await updateServiceWorker(true);
-							} finally {
-								setLoading(false);
-							}
-						}}
-					>
-						Get the latest
-					</Button>
-				</div>
-			</DialogContent>
-		</Dialog>
+		<div className={classes.content}>
+			<div className={classes.text}>
+				<StarIcon />
+				&nbsp;App update available!
+			</div>
+			<Button
+				loading={loading}
+				color="primary"
+				onClick={async () => {
+					try {
+						setLoading(true);
+						await updateApp(true);
+					} finally {
+						setLoading(false);
+					}
+				}}
+			>
+				Get the latest
+			</Button>
+		</div>
 	);
 }

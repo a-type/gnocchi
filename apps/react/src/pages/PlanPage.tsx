@@ -23,6 +23,7 @@ import { TextLink } from '@/components/nav/Link.jsx';
 import { H1, H2, Span } from '@aglio/ui/components/typography';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
+import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
 
 const contents = {
 	offline: OfflineContents,
@@ -58,6 +59,7 @@ export function PlanPage() {
 					align="flex-start"
 				>
 					<H1>Settings</H1>
+					<UpdatePrompt />
 					<Contents />
 					<Box fontSize="xs" gap={2}>
 						<TextLink to="/privacy-policy">Privacy policy</TextLink>
@@ -145,7 +147,7 @@ function UnsubscribedContents() {
 		<MainContainer>
 			<InstallHint />
 			<ColorModeSelect />
-			<Box background="primaryWash" color="primaryInk" p={4} borderRadius="lg">
+			<Box background="primaryWash" color="black" p={4} borderRadius="lg">
 				Subscription inactive
 			</Box>
 			<ManageSubscriptionButton />
