@@ -34,7 +34,7 @@ export function JoinPage({}: JoinPageProps) {
 				<Box direction="row" justify="space-between" align="center">
 					<H1
 						className={sprinkles({
-							color: 'primaryInk',
+							color: 'black',
 							my: 'auto',
 						})}
 						style={{ marginTop: 'auto' }}

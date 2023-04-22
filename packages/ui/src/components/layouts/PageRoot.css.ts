@@ -11,5 +11,5 @@ export const pageRoot = style({
 });
 
 export const pageRootLemon = style({
-	backgroundColor: vars.colors.primary,
+	backgroundColor: vars.colors.primaryLight,
 });
