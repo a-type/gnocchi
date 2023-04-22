@@ -108,7 +108,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	},
 	usePurchaseItem: (client) =>
 		useCallback(
-			async (item: Item) => {
+			async (item: Item, batchName?: string) => {
 				// also set expiration based on food info
 				const food = await client.foods.findOne({
 					where: 'nameLookup',
@@ -117,39 +117,36 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				const expirationDays = food?.get('expiresAfterDays');
 				const now = Date.now();
 
-				client
-					.batch()
-					.run(() => {
-						item.set('purchasedAt', now);
-						if (expirationDays) {
-							item.set('expiresAt', now + expirationDays * 24 * 60 * 60 * 1000);
-						}
+				client.batch({ batchName }).run(() => {
+					item.set('purchasedAt', now);
+					if (expirationDays) {
+						item.set('expiresAt', now + expirationDays * 24 * 60 * 60 * 1000);
+					}
 
-						if (food) {
-							const previousPurchaseCount = food.get('purchaseCount');
-							const previousPurchasedAt = food.get('lastPurchasedAt');
-							food.set('lastPurchasedAt', now);
-							const currentGuess = food.get('purchaseIntervalGuess') || 0;
-							if (previousPurchasedAt) {
-								const newInterval = now - previousPurchasedAt;
-								// reject outliers ... if we've established a baseline
-								if (
-									previousPurchaseCount < 5 ||
-									(newInterval <= 4 * currentGuess &&
-										newInterval >= currentGuess / 4)
-								) {
-									// minium 1 week
-									const newGuess = Math.max(
-										(currentGuess + newInterval) / 2,
-										7 * 24 * 60 * 60 * 1000,
-									);
-									food.set('purchaseIntervalGuess', newGuess);
-								}
+					if (food) {
+						const previousPurchaseCount = food.get('purchaseCount');
+						const previousPurchasedAt = food.get('lastPurchasedAt');
+						food.set('lastPurchasedAt', now);
+						const currentGuess = food.get('purchaseIntervalGuess') || 0;
+						if (previousPurchasedAt) {
+							const newInterval = now - previousPurchasedAt;
+							// reject outliers ... if we've established a baseline
+							if (
+								previousPurchaseCount < 5 ||
+								(newInterval <= 4 * currentGuess &&
+									newInterval >= currentGuess / 4)
+							) {
+								// minium 1 week
+								const newGuess = Math.max(
+									(currentGuess + newInterval) / 2,
+									7 * 24 * 60 * 60 * 1000,
+								);
+								food.set('purchaseIntervalGuess', newGuess);
 							}
-							food.set('purchaseCount', previousPurchaseCount + 1);
 						}
-					})
-					.flush();
+						food.set('purchaseCount', previousPurchaseCount + 1);
+					}
+				});
 			},
 			[client],
 		),
@@ -157,9 +154,14 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 		const purchaseItem = hooks.usePurchaseItem();
 		return useCallback(
 			async (items: Item[]) => {
-				for (const item of items) {
-					await purchaseItem(item);
-				}
+				const batchName = cuid();
+				const batch = client.batch({
+					batchName,
+					timeout: null,
+					max: null,
+				});
+				await Promise.all(items.map((item) => purchaseItem(item, batchName)));
+				batch.flush();
 			},
 			[client],
 		);

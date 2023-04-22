@@ -177,6 +177,8 @@ function GroceriesNavBarLink({ active }: { active: boolean }) {
 
 	useEffect(() => {
 		if (justAddedSomething) {
+			navigator.vibrate?.([50, 50, 50]);
+
 			const timeout = setTimeout(() => {
 				groceriesState.justAddedSomething = false;
 			}, 1500);

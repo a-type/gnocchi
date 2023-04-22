@@ -23,6 +23,26 @@ const slideLeftAndFade = keyframes({
 	'100%': { opacity: 1, transform: 'translateX(0)' },
 });
 
+const slideUpAndFadeReverse = keyframes({
+	'0%': { opacity: 1, transform: 'translateY(0)' },
+	'100%': { opacity: 0, transform: 'translateY(-2px)' },
+});
+
+const slideRightAndFadeReverse = keyframes({
+	'0%': { opacity: 1, transform: 'translateX(0)' },
+	'100%': { opacity: 0, transform: 'translateX(-2px)' },
+});
+
+const slideDownAndFadeReverse = keyframes({
+	'0%': { opacity: 1, transform: 'translateY(0)' },
+	'100%': { opacity: 0, transform: 'translateY(2px)' },
+});
+
+const slideLeftAndFadeReverse = keyframes({
+	'0%': { opacity: 1, transform: 'translateX(0)' },
+	'100%': { opacity: 0, transform: 'translateX(2px)' },
+});
+
 export const content = recipe({
 	base: {
 		borderRadius: vars.radii.xl,
@@ -53,6 +73,18 @@ export const content = recipe({
 					},
 					'&[data-state="open"][data-side="left"]': {
 						animationName: slideRightAndFade,
+					},
+					'&[data-state="closed"][data-side="top"]': {
+						animationName: slideDownAndFadeReverse,
+					},
+					'&[data-state="closed"][data-side="right"]': {
+						animationName: slideLeftAndFadeReverse,
+					},
+					'&[data-state="closed"][data-side="bottom"]': {
+						animationName: slideUpAndFadeReverse,
+					},
+					'&[data-state="closed"][data-side="left"]': {
+						animationName: slideRightAndFadeReverse,
 					},
 				},
 			},

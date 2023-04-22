@@ -30,7 +30,6 @@ export function PopEffect({ active, className }: PopEffectProps) {
 					}),
 				);
 			}
-			navigator.vibrate?.([50, 50, 50]);
 		}
 	}, [active]);
 
