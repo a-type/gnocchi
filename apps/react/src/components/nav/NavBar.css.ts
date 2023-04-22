@@ -82,12 +82,7 @@ export const button = style({
 
 export const buttonActive = style({
 	color: vars.colors.black,
-
-	'@media': {
-		[mediaQueries.sm]: {
-			backgroundColor: vars.colors.primaryWash,
-		},
-	},
+	backgroundColor: vars.colors.primaryWash,
 });
 
 export const buttonText = style({
