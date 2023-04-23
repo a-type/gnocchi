@@ -1,6 +1,10 @@
 import { vars } from '@aglio/ui/styles';
 import { keyframes, style } from '@vanilla-extract/css';
 
+export const button = style({
+	touchAction: 'none',
+});
+
 export const popoverContent = style({
 	position: 'relative',
 	overflow: 'hidden',
