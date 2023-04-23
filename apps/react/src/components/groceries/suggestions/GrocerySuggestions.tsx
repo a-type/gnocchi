@@ -23,6 +23,7 @@ import {
 	useLookupFoodName,
 } from '@/components/foods/FoodName.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
+import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 
 export interface GrocerySuggestionsProps {}
 
@@ -30,6 +31,8 @@ const NOW = startOfDay(new Date()).getTime();
 const SUGGESTION_INTERVAL_END = addDays(NOW, 5).getTime();
 
 export function GrocerySuggestions({}: GrocerySuggestionsProps) {
+	const [open, setOpen] = useLocalStorage('grocery-suggestions-open', true);
+
 	const guessedFoodsRaw = hooks.useAllFoods({
 		index: {
 			where: 'repurchaseAfter',
@@ -59,7 +62,11 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 		return null;
 
 	return (
-		<CollapsibleRoot defaultOpen className={classes.root}>
+		<CollapsibleRoot
+			open={open}
+			onOpenChange={setOpen}
+			className={classes.root}
+		>
 			<CollapsibleTrigger asChild>
 				<div className={classNames(classes.trigger, titleRow)}>
 					<CaretDownIcon className={classes.triggerIcon} />
