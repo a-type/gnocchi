@@ -40,6 +40,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 				{...props}
 				disabled={disabled || loading}
 				data-disabled={visuallyDisabled}
+				tabIndex={visuallyDisabled ? -1 : undefined}
 				className={classNames(
 					classes.root({ color, size, toggled, align }),
 					className,

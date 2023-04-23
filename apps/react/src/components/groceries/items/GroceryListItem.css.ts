@@ -244,3 +244,21 @@ export const commentBox = style({
 	borderColor: vars.colors.gray50,
 	flex: '1 1 80px',
 });
+
+export const tagLink = style({
+	selectors: {
+		'&:focus-visible': {
+			outline: 'none',
+		},
+	},
+});
+
+export const tagContainer = style({
+	borderRadius: vars.radii.md,
+	selectors: {
+		'&:focus-within': {
+			outline: 'none',
+			boxShadow: vars.shadows.focus,
+		},
+	},
+});

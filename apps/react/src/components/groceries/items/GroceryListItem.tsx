@@ -368,8 +368,8 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 	return (
 		<Tooltip content={list.get('name')}>
 			<CollapsibleRoot open={!collapsed}>
-				<CollapsibleContent data-horizontal>
-					<Link to={`/list/${list.get('id')}`}>
+				<CollapsibleContent data-horizontal className={classes.tagContainer}>
+					<Link to={`/list/${list.get('id')}`} className={classes.tagLink}>
 						<div className={classNames(listThemeClass, classes.listTag)}>
 							<Icon name="tag" className={classes.listTagIcon} />
 							<span className={classes.listTagName}>{name}</span>
