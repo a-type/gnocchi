@@ -7,6 +7,14 @@ export const root = style({
 	marginBottom: vars.space[6],
 });
 
+export const title = style({
+	selectors: {
+		'&&': {
+			fontSize: vars.fontSizes.md,
+		},
+	},
+});
+
 export const list = style({
 	display: 'flex',
 	flexDirection: 'column',

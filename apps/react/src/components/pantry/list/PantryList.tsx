@@ -16,7 +16,7 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 	return (
 		<div className={classNames(classes.root)} {...rest}>
 			<Suspense>
-				<ExpiresSoonSection />
+				<ExpiresSoonSection className={classes.expiresSoon} />
 			</Suspense>
 			<div>
 				{groupedItems.map(({ category, items }) => {

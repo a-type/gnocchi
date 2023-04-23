@@ -18,3 +18,7 @@ export const empty = style({
 	padding: vars.space[8],
 	opacity: 0.7,
 });
+
+export const expiresSoon = style({
+	margin: vars.space[2],
+});
