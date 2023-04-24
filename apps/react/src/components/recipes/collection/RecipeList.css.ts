@@ -9,6 +9,13 @@ export const root = style({
 	margin: 0,
 });
 
+export const topRow = style({
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	justifyContent: 'space-between',
+});
+
 export const list = style({
 	display: 'grid',
 	gridTemplateColumns: '1fr',

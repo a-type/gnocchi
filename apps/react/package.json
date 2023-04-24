@@ -50,6 +50,7 @@
 		"@vanilla-extract/recipes": "^0.4.0",
 		"@vanilla-extract/sprinkles": "^1.5.2",
 		"@vercel/analytics": "^0.1.6",
+		"@zip.js/zip.js": "^2.7.6",
 		"classnames": "^2.3.2",
 		"color-interpolate": "^1.0.5",
 		"convert-units": "^3.0.0-beta.4",
@@ -62,6 +63,7 @@
 		"fractional-indexing": "^3.0.1",
 		"jotai": "^1.13.0",
 		"just-mix": "^0.3.3",
+		"pako": "^2.1.0",
 		"parse-fraction": "^1.2.1",
 		"pluralize": "^8.0.0",
 		"postprocessing": "^6.29.1",
@@ -87,6 +89,7 @@
 	"devDependencies": {
 		"@types/convert-units": "^2.3.5",
 		"@types/dom-screen-wake-lock": "^1.0.0",
+		"@types/pako": "^2.0.0",
 		"@types/pluralize": "^0.0.29",
 		"@types/react": "^18.0.14",
 		"@types/react-dom": "^18.0.5",

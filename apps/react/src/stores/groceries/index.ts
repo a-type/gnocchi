@@ -1,5 +1,6 @@
 import { signupDialogState } from '@/components/sync/state.js';
 import { API_HOST_HTTP } from '@/config.js';
+import { instructionsToDoc } from '@/lib/tiptap.js';
 import { trpcClient } from '@/trpc.js';
 import { lookupUnit, parseIngredient } from '@aglio/conversion';
 import {
@@ -743,26 +744,6 @@ async function getScannedRecipe(
 		}
 		throw err;
 	}
-}
-
-function instructionsToDoc(lines: string[]) {
-	return lines?.length
-		? {
-				type: 'doc',
-				content: (lines || []).map((line: string) => ({
-					type: 'step',
-					attrs: {
-						id: cuid(),
-					},
-					content: [
-						{
-							type: 'text',
-							text: line,
-						},
-					],
-				})),
-		  }
-		: undefined;
 }
 
 // hook up undo to ctrl+z

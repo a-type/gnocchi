@@ -26,24 +26,30 @@ import {
 } from '@aglio/ui/components/dropdownMenu';
 import { Box } from '@aglio/ui/components/box';
 import { Link } from '@/components/nav/Link.jsx';
+import { FeatureFlag } from '@/components/auth/FeatureFlag.jsx';
+import { PaprikaImporter } from '@/components/import/PaprikaImporter.jsx';
+import { RecipeCollectionMenu } from '@/components/recipes/collection/RecipeCollectionMenu.jsx';
 
 export interface RecipeListProps {}
 
 export function RecipeList({}: RecipeListProps) {
 	return (
 		<div className={classes.root}>
-			<Suspense
-				fallback={
-					<Button
-						color="primary"
-						className={sprinkles({ alignSelf: 'flex-start' })}
-					>
-						Create New
-					</Button>
-				}
-			>
-				<RecipeCreateButton />
-			</Suspense>
+			<div className={classes.topRow}>
+				<Suspense
+					fallback={
+						<Button
+							color="primary"
+							className={sprinkles({ alignSelf: 'flex-start' })}
+						>
+							Create New
+						</Button>
+					}
+				>
+					<RecipeCreateButton />
+				</Suspense>
+				<RecipeCollectionMenu />
+			</div>
 			<Suspense>
 				<PageFixedArea>
 					<RecipeListActions />
