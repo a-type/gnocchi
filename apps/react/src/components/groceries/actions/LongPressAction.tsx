@@ -31,34 +31,42 @@ export function LongPressAction({
 	const [state, setState] = useState<'holding' | 'idle' | 'failed'>('idle');
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-	const timeStartedRef = useRef<number | null>(null);
-	const bind = useDrag(({ down, first, cancel, tap }) => {
-		const timeHeld = timeStartedRef.current
-			? Date.now() - timeStartedRef.current
-			: 0;
-
-		if (down && first) {
-			timeStartedRef.current = Date.now();
-			setState('holding');
-			navigator?.vibrate?.(200);
-		} else if (down) {
-			if (timeHeld > duration) {
-				onActivate();
-				cancel();
-				setState('idle');
-				timeStartedRef.current = null;
-			}
-		} else if (!down && timeStartedRef.current) {
-			if (timeHeld < 300) {
-				setState('failed');
-				navigator?.vibrate?.(200);
-				cancel();
+	const bind = useDrag(
+		({ first, cancel, elapsedTime, down, distance }) => {
+			if (first) {
+				setState('holding');
+				try {
+					navigator?.vibrate?.(200);
+				} catch (err) {
+					console.log(err);
+				}
 			} else {
-				setState('idle');
+				if (elapsedTime < 300) {
+					setState('failed');
+					try {
+						navigator?.vibrate?.(200);
+					} catch (err) {
+						console.log(err);
+					}
+					cancel();
+				} else if (!down && elapsedTime > duration) {
+					onActivate();
+					setState('idle');
+				} else if (
+					down &&
+					Math.sqrt(Math.pow(distance[0], 2) + Math.pow(distance[1], 2)) > 20
+				) {
+					cancel();
+					setState('failed');
+				}
 			}
-			timeStartedRef.current = null;
-		}
-	});
+		},
+		{
+			filterTaps: false,
+			triggerAllEvents: true,
+			preventScroll: true,
+		},
+	);
 
 	useEffect(() => {
 		if (state === 'failed') {

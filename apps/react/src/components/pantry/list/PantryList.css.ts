@@ -5,7 +5,6 @@ export const root = style({
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'stretch',
-	padding: vars.space[2],
 });
 
 export const empty = style({
@@ -19,6 +18,4 @@ export const empty = style({
 	opacity: 0.7,
 });
 
-export const expiresSoon = style({
-	margin: vars.space[2],
-});
+export const expiresSoon = style({});

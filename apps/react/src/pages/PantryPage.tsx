@@ -1,3 +1,4 @@
+import { PantryHeader } from '@/components/pantry/PantryHeader.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';
 import {
@@ -5,20 +6,20 @@ import {
 	PageFixedArea,
 	PageRoot,
 } from '@aglio/ui/components/layouts';
-import { H1 } from '@aglio/ui/components/typography';
-import { sprinkles } from '@aglio/ui/styles';
 import { Suspense } from 'react';
 
 export interface PantryPageProps {}
 
+const innerProps = {
+	gap: 3,
+} as const;
+
 export function PantryPage({}: PantryPageProps) {
 	return (
 		<PageRoot>
-			<PageContent fullHeight noPadding nav>
-				<H1 className={sprinkles({ p: 4, marginBottom: 0, paddingBottom: 0 })}>
-					Purchased
-				</H1>
-				<PageFixedArea className={sprinkles({ p: 2 })}>
+			<PageContent fullHeight nav innerProps={innerProps}>
+				<PantryHeader />
+				<PageFixedArea>
 					<PantryActionBar />
 				</PageFixedArea>
 				<Suspense>

@@ -43,7 +43,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 					<Button
 						ref={ref}
 						size="small"
-						className={classNames(classes.root)}
+						className={classNames(classes.root, className)}
 						{...rest}
 					>
 						{icon}

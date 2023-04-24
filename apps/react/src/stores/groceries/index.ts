@@ -240,6 +240,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				data: {
 					listId?: string | null;
 					sourceInfo?: Omit<ItemInputsItemInit, 'text' | 'quantity'>;
+					purchased?: boolean;
 				},
 			) => {
 				return addItems(client, lines, data);
@@ -422,12 +423,16 @@ export async function addItems(
 	{
 		sourceInfo,
 		listId = null,
+		purchased,
 	}: {
 		listId?: string | null;
 		sourceInfo?: Omit<ItemInputsItemInit, 'text' | 'quantity'>;
+		purchased?: boolean;
 	},
 ) {
 	if (!lines.length) return;
+
+	const purchasedAt = purchased ? Date.now() : undefined;
 
 	const results = await Promise.allSettled(
 		lines.map(async (line) => {
@@ -442,7 +447,7 @@ export async function addItems(
 				},
 				order: 'asc',
 			}).resolved;
-			if (firstMatch) {
+			if (firstMatch && !purchased) {
 				const totalQuantity = firstMatch.get('totalQuantity') + parsed.quantity;
 				firstMatch.set('totalQuantity', totalQuantity);
 				// add the source, too
@@ -480,6 +485,7 @@ export async function addItems(
 					totalQuantity: parsed.quantity,
 					unit: parsed.unit || '',
 					food: parsed.food,
+					purchasedAt,
 					inputs: [
 						{
 							...sourceInfo,

@@ -19,6 +19,7 @@ export function DeleteAllAction({}: DeleteAllActionProps) {
 		})
 		.filter((item) => listId === undefined || item.get('listId') === listId);
 	const deleteAll = useCallback(() => {
+		console.log('hello world', items);
 		deleteItems(items.map((i) => i.get('id')));
 	}, [items, deleteItems]);
 

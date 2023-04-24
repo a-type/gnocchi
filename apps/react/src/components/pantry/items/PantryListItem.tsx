@@ -18,6 +18,7 @@ import * as classes from './PantryListItem.css.js';
 import { useCallback, useState } from 'react';
 import { groceriesState } from '@/components/groceries/state.js';
 import { TextSkeleton } from '@aglio/ui/components/skeletons';
+import { shortenTimeUnits } from '@aglio/tools';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -38,9 +39,11 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 		} else {
 			expiresAtText = 'Expires ';
 		}
-		expiresAtText += formatDistanceStrict(expiresAt, purchasedAt, {
-			addSuffix: true,
-		});
+		expiresAtText += shortenTimeUnits(
+			formatDistanceStrict(expiresAt, purchasedAt, {
+				addSuffix: true,
+			}),
+		);
 	}
 
 	const [wasRepurchased, setWasRepurchased] = useState(false);
