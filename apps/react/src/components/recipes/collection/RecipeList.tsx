@@ -26,9 +26,9 @@ import {
 } from '@aglio/ui/components/dropdownMenu';
 import { Box } from '@aglio/ui/components/box';
 import { Link } from '@/components/nav/Link.jsx';
-import { FeatureFlag } from '@/components/auth/FeatureFlag.jsx';
-import { PaprikaImporter } from '@/components/import/PaprikaImporter.jsx';
 import { RecipeCollectionMenu } from '@/components/recipes/collection/RecipeCollectionMenu.jsx';
+import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
+import { EmptyState } from '@/components/recipes/collection/EmptyState.jsx';
 
 export interface RecipeListProps {}
 
@@ -98,6 +98,10 @@ function RecipeListContent() {
 			: undefined,
 	);
 
+	if (!recipes.length) {
+		return <EmptyState />;
+	}
+
 	return (
 		<>
 			{recipes
@@ -162,24 +166,6 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 				</div>
 			</div>
 		</div>
-	);
-}
-
-function RecipeCreateButton() {
-	const navigate = useNavigate();
-	const client = hooks.useClient();
-
-	return (
-		<Button
-			onClick={async () => {
-				const recipe = await client.recipes.put({});
-				navigate(makeRecipeLink(recipe, '/edit'));
-			}}
-			color="primary"
-			className={sprinkles({ alignSelf: 'flex-start' })}
-		>
-			Create New
-		</Button>
 	);
 }
 
