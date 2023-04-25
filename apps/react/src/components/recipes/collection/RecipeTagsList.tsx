@@ -1,10 +1,12 @@
+import { Icon } from '@/components/icons/Icon.jsx';
+import { RecipeTagMenuWrapper } from '@/components/recipes/tags/RecipeTagMenuWrapper.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { ThemeName } from '@aglio/ui/components/colorPicker';
 import { themeMap } from '@aglio/ui/styles';
 import classNames from 'classnames';
+import { forwardRef } from 'react';
 import * as classes from './RecipeTagsList.css.js';
-import { Icon } from '@/components/icons/Icon.jsx';
-import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
 
 export function RecipeTagsList({
 	onSelect,
@@ -35,29 +37,33 @@ export function RecipeTagsList({
 				</TagButtonBase>
 			)}
 			{filteredByOmit.map((tag) => (
-				<TagButtonBase
-					key={tag.get('name')}
-					toggled={tag.get('name') === selectedValue}
-					onClick={() => onSelect(tag.get('name'))}
-					className={classNames(
-						tag.get('color') && themeMap[tag.get('color') as ThemeName],
-					)}
-				>
-					<span>{tag.get('icon') ?? <Icon name="tag" />}</span>
-					<span>{tag.get('name')}</span>
-				</TagButtonBase>
+				<RecipeTagMenuWrapper tagName={tag.get('name')} key={tag.get('name')}>
+					<TagButtonBase
+						toggled={tag.get('name') === selectedValue}
+						onClick={() => onSelect(tag.get('name'))}
+						className={classNames(
+							tag.get('color') && themeMap[tag.get('color') as ThemeName],
+						)}
+					>
+						<span>{tag.get('icon') ?? <Icon name="tag" />}</span>
+						<span>{tag.get('name')}</span>
+					</TagButtonBase>
+				</RecipeTagMenuWrapper>
 			))}
 		</div>
 	);
 }
 
-function TagButtonBase({ className, ...props }: ButtonProps) {
-	return (
-		<Button
-			size="small"
-			color="primary"
-			{...props}
-			className={classNames(classes.tagButton, className)}
-		/>
-	);
-}
+const TagButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(
+	function TagButtonBase({ className, ...props }, ref) {
+		return (
+			<Button
+				ref={ref}
+				size="small"
+				color="primary"
+				{...props}
+				className={classNames(classes.tagButton, className)}
+			/>
+		);
+	},
+);

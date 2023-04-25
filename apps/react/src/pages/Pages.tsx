@@ -29,6 +29,7 @@ import { lazyWithPreload } from 'react-lazy-with-preload';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
+import { RecipeTagEditor } from '@/components/recipes/tags/RecipeTagEditor.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -252,6 +253,7 @@ export function Pages() {
 								<Outlet />
 								<StartSignupDialog />
 								<LogoutNotice />
+								<RecipeTagEditor />
 							</PageRoot>
 							<NavBar />
 						</Router>

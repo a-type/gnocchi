@@ -1,10 +1,14 @@
 'use client';
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { ComponentPropsWithoutRef, forwardRef, useCallback } from 'react';
+import {
+	ComponentPropsWithoutRef,
+	forwardRef,
+	useCallback,
+	useRef,
+} from 'react';
 import { withClassName } from '../../styles/withClassName.js';
 import * as classes from './Dialog.css.js';
-import { useOnUnmount } from '../../hooks/useOnUnmount.js';
 import useMergedRef from '../../hooks/useMergedRef.js';
 import { useParticles } from '../particles.js';
 import { mediaQueries } from '../../styles.js';
@@ -24,12 +28,17 @@ export const Content = forwardRef<
 	ref,
 ) {
 	const particles = useParticles();
+	const wasOpenRef = useRef(false);
 	const openRef = useCallback(
 		(element: HTMLDivElement | null) => {
-			if (element?.getAttribute('data-state') === 'open') {
+			if (
+				!wasOpenRef.current &&
+				element?.getAttribute('data-state') === 'open'
+			) {
+				wasOpenRef.current = true;
+
 				const matchesSmall = !window.matchMedia(mediaQueries.md).matches;
 				if (!matchesSmall) return;
-				console.log('party');
 
 				setTimeout(() => {
 					particles?.addParticles(
@@ -48,6 +57,8 @@ export const Content = forwardRef<
 						}),
 					);
 				}, 180);
+			} else {
+				wasOpenRef.current = false;
 			}
 		},
 		[particles],
