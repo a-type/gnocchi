@@ -44,6 +44,7 @@ const AdminPlanManagerPage = lazy(
 	() => import('./admin/AdminPlanManagerPage.js'),
 );
 const AdminSyncPage = lazy(() => import('./admin/AdminSyncPage.jsx'));
+const AdminFoodsPage = lazy(() => import('./admin/AdminFoodsPage.jsx'));
 const RecipeViewPage = lazyWithPreload(
 	() => import('./recipe/RecipeViewPage.jsx'),
 );
@@ -140,6 +141,10 @@ const routes = makeRoutes([
 			{
 				path: 'sync',
 				component: AdminSyncPage,
+			},
+			{
+				path: 'foods',
+				component: AdminFoodsPage,
 			},
 		],
 	},

@@ -88,13 +88,13 @@ function FeatureFlagPlanManager({
 						.join(', ')}
 				</P>
 				{plan.subscriptionStatus !== 'active' &&
-				plan.subscriptionStatus === 'trialing' ? (
-					<i>📈 Trial</i>
-				) : plan.subscriptionStatus ? (
-					<b>🚩 Subscription {plan.subscriptionStatus}</b>
-				) : (
-					<i>📉 No subscription</i>
-				)}
+					(plan.subscriptionStatus === 'trialing' ? (
+						<i>📈 Trial</i>
+					) : plan.subscriptionStatus ? (
+						<b>🚩 Subscription {plan.subscriptionStatus}</b>
+					) : (
+						<i>📉 No subscription</i>
+					))}
 			</div>
 			<Dialog>
 				<DialogTrigger asChild>

@@ -50,3 +50,7 @@ export const content = style({
 		},
 	},
 });
+
+export const wrap = style({
+	flexWrap: 'wrap',
+});

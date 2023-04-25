@@ -1,5 +1,6 @@
 import { prisma } from '../index.js';
 
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const DEFAULT_CATEGORIES = [
 	'Dairy & Eggs',
 	'Produce',
@@ -24,7 +25,8 @@ const DEFAULT_CATEGORIES = [
 		update: {},
 	});
 
-	for (const name of DEFAULT_CATEGORIES) {
+	for (let i = 0; i < DEFAULT_CATEGORIES.length; i++) {
+		const name = DEFAULT_CATEGORIES[i];
 		const existing = await prisma.defaultCategory.findFirst({
 			where: { name },
 		});
@@ -32,6 +34,7 @@ const DEFAULT_CATEGORIES = [
 			await prisma.defaultCategory.create({
 				data: {
 					name,
+					sortKey: `Zz${ALPHABET[i]}`,
 				},
 			});
 		}
