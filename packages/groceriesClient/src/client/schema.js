@@ -291,7 +291,7 @@ const recipes = collection({
         slug: {
             type: 'string',
             indexed: true,
-            default: ()=>cuid().slice(0, 8)
+            default: ()=>cuid.slug()
         },
         multiplier: {
             type: 'number',

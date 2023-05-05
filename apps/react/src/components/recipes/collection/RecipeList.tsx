@@ -29,6 +29,8 @@ import { Link } from '@/components/nav/Link.jsx';
 import { RecipeCollectionMenu } from '@/components/recipes/collection/RecipeCollectionMenu.jsx';
 import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
 import { EmptyState } from '@/components/recipes/collection/EmptyState.jsx';
+import { InfiniteLoadTrigger } from '@aglio/ui/components/infiniteLoadTrigger';
+import { Spinner } from '@aglio/ui/src/components/spinner';
 
 export interface RecipeListProps {}
 
@@ -55,19 +57,17 @@ export function RecipeList({}: RecipeListProps) {
 					<RecipeListActions />
 				</PageFixedArea>
 			</Suspense>
-			<div className={classes.list}>
-				<Suspense
-					fallback={
-						<>
-							<RecipePlaceholderItem />
-							<RecipePlaceholderItem />
-							<RecipePlaceholderItem />
-						</>
-					}
-				>
-					<RecipeListContent />
-				</Suspense>
-			</div>
+			<Suspense
+				fallback={
+					<div className={classes.list}>
+						<RecipePlaceholderItem />
+						<RecipePlaceholderItem />
+						<RecipePlaceholderItem />
+					</div>
+				}
+			>
+				<RecipeListContent />
+			</Suspense>
 		</div>
 	);
 }
@@ -80,13 +80,14 @@ function RecipeListContent() {
 	const normalizedTagFilter = tagFilter?.toLowerCase();
 	const normalizedFoodFilter = foodFilter?.toLowerCase();
 
-	const recipes = hooks.useAllRecipes(
+	const [recipes, { loadMore, hasMore }] = hooks.useAllRecipesInfinite(
 		normalizedFoodFilter
 			? {
 					index: {
 						where: 'food',
 						equals: normalizedFoodFilter,
 					},
+					key: 'recipesByFood',
 			  }
 			: normalizedTagFilter
 			? {
@@ -94,8 +95,11 @@ function RecipeListContent() {
 						where: 'tag',
 						equals: normalizedTagFilter,
 					},
+					key: 'recipesByTag',
 			  }
-			: undefined,
+			: {
+					key: 'recipes',
+			  },
 	);
 
 	if (!recipes.length) {
@@ -104,11 +108,19 @@ function RecipeListContent() {
 
 	return (
 		<>
-			{recipes
-				.sort((a, b) => b.get('updatedAt') - a.get('updatedAt'))
-				.map((recipe) => (
+			<div className={classes.list}>
+				{recipes.map((recipe) => (
 					<RecipeListItem key={recipe.get('id')} recipe={recipe} />
 				))}
+			</div>
+			{hasMore && (
+				<InfiniteLoadTrigger
+					onVisible={loadMore}
+					className={sprinkles({ mt: 6, width: 'full' })}
+				>
+					<Spinner />
+				</InfiniteLoadTrigger>
+			)}
 		</>
 	);
 }
@@ -122,7 +134,9 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 		<div className={classes.item}>
 			<Link className={classes.itemContent} to={makeRecipeLink(recipe)}>
 				<div className={classes.tags}>
-					<RecipeTagsViewer recipe={recipe} />
+					<Suspense>
+						<RecipeTagsViewer recipe={recipe} />
+					</Suspense>
 				</div>
 				<div className={classes.itemTitle}>
 					<span>{title}</span>

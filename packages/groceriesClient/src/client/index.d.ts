@@ -8,6 +8,7 @@ import type {
   Query,
   ServerSync,
   EntityFile,
+  CollectionQueries,
 } from "@lo-fi/web";
 export * from "@lo-fi/web";
 export type Schema = typeof schema;
@@ -18,56 +19,51 @@ interface Collection<
   Init,
   Filter
 > {
-  /**
-   * @deprecated use put
-   */
-  create: (init: Init, options?: { undoable?: boolean }) => Promise<Document>;
   put: (init: Init, options?: { undoable?: boolean }) => Promise<Document>;
   delete: (id: string, options?: { undoable?: boolean }) => Promise<void>;
   deleteAll: (ids: string[], options?: { undoable?: boolean }) => Promise<void>;
   get: (id: string) => Query<Document>;
   findOne: (filter: Filter) => Query<Document>;
   findAll: (filter?: Filter) => Query<Document[]>;
+  findAllPaginated: (
+    filter?: Filter,
+    pageSize?: number
+  ) => Query<Document[], { offset?: number }>;
+  findAllInfinite: (
+    filter?: Filter,
+    pageSize?: number
+  ) => Query<Document[], { offset?: number }>;
 }
 
 export class Client<Presence = any, Profile = any> {
-  readonly categories: Collection<
+  readonly categories: CollectionQueries<
     Category,
-    CategorySnapshot,
     CategoryInit,
     CategoryFilter
   >;
 
-  readonly items: Collection<Item, ItemSnapshot, ItemInit, ItemFilter>;
+  readonly items: CollectionQueries<Item, ItemInit, ItemFilter>;
 
-  readonly foods: Collection<Food, FoodSnapshot, FoodInit, FoodFilter>;
+  readonly foods: CollectionQueries<Food, FoodInit, FoodFilter>;
 
-  readonly suggestions: Collection<
+  readonly suggestions: CollectionQueries<
     Suggestion,
-    SuggestionSnapshot,
     SuggestionInit,
     SuggestionFilter
   >;
 
-  readonly lists: Collection<List, ListSnapshot, ListInit, ListFilter>;
+  readonly lists: CollectionQueries<List, ListInit, ListFilter>;
 
-  readonly collaborationInfo: Collection<
+  readonly collaborationInfo: CollectionQueries<
     CollaborationInfo,
-    CollaborationInfoSnapshot,
     CollaborationInfoInit,
     CollaborationInfoFilter
   >;
 
-  readonly recipes: Collection<
-    Recipe,
-    RecipeSnapshot,
-    RecipeInit,
-    RecipeFilter
-  >;
+  readonly recipes: CollectionQueries<Recipe, RecipeInit, RecipeFilter>;
 
-  readonly recipeTagMetadata: Collection<
+  readonly recipeTagMetadata: CollectionQueries<
     RecipeTagMetadata,
-    RecipeTagMetadataSnapshot,
     RecipeTagMetadataInit,
     RecipeTagMetadataFilter
   >;

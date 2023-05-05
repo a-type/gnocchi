@@ -17,6 +17,7 @@ import { instructionsToDoc, stringToDoc } from '@/lib/tiptap.js';
 import { parseIngredient } from '@aglio/conversion';
 import { ActionBar, ActionButton } from '@aglio/ui/src/components/actions';
 import { sprinkles } from '@aglio/ui/styles';
+import cuid from 'cuid';
 
 type PaprikaRecipe = {
 	categories: string[];
@@ -116,8 +117,9 @@ export const PaprikaImporter = forwardRef<
 					),
 				);
 				const recipesPromise = Promise.all(
-					recipes.map((recipe) =>
+					recipes.map((recipe, i) =>
 						client.recipes.put({
+							slug: cuid.slug() + i,
 							title: recipe.name,
 							prelude: recipe.description
 								? stringToDoc(recipe.description)

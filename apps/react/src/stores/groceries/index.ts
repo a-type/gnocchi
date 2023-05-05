@@ -59,8 +59,10 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				}
 
 				const existing = await client.foods.findOne({
-					where: 'nameLookup',
-					equals: food,
+					index: {
+						where: 'nameLookup',
+						equals: food,
+					},
 				}).resolved;
 				if (existing) {
 					if (categoryId) {
@@ -112,8 +114,10 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 			async (item: Item, batchName?: string) => {
 				// also set expiration based on food info
 				const food = await client.foods.findOne({
-					where: 'nameLookup',
-					equals: item.get('food'),
+					index: {
+						where: 'nameLookup',
+						equals: item.get('food'),
+					},
 				}).resolved;
 				const expirationDays = food?.get('expiresAfterDays');
 				const now = Date.now();
@@ -262,8 +266,10 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 		useCallback(
 			async (categoryId: string) => {
 				const matchingItems = await client.items.findAll({
-					where: 'categoryId',
-					equals: categoryId,
+					index: {
+						where: 'categoryId',
+						equals: categoryId,
+					},
 				}).resolved;
 				// move all items to the default category
 				for (const item of matchingItems) {
@@ -271,8 +277,10 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				}
 				// delete all lookups for this category locally
 				const lookups = await client.foods.findAll({
-					where: 'categoryId',
-					equals: categoryId,
+					index: {
+						where: 'categoryId',
+						equals: categoryId,
+					},
 				}).resolved;
 				for (const lookup of lookups) {
 					lookup.set('categoryId', null);
@@ -286,8 +294,10 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 		useCallback(
 			async (listId: string) => {
 				const matchingItems = await client.items.findAll({
-					where: 'listId',
-					equals: listId,
+					index: {
+						where: 'listId',
+						equals: listId,
+					},
 				}).resolved;
 				for (const item of matchingItems) {
 					item.set('listId', null);
@@ -347,8 +357,10 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 								// attempt to find a matching food
 								try {
 									const lookup = await client.foods.findOne({
-										where: 'nameLookup',
-										equals: parsedItem.food,
+										index: {
+											where: 'nameLookup',
+											equals: parsedItem.food,
+										},
 									}).resolved;
 									if (lookup) {
 										food = lookup.get('canonicalName');
@@ -439,13 +451,15 @@ export async function addItems(
 			if (typeof line === 'string' && !line.trim()) return;
 			const parsed = typeof line === 'string' ? parseIngredient(line) : line;
 			const firstMatch = await client.items.findOne({
-				where: 'purchased_food_listId',
-				match: {
-					purchased: 'no',
-					food: parsed.food,
-					listId: listId || 'null',
+				index: {
+					where: 'purchased_food_listId',
+					match: {
+						purchased: 'no',
+						food: parsed.food,
+						listId: listId || 'null',
+					},
+					order: 'asc',
 				},
-				order: 'asc',
 			}).resolved;
 			if (firstMatch && !purchased) {
 				const totalQuantity = firstMatch.get('totalQuantity') + parsed.quantity;
@@ -458,8 +472,10 @@ export async function addItems(
 				});
 			} else {
 				const lookup = await client.foods.findOne({
-					where: 'nameLookup',
-					equals: parsed.food,
+					index: {
+						where: 'nameLookup',
+						equals: parsed.food,
+					},
 				}).resolved;
 				let categoryId: string | null = lookup?.get('categoryId') ?? null;
 
@@ -694,8 +710,10 @@ async function getScannedRecipe(
 							if (!ingredient.food) return ingredient;
 
 							const lookup = await client.foods.findOne({
-								where: 'nameLookup',
-								equals: ingredient.food,
+								index: {
+									where: 'nameLookup',
+									equals: ingredient.food,
+								},
 							}).resolved;
 							if (lookup) {
 								ingredient.food = lookup.get('canonicalName');
