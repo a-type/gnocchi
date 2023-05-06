@@ -48,6 +48,7 @@ export const item = style({
 	'@media': {
 		[mediaQueries.md]: {
 			height: '30vh',
+			maxHeight: 400,
 		},
 	},
 });
@@ -155,4 +156,12 @@ export const itemActionsEnd = style({
 export const actionIcon = style({
 	width: 20,
 	height: 20,
+});
+
+export const searchBar = style({
+	width: '100%',
+});
+
+export const fixedArea = style({
+	paddingTop: vars.space[2],
 });

@@ -3,6 +3,12 @@ import { fractionToText } from '@aglio/tools';
 import pluralize from 'pluralize';
 
 export function useItemDisplayText(item: Item) {
+	const override = item.get('textOverride');
+
+	if (override) {
+		return override;
+	}
+
 	const inputs = item.get('inputs');
 
 	const quantity = item.get('totalQuantity');

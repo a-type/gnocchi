@@ -1,22 +1,13 @@
+import { Link } from '@/components/nav/Link.jsx';
+import { EmptyState } from '@/components/recipes/collection/EmptyState.jsx';
+import { RecipeCollectionMenu } from '@/components/recipes/collection/RecipeCollectionMenu.jsx';
+import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { sprinkles } from '@aglio/ui/styles';
-import {
-	DotsVerticalIcon,
-	PlusCircledIcon,
-	TrashIcon,
-} from '@radix-ui/react-icons';
-import { Suspense } from 'react';
-import { useNavigate } from '@lo-fi/react-router';
-import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
-import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
-import * as classes from './RecipeList.css.js';
-import { RecipeListActions } from './RecipeListActions.jsx';
-import { useRecipeFoodFilter, useRecipeTagFilter } from './hooks.js';
+import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
-import { PageFixedArea } from '@aglio/ui/components/layouts';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -24,13 +15,22 @@ import {
 	DropdownMenuItemRightSlot,
 	DropdownMenuTrigger,
 } from '@aglio/ui/components/dropdownMenu';
-import { Box } from '@aglio/ui/components/box';
-import { Link } from '@/components/nav/Link.jsx';
-import { RecipeCollectionMenu } from '@/components/recipes/collection/RecipeCollectionMenu.jsx';
-import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
-import { EmptyState } from '@/components/recipes/collection/EmptyState.jsx';
 import { InfiniteLoadTrigger } from '@aglio/ui/components/infiniteLoadTrigger';
+import { PageFixedArea } from '@aglio/ui/components/layouts';
 import { Spinner } from '@aglio/ui/src/components/spinner';
+import { sprinkles } from '@aglio/ui/styles';
+import {
+	DotsVerticalIcon,
+	PlusCircledIcon,
+	TrashIcon,
+} from '@radix-ui/react-icons';
+import { Suspense } from 'react';
+import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
+import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
+import * as classes from './RecipeList.css.js';
+import { RecipeListActions } from './RecipeListActions.jsx';
+import { useFilteredRecipes } from './hooks.js';
+import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
 
 export interface RecipeListProps {}
 
@@ -53,7 +53,8 @@ export function RecipeList({}: RecipeListProps) {
 				<RecipeCollectionMenu />
 			</div>
 			<Suspense>
-				<PageFixedArea>
+				<PageFixedArea className={classes.fixedArea}>
+					<RecipeSearchBar className={classes.searchBar} />
 					<RecipeListActions />
 				</PageFixedArea>
 			</Suspense>
@@ -73,34 +74,7 @@ export function RecipeList({}: RecipeListProps) {
 }
 
 function RecipeListContent() {
-	const [tagFilter] = useRecipeTagFilter();
-	const [foodFilter] = useRecipeFoodFilter();
-
-	// just in... 'case'
-	const normalizedTagFilter = tagFilter?.toLowerCase();
-	const normalizedFoodFilter = foodFilter?.toLowerCase();
-
-	const [recipes, { loadMore, hasMore }] = hooks.useAllRecipesInfinite(
-		normalizedFoodFilter
-			? {
-					index: {
-						where: 'food',
-						equals: normalizedFoodFilter,
-					},
-					key: 'recipesByFood',
-			  }
-			: normalizedTagFilter
-			? {
-					index: {
-						where: 'tag',
-						equals: normalizedTagFilter,
-					},
-					key: 'recipesByTag',
-			  }
-			: {
-					key: 'recipes',
-			  },
-	);
+	const [recipes, { loadMore, hasMore }] = useFilteredRecipes();
 
 	if (!recipes.length) {
 		return <EmptyState />;

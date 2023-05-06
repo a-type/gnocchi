@@ -57,7 +57,7 @@ export const Content = forwardRef<
 						}),
 					);
 				}, 180);
-			} else {
+			} else if (element?.getAttribute('data-state') === 'closed') {
 				wasOpenRef.current = false;
 			}
 		},

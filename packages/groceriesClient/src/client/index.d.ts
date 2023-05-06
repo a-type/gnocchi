@@ -344,6 +344,7 @@ export type ItemDestructured = {
   expiresAt: number | null;
   listId: string | null;
   comment: string | null;
+  textOverride: string | null;
 };
 export type ItemInit = {
   id?: string;
@@ -357,6 +358,7 @@ export type ItemInit = {
   expiresAt?: number | null;
   listId?: string | null;
   comment?: string | null;
+  textOverride?: string | null;
 };
 export type ItemSnapshot = {
   id: string;
@@ -370,6 +372,7 @@ export type ItemSnapshot = {
   expiresAt: number | null;
   listId: string | null;
   comment: string | null;
+  textOverride: string | null;
 };
 /** Item sub-object types */
 
@@ -470,6 +473,10 @@ export type ItemComment = string | null;
 export type ItemCommentInit = ItemComment | undefined;
 export type ItemCommentSnapshot = ItemComment;
 export type ItemCommentDestructured = ItemComment;
+export type ItemTextOverride = string | null;
+export type ItemTextOverrideInit = ItemTextOverride | undefined;
+export type ItemTextOverrideSnapshot = ItemTextOverride;
+export type ItemTextOverrideDestructured = ItemTextOverride;
 
 export type Food = ObjectEntity<FoodInit, FoodDestructured>;
 
@@ -837,6 +844,21 @@ export interface RecipeFoodRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipeTitleMatchMatchFilter {
+  where: "titleMatch";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeTitleMatchRangeFilter {
+  where: "titleMatch";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
 export type RecipeFilter =
   | RecipeSlugMatchFilter
   | RecipeSlugRangeFilter
@@ -848,7 +870,9 @@ export type RecipeFilter =
   | RecipeSuggestAfterMatchFilter
   | RecipeSuggestAfterRangeFilter
   | RecipeFoodMatchFilter
-  | RecipeFoodRangeFilter;
+  | RecipeFoodRangeFilter
+  | RecipeTitleMatchMatchFilter
+  | RecipeTitleMatchRangeFilter;
 
 export type RecipeDestructured = {
   id: string;

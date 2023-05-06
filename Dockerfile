@@ -17,7 +17,6 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 FROM base as dev
 COPY ./pnpm-lock.yaml .
-COPY ./patches ./patches
 RUN pnpm fetch
 
 COPY . .

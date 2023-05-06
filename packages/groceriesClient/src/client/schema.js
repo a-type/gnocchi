@@ -1,5 +1,9 @@
 import { collection, schema } from '@lo-fi/web';
 import cuid from 'cuid';
+import { removeStopwords } from 'stopword';
+function fullTextIndex(str) {
+    return removeStopwords(str.split(/\s+/)).map((s)=>s.toLowerCase());
+}
 const categories = collection({
     name: 'category',
     pluralName: 'categories',
@@ -189,6 +193,13 @@ const items = collection({
 		 * Shows up below the item, useful for reminders or notes
 		 * about a brand, etc.
 		 */ comment: {
+            type: 'string',
+            nullable: true
+        },
+        /**
+		 * If set, this will be used instead of the food's name
+		 * or input text.
+		 */ textOverride: {
             type: 'string',
             nullable: true
         }
@@ -459,6 +470,10 @@ const recipes = collection({
             compute: (recipe)=>{
                 return recipe.ingredients.map((i)=>i.food).filter((f)=>!!f).map((f)=>f.toLowerCase());
             }
+        },
+        titleMatch: {
+            type: 'string[]',
+            compute: (recipe)=>fullTextIndex(recipe.title)
         }
     }
 });
@@ -484,7 +499,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 30,
+    version: 31,
     collections: {
         categories,
         items,

@@ -53,8 +53,6 @@ const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 			skip: !tagFilter,
 		});
 
-		const [foodFilter] = useRecipeFoodFilter();
-
 		if (!selectedTag) {
 			return (
 				<ActionButton
@@ -62,7 +60,6 @@ const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 					color="default"
 					ref={ref}
 					icon={<Icon name="filter" />}
-					visible={!foodFilter}
 				>
 					Tag...
 				</ActionButton>
@@ -83,7 +80,6 @@ const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 					selectedTag.get('color') &&
 						themeMap[selectedTag.get('color') as ThemeName],
 				)}
-				visible={!foodFilter}
 			>
 				{selectedTag.get('name')}
 			</ActionButton>
@@ -112,7 +108,6 @@ export function RecipeFoodFilterAction() {
 const SelectedFoodDisplay = forwardRef<HTMLButtonElement, any>(
 	function SelectedFoodDisplay(props, ref) {
 		const [foodFilter, setFoodFilter] = useRecipeFoodFilter();
-		const [tagFilter] = useRecipeTagFilter();
 
 		return (
 			<ActionButton
@@ -127,7 +122,6 @@ const SelectedFoodDisplay = forwardRef<HTMLButtonElement, any>(
 						  }
 						: props.onClick
 				}
-				visible={!tagFilter}
 			>
 				{foodFilter ?? 'Food...'}
 			</ActionButton>
@@ -145,8 +139,10 @@ function FoodFilterContent({ onSubmit }: { onSubmit?: () => void }) {
 			onSubmit={async (values) => {
 				const foodName = values.foodFilter;
 				const lookup = await client.foods.findOne({
-					where: 'nameLookup',
-					equals: foodName,
+					index: {
+						where: 'nameLookup',
+						equals: foodName,
+					},
 				}).resolved;
 
 				setFoodFilter(lookup?.get('canonicalName') || foodName);
