@@ -161,3 +161,7 @@ export const actionIcon = style({
 export const searchBar = style({
 	width: '100%',
 });
+
+export const fixedArea = style({
+	paddingTop: vars.space[2],
+});

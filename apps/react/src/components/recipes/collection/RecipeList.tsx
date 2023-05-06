@@ -53,7 +53,7 @@ export function RecipeList({}: RecipeListProps) {
 				<RecipeCollectionMenu />
 			</div>
 			<Suspense>
-				<PageFixedArea>
+				<PageFixedArea className={classes.fixedArea}>
 					<RecipeSearchBar className={classes.searchBar} />
 					<RecipeListActions />
 				</PageFixedArea>
