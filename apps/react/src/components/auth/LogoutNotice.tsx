@@ -1,6 +1,6 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { LoginButton } from '../sync/LoginButton.jsx';
 import {
 	Dialog,
@@ -18,9 +18,10 @@ export function LogoutNotice({}: LogoutNoticeProps) {
 	const [wasLoggedIn, setWasLoggedIn] = useLocalStorage('wasLoggedIn', false);
 	const { data, error, isInitialLoading: initializing } = useAuth();
 	const session = data?.session;
+	const [close, setClose] = useState(false);
 
 	const wasLoggedInButNowLoggedOut =
-		wasLoggedIn && !session && !error && !initializing;
+		!close && wasLoggedIn && !session && !error && !initializing;
 
 	// only want to fire this when session changes, not when flag changes.
 	// flag can be reset manually.
@@ -40,7 +41,9 @@ export function LogoutNotice({}: LogoutNoticeProps) {
 						<Button color="ghost">Cancel</Button>
 					</DialogClose>
 					<DialogClose asChild>
-						<LoginButton color="primary">Sign in</LoginButton>
+						<LoginButton color="primary" onClick={() => setClose(true)}>
+							Sign in
+						</LoginButton>
 					</DialogClose>
 				</Box>
 			</DialogContent>

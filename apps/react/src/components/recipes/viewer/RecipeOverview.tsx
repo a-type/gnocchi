@@ -86,7 +86,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 									justifyContent="flex-end"
 								>
 									<RecipePublishControl recipe={recipe} />
-									<RecipeViewerEditButton recipe={recipe} color="primary" />
+									<RecipeViewerEditButton recipe={recipe} />
 								</Box>
 							</Box>
 							{url && (
@@ -109,13 +109,13 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				</TitleAndImageLayout>
 				<Box
 					width="auto"
-					alignSelf="flex-end"
-					gap={2}
+					alignSelf="flex-start"
+					gap={6}
 					direction="row"
 					align="center"
 				>
+					<AddToListButton color="primary" recipe={recipe} />
 					<RecipeMultiplierField recipe={recipe} />
-					<AddToListButton recipe={recipe} />
 				</Box>
 				<RecipeTagsEditor className={sprinkles({ mt: 3 })} recipe={recipe} />
 				<PreludeSection recipe={recipe} />

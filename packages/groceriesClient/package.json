@@ -19,9 +19,11 @@
 		"@lo-fi/web": "^2.0.0",
 		"@trpc/client": "^10.5.0",
 		"@trpc/server": "^10.5.0",
-		"cuid": "^2.1.8"
+		"cuid": "^2.1.8",
+		"stopword": "^2.0.8"
 	},
 	"devDependencies": {
+		"@types/stopword": "^2.0.0",
 		"react": "^18.2.0"
 	}
 }

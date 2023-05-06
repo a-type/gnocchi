@@ -28,6 +28,7 @@ import v27 from "./v27.js";
 import v28 from "./v28.js";
 import v29 from "./v29.js";
 import v30 from "./v30.js";
+import v31 from "./v31.js";
 
 export default [
   v1,
@@ -60,4 +61,5 @@ export default [
   v28,
   v29,
   v30,
+  v31,
 ];
