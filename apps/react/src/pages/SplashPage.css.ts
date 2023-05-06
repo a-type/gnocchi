@@ -27,7 +27,7 @@ export const contentInner = style({
 });
 
 export const mainContent = style({
-	backgroundColor: vars.colors.primary,
+	backgroundColor: vars.colors.primaryLight,
 });
 
 export const fixedContent = style({
@@ -35,7 +35,7 @@ export const fixedContent = style({
 	position: 'fixed',
 	flexDirection: 'column',
 	bottom: 0,
-	backgroundColor: vars.colors.primary,
+	backgroundColor: vars.colors.primaryLight,
 	borderTop: `1px solid ${vars.colors.primaryDark}`,
 	margin: 0,
 	width: '100%',
