@@ -392,7 +392,7 @@ function getInitials(name: string) {
 }
 
 function QuantityEditor({ item }: { item: Item }) {
-	const { totalQuantity } = hooks.useWatch(item);
+	const { totalQuantity, textOverride } = hooks.useWatch(item);
 	const displayText = useItemDisplayText(item);
 	return (
 		<Dialog>
@@ -402,9 +402,13 @@ function QuantityEditor({ item }: { item: Item }) {
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
-				<DialogTitle>Edit quantity</DialogTitle>
-				<Box align="center" gap={4}>
-					<span>{displayText}</span>
+				<DialogTitle>Edit item</DialogTitle>
+				<Box align="center" direction="row" gap={4}>
+					<LiveUpdateTextField
+						placeholder={displayText}
+						value={textOverride || ''}
+						onChange={(v) => item.set('textOverride', v)}
+					/>
 					<NumberStepper
 						value={totalQuantity}
 						onChange={(v) => item.set('totalQuantity', v)}
