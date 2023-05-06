@@ -94,6 +94,16 @@ function getIsSafari() {
 	return !!ua.match(/WebKit/i) && !ua.match(/CriOS/i);
 }
 
+function getIsFirefox() {
+	const ua = navigator.userAgent.toLowerCase();
+	return !!ua.match(/Firefox/i);
+}
+
+function getIsEdge() {
+	const ua = navigator.userAgent.toLowerCase();
+	return !!ua.match(/Edge/i);
+}
+
 function IOSTutorial() {
 	const isSafari = getIsSafari();
 	if (isSafari) {
@@ -148,6 +158,11 @@ function IOSTutorial() {
 }
 
 function AndroidTutorial() {
+	const videoSrc = getIsFirefox()
+		? `/videos/firefox-install.mp4`
+		: getIsEdge()
+		? `/videos/edge-install.mp4`
+		: `/videos/android-install.mp4`;
 	return (
 		<Box>
 			<H2>Adding the Gnocchi app to your phone</H2>
@@ -165,13 +180,7 @@ function AndroidTutorial() {
 				plain more convenient, which is key to keeping up with the weekly
 				groceries.
 			</P>
-			<video
-				src="/videos/android-install.mp4"
-				controls
-				autoPlay
-				loop
-				className={classes.video}
-			/>
+			<video src={videoSrc} controls autoPlay loop className={classes.video} />
 		</Box>
 	);
 }
