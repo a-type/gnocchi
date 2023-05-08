@@ -1,6 +1,6 @@
 import v19Schema from '../client/schemaVersions/v19.js';
 import v20Schema from '../client/schemaVersions/v20.js';
-import { migrate } from '@verdant-web/web';
+import { migrate } from '@verdant-web/store';
 
 export default migrate(
 	v19Schema,

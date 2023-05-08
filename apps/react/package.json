@@ -7,7 +7,7 @@
 		"dev": "vite --host",
 		"build": "vite build",
 		"preview": "vite preview",
-		"link-verdant": "pnpm link --global @verdant-web/web && pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/react && pnpm link --global @verdant-web/cli && pnpm link --global @verdant-web/react-router",
+		"link-verdant": "pnpm link --global @verdant-web/store && pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/react && pnpm link --global @verdant-web/cli && pnpm link --global @verdant-web/react-router",
 		"clear": "rm -rf node_modules/.vite",
 		"icons": "node ./scripts/generateIcons.js",
 		"typecheck": "tsc --build tsconfig.json"
@@ -27,7 +27,7 @@
 		"@verdant-web/common": "^1.11.0",
 		"@verdant-web/react": "^15.0.1",
 		"@verdant-web/react-router": "^0.1.4",
-		"@verdant-web/web": "^2.0.1",
+		"@verdant-web/store": "^2.0.1",
 		"@radix-ui/react-icons": "^1.1.1",
 		"@react-spring/three": "^9.5.5",
 		"@react-spring/web": "^9.4.5",

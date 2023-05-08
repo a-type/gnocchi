@@ -1,6 +1,6 @@
 import v7Schema from '../client/schemaVersions/v7.js';
 import v8Schema from '../client/schemaVersions/v8.js';
-import { migrate } from '@verdant-web/web';
+import { migrate } from '@verdant-web/store';
 
 export default migrate(
 	v7Schema,

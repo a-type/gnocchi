@@ -1,4 +1,4 @@
-import { migrate } from '@verdant-web/web';
+import { migrate } from '@verdant-web/store';
 import v2Schema from '../client/schemaVersions/v2.js';
 import v3Schema from '../client/schemaVersions/v3.js';
 

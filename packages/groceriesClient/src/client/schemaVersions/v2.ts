@@ -1,4 +1,4 @@
-import { collection, schema } from '@verdant-web/web';
+import { collection, schema } from '@verdant-web/store';
 
 export const categoryCollection = collection({
 	name: 'categories',

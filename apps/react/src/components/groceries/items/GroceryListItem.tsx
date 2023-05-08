@@ -40,7 +40,7 @@ import { useSizeCssVars } from '@aglio/ui/hooks';
 import { sprinkles } from '@aglio/ui/styles';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import { UserInfo } from '@verdant-web/web';
+import { UserInfo } from '@verdant-web/store';
 import {
 	HamburgerMenuIcon,
 	Pencil1Icon,

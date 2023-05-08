@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"generate": "lo-fi -s ./src/schema.ts -o ./src/client -r",
-		"link-verdant": "pnpm link --global @verdant-web/web && pnpm link --global @verdant-web/cli && pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/react"
+		"link-verdant": "pnpm link --global @verdant-web/store && pnpm link --global @verdant-web/cli && pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/react"
 	},
 	"peerDependencies": {
 		"react": "^18.2.0"
@@ -16,7 +16,7 @@
 		"@verdant-web/cli": "^2.0.0",
 		"@verdant-web/common": "^1.11.0",
 		"@verdant-web/react": "^15.0.1",
-		"@verdant-web/web": "^2.0.1",
+		"@verdant-web/store": "^2.0.1",
 		"@trpc/client": "^10.5.0",
 		"@trpc/server": "^10.5.0",
 		"cuid": "^2.1.8",

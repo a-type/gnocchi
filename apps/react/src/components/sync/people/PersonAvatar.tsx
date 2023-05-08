@@ -1,4 +1,4 @@
-import { UserInfo } from '@verdant-web/web';
+import { UserInfo } from '@verdant-web/store';
 import { Profile } from '@/stores/groceries/index.js';
 import classNames from 'classnames';
 import * as classes from './PersonAvatar.css.js';

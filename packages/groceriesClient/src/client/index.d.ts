@@ -9,8 +9,8 @@ import type {
 	ServerSync,
 	EntityFile,
 	CollectionQueries,
-} from '@verdant-web/web';
-export * from '@verdant-web/web';
+} from '@verdant-web/store';
+export * from '@verdant-web/store';
 export type Schema = typeof schema;
 
 interface Collection<
