@@ -11,8 +11,8 @@
 		"build": "turbo run build",
 		"test": "turbo run test",
 		"prisma": "pnpm --filter @aglio/prisma run prisma",
-		"link-lofi": "turbo run link-lofi && pnpm -r run clear",
-		"up-lofi": "pnpm --recursive update \"@lo-fi/*\" --latest",
+		"link-verdant": "turbo run link-verdant && pnpm -r run clear",
+		"up-verdant": "pnpm --recursive update \"@verdant-web/*\" --latest",
 		"generate": "pnpm --filter @aglio/groceries-client generate",
 		"stripe": "stripe listen --forward-to localhost:4445/api/stripe/webhook"
 	},

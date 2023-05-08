@@ -1,7 +1,7 @@
 import { ButtonProps, buttonClassNames } from '@aglio/ui/components/button';
 import classNames from 'classnames';
 import { forwardRef } from 'react';
-import { Link, LinkProps } from '@lo-fi/react-router';
+import { Link, LinkProps } from '@verdant-web/react-router';
 import * as classes from './Link.css.js';
 
 export { Link };

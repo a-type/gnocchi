@@ -1,6 +1,6 @@
 import { EmailSignInForm } from '@/components/auth/EmailSignInForm.jsx';
 import { EmailSignUpForm } from '@/components/auth/EmailSignUpForm.jsx';
-import { useSearchParams } from '@lo-fi/react-router';
+import { useSearchParams } from '@verdant-web/react-router';
 import { OAuthSignInButton } from '../components/auth/OAuthSignInButton.jsx';
 import {
 	PageContent,

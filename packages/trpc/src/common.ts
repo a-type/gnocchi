@@ -2,7 +2,7 @@ import { getLoginSession, Session } from '@aglio/auth';
 import { initTRPC } from '@trpc/server';
 import type { Request, Response } from 'express';
 import * as trpcExpress from '@trpc/server/adapters/express';
-import { Server } from '@lo-fi/server';
+import { Server } from '@verdant-web/server';
 import { getIsHubAuthorizedRequest } from '@aglio/tools';
 
 type Context = {

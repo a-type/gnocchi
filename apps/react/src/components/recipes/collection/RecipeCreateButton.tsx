@@ -1,7 +1,7 @@
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Button } from '@aglio/ui/src/components/button';
-import { useNavigate } from '@lo-fi/react-router';
+import { useNavigate } from '@verdant-web/react-router';
 
 export function RecipeCreateButton() {
 	const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ReplicaType, TokenProvider } from '@lo-fi/server';
+import { ReplicaType, TokenProvider } from '@verdant-web/server';
 import { assert, getGroceryLibraryName } from '@aglio/tools';
 import { getLoginSession, getTemporaryAccessSession } from '@aglio/auth';
 import { DEPLOYED_HOST } from '../../config/deployedContext.js';

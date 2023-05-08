@@ -23,7 +23,7 @@ import {
 } from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
 import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
-import { makeRoutes, Outlet, Router } from '@lo-fi/react-router';
+import { makeRoutes, Outlet, Router } from '@verdant-web/react-router';
 import { lazy, Suspense, useCallback } from 'react';
 import { lazyWithPreload } from 'react-lazy-with-preload';
 import { useRegisterSW } from 'virtual:pwa-register/react';

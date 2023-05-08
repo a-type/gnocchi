@@ -1,6 +1,6 @@
 import v18Schema from '../client/schemaVersions/v18.js';
 import v19Schema from '../client/schemaVersions/v19.js';
-import { migrate } from '@lo-fi/web';
+import { migrate } from '@verdant-web/web';
 
 export default migrate(
 	v18Schema,

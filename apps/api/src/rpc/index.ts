@@ -1,7 +1,7 @@
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { appRouter, createContext } from '@aglio/trpc';
 import * as deployedContext from '../config/deployedContext.js';
-import { Server } from '@lo-fi/server';
+import { Server } from '@verdant-web/server';
 
 export const createTrpcMiddleware = (lofi: Server) =>
 	trpcExpress.createExpressMiddleware({

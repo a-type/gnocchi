@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useSearchParams } from '@lo-fi/react-router';
+import { useSearchParams } from '@verdant-web/react-router';
 import { hooks } from '@/stores/groceries/index.js';
 
 export function useRecipeTagFilter() {

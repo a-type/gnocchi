@@ -1,4 +1,4 @@
-import { useIsRouteTransitioning } from '@lo-fi/react-router';
+import { useIsRouteTransitioning } from '@verdant-web/react-router';
 import { animated, useSpring } from '@react-spring/web';
 import classNames from 'classnames';
 import * as classes from './TopLoader.css.js';

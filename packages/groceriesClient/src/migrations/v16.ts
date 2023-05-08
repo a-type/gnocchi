@@ -1,6 +1,6 @@
 import v15Schema from '../client/schemaVersions/v15.js';
 import v16Schema from '../client/schemaVersions/v16.js';
-import { migrate } from '@lo-fi/web';
+import { migrate } from '@verdant-web/web';
 import { readRawIdb } from '../../src/readRawIdb.js';
 
 export default migrate(

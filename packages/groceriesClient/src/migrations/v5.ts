@@ -1,6 +1,6 @@
 import v4Schema from '../client/schemaVersions/v4.js';
 import v5Schema from '../client/schemaVersions/v5.js';
-import { migrate } from '@lo-fi/web';
+import { migrate } from '@verdant-web/web';
 import { trpcClient } from '../trpc.js';
 
 export default migrate(

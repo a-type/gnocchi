@@ -1,6 +1,6 @@
 import v26Schema from '../client/schemaVersions/v26.js';
 import v27Schema from '../client/schemaVersions/v27.js';
-import { migrate } from '@lo-fi/web';
+import { migrate } from '@verdant-web/web';
 
 export default migrate(
 	v26Schema,

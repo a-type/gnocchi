@@ -1,6 +1,6 @@
 import v11Schema from '../client/schemaVersions/v11.js';
 import v12Schema from '../client/schemaVersions/v12.js';
-import { migrate } from '@lo-fi/web';
+import { migrate } from '@verdant-web/web';
 
 export default migrate(
 	v11Schema,

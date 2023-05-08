@@ -1,5 +1,5 @@
 import { trpc } from '@/trpc.js';
-import { Outlet } from '@lo-fi/react-router';
+import { Outlet } from '@verdant-web/react-router';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { Box } from '@aglio/ui/components/box';

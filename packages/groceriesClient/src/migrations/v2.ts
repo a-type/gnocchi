@@ -1,4 +1,4 @@
-import { migrate } from '@lo-fi/web';
+import { migrate } from '@verdant-web/web';
 import v1Schema from '../client/schemaVersions/v1.js';
 import v2Schema from '../client/schemaVersions/v2.js';
 

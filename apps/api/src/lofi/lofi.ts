@@ -1,6 +1,11 @@
 import { prisma } from '@aglio/prisma';
 import { assert } from '@aglio/tools';
-import { Server, UserProfiles, FileStorage, FileInfo } from '@lo-fi/server';
+import {
+	Server,
+	UserProfiles,
+	FileStorage,
+	FileInfo,
+} from '@verdant-web/server';
 import { Server as HttpServer } from 'http';
 import { Readable } from 'stream';
 import {

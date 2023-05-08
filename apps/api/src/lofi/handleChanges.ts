@@ -3,7 +3,7 @@ import {
 	ListChangesPushData,
 	getPlanIdFromGroceryLibraryId,
 } from '@aglio/tools';
-import { DocumentBaseline, Operation, decomposeOid } from '@lo-fi/common';
+import { DocumentBaseline, Operation, decomposeOid } from '@verdant-web/common';
 import { sendPush } from 'src/data/webPush.js';
 
 export async function handleLofiChanges({

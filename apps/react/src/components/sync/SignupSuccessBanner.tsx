@@ -8,7 +8,7 @@ import { H1, P } from '@aglio/ui/components/typography';
 import { sprinkles } from '@aglio/ui/styles';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { useSearchParams } from '@lo-fi/react-router';
+import { useSearchParams } from '@verdant-web/react-router';
 import { InviteLinkButton } from './InviteLinkButton.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { Link } from '@/components/nav/Link.jsx';

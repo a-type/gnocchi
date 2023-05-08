@@ -1,5 +1,5 @@
 import { RecipeEditor } from '@/components/recipes/editor/RecipeEditor.jsx';
-import { useParams } from '@lo-fi/react-router';
+import { useParams } from '@verdant-web/react-router';
 
 export interface RecipeEditPageProps {}
 

@@ -1,6 +1,6 @@
 import v16Schema from '../client/schemaVersions/v16.js';
 import v17Schema from '../client/schemaVersions/v17.js';
-import { migrate } from '@lo-fi/web';
+import { migrate } from '@verdant-web/web';
 import cuid from 'cuid';
 
 export default migrate(v16Schema, v17Schema, async ({ queries, mutations }) => {

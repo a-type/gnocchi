@@ -6,7 +6,7 @@ import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
-import { useNavigate, useParams } from '@lo-fi/react-router';
+import { useNavigate, useParams } from '@verdant-web/react-router';
 
 export function ClaimInvitePage() {
 	const { data, refetch } = useAuth();

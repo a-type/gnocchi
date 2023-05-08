@@ -22,7 +22,11 @@ import {
 import { Box } from '@aglio/ui/components/box';
 import { PageContent } from '@aglio/ui/components/layouts';
 import { useCallback, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from '@lo-fi/react-router';
+import {
+	useNavigate,
+	useParams,
+	useSearchParams,
+} from '@verdant-web/react-router';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();

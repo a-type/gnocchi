@@ -1,5 +1,5 @@
 import { RecipeOverview } from '@/components/recipes/viewer/RecipeOverview.jsx';
-import { useParams } from '@lo-fi/react-router';
+import { useParams } from '@verdant-web/react-router';
 
 export interface RecipeOverviewPageProps {}
 

@@ -2,7 +2,7 @@ import { useAuth } from '@/hooks/useAuth.jsx';
 import { sprinkles } from '@aglio/ui/styles';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
-import { useNavigate } from '@lo-fi/react-router';
+import { useNavigate } from '@verdant-web/react-router';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 import {
 	Dialog,

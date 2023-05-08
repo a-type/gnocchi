@@ -1,7 +1,7 @@
 import { EmailCompleteSignUpForm } from '@/components/auth/EmailCompleteSignUpForm.jsx';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
-import { useNavigate, useSearchParams } from '@lo-fi/react-router';
+import { useNavigate, useSearchParams } from '@verdant-web/react-router';
 
 export interface VerifyEmailPageProps {}
 

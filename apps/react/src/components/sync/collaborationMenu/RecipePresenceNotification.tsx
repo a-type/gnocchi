@@ -4,7 +4,7 @@ import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { Button } from '@aglio/ui/components/button';
 import { PageNowPlaying } from '@aglio/ui/components/layouts';
-import { UserInfo } from '@lo-fi/common';
+import { UserInfo } from '@verdant-web/common';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Suspense, useState } from 'react';
 import { PersonAvatar } from '../people/PersonAvatar.jsx';
