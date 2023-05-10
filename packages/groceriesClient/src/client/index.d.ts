@@ -1,155 +1,155 @@
-import type schema from './schema.js';
-import type { StorageSchema } from '@verdant-web/common';
+import type schema from "./schema.js";
+import type { StorageSchema } from "@verdant-web/common";
 import type {
-	Storage,
-	StorageInitOptions,
-	ObjectEntity,
-	ListEntity,
-	Query,
-	ServerSync,
-	EntityFile,
-	CollectionQueries,
-} from '@verdant-web/store';
-export * from '@verdant-web/store';
+  Storage,
+  StorageInitOptions,
+  ObjectEntity,
+  ListEntity,
+  Query,
+  ServerSync,
+  EntityFile,
+  CollectionQueries,
+} from "@verdant-web/store";
+export * from "@verdant-web/store";
 export type Schema = typeof schema;
 
 interface Collection<
-	Document extends ObjectEntity<any, any>,
-	Snapshot,
-	Init,
-	Filter,
+  Document extends ObjectEntity<any, any>,
+  Snapshot,
+  Init,
+  Filter
 > {
-	put: (init: Init, options?: { undoable?: boolean }) => Promise<Document>;
-	delete: (id: string, options?: { undoable?: boolean }) => Promise<void>;
-	deleteAll: (ids: string[], options?: { undoable?: boolean }) => Promise<void>;
-	get: (id: string) => Query<Document>;
-	findOne: (filter: Filter) => Query<Document>;
-	findAll: (filter?: Filter) => Query<Document[]>;
-	findAllPaginated: (
-		filter?: Filter,
-		pageSize?: number,
-	) => Query<Document[], { offset?: number }>;
-	findAllInfinite: (
-		filter?: Filter,
-		pageSize?: number,
-	) => Query<Document[], { offset?: number }>;
+  put: (init: Init, options?: { undoable?: boolean }) => Promise<Document>;
+  delete: (id: string, options?: { undoable?: boolean }) => Promise<void>;
+  deleteAll: (ids: string[], options?: { undoable?: boolean }) => Promise<void>;
+  get: (id: string) => Query<Document>;
+  findOne: (filter: Filter) => Query<Document>;
+  findAll: (filter?: Filter) => Query<Document[]>;
+  findAllPaginated: (
+    filter?: Filter,
+    pageSize?: number
+  ) => Query<Document[], { offset?: number }>;
+  findAllInfinite: (
+    filter?: Filter,
+    pageSize?: number
+  ) => Query<Document[], { offset?: number }>;
 }
 
 export class Client<Presence = any, Profile = any> {
-	readonly categories: CollectionQueries<
-		Category,
-		CategoryInit,
-		CategoryFilter
-	>;
+  readonly categories: CollectionQueries<
+    Category,
+    CategoryInit,
+    CategoryFilter
+  >;
 
-	readonly items: CollectionQueries<Item, ItemInit, ItemFilter>;
+  readonly items: CollectionQueries<Item, ItemInit, ItemFilter>;
 
-	readonly foods: CollectionQueries<Food, FoodInit, FoodFilter>;
+  readonly foods: CollectionQueries<Food, FoodInit, FoodFilter>;
 
-	readonly suggestions: CollectionQueries<
-		Suggestion,
-		SuggestionInit,
-		SuggestionFilter
-	>;
+  readonly suggestions: CollectionQueries<
+    Suggestion,
+    SuggestionInit,
+    SuggestionFilter
+  >;
 
-	readonly lists: CollectionQueries<List, ListInit, ListFilter>;
+  readonly lists: CollectionQueries<List, ListInit, ListFilter>;
 
-	readonly collaborationInfo: CollectionQueries<
-		CollaborationInfo,
-		CollaborationInfoInit,
-		CollaborationInfoFilter
-	>;
+  readonly collaborationInfo: CollectionQueries<
+    CollaborationInfo,
+    CollaborationInfoInit,
+    CollaborationInfoFilter
+  >;
 
-	readonly recipes: CollectionQueries<Recipe, RecipeInit, RecipeFilter>;
+  readonly recipes: CollectionQueries<Recipe, RecipeInit, RecipeFilter>;
 
-	readonly recipeTagMetadata: CollectionQueries<
-		RecipeTagMetadata,
-		RecipeTagMetadataInit,
-		RecipeTagMetadataFilter
-	>;
+  readonly recipeTagMetadata: CollectionQueries<
+    RecipeTagMetadata,
+    RecipeTagMetadataInit,
+    RecipeTagMetadataFilter
+  >;
 
-	sync: ServerSync<Profile, Presence>;
-	undoHistory: Storage['undoHistory'];
-	namespace: Storage['namespace'];
-	entities: Storage['entities'];
-	queryStore: Storage['queryStore'];
-	batch: Storage['batch'];
-	files: Storage['files'];
+  sync: ServerSync<Profile, Presence>;
+  undoHistory: Storage["undoHistory"];
+  namespace: Storage["namespace"];
+  entities: Storage["entities"];
+  queryStore: Storage["queryStore"];
+  batch: Storage["batch"];
+  files: Storage["files"];
 
-	close: Storage['close'];
+  close: Storage["close"];
 
-	export: Storage['export'];
-	import: Storage['import'];
+  export: Storage["export"];
+  import: Storage["import"];
 
-	stats: () => Promise<any>;
-	/**
-	 * Resets all local data. Use with caution. If this replica
-	 * is synced, it can restore from the server, but if it is not,
-	 * the data will be permanently lost.
-	 */
-	__dangerous__resetLocal: Storage['__dangerous__resetLocal'];
+  stats: () => Promise<any>;
+  /**
+   * Resets all local data. Use with caution. If this replica
+   * is synced, it can restore from the server, but if it is not,
+   * the data will be permanently lost.
+   */
+  __dangerous__resetLocal: Storage["__dangerous__resetLocal"];
 }
 
 // schema is provided internally. loadInitialData must be revised to pass the typed Client
 interface ClientInitOptions<Presence = any, Profile = any>
-	extends Omit<StorageInitOptions<Presence, Profile>, 'schema'> {}
+  extends Omit<StorageInitOptions<Presence, Profile>, "schema"> {}
 
 export class ClientDescriptor<Presence = any, Profile = any> {
-	constructor(init: ClientInitOptions<Presence, Profile>);
-	open: () => Promise<Client<Presence, Profile>>;
-	readonly current: Client<Presence, Profile> | null;
-	readonly readyPromise: Promise<Client<Presence, Profile>>;
-	readonly schema: StorageSchema;
-	readonly namespace: string;
-	close: () => Promise<void>;
+  constructor(init: ClientInitOptions<Presence, Profile>);
+  open: () => Promise<Client<Presence, Profile>>;
+  readonly current: Client<Presence, Profile> | null;
+  readonly readyPromise: Promise<Client<Presence, Profile>>;
+  readonly schema: StorageSchema;
+  readonly namespace: string;
+  close: () => Promise<void>;
 }
 export type Category = ObjectEntity<CategoryInit, CategoryDestructured>;
 
 export interface CategorySortKeyMatchFilter {
-	where: 'sortKey';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "sortKey";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface CategorySortKeyRangeFilter {
-	where: 'sortKey';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "sortKey";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface CategorySortKeyStartsWithFilter {
-	where: 'sortKey';
-	startsWith: string;
-	order?: 'asc' | 'desc';
+  where: "sortKey";
+  startsWith: string;
+  order?: "asc" | "desc";
 }
 export type CategoryFilter =
-	| CategorySortKeyMatchFilter
-	| CategorySortKeyRangeFilter
-	| CategorySortKeyStartsWithFilter;
+  | CategorySortKeyMatchFilter
+  | CategorySortKeyRangeFilter
+  | CategorySortKeyStartsWithFilter;
 
 export type CategoryDestructured = {
-	id: string;
-	name: string;
-	sortKey: string;
-	expirationDays: number | null;
-	claim: CategoryClaim | null;
+  id: string;
+  name: string;
+  sortKey: string;
+  expirationDays: number | null;
+  claim: CategoryClaim | null;
 };
 export type CategoryInit = {
-	id?: string;
-	name: string;
-	sortKey?: string;
-	expirationDays?: number | null;
-	claim?: CategoryClaimInit | null;
+  id?: string;
+  name: string;
+  sortKey?: string;
+  expirationDays?: number | null;
+  claim?: CategoryClaimInit | null;
 };
 export type CategorySnapshot = {
-	id: string;
-	name: string;
-	sortKey: string;
-	expirationDays: number | null;
-	claim: CategoryClaimSnapshot | null;
+  id: string;
+  name: string;
+  sortKey: string;
+  expirationDays: number | null;
+  claim: CategoryClaimSnapshot | null;
 };
 /** Category sub-object types */
 
@@ -170,20 +170,20 @@ export type CategoryExpirationDaysInit = CategoryExpirationDays | undefined;
 export type CategoryExpirationDaysSnapshot = CategoryExpirationDays;
 export type CategoryExpirationDaysDestructured = CategoryExpirationDays;
 export type CategoryClaim = ObjectEntity<
-	CategoryClaimInit,
-	CategoryClaimDestructured
+  CategoryClaimInit,
+  CategoryClaimDestructured
 >;
 export type CategoryClaimInit = {
-	claimedBy: string;
-	claimedAt: number;
+  claimedBy: string;
+  claimedAt: number;
 };
 export type CategoryClaimDestructured = {
-	claimedBy: string;
-	claimedAt: number;
+  claimedBy: string;
+  claimedAt: number;
 };
 export type CategoryClaimSnapshot = {
-	claimedBy: string;
-	claimedAt: number;
+  claimedBy: string;
+  claimedAt: number;
 };
 export type CategoryClaimClaimedBy = string;
 export type CategoryClaimClaimedByInit = CategoryClaimClaimedBy;
@@ -197,182 +197,182 @@ export type CategoryClaimClaimedAtDestructured = CategoryClaimClaimedAt;
 export type Item = ObjectEntity<ItemInit, ItemDestructured>;
 
 export interface ItemCategoryIdMatchFilter {
-	where: 'categoryId';
-	equals: string | null;
-	order?: 'asc' | 'desc';
+  where: "categoryId";
+  equals: string | null;
+  order?: "asc" | "desc";
 }
 
 export interface ItemCategoryIdRangeFilter {
-	where: 'categoryId';
-	gte?: string | null;
-	gt?: string | null;
-	lte?: string | null;
-	lt?: string | null;
-	order?: 'asc' | 'desc';
+  where: "categoryId";
+  gte?: string | null;
+  gt?: string | null;
+  lte?: string | null;
+  lt?: string | null;
+  order?: "asc" | "desc";
 }
 
 export interface ItemCategoryIdStartsWithFilter {
-	where: 'categoryId';
-	startsWith: string;
-	order?: 'asc' | 'desc';
+  where: "categoryId";
+  startsWith: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemFoodMatchFilter {
-	where: 'food';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "food";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemFoodRangeFilter {
-	where: 'food';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "food";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemFoodStartsWithFilter {
-	where: 'food';
-	startsWith: string;
-	order?: 'asc' | 'desc';
+  where: "food";
+  startsWith: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemPurchasedFoodListIdCompoundFilter {
-	where: 'purchased_food_listId';
-	match: {
-		purchased?: string;
-		food?: string;
-		listId?: string;
-	};
-	order: 'asc' | 'desc';
+  where: "purchased_food_listId";
+  match: {
+    purchased?: string;
+    food?: string;
+    listId?: string;
+  };
+  order: "asc" | "desc";
 }
 
 export interface ItemPurchasedListIdCompoundFilter {
-	where: 'purchased_listId';
-	match: {
-		purchased?: string;
-		listId?: string;
-	};
-	order: 'asc' | 'desc';
+  where: "purchased_listId";
+  match: {
+    purchased?: string;
+    listId?: string;
+  };
+  order: "asc" | "desc";
 }
 
 export interface ItemPurchasedMatchFilter {
-	where: 'purchased';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "purchased";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemPurchasedRangeFilter {
-	where: 'purchased';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "purchased";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemPurchasedStartsWithFilter {
-	where: 'purchased';
-	startsWith: string;
-	order?: 'asc' | 'desc';
+  where: "purchased";
+  startsWith: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemListIdMatchFilter {
-	where: 'listId';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "listId";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemListIdRangeFilter {
-	where: 'listId';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "listId";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemListIdStartsWithFilter {
-	where: 'listId';
-	startsWith: string;
-	order?: 'asc' | 'desc';
+  where: "listId";
+  startsWith: string;
+  order?: "asc" | "desc";
 }
 
 export interface ItemPurchasedAndExpiresAtMatchFilter {
-	where: 'purchasedAndExpiresAt';
-	equals: number;
-	order?: 'asc' | 'desc';
+  where: "purchasedAndExpiresAt";
+  equals: number;
+  order?: "asc" | "desc";
 }
 
 export interface ItemPurchasedAndExpiresAtRangeFilter {
-	where: 'purchasedAndExpiresAt';
-	gte?: number;
-	gt?: number;
-	lte?: number;
-	lt?: number;
-	order?: 'asc' | 'desc';
+  where: "purchasedAndExpiresAt";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
 }
 
 export type ItemFilter =
-	| ItemCategoryIdMatchFilter
-	| ItemCategoryIdRangeFilter
-	| ItemCategoryIdStartsWithFilter
-	| ItemFoodMatchFilter
-	| ItemFoodRangeFilter
-	| ItemFoodStartsWithFilter
-	| ItemPurchasedFoodListIdCompoundFilter
-	| ItemPurchasedListIdCompoundFilter
-	| ItemPurchasedMatchFilter
-	| ItemPurchasedRangeFilter
-	| ItemPurchasedStartsWithFilter
-	| ItemListIdMatchFilter
-	| ItemListIdRangeFilter
-	| ItemListIdStartsWithFilter
-	| ItemPurchasedAndExpiresAtMatchFilter
-	| ItemPurchasedAndExpiresAtRangeFilter;
+  | ItemCategoryIdMatchFilter
+  | ItemCategoryIdRangeFilter
+  | ItemCategoryIdStartsWithFilter
+  | ItemFoodMatchFilter
+  | ItemFoodRangeFilter
+  | ItemFoodStartsWithFilter
+  | ItemPurchasedFoodListIdCompoundFilter
+  | ItemPurchasedListIdCompoundFilter
+  | ItemPurchasedMatchFilter
+  | ItemPurchasedRangeFilter
+  | ItemPurchasedStartsWithFilter
+  | ItemListIdMatchFilter
+  | ItemListIdRangeFilter
+  | ItemListIdStartsWithFilter
+  | ItemPurchasedAndExpiresAtMatchFilter
+  | ItemPurchasedAndExpiresAtRangeFilter;
 
 export type ItemDestructured = {
-	id: string;
-	categoryId: string | null;
-	createdAt: number;
-	totalQuantity: number;
-	unit: string;
-	food: string;
-	inputs: ItemInputs;
-	purchasedAt: number | null;
-	expiresAt: number | null;
-	listId: string | null;
-	comment: string | null;
-	textOverride: string | null;
+  id: string;
+  categoryId: string | null;
+  createdAt: number;
+  totalQuantity: number;
+  unit: string;
+  food: string;
+  inputs: ItemInputs;
+  purchasedAt: number | null;
+  expiresAt: number | null;
+  listId: string | null;
+  comment: string | null;
+  textOverride: string | null;
 };
 export type ItemInit = {
-	id?: string;
-	categoryId?: string | null;
-	createdAt?: number;
-	totalQuantity: number;
-	unit: string;
-	food: string;
-	inputs?: ItemInputsInit;
-	purchasedAt?: number | null;
-	expiresAt?: number | null;
-	listId?: string | null;
-	comment?: string | null;
-	textOverride?: string | null;
+  id?: string;
+  categoryId?: string | null;
+  createdAt?: number;
+  totalQuantity: number;
+  unit: string;
+  food: string;
+  inputs?: ItemInputsInit;
+  purchasedAt?: number | null;
+  expiresAt?: number | null;
+  listId?: string | null;
+  comment?: string | null;
+  textOverride?: string | null;
 };
 export type ItemSnapshot = {
-	id: string;
-	categoryId: string | null;
-	createdAt: number;
-	totalQuantity: number;
-	unit: string;
-	food: string;
-	inputs: ItemInputsSnapshot;
-	purchasedAt: number | null;
-	expiresAt: number | null;
-	listId: string | null;
-	comment: string | null;
-	textOverride: string | null;
+  id: string;
+  categoryId: string | null;
+  createdAt: number;
+  totalQuantity: number;
+  unit: string;
+  food: string;
+  inputs: ItemInputsSnapshot;
+  purchasedAt: number | null;
+  expiresAt: number | null;
+  listId: string | null;
+  comment: string | null;
+  textOverride: string | null;
 };
 /** Item sub-object types */
 
@@ -405,32 +405,32 @@ export type ItemInputsInit = Array<ItemInputsItemInit>;
 export type ItemInputsDestructured = Array<ItemInputsItem>;
 export type ItemInputsSnapshot = Array<ItemInputsItemSnapshot>;
 export type ItemInputsItem = ObjectEntity<
-	ItemInputsItemInit,
-	ItemInputsItemDestructured
+  ItemInputsItemInit,
+  ItemInputsItemDestructured
 >;
 export type ItemInputsItemInit = {
-	text: string;
-	url?: string | null;
-	title?: string | null;
-	multiplier?: number | null;
-	recipeId?: string | null;
-	quantity?: number | null;
+  text: string;
+  url?: string | null;
+  title?: string | null;
+  multiplier?: number | null;
+  recipeId?: string | null;
+  quantity?: number | null;
 };
 export type ItemInputsItemDestructured = {
-	text: string;
-	url: string | null;
-	title: string | null;
-	multiplier: number | null;
-	recipeId: string | null;
-	quantity: number | null;
+  text: string;
+  url: string | null;
+  title: string | null;
+  multiplier: number | null;
+  recipeId: string | null;
+  quantity: number | null;
 };
 export type ItemInputsItemSnapshot = {
-	text: string;
-	url: string | null;
-	title: string | null;
-	multiplier: number | null;
-	recipeId: string | null;
-	quantity: number | null;
+  text: string;
+  url: string | null;
+  title: string | null;
+  multiplier: number | null;
+  recipeId: string | null;
+  quantity: number | null;
 };
 export type ItemInputsItemText = string;
 export type ItemInputsItemTextInit = ItemInputsItemText;
@@ -481,100 +481,100 @@ export type ItemTextOverrideDestructured = ItemTextOverride;
 export type Food = ObjectEntity<FoodInit, FoodDestructured>;
 
 export interface FoodCategoryIdMatchFilter {
-	where: 'categoryId';
-	equals: string | null;
-	order?: 'asc' | 'desc';
+  where: "categoryId";
+  equals: string | null;
+  order?: "asc" | "desc";
 }
 
 export interface FoodCategoryIdRangeFilter {
-	where: 'categoryId';
-	gte?: string | null;
-	gt?: string | null;
-	lte?: string | null;
-	lt?: string | null;
-	order?: 'asc' | 'desc';
+  where: "categoryId";
+  gte?: string | null;
+  gt?: string | null;
+  lte?: string | null;
+  lt?: string | null;
+  order?: "asc" | "desc";
 }
 
 export interface FoodCategoryIdStartsWithFilter {
-	where: 'categoryId';
-	startsWith: string;
-	order?: 'asc' | 'desc';
+  where: "categoryId";
+  startsWith: string;
+  order?: "asc" | "desc";
 }
 
 export interface FoodNameLookupMatchFilter {
-	where: 'nameLookup';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "nameLookup";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface FoodNameLookupRangeFilter {
-	where: 'nameLookup';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "nameLookup";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface FoodRepurchaseAfterMatchFilter {
-	where: 'repurchaseAfter';
-	equals: number;
-	order?: 'asc' | 'desc';
+  where: "repurchaseAfter";
+  equals: number;
+  order?: "asc" | "desc";
 }
 
 export interface FoodRepurchaseAfterRangeFilter {
-	where: 'repurchaseAfter';
-	gte?: number;
-	gt?: number;
-	lte?: number;
-	lt?: number;
-	order?: 'asc' | 'desc';
+  where: "repurchaseAfter";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
 }
 
 export type FoodFilter =
-	| FoodCategoryIdMatchFilter
-	| FoodCategoryIdRangeFilter
-	| FoodCategoryIdStartsWithFilter
-	| FoodNameLookupMatchFilter
-	| FoodNameLookupRangeFilter
-	| FoodRepurchaseAfterMatchFilter
-	| FoodRepurchaseAfterRangeFilter;
+  | FoodCategoryIdMatchFilter
+  | FoodCategoryIdRangeFilter
+  | FoodCategoryIdStartsWithFilter
+  | FoodNameLookupMatchFilter
+  | FoodNameLookupRangeFilter
+  | FoodRepurchaseAfterMatchFilter
+  | FoodRepurchaseAfterRangeFilter;
 
 export type FoodDestructured = {
-	canonicalName: string;
-	alternateNames: FoodAlternateNames;
-	categoryId: string | null;
-	expiresAfterDays: number | null;
-	lastPurchasedAt: number | null;
-	purchaseIntervalGuess: number | null;
-	lastAddedAt: number | null;
-	purchaseCount: number;
-	defaultListId: string | null;
-	pluralizeName: boolean;
+  canonicalName: string;
+  alternateNames: FoodAlternateNames;
+  categoryId: string | null;
+  expiresAfterDays: number | null;
+  lastPurchasedAt: number | null;
+  purchaseIntervalGuess: number | null;
+  lastAddedAt: number | null;
+  purchaseCount: number;
+  defaultListId: string | null;
+  pluralizeName: boolean;
 };
 export type FoodInit = {
-	canonicalName: string;
-	alternateNames?: FoodAlternateNamesInit;
-	categoryId?: string | null;
-	expiresAfterDays?: number | null;
-	lastPurchasedAt?: number | null;
-	purchaseIntervalGuess?: number | null;
-	lastAddedAt?: number | null;
-	purchaseCount?: number;
-	defaultListId?: string | null;
-	pluralizeName?: boolean;
+  canonicalName: string;
+  alternateNames?: FoodAlternateNamesInit;
+  categoryId?: string | null;
+  expiresAfterDays?: number | null;
+  lastPurchasedAt?: number | null;
+  purchaseIntervalGuess?: number | null;
+  lastAddedAt?: number | null;
+  purchaseCount?: number;
+  defaultListId?: string | null;
+  pluralizeName?: boolean;
 };
 export type FoodSnapshot = {
-	canonicalName: string;
-	alternateNames: FoodAlternateNamesSnapshot;
-	categoryId: string | null;
-	expiresAfterDays: number | null;
-	lastPurchasedAt: number | null;
-	purchaseIntervalGuess: number | null;
-	lastAddedAt: number | null;
-	purchaseCount: number;
-	defaultListId: string | null;
-	pluralizeName: boolean;
+  canonicalName: string;
+  alternateNames: FoodAlternateNamesSnapshot;
+  categoryId: string | null;
+  expiresAfterDays: number | null;
+  lastPurchasedAt: number | null;
+  purchaseIntervalGuess: number | null;
+  lastAddedAt: number | null;
+  purchaseCount: number;
+  defaultListId: string | null;
+  pluralizeName: boolean;
 };
 /** Food sub-object types */
 
@@ -583,8 +583,8 @@ export type FoodCanonicalNameInit = FoodCanonicalName;
 export type FoodCanonicalNameSnapshot = FoodCanonicalName;
 export type FoodCanonicalNameDestructured = FoodCanonicalName;
 export type FoodAlternateNames = ListEntity<
-	FoodAlternateNamesInit,
-	FoodAlternateNamesDestructured
+  FoodAlternateNamesInit,
+  FoodAlternateNamesDestructured
 >;
 export type FoodAlternateNamesInit = Array<FoodAlternateNamesItemInit>;
 export type FoodAlternateNamesDestructured = Array<FoodAlternateNamesItem>;
@@ -607,8 +607,8 @@ export type FoodLastPurchasedAtSnapshot = FoodLastPurchasedAt;
 export type FoodLastPurchasedAtDestructured = FoodLastPurchasedAt;
 export type FoodPurchaseIntervalGuess = number | null;
 export type FoodPurchaseIntervalGuessInit =
-	| FoodPurchaseIntervalGuess
-	| undefined;
+  | FoodPurchaseIntervalGuess
+  | undefined;
 export type FoodPurchaseIntervalGuessSnapshot = FoodPurchaseIntervalGuess;
 export type FoodPurchaseIntervalGuessDestructured = FoodPurchaseIntervalGuess;
 export type FoodLastAddedAt = number | null;
@@ -631,35 +631,35 @@ export type FoodPluralizeNameDestructured = FoodPluralizeName;
 export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
 
 export interface SuggestionUsageCountMatchFilter {
-	where: 'usageCount';
-	equals: number;
-	order?: 'asc' | 'desc';
+  where: "usageCount";
+  equals: number;
+  order?: "asc" | "desc";
 }
 
 export interface SuggestionUsageCountRangeFilter {
-	where: 'usageCount';
-	gte?: number;
-	gt?: number;
-	lte?: number;
-	lt?: number;
-	order?: 'asc' | 'desc';
+  where: "usageCount";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
 }
 
 export type SuggestionFilter =
-	| SuggestionUsageCountMatchFilter
-	| SuggestionUsageCountRangeFilter;
+  | SuggestionUsageCountMatchFilter
+  | SuggestionUsageCountRangeFilter;
 
 export type SuggestionDestructured = {
-	text: string;
-	usageCount: number;
+  text: string;
+  usageCount: number;
 };
 export type SuggestionInit = {
-	text: string;
-	usageCount?: number;
+  text: string;
+  usageCount?: number;
 };
 export type SuggestionSnapshot = {
-	text: string;
-	usageCount: number;
+  text: string;
+  usageCount: number;
 };
 /** Suggestion sub-object types */
 
@@ -676,19 +676,19 @@ export type List = ObjectEntity<ListInit, ListDestructured>;
 
 export type ListFilter = never;
 export type ListDestructured = {
-	id: string;
-	name: string;
-	color: string;
+  id: string;
+  name: string;
+  color: string;
 };
 export type ListInit = {
-	id?: string;
-	name: string;
-	color: string;
+  id?: string;
+  name: string;
+  color: string;
 };
 export type ListSnapshot = {
-	id: string;
-	name: string;
-	color: string;
+  id: string;
+  name: string;
+  color: string;
 };
 /** List sub-object types */
 
@@ -706,22 +706,22 @@ export type ListColorSnapshot = ListColor;
 export type ListColorDestructured = ListColor;
 
 export type CollaborationInfo = ObjectEntity<
-	CollaborationInfoInit,
-	CollaborationInfoDestructured
+  CollaborationInfoInit,
+  CollaborationInfoDestructured
 >;
 
 export type CollaborationInfoFilter = never;
 export type CollaborationInfoDestructured = {
-	id: string;
-	meetup: CollaborationInfoMeetup | null;
+  id: string;
+  meetup: CollaborationInfoMeetup | null;
 };
 export type CollaborationInfoInit = {
-	id?: string;
-	meetup?: CollaborationInfoMeetupInit | null;
+  id?: string;
+  meetup?: CollaborationInfoMeetupInit | null;
 };
 export type CollaborationInfoSnapshot = {
-	id: string;
-	meetup: CollaborationInfoMeetupSnapshot | null;
+  id: string;
+  meetup: CollaborationInfoMeetupSnapshot | null;
 };
 /** CollaborationInfo sub-object types */
 
@@ -730,209 +730,226 @@ export type CollaborationInfoIdInit = CollaborationInfoId | undefined;
 export type CollaborationInfoIdSnapshot = CollaborationInfoId;
 export type CollaborationInfoIdDestructured = CollaborationInfoId;
 export type CollaborationInfoMeetup = ObjectEntity<
-	CollaborationInfoMeetupInit,
-	CollaborationInfoMeetupDestructured
+  CollaborationInfoMeetupInit,
+  CollaborationInfoMeetupDestructured
 >;
 export type CollaborationInfoMeetupInit = {
-	createdAt?: number;
-	location: string;
+  createdAt?: number;
+  location: string;
 };
 export type CollaborationInfoMeetupDestructured = {
-	createdAt: number;
-	location: string;
+  createdAt: number;
+  location: string;
 };
 export type CollaborationInfoMeetupSnapshot = {
-	createdAt: number;
-	location: string;
+  createdAt: number;
+  location: string;
 };
 export type CollaborationInfoMeetupCreatedAt = number;
 export type CollaborationInfoMeetupCreatedAtInit =
-	| CollaborationInfoMeetupCreatedAt
-	| undefined;
+  | CollaborationInfoMeetupCreatedAt
+  | undefined;
 export type CollaborationInfoMeetupCreatedAtSnapshot =
-	CollaborationInfoMeetupCreatedAt;
+  CollaborationInfoMeetupCreatedAt;
 export type CollaborationInfoMeetupCreatedAtDestructured =
-	CollaborationInfoMeetupCreatedAt;
+  CollaborationInfoMeetupCreatedAt;
 export type CollaborationInfoMeetupLocation = string;
 export type CollaborationInfoMeetupLocationInit =
-	CollaborationInfoMeetupLocation;
+  CollaborationInfoMeetupLocation;
 export type CollaborationInfoMeetupLocationSnapshot =
-	CollaborationInfoMeetupLocation;
+  CollaborationInfoMeetupLocation;
 export type CollaborationInfoMeetupLocationDestructured =
-	CollaborationInfoMeetupLocation;
+  CollaborationInfoMeetupLocation;
 
 export type Recipe = ObjectEntity<RecipeInit, RecipeDestructured>;
 
 export interface RecipeSlugMatchFilter {
-	where: 'slug';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "slug";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeSlugRangeFilter {
-	where: 'slug';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "slug";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeSlugStartsWithFilter {
-	where: 'slug';
-	startsWith: string;
-	order?: 'asc' | 'desc';
+  where: "slug";
+  startsWith: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeUpdatedAtMatchFilter {
-	where: 'updatedAt';
-	equals: number;
-	order?: 'asc' | 'desc';
+  where: "updatedAt";
+  equals: number;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeUpdatedAtRangeFilter {
-	where: 'updatedAt';
-	gte?: number;
-	gt?: number;
-	lte?: number;
-	lt?: number;
-	order?: 'asc' | 'desc';
+  where: "updatedAt";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeTagMatchFilter {
-	where: 'tag';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "tag";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeTagRangeFilter {
-	where: 'tag';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "tag";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeSuggestAfterMatchFilter {
-	where: 'suggestAfter';
-	equals: number;
-	order?: 'asc' | 'desc';
+  where: "suggestAfter";
+  equals: number;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeSuggestAfterRangeFilter {
-	where: 'suggestAfter';
-	gte?: number;
-	gt?: number;
-	lte?: number;
-	lt?: number;
-	order?: 'asc' | 'desc';
+  where: "suggestAfter";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeFoodMatchFilter {
-	where: 'food';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "food";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeFoodRangeFilter {
-	where: 'food';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "food";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeTitleMatchMatchFilter {
-	where: 'titleMatch';
-	equals: string;
-	order?: 'asc' | 'desc';
+  where: "titleMatch";
+  equals: string;
+  order?: "asc" | "desc";
 }
 
 export interface RecipeTitleMatchRangeFilter {
-	where: 'titleMatch';
-	gte?: string;
-	gt?: string;
-	lte?: string;
-	lt?: string;
-	order?: 'asc' | 'desc';
+  where: "titleMatch";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeSessionStartedAtMatchFilter {
+  where: "sessionStartedAt";
+  equals: number;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeSessionStartedAtRangeFilter {
+  where: "sessionStartedAt";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
 }
 
 export type RecipeFilter =
-	| RecipeSlugMatchFilter
-	| RecipeSlugRangeFilter
-	| RecipeSlugStartsWithFilter
-	| RecipeUpdatedAtMatchFilter
-	| RecipeUpdatedAtRangeFilter
-	| RecipeTagMatchFilter
-	| RecipeTagRangeFilter
-	| RecipeSuggestAfterMatchFilter
-	| RecipeSuggestAfterRangeFilter
-	| RecipeFoodMatchFilter
-	| RecipeFoodRangeFilter
-	| RecipeTitleMatchMatchFilter
-	| RecipeTitleMatchRangeFilter;
+  | RecipeSlugMatchFilter
+  | RecipeSlugRangeFilter
+  | RecipeSlugStartsWithFilter
+  | RecipeUpdatedAtMatchFilter
+  | RecipeUpdatedAtRangeFilter
+  | RecipeTagMatchFilter
+  | RecipeTagRangeFilter
+  | RecipeSuggestAfterMatchFilter
+  | RecipeSuggestAfterRangeFilter
+  | RecipeFoodMatchFilter
+  | RecipeFoodRangeFilter
+  | RecipeTitleMatchMatchFilter
+  | RecipeTitleMatchRangeFilter
+  | RecipeSessionStartedAtMatchFilter
+  | RecipeSessionStartedAtRangeFilter;
 
 export type RecipeDestructured = {
-	id: string;
-	slug: string;
-	multiplier: number;
-	title: string;
-	createdAt: number;
-	updatedAt: number;
-	prelude: any;
-	note: string | null;
-	ingredients: RecipeIngredients;
-	instructions: any;
-	url: string | null;
-	session: RecipeSession | null;
-	tags: RecipeTags;
-	mainImage: RecipeMainImage | null;
-	cookCount: number;
-	lastCookedAt: number | null;
-	lastAddedAt: number | null;
-	addIntervalGuess: number | null;
+  id: string;
+  slug: string;
+  multiplier: number;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  prelude: any;
+  note: string | null;
+  ingredients: RecipeIngredients;
+  instructions: any;
+  url: string | null;
+  session: RecipeSession | null;
+  tags: RecipeTags;
+  mainImage: RecipeMainImage | null;
+  cookCount: number;
+  lastCookedAt: number | null;
+  lastAddedAt: number | null;
+  addIntervalGuess: number | null;
 };
 export type RecipeInit = {
-	id?: string;
-	slug?: string;
-	multiplier?: number;
-	title?: string;
-	createdAt?: number;
-	updatedAt?: number;
-	prelude?: any;
-	note?: string | null;
-	ingredients?: RecipeIngredientsInit;
-	instructions?: any;
-	url?: string | null;
-	session?: RecipeSessionInit | null;
-	tags?: RecipeTagsInit;
-	mainImage?: RecipeMainImageInit | null;
-	cookCount?: number;
-	lastCookedAt?: number | null;
-	lastAddedAt?: number | null;
-	addIntervalGuess?: number | null;
+  id?: string;
+  slug?: string;
+  multiplier?: number;
+  title?: string;
+  createdAt?: number;
+  updatedAt?: number;
+  prelude?: any;
+  note?: string | null;
+  ingredients?: RecipeIngredientsInit;
+  instructions?: any;
+  url?: string | null;
+  session?: RecipeSessionInit | null;
+  tags?: RecipeTagsInit;
+  mainImage?: RecipeMainImageInit | null;
+  cookCount?: number;
+  lastCookedAt?: number | null;
+  lastAddedAt?: number | null;
+  addIntervalGuess?: number | null;
 };
 export type RecipeSnapshot = {
-	id: string;
-	slug: string;
-	multiplier: number;
-	title: string;
-	createdAt: number;
-	updatedAt: number;
-	prelude: any;
-	note: string | null;
-	ingredients: RecipeIngredientsSnapshot;
-	instructions: any;
-	url: string | null;
-	session: RecipeSessionSnapshot | null;
-	tags: RecipeTagsSnapshot;
-	mainImage: RecipeMainImageSnapshot | null;
-	cookCount: number;
-	lastCookedAt: number | null;
-	lastAddedAt: number | null;
-	addIntervalGuess: number | null;
+  id: string;
+  slug: string;
+  multiplier: number;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  prelude: any;
+  note: string | null;
+  ingredients: RecipeIngredientsSnapshot;
+  instructions: any;
+  url: string | null;
+  session: RecipeSessionSnapshot | null;
+  tags: RecipeTagsSnapshot;
+  mainImage: RecipeMainImageSnapshot | null;
+  cookCount: number;
+  lastCookedAt: number | null;
+  lastAddedAt: number | null;
+  addIntervalGuess: number | null;
 };
 /** Recipe sub-object types */
 
@@ -969,45 +986,45 @@ export type RecipeNoteInit = RecipeNote | undefined;
 export type RecipeNoteSnapshot = RecipeNote;
 export type RecipeNoteDestructured = RecipeNote;
 export type RecipeIngredients = ListEntity<
-	RecipeIngredientsInit,
-	RecipeIngredientsDestructured
+  RecipeIngredientsInit,
+  RecipeIngredientsDestructured
 >;
 export type RecipeIngredientsInit = Array<RecipeIngredientsItemInit>;
 export type RecipeIngredientsDestructured = Array<RecipeIngredientsItem>;
 export type RecipeIngredientsSnapshot = Array<RecipeIngredientsItemSnapshot>;
 export type RecipeIngredientsItem = ObjectEntity<
-	RecipeIngredientsItemInit,
-	RecipeIngredientsItemDestructured
+  RecipeIngredientsItemInit,
+  RecipeIngredientsItemDestructured
 >;
 export type RecipeIngredientsItemInit = {
-	id?: string;
-	text: string;
-	unit?: string | null;
-	food?: string | null;
-	quantity?: number;
-	comments?: RecipeIngredientsItemCommentsInit;
-	note?: string | null;
-	isSectionHeader?: boolean;
+  id?: string;
+  text: string;
+  unit?: string | null;
+  food?: string | null;
+  quantity?: number;
+  comments?: RecipeIngredientsItemCommentsInit;
+  note?: string | null;
+  isSectionHeader?: boolean;
 };
 export type RecipeIngredientsItemDestructured = {
-	id: string;
-	text: string;
-	unit: string | null;
-	food: string | null;
-	quantity: number;
-	comments: RecipeIngredientsItemComments;
-	note: string | null;
-	isSectionHeader: boolean;
+  id: string;
+  text: string;
+  unit: string | null;
+  food: string | null;
+  quantity: number;
+  comments: RecipeIngredientsItemComments;
+  note: string | null;
+  isSectionHeader: boolean;
 };
 export type RecipeIngredientsItemSnapshot = {
-	id: string;
-	text: string;
-	unit: string | null;
-	food: string | null;
-	quantity: number;
-	comments: RecipeIngredientsItemCommentsSnapshot;
-	note: string | null;
-	isSectionHeader: boolean;
+  id: string;
+  text: string;
+  unit: string | null;
+  food: string | null;
+  quantity: number;
+  comments: RecipeIngredientsItemCommentsSnapshot;
+  note: string | null;
+  isSectionHeader: boolean;
 };
 export type RecipeIngredientsItemId = string;
 export type RecipeIngredientsItemIdInit = RecipeIngredientsItemId | undefined;
@@ -1019,55 +1036,55 @@ export type RecipeIngredientsItemTextSnapshot = RecipeIngredientsItemText;
 export type RecipeIngredientsItemTextDestructured = RecipeIngredientsItemText;
 export type RecipeIngredientsItemUnit = string | null;
 export type RecipeIngredientsItemUnitInit =
-	| RecipeIngredientsItemUnit
-	| undefined;
+  | RecipeIngredientsItemUnit
+  | undefined;
 export type RecipeIngredientsItemUnitSnapshot = RecipeIngredientsItemUnit;
 export type RecipeIngredientsItemUnitDestructured = RecipeIngredientsItemUnit;
 export type RecipeIngredientsItemFood = string | null;
 export type RecipeIngredientsItemFoodInit =
-	| RecipeIngredientsItemFood
-	| undefined;
+  | RecipeIngredientsItemFood
+  | undefined;
 export type RecipeIngredientsItemFoodSnapshot = RecipeIngredientsItemFood;
 export type RecipeIngredientsItemFoodDestructured = RecipeIngredientsItemFood;
 export type RecipeIngredientsItemQuantity = number;
 export type RecipeIngredientsItemQuantityInit =
-	| RecipeIngredientsItemQuantity
-	| undefined;
+  | RecipeIngredientsItemQuantity
+  | undefined;
 export type RecipeIngredientsItemQuantitySnapshot =
-	RecipeIngredientsItemQuantity;
+  RecipeIngredientsItemQuantity;
 export type RecipeIngredientsItemQuantityDestructured =
-	RecipeIngredientsItemQuantity;
+  RecipeIngredientsItemQuantity;
 export type RecipeIngredientsItemComments = ListEntity<
-	RecipeIngredientsItemCommentsInit,
-	RecipeIngredientsItemCommentsDestructured
+  RecipeIngredientsItemCommentsInit,
+  RecipeIngredientsItemCommentsDestructured
 >;
 export type RecipeIngredientsItemCommentsInit =
-	Array<RecipeIngredientsItemCommentsItemInit>;
+  Array<RecipeIngredientsItemCommentsItemInit>;
 export type RecipeIngredientsItemCommentsDestructured =
-	Array<RecipeIngredientsItemCommentsItem>;
+  Array<RecipeIngredientsItemCommentsItem>;
 export type RecipeIngredientsItemCommentsSnapshot =
-	Array<RecipeIngredientsItemCommentsItemSnapshot>;
+  Array<RecipeIngredientsItemCommentsItemSnapshot>;
 export type RecipeIngredientsItemCommentsItem = string;
 export type RecipeIngredientsItemCommentsItemInit =
-	RecipeIngredientsItemCommentsItem;
+  RecipeIngredientsItemCommentsItem;
 export type RecipeIngredientsItemCommentsItemSnapshot =
-	RecipeIngredientsItemCommentsItem;
+  RecipeIngredientsItemCommentsItem;
 export type RecipeIngredientsItemCommentsItemDestructured =
-	RecipeIngredientsItemCommentsItem;
+  RecipeIngredientsItemCommentsItem;
 export type RecipeIngredientsItemNote = string | null;
 export type RecipeIngredientsItemNoteInit =
-	| RecipeIngredientsItemNote
-	| undefined;
+  | RecipeIngredientsItemNote
+  | undefined;
 export type RecipeIngredientsItemNoteSnapshot = RecipeIngredientsItemNote;
 export type RecipeIngredientsItemNoteDestructured = RecipeIngredientsItemNote;
 export type RecipeIngredientsItemIsSectionHeader = boolean;
 export type RecipeIngredientsItemIsSectionHeaderInit =
-	| RecipeIngredientsItemIsSectionHeader
-	| undefined;
+  | RecipeIngredientsItemIsSectionHeader
+  | undefined;
 export type RecipeIngredientsItemIsSectionHeaderSnapshot =
-	RecipeIngredientsItemIsSectionHeader;
+  RecipeIngredientsItemIsSectionHeader;
 export type RecipeIngredientsItemIsSectionHeaderDestructured =
-	RecipeIngredientsItemIsSectionHeader;
+  RecipeIngredientsItemIsSectionHeader;
 
 export type RecipeInstructions = any;
 export type RecipeInstructionsInit = RecipeInstructions | undefined;
@@ -1078,113 +1095,113 @@ export type RecipeUrlInit = RecipeUrl | undefined;
 export type RecipeUrlSnapshot = RecipeUrl;
 export type RecipeUrlDestructured = RecipeUrl;
 export type RecipeSession = ObjectEntity<
-	RecipeSessionInit,
-	RecipeSessionDestructured
+  RecipeSessionInit,
+  RecipeSessionDestructured
 >;
 export type RecipeSessionInit = {
-	startedAt?: number;
-	completedInstructions?: RecipeSessionCompletedInstructionsInit;
-	completedIngredients?: RecipeSessionCompletedIngredientsInit;
-	instructionAssignments?: RecipeSessionInstructionAssignmentsInit;
-	ingredientAssignments?: RecipeSessionIngredientAssignmentsInit;
+  startedAt?: number;
+  completedInstructions?: RecipeSessionCompletedInstructionsInit;
+  completedIngredients?: RecipeSessionCompletedIngredientsInit;
+  instructionAssignments?: RecipeSessionInstructionAssignmentsInit;
+  ingredientAssignments?: RecipeSessionIngredientAssignmentsInit;
 };
 export type RecipeSessionDestructured = {
-	startedAt: number;
-	completedInstructions: RecipeSessionCompletedInstructions;
-	completedIngredients: RecipeSessionCompletedIngredients;
-	instructionAssignments: RecipeSessionInstructionAssignments;
-	ingredientAssignments: RecipeSessionIngredientAssignments;
+  startedAt: number;
+  completedInstructions: RecipeSessionCompletedInstructions;
+  completedIngredients: RecipeSessionCompletedIngredients;
+  instructionAssignments: RecipeSessionInstructionAssignments;
+  ingredientAssignments: RecipeSessionIngredientAssignments;
 };
 export type RecipeSessionSnapshot = {
-	startedAt: number;
-	completedInstructions: RecipeSessionCompletedInstructionsSnapshot;
-	completedIngredients: RecipeSessionCompletedIngredientsSnapshot;
-	instructionAssignments: RecipeSessionInstructionAssignmentsSnapshot;
-	ingredientAssignments: RecipeSessionIngredientAssignmentsSnapshot;
+  startedAt: number;
+  completedInstructions: RecipeSessionCompletedInstructionsSnapshot;
+  completedIngredients: RecipeSessionCompletedIngredientsSnapshot;
+  instructionAssignments: RecipeSessionInstructionAssignmentsSnapshot;
+  ingredientAssignments: RecipeSessionIngredientAssignmentsSnapshot;
 };
 export type RecipeSessionStartedAt = number;
 export type RecipeSessionStartedAtInit = RecipeSessionStartedAt | undefined;
 export type RecipeSessionStartedAtSnapshot = RecipeSessionStartedAt;
 export type RecipeSessionStartedAtDestructured = RecipeSessionStartedAt;
 export type RecipeSessionCompletedInstructions = ListEntity<
-	RecipeSessionCompletedInstructionsInit,
-	RecipeSessionCompletedInstructionsDestructured
+  RecipeSessionCompletedInstructionsInit,
+  RecipeSessionCompletedInstructionsDestructured
 >;
 export type RecipeSessionCompletedInstructionsInit =
-	Array<RecipeSessionCompletedInstructionsItemInit>;
+  Array<RecipeSessionCompletedInstructionsItemInit>;
 export type RecipeSessionCompletedInstructionsDestructured =
-	Array<RecipeSessionCompletedInstructionsItem>;
+  Array<RecipeSessionCompletedInstructionsItem>;
 export type RecipeSessionCompletedInstructionsSnapshot =
-	Array<RecipeSessionCompletedInstructionsItemSnapshot>;
+  Array<RecipeSessionCompletedInstructionsItemSnapshot>;
 export type RecipeSessionCompletedInstructionsItem = string;
 export type RecipeSessionCompletedInstructionsItemInit =
-	RecipeSessionCompletedInstructionsItem;
+  RecipeSessionCompletedInstructionsItem;
 export type RecipeSessionCompletedInstructionsItemSnapshot =
-	RecipeSessionCompletedInstructionsItem;
+  RecipeSessionCompletedInstructionsItem;
 export type RecipeSessionCompletedInstructionsItemDestructured =
-	RecipeSessionCompletedInstructionsItem;
+  RecipeSessionCompletedInstructionsItem;
 export type RecipeSessionCompletedIngredients = ListEntity<
-	RecipeSessionCompletedIngredientsInit,
-	RecipeSessionCompletedIngredientsDestructured
+  RecipeSessionCompletedIngredientsInit,
+  RecipeSessionCompletedIngredientsDestructured
 >;
 export type RecipeSessionCompletedIngredientsInit =
-	Array<RecipeSessionCompletedIngredientsItemInit>;
+  Array<RecipeSessionCompletedIngredientsItemInit>;
 export type RecipeSessionCompletedIngredientsDestructured =
-	Array<RecipeSessionCompletedIngredientsItem>;
+  Array<RecipeSessionCompletedIngredientsItem>;
 export type RecipeSessionCompletedIngredientsSnapshot =
-	Array<RecipeSessionCompletedIngredientsItemSnapshot>;
+  Array<RecipeSessionCompletedIngredientsItemSnapshot>;
 export type RecipeSessionCompletedIngredientsItem = string;
 export type RecipeSessionCompletedIngredientsItemInit =
-	RecipeSessionCompletedIngredientsItem;
+  RecipeSessionCompletedIngredientsItem;
 export type RecipeSessionCompletedIngredientsItemSnapshot =
-	RecipeSessionCompletedIngredientsItem;
+  RecipeSessionCompletedIngredientsItem;
 export type RecipeSessionCompletedIngredientsItemDestructured =
-	RecipeSessionCompletedIngredientsItem;
+  RecipeSessionCompletedIngredientsItem;
 export type RecipeSessionInstructionAssignments = ObjectEntity<
-	RecipeSessionInstructionAssignmentsInit,
-	RecipeSessionInstructionAssignmentsDestructured
+  RecipeSessionInstructionAssignmentsInit,
+  RecipeSessionInstructionAssignmentsDestructured
 >;
 export type RecipeSessionInstructionAssignmentsInit = Record<
-	string,
-	RecipeSessionInstructionAssignmentsValueInit
+  string,
+  RecipeSessionInstructionAssignmentsValueInit
 >;
 export type RecipeSessionInstructionAssignmentsDestructured = {
-	[key: string]: RecipeSessionInstructionAssignmentsValue | undefined;
+  [key: string]: RecipeSessionInstructionAssignmentsValue | undefined;
 };
 export type RecipeSessionInstructionAssignmentsSnapshot = Record<
-	string,
-	RecipeSessionInstructionAssignmentsValueSnapshot
+  string,
+  RecipeSessionInstructionAssignmentsValueSnapshot
 >;
 export type RecipeSessionInstructionAssignmentsValue = string;
 export type RecipeSessionInstructionAssignmentsValueInit =
-	RecipeSessionInstructionAssignmentsValue;
+  RecipeSessionInstructionAssignmentsValue;
 export type RecipeSessionInstructionAssignmentsValueSnapshot =
-	RecipeSessionInstructionAssignmentsValue;
+  RecipeSessionInstructionAssignmentsValue;
 export type RecipeSessionInstructionAssignmentsValueDestructured =
-	RecipeSessionInstructionAssignmentsValue;
+  RecipeSessionInstructionAssignmentsValue;
 
 export type RecipeSessionIngredientAssignments = ObjectEntity<
-	RecipeSessionIngredientAssignmentsInit,
-	RecipeSessionIngredientAssignmentsDestructured
+  RecipeSessionIngredientAssignmentsInit,
+  RecipeSessionIngredientAssignmentsDestructured
 >;
 export type RecipeSessionIngredientAssignmentsInit = Record<
-	string,
-	RecipeSessionIngredientAssignmentsValueInit
+  string,
+  RecipeSessionIngredientAssignmentsValueInit
 >;
 export type RecipeSessionIngredientAssignmentsDestructured = {
-	[key: string]: RecipeSessionIngredientAssignmentsValue | undefined;
+  [key: string]: RecipeSessionIngredientAssignmentsValue | undefined;
 };
 export type RecipeSessionIngredientAssignmentsSnapshot = Record<
-	string,
-	RecipeSessionIngredientAssignmentsValueSnapshot
+  string,
+  RecipeSessionIngredientAssignmentsValueSnapshot
 >;
 export type RecipeSessionIngredientAssignmentsValue = string;
 export type RecipeSessionIngredientAssignmentsValueInit =
-	RecipeSessionIngredientAssignmentsValue;
+  RecipeSessionIngredientAssignmentsValue;
 export type RecipeSessionIngredientAssignmentsValueSnapshot =
-	RecipeSessionIngredientAssignmentsValue;
+  RecipeSessionIngredientAssignmentsValue;
 export type RecipeSessionIngredientAssignmentsValueDestructured =
-	RecipeSessionIngredientAssignmentsValue;
+  RecipeSessionIngredientAssignmentsValue;
 
 export type RecipeTags = ListEntity<RecipeTagsInit, RecipeTagsDestructured>;
 export type RecipeTagsInit = Array<RecipeTagsItemInit>;
@@ -1216,25 +1233,25 @@ export type RecipeAddIntervalGuessSnapshot = RecipeAddIntervalGuess;
 export type RecipeAddIntervalGuessDestructured = RecipeAddIntervalGuess;
 
 export type RecipeTagMetadata = ObjectEntity<
-	RecipeTagMetadataInit,
-	RecipeTagMetadataDestructured
+  RecipeTagMetadataInit,
+  RecipeTagMetadataDestructured
 >;
 
 export type RecipeTagMetadataFilter = never;
 export type RecipeTagMetadataDestructured = {
-	name: string;
-	color: string | null;
-	icon: string | null;
+  name: string;
+  color: string | null;
+  icon: string | null;
 };
 export type RecipeTagMetadataInit = {
-	name: string;
-	color?: string | null;
-	icon?: string | null;
+  name: string;
+  color?: string | null;
+  icon?: string | null;
 };
 export type RecipeTagMetadataSnapshot = {
-	name: string;
-	color: string | null;
-	icon: string | null;
+  name: string;
+  color: string | null;
+  icon: string | null;
 };
 /** RecipeTagMetadata sub-object types */
 

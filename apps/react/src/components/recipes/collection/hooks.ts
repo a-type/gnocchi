@@ -119,10 +119,12 @@ export function useFilteredRecipes() {
 			  }
 			: {
 					key: 'recipes',
+					index: {
+						where: 'updatedAt',
+						order: 'desc',
+					},
 			  },
 	);
-
-	console.log(rawRecipes);
 
 	// filter for the un-indexed filters
 	const recipes = rawRecipes.filter((recipe) => {

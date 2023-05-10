@@ -140,15 +140,10 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						width="full"
 					>
 						<LinkButton
-							to={makeRecipeLink(recipe, '/cook/prep')}
-							className={classes.cookButton}
-						>
-							Start prep
-						</LinkButton>
-						<LinkButton
 							color="primary"
 							to={makeRecipeLink(recipe, '/cook/steps')}
 							className={classes.cookButton}
+							onClick={() => recipe.set('session', {})}
 						>
 							Start cooking
 						</LinkButton>

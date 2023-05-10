@@ -15,7 +15,11 @@ export interface RecipeInstructionsFieldProps {
 export function RecipeInstructionsField({
 	recipe,
 }: RecipeInstructionsFieldProps) {
-	const editor = useSyncedInstructionsEditor(recipe, false, isMobileOs());
+	const editor = useSyncedInstructionsEditor({
+		recipe,
+		readonly: false,
+		useBasicEditor: isMobileOs(),
+	});
 
 	return (
 		<Box gap={2} flexDirection="column">

@@ -5,6 +5,7 @@ import {
 	UserProfiles,
 	FileStorage,
 	FileInfo,
+	LocalFileStorage,
 } from '@verdant-web/server';
 import { Server as HttpServer } from 'http';
 import { Readable } from 'stream';
@@ -15,6 +16,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import { handleLofiChanges } from 'src/lofi/handleChanges.js';
+import { DEPLOYED_HOST } from 'src/config/deployedContext.js';
 
 const storageDbFile = process.env.STORAGE_DATABASE_URL;
 assert(!!storageDbFile, 'STORAGE_DATABASE_URL is not set');
@@ -119,7 +121,13 @@ export function attachSocketServer(httpServer: HttpServer) {
 		profiles: new Profiles(),
 		replicaTruancyMinutes: 14 * 60 * 24,
 		//log: console.debug,
-		fileStorage: new S3FileBackend(),
+		fileStorage:
+			process.env.NODE_ENV === 'production'
+				? new S3FileBackend()
+				: new LocalFileStorage({
+						rootDirectory: 'userFiles',
+						host: DEPLOYED_HOST,
+				  }),
 		fileConfig: {
 			deleteExpirationDays: 3,
 		},

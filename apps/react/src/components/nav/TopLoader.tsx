@@ -18,7 +18,6 @@ export function TopLoader({ className }: TopLoaderProps) {
 	const run = useCallback(() => {
 		let timeout: NodeJS.Timeout | undefined;
 		function step(previous: number) {
-			console.log(previous);
 			spring.start({
 				width: `${previous}%`,
 			});

@@ -17,7 +17,8 @@ export const IngredientCheckoffView = forwardRef<
 	IngredientCheckoffViewProps
 >(function IngredientCheckoffView({ recipe, className }, ref) {
 	const session = useCurrentRecipeSession(recipe);
-	const { completedIngredients } = hooks.useWatch(session);
+	hooks.useWatch(session);
+	const completedIngredients = session?.get('completedIngredients') ?? null;
 	hooks.useWatch(completedIngredients);
 	const { ingredients, multiplier } = hooks.useWatch(recipe);
 	hooks.useWatch(ingredients);
@@ -29,12 +30,18 @@ export const IngredientCheckoffView = forwardRef<
 					key={ingredient.get('id')}
 					ingredient={ingredient}
 					multiplier={multiplier}
-					checked={completedIngredients.has(ingredient.get('id'))}
+					checked={completedIngredients?.has(ingredient.get('id')) ?? false}
 					onCheckedChange={(checked) => {
-						if (checked) {
-							completedIngredients.add(ingredient.get('id'));
+						if (!completedIngredients) {
+							recipe.set('session', {
+								completedIngredients: [ingredient.get('id')],
+							});
 						} else {
-							completedIngredients.removeAll(ingredient.get('id'));
+							if (checked) {
+								completedIngredients.add(ingredient.get('id'));
+							} else {
+								completedIngredients.removeAll(ingredient.get('id'));
+							}
 						}
 					}}
 				/>

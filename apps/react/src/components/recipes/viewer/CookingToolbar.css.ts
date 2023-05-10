@@ -7,20 +7,27 @@ export const root = style({
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'center',
-	gap: vars.space[3],
 	position: 'relative',
-	bottom: calc(vars.space[3]).multiply(-1).toString(),
+	bottom: calc(vars.space[1]).multiply(-1).toString(),
+});
+
+export const actions = style({
+	display: 'flex',
+	flexDirection: 'row',
+	gap: vars.space[2],
+	marginBottom: vars.space[3],
 });
 
 export const container = style({
-	backgroundColor: vars.colors.light,
+	backgroundColor: vars.colors.white,
 	width: '100%',
 	position: 'relative',
 	overflow: 'hidden',
+	borderRadius: vars.radii.lg,
 });
 
 export const containerOpen = style({
-	borderTop: `1px solid ${vars.colors.black}`,
+	border: `1px solid ${vars.colors.black}`,
 });
 
 export const containerScroll = style({
@@ -52,4 +59,14 @@ export const list = style({
 
 export const multiplier = style({
 	marginBottom: vars.space[2],
+});
+
+export const nowPlaying = style({
+	display: 'flex',
+	flexDirection: 'column',
+	width: '100%',
+	backgroundColor: vars.colors.white,
+	borderRadius: vars.radii.lg,
+	boxShadow: vars.shadows.lg,
+	border: `1px solid ${vars.colors.gray70}`,
 });

@@ -14,16 +14,9 @@ export interface CookingActionBarProps {
 }
 
 export function CookingActionBar({ recipe }: CookingActionBarProps) {
-	const resetAll = () => {
-		recipe.set('session', {});
-	};
-
 	return (
 		<ActionBar>
 			<CookingPeople recipeId={recipe.get('id')} />
-			<ActionButton onClick={resetAll} icon={<ResetIcon />}>
-				Reset Progress
-			</ActionButton>
 		</ActionBar>
 	);
 }

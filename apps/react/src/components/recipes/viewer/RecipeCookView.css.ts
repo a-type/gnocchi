@@ -13,10 +13,26 @@ const fadeUp = keyframes({
 });
 
 export const container = style({
-	animation: `${fadeUp} 0.3s ease-out`,
 	gap: vars.space[4],
 	display: 'flex',
 	flexDirection: 'column',
 	alignItems: 'flex-start',
 	marginBottom: 300,
+});
+
+export const fixedArea = style({
+	display: 'flex',
+	flexDirection: 'row',
+	alignItems: 'center',
+	justifyContent: 'space-between',
+	gap: vars.space[2],
+	width: '100%',
+});
+
+export const content = style({
+	animation: `${fadeUp} 0.3s ease-out`,
+});
+
+export const tabsRoot = style({
+	width: '100%',
 });

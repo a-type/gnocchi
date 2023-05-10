@@ -14,9 +14,9 @@
 		"@aglio/prisma": "workspace:*",
 		"@aglio/scanning": "workspace:*",
 		"@aglio/tools": "workspace:*",
-		"@verdant-web/common": "^1.11.0",
-		"@verdant-web/server": "^1.7.8",
 		"@trpc/server": "^10.10.0",
+		"@verdant-web/common": "^1.11.1",
+		"@verdant-web/server": "^1.7.9",
 		"cuid": "^3.0.0",
 		"superjson": "^1.12.0",
 		"zod": "^3.19.0"

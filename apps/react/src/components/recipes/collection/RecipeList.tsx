@@ -1,4 +1,4 @@
-import { Link } from '@/components/nav/Link.jsx';
+import { Link, LinkButton } from '@/components/nav/Link.jsx';
 import { EmptyState } from '@/components/recipes/collection/EmptyState.jsx';
 import { RecipeCollectionMenu } from '@/components/recipes/collection/RecipeCollectionMenu.jsx';
 import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
@@ -21,6 +21,7 @@ import { Spinner } from '@aglio/ui/src/components/spinner';
 import { sprinkles } from '@aglio/ui/styles';
 import {
 	DotsVerticalIcon,
+	PlayIcon,
 	PlusCircledIcon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
@@ -119,13 +120,21 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 			<RecipeMainImageViewer recipe={recipe} className={classes.itemImage} />
 			<div className={classes.itemActions}>
 				<div className={classes.itemActionsStart}>
+					<LinkButton
+						size="icon"
+						color="primary"
+						to={makeRecipeLink(recipe, '/cook/steps')}
+					>
+						<PlayIcon style={{ position: 'relative', left: 1 }} />
+					</LinkButton>
 					<AddToListButton
 						recipe={recipe}
 						color="ghost"
-						size="icon"
+						size="small"
 						className={classes.itemActionButton}
 					>
 						<PlusCircledIcon className={classes.actionIcon} />
+						<span>Add to List</span>
 					</AddToListButton>
 				</div>
 				<div className={classes.itemActionsEnd}>

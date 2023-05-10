@@ -1,7 +1,7 @@
-import { RecipePrepView } from '@/components/recipes/viewer/RecipePrepView.jsx';
+import { RecipeCookView } from '@/components/recipes/viewer/RecipeCookView.jsx';
 
 export function RecipeCookPrepPage() {
-	return <RecipePrepView />;
+	return <RecipeCookView tab="prep" />;
 }
 
 export default RecipeCookPrepPage;

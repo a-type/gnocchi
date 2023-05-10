@@ -27,11 +27,14 @@ const THIRTY_MINUTES = 1000 * 60 * 30;
 // for local development (defined by env var), use five minutes
 
 const SESSION_TIMEOUT = import.meta.env.DEV ? THIRTY_MINUTES : TWO_DAYS;
-export function useCurrentRecipeSession(recipe: Recipe) {
+export function useCurrentRecipeSession(recipe: Recipe, enforce = false) {
 	const live = hooks.useWatch(recipe);
 	const client = hooks.useClient();
 	let session = live.session;
-	if (!session || session.get('startedAt') < Date.now() - SESSION_TIMEOUT) {
+	if (
+		(enforce && !session) ||
+		session.get('startedAt') < Date.now() - SESSION_TIMEOUT
+	) {
 		client
 			.batch({ undoable: false })
 			.run(() => {
@@ -48,15 +51,18 @@ export function useCurrentRecipeSession(recipe: Recipe) {
 			})
 			.flush();
 	}
-	return session!;
+	return session;
 }
 
-export function useSyncedInstructionsEditor(
-	recipe: Recipe,
+export function useSyncedInstructionsEditor({
+	recipe,
 	readonly = false,
 	useBasicEditor = false,
-) {
-	useCurrentRecipeSession(recipe);
+}: {
+	recipe: Recipe;
+	readonly?: boolean;
+	useBasicEditor?: boolean;
+}) {
 	return useSyncedEditor(
 		recipe,
 		'instructions',
@@ -110,7 +116,7 @@ function useSyncedEditor(
 				update(editor);
 			},
 		},
-		[field],
+		[field, update],
 	);
 
 	useEffect(() => {

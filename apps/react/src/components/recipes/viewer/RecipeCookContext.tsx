@@ -24,10 +24,12 @@ export function RecipeCookProvider({
 	const client = hooks.useClient();
 	useEffect(() => {
 		client.sync.presence.update({ viewingRecipeId: recipeId });
+	}, [recipeId, client]);
+	useEffect(() => {
 		return () => {
 			client.sync.presence.update({ viewingRecipeId: null });
 		};
-	}, [recipeId, client]);
+	}, [client]);
 
 	if (!recipe) return <RecipeNotFound />;
 

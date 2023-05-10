@@ -13,8 +13,7 @@ export function RecipeInstructionsViewer({
 	recipe,
 	className,
 }: RecipeInstructionsViewerProps) {
-	const editor = useSyncedInstructionsEditor(recipe, true);
-
+	const editor = useSyncedInstructionsEditor({ recipe, readonly: true });
 	return (
 		<RichEditor
 			className={classNames(classes.root, className)}

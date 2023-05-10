@@ -66,6 +66,17 @@ export function InstructionStepNodeView({
 
 	const assignPersonId = useCallback(
 		(personId: string | null) => {
+			if (!maybeAssignments) {
+				if (maybeRecipe && personId) {
+					maybeRecipe.set('session', {
+						instructionAssignments: {
+							[id]: personId,
+						},
+					});
+				}
+				return;
+			}
+
 			if (personId) {
 				maybeAssignments?.set(id, personId);
 			} else {
@@ -137,8 +148,16 @@ export function InstructionStepNodeView({
 							tabIndex={-1}
 							contentEditable={false}
 							onCheckedChange={(checked) => {
-								if (!maybeCompletedSteps) return;
 								if (!id) {
+									return;
+								}
+
+								if (!maybeCompletedSteps) {
+									if (maybeRecipe) {
+										maybeRecipe.set('session', {
+											completedInstructions: [id],
+										});
+									}
 									return;
 								}
 

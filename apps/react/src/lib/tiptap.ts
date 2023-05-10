@@ -1,9 +1,22 @@
 import cuid from 'cuid';
 
+export type RecipeInstructionsDocument = {
+	type: 'doc';
+	content: {
+		type: 'header' | 'step';
+		attrs: {
+			id: string;
+		};
+		content: { type: 'text'; text: string }[];
+	}[];
+};
+
 /**
  * Converts recipe instruction step lines into a ProseMirror document
  */
-export function instructionsToDoc(lines: string[]) {
+export function instructionsToDoc(
+	lines: string[],
+): undefined | RecipeInstructionsDocument {
 	return lines?.length
 		? {
 				type: 'doc',
