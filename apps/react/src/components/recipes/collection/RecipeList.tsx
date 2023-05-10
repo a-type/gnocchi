@@ -32,6 +32,7 @@ import * as classes from './RecipeList.css.js';
 import { RecipeListActions } from './RecipeListActions.jsx';
 import { useFilteredRecipes } from './hooks.js';
 import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
+import { RecipeStartCookingButton } from '@/components/recipes/viewer/RecipeStartCookingButton.jsx';
 
 export interface RecipeListProps {}
 
@@ -120,13 +121,9 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 			<RecipeMainImageViewer recipe={recipe} className={classes.itemImage} />
 			<div className={classes.itemActions}>
 				<div className={classes.itemActionsStart}>
-					<LinkButton
-						size="icon"
-						color="primary"
-						to={makeRecipeLink(recipe, '/cook/steps')}
-					>
+					<RecipeStartCookingButton recipe={recipe} size="icon" color="primary">
 						<PlayIcon style={{ position: 'relative', left: 1 }} />
-					</LinkButton>
+					</RecipeStartCookingButton>
 					<AddToListButton
 						recipe={recipe}
 						color="ghost"

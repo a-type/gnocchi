@@ -34,6 +34,7 @@ import { PageNowPlaying } from '@aglio/ui/components/layouts';
 import { LinkButton } from '@/components/nav/Link.jsx';
 import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
+import { RecipeStartCookingButton } from '@/components/recipes/viewer/RecipeStartCookingButton.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -145,16 +146,12 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						justify="flex-end"
 						width="full"
 					>
-						<LinkButton
-							color="primary"
-							to={makeRecipeLink(recipe, '/cook/steps')}
+						<RecipeStartCookingButton
+							recipe={recipe}
 							className={classes.cookButton}
-							onClick={() => {
-								startSession();
-							}}
 						>
 							Start cooking
-						</LinkButton>
+						</RecipeStartCookingButton>
 					</Box>
 				</PageNowPlaying>
 			</Box>
