@@ -1,7 +1,11 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { format } from 'date-fns/esm';
-import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
+import {
+	useRecipeFromSlugUrl,
+	useStartNewSessionIfNeeded,
+	useWatchChanges,
+} from '../hooks.js';
 import {
 	ImageContainer,
 	TitleAndImageLayout,
@@ -48,6 +52,8 @@ export function RecipeOverview({ slug }: RecipeOverviewProps) {
 function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	const { title, createdAt, url, mainImage } = hooks.useWatch(recipe);
 	useWatchChanges(recipe);
+
+	const startSession = useStartNewSessionIfNeeded(recipe);
 
 	return (
 		<>
@@ -143,7 +149,9 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							color="primary"
 							to={makeRecipeLink(recipe, '/cook/steps')}
 							className={classes.cookButton}
-							onClick={() => recipe.set('session', {})}
+							onClick={() => {
+								startSession();
+							}}
 						>
 							Start cooking
 						</LinkButton>

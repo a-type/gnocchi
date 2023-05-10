@@ -2,7 +2,6 @@ import { Checkbox } from '@aglio/ui/components/checkbox';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
-import { useCurrentRecipeSession } from '../hooks.js';
 import classNames from 'classnames';
 import * as classes from './IngredientCheckoffView.css.js';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
@@ -16,7 +15,7 @@ export const IngredientCheckoffView = forwardRef<
 	HTMLUListElement,
 	IngredientCheckoffViewProps
 >(function IngredientCheckoffView({ recipe, className }, ref) {
-	const session = useCurrentRecipeSession(recipe);
+	const { session } = hooks.useWatch(recipe);
 	hooks.useWatch(session);
 	const completedIngredients = session?.get('completedIngredients') ?? null;
 	hooks.useWatch(completedIngredients);

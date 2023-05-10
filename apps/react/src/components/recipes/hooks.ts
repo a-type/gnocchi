@@ -8,6 +8,7 @@ import { ExtensionConfig, useEditor } from '@tiptap/react';
 import { useCallback, useEffect, useRef } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import StarterKit from '@tiptap/starter-kit';
+import { SESSION_TIMEOUT } from '@/components/recipes/constants.js';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -22,36 +23,27 @@ export function useRecipeFromSlugUrl(url: string) {
 	return recipe;
 }
 
-const TWO_DAYS = 1000 * 60 * 60 * 24 * 2;
-const THIRTY_MINUTES = 1000 * 60 * 30;
-// for local development (defined by env var), use five minutes
-
-const SESSION_TIMEOUT = import.meta.env.DEV ? THIRTY_MINUTES : TWO_DAYS;
-export function useCurrentRecipeSession(recipe: Recipe, enforce = false) {
-	const live = hooks.useWatch(recipe);
+export function useStartNewSessionIfNeeded(recipe: Recipe) {
 	const client = hooks.useClient();
-	let session = live.session;
-	if (
-		(enforce && !session) ||
-		session.get('startedAt') < Date.now() - SESSION_TIMEOUT
-	) {
-		client
-			.batch({ undoable: false })
-			.run(() => {
-				recipe.set('session', {
-					completedIngredients: [],
-					completedInstructions: [],
-					ingredientAssignments: {},
-					instructionAssignments: {},
-					startedAt: Date.now(),
-				});
-				recipe.set('cookCount', recipe.get('cookCount') + 1);
-				recipe.set('lastCookedAt', Date.now());
-				session = recipe.get('session')!;
-			})
-			.flush();
-	}
-	return session;
+	return useCallback(() => {
+		const session = recipe.get('session');
+		if (!session || session.get('startedAt') < Date.now() - SESSION_TIMEOUT) {
+			client
+				.batch({ undoable: false })
+				.run(() => {
+					recipe.set('session', {
+						completedIngredients: [],
+						completedInstructions: [],
+						ingredientAssignments: {},
+						instructionAssignments: {},
+						startedAt: Date.now(),
+					});
+					recipe.set('cookCount', recipe.get('cookCount') + 1);
+					recipe.set('lastCookedAt', Date.now());
+				})
+				.flush();
+		}
+	}, [recipe, client]);
 }
 
 export function useSyncedInstructionsEditor({

@@ -11,7 +11,7 @@ export const heading = recipe({
 		selectors: {
 			'h1&': {
 				fontFamily: vars.fonts.title,
-				fontSize: vars.fontSizes['3xl'],
+				fontSize: vars.fontSizes['2xl'],
 				fontWeight: vars.fontWeights.bold,
 			},
 			'h2&': {
