@@ -1,5 +1,16 @@
 import { vars } from '@aglio/ui/styles';
-import { style } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
+
+const fadeUp = keyframes({
+	from: {
+		opacity: 0,
+		transform: 'translateY(32px)',
+	},
+	to: {
+		opacity: 1,
+		transform: 'translateY(0)',
+	},
+});
 
 export const root = style({
 	display: 'flex',
@@ -11,6 +22,7 @@ export const root = style({
 	boxShadow: vars.shadows.lg,
 	border: `1px solid ${vars.colors.gray70}`,
 	overflow: 'hidden',
+	animation: `${fadeUp} 0.3s ease-out`,
 });
 
 export const label = style({
