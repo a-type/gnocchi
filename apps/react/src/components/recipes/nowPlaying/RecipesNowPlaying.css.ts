@@ -49,7 +49,7 @@ export const topBar = style({
 	alignItems: 'center',
 	justifyContent: 'space-between',
 	width: '100%',
-	paddingRight: vars.space[2],
+	paddingRight: vars.space[5],
 });
 
 export const collapseIcon = style({

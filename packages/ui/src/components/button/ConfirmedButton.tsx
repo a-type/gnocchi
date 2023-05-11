@@ -16,6 +16,7 @@ export interface ConfirmedButtonProps extends Omit<ButtonProps, 'onClick'> {
 	confirmAction?: string;
 	cancelAction?: string;
 	onConfirm: () => void | Promise<any>;
+	skip?: boolean;
 }
 
 export function ConfirmedButton({
@@ -24,6 +25,7 @@ export function ConfirmedButton({
 	confirmAction = 'OK',
 	cancelAction = 'Nevermind',
 	onConfirm,
+	skip,
 	...rest
 }: ConfirmedButtonProps) {
 	const [open, setOpen] = useState(false);
@@ -37,6 +39,11 @@ export function ConfirmedButton({
 			setLoading(false);
 		}
 	}, [onConfirm]);
+
+	if (skip) {
+		return <Button {...rest} />;
+	}
+
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>

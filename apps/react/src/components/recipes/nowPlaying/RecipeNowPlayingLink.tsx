@@ -40,6 +40,7 @@ export function RecipeNowPlayingLink({ recipe }: { recipe: Recipe }) {
 				confirmAction="Stop Cooking"
 				onConfirm={stopCooking}
 				color="ghost"
+				skip={progress === 1}
 			>
 				<Cross2Icon />
 			</ConfirmedButton>
