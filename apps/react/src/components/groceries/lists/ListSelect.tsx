@@ -9,10 +9,9 @@ import {
 	SelectValue,
 } from '@aglio/ui/components/select';
 import { hooks } from '@/stores/groceries/index.js';
-import { sprinkles, themeMap } from '@aglio/ui/styles';
+import { themeMap, withClassName } from '@aglio/ui/styles';
 import { Formik } from 'formik';
 import { useState } from 'react';
-import * as classes from './ListSelect.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import classNames from 'classnames';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
@@ -30,6 +29,8 @@ export interface ListSelectProps {
 	onChange: (value: string | null | undefined) => void;
 	inDialog?: boolean;
 }
+
+const FilledIcon = withClassName(Icon, 'important:fill-primary');
 
 export function ListSelect({
 	value,
@@ -61,24 +62,20 @@ export function ListSelect({
 					{includeAll && <SelectItem value="undefined">All lists</SelectItem>}
 					<SelectItem value={'null'}>
 						<Box direction="row" gap={2} align="center">
-							<Icon
-								name="tag"
-								className={classNames(themeMap.lemon, classes.filledIcon)}
-							/>
+							<FilledIcon name="tag" className="theme-lemon" />
 							<span>Default</span>
 						</Box>
 					</SelectItem>
 					{lists.map((list) => (
 						<SelectItem key={list.get('id')} value={list.get('id')}>
 							<Box direction="row" gap={2} align="center">
-								<Icon
+								<FilledIcon
 									name="tag"
-									className={classNames(
-										themeMap[(list.get('color') as ThemeName) || 'lemon'],
-										classes.filledIcon,
-									)}
+									className={`theme-${list.get('color') ?? 'lemon'}`}
 								/>
-								<span className={classes.itemText}>{list.get('name')}</span>
+								<span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
+									{list.get('name')}
+								</span>
 							</Box>
 						</SelectItem>
 					))}
@@ -106,9 +103,7 @@ export function ListSelect({
 								placeholder="Custom list"
 								required
 							/>
-							<SubmitButton className={sprinkles({ alignSelf: 'flex-end' })}>
-								Create
-							</SubmitButton>
+							<SubmitButton className="self-end">Create</SubmitButton>
 						</Form>
 					</Formik>
 				</DialogContent>

@@ -9,11 +9,9 @@ import {
 	PopoverArrow,
 	PopoverContent,
 } from '@aglio/ui/src/components/popover';
-import { sprinkles } from '@aglio/ui/styles';
 import { useDrag } from '@use-gesture/react';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
-import * as classes from './LongPressAction.css.js';
 
 export type LongPressActionProps = ActionButtonProps & {
 	onActivate: () => void;
@@ -87,7 +85,7 @@ export function LongPressAction({
 					onContextMenu={preventDefault}
 					{...bind()}
 					{...rest}
-					className={classNames(classes.button, rest.className)}
+					className={classNames('touch-none', rest.className)}
 				>
 					{children}
 				</ActionButton>
@@ -95,23 +93,26 @@ export function LongPressAction({
 			<PopoverContent
 				side="top"
 				sideOffset={12}
-				className={classes.popoverContent}
+				className="position-relative overflow-hidden px-4 py-2 text-sm"
 			>
 				<PopoverArrow />
 				<div
 					className={classNames(
-						classes.progress,
-						sprinkles({
-							background: progressColor,
-						}),
-						state === 'holding' && classes.progressing,
+						'position-absolute top-0 left-0 h-full',
+						{
+							'bg-attentionLight': progressColor === 'attentionLight',
+							'bg-accentLight': progressColor === 'accentLight',
+							'bg-primaryLight': progressColor === 'primaryLight',
+						},
+						state === 'holding' &&
+							`animate-progress-bar animate-forwards animate-ease-linear`,
 					)}
 					style={{
 						animationDuration: `${duration}ms`,
 					}}
 					key={timeoutRef.current as any}
 				/>
-				<div className={classes.warning}>Hold for 2 seconds</div>
+				<div className="position-relative z-1">Hold for 2 seconds</div>
 			</PopoverContent>
 		</Popover>
 	);

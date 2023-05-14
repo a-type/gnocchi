@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { CSSProperties } from 'react';
-import * as classes from './DemoFrame.css.js';
 
 export interface DemoFrameProps {
 	demo: string;
@@ -10,14 +9,20 @@ export interface DemoFrameProps {
 
 export function DemoFrame({ demo, className, ...rest }: DemoFrameProps) {
 	return (
-		<div className={classNames(classes.root, className)} {...rest}>
+		<div
+			className={classNames(
+				'flex flex-col border-default rounded-lg overflow-hidden',
+				className,
+			)}
+			{...rest}
+		>
 			<video
 				autoPlay
 				loop
 				muted
 				controls={false}
 				src={`/videos/demos/${demo}.mp4`}
-				className={classes.image}
+				className="w-full h-auto object-cover"
 			/>
 		</div>
 	);

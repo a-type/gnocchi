@@ -1,6 +1,4 @@
-import classNames from 'classnames';
 import { useItemsGroupedAndSorted } from '../hooks.js';
-import * as classes from './PantryList.css.js';
 import { PantryListCategory } from './PantryListCategory.jsx';
 import { ExpiresSoonSection } from './ExpiresSoonSection.jsx';
 import { Suspense } from 'react';
@@ -14,9 +12,9 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 	const { groupedItems, empty } = useItemsGroupedAndSorted();
 
 	return (
-		<div className={classNames(classes.root)} {...rest}>
+		<div className="flex flex-col items-stretch" {...rest}>
 			<Suspense>
-				<ExpiresSoonSection className={classes.expiresSoon} />
+				<ExpiresSoonSection />
 			</Suspense>
 			<div>
 				{groupedItems.map(({ category, items }) => {
@@ -29,7 +27,11 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 					);
 				})}
 			</div>
-			{empty && <div className={classes.empty}>Nothing here yet...</div>}
+			{empty && (
+				<div className="flex flex-col items-center justify-center text-center w-full padding-8 opacity-70">
+					Nothing here yet...
+				</div>
+			)}
 		</div>
 	);
 }
@@ -44,7 +46,7 @@ export function PantryList(props: PantryListProps) {
 
 function SkeletonList() {
 	return (
-		<div className={classes.root}>
+		<div className="flex flex-col items-stretch">
 			<div style={{ height: 30 }} />
 			{new Array(8).fill(null).map((_, i) => (
 				<PantryListItemSkeleton key={i} />

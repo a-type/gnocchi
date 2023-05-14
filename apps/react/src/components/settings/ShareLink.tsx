@@ -1,7 +1,6 @@
 import { Share1Icon } from '@radix-ui/react-icons';
 import copy from 'copy-to-clipboard';
 import { useState } from 'react';
-import * as classes from './ShareLink.css.js';
 import { toast } from 'react-hot-toast';
 import { Box } from '@aglio/ui/components/box';
 import { Input } from '@aglio/ui/components/input';
@@ -21,16 +20,16 @@ export function ShareLink({ onGenerate, ...rest }: ShareLinkProps) {
 	};
 
 	return (
-		<Box className={classes.root}>
+		<Box className="flex flex-col items-end gap-2 md:(flex-row items-center)">
 			{value && (
 				<button
 					onClick={() => {
 						copy(value);
 						toast.success('Link copied to clipboard');
 					}}
-					className={classes.wrapperButton}
+					className="border-none bg-none p-0 relative cursor-pointer w-full md:w-auto after:(content-['Copy'] absolute right-1 top-[50%] translate-y-[-50%] bg-primary color-black rounded-sm px-2 py-1 border-default) hover:(after:bg-primaryDark)"
 				>
-					<Input disabled value={value} className={classes.input} />
+					<Input disabled value={value} className="cursor-pointer w-full" />
 				</button>
 			)}
 			<GenerateButton onGenerate={handleGenerate} {...rest} />

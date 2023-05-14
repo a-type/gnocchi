@@ -8,7 +8,6 @@ import { UserInfo } from '@verdant-web/common';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Suspense, useState } from 'react';
 import { PersonAvatar } from '../people/PersonAvatar.jsx';
-import * as classes from './RecipePresenceNotification.css.js';
 import { LinkButton } from '@/components/nav/Link.jsx';
 
 export interface RecipePresenceNotificationProps {}
@@ -39,7 +38,7 @@ function RecipePresenceNotificationContent() {
 
 	if (recipeId && recipeId !== dismissedId) {
 		return (
-			<PageNowPlaying className={classes.nowPlaying}>
+			<PageNowPlaying className="w-full pb-[env(safe-area-inset-bottom,0px)]">
 				<RecipePresenceLink
 					person={viewingRecipe}
 					recipeId={recipeId}
@@ -66,21 +65,21 @@ function RecipePresenceLink({
 	if (!recipe) return null;
 
 	return (
-		<div className={classes.root}>
+		<div className="flex flex-row gap-2 items-center p-2">
 			<Button size="small" onClick={onDismiss} color="ghost">
 				<Cross2Icon />
 			</Button>
 			<PersonAvatar person={person} />
-			<div className={classes.titleStack}>
-				<div className={classes.name}>
-					&nbsp;{person.profile.name} is cooking
+			<div className="flex flex-col gap-2px flex-[1_1_0] min-w-0">
+				<div className="text-xxs">&nbsp;{person.profile.name} is cooking</div>
+				<div className="text-xs font-bold overflow-hidden text-ellipsis whitespace-nowrap">
+					{recipe.get('title')}
 				</div>
-				<div className={classes.title}>{recipe.get('title')}</div>
 			</div>
 			<LinkButton
 				size="small"
 				to={makeRecipeLink(recipe, '/cook/prep')}
-				className={classes.button}
+				className="whitespace-nowrap"
 				onClick={onDismiss}
 			>
 				Join

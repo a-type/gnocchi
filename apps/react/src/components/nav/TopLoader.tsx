@@ -1,7 +1,6 @@
 import { useIsRouteTransitioning } from '@verdant-web/react-router';
 import { animated, useSpring } from '@react-spring/web';
 import classNames from 'classnames';
-import * as classes from './TopLoader.css.js';
 import { useCallback, useEffect } from 'react';
 
 export interface TopLoaderProps {
@@ -48,10 +47,19 @@ export function TopLoader({ className }: TopLoaderProps) {
 
 	return (
 		<div
-			className={classNames(classes.root, className)}
+			className={classNames(
+				'fixed top-0 left-0 w-full h-4px pointer-events-none opacity-0 z-100000',
+				'[&[data-state=visible]]:(opacity-100 transition-opacity)',
+				'md:(h-2px)',
+				'motion-reduce:display-none',
+				className,
+			)}
 			data-state={show ? 'visible' : 'hidden'}
 		>
-			<animated.div className={classes.bar} style={style} />
+			<animated.div
+				className="absolute top-0 left-0 h-full bg-accent"
+				style={style}
+			/>
 		</div>
 	);
 }

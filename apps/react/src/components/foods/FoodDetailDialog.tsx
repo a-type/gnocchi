@@ -1,8 +1,6 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { ReactNode, Suspense, useState } from 'react';
-import { capitalize } from '@aglio/tools';
 import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
-import * as classes from './FoodDetailDialog.css.js';
 import { Icon } from '../icons/Icon.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 import { useToggle } from '@aglio/ui/hooks';
@@ -104,7 +102,6 @@ function FoodDetailView({
 				<CategorySelect
 					value={food.get('categoryId')}
 					onChange={(val) => food.set('categoryId', val)}
-					contentClassName={classes.categoryContent}
 				/>
 			</Box>
 			<Box gap={1} direction="row" alignItems="center">

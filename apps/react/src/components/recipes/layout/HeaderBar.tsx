@@ -3,7 +3,6 @@ import { PageFixedArea } from '@aglio/ui/src/components/layouts';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 import classNames from 'classnames';
-import * as classes from './HeaderBar.css.js';
 
 export interface HeaderBarProps {
 	children?: ReactNode;
@@ -13,7 +12,12 @@ export interface HeaderBarProps {
 
 export function HeaderBar({ children, backUrl, className }: HeaderBarProps) {
 	return (
-		<PageFixedArea className={classNames(classes.fixedArea, className)}>
+		<PageFixedArea
+			className={classNames(
+				'z-10 top-0 flex flex-row items-center gap-3 py-1',
+				className,
+			)}
+		>
 			<LinkButton to={backUrl} color="ghost">
 				<ArrowLeftIcon />
 				Back

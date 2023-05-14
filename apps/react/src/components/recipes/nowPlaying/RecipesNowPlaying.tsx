@@ -1,18 +1,12 @@
+import { RecipeNowPlayingLink } from '@/components/recipes/nowPlaying/RecipeNowPlayingLink.jsx';
+import { useNowPlayingRecipes } from '@/components/recipes/nowPlaying/hooks.js';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
 } from '@aglio/ui/src/components/collapsible';
 import { PageNowPlaying } from '@aglio/ui/src/components/layouts';
-import * as classes from './RecipesNowPlaying.css.js';
-import { Button } from '@aglio/ui/src/components/button';
 import { Span } from '@aglio/ui/src/components/typography';
-import { Recipe } from '@aglio/groceries-client';
-import { RecipeMainImageViewer } from '@/components/recipes/viewer/RecipeMainImageViewer.jsx';
-import { Link } from '@verdant-web/react-router';
-import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
-import { useNowPlayingRecipes } from '@/components/recipes/nowPlaying/hooks.js';
-import { RecipeNowPlayingLink } from '@/components/recipes/nowPlaying/RecipeNowPlayingLink.jsx';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 export interface RecipesNowPlayingProps {
@@ -34,18 +28,18 @@ export function RecipesNowPlaying({
 	}
 
 	return (
-		<PageNowPlaying className={classes.root}>
-			<CollapsibleRoot defaultOpen={defaultOpen} className={classes.inner}>
+		<PageNowPlaying className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-light overflow-hidden animate-fade-in-up duration-300 ease-out">
+			<CollapsibleRoot defaultOpen={defaultOpen} className="w-full">
 				<CollapsibleTrigger asChild>
-					<div className={classes.topBar}>
-						<Span size="xs" italic className={classes.label}>
+					<div className="flex flex-row items-center justify-between w-full pr-5">
+						<Span size="xs" italic className="py-1 px-2">
 							Now Cooking
 						</Span>
-						<ChevronDownIcon className={classes.collapseIcon} />
+						<ChevronDownIcon className="transition-transform [[data-state=closed]_&]:rotate-180" />
 					</div>
 				</CollapsibleTrigger>
 				<CollapsibleContent>
-					<div className={classes.list}>
+					<div className="flex flex-col gap-2">
 						<RecipeNowPlayingLink recipe={firstRecipe} />
 						{otherRecipes.map((recipe) => (
 							<RecipeNowPlayingLink key={recipe.get('id')} recipe={recipe} />

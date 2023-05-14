@@ -2,10 +2,7 @@ import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { Link } from '@/components/nav/Link.jsx';
 import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
-import {
-	circleParticleExplosion,
-	useParticles,
-} from '@aglio/ui/components/particles';
+import { useParticles } from '@aglio/ui/components/particles';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -37,8 +34,6 @@ import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
 import { NumberStepper } from '@aglio/ui/components/numberStepper';
 import { Tooltip } from '@aglio/ui/components/tooltip';
 import { useSizeCssVars } from '@aglio/ui/hooks';
-import { sprinkles } from '@aglio/ui/styles';
-import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@verdant-web/store';
 import {
@@ -62,10 +57,10 @@ import { useSnapshot } from 'valtio';
 import { ListSelect } from '../lists/ListSelect.jsx';
 import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
 import { groceriesState } from '../state.js';
-import * as classes from './GroceryListItem.css.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
-import { ItemSources } from './ItemSources.js';
 import { useItemDisplayText } from './hooks.js';
+import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
+import { useDraggable } from '@dnd-kit/core';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -134,7 +129,18 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 
 		return (
 			<CollapsibleRoot
-				className={classNames('item', classes.root, className)}
+				className={classNames(
+					'item',
+					'grid grid-areas-[check_main]-[check_comment]-[secondary_secondary] grid-cols-[min-content_1fr_min-content] grid-rows-[min-content_min-content_min-content]',
+					'w-full bg-light rounded-md relative select-none all:transition-200 all:ease-springy',
+					'repeated:mt-1',
+					'[&[data-dragging=true]]:(shadow-xl cursor-grabbing touch-none border-light)',
+					'[&[data-highlighted=true]]:bg-primaryWash',
+					'[&[data-menu-open=true]]:(bg-white border-light)',
+					'[&[data-just-moved=true][data-hidden-state=visible]]:(animation-pop-up duration-400 timing-springy)',
+					'[&[data-state=hidden]]:(animation-disappear duration-3000 animation-ease-out fill-mode-forwards)',
+					className,
+				)}
 				open={menuOpen}
 				onOpenChange={setMenuOpen}
 				hidden={sectionStateSnap.newCategoryPendingItem?.get('id') === id}
@@ -154,15 +160,20 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					isPartiallyPurchased={isPartiallyPurchased}
 					togglePurchased={togglePurchased}
 				/>
-				<div className={classes.mainContent}>
-					<div className={classes.textStack}>
-						<div className={classes.textContent}>
+				<div className="flex flex-row items-start gap-2 [grid-area:main] pt-4 pr-3 pb-2 relative">
+					<div className="flex flex-col gap-2 items-start flex-1">
+						<div className="flex flex-row gap-1 max-w-full overflow-hidden text-ellipsis relative">
 							<span>{displayString}</span>
 							{menuOpen && <QuantityEditor item={item} />}
 						</div>
-						{isPurchased && <div className={classes.strikethrough} />}
+						{isPurchased && (
+							<div className="absolute left-0 right-52px top-28px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
+						)}
 						{comment && !menuOpen && (
-							<Box open={!menuOpen} className={classes.comment}>
+							<Box
+								open={!menuOpen}
+								className="text-xs text-gray7 italic [grid-area:comment]"
+							>
 								{comment}
 							</Box>
 						)}
@@ -172,9 +183,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					<CollapsibleTrigger asChild>
 						<Button
 							color="ghost"
-							className={sprinkles({
-								position: 'relative',
-							})}
+							className="relative"
 							size="small"
 							onContextMenu={preventDefault}
 							{...menuProps}
@@ -194,17 +203,17 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 						</Button>
 					</CollapsibleTrigger>
 				</div>
-				<CollapsibleContent className={classes.secondaryCollapse}>
+				<CollapsibleContent className="[grid-area:secondary]">
 					<Suspense>
-						<div className={classes.secondaryContent}>
+						<div className="flex flex-col gap-2 justify-end p-3 pt-0 items-end">
 							<ItemSources item={item} />
 
-							<div className={classes.controls}>
+							<div className="flex flex-row gap-3 flex-wrap justify-end w-full items-center">
 								<LiveUpdateTextField
 									value={comment || ''}
 									onChange={(val) => item.set('comment', val)}
 									placeholder="Add a comment"
-									className={classes.commentBox}
+									className="important:text-xs important:border-gray5 flex-grow-1 flex-shrink-1 flex-basis-80px"
 								/>
 								<ListSelect
 									value={item.get('listId')}
@@ -318,7 +327,7 @@ function RecentPeople({ item }: { item: Item }) {
 					<PersonAvatar
 						key={person.id}
 						person={person}
-						className={classes.person}
+						className="relative z-[var(--index)] left-[calc(var(--index)*-8px)]"
 					/>
 				</PeopleListItem>
 			))}
@@ -368,12 +377,25 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 	return (
 		<Tooltip content={list.get('name')}>
 			<CollapsibleRoot open={!collapsed}>
-				<CollapsibleContent data-horizontal className={classes.tagContainer}>
-					<Link to={`/list/${list.get('id')}`} className={classes.tagLink}>
-						<div className={classNames(listThemeClass, classes.listTag)}>
-							<Icon name="tag" className={classes.listTagIcon} />
-							<span className={classes.listTagName}>{name}</span>
-							<span className={classes.listTagNameSmall}>
+				<CollapsibleContent
+					data-horizontal
+					className="rounded-md focus-within:(outline-none shadow-focus)"
+				>
+					<Link
+						to={`/list/${list.get('id')}`}
+						className="focus-visible:outline-none"
+					>
+						<div
+							className={classNames(
+								listThemeClass,
+								'flex items-center justify-center p-4 color-white rounded-md bg-primary text-xs min-w-3 min-h-3 gap-1 lg:px-8',
+							)}
+						>
+							<Icon name="tag" className="inline" />
+							<span className="display-none whitespace-nowrap overflow-hidden text-ellipsis max-w-full lg:inline">
+								{name}
+							</span>
+							<span className="inline whitespace-nowrap overflow-hidden text-ellipsis max-w-full lg:display-none">
 								{getInitials(name)}
 							</span>
 						</div>
@@ -461,7 +483,7 @@ function ItemCheckbox({
 			onPointerDown={stopPropagation}
 			onPointerUp={stopPropagation}
 			data-test="grocery-list-item-checkbox"
-			className={classes.checkbox}
+			className="[grid-area:check] mt-4 mx-3"
 		/>
 	);
 }

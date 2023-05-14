@@ -5,7 +5,6 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import * as classes from './AddToListButton.css.js';
 import { MultiplierStepper } from './MultiplierStepper.jsx';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
@@ -74,18 +73,21 @@ export function AddToListButton({
 					</DialogTrigger>
 					<DialogContent>
 						<DialogTitle>Add to list</DialogTitle>
-						<div className={classes.mainContent}>
+						<div className="flex flex-col items-start gap-3">
 							<RecipeNote recipe={recipe} readOnly />
 							<MultiplierStepper
 								highlightChange
 								value={multiplier}
 								onChange={setMultiplier}
 							/>
-							<ul className={classes.checklist}>
+							<ul className="flex flex-col items-start list-none p-0 m-0 gap-3">
 								{items.map((ingredient, index) => {
 									const isSectionHeader = ingredient.get('isSectionHeader');
 									return (
-										<li key={index} className={classes.item}>
+										<li
+											key={index}
+											className="flex flex-row items-start gap-2 w-full"
+										>
 											<Checkbox
 												checked={checkedItems[index]}
 												onCheckedChange={(checked) => {
@@ -95,15 +97,17 @@ export function AddToListButton({
 														return next;
 													});
 												}}
-												className={isSectionHeader ? classes.hidden : undefined}
+												className={
+													isSectionHeader ? '[visibility:hidden]' : undefined
+												}
 												disabled={isSectionHeader}
 												id={`ingredient-${index}`}
 											/>
 											<label
 												htmlFor={`ingredient-${index}`}
 												className={classNames(
-													classes.itemContent,
-													isSectionHeader ? classes.sectionHeader : undefined,
+													'flex-1',
+													isSectionHeader ? 'font-bold' : undefined,
 												)}
 											>
 												<RecipeIngredientViewer

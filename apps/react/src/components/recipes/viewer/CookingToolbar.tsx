@@ -1,24 +1,14 @@
+import { Icon } from '@/components/icons/Icon.jsx';
 import { Recipe } from '@aglio/groceries-client';
+import { Button } from '@aglio/ui/components/button';
+import { PageNowPlaying } from '@aglio/ui/components/layouts';
+import { H5 } from '@aglio/ui/components/typography';
 import { ListBulletIcon } from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
-import classNames from 'classnames';
-import { Suspense, useCallback, useRef, useState } from 'react';
-import * as classes from './CookingToolbar.css.js';
+import { useCallback, useRef } from 'react';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
-import { Icon } from '@/components/icons/Icon.jsx';
-import { PageNowPlaying } from '@aglio/ui/components/layouts';
-import { Button } from '@aglio/ui/components/button';
-import { sprinkles } from '@aglio/ui/styles';
-import { H5 } from '@aglio/ui/components/typography';
-import {
-	CollapsibleContent,
-	CollapsibleRoot,
-	CollapsibleTrigger,
-} from '@aglio/ui/src/components/collapsible';
-import { useNowPlayingRecipes } from '@/components/recipes/nowPlaying/hooks.js';
-import { RecipeNowPlayingLink } from '@/components/recipes/nowPlaying/RecipeNowPlayingLink.jsx';
 
 export interface CookingToolbarProps {
 	recipe: Recipe;
@@ -28,98 +18,60 @@ const PEEK_HEIGHT = 150;
 const MAX_HEIGHT = 400;
 
 export function CookingToolbar({ recipe }: CookingToolbarProps) {
-	const [nowPlayingOpen, setNowPlayingOpen] = useState(false);
-	const closeNowPlaying = useCallback(() => setNowPlayingOpen(false), []);
-	const {
-		containerRef,
-		containerStyle,
-		bind,
-		close: closeInfo,
-	} = useExpandingContainer(closeNowPlaying);
-
-	const { otherRecipes } = useNowPlayingRecipes();
-	const showNowPlaying = false;
-
-	const onNowPlayingOpenChange = useCallback(
-		(open: boolean) => {
-			setNowPlayingOpen(open);
-			if (open) closeInfo();
-		},
-		[closeInfo],
-	);
+	const { containerRef, containerStyle, bind } = useExpandingContainer();
 
 	return (
-		<CollapsibleRoot
-			open={nowPlayingOpen}
-			onOpenChange={onNowPlayingOpenChange}
+		<PageNowPlaying
+			unstyled
+			className="w-full flex flex-col items-center relative bottom-[calc(0.25rem*-1)]"
 		>
-			<PageNowPlaying unstyled className={classes.root}>
-				<div className={classes.actions}>
-					<Button className={classes.toggleButton} {...bind()}>
-						<animated.span
-							style={{
-								display: containerStyle.height.to((h) =>
-									h > 0 ? 'none' : 'block',
-								),
-							}}
-						>
-							<ListBulletIcon />
-						</animated.span>
-						<animated.span
-							style={{
-								display: containerStyle.height.to((h) =>
-									h > 0 ? 'block' : 'none',
-								),
-							}}
-						>
-							<Icon name="drag_vertical" />
-						</animated.span>
-					</Button>
-					{showNowPlaying && (
-						<CollapsibleTrigger asChild>
-							<Button className={classes.toggleButton}>
-								+ {otherRecipes.length}
-							</Button>
-						</CollapsibleTrigger>
-					)}
-				</div>
-
-				<animated.div
-					ref={containerRef}
-					className={classNames(classes.container)}
-					style={{
-						height: containerStyle.height,
-						border: containerStyle.height.to((h) =>
-							h > 0 ? '1px solid currentColor' : 'none',
-						),
-					}}
+			<div className="flex flex-row gap-2 mb-3">
+				<Button
+					className="important:(rounded-full w-40px h-40px p-0 flex items-center justify-center touch-none)"
+					{...bind()}
 				>
-					<div className={classes.containerScroll}>
-						<RecipeMultiplierField
-							recipe={recipe}
-							className={classes.multiplier}
-						/>
-						<H5 className={sprinkles({ mx: 2 })}>Ingredients</H5>
-						<IngredientCheckoffView recipe={recipe} className={classes.list} />
-					</div>
-				</animated.div>
-				{showNowPlaying && (
-					<CollapsibleContent>
-						<div className={classes.nowPlaying}>
-							{otherRecipes.map((recipe) => (
-								<Suspense fallback={null} key={recipe.get('id')}>
-									<RecipeNowPlayingLink recipe={recipe} />
-								</Suspense>
-							))}
-						</div>
-					</CollapsibleContent>
-				)}
-			</PageNowPlaying>
-		</CollapsibleRoot>
+					<animated.span
+						style={{
+							display: containerStyle.height.to((h) =>
+								h > 0 ? 'none' : 'block',
+							),
+						}}
+					>
+						<ListBulletIcon />
+					</animated.span>
+					<animated.span
+						style={{
+							display: containerStyle.height.to((h) =>
+								h > 0 ? 'block' : 'none',
+							),
+						}}
+					>
+						<Icon name="drag_vertical" />
+					</animated.span>
+				</Button>
+			</div>
+
+			<animated.div
+				ref={containerRef}
+				className="bg-white w-full relative overflow-hidden rounded-lg"
+				style={{
+					height: containerStyle.height,
+					border: containerStyle.height.to((h) =>
+						h > 0 ? '1px solid currentColor' : 'none',
+					),
+				}}
+			>
+				<div className="overflow-overlay h-full mt-3 pb-[calc(40px+env(safe-area-inset-bottom,0px))] flex flex-col items-center px-1">
+					<RecipeMultiplierField recipe={recipe} className="mb-2" />
+					<H5 className="mx-2">Ingredients</H5>
+					<IngredientCheckoffView recipe={recipe} className="important:p-2" />
+				</div>
+			</animated.div>
+		</PageNowPlaying>
 	);
 }
 
-function useExpandingContainer(onOpen: () => void) {
+function useExpandingContainer(onOpen?: () => void) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [containerStyle, containerSpring] = useSpring(() => ({
 		height: 0,
@@ -135,7 +87,7 @@ function useExpandingContainer(onOpen: () => void) {
 			containerSpring.start({
 				height: Math.max(PEEK_HEIGHT, lastExpandedHeightRef.current),
 			});
-			onOpen();
+			onOpen?.();
 		}
 	};
 
@@ -144,7 +96,7 @@ function useExpandingContainer(onOpen: () => void) {
 		if (target < 24) {
 			target = 0;
 		} else {
-			onOpen();
+			onOpen?.();
 		}
 		if (target >= PEEK_HEIGHT) {
 			lastExpandedHeightRef.current = target;

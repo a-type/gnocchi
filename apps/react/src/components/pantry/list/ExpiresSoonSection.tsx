@@ -10,7 +10,6 @@ import classNames from 'classnames';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import { useCallback } from 'react';
 import { useExpiresSoonItems } from '../hooks.js';
-import * as classes from './ExpiresSoonSection.css.js';
 import { groceriesState } from '@/components/groceries/state.js';
 
 export interface ExpiresSoonSectionProps {
@@ -23,11 +22,11 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 	if (expiresSoonItems.length === 0) return null;
 
 	return (
-		<div className={classNames(classes.root, className)}>
-			<H2 gutterBottom className={classes.title}>
+		<div className={classNames('flex flex-col mb-6', className)}>
+			<H2 gutterBottom className="important:text-md">
 				Expiring Soon
 			</H2>
-			<div className={classes.list}>
+			<div className="flex flex-col gap-3">
 				{expiresSoonItems.map((item) => (
 					<ExpiresSoonItem item={item} key={item.get('id')} />
 				))}
@@ -60,25 +59,25 @@ function ExpiresSoonItem({ item }: { item: Item }) {
 	const inThePast = expiresAt < Date.now();
 
 	return (
-		<div className={classes.item}>
-			<div className={classes.itemContent}>
-				<div className={classes.itemText}>
+		<div className="flex flex-col gap-2 p-3 rounded-lg bg-white border-light">
+			<div className="flex flex-row items-start gap-2">
+				<div className="flex-1">
 					<LookupFoodName foodName={food} />
 				</div>
-				<div className={classes.dateStack}>
-					<div className={classes.expiresAt}>
+				<div className="flex flex-col gap-1 text-sm">
+					<div className="ml-auto color-attentionDark">
 						{inThePast ? 'Expired' : 'Expires'}{' '}
 						{formatDistanceToNowStrict(expiresAt, { addSuffix: true })}
 					</div>
 					{purchasedAt && (
-						<div className={classes.purchasedAt}>
+						<div className="color-gray8">
 							Purchased{' '}
 							{formatDistanceToNowStrict(purchasedAt, { addSuffix: true })}
 						</div>
 					)}
 				</div>
 			</div>
-			<div className={classes.itemActions}>
+			<div className="flex flex-row items-center w-full gap-2 flex-wrap">
 				<Button size="small" color="destructive" onClick={deleteThisItem}>
 					<TrashIcon />
 					<span>Delete</span>
@@ -92,7 +91,7 @@ function ExpiresSoonItem({ item }: { item: Item }) {
 					<span>Snooze</span>
 				</Button>
 				<FoodDetailDialog foodName={food}>
-					<Button color="ghost" size="icon" className={classes.itemFoodInfo}>
+					<Button color="ghost" size="icon" className="ml-auto">
 						<Icon name="food" />
 					</Button>
 				</FoodDetailDialog>

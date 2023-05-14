@@ -7,8 +7,6 @@ import classNames from 'classnames';
 import { useCallback, useMemo, useState } from 'react';
 import { NoteEditor } from '../editor/NoteEditor.jsx';
 import { IngredientText } from './IngredientText.jsx';
-import * as classes from './RecipeIngredientViewer.css.js';
-import { Box } from '@aglio/ui/components/box';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -80,18 +78,18 @@ export function RecipeIngredientViewer({
 	return (
 		<div
 			className={classNames(
-				classes.root,
-				isSectionHeader && classes.sectionHeader,
+				'flex flex-col items-end gap-2',
+				isSectionHeader && 'font-bold',
 				className,
 			)}
 		>
-			<div className={classes.mainRow}>
+			<div className="flex flex-row w-full">
 				<IngredientText
-					className={classes.text}
+					className="flex-1 block"
 					multiplier={multiplier}
 					ingredient={ingredient}
 				/>
-				<Box direction="row" gap={2} align="center">
+				<div className="flex flex-row gap-2 items-center">
 					{conversionEnabled && (
 						<>
 							<DropdownMenu>
@@ -121,17 +119,24 @@ export function RecipeIngredientViewer({
 							{!!note ? (
 								<Icon
 									name="note"
-									className={showNote ? undefined : classes.noteIconWithNote}
+									className={
+										showNote
+											? undefined
+											: 'color-primaryDark fill-primary stroke-primaryDark'
+									}
 								/>
 							) : (
-								<Icon name="add_note" className={classes.addNoteIcon} />
+								<Icon name="add_note" className="color-gray7" />
 							)}
 						</Button>
 					)}
-				</Box>
+				</div>
 			</div>
-			<CollapsibleRoot open={!!conversion} className={classes.conversion}>
-				<CollapsibleContent className={classes.conversionContent}>
+			<CollapsibleRoot
+				open={!!conversion}
+				className="mr-auto self-start italic color-gray7"
+			>
+				<CollapsibleContent className="pr-2">
 					<Span size="sm">Converted: {convertedValue}</Span>
 				</CollapsibleContent>
 			</CollapsibleRoot>
@@ -165,6 +170,8 @@ const usefulUnits = [
 	'cup',
 	'tsp',
 	'tbsp',
+	'tb',
+	'T',
 	'pt',
 	'qt',
 	'gal',

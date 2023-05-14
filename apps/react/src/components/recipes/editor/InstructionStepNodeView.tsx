@@ -12,7 +12,6 @@ import {
 	useContext,
 	useMemo,
 } from 'react';
-import * as classes from './InstructionStepNodeView.css.js';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
@@ -109,23 +108,25 @@ export function InstructionStepNodeView({
 		<NodeViewWrapper
 			data-id={node.attrs.id}
 			className={classNames(
-				classes.root,
-				completed && classes.completed,
-				isAssignedToMe && classes.assignedToMe,
+				'grid grid-areas-[label_label_label]-[tools_content_endTools]-[note_note_note]',
+				'grid-cols-[min-content_1fr_min-content] grid-rows-[repeat(3,min-content)]',
+				'mb-3 rounded-md w-full p-1 transition-colors',
+				completed && !isEditing && 'opacity-60',
+				isAssignedToMe && !isEditing && 'bg-primaryWash mb-2',
 			)}
 		>
-			<div className={classes.content}>
+			<div className="[grid-area:content]">
 				<NodeViewContent />
 			</div>
 			<CollapsibleRoot
 				open={showNote}
-				className={classes.noteContainer}
+				className="[grid-area:note] mt-2 ml-auto"
 				contentEditable={false}
 			>
 				<CollapsibleContent>
-					<Note className={classes.note} contentEditable={false}>
+					<Note className="focus-within:shadow-focus" contentEditable={false}>
 						<TextArea
-							className={classes.noteEditor}
+							className="p-0 m-0 border-none bg-none w-full text-inherit [font-style:inherit] focus:(outline-none bg-none shadow-none)"
 							value={note || ''}
 							onChange={updateNote}
 							onBlur={onNoteBlur}
@@ -136,12 +137,18 @@ export function InstructionStepNodeView({
 				</CollapsibleContent>
 			</CollapsibleRoot>
 			{!isEditing && isAssignedToMe && (
-				<label contentEditable={false} className={classes.label}>
+				<label
+					contentEditable={false}
+					className="[grid-area:label] text-xs italic color-black animate-fade-in-up mb-1"
+				>
 					Assigned to you
 				</label>
 			)}
 			{showTools && (
-				<div className={classes.tools} contentEditable={false}>
+				<div
+					className="flex flex-col items-center gap-2 [grid-area:tools] w-32px mr-3"
+					contentEditable={false}
+				>
 					{!isEditing && (
 						<Checkbox
 							checked={!isEditing && completed}
@@ -180,16 +187,23 @@ export function InstructionStepNodeView({
 					)}
 				</div>
 			)}
-			<div className={classes.endTools} contentEditable={false}>
+			<div
+				className="flex flex-col items-center gap-2 [grid-area:endTools] w-32px ml-3"
+				contentEditable={false}
+			>
 				<Tooltip content={note === undefined ? 'Add a note' : 'Show note'}>
 					<Button color="ghost" size="icon" onClick={toggleShowNote}>
 						{!!note ? (
 							<Icon
 								name="note"
-								className={showNote ? undefined : classes.noteIconWithNote}
+								className={
+									showNote
+										? undefined
+										: 'fill-primary stroke-primaryDark color-primaryDark'
+								}
 							/>
 						) : (
-							<Icon name="add_note" className={classes.addNoteIcon} />
+							<Icon name="add_note" className="color-gray7" />
 						)}
 					</Button>
 				</Tooltip>

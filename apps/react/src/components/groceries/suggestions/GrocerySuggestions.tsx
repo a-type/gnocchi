@@ -11,19 +11,21 @@ import {
 } from '@aglio/ui/components/collapsible';
 import { H5, Span } from '@aglio/ui/components/typography';
 import { CaretDownIcon, PlusCircledIcon } from '@radix-ui/react-icons';
-import classNames from 'classnames';
 import addDays from 'date-fns/addDays';
 import startOfDay from 'date-fns/startOfDay';
-import { title, titleRow } from '../categories/GroceryListCategory.css.js';
-import * as classes from './GrocerySuggestions.css.js';
 import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
 import {
-	FoodName,
 	useFoodName,
 	useLookupFoodName,
 } from '@/components/foods/FoodName.jsx';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
+import {
+	CategoryTitle,
+	CategoryTitleRow,
+} from '@/components/groceries/categories/CategoryTitleRow.jsx';
+import { withClassName } from '@aglio/ui/styles';
+import classNames from 'classnames';
 
 export interface GrocerySuggestionsProps {}
 
@@ -65,19 +67,25 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 		<CollapsibleRoot
 			open={open}
 			onOpenChange={setOpen}
-			className={classes.root}
+			className={classNames(
+				'flex flex-col gap-1 bg-accentWash overflow-hidden mb-2 p-2',
+				'transition-shadow-200',
+				'transition-transform-200',
+				'transition-colors-500',
+				'[&[data-state=closed]]:bg-transparent',
+			)}
 		>
 			<CollapsibleTrigger asChild>
-				<div className={classNames(classes.trigger, titleRow)}>
-					<CaretDownIcon className={classes.triggerIcon} />
-					<div className={classNames(title, classes.title)}>Suggested</div>
-					<Icon name="magic" className={classes.titleIcon} />
-				</div>
+				<CategoryTitleRow className="cursor-pointer">
+					<CaretDownIcon className="mr-2 transition-transform-200 [div[aria-expanded=true]>&]:transform-rotate-180deg" />
+					<CategoryTitle className="text-xs">Suggested</CategoryTitle>
+					<Icon name="magic" className="mr-3 color-gray7" />
+				</CategoryTitleRow>
 			</CollapsibleTrigger>
-			<CollapsibleContent className={classes.list}>
+			<CollapsibleContent className="flex flex-col gap-2">
 				{!!guessedFoods.length ||
 					(!!guessedRecipes.length && (
-						<H5 className={classes.subtitle}>Favorites</H5>
+						<H5 className="ml-3 text-black mb-1 mt-2">Favorites</H5>
 					))}
 				{guessedFoods.map((food) => (
 					<FoodSuggestionItem key={food.get('canonicalName')} food={food} />
@@ -86,7 +94,7 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 					<RecipeSuggestionItem key={recipe.get('id')} recipe={recipe} />
 				))}
 				{!!expiresSoonItems.length && (
-					<H5 className={classes.subtitle}>Expiring soon</H5>
+					<H5 className="ml-3 text-black mb-1 mt-2">Expiring soon</H5>
 				)}
 				{expiresSoonItems.map((item) => (
 					<ExpiresSoonSuggestionItem key={item.get('id')} item={item} />
@@ -96,47 +104,57 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 	);
 }
 
+const Item = withClassName(
+	'div',
+	'flex flex-row gap-2 items-center pl-3 pr-5 py-1',
+);
+const ItemName = withClassName('div', 'flex-1');
+const addButtonClass = 'flex-shrink-0 flex-grow-0 flex-basis-auto';
+
 function FoodSuggestionItem({ food }: { food: Food }) {
 	const addItems = hooks.useAddItems();
 	const name = useFoodName(food);
 	const listId = useListId() || null;
 
 	return (
-		<div className={classes.item}>
-			<div className={classes.name}>{name}</div>
+		<Item>
+			<ItemName>{name}</ItemName>
 			<Button
 				size="icon"
 				color="ghost"
-				className={classes.addButton}
+				className={addButtonClass}
 				onClick={async () => {
 					await addItems([name], { listId });
 				}}
 			>
 				<PlusCircledIcon />
 			</Button>
-		</div>
+		</Item>
 	);
 }
 
 function RecipeSuggestionItem({ recipe }: { recipe: Recipe }) {
 	const listId = useListId() || null;
 	return (
-		<div className={classes.item}>
-			<RecipeMainImageViewer recipe={recipe} className={classes.recipeImage} />
-			<div className={classes.recipeTitle}>
-				<Span className={classes.recipeNote}>Recipe</Span>
+		<Item>
+			<RecipeMainImageViewer
+				recipe={recipe}
+				className="important:(flex-0-0-auto w-48px h-48px rounded-md)"
+			/>
+			<div className="flex-1 flex flex-col">
+				<Span className="text-xs text-darkBlend italic">Recipe</Span>
 				<Span>{recipe.get('title')}</Span>
 			</div>
 			<AddToListButton
 				color="ghost"
 				size="icon"
 				recipe={recipe}
-				className={classes.addButton}
+				className={addButtonClass}
 				listId={listId}
 			>
 				<PlusCircledIcon />
 			</AddToListButton>
-		</div>
+		</Item>
 	);
 }
 
@@ -146,18 +164,18 @@ function ExpiresSoonSuggestionItem({ item }: { item: Item }) {
 	const listId = useListId() || null;
 
 	return (
-		<div className={classes.item}>
-			<div className={classes.name}>{name}</div>
+		<Item>
+			<ItemName>{name}</ItemName>
 			<Button
 				size="icon"
 				color="ghost"
-				className={classes.addButton}
+				className={addButtonClass}
 				onClick={async () => {
 					await addItems([name], { listId });
 				}}
 			>
 				<PlusCircledIcon />
 			</Button>
-		</div>
+		</Item>
 	);
 }

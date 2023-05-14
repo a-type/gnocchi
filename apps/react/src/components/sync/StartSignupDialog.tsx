@@ -7,7 +7,6 @@ import { sprinkles } from '@aglio/ui/styles';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { useSnapshot } from 'valtio';
 import { LoginButton } from './LoginButton.js';
-import * as classes from './StartSignupDialog.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 import {
 	Dialog,
@@ -16,7 +15,6 @@ import {
 	DialogContent,
 	DialogTitle,
 } from '@aglio/ui/components/dialog';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import { H2, P, Span } from '@aglio/ui/components/typography';
 import { signupDialogState } from '@/components/sync/state.js';
@@ -36,7 +34,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 			}}
 		>
 			<DialogContent width="lg">
-				<Box flexDirection="row" align="flex-start" gap={2}>
+				<div className="flex flex-row items-start gap-2">
 					<DialogTitle className={sprinkles({ flex: 1 })}>
 						Upgrade for sync &amp; more
 					</DialogTitle>
@@ -45,9 +43,9 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 							<Cross1Icon />
 						</Button>
 					</DialogClose>
-				</Box>
+				</div>
 				<P>Make {APP_NAME} your household's new grocery list.</P>
-				<div className={classes.grid}>
+				<div className="grid grid-cols-[1fr] gap-3 md:grid-cols-[repeat(2,1fr)]">
 					<div>
 						<H2>Sync with family or friends so everyone's on the same page</H2>
 						<P>Everyone you invite can add items to the list.</P>
@@ -74,7 +72,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 				</div>
 
 				<DialogActions>
-					<Box gap={2} align="center" m="auto" mt={1}>
+					<div className="flex flex-row gap-2 items-center m-auto mt-1">
 						<LoginButton
 							color="primary"
 							returnTo="/"
@@ -86,7 +84,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 							${PRICE_MONTHLY_DOLLARS} / month (${PRICE_YEARLY_DOLLARS} / year).
 							14 days free. Unlimited devices and collaborators.
 						</Span>
-					</Box>
+					</div>
 				</DialogActions>
 			</DialogContent>
 		</Dialog>

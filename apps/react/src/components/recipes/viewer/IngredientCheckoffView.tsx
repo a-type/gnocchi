@@ -3,7 +3,6 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
 import classNames from 'classnames';
-import * as classes from './IngredientCheckoffView.css.js';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
 
 export interface IngredientCheckoffViewProps {
@@ -23,7 +22,13 @@ export const IngredientCheckoffView = forwardRef<
 	hooks.useWatch(ingredients);
 
 	return (
-		<ul ref={ref} className={classNames(classes.list, className)}>
+		<ul
+			ref={ref}
+			className={classNames(
+				'list-none m-0 flex flex-col gap-4 p-0 w-full max-w-600px',
+				className,
+			)}
+		>
 			{ingredients.map((ingredient) => (
 				<IngredientCheckoffItem
 					key={ingredient.get('id')}
@@ -62,7 +67,7 @@ function IngredientCheckoffItem({
 }) {
 	const isSectionHeader = hooks.useWatch(ingredient, 'isSectionHeader');
 	return (
-		<li className={classNames(classes.item, checked && classes.itemChecked)}>
+		<li className={'flex flex-row gap-2 w-full'}>
 			{!isSectionHeader && (
 				<Checkbox
 					checked={checked}
@@ -70,7 +75,7 @@ function IngredientCheckoffItem({
 				/>
 			)}
 			<RecipeIngredientViewer
-				className={classes.ingredientContent}
+				className="flex-1"
 				ingredient={ingredient}
 				multiplier={multiplier}
 			/>

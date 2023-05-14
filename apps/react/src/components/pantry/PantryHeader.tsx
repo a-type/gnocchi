@@ -9,8 +9,6 @@ import {
 import { H1 } from '@aglio/ui/src/components/typography';
 import { sprinkles } from '@aglio/ui/styles';
 import { PlusIcon } from '@radix-ui/react-icons';
-import classNames from 'classnames';
-import * as classes from './PantryHeader.css.js';
 
 export function PantryHeader() {
 	return (
@@ -27,7 +25,7 @@ export function PantryHeader() {
 					</H1>
 					<CollapsibleTrigger asChild>
 						<Button size="icon" color="default">
-							<PlusIcon className={classes.plusIcon} />
+							<PlusIcon className="transition-transform [div[data-state=open]_&]:rotate-45" />
 						</Button>
 					</CollapsibleTrigger>
 				</Box>

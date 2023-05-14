@@ -1,6 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Formik } from 'formik';
-import * as classes from './NewTagForm.css.js';
 import { randomTheme } from '@aglio/ui/styles';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 
@@ -28,11 +27,11 @@ export function NewTagForm({ onCreate }: NewTagFormProps) {
 				}
 			}}
 		>
-			<Form className={classes.form}>
+			<Form className="flex items-center gap-2 flex-row max-w-full">
 				<TextField
 					name="name"
 					placeholder="tag name"
-					className={classes.input}
+					className="flex-1-0-0 min-w-60px max-w-40vw"
 					autoComplete="off"
 				/>
 				<SubmitButton>Create</SubmitButton>

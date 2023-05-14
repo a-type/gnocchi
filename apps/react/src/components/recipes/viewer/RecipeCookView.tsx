@@ -10,12 +10,11 @@ import { AddImagePrompt } from './AddImagePrompt.jsx';
 import { CookingActionBar } from './CookingActionBar.jsx';
 import { CookingToolbar } from './CookingToolbar.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
-import * as classes from './RecipeCookView.css.js';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { PageFixedArea } from '@aglio/ui/src/components/layouts';
 import { LinkButton } from '@/components/nav/Link.jsx';
 import { Cross2Icon } from '@radix-ui/react-icons';
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import {
 	TabsContent,
 	TabsList,
@@ -24,7 +23,6 @@ import {
 } from '@aglio/ui/src/components/tabs';
 import { Link } from '@verdant-web/react-router';
 import { IngredientCheckoffView } from '@/components/recipes/viewer/IngredientCheckoffView.jsx';
-import { sprinkles } from '@aglio/ui/styles';
 
 export interface RecipeCookViewProps {
 	className?: string;
@@ -39,8 +37,13 @@ export function RecipeCookView({
 	useWatchChanges(recipe);
 
 	return (
-		<div className={classNames(classes.container, className)}>
-			<PageFixedArea className={classes.fixedArea}>
+		<div
+			className={classNames(
+				'gap-4 flex flex-col items-start mb-300px',
+				className,
+			)}
+		>
+			<PageFixedArea className="flex flex-row items-center justify-between gap-2 w-full">
 				<CookingActionBar recipe={recipe} />
 				<LinkButton
 					to={makeRecipeLink(recipe)}
@@ -53,8 +56,8 @@ export function RecipeCookView({
 			</PageFixedArea>
 			<H1 gutterBottom={false}>{recipe.get('title')}</H1>
 			<RecipeNote recipe={recipe} />
-			<TabsRoot value={tab} className={classes.tabsRoot}>
-				<TabsList className={sprinkles({ width: 'full' })}>
+			<TabsRoot value={tab} className="w-full">
+				<TabsList className="w-full">
 					<Link to={makeRecipeLink(recipe, '/cook/prep')}>
 						<TabsTrigger value="prep">Prep</TabsTrigger>
 					</Link>
@@ -62,10 +65,10 @@ export function RecipeCookView({
 						<TabsTrigger value="cook">Cook</TabsTrigger>
 					</Link>
 				</TabsList>
-				<TabsContent value="prep" className={classes.content}>
+				<TabsContent value="prep" className="animate-fade-in-up">
 					<IngredientCheckoffView recipe={recipe} />
 				</TabsContent>
-				<TabsContent value="cook" className={classes.content}>
+				<TabsContent value="cook" className="animate-fade-in-up">
 					<Suspense>
 						<InstructionsProvider
 							isEditing={false}
@@ -75,17 +78,7 @@ export function RecipeCookView({
 							<RecipeInstructionsViewer recipe={recipe} />
 						</InstructionsProvider>
 					</Suspense>
-					<Suspense
-						fallback={
-							<div
-								style={{
-									width: '100%',
-									height: '100%',
-									backgroundColor: 'red',
-								}}
-							/>
-						}
-					>
+					<Suspense>
 						<AddImagePrompt recipe={recipe} />
 						<AddNotePrompt recipe={recipe} />
 						<CookingToolbar recipe={recipe} />

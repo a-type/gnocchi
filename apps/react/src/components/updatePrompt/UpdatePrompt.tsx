@@ -1,6 +1,3 @@
-import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
-import { useRegisterSW } from 'virtual:pwa-register/react';
-import * as classes from './UpdatePrompt.css.js';
 import { StarIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { Button } from '@aglio/ui/components/button';
@@ -24,8 +21,8 @@ export function UpdatePrompt({}: UpdatePromptProps) {
 	}
 
 	return (
-		<div className={classes.content}>
-			<div className={classes.text}>
+		<div className="flex flex-col gap-3 items-start bg-primary-wash color-black p-4 rounded-lg border border-solid border-primary w-full">
+			<div>
 				<StarIcon />
 				&nbsp;App update available!
 			</div>

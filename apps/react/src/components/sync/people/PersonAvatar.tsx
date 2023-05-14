@@ -1,7 +1,6 @@
 import { UserInfo } from '@verdant-web/store';
 import { Profile } from '@/stores/groceries/index.js';
 import classNames from 'classnames';
-import * as classes from './PersonAvatar.css.js';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { CSSProperties } from 'react';
 
@@ -19,7 +18,11 @@ export function PersonAvatar({
 	return (
 		<div
 			data-pop={popIn}
-			className={classNames(classes.root, !person && classes.empty, className)}
+			className={classNames(
+				'flex items-center justify-center rounded-full border-default p-2px overflow-hidden w-24px h-24px select-none relative bg-white [&[data-pop=true]]:(animate-pop-in-from-half springy)',
+				!person && 'border-dashed bg-gray2',
+				className,
+			)}
 			{...rest}
 		>
 			{person && <AvatarContent user={person} />}
@@ -32,7 +35,7 @@ function AvatarContent({ user }: { user: UserInfo<Profile, any> }) {
 	if (user.profile?.imageUrl) {
 		return (
 			<img
-				className={classes.image}
+				className="w-full h-full object-cover rounded-full"
 				referrerPolicy="no-referrer"
 				crossOrigin="anonymous"
 				src={user.profile.imageUrl}
@@ -40,7 +43,7 @@ function AvatarContent({ user }: { user: UserInfo<Profile, any> }) {
 		);
 	}
 	return (
-		<div className={classes.initials}>
+		<div className="color-black items-center justify-center flex text-sm font-bold rounded-full">
 			{user.profile.name?.charAt(0) || '?'}
 		</div>
 	);

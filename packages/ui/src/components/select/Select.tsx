@@ -77,17 +77,18 @@ export const SelectIcon = forwardRef<
 	);
 });
 
+const zIndex = { zIndex: 1001 };
 export const SelectContent = forwardRef<
 	HTMLDivElement,
 	SelectPrimitive.SelectContentProps & { inDialog?: boolean }
 >(({ children, inDialog, className, ...props }, forwardedRef) => {
 	return (
-		<SelectPrimitive.Portal>
+		<SelectPrimitive.Portal className={className} style={zIndex}>
 			<SelectPrimitive.Content
 				className={classNames(
 					classes.content,
 					inDialog && classes.contentInDialog,
-					className,
+					// className,
 				)}
 				{...props}
 				ref={forwardedRef}

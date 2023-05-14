@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { Suspense, useState } from 'react';
 import { RecipeTagsList } from '../collection/RecipeTagsList.jsx';
 import { NewTagForm } from './NewTagForm.jsx';
-import * as classes from './RecipeTagsEditor.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
 import { themeMap } from '@aglio/ui/styles';
@@ -32,9 +31,9 @@ export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 	const removeTag = (name: string) => tags.removeAll(name);
 
 	return (
-		<div className={classNames(classes.root, className)}>
+		<div className={classNames('flex flex-col gap-2', className)}>
 			<H2>Tags</H2>
-			<div className={classes.list}>
+			<div className="flex flex-wrap gap-1 p-1">
 				{tags?.map((tag) => (
 					<Suspense key={tag}>
 						<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
@@ -59,15 +58,15 @@ function TagDisplay({
 	const color = data?.get('color') as ThemeName | undefined;
 
 	return (
-		<div className={classNames(classes.tag, color && themeMap[color])}>
+		<div
+			className={classNames(
+				'flex items-center gap-1 p-1 pl-3 rounded-lg bg-primaryLight color-black font-bold',
+				color && themeMap[color],
+			)}
+		>
 			<span>{icon ?? <Icon name="tag" />}</span>
 			<span>{tag}</span>
-			<Button
-				size="small"
-				color="ghost"
-				className={classes.tagRemoveButton}
-				onClick={() => onRemove(tag)}
-			>
+			<Button size="small" color="ghost" onClick={() => onRemove(tag)}>
 				<Cross2Icon />
 			</Button>
 		</div>
@@ -102,7 +101,7 @@ function TagAdd({
 					{empty && <span>Add tag</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className={classes.popover}>
+			<PopoverContent className="max-w-350px">
 				<PopoverArrow />
 				<Suspense>
 					<NewTagForm onCreate={addTag} />

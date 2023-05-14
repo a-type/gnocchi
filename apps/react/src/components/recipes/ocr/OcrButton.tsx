@@ -7,7 +7,6 @@ import {
 } from '@aglio/ui/src/components/dialog';
 import { CameraIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import * as classes from './OcrButton.css.js';
 
 export interface OcrButtonProps extends ButtonProps {
 	onText: (text: string) => void;
@@ -27,8 +26,8 @@ export function OcrButton({ onText }: OcrButtonProps) {
 					<CameraIcon />
 				</Button>
 			</DialogTrigger>
-			<DialogContent className={classes.dialog}>
-				<Capturer onComplete={onComplete} className={classes.capturer} />
+			<DialogContent className="w-full h-full max-w-none max-h-none p-0 border-none rounded-0 flex flex-col">
+				<Capturer onComplete={onComplete} className="flex-1" />
 			</DialogContent>
 		</Dialog>
 	);

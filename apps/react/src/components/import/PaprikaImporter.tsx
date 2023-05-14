@@ -1,7 +1,3 @@
-// import { ungzip } from 'pako';
-// import { ZipReader, BlobReader, BlobWriter } from '@zip.js/zip.js';
-import classNames from 'classnames';
-import * as classes from './PaprikaImporter.css.js';
 import { Button } from '@aglio/ui/src/components/button';
 import { ReactNode, forwardRef, useCallback, useState } from 'react';
 import {
@@ -16,7 +12,6 @@ import { hooks } from '@/stores/groceries/index.js';
 import { instructionsToDoc, stringToDoc } from '@/lib/tiptap.js';
 import { parseIngredient } from '@aglio/conversion';
 import { ActionBar, ActionButton } from '@aglio/ui/src/components/actions';
-import { sprinkles } from '@aglio/ui/styles';
 import cuid from 'cuid';
 
 type PaprikaRecipe = {
@@ -165,11 +160,7 @@ export const PaprikaImporter = forwardRef<
 				}
 			}}
 		>
-			<label
-				className={classNames(classes.fileInputLabel, className)}
-				ref={ref}
-				{...rest}
-			>
+			<label className={className} ref={ref} {...rest}>
 				<input
 					type="file"
 					accept=".paprikarecipes"
@@ -187,13 +178,13 @@ export const PaprikaImporter = forwardRef<
 							);
 						}
 					}}
-					className={classes.fileInput}
+					className="hidden-input"
 				/>
 				{children}
 			</label>
 			<DialogContent>
 				<DialogTitle>Choose recipes</DialogTitle>
-				<ActionBar className={sprinkles({ flexShrink: 0 })}>
+				<ActionBar className="flex-shrink-0">
 					<ActionButton onClick={() => setSelected({})}>
 						Select none
 					</ActionButton>
@@ -209,7 +200,7 @@ export const PaprikaImporter = forwardRef<
 						Select all
 					</ActionButton>
 				</ActionBar>
-				<div className={classes.list}>
+				<div className="flex flex-col items-stretch p-0 m-0 gap-2">
 					{data.map((recipe) => (
 						<RecipeItem
 							key={recipe.uid}
@@ -246,9 +237,9 @@ function RecipeItem({
 	onSelectedChange: (selected: boolean) => void;
 }) {
 	return (
-		<label className={classes.item}>
+		<label className="flex flex-row items-center p-2 gap-2">
 			<Checkbox checked={selected} onCheckedChange={onSelectedChange} />
-			<div className={classes.itemTitle}>{recipe.name}</div>
+			<div className="flex-1 font-bold">{recipe.name}</div>
 		</label>
 	);
 }

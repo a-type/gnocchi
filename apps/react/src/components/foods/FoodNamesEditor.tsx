@@ -1,10 +1,6 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { Food, FoodAlternateNames } from '@aglio/groceries-client';
+import { FoodAlternateNames } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/src/components/button';
-import { Span } from '@aglio/ui/src/components/typography';
-import { Cross2Icon, PlusCircledIcon, PlusIcon } from '@radix-ui/react-icons';
-import classNames from 'classnames';
-import * as classes from './FoodNamesEditor.css.js';
 import {
 	Dialog,
 	DialogActions,
@@ -12,10 +8,12 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/src/components/dialog';
-import { Formik, setNestedObjectValues } from 'formik';
 import { Form, SubmitButton, TextField } from '@aglio/ui/src/components/forms';
-import { toast } from 'react-hot-toast';
+import { Span } from '@aglio/ui/src/components/typography';
+import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
+import { Formik } from 'formik';
 import { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 export interface FoodNamesEditorProps {
 	names: FoodAlternateNames;
@@ -27,7 +25,7 @@ export function FoodNamesEditor({ names }: FoodNamesEditorProps) {
 	const unique = Array.from(new Set(asArray));
 
 	return (
-		<div className={classes.root}>
+		<div className="flex flex-row items-center flex-wrap gap-2">
 			{unique.map((name) => (
 				<FoodNameTag
 					key={name}
@@ -48,13 +46,13 @@ function FoodNameTag({
 	onDelete: (name: string) => void;
 }) {
 	return (
-		<div className={classes.tag}>
+		<div className="inline-flex flex-row items-center whitespace-nowrap gap-1 px-3 py-1 rounded-xl border border-solid border-black text-sm">
 			<Span>{name}</Span>
 			<Button
 				size="icon"
 				onClick={() => onDelete(name)}
 				color="ghost"
-				className={classes.removeButton}
+				className="p-2"
 			>
 				<Cross2Icon />
 			</Button>
@@ -82,8 +80,10 @@ function AddNameButton({ names }: { names: FoodAlternateNames }) {
 						try {
 							// cannot add a name that already exists elsewhere
 							const lookup = await client.foods.findOne({
-								where: 'nameLookup',
-								equals: values.name,
+								index: {
+									where: 'nameLookup',
+									equals: values.name,
+								},
 							}).resolved;
 
 							if (lookup) {

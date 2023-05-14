@@ -1,6 +1,5 @@
 import { Onboarding, OnboardingStep } from '@/onboarding/createOnboarding.js';
 import classNames from 'classnames';
-import * as classes from './OnboardingBanner.css.js';
 import { ReactNode } from 'react';
 import { leekTheme } from '@aglio/ui/styles';
 import {
@@ -24,20 +23,17 @@ export function OnboardingBanner<O extends Onboarding<any>>({
 	className,
 	disableNext,
 }: OnboardingBannerProps<O>) {
-	const skip = onboarding.useSkip();
 	const [show, next, isLast] = onboarding.useStep(step);
-
-	// if (!show) return null;
 
 	return (
 		<CollapsibleRoot
 			open={show}
-			className={classNames(leekTheme, classes.root, className)}
+			className={classNames('theme-leek', 'w-full', className)}
 		>
 			<CollapsibleContent>
-				<div className={classes.content}>
+				<div className="flex flex-col w-full bg-primaryWash color-black p-4 rounded-lg gap-3">
 					<div>{children}</div>
-					<div className={classes.buttons}>
+					<div className="flex justify-end gap-3">
 						{!disableNext && (
 							<Button color="ghost" onClick={next}>
 								{isLast ? 'Finish' : 'Next'}
