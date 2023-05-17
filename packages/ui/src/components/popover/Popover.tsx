@@ -12,18 +12,21 @@ const StyledContent = withClassName(
 	'will-change-transform',
 	'animate-ease-springy animate-duration-200',
 	'important:motion-reduce:animate-none',
-	'[&[data-state=open][data-side=top]]:animate-keyframes-fade-in-up',
-	'[&[data-state=open][data-side=right]]:animate-keyframes-fade-in-right',
-	'[&[data-state=open][data-side=bottom]]:animate-keyframes-fade-in-down',
-	'[&[data-state=open][data-side=left]]:animate-keyframes-fade-in-left',
-	'[&[data-state=closed][data-side=top]]:animate-keyframes-fade-out-down',
-	'[&[data-state=closed][data-side=right]]:animate-keyframes-fade-out-left',
-	'[&[data-state=closed][data-side=bottom]]:animate-keyframes-fade-out-up',
-	'[&[data-state=closed][data-side=left]]:animate-keyframes-fade-out-right',
+	'[&[data-state=open][data-side=top]]:animate-name-fade-in-down',
+	'[&[data-state=open][data-side=right]]:animate-name-fade-in-left',
+	'[&[data-state=open][data-side=bottom]]:animate-name-fade-in-up',
+	'[&[data-state=open][data-side=left]]:animate-name-fade-in-right',
+	'[&[data-state=closed][data-side=top]]:animate-name-fade-out-up',
+	'[&[data-state=closed][data-side=right]]:animate-name-fade-out-right',
+	'[&[data-state=closed][data-side=bottom]]:animate-name-fade-out-down',
+	'[&[data-state=closed][data-side=left]]:animate-name-fade-out-left',
 	'layer-components:[&[data-state=open]]:(opacity-100 flex flex-col)',
 );
 
-const StyledArrow = withClassName(PopoverPrimitive.Arrow, 'fill-white');
+const StyledArrow = withClassName(
+	PopoverPrimitive.Arrow,
+	'fill-white stroke-black',
+);
 
 const StyledClose = withClassName(
 	PopoverPrimitive.Close,

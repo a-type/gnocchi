@@ -248,7 +248,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 
 const ListItem = withClassName(
 	'li',
-	'list-item flex align-start justify-between w-full rd-0 px-4 py-2 border-width-0 border-black border-style-solid repeated:border-t-1',
+	'text-md list-item flex align-start justify-between w-full rd-0 px-4 py-2 border-width-0 border-black border-style-solid repeated:border-t-1',
 );
 
 export const AddBar = forwardRef<HTMLDivElement, AddBarProps>(function AddBar(

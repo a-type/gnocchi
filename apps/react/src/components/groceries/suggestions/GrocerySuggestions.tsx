@@ -73,6 +73,7 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 				'transition-transform-200',
 				'transition-colors-500',
 				'[&[data-state=closed]]:bg-transparent',
+				'sm:rounded-sm',
 			)}
 		>
 			<CollapsibleTrigger asChild>
