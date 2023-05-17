@@ -3,7 +3,6 @@ import { Recipe } from '@aglio/groceries-client';
 import classNames from 'classnames';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { themeMap } from '@aglio/ui/styles';
 import { RecipeTagMenuWrapper } from '@/components/recipes/tags/RecipeTagMenuWrapper.jsx';
 
 export interface RecipeTagsViewerProps {
@@ -34,7 +33,7 @@ function RecipeTagViewer({ tag }: { tag: string }) {
 			<div
 				className={classNames(
 					'flex items-center gap-1 px-3 py-1 rounded-lg bg-primaryLight color-black font-bold',
-					data?.get('color') && themeMap[data.get('color') as ThemeName],
+					data?.get('color') && `theme-${data.get('color')}`,
 				)}
 			>
 				<span>{data?.get('icon') ?? <Icon name="tag" />}</span>

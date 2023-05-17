@@ -20,7 +20,6 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 } from '@aglio/ui/components/collapsible';
-import { Span } from '@aglio/ui/components/typography';
 import { useToggle } from '@aglio/ui/hooks';
 
 (window as any).convertUnits = convertUnits;
@@ -137,7 +136,7 @@ export function RecipeIngredientViewer({
 				className="mr-auto self-start italic color-gray7"
 			>
 				<CollapsibleContent className="pr-2">
-					<Span size="sm">Converted: {convertedValue}</Span>
+					<span className="text-sm">Converted: {convertedValue}</span>
 				</CollapsibleContent>
 			</CollapsibleRoot>
 			<CollapsibleRoot open={showNote}>

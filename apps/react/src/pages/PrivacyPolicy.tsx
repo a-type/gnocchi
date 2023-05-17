@@ -1,6 +1,5 @@
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { sprinkles } from '@aglio/ui/styles';
 
 export function PrivacyPolicy() {
 	return (
@@ -27,14 +26,7 @@ export function PrivacyPolicy() {
 					</a>
 					.
 				</p>
-				<div
-					className={sprinkles({
-						color: 'accentInk',
-						background: 'accentWash',
-						padding: 3,
-						borderRadius: 'md',
-					})}
-				>
+				<div className="color-accent-ink bg-accent-wash p-3 rounded-md">
 					<p>
 						<strong>Grant's note</strong>: the rest of this is largely a
 						standard privacy policy, but if you're wondering, Gnocchi collects

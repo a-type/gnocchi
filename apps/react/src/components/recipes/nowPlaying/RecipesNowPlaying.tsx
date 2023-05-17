@@ -6,7 +6,6 @@ import {
 	CollapsibleTrigger,
 } from '@aglio/ui/src/components/collapsible';
 import { PageNowPlaying } from '@aglio/ui/src/components/layouts';
-import { Span } from '@aglio/ui/src/components/typography';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 export interface RecipesNowPlayingProps {
@@ -28,14 +27,12 @@ export function RecipesNowPlaying({
 	}
 
 	return (
-		<PageNowPlaying className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-light overflow-hidden animate-fade-in-up duration-300 ease-out">
+		<PageNowPlaying className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-light overflow-hidden animate-fade-in-up animate-duration-300 ease-out">
 			<CollapsibleRoot defaultOpen={defaultOpen} className="w-full">
 				<CollapsibleTrigger asChild>
 					<div className="flex flex-row items-center justify-between w-full pr-5">
-						<Span size="xs" italic className="py-1 px-2">
-							Now Cooking
-						</Span>
-						<ChevronDownIcon className="transition-transform [[data-state=closed]_&]:rotate-180" />
+						<span className="text-xs italic py-1 px-2">Now Cooking</span>
+						<ChevronDownIcon className="transition-transform duration-200 [[data-state=closed]_&]:rotate-180" />
 					</div>
 				</CollapsibleTrigger>
 				<CollapsibleContent>

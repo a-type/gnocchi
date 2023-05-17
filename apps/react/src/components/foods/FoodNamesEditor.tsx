@@ -9,7 +9,6 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/src/components/dialog';
 import { Form, SubmitButton, TextField } from '@aglio/ui/src/components/forms';
-import { Span } from '@aglio/ui/src/components/typography';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Formik } from 'formik';
 import { useState } from 'react';
@@ -46,13 +45,13 @@ function FoodNameTag({
 	onDelete: (name: string) => void;
 }) {
 	return (
-		<div className="inline-flex flex-row items-center whitespace-nowrap gap-1 px-3 py-1 rounded-xl border border-solid border-black text-sm">
-			<Span>{name}</Span>
+		<div className="inline-flex flex-row items-center whitespace-nowrap gap-1 px-3 py-1 rounded-2xl border border-solid border-black text-sm">
+			<span>{name}</span>
 			<Button
 				size="icon"
 				onClick={() => onDelete(name)}
 				color="ghost"
-				className="p-2"
+				className="important:p-2px"
 			>
 				<Cross2Icon />
 			</Button>
@@ -67,7 +66,10 @@ function AddNameButton({ names }: { names: FoodAlternateNames }) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button size="small">
+				<Button
+					size="small"
+					className="important:rounded-2xl important:px-3 important:py-1"
+				>
 					<PlusIcon />
 					<span>Add name</span>
 				</Button>

@@ -4,7 +4,6 @@ import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
-import { Box } from '@aglio/ui/components/box';
 import { H3, P } from '@aglio/ui/components/typography';
 import {
 	DndContext,
@@ -81,9 +80,9 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 					<P>Sync between devices and other members of your household,</P>
 					<P>collaborate in real time while shopping or cooking,</P>
 					<P>and make copies of recipes from anywhere on the web.</P>
-					<Box direction="row">
+					<div className="flex flex-row">
 						<PromoteSubscriptionButton>Upgrade now</PromoteSubscriptionButton>
-					</Box>
+					</div>
 				</OnboardingBanner>
 				{showSuggestions && (
 					<Suspense>
@@ -111,12 +110,9 @@ const GroceryListCategories = forwardRef<
 	}
 
 	return (
-		<Box
+		<div
 			id="groceryList"
-			width="full"
-			flexGrow={1}
-			p={2}
-			mb={20}
+			className="flex flex-col w-full flex-grow-1 p-2 mb-20"
 			ref={ref}
 			{...props}
 		>
@@ -130,7 +126,7 @@ const GroceryListCategories = forwardRef<
 					/>
 				);
 			})}
-		</Box>
+		</div>
 	);
 });
 

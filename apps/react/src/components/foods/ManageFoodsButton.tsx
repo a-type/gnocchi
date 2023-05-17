@@ -1,7 +1,6 @@
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { FoodName } from '@/components/foods/FoodName.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Box } from '@aglio/ui/src/components/box';
 import { Button } from '@aglio/ui/src/components/button';
 import {
 	Dialog,
@@ -38,21 +37,18 @@ function FoodsList() {
 	const foods = hooks.useAllFoods();
 
 	return (
-		<Box display="flex" direction="column">
+		<div className="flex flex-col">
 			{foods.map((food) => (
-				<Box
+				<div
 					key={food.get('canonicalName')}
-					direction="row"
-					gap={4}
-					justifyContent="space-between"
-					p={2}
+					className="flex flex-row gap-4 justify-between p-2"
 				>
-					<Box flex={1} fontSize="md" fontWeight="bold">
+					<div className="flex flex-1 text-md font-bold">
 						<FoodName food={food} />
-					</Box>
+					</div>
 					<FoodDetailDialog foodName={food.get('canonicalName')} />
-				</Box>
+				</div>
 			))}
-		</Box>
+		</div>
 	);
 }

@@ -1,7 +1,5 @@
 import classNames from 'classnames';
 import { HTMLAttributes } from 'react';
-import { Box, BoxProps } from '../box.js';
-import * as classes from './PageContent.css.js';
 import { NavOutlet } from './PageNav.jsx';
 
 export function PageContent({
@@ -15,24 +13,32 @@ export function PageContent({
 }: HTMLAttributes<HTMLDivElement> & {
 	fullHeight?: boolean;
 	noPadding?: boolean;
-	innerProps?: BoxProps;
+	innerProps?: HTMLAttributes<HTMLDivElement>;
 	nav?: boolean;
 }) {
 	return (
-		<div className={classNames(classes.content, className)} {...rest}>
-			<Box
+		<div
+			className={classNames(
+				'grid grid-areas-[innerContent] grid-cols[1fr] grid-rows-[1fr] items-start justify-center relative flex-1 gap-3 h-max-content',
+				'sm:(grid-areas-[gutter1_nav_innerContent_gutter2] grid-cols-[1fr_auto_min(800px,60vw)_1fr])',
+				className,
+			)}
+			{...rest}
+		>
+			<div
 				{...innerProps}
 				className={classNames(
-					classes.innerContent,
+					'w-full min-w-0 flex flex-col mb-120px [grid-area:innerContent] px-4 py-6',
+					'sm:(max-w-700px w-full)',
 					{
-						[classes.innerContentFullHeight]: fullHeight,
-						[classes.contentNoPadding]: noPadding,
+						'flex-1': fullHeight,
+						'important:(p-0 sm:p-4)': noPadding,
 					},
 					innerProps?.className,
 				)}
 			>
 				{children}
-			</Box>
+			</div>
 			<NavOutlet />
 		</div>
 	);

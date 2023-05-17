@@ -3,7 +3,6 @@
 import React, { ComponentPropsWithoutRef } from 'react';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import classNames from 'classnames';
-import * as classes from './Tooltip.css.js';
 
 function Content({
 	children,
@@ -13,11 +12,18 @@ function Content({
 	return (
 		<TooltipPrimitive.Portal>
 			<TooltipPrimitive.Content
-				className={classNames(classes.content, className)}
+				className={classNames(
+					'relative rounded-lg py-2 px-3 border-default text-sm leading-tight color-inherit bg-white shadow-sm select-none display-none z-tooltip sm:display-initial',
+					'[&[data-state=delayed-open][data-side=top]]:animate-fade-in-up',
+					'[&[data-state=delayed-open][data-side=right]]:animate-fade-in-right',
+					'[&[data-state=delayed-open][data-side=bottom]]:animate-fade-in-down',
+					'[&[data-state=delayed-open][data-side=left]]:animate-fade-in-left',
+					className,
+				)}
 				{...props}
 			>
 				{children}
-				<TooltipPrimitive.Arrow className={classes.arrow} />
+				<TooltipPrimitive.Arrow className="fill-white stroke-black stroke-1" />
 			</TooltipPrimitive.Content>
 		</TooltipPrimitive.Portal>
 	);

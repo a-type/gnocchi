@@ -8,9 +8,8 @@ import {
 	SelectValue,
 } from '../select/Select.jsx';
 import classNames from 'classnames';
-import * as classes from './ColorPicker.css.js';
-import { themeMap } from '../../styles/themes/map.js';
 import { ReactNode } from 'react';
+import { withClassName } from '../../hooks/withClassName.js';
 
 export type ThemeName = 'lemon' | 'tomato' | 'leek' | 'blueberry' | 'eggplant';
 
@@ -20,7 +19,13 @@ export interface ColorPickerProps {
 }
 
 export function ColorPicker({ value, onChange }: ColorPickerProps) {
-	const resolvedValue = Object.keys(themeMap).includes(value || '')
+	const resolvedValue = [
+		'lemon',
+		'tomato',
+		'leek',
+		'blueberry',
+		'eggplant',
+	].includes(value || '')
 		? (value as ThemeName)
 		: 'lemon';
 
@@ -29,31 +34,33 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
 			<SelectTrigger>
 				<SelectValue />
 			</SelectTrigger>
-			<SelectContent className={classes.pickerContent}>
+			<SelectContent className="z-[calc(var(--z-dialog)+1)]">
 				<SelectItem value="lemon">
 					<ColorSwatch value="lemon" />
-					<span className={classes.itemLabel}>Lemon</span>
+					<ItemLabel>Lemon</ItemLabel>
 				</SelectItem>
 				<SelectItem value="tomato">
 					<ColorSwatch value="tomato" />
-					<span className={classes.itemLabel}>Tomato</span>
+					<ItemLabel>Tomato</ItemLabel>
 				</SelectItem>
 				<SelectItem value="leek">
 					<ColorSwatch value="leek" />
-					<span className={classes.itemLabel}>Leek</span>
+					<ItemLabel>Leek</ItemLabel>
 				</SelectItem>
 				<SelectItem value="blueberry">
 					<ColorSwatch value="blueberry" />
-					<span className={classes.itemLabel}>Blueberry</span>
+					<ItemLabel>Blueberry</ItemLabel>
 				</SelectItem>
 				<SelectItem value="eggplant">
 					<ColorSwatch value="eggplant" />
-					<span className={classes.itemLabel}>Eggplant</span>
+					<ItemLabel>Eggplant</ItemLabel>
 				</SelectItem>
 			</SelectContent>
 		</Select>
 	);
 }
+
+const ItemLabel = withClassName('span', 'display-none');
 
 export function ColorSwatch({
 	value,
@@ -64,7 +71,10 @@ export function ColorSwatch({
 }) {
 	return (
 		<div
-			className={classNames(classes.swatch, themeMap[value] ?? themeMap.lemon)}
+			className={classNames(
+				'bg-primary w-16px h-16px rounded-sm',
+				`theme-${value ?? 'lemon'}`,
+			)}
 		>
 			{children}
 		</div>

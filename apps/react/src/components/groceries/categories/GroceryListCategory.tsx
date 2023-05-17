@@ -1,18 +1,17 @@
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { Category, Item } from '@aglio/groceries-client';
-import { useSizeCssVars } from '@aglio/ui/hooks';
-import { vars } from '@aglio/ui/styles';
+import { useSizeCssVars, withClassName } from '@aglio/ui/hooks';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useIsDragging } from '../dndHooks.js';
 import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
-import * as classes from './GroceryListCategory.css.js';
 import { CategoryClaim } from '@/components/groceries/categories/CategoryClaim.jsx';
 import {
 	CategoryTitle,
 	CategoryTitleRow,
 } from '@/components/groceries/categories/CategoryTitleRow.jsx';
+import './GroceryListCategory.css';
 
 const EMPTY_DROPPABLE_SIZE = 48;
 
@@ -46,8 +45,8 @@ export function GroceryListCategory({
 	const finalRef = useMergedRef(internalRef, setNodeRef, measureRef);
 
 	return (
-		<div
-			className={classNames('groceryCategory', classes.root)}
+		<CategoryRoot
+			className={classNames('groceryCategory')}
 			data-dragged-over={isOver}
 			data-is-item-dragging={isDragging}
 			data-is-empty={empty}
@@ -65,10 +64,7 @@ export function GroceryListCategory({
 					</div>
 				)}
 			</CategoryTitleRow>
-			<div
-				className="flex flex-col transition-opacity duration-200 ease-springy [&data-is-item-dragging=true]:opacity-0"
-				data-is-item-dragging={isDragging}
-			>
+			<div className="" data-is-item-dragging={isDragging}>
 				{items.map((item, index) => {
 					return (
 						<MemoizedDraggableItem
@@ -79,9 +75,26 @@ export function GroceryListCategory({
 					);
 				})}
 			</div>
-		</div>
+		</CategoryRoot>
 	);
 }
+
+export const CategoryRoot = withClassName(
+	'div',
+	'flex flex-col gap-1 rounded-md bg-wash overflow-hidden ease-springy transition mb-2',
+	'[&[data-dragged-over=true]]:(bg-primary-wash shadow-[0_0_0_1px_var(--color-primary-dark)])',
+	'[&[data-is-item-dragging=true]]:(shadow-[0_0_0_1px_var(--color-gray-3)] mb-2)',
+	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 opacity-0 pointer-events-none mb-0 [animation-name:category-collapse] animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
+	'important:[&[data-do-not-animate=true]]:(animate-none) important:motion-reduce:animate-none',
+	'[&[data-is-item-dragging=true][data-dragged-over=false]]:(scale-95)',
+	'[&[data-is-empty=false][data-dragged-over=false][data-is-item-dragging=false]]:(animate-fade-in-up animate-duration-200 animate-ease-springy)',
+	'focus-visible:(color-primary-dark outline-1 outline-solid outline-primary)',
+);
+
+export const CategoryItems = withClassName(
+	'div',
+	'flex flex-col transition-opacity duration-200 ease-springy [&data-is-item-dragging=true]:opacity-0',
+);
 
 function waitForAnimationCancel(animation: Animation) {
 	return new Promise((resolve) => {
@@ -147,12 +160,12 @@ function useDragExpansion({
 					{
 						height: `${element.clientHeight}px`,
 						opacity: empty ? 0 : 1,
-						marginBottom: empty ? 0 : vars.space[4],
+						marginBottom: empty ? 0 : '32px',
 					},
 					{
 						height: `${EMPTY_DROPPABLE_SIZE}px`,
 						opacity: 1,
-						marginBottom: vars.space[4],
+						marginBottom: '32px',
 					},
 				],
 				{

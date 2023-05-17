@@ -1,9 +1,9 @@
 'use client';
 
 import classNames from 'classnames';
-import * as classes from './TextArea.css.js';
 import useMergedRef from '../../hooks/useMergedRef.js';
 import { forwardRef, HTMLProps, useLayoutEffect, useRef } from 'react';
+import { inputClassName } from '../input.js';
 
 export interface TextAreaProps
 	extends Omit<HTMLProps<HTMLTextAreaElement>, 'ref'> {
@@ -43,9 +43,11 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 			<textarea
 				ref={finalRef}
 				className={classNames(
-					classes.root({
-						resizeable: !autoSize,
-					}),
+					inputClassName,
+					'[font-family:inherit] text-inherit overflow-hidden',
+					{
+						'resize-vertical': !autoSize,
+					},
 					className,
 				)}
 				rows={autoSize ? 1 : rows}

@@ -1,4 +1,4 @@
-import { withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import classNames from 'classnames';
 import {
@@ -17,7 +17,7 @@ import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubsc
 import { useOnVisible } from '@/hooks/useOnVisible.js';
 import { useSearchParams } from '@verdant-web/react-router';
 import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
-import { H2, P, Span } from '@aglio/ui/components/typography';
+import { H2, P } from '@aglio/ui/components/typography';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { LinkButton } from '@/components/nav/Link.jsx';
 
@@ -218,12 +218,12 @@ export function SplashPage() {
 					Get Started
 				</LinkButton>
 
-				<Span size="sm">
+				<span className="text-sm">
 					Free, no signup required. By continuing you agree to{' '}
 					<TextLink to="/tos" newTab>
 						the terms and conditions of usage.
 					</TextLink>
-				</Span>
+				</span>
 			</div>
 		</div>
 	);

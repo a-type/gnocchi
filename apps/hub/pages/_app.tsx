@@ -1,9 +1,8 @@
-import { lemonTheme } from '@aglio/ui/styles';
 // @ts-ignore
 import type { AppProps } from 'next/app';
 
 if (typeof window !== 'undefined') {
-	document.body.className = lemonTheme;
+	document.body.className = 'theme-lemon';
 }
 
 export default function MyApp({ Component, pageProps }: AppProps) {

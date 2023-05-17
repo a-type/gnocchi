@@ -1,7 +1,6 @@
 import { Onboarding, OnboardingStep } from '@/onboarding/createOnboarding.js';
 import classNames from 'classnames';
 import { ReactNode } from 'react';
-import { leekTheme } from '@aglio/ui/styles';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,

@@ -2,7 +2,6 @@
 
 import classNames from 'classnames';
 import { forwardRef, lazy } from 'react';
-import * as classes from './RichEditor.css.js';
 
 const EditorContent = lazy(() => import('./EditorContent.js'));
 
@@ -22,7 +21,12 @@ export const RichEditor = forwardRef<any, RichEditorProps>(function RichEditor(
 	return (
 		<EditorContent
 			ref={ref as any}
-			className={classNames(classes.root, className)}
+			className={classNames('w-full',
+			'[&_.ProseMirror:focus]:(outline-none bg-gray1)',
+			'[&_.ProseMirror_h1,h2,h3,p]:mt-0',
+			'[&_.ProseMirror_h1]:(text-xl font-medium)',
+			'[&_.ProseMirror_h2]:(text-lg font-medium mt-4 mb-2)',
+			'[&_.ProseMirror_h3]:(text-md font-extrabold)', className)}
 			{...rest}
 		/>
 	);

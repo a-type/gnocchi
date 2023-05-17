@@ -22,14 +22,14 @@ export function RecipeInstructionsField({
 	return (
 		<div className="flex flex-col gap-2">
 			{/* {isMobileOs() && (
-				<Box background="primaryWash" p={2} borderRadius="md">
+				<div className="bg-primary-wash p-2 rounded-md flex flex-col">
 					<P size="xs">
 						Hi, mobile user! Sorry, but the instruction editor doesn't always
 						work correctly on phones. I'm working on it! If you have a sync
 						subscription, I recommend switching to a computer to write up your
 						recipes for now.
 					</P>
-				</Box>
+				</div>
 			)} */}
 			{editor && <Toolbar editor={editor} />}
 			<RichEditor
@@ -54,7 +54,7 @@ function isMobileOs() {
 function Toolbar({ editor }: { editor: Editor }) {
 	return (
 		// Sticks below the action bar
-		<div className="flex flex-row gap-2 items-center sticky z-1 top-44px bg-light">
+		<div className="flex flex-row gap-2 items-center sticky z-1 top-44px bg-wash">
 			<Button
 				color="ghost"
 				onClick={() => {

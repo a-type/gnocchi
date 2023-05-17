@@ -1,6 +1,5 @@
 import { recipeTagEditorState } from '@/components/recipes/tags/recipeTagEditorState.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { Box } from '@aglio/ui/src/components/box';
 import { Button } from '@aglio/ui/src/components/button';
 import { ColorPicker, ThemeName } from '@aglio/ui/src/components/colorPicker';
 import {
@@ -32,13 +31,13 @@ export function RecipeTagEditor() {
 		>
 			<DialogContent>
 				<DialogTitle>Edit {tag?.get('name')}</DialogTitle>
-				<Box direction="row" gap={3}>
-					<Box>Color:</Box>
+				<div className="flex gap-3">
+					<div>Color:</div>
 					<ColorPicker
 						onChange={(color) => tag?.set('color', color)}
 						value={tag?.get('color') as ThemeName | null}
 					/>
-				</Box>
+				</div>
 
 				<DialogActions>
 					<DialogClose asChild>

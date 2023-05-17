@@ -13,9 +13,7 @@ import {
 } from '@aglio/ui/components/dialog';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
-import { Box } from '@aglio/ui/components/box';
 import { H2, H3, P } from '@aglio/ui/components/typography';
-import { sprinkles } from '@aglio/ui/styles';
 
 export interface ItemSourcesProps {
 	item: Item;
@@ -24,7 +22,7 @@ export interface ItemSourcesProps {
 export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 	hooks.useWatch(item.get('inputs'));
 	return (
-		<div className="mr-auto mt-2 mb-0 text-xs min-w-0" {...rest}>
+		<div className="mr-auto mt-2 mb-0 text-xs leading-tight min-w-0" {...rest}>
 			<label className="italic inline mr-2">Sources:</label>
 			<ul
 				className="color-gray7 list-none p-0 m-0 max-w-full overflow-hidden inline-flex flex-col"
@@ -129,19 +127,19 @@ function RecipePreviewContent({
 
 	if (!live || !recipe) {
 		return (
-			<Box>
+			<div>
 				<H2>Recipe not found</H2>
 				<P>It may have been deleted.</P>
-			</Box>
+			</div>
 		);
 	}
 
 	const { title, ingredients } = live;
 
 	return (
-		<Box>
-			<H2 gutterBottom={false}>{title}</H2>
-			<TextLink className={sprinkles({ mb: 3 })} to={makeRecipeLink(recipe)}>
+		<div>
+			<H2>{title}</H2>
+			<TextLink className="mb-3" to={makeRecipeLink(recipe)}>
 				View recipe
 			</TextLink>
 			<H3>Ingredients</H3>
@@ -155,6 +153,6 @@ function RecipePreviewContent({
 					</li>
 				))}
 			</ul>
-		</Box>
+		</div>
 	);
 }

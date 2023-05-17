@@ -3,7 +3,6 @@ import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import { Checkbox } from '@aglio/ui/components/checkbox';
 import {
@@ -16,7 +15,6 @@ import {
 } from '@aglio/ui/components/dialog';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { P } from '@aglio/ui/components/typography';
-import { sprinkles } from '@aglio/ui/styles';
 import format from 'date-fns/format';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
@@ -106,11 +104,7 @@ function PublishedContent({
 			<DialogTitle>Manage publication</DialogTitle>
 			<P>Published {format(publishDate, 'PPp')}</P>
 			{outOfDate && (
-				<P
-					className={sprinkles({
-						color: 'attentionDark',
-					})}
-				>
+				<P className="color-attention-dark">
 					Updated {format(new Date(updatedAt), 'PPp')}
 				</P>
 			)}
@@ -173,29 +167,26 @@ function UnpublishedContent({
 	return (
 		<DialogContent>
 			<DialogTitle>Publish your recipe</DialogTitle>
-			<Box direction="column" gap={4}>
+			<div className="flex flex-col gap-4">
 				<P>
 					Published recipes can be shared with others on the web. You retain
 					full rights to your recipe and can unpublish anytime
 				</P>
-				<Box direction="row" align="flex-start" gap={2}>
+				<div className="flex flex-row items-start gap-2">
 					<Checkbox
 						checked={consent}
 						onCheckedChange={(c) => setConsent(c !== false)}
 						id="publish-consent"
 					/>
-					<label
-						htmlFor="publish-consent"
-						className={sprinkles({ fontSize: 'xs' })}
-					>
+					<label htmlFor="publish-consent" className="text-xs">
 						I confirm that I own and have the right to publish this recipe, in
 						accordance with the{' '}
 						<TextLink to="https://www.aglio.com/terms" newTab>
 							Aglio Terms of Service
 						</TextLink>
 					</label>
-				</Box>
-			</Box>
+				</div>
+			</div>
 			<DialogActions>
 				<DialogClose asChild>
 					<Button>Cancel</Button>

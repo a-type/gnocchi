@@ -1,6 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Formik } from 'formik';
-import { randomTheme } from '@aglio/ui/styles';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 
 export interface NewTagFormProps {
@@ -18,7 +17,9 @@ export function NewTagForm({ onCreate }: NewTagFormProps) {
 					const name = values.name.toLocaleLowerCase();
 					await client.recipeTagMetadata.put({
 						name,
-						color: randomTheme(),
+						color: ['lemon', 'blueberry', 'tomato', 'eggplant', 'leek'][
+							Math.floor(Math.random() * 5)
+						],
 					});
 					// create the metadata
 					onCreate(name);

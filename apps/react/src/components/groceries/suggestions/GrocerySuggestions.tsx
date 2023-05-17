@@ -9,7 +9,7 @@ import {
 	CollapsibleRoot,
 	CollapsibleTrigger,
 } from '@aglio/ui/components/collapsible';
-import { H5, Span } from '@aglio/ui/components/typography';
+import { H5 } from '@aglio/ui/components/typography';
 import { CaretDownIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import addDays from 'date-fns/addDays';
 import startOfDay from 'date-fns/startOfDay';
@@ -24,7 +24,7 @@ import {
 	CategoryTitle,
 	CategoryTitleRow,
 } from '@/components/groceries/categories/CategoryTitleRow.jsx';
-import { withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import classNames from 'classnames';
 
 export interface GrocerySuggestionsProps {}
@@ -82,23 +82,25 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 					<Icon name="magic" className="mr-3 color-gray7" />
 				</CategoryTitleRow>
 			</CollapsibleTrigger>
-			<CollapsibleContent className="flex flex-col gap-2">
-				{!!guessedFoods.length ||
-					(!!guessedRecipes.length && (
-						<H5 className="ml-3 text-black mb-1 mt-2">Favorites</H5>
+			<CollapsibleContent>
+				<div className="flex flex-col gap-2">
+					{!!guessedFoods.length ||
+						(!!guessedRecipes.length && (
+							<H5 className="ml-3 text-black mb-1 mt-2">Favorites</H5>
+						))}
+					{guessedFoods.map((food) => (
+						<FoodSuggestionItem key={food.get('canonicalName')} food={food} />
 					))}
-				{guessedFoods.map((food) => (
-					<FoodSuggestionItem key={food.get('canonicalName')} food={food} />
-				))}
-				{guessedRecipes.map((recipe) => (
-					<RecipeSuggestionItem key={recipe.get('id')} recipe={recipe} />
-				))}
-				{!!expiresSoonItems.length && (
-					<H5 className="ml-3 text-black mb-1 mt-2">Expiring soon</H5>
-				)}
-				{expiresSoonItems.map((item) => (
-					<ExpiresSoonSuggestionItem key={item.get('id')} item={item} />
-				))}
+					{guessedRecipes.map((recipe) => (
+						<RecipeSuggestionItem key={recipe.get('id')} recipe={recipe} />
+					))}
+					{!!expiresSoonItems.length && (
+						<H5 className="ml-3 text-black mb-1 mt-2">Expiring soon</H5>
+					)}
+					{expiresSoonItems.map((item) => (
+						<ExpiresSoonSuggestionItem key={item.get('id')} item={item} />
+					))}
+				</div>
 			</CollapsibleContent>
 		</CollapsibleRoot>
 	);
@@ -142,8 +144,8 @@ function RecipeSuggestionItem({ recipe }: { recipe: Recipe }) {
 				className="important:(flex-0-0-auto w-48px h-48px rounded-md)"
 			/>
 			<div className="flex-1 flex flex-col">
-				<Span className="text-xs text-darkBlend italic">Recipe</Span>
-				<Span>{recipe.get('title')}</Span>
+				<span className="text-xs text-darkBlend italic">Recipe</span>
+				<span>{recipe.get('title')}</span>
 			</div>
 			<AddToListButton
 				color="ghost"

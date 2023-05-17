@@ -1,6 +1,5 @@
 import { ReactNode, forwardRef, useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import * as classes from './InfiniteLoadTrigger.css.js';
 import useMergedRef from '../../hooks/useMergedRef.js';
 import { useStableCallback } from '../../hooks.js';
 
@@ -32,7 +31,7 @@ export const InfiniteLoadTrigger = forwardRef<
 	return (
 		<div
 			ref={useMergedRef(ref, innerRef)}
-			className={classNames(classes.root, className)}
+			className={classNames('flex flex-col items-center', className)}
 			{...rest}
 		/>
 	);

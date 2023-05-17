@@ -17,7 +17,7 @@ import {
 import { InfiniteLoadTrigger } from '@aglio/ui/components/infiniteLoadTrigger';
 import { PageFixedArea } from '@aglio/ui/components/layouts';
 import { Spinner } from '@aglio/ui/src/components/spinner';
-import { withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import {
 	DotsVerticalIcon,
 	PlayIcon,

@@ -2,7 +2,6 @@ import { trpc } from '@/trpc.js';
 import { Outlet } from '@verdant-web/react-router';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { Box } from '@aglio/ui/components/box';
 import { Link } from '@/components/nav/Link.jsx';
 
 export function AdminPage() {
@@ -15,12 +14,12 @@ export function AdminPage() {
 	return (
 		<PageRoot>
 			<PageContent>
-				<Box direction="row" gap={2} mb={6}>
+				<div class="flex flex-row gap-2 mb-6">
 					<Link to="/admin/categories">Categories</Link>
 					<Link to="/admin/foods">Foods</Link>
 					<Link to="/admin/plans">Plans</Link>
 					<Link to="/admin/sync">Sync</Link>
-				</Box>
+				</div>
 				<Outlet />
 			</PageContent>
 		</PageRoot>

@@ -9,7 +9,6 @@ import {
 	DialogTitle,
 } from '@aglio/ui/components/dialog';
 import { P } from '@aglio/ui/components/typography';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 
 export interface LogoutNoticeProps {}
@@ -36,7 +35,7 @@ export function LogoutNotice({}: LogoutNoticeProps) {
 			<DialogContent>
 				<DialogTitle>Session expired</DialogTitle>
 				<P>To resume syncing your data, please sign in again.</P>
-				<Box direction="row" gap={3} justify="flex-end" align="center">
+				<div className="flex flex-row gap-3 justify-end items-center">
 					<DialogClose asChild>
 						<Button color="ghost">Cancel</Button>
 					</DialogClose>
@@ -45,7 +44,7 @@ export function LogoutNotice({}: LogoutNoticeProps) {
 							Sign in
 						</LoginButton>
 					</DialogClose>
-				</Box>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

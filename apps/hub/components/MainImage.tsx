@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import * as classes from './MainImage.css.js';
 // @ts-ignore
 import Image from 'next/image';
 import { TopLineImage } from './layout.jsx';
@@ -11,12 +10,12 @@ export interface MainImageProps {
 
 export function MainImage({ url, title }: MainImageProps) {
 	return (
-		<TopLineImage className={classes.root}>
+		<TopLineImage className="block relative w-full h-30vh rounded-lg overflow-hidden">
 			<Image
 				src={url}
 				fill
 				itemProp="image"
-				className={classNames('u-photo', classes.img)}
+				className={classNames('u-photo', 'object-cover object-center')}
 				alt={`A photo of ${title}`}
 			/>
 		</TopLineImage>

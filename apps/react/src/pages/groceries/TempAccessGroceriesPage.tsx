@@ -10,7 +10,6 @@ import {
 } from '@/pages/groceries/layout.jsx';
 import { createClientDescriptor, hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
-import { Box } from '@aglio/ui/components/box';
 import { LinkButton } from '@/components/nav/Link.jsx';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
@@ -78,12 +77,12 @@ export function TempAccessGroceriesPage() {
 						<Form>
 							<TextField name="name" required placeholder="Your name" />
 							<SubmitButton>Join in</SubmitButton>
-							<Box fontSize="sm">
+							<div className="text-sm">
 								By continuing you agree to the{' '}
-								<TextLink href="/tos" target="_blank">
+								<TextLink to="/tos" newTab>
 									Terms of Service
 								</TextLink>
-							</Box>
+							</div>
 						</Form>
 					</Formik>
 				</PageContent>
@@ -126,25 +125,12 @@ function TempAccessGroceriesView({ code }: { code: string }) {
 				<ListContext.Provider value={listId}>
 					<ThemedPageRoot listId={listId}>
 						<PageContent fullHeight noPadding nav={false}>
-							<Box
-								p={3}
-								gap={1}
-								direction="column"
-								align="flex-start"
-								background="accentWash"
-								color="accentInk"
-								borderRadius="lg"
-							>
+							<div className="flex flex-col p-3 gap-1 items-start bg-accent-wash color-accent-ink rounded-lg">
 								<P>This link lets you view someone else's list.</P>
-								<LinkButton
-									size="small"
-									to="/welcome"
-									target="_blank"
-									color="accent"
-								>
+								<LinkButton size="small" to="/welcome" newTab color="accent">
 									Start your own list
 								</LinkButton>
-							</Box>
+							</div>
 							<TopControls>
 								<ListSelect includeAll value={listId} onChange={onListChange} />
 							</TopControls>

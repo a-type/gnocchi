@@ -14,7 +14,6 @@ import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
 import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
 import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
-import { Box } from '@aglio/ui/components/box';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
 import { Checkbox } from '@aglio/ui/components/checkbox';
 import {
@@ -132,13 +131,13 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				className={classNames(
 					'item',
 					'grid grid-areas-[check_main]-[check_comment]-[secondary_secondary] grid-cols-[min-content_1fr_min-content] grid-rows-[min-content_min-content_min-content]',
-					'w-full bg-light rounded-md relative select-none all:transition-200 all:ease-springy',
+					'w-full bg-wash rounded-md relative select-none transition ease-springy',
 					'repeated:mt-1',
 					'[&[data-dragging=true]]:(shadow-xl cursor-grabbing touch-none border-light)',
-					'[&[data-highlighted=true]]:bg-primaryWash',
+					'[&[data-highlighted=true]]:bg-primary-wash',
 					'[&[data-menu-open=true]]:(bg-white border-light)',
-					'[&[data-just-moved=true][data-hidden-state=visible]]:(animation-pop-up duration-400 timing-springy)',
-					'[&[data-state=hidden]]:(animation-disappear duration-3000 animation-ease-out fill-mode-forwards)',
+					'[&[data-just-moved=true][data-hidden-state=visible]]:(animate-pop-up animate-duration-400 animate-springy)',
+					'[&[data-state=hidden]]:(animate-disappear duration-3000 animate-ease-out animate-mode-forwards)',
 					className,
 				)}
 				open={menuOpen}
@@ -162,7 +161,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				/>
 				<div className="flex flex-row items-start gap-2 [grid-area:main] pt-4 pr-3 pb-2 relative">
 					<div className="flex flex-col gap-2 items-start flex-1">
-						<div className="flex flex-row gap-1 max-w-full overflow-hidden text-ellipsis relative">
+						<div className="flex flex-row items-center gap-1 max-w-full overflow-hidden text-ellipsis relative">
 							<span>{displayString}</span>
 							{menuOpen && <QuantityEditor item={item} />}
 						</div>
@@ -170,12 +169,9 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 							<div className="absolute left-0 right-52px top-28px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
 						)}
 						{comment && !menuOpen && (
-							<Box
-								open={!menuOpen}
-								className="text-xs text-gray7 italic [grid-area:comment]"
-							>
+							<div className="text-xs text-gray7 italic [grid-area:comment]">
 								{comment}
-							</Box>
+							</div>
 						)}
 					</div>
 					<RecentPeople item={item} />
@@ -425,7 +421,7 @@ function QuantityEditor({ item }: { item: Item }) {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogTitle>Edit item</DialogTitle>
-				<Box align="center" direction="row" gap={4}>
+				<div className="flex flex-row items-center gap-4">
 					<LiveUpdateTextField
 						placeholder={displayText}
 						value={textOverride || ''}
@@ -435,7 +431,7 @@ function QuantityEditor({ item }: { item: Item }) {
 						value={totalQuantity}
 						onChange={(v) => item.set('totalQuantity', v)}
 					/>
-				</Box>
+				</div>
 				<DialogActions>
 					<DialogClose asChild>
 						<Button align="end">Done</Button>

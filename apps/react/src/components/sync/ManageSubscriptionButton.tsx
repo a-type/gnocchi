@@ -1,6 +1,5 @@
 import { Button, ButtonProps } from '@aglio/ui/components/button';
 import { API_HOST_HTTP } from '@/config.js';
-import { Span } from '@aglio/ui/components/typography';
 
 export interface ManageSubscriptionButtonProps extends ButtonProps {}
 
@@ -17,7 +16,7 @@ export function ManageSubscriptionButton({
 			<Button type="submit" {...props}>
 				Change your subscription
 			</Button>
-			<Span size="xs">Update your card or unsubscribe</Span>
+			<span className="text-xs">Update your card or unsubscribe</span>
 		</form>
 	);
 }

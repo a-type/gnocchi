@@ -7,7 +7,6 @@ import { RecipeTagsList } from '../collection/RecipeTagsList.jsx';
 import { NewTagForm } from './NewTagForm.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { themeMap } from '@aglio/ui/styles';
 import {
 	Popover,
 	PopoverArrow,
@@ -15,7 +14,6 @@ import {
 	PopoverTrigger,
 } from '@aglio/ui/components/popover';
 import { Button } from '@aglio/ui/components/button';
-import { Box } from '@aglio/ui/components/box';
 import { H2 } from '@aglio/ui/components/typography';
 
 export interface RecipeTagsEditorProps {
@@ -61,7 +59,7 @@ function TagDisplay({
 		<div
 			className={classNames(
 				'flex items-center gap-1 p-1 pl-3 rounded-lg bg-primaryLight color-black font-bold',
-				color && themeMap[color],
+				color && `theme-${color}`,
 			)}
 		>
 			<span>{icon ?? <Icon name="tag" />}</span>
@@ -105,9 +103,9 @@ function TagAdd({
 				<PopoverArrow />
 				<Suspense>
 					<NewTagForm onCreate={addTag} />
-					<Box mt={4}>
+					<div className="mt-4">
 						<RecipeTagsList onSelect={addTag} omit={tagsSnapshot} />
-					</Box>
+					</div>
 				</Suspense>
 			</PopoverContent>
 		</Popover>

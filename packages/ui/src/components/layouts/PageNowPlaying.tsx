@@ -9,7 +9,6 @@ import {
 	useState,
 } from 'react';
 import classNames from 'classnames';
-import * as classes from './PageNowPlaying.css.js';
 import { createPortal } from 'react-dom';
 
 export const NowPlayingContext = createContext<{
@@ -39,7 +38,9 @@ export function PageNowPlaying({
 			<div
 				{...props}
 				className={classNames(
-					unstyled ? undefined : classes.nowPlaying,
+					unstyled
+						? undefined
+						: 'bg-wash p-2px rounded-2xl border-light shadow-md min-w-32px items-center justify-center',
 					className,
 				)}
 			/>,

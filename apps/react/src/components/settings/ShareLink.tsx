@@ -2,7 +2,6 @@ import { Share1Icon } from '@radix-ui/react-icons';
 import copy from 'copy-to-clipboard';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Box } from '@aglio/ui/components/box';
 import { Input } from '@aglio/ui/components/input';
 import { Button } from '@aglio/ui/components/button';
 
@@ -20,7 +19,7 @@ export function ShareLink({ onGenerate, ...rest }: ShareLinkProps) {
 	};
 
 	return (
-		<Box className="flex flex-col items-end gap-2 md:(flex-row items-center)">
+		<div className="flex flex-col items-end gap-2 md:(flex-row items-center)">
 			{value && (
 				<button
 					onClick={() => {
@@ -33,7 +32,7 @@ export function ShareLink({ onGenerate, ...rest }: ShareLinkProps) {
 				</button>
 			)}
 			<GenerateButton onGenerate={handleGenerate} {...rest} />
-		</Box>
+		</div>
 	);
 }
 

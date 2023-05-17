@@ -13,7 +13,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
-import { H2, P, Span } from '@aglio/ui/components/typography';
+import { H2, P } from '@aglio/ui/components/typography';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { hooks } from '@/stores/groceries/index.js';
@@ -101,12 +101,12 @@ export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 					<P style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>{url}</P>
 				)}
 
-				<Span size="sm">
+				<span className="text-sm">
 					By continuing you agree to{' '}
 					<TextLink to="/tos" newTab>
 						the terms and conditions of usage.
 					</TextLink>
-				</Span>
+				</span>
 				<DialogActions>
 					<DialogClose asChild>
 						<Button onClick={cancelOnboarding}>Cancel</Button>

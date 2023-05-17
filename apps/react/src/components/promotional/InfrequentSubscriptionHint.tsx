@@ -2,7 +2,7 @@ import { APP_NAME } from '@/config.js';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { PromoteSubscriptionButton } from './PromoteSubscriptionButton.jsx';
-import { Box } from '@aglio/ui/components/box';
+import { div } from '@aglio/ui/components/box';
 import { P } from '@aglio/ui/components/typography';
 import { Button } from '@aglio/ui/components/button';
 
@@ -32,23 +32,15 @@ export function InfrequentSubscriptionHint() {
 
 	if (daysSinceDismissed > 60 && daysSinceFirstSeen > 30) {
 		return (
-			<Box
-				borderWidth="default"
-				borderColor="gray50"
-				borderRadius="md"
-				borderStyle="solid"
-				p={4}
-				gap={3}
-				color="gray80"
-			>
+			<div className="border-light rounded-md flex flex-col p-4 gap-3 color-gray8">
 				<P>Enjoying {APP_NAME}? A subscription unlocks device sync and more</P>
-				<Box direction="row" align="center" justify="flex-end" gap={2}>
+				<div className="flex items-center justify-end gap-2">
 					<Button color="ghost" onClick={() => setDismissedAt(Date.now())}>
 						Dismiss
 					</Button>
 					<PromoteSubscriptionButton>Learn more</PromoteSubscriptionButton>
-				</Box>
-			</Box>
+				</div>
+			</div>
 		);
 	}
 

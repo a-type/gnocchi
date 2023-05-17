@@ -1,6 +1,5 @@
 import { ShareLink } from '@/components/settings/ShareLink.jsx';
 import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
-import { Box } from '@aglio/ui/components/box';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
 import {
 	Dialog,
@@ -9,7 +8,7 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
-import { P, Span } from '@aglio/ui/components/typography';
+import { P } from '@aglio/ui/components/typography';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -50,7 +49,7 @@ export function InviteLinkButton(props: InviteLinkButtonProps) {
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
-			<Span size="xs">All members are free</Span>
+			<span className="text-xs">All members are free</span>
 		</div>
 	);
 }
@@ -66,12 +65,12 @@ function LinkContent() {
 	}, []);
 
 	return (
-		<Box gap={1}>
+		<div className="flex flex-col gap-1">
 			<P>
 				Send this link to someone you want to join your plan. The link only
 				works for one person.
 			</P>
 			<ShareLink onGenerate={generateLink} shareTitle="Join my grocery list" />
-		</Box>
+		</div>
 	);
 }

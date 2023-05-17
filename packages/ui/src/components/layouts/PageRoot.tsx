@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import { forwardRef, ReactNode } from 'react';
-import * as classes from './PageRoot.css.js';
 
 export const PageRoot = forwardRef<
 	HTMLDivElement,
@@ -14,9 +13,9 @@ export const PageRoot = forwardRef<
 		<div
 			ref={ref}
 			className={classNames(
-				classes.pageRoot,
+				'flex-grow-1 flex-shrink-1 flex-basis-0 flex flex-col',
 				{
-					[classes.pageRootLemon]: props.color === 'lemon',
+					'bg-[var(--palette-yellow-70)]': props.color === 'lemon',
 				},
 				className,
 			)}

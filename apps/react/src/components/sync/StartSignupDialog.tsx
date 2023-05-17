@@ -3,7 +3,6 @@ import {
 	PRICE_MONTHLY_DOLLARS,
 	PRICE_YEARLY_DOLLARS,
 } from '@/config.js';
-import { sprinkles } from '@aglio/ui/styles';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { useSnapshot } from 'valtio';
 import { LoginButton } from './LoginButton.js';
@@ -16,7 +15,7 @@ import {
 	DialogTitle,
 } from '@aglio/ui/components/dialog';
 import { Button } from '@aglio/ui/components/button';
-import { H2, P, Span } from '@aglio/ui/components/typography';
+import { H2, P } from '@aglio/ui/components/typography';
 import { signupDialogState } from '@/components/sync/state.js';
 
 export interface StartSignupDialogProps {}
@@ -35,7 +34,7 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 		>
 			<DialogContent width="lg">
 				<div className="flex flex-row items-start gap-2">
-					<DialogTitle className={sprinkles({ flex: 1 })}>
+					<DialogTitle className="flex-1">
 						Upgrade for sync &amp; more
 					</DialogTitle>
 					<DialogClose asChild>
@@ -80,10 +79,10 @@ export function StartSignupDialog({}: StartSignupDialogProps) {
 						>
 							Start your subscription
 						</LoginButton>
-						<Span size="xs">
+						<span className="text-xs">
 							${PRICE_MONTHLY_DOLLARS} / month (${PRICE_YEARLY_DOLLARS} / year).
 							14 days free. Unlimited devices and collaborators.
-						</Span>
+						</span>
 					</div>
 				</DialogActions>
 			</DialogContent>

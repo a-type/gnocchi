@@ -2,7 +2,6 @@ import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
@@ -42,7 +41,7 @@ export function ClaimInvitePage() {
 			return (
 				<PageRoot>
 					<PageContent>
-						<Box p={2} align="flex-start">
+						<div className="flex flex-col items-start p-2">
 							<P>You already have a subscription.</P>
 							<P>
 								By claiming this invite you will cancel your current
@@ -51,7 +50,7 @@ export function ClaimInvitePage() {
 							<Button align="end" color="primary" onClick={claim}>
 								Claim Invite
 							</Button>
-						</Box>
+						</div>
 					</PageContent>
 				</PageRoot>
 			);
@@ -59,7 +58,7 @@ export function ClaimInvitePage() {
 			return (
 				<PageRoot>
 					<PageContent>
-						<Box p={2} align="flex-start">
+						<div className="flex flex-col items-start p-2">
 							<H1>Join {inviterName}'s grocery list</H1>
 							<P>
 								Your current list will be deleted, and you'll begin syncing your
@@ -68,7 +67,7 @@ export function ClaimInvitePage() {
 							<Button align="end" color="primary" onClick={claim}>
 								Claim Invite
 							</Button>
-						</Box>
+						</div>
 					</PageContent>
 				</PageRoot>
 			);
@@ -78,7 +77,7 @@ export function ClaimInvitePage() {
 	return (
 		<PageRoot>
 			<PageContent>
-				<Box p={2}>
+				<div className="flex flex-col p-2">
 					<H1>Sign up to join {inviterName}'s grocery list</H1>
 					<P>
 						Collaborate on shopping together in the store or during the week.
@@ -91,7 +90,7 @@ export function ClaimInvitePage() {
 					>
 						Sign up
 					</LoginButton>
-				</Box>
+				</div>
 			</PageContent>
 		</PageRoot>
 	);

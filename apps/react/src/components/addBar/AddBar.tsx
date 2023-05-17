@@ -26,9 +26,8 @@ import {
 	PopoverAnchor,
 	PopoverContent,
 } from '@aglio/ui/components/popover';
-import { Box } from '@aglio/ui/components/box';
 import { Input } from '@aglio/ui/components/input';
-import { withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import { Button } from '@aglio/ui/components/button';
 
 export interface AddBarProps {

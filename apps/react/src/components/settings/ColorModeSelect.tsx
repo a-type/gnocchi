@@ -3,7 +3,6 @@ import {
 	setColorMode,
 	subscribeToColorModeChange,
 } from '@/darkMode.js';
-import { Box } from '@aglio/ui/src/components/box';
 import {
 	Select,
 	SelectContent,
@@ -12,7 +11,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@aglio/ui/src/components/select';
-import { Span } from '@aglio/ui/src/components/typography';
 import { useEffect, useState } from 'react';
 
 export function ColorModeSelect() {
@@ -22,8 +20,8 @@ export function ColorModeSelect() {
 	useEffect(() => subscribeToColorModeChange(setColorModeInternal), []);
 
 	return (
-		<Box direction="row" gap={2} align="center">
-			<Span>Color theme:</Span>
+		<div className="flex gap-2 items-center">
+			<span>Color theme:</span>
 			<Select value={colorMode} onValueChange={setColorMode}>
 				<SelectTrigger>
 					<SelectValue />
@@ -35,6 +33,6 @@ export function ColorModeSelect() {
 					<SelectItem value="dark">Dark</SelectItem>
 				</SelectContent>
 			</Select>
-		</Box>
+		</div>
 	);
 }

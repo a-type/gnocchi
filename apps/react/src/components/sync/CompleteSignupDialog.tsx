@@ -4,7 +4,6 @@ import { LogoutButton } from '../auth/LogoutButton.js';
 import { SubscribeButton } from './SubscribeButton.js';
 import { H2, P } from '@aglio/ui/components/typography';
 import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
-import { Box } from '@aglio/ui/components/box';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
@@ -12,7 +11,6 @@ import {
 } from '@aglio/ui/components/collapsible';
 import { Button } from '@aglio/ui/components/button';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { sprinkles } from '@aglio/ui/styles';
 
 export interface CompleteSignupDialogProps {}
 
@@ -25,7 +23,7 @@ export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
 
 	return (
 		<Dialog open={open}>
-			<DialogContent className={sprinkles({ gap: 2 })}>
+			<DialogContent className="gap-2">
 				<H2>Complete Signup</H2>
 				<P>
 					Now that you're signed in, finish creating your subscription to start
@@ -37,7 +35,7 @@ export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
 					and keep using your list on this device.
 				</P>
 				<LogoutButton>Log out</LogoutButton>
-				<Box mt={4}>
+				<div className="flex flex-col mt-4">
 					<CollapsibleRoot>
 						<CollapsibleTrigger asChild>
 							<Button color="ghost" size="small">
@@ -60,7 +58,7 @@ export function CompleteSignupDialog({}: CompleteSignupDialogProps) {
 							</P>
 						</CollapsibleContent>
 					</CollapsibleRoot>
-				</Box>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

@@ -17,7 +17,7 @@ import { useCallback, useState } from 'react';
 import { groceriesState } from '@/components/groceries/state.js';
 import { TextSkeleton } from '@aglio/ui/components/skeletons';
 import { shortenTimeUnits } from '@aglio/tools';
-import { withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -98,7 +98,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 
 const Root = withClassName(
 	'div',
-	'w-full bg-light rounded-md relative select-none all:transition-200 all:ease-springy repeated:mt-1',
+	'w-full bg-wash rounded-md relative select-none all:transition-200 all:ease-springy repeated:mt-1',
 );
 const Main = withClassName(
 	'div',

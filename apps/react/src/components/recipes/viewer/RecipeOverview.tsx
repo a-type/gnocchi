@@ -93,12 +93,12 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				<PreludeSection recipe={recipe} />
 				<Divider />
 				<div className="w-full">
-					<H2 gutterBottom>Ingredients</H2>
+					<H2 className="gutter-bottom">Ingredients</H2>
 					<RecipeIngredientsViewer recipe={recipe} />
 				</div>
 				<Divider />
 				<div className="w-full">
-					<H2 gutterBottom>Instructions</H2>
+					<H2 className="gutter-bottom">Instructions</H2>
 					<Peek>
 						<RecipeInstructionsViewer recipe={recipe} />
 					</Peek>
@@ -125,7 +125,7 @@ function PreludeSection({ recipe }: { recipe: Recipe }) {
 
 	return (
 		<div className="w-full">
-			<H2 gutterBottom>Description</H2>
+			<H2 className="gutter-bottom">Description</H2>
 			<RecipePreludeViewer recipe={recipe} />
 		</div>
 	);

@@ -1,5 +1,4 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
-import { sprinkles } from '@aglio/ui/styles';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
 import { useNavigate } from '@verdant-web/react-router';
@@ -44,9 +43,7 @@ export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
 				/>
 				<SubmitButton>Sign In</SubmitButton>
 				<ForgotPassword />
-				{error && (
-					<P className={sprinkles({ color: 'attention' })}>{error.message}</P>
-				)}
+				{error && <P className="color-attention">{error.message}</P>}
 			</Form>
 		</Formik>
 	);
@@ -57,16 +54,7 @@ function ForgotPassword() {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<button
-					className={sprinkles({
-						background: 'none',
-						border: 'none',
-						padding: 0,
-						color: 'black',
-						textDecoration: 'underline',
-						cursor: 'pointer',
-					})}
-				>
+				<button className="bg-none border-none p-0 color-black underline cursor-pointer">
 					Forgot password?
 				</button>
 			</DialogTrigger>
@@ -85,11 +73,7 @@ function ForgotPassword() {
 					<Form>
 						<TextField name="email" label="Email" />
 						<SubmitButton>Send reset email</SubmitButton>
-						{error && (
-							<P className={sprinkles({ color: 'attention' })}>
-								{error.message}
-							</P>
-						)}
+						{error && <P className="color-attention">{error.message}</P>}
 					</Form>
 				</Formik>
 			</DialogContent>

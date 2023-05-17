@@ -43,18 +43,19 @@ export function RecipeCookView({
 				className,
 			)}
 		>
-			<PageFixedArea className="flex flex-row items-center justify-between gap-2 w-full">
+			<PageFixedArea className="flex important:flex-row items-center justify-between gap-2 w-full">
 				<CookingActionBar recipe={recipe} />
 				<LinkButton
 					to={makeRecipeLink(recipe)}
 					color="ghost"
 					onClick={() => recipe.set('session', null)}
+					className="w-auto"
 				>
 					<span>Stop Cooking</span>
 					<Cross2Icon />
 				</LinkButton>
 			</PageFixedArea>
-			<H1 gutterBottom={false}>{recipe.get('title')}</H1>
+			<H1>{recipe.get('title')}</H1>
 			<RecipeNote recipe={recipe} />
 			<TabsRoot value={tab} className="w-full">
 				<TabsList className="w-full">

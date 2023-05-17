@@ -23,9 +23,7 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 
 	return (
 		<div className={classNames('flex flex-col mb-6', className)}>
-			<H2 gutterBottom className="important:text-md">
-				Expiring Soon
-			</H2>
+			<H2 className="important:text-md gutter-bottom">Expiring soon</H2>
 			<div className="flex flex-col gap-3">
 				{expiresSoonItems.map((item) => (
 					<ExpiresSoonItem item={item} key={item.get('id')} />

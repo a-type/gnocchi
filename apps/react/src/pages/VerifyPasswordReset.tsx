@@ -2,7 +2,6 @@ import { trpc } from '@/trpc.js';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
-import { sprinkles } from '@aglio/ui/styles';
 import { Formik } from 'formik';
 import { useNavigate, useSearchParams } from '@verdant-web/react-router';
 
@@ -49,15 +48,7 @@ export function VerifyPasswordResetPage({}: VerifyPasswordResetProps) {
 							type="password"
 						/>
 						<SubmitButton>Reset password</SubmitButton>
-						{error && (
-							<P
-								className={sprinkles({
-									color: 'attention',
-								})}
-							>
-								{error.message}
-							</P>
-						)}
+						{error && <P className="color-attention">{error.message}</P>}
 					</Form>
 				</Formik>
 			</PageContent>

@@ -1,8 +1,9 @@
 'use client';
 
 import { Form as FormikForm } from 'formik';
-import { withClassName } from '../../styles/withClassName.js';
-import * as classes from './Form.css.js';
-import '../../styles/sprinkles.css.js';
+import { withClassName } from '../../hooks/withClassName.js';
 
-export const Form = withClassName(FormikForm, classes.form);
+export const Form = withClassName(
+	FormikForm,
+	'flex flex-col gap-2 items-start',
+);

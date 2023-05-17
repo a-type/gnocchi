@@ -7,8 +7,6 @@ import {
 	PageRoot,
 	PageSection,
 } from '@aglio/ui/components/layouts';
-import { sprinkles } from '@aglio/ui/styles';
-import { Box } from '@aglio/ui/components/box';
 import { H1, H2 } from '@aglio/ui/components/typography';
 import { Divider } from '@aglio/ui/components/divider';
 import { TextLink } from '@/components/nav/Link.jsx';
@@ -25,29 +23,18 @@ export function JoinPage({}: JoinPageProps) {
 	return (
 		<PageRoot color="lemon">
 			<PageContent
-				className={sprinkles({
-					alignItems: 'center',
-					justifyContent: 'center',
-				})}
-				innerProps={{ gap: 6, width: 'auto', minHeight: 0, my: 4 }}
+				className="items-center justify-center"
+				innerProps={{ className: 'flex flex-col gap-6 w-auto min-h-0 my-4' }}
 			>
-				<Box direction="row" justify="space-between" align="center">
-					<H1
-						className={sprinkles({
-							color: 'black',
-							my: 'auto',
-						})}
-						style={{ marginTop: 'auto' }}
-					>
-						Welcome!
-					</H1>
+				<div className="flex flex-row justify-between items-center">
+					<H1 className="color-black mt-auto mb-0">Welcome!</H1>
 					<img
 						src="/android-chrome-192x192.png"
 						alt="logo"
 						width="80"
 						height="80"
 					/>
-				</Box>
+				</div>
 				<PageSection>
 					<H2>First time?</H2>
 					<OAuthSignInButton
@@ -72,14 +59,14 @@ export function JoinPage({}: JoinPageProps) {
 					<Divider padded compensate={4} />
 					<EmailSignInForm returnTo={returnTo} />
 				</PageSection>
-				<Box gap={2} mt={6}>
+				<div className="flex flex-col gap-2 mt-6">
 					<TextLink to="/privacy-policy" newTab>
 						Privacy Policy
 					</TextLink>
 					<TextLink to="/tos" newTab>
 						Terms and conditions of usage
 					</TextLink>
-				</Box>
+				</div>
 			</PageContent>
 		</PageRoot>
 	);

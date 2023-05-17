@@ -2,7 +2,6 @@
 
 import classNames from 'classnames';
 import { forwardRef, ReactNode, useEffect, useRef, useState } from 'react';
-import * as classes from './ActionButton.css.js';
 import { Button, ButtonProps } from '../button/Button.js';
 import { CollapsibleContent, CollapsibleRoot } from '../collapsible.js';
 
@@ -39,11 +38,15 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 
 		return (
 			<CollapsibleRoot open={!visible ? false : render}>
-				<CollapsibleContent data-horizontal className={classes.outer}>
+				<CollapsibleContent data-horizontal className="overflow-hidden">
 					<Button
 						ref={ref}
 						size="small"
-						className={classNames(classes.root, className)}
+						className={classNames(
+							'important:(border-gray7 font-normal whitespace-nowrap m-2 flex flex-row gap-2 items-center h-30px rounded-15px mx-1)',
+							'hover:bg-gray2',
+							className,
+						)}
 						{...rest}
 					>
 						{icon}

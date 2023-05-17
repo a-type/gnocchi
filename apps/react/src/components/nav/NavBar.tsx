@@ -20,7 +20,7 @@ import { Icon } from '../icons/Icon.jsx';
 import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
 import { useHasNewExpirations } from '../pantry/hooks.js';
 import { PopEffect } from './PopEffect.jsx';
-import { withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 
 export interface NavBarProps {}
 
@@ -57,7 +57,7 @@ export function NavBar({}: NavBarProps) {
 	return (
 		<PageNav
 			innerClassName={classNames(
-				'flex flex-row items-stretch justify-around w-full rounded-0 shadow-lg overflow-hidden z-50 bg-light border-t border-t-solid border-gray5 p-1 h-auto',
+				'flex flex-row items-stretch justify-around w-full rounded-0 shadow-lg overflow-hidden z-50 bg-wash border-t border-t-solid border-gray5 p-1 h-auto',
 				'pb-[calc(2px+env(safe-area-inset-bottom,0px))]',
 				'sm:(bg-transparent flex flex-col rounded-0 border-none border-transparent shadow-none h-min-content overflow-y-auto overflow-x-hidden justify-start items-stretch gap-2 pb-10)',
 			)}
@@ -124,7 +124,7 @@ const NavBarLink = memo(
 					{icon}
 				</div>
 				<span
-					className="overflow-hidden pl-1 inline-block text-xxs whitespace-nowrap text-ellipsis sm:text-md"
+					className="overflow-hidden pl-1 inline-block text-xxs whitespace-nowrap text-ellipsis sm:(text-md leading-normal)"
 					data-active={!!active}
 				>
 					{children}
@@ -136,7 +136,7 @@ const NavBarLink = memo(
 
 const NavIcon = withClassName(
 	Icon,
-	'relative z-1 [button.active>&]:fill-primaryLight',
+	'relative z-1 [a[data-active=true]_&]:fill-primary-light',
 );
 
 function RecipesNavBarLink({ active }: { active: boolean }) {

@@ -7,21 +7,31 @@ import {
 	useCallback,
 	useRef,
 } from 'react';
-import { withClassName } from '../../styles/withClassName.js';
-import * as classes from './Dialog.css.js';
+import { withClassName } from '../../hooks/withClassName.js';
 import useMergedRef from '../../hooks/useMergedRef.js';
 import { useParticles } from '../particles.js';
-import { mediaQueries } from '../../styles.js';
+import classNames from 'classnames';
 
-const StyledOverlay = withClassName(DialogPrimitive.Overlay, classes.overlay);
+const StyledOverlay = withClassName(
+	DialogPrimitive.Overlay,
+	'bg-overlay fixed inset-0 z-dialog-backdrop animate-fade-in [&[data-state=closed]]:animate-fade-out animate-duration-200 motion-reduce:animate-none',
+);
 
-const StyledContent = withClassName(DialogPrimitive.Content, classes.content);
+const StyledContent = withClassName(
+	DialogPrimitive.Content,
+	'z-dialog fixed bottom-[var(--viewport-bottom-offset,0px)] left-0 right-0 h-min-content max-h-[calc(0.85*var(--viewport-height,100vh))]',
+	'translate-0 transform-gpu',
+	'important:animate-duration-300 animate-ease-out',
+	'shadow-xl bg-white rounded-tl-lg rounded-tr-lg p-6 border-default border-b-0 overflow-y-auto flex flex-col pb-[calc(3rem+env(safe-area-inset-bottom,0px))]',
+	'animate-fade-in-up-big [&[data-state=closed]]:animate-fade-out-down-big animate-ease-in motion-reduce:animate-none',
+	'sm:(left-50% top-50% translate-[-50%] w-90vw max-w-450px max-h-85vh pb-6 rounded-lg border-b-1 animate-fade-in [&[data-state=closed]]:animate-fade-out motion-reduce:animate-none)',
+);
 
 export const Content = forwardRef<
 	HTMLDivElement,
 	ComponentPropsWithoutRef<typeof StyledContent> & {
 		outerClassName?: string;
-		width?: ComponentPropsWithoutRef<typeof StyledContent>['width'];
+		width?: 'lg' | 'md' | 'sm';
 	}
 >(function Content(
 	{ children, width, outerClassName, className, ...props },
@@ -37,7 +47,7 @@ export const Content = forwardRef<
 			) {
 				wasOpenRef.current = true;
 
-				const matchesSmall = !window.matchMedia(mediaQueries.md).matches;
+				const matchesSmall = !window.matchMedia('(min-width:600px)').matches;
 				if (!matchesSmall) return;
 
 				setTimeout(() => {
@@ -72,8 +82,14 @@ export const Content = forwardRef<
 			<StyledContent
 				ref={finalRef}
 				{...props}
-				width={width}
-				className={outerClassName || className}
+				className={classNames(
+					{
+						'md:max-w-800px': width === 'lg',
+						'max-w-600px': width === 'md',
+						'max-w-300px': width === 'sm',
+					},
+					outerClassName || className,
+				)}
 			>
 				{children}
 			</StyledContent>
@@ -81,11 +97,14 @@ export const Content = forwardRef<
 	);
 });
 
-const StyledTitle = withClassName(DialogPrimitive.Title, classes.title);
+const StyledTitle = withClassName(
+	DialogPrimitive.Title,
+	'font-title color-black text-3xl mb-4 mt-0',
+);
 
 const StyledDescription = withClassName(
 	DialogPrimitive.Description,
-	classes.description,
+	'mt-3 mb-6 color-gray8 text-md leading-6',
 );
 
 // Exports
@@ -96,4 +115,7 @@ export const DialogTitle = StyledTitle;
 export const DialogDescription = StyledDescription;
 export const DialogClose = DialogPrimitive.Close;
 
-export const DialogActions = withClassName('div', classes.actions);
+export const DialogActions = withClassName(
+	'div',
+	'flex justify-end sticky bottom-0 w-full gap-3 items-center bg-white py-3 translate-y-6 flex-wrap',
+);

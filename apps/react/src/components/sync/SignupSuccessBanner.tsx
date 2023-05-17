@@ -5,7 +5,6 @@ import {
 	DialogContent,
 } from '@aglio/ui/components/dialog';
 import { H1, P } from '@aglio/ui/components/typography';
-import { sprinkles } from '@aglio/ui/styles';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { useSearchParams } from '@verdant-web/react-router';
@@ -22,20 +21,16 @@ export function SignupSuccessBanner({}: SignupSuccessBannerProps) {
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className={sprinkles({ align: 'flex-start' })}>
+			<DialogContent className="items-start">
 				<H1>You're subscribed!</H1>
 				<P>
-					<Link
-						newTab
-						className={sprinkles({ fontWeight: 'bold' })}
-						to="/welcome?upgrade=true"
-					>
+					<Link newTab className="font-bold" to="/welcome?upgrade=true">
 						Click here
 					</Link>{' '}
 					to learn more about what you get with your subscription - including
 					sync, recipe scanning, and more.
 				</P>
-				<InviteLinkButton color="primary" className={sprinkles({ my: 3 })} />
+				<InviteLinkButton color="primary" className="my-3" />
 				<P>
 					As a paid subscriber you can invite any number of people to shop and
 					cook with you, for free.

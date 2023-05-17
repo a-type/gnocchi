@@ -17,8 +17,8 @@ export function RecipePrepView({}: RecipePrepViewProps) {
 			<HeaderBar backUrl={makeRecipeLink(recipe, '')}>
 				<CookingActionBar recipe={recipe} />
 			</HeaderBar>
-			<H1 gutterBottom={false}>{recipe.get('title')}</H1>
-			<H2 gutterBottom={false}>Prep</H2>
+			<H1>{recipe.get('title')}</H1>
+			<H2>Prep</H2>
 			<P size="xs">
 				Prepping ingredients by collecting them and pre-measuring quantities can
 				help cooking go faster. Use the button below to skip ahead.

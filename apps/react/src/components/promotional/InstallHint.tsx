@@ -8,7 +8,7 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
-import { withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 
 export interface InstallHintProps {}
 
@@ -32,7 +32,7 @@ export function InstallHint({}: InstallHintProps) {
 	const Content = content[os] || (() => null);
 
 	return (
-		<Box className="bg-primaryWash rounded-lg p-4 flex flex-col gap-4 items-stretch">
+		<div className="bg-primaryWash rounded-lg p-4 flex flex-col gap-4 items-stretch">
 			<P>Get more out of this app by installing it on your device.</P>
 			<div className="flex flex-row items-center justify-end gap-4 w-full">
 				<Button color="ghost" onClick={() => setIsDismissed(true)}>
@@ -52,7 +52,7 @@ export function InstallHint({}: InstallHintProps) {
 					</DialogContent>
 				</Dialog>
 			</div>
-		</Box>
+		</div>
 	);
 }
 
@@ -104,7 +104,7 @@ function IOSTutorial() {
 	const isSafari = getIsSafari();
 	if (isSafari) {
 		return (
-			<Box>
+			<div>
 				<H2>Adding Gnocchi to your homescreen</H2>
 				<P>
 					Open the share menu and tap <Keyword>"Add to Home Screen"</Keyword>.
@@ -124,12 +124,12 @@ function IOSTutorial() {
 					groceries.
 				</P>
 				<Video src="/videos/iphone-install.mp4" controls autoPlay loop />
-			</Box>
+			</div>
 		);
 	}
 
 	return (
-		<Box>
+		<div>
 			<H2>Hi, iOS user!</H2>
 			<P>
 				Gnocchi is a website that can act just like a native app, but Apple
@@ -140,7 +140,7 @@ function IOSTutorial() {
 				you've done that, open Settings and click this button again to show next
 				steps.
 			</P>
-		</Box>
+		</div>
 	);
 }
 
@@ -151,7 +151,7 @@ function AndroidTutorial() {
 		? `/videos/edge-install.mp4`
 		: `/videos/android-install.mp4`;
 	return (
-		<Box>
+		<div>
 			<H2>Adding the Gnocchi app to your phone</H2>
 			<P>
 				Open the browser menu and look for <Keyword>"Install app"</Keyword>
@@ -167,7 +167,7 @@ function AndroidTutorial() {
 				groceries.
 			</P>
 			<Video src={videoSrc} controls autoPlay loop />
-		</Box>
+		</div>
 	);
 }
 

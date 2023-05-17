@@ -19,7 +19,6 @@ import {
 	TopControls,
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
-import { Box } from '@aglio/ui/components/box';
 import { PageContent } from '@aglio/ui/components/layouts';
 import { useCallback, useEffect } from 'react';
 import {
@@ -69,14 +68,14 @@ export function GroceriesPage() {
 							{listId && <ListEdit listId={listId} />}
 						</ListSelectWrapper>
 
-						<Box direction="row" gap={1} align="center">
+						<div className="flex flex-row gap-2 items-center">
 							<UnsubscribedOnly>
 								<PromoteSubscriptionButton size="small" color="accent">
 									Upgrade
 								</PromoteSubscriptionButton>
 							</UnsubscribedOnly>
 							<OfflineIndicator />
-						</Box>
+						</div>
 					</TopControls>
 					<AddBar />
 					<List />

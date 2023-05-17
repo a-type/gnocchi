@@ -1,6 +1,5 @@
 import { RouterOutputs, trpc } from '@/trpc.js';
 import { ActionBar, ActionButton } from '@aglio/ui/src/components/actions';
-import { Box } from '@aglio/ui/src/components/box';
 import { Button } from '@aglio/ui/src/components/button';
 import { Checkbox } from '@aglio/ui/src/components/checkbox';
 import {
@@ -16,7 +15,6 @@ import {
 	FormikForm,
 } from '@aglio/ui/src/components/forms';
 import { Input } from '@aglio/ui/src/components/input';
-import { sprinkles } from '@aglio/ui/styles';
 import { CheckIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useField } from 'formik';
 import { useState } from 'react';
@@ -32,7 +30,7 @@ export function FoodManager({}: FoodManagerProps) {
 	});
 
 	return (
-		<Box>
+		<div>
 			<h1>Foods</h1>
 			<ActionBar wrap>
 				{letters.map((l) => (
@@ -45,13 +43,13 @@ export function FoodManager({}: FoodManagerProps) {
 					</ActionButton>
 				))}
 			</ActionBar>
-			<Box direction="column" gap={3}>
+			<div className="flex flex-col gap-3">
 				{foods.map((food) => (
 					<FoodManagerItem food={food} key={food.canonicalName} />
 				))}
 				{!foods.length && <div>No foods</div>}
-			</Box>
-		</Box>
+			</div>
+		</div>
 	);
 }
 
@@ -70,14 +68,14 @@ function FoodManagerItem({
 
 	return (
 		<Dialog>
-			<Box direction="row">
-				<Box flex={1}>{food.canonicalName}</Box>
+			<div className="flex flex-row">
+				<div className="flex-1">{food.canonicalName}</div>
 				<DialogTrigger asChild>
 					<Button size="icon">
 						<DotsHorizontalIcon />
 					</Button>
 				</DialogTrigger>
-			</Box>
+			</div>
 			<DialogContent>
 				<FormikForm
 					enableReinitialize
@@ -129,7 +127,7 @@ function CategorySelect() {
 	});
 
 	return (
-		<select {...props} className={sprinkles({ my: 3 })}>
+		<select {...props} className="my-3">
 			<option value="">None</option>
 			{categories.map((category) => (
 				<option value={category.id}>{category.name}</option>
@@ -164,9 +162,9 @@ function NameChanger({
 	};
 
 	return (
-		<Box direction="column" gap={3}>
+		<div className="flex flex-col gap-3">
 			{food.names.map(({ name }) => (
-				<Box as="label" direction="row" gap={3}>
+				<label className="flex flex-row gap-3">
 					<Checkbox
 						checked={!removeNamesValue.includes(name)}
 						onCheckedChange={(checked) => {
@@ -178,10 +176,10 @@ function NameChanger({
 						}}
 					/>
 					{name}
-				</Box>
+				</label>
 			))}
 			{addNamesValue.map((name) => (
-				<Box as="label" direction="row" gap={3}>
+				<label className="flex flex-row gap-3">
 					<Checkbox
 						checked={true}
 						onCheckedChange={(checked) => {
@@ -193,7 +191,7 @@ function NameChanger({
 						}}
 					/>
 					{name}
-				</Box>
+				</label>
 			))}
 			<Input
 				placeholder="Add name"
@@ -204,6 +202,6 @@ function NameChanger({
 					}
 				}}
 			/>
-		</Box>
+		</div>
 	);
 }

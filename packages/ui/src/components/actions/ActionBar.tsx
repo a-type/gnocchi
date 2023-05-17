@@ -1,5 +1,4 @@
 import { ReactNode, Suspense } from 'react';
-import * as classes from './ActionBar.css.js';
 import classNames from 'classnames';
 
 export interface ActionBarProps {
@@ -16,8 +15,21 @@ export function ActionBar({
 }: ActionBarProps) {
 	return (
 		<Suspense fallback={null}>
-			<div className={classNames(classes.root, className)} {...rest}>
-				<div className={classNames(classes.content, wrap && classes.wrap)}>
+			<div
+				className={classNames(
+					'flex flex-row items-center justify-start w-full overflow-hidden relative h-[max-content] transition-[height] springy',
+					'[&:empty]:height-0',
+					'after:(content-[""] absolute right-0 top-0 bottom-0 w-50 z-1 bg-[linear-gradient(to_left,var(--color-wash)_0%,rgba(255,255,255,0)_100%)] pointer-events-none)',
+					className,
+				)}
+				{...rest}
+			>
+				<div
+					className={classNames(
+						'flex flex-row items-center justify-start w-full overflow-y-hidden overflow-x-auto pr-80px relative h-full [&::-webkit-scrollbar]:display-none',
+						wrap && 'flex-wrap',
+					)}
+				>
 					{children}
 				</div>
 			</div>

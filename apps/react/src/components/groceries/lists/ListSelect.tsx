@@ -9,17 +9,21 @@ import {
 	SelectValue,
 } from '@aglio/ui/components/select';
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap, withClassName } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { Icon } from '@/components/icons/Icon.jsx';
-import classNames from 'classnames';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { Box } from '@aglio/ui/components/box';
 import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
 
 function getRandomColor(): ThemeName {
-	const colors = Object.keys(themeMap);
+	const colors: ThemeName[] = [
+		'lemon',
+		'blueberry',
+		'tomato',
+		'eggplant',
+		'leek',
+	];
 	return colors[Math.floor(Math.random() * colors.length)] as any;
 }
 
@@ -61,14 +65,14 @@ export function ListSelect({
 				<SelectContent inDialog={inDialog}>
 					{includeAll && <SelectItem value="undefined">All lists</SelectItem>}
 					<SelectItem value={'null'}>
-						<Box direction="row" gap={2} align="center">
+						<div className="flex flex-row gap-2 items-center">
 							<FilledIcon name="tag" className="theme-lemon" />
 							<span>Default</span>
-						</Box>
+						</div>
 					</SelectItem>
 					{lists.map((list) => (
 						<SelectItem key={list.get('id')} value={list.get('id')}>
-							<Box direction="row" gap={2} align="center">
+							<div className="flex flex-row gap-2 items-center">
 								<FilledIcon
 									name="tag"
 									className={`theme-${list.get('color') ?? 'lemon'}`}
@@ -76,7 +80,7 @@ export function ListSelect({
 								<span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
 									{list.get('name')}
 								</span>
-							</Box>
+							</div>
 						</SelectItem>
 					))}
 					<SelectSeparator />
