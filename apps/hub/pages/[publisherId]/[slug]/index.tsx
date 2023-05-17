@@ -113,7 +113,7 @@ export default function RecipePage({
 								</Button>
 							</a>
 						</PageFixedArea>
-						<P size="xs" className="color-gray7 ml-auto text-right">
+						<P className="color-gray7 ml-auto text-right text-sm">
 							Powered by{' '}
 							<a
 								className="font-bold color-black"

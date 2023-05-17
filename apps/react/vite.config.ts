@@ -10,7 +10,7 @@ export default defineConfig({
 	plugins: [
 		UnoCSS(),
 		react(),
-		vanillaExtractPlugin(),
+		// vanillaExtractPlugin(),
 		// checker({
 		// 	typescript: {
 		// 		tsconfigPath: './tsconfig.json',

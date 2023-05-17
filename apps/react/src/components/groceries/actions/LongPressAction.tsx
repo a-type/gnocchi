@@ -30,8 +30,6 @@ export function LongPressAction({
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const ref = useRef<HTMLButtonElement>(null);
 
-	console.log(state);
-
 	useDrag(
 		({ first, cancel, elapsedTime, down, distance, tap }) => {
 			if (first) {

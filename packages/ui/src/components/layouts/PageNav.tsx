@@ -55,7 +55,7 @@ export function PageNav({
 			<div className={innerClassName}>{children}</div>
 			<div
 				ref={setContainer}
-				className="absolute bottom-full w-full flex flex-col gap-2 items-end p-2 sm:(fixed bottom-3 left-50% translate-x-50% top-auto items-end w-full max-w-600px p-0) md:(w-80% max-w-800px)"
+				className="absolute bottom-full w-full flex flex-col gap-2 items-end p-2 sm:(fixed bottom-3 left-50% translate-x--50% top-auto items-end w-full max-w-600px p-0) md:(w-80% max-w-800px)"
 			/>
 		</>,
 		container,

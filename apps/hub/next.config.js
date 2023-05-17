@@ -1,7 +1,3 @@
-import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
-// const { createVanillaExtractPlugin } = require('@vanilla-extract/next-plugin');
-const withVanillaExtract = createVanillaExtractPlugin({});
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	webpack: (config, { dev }) => {
@@ -35,5 +31,4 @@ const nextConfig = {
 	},
 };
 
-export default withVanillaExtract(nextConfig);
-// module.exports = withVanillaExtract(nextConfig);
+export default nextConfig;

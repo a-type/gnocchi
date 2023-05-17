@@ -17,7 +17,7 @@ export function PlanManager({}: PlanManagerProps) {
 	const { data: plans, refetch } = trpc.admin.plans.useQuery();
 
 	return (
-		<div className="flex gap-3">
+		<div className="flex gap-3 flex-col">
 			<H2>Plans</H2>
 			{plans?.map((plan) => (
 				<FeatureFlagPlanManagerWrapper
@@ -72,7 +72,7 @@ function FeatureFlagPlanManager({
 					)}
 					<span>{plan.id}</span>
 				</div>
-				<P size="xs">
+				<P className="text-xs">
 					{plan.members
 						.slice(0, 3)
 						.map((member) => `${member.fullName} [${member.email}]`)
