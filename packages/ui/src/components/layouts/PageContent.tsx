@@ -19,7 +19,7 @@ export function PageContent({
 	return (
 		<div
 			className={classNames(
-				'grid grid-areas-[innerContent] grid-cols[1fr] grid-rows-[1fr] items-start justify-center relative flex-1 gap-3 h-max-content',
+				'grid grid-areas-[innerContent] grid-cols-[1fr] grid-rows-[1fr] items-start justify-center relative flex-1 gap-3 h-max-content',
 				'sm:(grid-areas-[gutter1_nav_innerContent_gutter2] grid-cols-[1fr_auto_min(800px,60vw)_1fr])',
 				className,
 			)}

@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import {
 	ChangeEvent,
 	ReactNode,
-	createContext,
 	useCallback,
 	useContext,
 	useMemo,
@@ -22,6 +21,7 @@ import { Checkbox } from '@aglio/ui/components/checkbox';
 import { Tooltip } from '@aglio/ui/components/tooltip';
 import { Button } from '@aglio/ui/components/button';
 import { useToggle } from '@aglio/ui/hooks';
+import { InstructionsContext } from '@/components/recipes/editor/InstructionsContext.jsx';
 
 export interface InstructionStepNodeViewProps {
 	node: {
@@ -139,7 +139,7 @@ export function InstructionStepNodeView({
 			{!isEditing && isAssignedToMe && (
 				<label
 					contentEditable={false}
-					className="[grid-area:label] text-xs italic color-black animate-fade-in-up mb-1"
+					className="[grid-area:label] text-xs italic color-black animate-keyframes-fade-in-up animate-duration-200 animate-ease-out mb-1"
 				>
 					Assigned to you
 				</label>
@@ -174,6 +174,7 @@ export function InstructionStepNodeView({
 									maybeCompletedSteps.removeAll(id);
 								}
 							}}
+							className="relative top--1"
 						/>
 					)}
 					{!isEditing && hasPeers && (
@@ -211,16 +212,6 @@ export function InstructionStepNodeView({
 		</NodeViewWrapper>
 	);
 }
-
-export const InstructionsContext = createContext<{
-	isEditing: boolean;
-	hasPeers: boolean;
-	showTools: boolean;
-}>({
-	isEditing: false,
-	hasPeers: false,
-	showTools: false,
-});
 
 export const InstructionsProvider = ({
 	isEditing,

@@ -4,3 +4,4 @@ export * from './PageFixedArea.jsx';
 export * from './PageNav.jsx';
 export * from './PageNowPlaying.jsx';
 export * from './PageSection.jsx';
+export * from './PageNowPlayingContext.js';

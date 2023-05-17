@@ -75,7 +75,7 @@ function IngredientCheckoffItem({
 				/>
 			)}
 			<RecipeIngredientViewer
-				className="flex-1"
+				className="flex-1 mt-1"
 				ingredient={ingredient}
 				multiplier={multiplier}
 			/>

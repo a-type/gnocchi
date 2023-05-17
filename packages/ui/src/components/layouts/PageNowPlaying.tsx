@@ -10,11 +10,7 @@ import {
 } from 'react';
 import classNames from 'classnames';
 import { createPortal } from 'react-dom';
-
-export const NowPlayingContext = createContext<{
-	container: HTMLDivElement | undefined;
-	setContainer: (container: HTMLDivElement) => void;
-}>({ container: undefined, setContainer: () => {} });
+import { NowPlayingContext } from './PageNowPlayingContext.js';
 
 export const NowPlayingProvider = ({ children }: { children: ReactNode }) => {
 	const [container, setContainer] = useState<HTMLDivElement>();
@@ -40,7 +36,7 @@ export function PageNowPlaying({
 				className={classNames(
 					unstyled
 						? undefined
-						: 'bg-wash p-2px rounded-2xl border-light shadow-md min-w-32px items-center justify-center',
+						: 'layer-components:(bg-wash p-2px rounded-xl border-light shadow-md min-w-32px items-center justify-center)',
 					className,
 				)}
 			/>,

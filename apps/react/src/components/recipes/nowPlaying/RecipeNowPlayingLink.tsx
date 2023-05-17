@@ -30,7 +30,7 @@ export function RecipeNowPlayingLink({ recipe }: { recipe: Recipe }) {
 				className="flex flex-row gap-2 items-center p-2 w-full overflow-hidden"
 			>
 				<PieProgress value={progress} />
-				<div className="font-bold max-w-full text-ellipsis whitespace-nowrap text-sm">
+				<div className="font-bold max-w-full text-ellipsis whitespace-nowrap text-sm overflow-hidden min-w-0">
 					{title}
 				</div>
 			</Link>

@@ -55,20 +55,20 @@ export default function presetAglio(): Preset {
 				title: '"Inter", sans-serif',
 			},
 			fontSize: {
-				xxs: '0.5rem',
-				xs: '0.75rem',
-				sm: '0.875rem',
-				md: '1rem',
-				lg: '1.25rem',
-				xl: '1.33333333333333333rem',
-				'2xl': '1.5rem',
-				'3xl': '2rem',
-				'4xl': '2.5rem',
-				'5xl': '3rem',
-				'6xl': '4rem',
-				'7xl': '5rem',
-				'8xl': '6rem',
-				'9xl': '7rem',
+				xxs: ['0.625rem', '0.75rem'],
+				xs: ['0.75rem', '1rem'],
+				sm: ['1rem', '1.25rem'],
+				md: ['1.125rem', '1.5rem'],
+				lg: ['1.25rem', '1.75rem'],
+				xl: ['1.5rem', '2rem'],
+				'2xl': ['1.75rem', '2.25rem'],
+				'3xl': ['2rem', '2.5rem'],
+				'4xl': ['2.5rem', '3rem'],
+				'5xl': ['3rem', '3.5rem'],
+				'6xl': ['4rem', '4.5rem'],
+				'7xl': ['5rem', '5.5rem'],
+				'8xl': ['6rem', '6.5rem'],
+				'9xl': ['7rem', '7.5rem'],
 			},
 			spacing: {
 				0: '0',
@@ -120,7 +120,7 @@ export default function presetAglio(): Preset {
 				keyframes: {
 					'progress-bar': `{0% { width: 0% } 100% { width: 100% }}`,
 					'pop-up': `{from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); }}`,
-					disappear: `{
+					'item-disappear': `{
 					0% {opacity:1;transform:translateY(0);height:var(--height);}
 					25% {opacity:1;transform:translateY(0);height:var(--height);}
 					100% {opacity:0;transform:translateY(30px);height:0;marginTop:0;}
@@ -182,7 +182,7 @@ export default function presetAglio(): Preset {
 						to { background-position: 100% 50%; }
 					}`,
 					'spinner-stroke': `{
-						0& { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
+						0% { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
 						50% { stroke-dasharray: 100, 200; stroke-dashoffset: -15; }
 						100% { stroke-dasharray: 100, 200; stroke-dashoffset: -125; }
 					}`,
@@ -199,10 +199,29 @@ export default function presetAglio(): Preset {
 					linear: 'linear',
 					springy: 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
 					'ease-out': 'ease-out',
-					DEFAULT: 'ease-in-out',
+					'fade-in-up': 'ease-out',
+					'fade-in-down': 'ease-out',
+					'fade-in-left': 'ease-out',
+					'fade-in-right': 'ease-out',
+					'fade-out-up': 'ease-in',
+					'fade-out-down': 'ease-in',
+					'fade-out-left': 'ease-in',
+					'fade-out-right': 'ease-in',
+					'fade-in': 'ease-out',
+					'fade-out': 'ease-in',
+					'scan-line': 'linear',
 				},
 				durations: {
-					DEFAULT: '200ms',
+					'fade-in-up': '300ms',
+					'fade-in-down': '300ms',
+					'fade-in-left': '300ms',
+					'fade-in-right': '300ms',
+					'fade-out-up': '300ms',
+					'fade-out-down': '300ms',
+					'fade-out-left': '300ms',
+					'fade-out-right': '300ms',
+					'fade-in': '300ms',
+					'fade-out': '300ms',
 				},
 			},
 		},
@@ -231,7 +250,7 @@ export default function presetAglio(): Preset {
 			'flex-1-0-0': 'flex-grow-1 flex-shrink-0 flex-basis-0',
 			'flex-0-0-auto': 'flex-grow-0 flex-shrink-0 flex-basis-auto',
 			'hidden-input':
-				'opacity-0 absolute z--1 pointer-events-none [&::webkit-file-upload-button]:display-none',
+				'op-0 absolute z--1 pointer-events-none [&::webkit-file-upload-button]:display-none',
 			center: 'left-50% top-50%',
 			'z-nav': 'z-[var(--z-nav)]',
 			'z-menu': 'z-[var(--z-menu)]',
@@ -248,6 +267,8 @@ export default function presetAglio(): Preset {
 			{
 				// TODO: other themes...
 				getCSS: (ctx) => `
+				@layer components, variants, utilities;
+
 				:root {
 					--palette-red-90: #ffede7;
 					--palette-red-80: #ffdbcf;
@@ -269,8 +290,8 @@ export default function presetAglio(): Preset {
 					--palette-green-20: #006d3e;
 					--palette-green-10: #005f35;
 					--palette-green-00: #00391d;
-					--palette-yellow-90: #fff8ef;
-					--palette-yellow-80: #fff0c7;
+					--palette-yellow-90: #fff9ef;
+					--palette-yellow-80: #fff1c7;
 					--palette-yellow-70: #ffe17c;
 					--palette-yellow-60: #f7d352;
 					--palette-yellow-50: #c9a829;
@@ -543,8 +564,8 @@ export default function presetAglio(): Preset {
         html, body {
           margin: 0;
           padding: 0;
-          font-family: "Inter", system-ui, sans-serif;
-          font-size: 18px;
+          font-family: "Inter", sans-serif;
+          font-size: 16px;
           height: 100%;
           --webkit-font-smoothing: antialiased;
         }
@@ -569,7 +590,7 @@ export default function presetAglio(): Preset {
 
         * {
           box-sizing: border-box;
-          --webkit-tap-highlight-color: transparent;
+          -webkit-tap-highlight-color: transparent;
         }
 
         @font-face {
@@ -577,18 +598,20 @@ export default function presetAglio(): Preset {
           src: url("/fonts/Inter-VariableFont_slnt,wght.ttf") format("truetype-variations");
           font-weight: 1 999;
           font-style: oblique 0deg 5deg;
-          font-display: swap;
+          font-display: block;
         }
 
         @font-face {
           font-family: "Londrina Outline";
           src: url("/fonts/LondrinaOutline-Regular.ttf") format("truetype");
-          font-display: swap;
+          font-display: block;
           font-style: normal;
         }
 
 				@media (display-mode: standalone) {
-					overscroll-behavior: none;
+					html {
+						overscroll-behavior: none;
+					}
 				}
 			`,
 			},

@@ -192,7 +192,10 @@ function IngredientMenu({
 					<DropdownMenuItem onSelect={() => setDetailsOpen(true)}>
 						Edit details
 					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={onDelete} color="destructive">
+					<DropdownMenuItem
+						className="color-attention-dark"
+						onSelect={onDelete}
+					>
 						<span>Delete</span>
 						<DropdownMenuItemRightSlot>
 							<TrashIcon />

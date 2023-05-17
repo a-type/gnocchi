@@ -64,7 +64,7 @@ export function GroceryListCategory({
 					</div>
 				)}
 			</CategoryTitleRow>
-			<div className="" data-is-item-dragging={isDragging}>
+			<CategoryItems data-is-item-dragging={isDragging}>
 				{items.map((item, index) => {
 					return (
 						<MemoizedDraggableItem
@@ -74,7 +74,7 @@ export function GroceryListCategory({
 						/>
 					);
 				})}
-			</div>
+			</CategoryItems>
 		</CategoryRoot>
 	);
 }
@@ -83,17 +83,17 @@ export const CategoryRoot = withClassName(
 	'div',
 	'flex flex-col gap-1 rounded-md bg-wash overflow-hidden ease-springy transition mb-2',
 	'[&[data-dragged-over=true]]:(bg-primary-wash shadow-[0_0_0_1px_var(--color-primary-dark)])',
-	'[&[data-is-item-dragging=true]]:(shadow-[0_0_0_1px_var(--color-gray-3)] mb-2)',
-	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 opacity-0 pointer-events-none mb-0 [animation-name:category-collapse] animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
+	'[&[data-is-item-dragging=true]]:(shadow-[0_0_0_1px_var(--color-gray-3)] mb-0)',
+	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 op-0 pointer-events-none mb-0 [animation-name:category-collapse] animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
 	'important:[&[data-do-not-animate=true]]:(animate-none) important:motion-reduce:animate-none',
 	'[&[data-is-item-dragging=true][data-dragged-over=false]]:(scale-95)',
-	'[&[data-is-empty=false][data-dragged-over=false][data-is-item-dragging=false]]:(animate-fade-in-up animate-duration-200 animate-ease-springy)',
+	'[&[data-is-empty=false][data-dragged-over=false][data-is-item-dragging=false]]:(animate-keyframes-fade-in-up animate-duration-200 animate-ease-springy)',
 	'focus-visible:(color-primary-dark outline-1 outline-solid outline-primary)',
 );
 
 export const CategoryItems = withClassName(
 	'div',
-	'flex flex-col transition-opacity duration-200 ease-springy [&data-is-item-dragging=true]:opacity-0',
+	'flex flex-col transition-opacity duration-200 ease-springy [&[data-is-item-dragging=true]]:op-0',
 );
 
 function waitForAnimationCancel(animation: Animation) {
@@ -160,12 +160,12 @@ function useDragExpansion({
 					{
 						height: `${element.clientHeight}px`,
 						opacity: empty ? 0 : 1,
-						marginBottom: empty ? 0 : '32px',
+						marginBottom: empty ? 0 : '16px',
 					},
 					{
 						height: `${EMPTY_DROPPABLE_SIZE}px`,
 						opacity: 1,
-						marginBottom: '32px',
+						marginBottom: '16px',
 					},
 				],
 				{

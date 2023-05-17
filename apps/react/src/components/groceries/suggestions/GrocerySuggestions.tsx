@@ -68,7 +68,7 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 			open={open}
 			onOpenChange={setOpen}
 			className={classNames(
-				'flex flex-col gap-1 bg-accentWash overflow-hidden mb-2 p-2',
+				'flex flex-col bg-accentWash overflow-hidden mb-2 p-2',
 				'transition-shadow-200',
 				'transition-transform-200',
 				'transition-colors-500',
@@ -79,7 +79,7 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 				<CategoryTitleRow className="cursor-pointer">
 					<CaretDownIcon className="mr-2 transition-transform-200 [div[aria-expanded=true]>&]:transform-rotate-180deg" />
 					<CategoryTitle className="text-xs">Suggested</CategoryTitle>
-					<Icon name="magic" className="mr-3 color-gray7" />
+					<Icon name="magic" className="mr-3 color-gray-dark-blend" />
 				</CategoryTitleRow>
 			</CollapsibleTrigger>
 			<CollapsibleContent>

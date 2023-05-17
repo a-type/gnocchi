@@ -62,7 +62,7 @@ export function SplashPage() {
 					</TitleWrap>
 					<Demo demo="groceries" />
 					<Section>
-						<H2>How it works</H2>
+						<H2 className="gutter-bottom">How it works</H2>
 						<Item>
 							<Emoji>🧾</Emoji>
 							<ItemText>
@@ -85,7 +85,7 @@ export function SplashPage() {
 					</Section>
 					<Demo demo="recipe" />
 					<Section>
-						<H2>Collect recipes</H2>
+						<H2 className="gutter-bottom">Collect recipes</H2>
 						<p>
 							{APP_NAME} is a recipe app, too. You can save recipes from the
 							web, or add your own.
@@ -106,7 +106,7 @@ export function SplashPage() {
 					</Section>
 					<Demo demo="groceries-lists" />
 					<Section color="white">
-						<H2>Less improv at the grocery store</H2>
+						<H2 className="gutter-bottom">Less improv at the grocery store</H2>
 						<p>
 							If you're like me, you usually leave the grocery store with some
 							foods you didn't plan on buying. But you also get home, start
@@ -132,7 +132,7 @@ export function SplashPage() {
 			>
 				<DemoGrid className="mt-20vh">
 					<TitleWrap className="bg-primary-wash border-1 border-solid border-primary-dark rounded-lg p-4">
-						<H2 className="[font-size:5vmax]">
+						<H2 className="[font-size:5vmax] gutter-bottom">
 							Upgrade to the world's most collaborative cooking app
 						</H2>
 						<P>
@@ -143,7 +143,7 @@ export function SplashPage() {
 					</TitleWrap>
 					<Demo demo="multiplayer-groceries" />
 					<Section>
-						<H2>Collaborative groceries</H2>
+						<H2 className="gutter-bottom">Collaborative groceries</H2>
 						<p>
 							Team up with your family, roommates, or friends to plan and shop
 						</p>
@@ -167,7 +167,7 @@ export function SplashPage() {
 					</Section>
 					<Demo demo="multiplayer-cooking" />
 					<Section>
-						<H2>Sous chef mode</H2>
+						<H2 className="gutter-bottom">Sous chef mode</H2>
 						<p>Stay on task when cooking together</p>
 						<Item>
 							<Emoji>🖨️</Emoji>

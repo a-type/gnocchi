@@ -67,7 +67,7 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 				</InstructionsProvider>
 			</div>
 			<div>
-				<H2>Danger zone</H2>
+				<H2 className="gutter-bottom">Danger zone</H2>
 				<RecipeDeleteButton className="self-start" recipe={recipe} />
 			</div>
 		</div>

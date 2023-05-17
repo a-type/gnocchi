@@ -12,7 +12,7 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 	const { groupedItems, empty } = useItemsGroupedAndSorted();
 
 	return (
-		<div className="flex flex-col items-stretch" {...rest}>
+		<div className="flex flex-col items-stretch w-full" {...rest}>
 			<Suspense>
 				<ExpiresSoonSection />
 			</Suspense>
@@ -28,7 +28,7 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 				})}
 			</div>
 			{empty && (
-				<div className="flex flex-col items-center justify-center text-center w-full padding-8 opacity-70">
+				<div className="flex flex-col items-center justify-center text-center w-full p-8 opacity-70">
 					Nothing here yet...
 				</div>
 			)}

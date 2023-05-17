@@ -48,7 +48,7 @@ export function TopLoader({ className }: TopLoaderProps) {
 	return (
 		<div
 			className={classNames(
-				'fixed top-0 left-0 w-full h-4px pointer-events-none opacity-0 z-100000',
+				'fixed top-0 left-0 w-full h-4px pointer-events-none op-0 z-100000',
 				'[&[data-state=visible]]:(opacity-100 transition-opacity)',
 				'md:(h-2px)',
 				'motion-reduce:display-none',

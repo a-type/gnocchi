@@ -31,7 +31,7 @@ export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 	return (
 		<div className={classNames('flex flex-col gap-2', className)}>
 			<H2>Tags</H2>
-			<div className="flex flex-wrap gap-1 p-1">
+			<div className="flex flex-wrap gap-1 p-1 items-center">
 				{tags?.map((tag) => (
 					<Suspense key={tag}>
 						<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
@@ -58,13 +58,13 @@ function TagDisplay({
 	return (
 		<div
 			className={classNames(
-				'flex items-center gap-1 p-1 pl-3 rounded-lg bg-primaryLight color-black font-bold',
+				'flex items-center gap-1 px-2 pl-4 rounded-lg bg-primaryLight color-black font-bold text-sm',
 				color && `theme-${color}`,
 			)}
 		>
 			<span>{icon ?? <Icon name="tag" />}</span>
 			<span>{tag}</span>
-			<Button size="small" color="ghost" onClick={() => onRemove(tag)}>
+			<Button size="icon" color="ghost" onClick={() => onRemove(tag)}>
 				<Cross2Icon />
 			</Button>
 		</div>

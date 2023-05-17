@@ -1,5 +1,5 @@
 import { addItems, groceriesDescriptor } from '@/stores/groceries/index.js';
-import { recipeSavePromptState } from './components/recipes/savePrompt/RecipeSavePrompt.jsx';
+import { recipeSavePromptState } from './components/recipes/savePrompt/state.js';
 
 export function attachToPwaEvents() {
 	if (typeof window === 'undefined') return;

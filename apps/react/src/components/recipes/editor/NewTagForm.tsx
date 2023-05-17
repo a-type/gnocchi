@@ -28,7 +28,7 @@ export function NewTagForm({ onCreate }: NewTagFormProps) {
 				}
 			}}
 		>
-			<Form className="flex items-center gap-2 flex-row max-w-full">
+			<Form className="flex items-center gap-2 important:flex-row max-w-full">
 				<TextField
 					name="name"
 					placeholder="tag name"

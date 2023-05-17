@@ -73,23 +73,23 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 				</Button>
 				<TextContent>
 					<LookupFoodName foodName={food} />
+					{purchasedAt && (
+						<Tooltip disabled={!expiresAt} content={expiresAtText}>
+							<div
+								className={classNames(
+									' color-gray3 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap',
+									{
+										'color-attentionDark': isAlmostOrExpired,
+									},
+								)}
+							>
+								<ClockIcon />
+								<RelativeTime value={purchasedAt} />
+								&nbsp;ago
+							</div>
+						</Tooltip>
+					)}
 				</TextContent>
-				{purchasedAt && (
-					<Tooltip disabled={!expiresAt} content={expiresAtText}>
-						<div
-							className={classNames(
-								'justify-self-end ml-auto color-gray5 italic text-sm flex flex-row items-center gap-2 whitespace-nowrap',
-								{
-									'color-attentionDark': isAlmostOrExpired,
-								},
-							)}
-						>
-							<ClockIcon />
-							<RelativeTime value={purchasedAt} />
-							&nbsp;ago
-						</div>
-					</Tooltip>
-				)}
 				<FoodDetailDialog foodName={food} />
 			</Main>
 		</Root>
@@ -106,7 +106,7 @@ const Main = withClassName(
 );
 const TextContent = withClassName(
 	'div',
-	'flex flex-row gap-1 max-w-full overflow-hidden text-ellipsis relative',
+	'flex flex-col flex-1 items-start gap-2 mt-1 max-w-full overflow-hidden text-ellipsis relative',
 );
 
 export const PantryListItemSkeleton = () => {

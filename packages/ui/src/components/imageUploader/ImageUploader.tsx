@@ -117,7 +117,7 @@ export function ImageUploader({
 				accept="image/*"
 				onChange={onFileChange}
 				onClick={onFileClick}
-				className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+				className="absolute inset-0 op-0 w-full h-full cursor-pointer"
 			/>
 			<div
 				className={classNames(

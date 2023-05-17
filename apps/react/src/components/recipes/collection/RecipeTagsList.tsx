@@ -39,7 +39,7 @@ export function RecipeTagsList({
 						toggled={tag.get('name') === selectedValue}
 						onClick={() => onSelect(tag.get('name'))}
 						className={classNames(
-							tag.get('color') && `theme-${tag.get('color')}}`,
+							tag.get('color') && `theme-${tag.get('color')}`,
 						)}
 					>
 						<span>{tag.get('icon') ?? <Icon name="tag" />}</span>

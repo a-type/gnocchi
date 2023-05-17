@@ -31,7 +31,7 @@ export function RecipeTagEditor() {
 		>
 			<DialogContent>
 				<DialogTitle>Edit {tag?.get('name')}</DialogTitle>
-				<div className="flex gap-3">
+				<div className="flex flex-row gap-3">
 					<div>Color:</div>
 					<ColorPicker
 						onChange={(color) => tag?.set('color', color)}

@@ -41,9 +41,9 @@ export function Capturer({ onComplete, className }: CapturerProps) {
 					<>
 						<img
 							src={croppedImage}
-							className="absolute z-1 w-full h-full object-contain bg-black animate-fade-in duration-500 motion-reduce:animate-none"
+							className="absolute z-1 w-full h-full object-contain bg-black animate-keyframes-fade-in animate-duration-500 animate-ease-out motion-reduce:animate-none"
 						/>
-						<div className="absolute z-2 w-full h-2px bg-[rgba(255,255,255,0.8)] animate-scan-line duration-2000 [animation-timing-function:linear] animate-iteration-infinite delay-500 motion-reduce:animate-none" />
+						<div className="absolute z-2 w-full h-2px bg-[rgba(255,255,255,0.8)] animate-keyframes-scan-line animate-duration-2000 animate-ease-linear animate-iteration-infinite animate-delay-500 motion-reduce:animate-none" />
 					</>
 				)}
 			</div>

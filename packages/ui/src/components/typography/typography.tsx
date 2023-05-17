@@ -1,6 +1,6 @@
 import { withClassName } from '../../hooks/withClassName.js';
 
-const baseHeadingClass = 'my-0 color-inherit';
+const baseHeadingClass = 'my-0';
 export const H1 = withClassName(
 	'h1',
 	baseHeadingClass,

@@ -136,8 +136,8 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					'[&[data-dragging=true]]:(shadow-xl cursor-grabbing touch-none border-light)',
 					'[&[data-highlighted=true]]:bg-primary-wash',
 					'[&[data-menu-open=true]]:(bg-white border-light)',
-					'[&[data-just-moved=true][data-hidden-state=visible]]:(animate-pop-up animate-duration-400 animate-springy)',
-					'[&[data-state=hidden]]:(animate-disappear duration-3000 animate-ease-out animate-mode-forwards)',
+					'[&[data-just-moved=true][data-hidden-state=visible]]:(animate-keyframes-pop-up animate-duration-400 animate-springy)',
+					'[&[data-state=hidden]]:(animate-keyframes-item-disappear duration-3000 animate-ease-out animate-mode-forwards)',
 					className,
 				)}
 				open={menuOpen}
@@ -159,14 +159,16 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					isPartiallyPurchased={isPartiallyPurchased}
 					togglePurchased={togglePurchased}
 				/>
-				<div className="flex flex-row items-start gap-2 [grid-area:main] pt-4 pr-3 pb-2 relative">
+				<div className="flex flex-row items-start gap-2 [grid-area:main] pt-2 pr-3 pb-2 relative">
 					<div className="flex flex-col gap-2 items-start flex-1">
-						<div className="flex flex-row items-center gap-1 max-w-full overflow-hidden text-ellipsis relative">
+						<div className="flex flex-row items-start gap-1 mt-1 max-w-full overflow-hidden text-ellipsis relative">
 							<span>{displayString}</span>
-							{menuOpen && <QuantityEditor item={item} />}
+							{menuOpen && (
+								<QuantityEditor className="relative top--1" item={item} />
+							)}
 						</div>
 						{isPurchased && (
-							<div className="absolute left-0 right-52px top-28px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
+							<div className="absolute left-0 right-52px top-20px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
 						)}
 						{comment && !menuOpen && (
 							<div className="text-xs text-gray7 italic [grid-area:comment]">
@@ -384,7 +386,7 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 						<div
 							className={classNames(
 								listThemeClass,
-								'flex items-center justify-center p-4 color-white rounded-md bg-primary text-xs min-w-3 min-h-3 gap-1 lg:px-8',
+								'flex items-center justify-center p-1 color-white rounded-md bg-primary text-xs min-w-3 min-h-3 gap-1 lg:px-8',
 							)}
 						>
 							<Icon name="tag" className="inline" />
@@ -409,13 +411,23 @@ function getInitials(name: string) {
 		.join('');
 }
 
-function QuantityEditor({ item }: { item: Item }) {
+function QuantityEditor({
+	item,
+	className,
+}: {
+	item: Item;
+	className?: string;
+}) {
 	const { totalQuantity, textOverride } = hooks.useWatch(item);
 	const displayText = useItemDisplayText(item);
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button size="small" color="ghost">
+				<Button
+					size="icon"
+					className={classNames('p-1', className)}
+					color="ghost"
+				>
 					<Pencil1Icon />
 				</Button>
 			</DialogTrigger>
@@ -479,7 +491,7 @@ function ItemCheckbox({
 			onPointerDown={stopPropagation}
 			onPointerUp={stopPropagation}
 			data-test="grocery-list-item-checkbox"
-			className="[grid-area:check] mt-4 mx-3"
+			className="[grid-area:check] mt-2 mx-3"
 		/>
 	);
 }

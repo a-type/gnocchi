@@ -1,4 +1,4 @@
-import { recipeSavePromptState } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
+import { recipeSavePromptState } from '@/components/recipes/savePrompt/state.js';
 import { signupDialogState as signupState } from '@/components/sync/state.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';

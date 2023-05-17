@@ -32,7 +32,7 @@ function RecipeTagViewer({ tag }: { tag: string }) {
 		<RecipeTagMenuWrapper tagName={tag}>
 			<div
 				className={classNames(
-					'flex items-center gap-1 px-3 py-1 rounded-lg bg-primaryLight color-black font-bold',
+					'flex flex-row items-center gap-1 px-3 py-1 rounded-lg bg-primaryLight color-black font-bold text-sm',
 					data?.get('color') && `theme-${data.get('color')}`,
 				)}
 			>

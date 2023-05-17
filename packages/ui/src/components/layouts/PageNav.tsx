@@ -10,8 +10,7 @@ import {
 	useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import * as classes from './PageNav.css.js';
-import { NowPlayingContext } from './PageNowPlaying.jsx';
+import { NowPlayingContext } from './PageNowPlayingContext.jsx';
 import classNames from 'classnames';
 
 const NavContext = createContext<{

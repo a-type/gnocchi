@@ -17,13 +17,9 @@ import { H2, P } from '@aglio/ui/components/typography';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { hooks } from '@/stores/groceries/index.js';
+import { recipeSavePromptState } from '@/components/recipes/savePrompt/state.js';
 
 export interface RecipeSavePromptProps {}
-
-export const recipeSavePromptState = proxy({
-	url: '',
-	hubSlug: '',
-});
 
 export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 	const { url } = useSnapshot(recipeSavePromptState);

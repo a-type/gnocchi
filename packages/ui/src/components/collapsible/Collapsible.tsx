@@ -14,7 +14,7 @@ const CollapsibleContentBase = withClassName(
 // specifically removing className... it's causing problems?
 export const CollapsibleContent = forwardRef<
 	HTMLDivElement,
-	Omit<CollapsiblePrimitive.CollapsibleContentProps, 'className'> & {
+	CollapsiblePrimitive.CollapsibleContentProps & {
 		horizontal?: boolean;
 	}
 >(function CollapsibleContent({ horizontal, ...props }, ref) {

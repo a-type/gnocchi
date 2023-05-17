@@ -23,3 +23,15 @@ function main() {
 main();
 
 attachToPwaEvents();
+
+function debugUno() {
+	setTimeout(
+		() =>
+			navigator.clipboard.writeText(
+				document.querySelector('[data-vite-dev-id="/__uno.css"]')
+					?.textContent ?? 'failed to copy',
+			),
+		3000,
+	);
+}
+(window as any).debugUno = debugUno;

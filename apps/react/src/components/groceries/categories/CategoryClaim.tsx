@@ -37,11 +37,11 @@ export const CategoryClaim = memo(function CategoryClaim({
 	}
 
 	return (
-		<Button color="ghost" size="small" className="my-1 h-30px" onClick={claim}>
+		<Button color="ghost" size="small" className="py-0 h-30px" onClick={claim}>
 			<CollapsibleRoot open={!!claimer}>
 				<CollapsibleContent data-horizontal>
 					<div className="flex flex-row items-center justify-center gap-1">
-						<span className="text-sm font-sans font-normal color-gray-5 whitespace-nowrap">
+						<span className="text-xs font-sans font-normal color-gray-5 whitespace-nowrap">
 							claimed
 						</span>
 						{!!claimer ? (

@@ -27,10 +27,10 @@ export function RecipesNowPlaying({
 	}
 
 	return (
-		<PageNowPlaying className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-light overflow-hidden animate-fade-in-up animate-duration-300 ease-out">
+		<PageNowPlaying className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-light overflow-hidden animate-keyframes-fade-in-up animate-duration-300 animate-ease-out">
 			<CollapsibleRoot defaultOpen={defaultOpen} className="w-full">
 				<CollapsibleTrigger asChild>
-					<div className="flex flex-row items-center justify-between w-full pr-5">
+					<div className="flex flex-row items-center justify-between w-full pr-5 py-1 px-1">
 						<span className="text-xs italic py-1 px-2">Now Cooking</span>
 						<ChevronDownIcon className="transition-transform duration-200 [[data-state=closed]_&]:rotate-180" />
 					</div>

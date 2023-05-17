@@ -38,7 +38,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 
 		return (
 			<CollapsibleRoot open={!visible ? false : render}>
-				<CollapsibleContent data-horizontal className="overflow-hidden">
+				<CollapsibleContent data-horizontal>
 					<Button
 						ref={ref}
 						size="small"

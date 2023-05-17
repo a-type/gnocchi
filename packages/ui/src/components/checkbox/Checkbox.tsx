@@ -9,10 +9,10 @@ import { withClassName } from '../../hooks/withClassName.js';
 const CheckboxRoot = withClassName(
 	CheckboxPrimitive.Root,
 	classNames(
-		'w-24px h-24px flex-shrink-0 relative bg-white border-default transition rounded-[4px]',
-		'focus-visible:(outline-off shadow-focus)',
-		'[&[data-state=checked]]:(bg-primary-light border-primary-dark)',
-		'[&:hover:not(:disabled)]:shadow-[0_0_0_1px_var(--color-black)]',
+		'layer-components:(w-28px h-28px flex-shrink-0 relative bg-white border-default transition rounded-[6px])',
+		'layer-components:focus-visible:(outline-off shadow-focus)',
+		'layer-components:[&[data-state=checked]]:(bg-primary-light border-primary-dark)',
+		'layer-components:[&:hover:not(:disabled)]:shadow-[0_0_0_1px_var(--color-black)]',
 	),
 );
 

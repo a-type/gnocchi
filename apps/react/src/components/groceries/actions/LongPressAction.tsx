@@ -11,7 +11,7 @@ import {
 } from '@aglio/ui/src/components/popover';
 import { useDrag } from '@use-gesture/react';
 import classNames from 'classnames';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export type LongPressActionProps = ActionButtonProps & {
 	onActivate: () => void;
@@ -28,17 +28,21 @@ export function LongPressAction({
 }: LongPressActionProps) {
 	const [state, setState] = useState<'holding' | 'idle' | 'failed'>('idle');
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const ref = useRef<HTMLButtonElement>(null);
 
-	const bind = useDrag(
-		({ first, cancel, elapsedTime, down, distance }) => {
+	console.log(state);
+
+	useDrag(
+		({ first, cancel, elapsedTime, down, distance, tap }) => {
 			if (first) {
-				setState('holding');
 				try {
 					navigator?.vibrate?.(200);
 				} catch (err) {
 					console.log(err);
 				}
-			} else {
+			}
+
+			if (!down) {
 				if (elapsedTime < 300) {
 					setState('failed');
 					try {
@@ -47,22 +51,28 @@ export function LongPressAction({
 						console.log(err);
 					}
 					cancel();
-				} else if (!down && elapsedTime > duration) {
+				} else if (elapsedTime > duration) {
 					onActivate();
 					setState('idle');
-				} else if (
+				} else {
+					setState('idle');
+				}
+			} else {
+				if (
 					down &&
 					Math.sqrt(Math.pow(distance[0], 2) + Math.pow(distance[1], 2)) > 20
 				) {
 					cancel();
 					setState('failed');
+				} else {
+					setState('holding');
 				}
 			}
 		},
 		{
-			filterTaps: false,
 			triggerAllEvents: true,
-			preventScroll: true,
+			preventDefault: true,
+			target: ref,
 		},
 	);
 
@@ -83,7 +93,7 @@ export function LongPressAction({
 				<ActionButton
 					size="small"
 					onContextMenu={preventDefault}
-					{...bind()}
+					ref={ref}
 					{...rest}
 					className={classNames('touch-none', rest.className)}
 				>
@@ -105,7 +115,7 @@ export function LongPressAction({
 							'bg-primaryLight': progressColor === 'primaryLight',
 						},
 						state === 'holding' &&
-							`animate-progress-bar animate-forwards animate-ease-linear`,
+							`animate-keyframes-progress-bar animate-forwards animate-ease-linear`,
 					)}
 					style={{
 						animationDuration: `${duration}ms`,
