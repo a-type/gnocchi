@@ -29,16 +29,18 @@ export default function presetAglio(): Preset {
 				'primary-dark': 'var(--color-primary-dark)',
 				primaryWash: 'var(--color-primary-wash)',
 				'primary-wash': 'var(--color-primary-wash)',
-				gray1: 'var(--color-gray-1)',
-				gray2: 'var(--color-gray-2)',
-				gray3: 'var(--color-gray-3)',
-				gray4: 'var(--color-gray-4)',
-				gray5: 'var(--color-gray-5)',
-				gray6: 'var(--color-gray-6)',
-				gray7: 'var(--color-gray-7)',
-				gray8: 'var(--color-gray-8)',
-				gray9: 'var(--color-gray-9)',
-				gray0: 'var(--color-gray-0)',
+				gray: {
+					1: 'var(--color-gray-1)',
+					2: 'var(--color-gray-2)',
+					3: 'var(--color-gray-3)',
+					4: 'var(--color-gray-4)',
+					5: 'var(--color-gray-5)',
+					6: 'var(--color-gray-6)',
+					7: 'var(--color-gray-7)',
+					8: 'var(--color-gray-8)',
+					9: 'var(--color-gray-9)',
+					0: 'var(--color-gray-0)',
+				},
 				grayBlend: 'var(--color-gray-blend)',
 				'gray-blend': 'var(--color-gray-blend)',
 				grayDarkBlend: 'var(--color-gray-dark-blend)',
@@ -207,6 +209,10 @@ export default function presetAglio(): Preset {
 					'fade-out-down': 'ease-in',
 					'fade-out-left': 'ease-in',
 					'fade-out-right': 'ease-in',
+					'fade-in-up-big': 'ease-out',
+					'fade-in-down-big': 'ease-out',
+					'fade-in-left-big': 'ease-out',
+					'fade-in-right-big': 'ease-out',
 					'fade-in': 'ease-out',
 					'fade-out': 'ease-in',
 					'scan-line': 'linear',
@@ -220,8 +226,12 @@ export default function presetAglio(): Preset {
 					'fade-out-down': '300ms',
 					'fade-out-left': '300ms',
 					'fade-out-right': '300ms',
-					'fade-in': '300ms',
-					'fade-out': '300ms',
+					'fade-in-up-big': '400ms',
+					'fade-in-down-big': '400ms',
+					'fade-in-left-big': '400ms',
+					'fade-in-right-big': '400ms',
+					'fade-in': '200ms',
+					'fade-out': '200ms',
 				},
 			},
 		},
@@ -421,7 +431,7 @@ export default function presetAglio(): Preset {
 						--color-gray-8: var(--palette-gray-5);
 						--color-gray-9: var(--palette-gray-4);
 						--color-gray-0: var(--palette-gray-3);
-						--color-gray-blend: var(--palette-gray-light-blend);
+						--color-gray-blend: var(--palette-light-gray-blend);
 						--color-gray-dark-blend: var(--palette-gray-dark-blend);
 					}
 				}
@@ -476,7 +486,7 @@ export default function presetAglio(): Preset {
 						--color-gray-8: var(--palette-gray-5);
 						--color-gray-9: var(--palette-gray-4);
 						--color-gray-0: var(--palette-gray-3);
-						--color-gray-blend: var(--palette-gray-light-blend);
+						--color-gray-blend: var(--palette-light-gray-blend);
 						--color-gray-dark-blend: var(--palette-gray-dark-blend);
 					}
 				}

@@ -211,11 +211,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									value={comment || ''}
 									onChange={(val) => item.set('comment', val)}
 									placeholder="Add a comment"
-									className="important:text-xs important:border-gray5 flex-grow-1 flex-shrink-1 flex-basis-80px"
+									className="important:text-xs important:border-gray5 flex-grow-2 flex-shrink-1 flex-basis-50% md:flex-basis-120px"
 								/>
 								<ListSelect
 									value={item.get('listId')}
 									onChange={(listId) => item.set('listId', listId)}
+									className="flex-basis-50% flex-grow-1 flex-shrink-1 md:flex-basis-80px"
 								/>
 								<FoodDetailDialog foodName={food} />
 								{/* <CategoryPicker item={item} /> */}
@@ -386,7 +387,7 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 						<div
 							className={classNames(
 								listThemeClass,
-								'flex items-center justify-center p-1 color-white rounded-md bg-primary text-xs min-w-3 min-h-3 gap-1 lg:px-8',
+								'flex items-center justify-center p-1 color-black rounded-md bg-primary-light text-xs min-w-3 min-h-3 gap-1 lg:px-2',
 							)}
 						>
 							<Icon name="tag" className="inline" />

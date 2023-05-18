@@ -77,7 +77,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 						<Tooltip disabled={!expiresAt} content={expiresAtText}>
 							<div
 								className={classNames(
-									' color-gray3 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap',
+									' color-gray5 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap',
 									{
 										'color-attentionDark': isAlmostOrExpired,
 									},

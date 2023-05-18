@@ -32,6 +32,7 @@ export interface ListSelectProps {
 	value: string | null | undefined;
 	onChange: (value: string | null | undefined) => void;
 	inDialog?: boolean;
+	className?: string;
 }
 
 const FilledIcon = withClassName(Icon, 'important:fill-primary');
@@ -41,6 +42,7 @@ export function ListSelect({
 	onChange,
 	includeAll,
 	inDialog,
+	className,
 }: ListSelectProps) {
 	const lists = hooks.useAllLists();
 	const [isCreating, setIsCreating] = useState(false);
@@ -58,7 +60,7 @@ export function ListSelect({
 					} else onChange(val);
 				}}
 			>
-				<SelectTrigger>
+				<SelectTrigger className={className}>
 					<SelectValue />
 					<SelectIcon />
 				</SelectTrigger>
