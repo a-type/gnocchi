@@ -8,7 +8,6 @@
 		"build:next": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"build:uno": "unocss",
 		"dev": "concurrently npm:dev:*",
 		"build": "concurrently npm:build:*"
 	},
@@ -46,7 +45,6 @@
 		}
 	},
 	"devDependencies": {
-		"@unocss/cli": "^0.51.13",
 		"@unocss/transformer-variant-group": "^0.51.12",
 		"@unocss/webpack": "^0.51.13",
 		"concurrently": "^7.5.0",

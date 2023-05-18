@@ -5,6 +5,7 @@ import presetAglio from '@aglio/ui/uno-preset';
 
 export default defineConfig({
 	presets: [presetAglio()],
+	// @ts-ignore
 	transformers: [variantGroup()],
 	cli: {
 		entry: {
@@ -13,14 +14,3 @@ export default defineConfig({
 		},
 	},
 });
-
-interface CliEntryItem {
-	/**
-	 * Glob patterns to match files
-	 */
-	patterns: string[];
-	/**
-	 * The output filename for the generated UnoCSS file
-	 */
-	outFile: string;
-}
