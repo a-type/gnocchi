@@ -1,4 +1,4 @@
-import { sprinkles } from '@aglio/ui/styles';
+import classNames from 'classnames';
 
 export function TagIcon({
 	fill,
@@ -20,8 +20,8 @@ export function TagIcon({
 				d="M2 7V2H7L14 9L9 14L2 7Z"
 				stroke="currentColor"
 				strokeLinejoin="round"
-				className={sprinkles({
-					fill: fill ? 'primary' : 'none',
+				className={classNames({
+					'fill-primary': fill,
 				})}
 			/>
 			<circle cx="4.5" cy="4.5" r="1" fill="currentColor" />

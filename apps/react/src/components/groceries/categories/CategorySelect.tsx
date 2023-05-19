@@ -18,11 +18,13 @@ export function CategorySelect({
 	onChange,
 	children,
 	contentClassName,
+	open,
 }: {
 	value: string | null;
 	onChange: (v: string | null) => void;
 	children?: ReactNode;
 	contentClassName?: string;
+	open?: boolean;
 }) {
 	const [state, setState] = useState<
 		'idle' | 'scrubbing' | 'picking' | 'create'
@@ -54,6 +56,7 @@ export function CategorySelect({
 			<Select
 				value={value === null ? 'null' : value}
 				onValueChange={setCategory}
+				open={open}
 			>
 				<SelectTrigger asChild>
 					<Button color="ghost">

@@ -1,5 +1,4 @@
 import { ReactNode, useState } from 'react';
-import * as classes from './ParticleLayer.css.js';
 import { Particles } from './particlesState.js';
 import { createPortal } from 'react-dom';
 import { ParticlesProvider } from './ParticleContext.js';
@@ -10,7 +9,10 @@ export function ParticleLayer({ children }: { children: ReactNode }) {
 	return (
 		<ParticlesProvider value={particles}>
 			{createPortal(
-				<canvas ref={particles.setCanvas} className={classes.canvas} />,
+				<canvas
+					ref={particles.setCanvas}
+					className="fixed inset-0 w-full h-full z-overdraw pointer-events-none"
+				/>,
 				document.body,
 			)}
 			{children}

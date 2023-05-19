@@ -1,8 +1,7 @@
-import { ButtonProps, buttonClassNames } from '@aglio/ui/components/button';
+import { ButtonProps, getButtonClassName } from '@aglio/ui/components/button';
 import classNames from 'classnames';
 import { forwardRef } from 'react';
 import { Link, LinkProps } from '@verdant-web/react-router';
-import * as classes from './Link.css.js';
 
 export { Link };
 export type { LinkProps };
@@ -18,12 +17,8 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(
 		return (
 			<Link
 				className={classNames(
-					buttonClassNames.root({
-						color,
-						size,
-						align,
-					}),
-					classes.root,
+					getButtonClassName({ color, size, align }),
+					'[&[data-transitioning=true]]:opacity-70',
 					className,
 				)}
 				{...props}
@@ -38,7 +33,10 @@ export const TextLink = forwardRef<HTMLAnchorElement, LinkProps>(
 		return (
 			<Link
 				{...props}
-				className={classNames(classes.root, classes.textLink, className)}
+				className={classNames(
+					'layer-components:([&[data-transitioning=true]]:opacity-70 font-bold cursor-pointer text-gray9)',
+					className,
+				)}
 				// ref={ref} // FIXME: in lo-fi
 			/>
 		);

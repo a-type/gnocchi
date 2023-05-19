@@ -19,8 +19,8 @@ import { groceriesState } from '../groceries/state.js';
 import { Icon } from '../icons/Icon.jsx';
 import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
 import { useHasNewExpirations } from '../pantry/hooks.js';
-import * as classes from './NavBar.css.js';
 import { PopEffect } from './PopEffect.jsx';
+import { withClassName } from '@aglio/ui/hooks';
 
 export interface NavBarProps {}
 
@@ -55,21 +55,24 @@ export function NavBar({}: NavBarProps) {
 	}
 
 	return (
-		<PageNav innerClassName={classNames(classes.root)}>
+		<PageNav
+			innerClassName={classNames(
+				'flex flex-row items-stretch justify-around w-full rounded-0 shadow-lg overflow-hidden z-50 bg-wash border-t border-t-solid border-gray3 p-1 h-auto',
+				'pb-[calc(0.25rem+env(safe-area-inset-bottom,0px))]',
+				'sm:(bg-transparent flex flex-col rounded-0 border-none border-transparent shadow-none h-min-content overflow-y-auto overflow-x-hidden justify-start items-stretch gap-2 pb-10)',
+			)}
+		>
 			<Suspense>
-				<div className={classes.logo}>
-					<img
-						src="/android-chrome-192x192.png"
-						className={classes.logoImage}
-					/>
-					<h1 className={classes.logoText}>Gnocchi</h1>
+				<div className="display-none sm:(flex flex-row gap-1 items-center justify-center px-2 py-4)">
+					<img src="/android-chrome-192x192.png" className="w-40px h-40px" />
+					<h1 className="text-md font-title font-medium">Gnocchi</h1>
 				</div>
 				<GroceriesNavBarLink active={matchGroceries} />
 				<PantryNavBarLink active={matchPurchased} />
 				<RecipesNavBarLink active={matchRecipes} />
 				<SettingsNavBarLink active={matchSettings} />
 			</Suspense>
-			<ProductHunt className={classes.productHunt} />
+			<ProductHunt className="display-none md:(display-block w-160px)" />
 		</PageNav>
 	);
 }
@@ -100,23 +103,40 @@ const NavBarLink = memo(
 		return (
 			<Link
 				to={to}
-				className={classNames(classes.button, {
-					[classes.buttonActive]: active,
-				})}
+				className={classNames(
+					'flex flex-col items-center justify-center whitespace-nowrap py-1 px-3 bg-transparent rounded-md border-none cursor-pointer text-sm transition-colors h-full gap-6px relative',
+					'sm:(flex-row-reverse h-auto justify-start gap-2 overflow-visible)',
+					'hover:bg-primaryWash',
+					'focus-visible:(outline-none bg-primaryWash)',
+					'active:bg-primaryWash',
+					{
+						'important:(color-black bg-primaryWash)': active,
+						active: active,
+					},
+				)}
+				data-active={active}
 				onClick={handleClick}
 				onMouseOver={onHover}
 				ref={ref}
 			>
-				<div className={classes.iconContainer}>
+				<div className="relative flex sm:(p-6px rounded-full bg-lightBlend)">
 					<PopEffect active={animate} />
 					{icon}
 				</div>
-				<span className={classes.buttonText} data-active={!!active}>
+				<span
+					className="overflow-hidden pl-1 inline-block text-xxs whitespace-nowrap text-ellipsis sm:(text-md leading-normal)"
+					data-active={!!active}
+				>
 					{children}
 				</span>
 			</Link>
 		);
 	}),
+);
+
+const NavIcon = withClassName(
+	Icon,
+	'relative z-1 [a[data-active=true]_&]:fill-primary-light',
 );
 
 function RecipesNavBarLink({ active }: { active: boolean }) {
@@ -136,7 +156,7 @@ function RecipesNavBarLink({ active }: { active: boolean }) {
 		>
 			<NavBarLink
 				to="/recipes"
-				icon={<Icon name="book" className={classes.icon} />}
+				icon={<NavIcon name="book" />}
 				active={active}
 				onHover={preload}
 			>
@@ -145,6 +165,11 @@ function RecipesNavBarLink({ active }: { active: boolean }) {
 		</OnboardingTooltip>
 	);
 }
+
+const Pip = withClassName(
+	'div',
+	'absolute top-6px right-6px w-6px h-6px rounded-full bg-attention shadow-sm',
+);
 
 function PantryNavBarLink({ active }: { active: boolean }) {
 	const { purchasedHidingItems } = useSnapshot(groceriesState);
@@ -160,13 +185,13 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 		>
 			<NavBarLink
 				to="/purchased"
-				icon={<Icon name="fridge" className={classes.icon} />}
+				icon={<NavIcon name="fridge" />}
 				animate={recent}
 				active={active}
 				onClick={onSeen}
 			>
 				<span>Purchased</span>
-				{newExpiredTime && <div className={classes.pip} />}
+				{newExpiredTime && <Pip />}
 			</NavBarLink>
 		</OnboardingTooltip>
 	);
@@ -194,7 +219,7 @@ function GroceriesNavBarLink({ active }: { active: boolean }) {
 		>
 			<NavBarLink
 				to="/"
-				icon={<Icon name="cart" className={classes.icon} />}
+				icon={<NavIcon name="cart" />}
 				active={active}
 				animate={justAddedSomething}
 			>
@@ -215,7 +240,7 @@ function SettingsNavBarLink({ active }: { active: boolean }) {
 		>
 			<NavBarLink
 				to="/settings"
-				icon={<Icon name="profile" className={classes.icon} />}
+				icon={<NavIcon name="profile" />}
 				active={active}
 			>
 				<span>Settings</span>

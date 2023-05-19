@@ -5,7 +5,6 @@ import { Recipe } from '@aglio/groceries-client';
 import { useToggle } from '@aglio/ui/hooks';
 import { Button } from '@aglio/ui/src/components/button';
 import { Note } from '@aglio/ui/src/components/note';
-import { Span } from '@aglio/ui/src/components/typography';
 
 export interface RecipeNoteProps {
 	recipe: Recipe;

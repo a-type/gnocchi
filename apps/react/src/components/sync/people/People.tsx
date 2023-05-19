@@ -1,7 +1,6 @@
 import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
 import { hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
-import * as classes from './People.css.js';
 import { ReactNode } from 'react';
 
 export function People({
@@ -46,7 +45,10 @@ export function PeopleList({
 	const width = count > 0 ? 24 + (count - 1) * 16 : 0;
 
 	return (
-		<div className={classes.root} style={{ width, minWidth: width }}>
+		<div
+			className="relative h-24px flex-basis-auto"
+			style={{ width, minWidth: width }}
+		>
 			{children}
 		</div>
 	);
@@ -61,7 +63,7 @@ export function PeopleListItem({
 }) {
 	return (
 		<div
-			className={classes.person}
+			className="absolute"
 			style={{ left: index === 0 ? 0 : index * 16, zIndex: index, top: 0 }}
 		>
 			{children}

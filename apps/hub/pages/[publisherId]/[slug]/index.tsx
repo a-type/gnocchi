@@ -21,8 +21,6 @@ import {
 	PageFixedArea,
 } from '@aglio/ui/components/layouts';
 import { H1, P, H2 } from '@aglio/ui/components/typography';
-import { lemonTheme, sprinkles } from '@aglio/ui/styles';
-import { Box } from '@aglio/ui/components/box';
 import { Divider } from '@aglio/ui/components/divider';
 import { Note } from '@aglio/ui/components/note';
 import { Button } from '@aglio/ui/components/button';
@@ -41,7 +39,7 @@ export default function RecipePage({
 				<Head>
 					<title>Not found</title>
 				</Head>
-				<PageRoot className={lemonTheme}>
+				<PageRoot className="theme-lemon">
 					<PageContent>
 						<H1>Not found</H1>
 					</PageContent>
@@ -56,7 +54,7 @@ export default function RecipePage({
 			<Head>
 				<title>{data.title}</title>
 			</Head>
-			<PageRoot className={lemonTheme}>
+			<PageRoot className="theme-lemon">
 				<PageContent>
 					<article
 						itemScope
@@ -77,13 +75,13 @@ export default function RecipePage({
 							</TopLineTitle>
 						</TopLineRoot>
 						{data.prelude && (
-							<Box>
+							<div>
 								<Prelude content={data.prelude} />
-							</Box>
+							</div>
 						)}
 						<Divider />
-						<Box mb={4} mt={4}>
-							<H2 gutterBottom>Ingredients</H2>
+						<div className="my-4">
+							<H2 className="gutter-bottom">Ingredients</H2>
 							<IngredientList>
 								{data.ingredients.map((ingredient) => (
 									<IngredientListItem key={ingredient.id}>
@@ -91,32 +89,18 @@ export default function RecipePage({
 											{ingredient.text}
 										</div>
 										{ingredient.note && (
-											<Note className={sprinkles({ ml: 4 })}>
-												{ingredient.note}
-											</Note>
+											<Note className="ml-4">{ingredient.note}</Note>
 										)}
 									</IngredientListItem>
 								))}
 							</IngredientList>
-						</Box>
+						</div>
 						<Divider />
-						<Box mb={12} mt={4}>
-							<H2 gutterBottom>Instructions</H2>
+						<div className="mb-12 mt-4">
+							<H2 className="gutter-bottom">Instructions</H2>
 							<Instructions instructions={data.instructions} />
-						</Box>
-						<PageFixedArea
-							className={sprinkles({
-								display: 'flex',
-								flexDirection: 'row',
-								justifyContent: 'flex-end',
-							})}
-							style={{
-								bottom: 16,
-								top: 'auto',
-								marginBottom: 16,
-								background: 'transparent',
-							}}
-						>
+						</div>
+						<PageFixedArea className="flex flex-row justify-end bottom-4 top-auto mb-4 bg-transparent">
 							<a
 								href={`${
 									process.env.NEXT_APP_GROCERIES_HOST
@@ -124,27 +108,15 @@ export default function RecipePage({
 									url,
 								)}&hub=true&skipWelcome=true`}
 							>
-								<Button
-									color="primary"
-									className={sprinkles({
-										boxShadow: 'lg',
-									})}
-								>
+								<Button color="primary" className="shadow-lg">
 									Save Recipe
 								</Button>
 							</a>
 						</PageFixedArea>
-						<P
-							size="xs"
-							className={sprinkles({
-								color: 'gray70',
-								marginLeft: 'auto',
-								textAlign: 'right',
-							})}
-						>
+						<P className="color-gray7 ml-auto text-right text-sm">
 							Powered by{' '}
 							<a
-								className={sprinkles({ fontWeight: 'bold', color: 'black' })}
+								className="font-bold color-black"
 								href="https://gnocchi.club/welcome"
 							>
 								Gnocchi.club

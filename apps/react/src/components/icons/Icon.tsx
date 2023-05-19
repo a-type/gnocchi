@@ -1,6 +1,5 @@
 import { forwardRef, HTMLAttributes } from 'react';
 import classNames from 'classnames';
-import * as classes from './Icon.css.js';
 import { IconName } from './generated/iconNames.js';
 
 export interface IconProps extends HTMLAttributes<SVGSVGElement> {
@@ -15,7 +14,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
 	return (
 		<svg
 			ref={ref}
-			className={classNames(classes.root, className)}
+			className={classNames('flex-shrink-0 fill-none', className)}
 			width={size}
 			height={size}
 			{...rest}

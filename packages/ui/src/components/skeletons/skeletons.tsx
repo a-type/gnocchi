@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import classNames from 'classnames';
-import * as classes from './skeletons.css.js';
 
 export const TextSkeleton = ({
 	maxLength,
@@ -15,7 +14,10 @@ export const TextSkeleton = ({
 
 	return (
 		<span
-			className={classNames(classes.blob, className)}
+			className={classNames(
+				'w-full h-full rounded-2 bg-gradient-to-r from-gray1 via-gray2 to-gray1 [background-size:400%_400%] max-w-full animate-skeleton animate-duration-1200 animate-ease-in-out animate-iteration-infinite animate-alternate',
+				className,
+			)}
 			style={{
 				width: `${length}ch`,
 				height: '1.2em',

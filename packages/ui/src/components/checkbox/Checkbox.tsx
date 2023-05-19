@@ -4,10 +4,17 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ComponentProps, forwardRef } from 'react';
 import { CheckIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
-import * as classes from './Checkbox.css.js';
-import { withClassName } from '../../styles/withClassName.js';
+import { withClassName } from '../../hooks/withClassName.js';
 
-const CheckboxRoot = withClassName(CheckboxPrimitive.Root, classes.root);
+const CheckboxRoot = withClassName(
+	CheckboxPrimitive.Root,
+	classNames(
+		'layer-components:(w-28px h-28px flex-shrink-0 relative bg-white border-default transition rounded-[6px])',
+		'layer-components:focus-visible:(outline-off shadow-focus)',
+		'layer-components:[&[data-state=checked]]:(bg-primary-light border-primary-dark)',
+		'layer-components:[&:hover:not(:disabled)]:shadow-[0_0_0_1px_var(--color-black)]',
+	),
+);
 
 export function CheckboxIndicator({
 	children,
@@ -16,7 +23,10 @@ export function CheckboxIndicator({
 }: CheckboxPrimitive.CheckboxIndicatorProps) {
 	return (
 		<CheckboxPrimitive.Indicator
-			className={classNames(classes.indicator, className)}
+			className={classNames(
+				'absolute center translate-[-50%] color-black',
+				className,
+			)}
 			{...props}
 		>
 			{children ?? <CheckIcon width={18} height={18} />}

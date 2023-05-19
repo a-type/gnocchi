@@ -1,21 +1,17 @@
-import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
-import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
-import { hooks } from '@/stores/groceries/index.js';
 import { Category, Item } from '@aglio/groceries-client';
+import { useSizeCssVars, withClassName } from '@aglio/ui/hooks';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useIsDragging } from '../dndHooks.js';
 import { GroceryListItemDraggable } from '../items/GroceryListItem.js';
-import * as classes from './GroceryListCategory.css.js';
-import { useSizeCssVars } from '@aglio/ui/hooks';
-import { vars } from '@aglio/ui/styles';
-import { Button } from '@aglio/ui/components/button';
+import { CategoryClaim } from '@/components/groceries/categories/CategoryClaim.jsx';
 import {
-	CollapsibleContent,
-	CollapsibleRoot,
-} from '@aglio/ui/components/collapsible';
+	CategoryTitle,
+	CategoryTitleRow,
+} from '@/components/groceries/categories/CategoryTitleRow.jsx';
+import './GroceryListCategory.css';
 
 const EMPTY_DROPPABLE_SIZE = 48;
 
@@ -49,8 +45,8 @@ export function GroceryListCategory({
 	const finalRef = useMergedRef(internalRef, setNodeRef, measureRef);
 
 	return (
-		<div
-			className={classNames('groceryCategory', classes.root)}
+		<CategoryRoot
+			className={classNames('groceryCategory')}
 			data-dragged-over={isOver}
 			data-is-item-dragging={isDragging}
 			data-is-empty={empty}
@@ -58,17 +54,17 @@ export function GroceryListCategory({
 			ref={finalRef}
 			{...rest}
 		>
-			<div className={classes.titleRow}>
-				<h2 className={classes.title}>
+			<CategoryTitleRow>
+				<CategoryTitle>
 					{category?.get('name') ?? 'Uncategorized'}
-				</h2>
+				</CategoryTitle>
 				{category && (
-					<div className={classes.claimGroup}>
+					<div className="flex flex-row items-center justify-between flex-grow-0 flex-shrink-0 flex-basis-auto">
 						<CategoryClaim category={category} />
 					</div>
 				)}
-			</div>
-			<div className={classes.items} data-is-item-dragging={isDragging}>
+			</CategoryTitleRow>
+			<CategoryItems data-is-item-dragging={isDragging}>
 				{items.map((item, index) => {
 					return (
 						<MemoizedDraggableItem
@@ -78,10 +74,27 @@ export function GroceryListCategory({
 						/>
 					);
 				})}
-			</div>
-		</div>
+			</CategoryItems>
+		</CategoryRoot>
 	);
 }
+
+export const CategoryRoot = withClassName(
+	'div',
+	'flex flex-col gap-1 rounded-md bg-wash overflow-hidden ease-springy transition mb-2',
+	'[&[data-dragged-over=true]]:(bg-primary-wash shadow-[0_0_0_1px_var(--color-primary-dark)])',
+	'[&[data-is-item-dragging=true]]:(shadow-[0_0_0_1px_var(--color-gray-3)] mb-0)',
+	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 op-0 pointer-events-none mb-0 [animation-name:category-collapse] animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
+	'important:[&[data-do-not-animate=true]]:(animate-none) important:motion-reduce:animate-none',
+	'[&[data-is-item-dragging=true][data-dragged-over=false]]:(scale-95)',
+	'[&[data-is-empty=false][data-dragged-over=false][data-is-item-dragging=false]]:(animate-keyframes-fade-in-up animate-duration-200 animate-ease-springy)',
+	'focus-visible:(color-primary-dark outline-1 outline-solid outline-primary)',
+);
+
+export const CategoryItems = withClassName(
+	'div',
+	'flex flex-col transition-opacity duration-200 ease-springy [&[data-is-item-dragging=true]]:op-0',
+);
 
 function waitForAnimationCancel(animation: Animation) {
 	return new Promise((resolve) => {
@@ -147,12 +160,12 @@ function useDragExpansion({
 					{
 						height: `${element.clientHeight}px`,
 						opacity: empty ? 0 : 1,
-						marginBottom: empty ? 0 : vars.space[4],
+						marginBottom: empty ? 0 : '16px',
 					},
 					{
 						height: `${EMPTY_DROPPABLE_SIZE}px`,
 						opacity: 1,
-						marginBottom: vars.space[4],
+						marginBottom: '16px',
 					},
 				],
 				{
@@ -169,89 +182,6 @@ function useDragExpansion({
 }
 
 const MemoizedDraggableItem = memo(GroceryListItemDraggable);
-
-const CategoryClaim = memo(function CategoryClaim({
-	category,
-}: {
-	category: Category;
-}) {
-	const claimer = useCategoryClaimPresence(category);
-	const me = hooks.useSelf();
-	const isMyClaim = claimer?.id === me.id;
-
-	const claim = useCallback(() => {
-		if (isMyClaim) {
-			category.set('claim', null);
-		} else {
-			category.set('claim', {
-				claimedBy: me.id,
-				claimedAt: Date.now(),
-			});
-		}
-	}, [me.id, isMyClaim]);
-
-	const isSubscribed = useIsSubscribed();
-
-	if (!isSubscribed) {
-		return null;
-	}
-
-	return (
-		<Button
-			color="ghost"
-			size="small"
-			className={classes.claimButton}
-			onClick={claim}
-		>
-			<CollapsibleRoot open={!!claimer}>
-				<CollapsibleContent data-horizontal className={classes.claimCollapse}>
-					<span className={classes.claimLabel}>claimed</span>
-					{!!claimer ? (
-						<PersonAvatar className={classes.claimAvatar} person={claimer} />
-					) : (
-						<div className={classes.claimAvatarSpacer} />
-					)}
-				</CollapsibleContent>
-			</CollapsibleRoot>
-			<ClaimIcon active={!!claimer} />
-		</Button>
-	);
-});
-
-// TODO: elevate this to a reusable hook in lo-fi?
-function useCategoryClaimPresence(category: Category) {
-	const { claim } = hooks.useWatch(category);
-	const self = hooks.useSelf();
-	const peer = hooks.usePeer(claim?.get('claimedBy') ?? null);
-	const user = self.id === claim?.get('claimedBy') ? self : peer;
-	// only return claims in the last day
-	if (!claim || claim?.get('claimedAt') < Date.now() - 1000 * 60 * 60 * 24) {
-		return null;
-	}
-	return user;
-}
-
-function ClaimIcon({ active }: { active?: boolean }) {
-	return (
-		<svg
-			width="15"
-			height="15"
-			viewBox="0 0 15 15"
-			fill="none"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			<path
-				d="M8.5 14.5L10.6429 4.99999M10.6429 4.99999L11.5 0.999986C11.5 0.999986 9 1.99999 7.5 0.999986C6 -1.35601e-05 3.5 0.999986 3.5 0.999986L3 4.99999C3 4.99999 5 3.49999 6.8258 4.60521C8.6516 5.71043 10.6429 4.99999 10.6429 4.99999Z"
-				stroke="currentColor"
-				strokeLinecap="round"
-				strokeLinejoin="round"
-				className={classNames(classes.claimIcon, {
-					[classes.claimIconActive]: active,
-				})}
-			/>
-		</svg>
-	);
-}
 
 function useCategoryItemVisibilityState(items: Item[]) {
 	const empty = items.length === 0;

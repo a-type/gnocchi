@@ -1,6 +1,5 @@
 import { ItemInputsItem, Item } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
-import * as classes from './ItemSources.css.js';
 import { fractionToText } from '@aglio/tools';
 import { IngredientText } from '@/components/recipes/viewer/IngredientText.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
@@ -14,9 +13,7 @@ import {
 } from '@aglio/ui/components/dialog';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
-import { Box } from '@aglio/ui/components/box';
 import { H2, H3, P } from '@aglio/ui/components/typography';
-import { sprinkles } from '@aglio/ui/styles';
 
 export interface ItemSourcesProps {
 	item: Item;
@@ -25,11 +22,17 @@ export interface ItemSourcesProps {
 export function ItemSources({ item, ...rest }: ItemSourcesProps) {
 	hooks.useWatch(item.get('inputs'));
 	return (
-		<div className={classes.root} {...rest}>
-			<label className={classes.label}>Sources:</label>
-			<ul className={classes.list} {...rest}>
+		<div className="mr-auto mt-2 mb-0 text-xs leading-tight min-w-0" {...rest}>
+			<label className="italic inline mr-2">Sources:</label>
+			<ul
+				className="color-gray7 list-none p-0 m-0 max-w-full overflow-hidden inline-flex flex-col"
+				{...rest}
+			>
 				{item.get('inputs').map((input) => (
-					<li className={classes.item} key={(input as any).oid}>
+					<li
+						className="color-inherit text-inherit inline text-ellipsis max-w-full after:[&:not(:last-child)]:content-[',_']"
+						key={(input as any).oid}
+					>
 						<InputRenderer input={input} />
 					</li>
 				))}
@@ -58,7 +61,7 @@ function InputRenderer({ input }: { input: ItemInputsItem }) {
 		return (
 			<a
 				href={url}
-				className={classes.link}
+				className="font-bold"
 				rel="noopener noreferrer"
 				target="_blank"
 			>
@@ -124,19 +127,19 @@ function RecipePreviewContent({
 
 	if (!live || !recipe) {
 		return (
-			<Box>
+			<div>
 				<H2>Recipe not found</H2>
 				<P>It may have been deleted.</P>
-			</Box>
+			</div>
 		);
 	}
 
 	const { title, ingredients } = live;
 
 	return (
-		<Box>
-			<H2 gutterBottom={false}>{title}</H2>
-			<TextLink className={sprinkles({ mb: 3 })} to={makeRecipeLink(recipe)}>
+		<div>
+			<H2>{title}</H2>
+			<TextLink className="mb-3" to={makeRecipeLink(recipe)}>
 				View recipe
 			</TextLink>
 			<H3>Ingredients</H3>
@@ -150,6 +153,6 @@ function RecipePreviewContent({
 					</li>
 				))}
 			</ul>
-		</Box>
+		</div>
 	);
 }

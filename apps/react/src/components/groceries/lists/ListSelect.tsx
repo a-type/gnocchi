@@ -9,18 +9,21 @@ import {
 	SelectValue,
 } from '@aglio/ui/components/select';
 import { hooks } from '@/stores/groceries/index.js';
-import { sprinkles, themeMap } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import { Formik } from 'formik';
 import { useState } from 'react';
-import * as classes from './ListSelect.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
-import classNames from 'classnames';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { Box } from '@aglio/ui/components/box';
 import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
 
 function getRandomColor(): ThemeName {
-	const colors = Object.keys(themeMap);
+	const colors: ThemeName[] = [
+		'lemon',
+		'blueberry',
+		'tomato',
+		'eggplant',
+		'leek',
+	];
 	return colors[Math.floor(Math.random() * colors.length)] as any;
 }
 
@@ -29,13 +32,17 @@ export interface ListSelectProps {
 	value: string | null | undefined;
 	onChange: (value: string | null | undefined) => void;
 	inDialog?: boolean;
+	className?: string;
 }
+
+const FilledIcon = withClassName(Icon, 'important:fill-primary');
 
 export function ListSelect({
 	value,
 	onChange,
 	includeAll,
 	inDialog,
+	className,
 }: ListSelectProps) {
 	const lists = hooks.useAllLists();
 	const [isCreating, setIsCreating] = useState(false);
@@ -53,33 +60,29 @@ export function ListSelect({
 					} else onChange(val);
 				}}
 			>
-				<SelectTrigger>
+				<SelectTrigger className={className}>
 					<SelectValue />
 					<SelectIcon />
 				</SelectTrigger>
 				<SelectContent inDialog={inDialog}>
 					{includeAll && <SelectItem value="undefined">All lists</SelectItem>}
 					<SelectItem value={'null'}>
-						<Box direction="row" gap={2} align="center">
-							<Icon
-								name="tag"
-								className={classNames(themeMap.lemon, classes.filledIcon)}
-							/>
+						<div className="flex flex-row gap-2 items-center">
+							<FilledIcon name="tag" className="theme-lemon" />
 							<span>Default</span>
-						</Box>
+						</div>
 					</SelectItem>
 					{lists.map((list) => (
 						<SelectItem key={list.get('id')} value={list.get('id')}>
-							<Box direction="row" gap={2} align="center">
-								<Icon
+							<div className="flex flex-row gap-2 items-center">
+								<FilledIcon
 									name="tag"
-									className={classNames(
-										themeMap[(list.get('color') as ThemeName) || 'lemon'],
-										classes.filledIcon,
-									)}
+									className={`theme-${list.get('color') ?? 'lemon'}`}
 								/>
-								<span className={classes.itemText}>{list.get('name')}</span>
-							</Box>
+								<span className="whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
+									{list.get('name')}
+								</span>
+							</div>
 						</SelectItem>
 					))}
 					<SelectSeparator />
@@ -106,9 +109,7 @@ export function ListSelect({
 								placeholder="Custom list"
 								required
 							/>
-							<SubmitButton className={sprinkles({ alignSelf: 'flex-end' })}>
-								Create
-							</SubmitButton>
+							<SubmitButton className="self-end">Create</SubmitButton>
 						</Form>
 					</Formik>
 				</DialogContent>

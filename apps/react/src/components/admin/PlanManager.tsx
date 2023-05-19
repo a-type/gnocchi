@@ -1,6 +1,5 @@
 import { FeatureFlagName, featureFlags } from '@/featureFlags.js';
 import { RouterOutputs, trpc } from '@/trpc.js';
-import { Box } from '@aglio/ui/components/box';
 import { H2, P } from '@aglio/ui/components/typography';
 import { Button } from '@aglio/ui/src/components/button';
 import {
@@ -18,7 +17,7 @@ export function PlanManager({}: PlanManagerProps) {
 	const { data: plans, refetch } = trpc.admin.plans.useQuery();
 
 	return (
-		<Box gap={3}>
+		<div className="flex gap-3 flex-col">
 			<H2>Plans</H2>
 			{plans?.map((plan) => (
 				<FeatureFlagPlanManagerWrapper
@@ -27,7 +26,7 @@ export function PlanManager({}: PlanManagerProps) {
 					onChange={refetch}
 				/>
 			))}
-		</Box>
+		</div>
 	);
 }
 
@@ -65,15 +64,7 @@ function FeatureFlagPlanManager({
 	const updateMember = trpc.admin.updateProfile.useMutation();
 
 	return (
-		<Box
-			direction="row"
-			justify="space-between"
-			borderWidth="default"
-			borderColor="gray50"
-			borderStyle="solid"
-			padding={2}
-			align="center"
-		>
+		<div className="flex flex-row justify-between items-center border-light p-2">
 			<div>
 				<div>
 					{!plan.members.some((m) => m.role === 'admin') && (
@@ -81,7 +72,7 @@ function FeatureFlagPlanManager({
 					)}
 					<span>{plan.id}</span>
 				</div>
-				<P size="xs">
+				<P className="text-xs">
 					{plan.members
 						.slice(0, 3)
 						.map((member) => `${member.fullName} [${member.email}]`)
@@ -152,7 +143,7 @@ function FeatureFlagPlanManager({
 					</ul>
 				</DialogContent>
 			</Dialog>
-		</Box>
+		</div>
 	);
 }
 

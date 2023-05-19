@@ -1,5 +1,4 @@
 import { trpc } from '@/trpc.js';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import { Form, TextField } from '@aglio/ui/components/forms';
 import { Input } from '@aglio/ui/components/input';
@@ -47,9 +46,9 @@ export function AdminCategoryManager() {
 	}
 
 	return (
-		<Box gap={10}>
+		<div className="flex flex-col gap-10">
 			<H1>Default Categories</H1>
-			<Box gap={6}>
+			<div className="flex flex-col gap-6">
 				{categories?.map((cat, i) => {
 					const { prev, next } = getNextAndPrevSortKeys(
 						categoryKeys,
@@ -67,8 +66,8 @@ export function AdminCategoryManager() {
 						/>
 					);
 				})}
-			</Box>
-			<Box>
+			</div>
+			<div>
 				<Formik
 					initialValues={{ name: '' }}
 					onSubmit={async (values) => {
@@ -87,8 +86,8 @@ export function AdminCategoryManager() {
 						<Button type="submit">Create</Button>
 					</Form>
 				</Formik>
-			</Box>
-		</Box>
+			</div>
+		</div>
 	);
 }
 
@@ -116,15 +115,15 @@ function AdminCategoryItem({
 	}, [category.name]);
 
 	return (
-		<Box gap={2}>
-			<Box flexDirection="row" align="center" gap={2}>
+		<div className="flex flex-col gap-2">
+			<div className="flex items-center gap-2">
 				<Input value={name} onChange={(ev) => setName(ev.target.value)} />
 				<Button onClick={() => updateCategory({ id: category.id, name })}>
 					Update
 				</Button>
-			</Box>
-			<Box justify="space-between" flexDirection="row">
-				<Box>
+			</div>
+			<div className="flex justify-between">
+				<div>
 					<Button
 						size="small"
 						onClick={() => {
@@ -134,8 +133,8 @@ function AdminCategoryItem({
 					>
 						Delete
 					</Button>
-				</Box>
-				<Box flexDirection="row" gap={2} align="center">
+				</div>
+				<div className="flex gap-2 items-center">
 					<span>
 						{category.sortKey} ({prevSortKey},{nextSortKey})
 					</span>
@@ -159,9 +158,9 @@ function AdminCategoryItem({
 					>
 						<ArrowDownIcon />
 					</Button>
-				</Box>
-			</Box>
-		</Box>
+				</div>
+			</div>
+		</div>
 	);
 }
 

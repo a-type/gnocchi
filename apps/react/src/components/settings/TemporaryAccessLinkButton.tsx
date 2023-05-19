@@ -1,7 +1,6 @@
 import { ShareLink } from '@/components/settings/ShareLink.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { trpc } from '@/trpc.js';
-import { Box } from '@aglio/ui/components/box';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
 import {
 	Dialog,
@@ -9,7 +8,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
-import { P, Span } from '@aglio/ui/components/typography';
+import { P } from '@aglio/ui/components/typography';
 
 export interface TemporaryAccessLinkButtonProps extends ButtonProps {}
 
@@ -21,12 +20,12 @@ export function TemporaryAccessLinkButton(
 
 	return (
 		<Dialog>
-			<Box gap={1}>
+			<div className="flex flex-col gap-1">
 				<DialogTrigger asChild>
 					<Button {...props}>Invite a temporary collaborator</Button>
 				</DialogTrigger>
-				<Span size="xs">Let someone shop with you for 24 hours</Span>
-			</Box>
+				<span className="text-xs">Let someone shop with you for 24 hours</span>
+			</div>
 			<DialogContent>
 				<DialogTitle>Temporary collaborator link</DialogTitle>
 				<LinkField />

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { forwardRef, ButtonHTMLAttributes } from 'react';
-import * as classes from './Button.css.js';
 import { Spinner } from '../spinner.js';
+import { getButtonClassName } from './classes.js';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	color?:
@@ -42,11 +42,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 				data-disabled={visuallyDisabled}
 				tabIndex={visuallyDisabled ? -1 : undefined}
 				className={classNames(
-					classes.root({ color, size, toggled, align }),
+					getButtonClassName({ color, size, toggled, align }),
 					className,
 				)}
 			>
-				{loading && <Spinner size={16} className={classes.spinner} />}
+				{loading && <Spinner size={16} className="inline-block w-1em h-1em" />}
 				{children}
 			</button>
 		);

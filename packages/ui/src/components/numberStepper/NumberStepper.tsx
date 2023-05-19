@@ -3,7 +3,6 @@ import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import { ReactNode } from 'react';
 import { Button } from '../button.js';
-import * as classes from './NumberStepper.css.js';
 
 export interface NumberStepperProps {
 	value: number;
@@ -55,29 +54,19 @@ export function NumberStepper({
 	return (
 		<div
 			className={classNames(
-				classes.container,
+				'flex items-center border-default rounded-lg overflow-hidden w-min-content flex-shrink-0',
 				{
-					[classes.highlightChange]: !!highlightChange && value !== 1,
+					'bg-accent-wash color-black': !!highlightChange && value !== 1,
 				},
 				className,
 			)}
 			{...rest}
 		>
-			<Button
-				className={classes.button}
-				color="ghost"
-				onClick={decrement}
-				disabled={!canDecrement}
-			>
+			<Button color="ghost" onClick={decrement} disabled={!canDecrement}>
 				<MinusIcon />
 			</Button>
-			<div className={classes.display}>{renderValue(value)}</div>
-			<Button
-				className={classes.button}
-				color="ghost"
-				onClick={increment}
-				disabled={!canIncrement}
-			>
+			<div className="w-80px text-center">{renderValue(value)}</div>
+			<Button color="ghost" onClick={increment} disabled={!canIncrement}>
 				<PlusIcon />
 			</Button>
 		</div>

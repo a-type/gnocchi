@@ -1,14 +1,11 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@aglio/ui/styles';
 import { useSyncExternalStore } from 'react';
 
 // TODO: add optional/skippable query hooks to lo-fi/react
 export function useListThemeClass(listId: string | null | undefined) {
 	const list = useListOrNull(listId);
 	const color = list?.get('color') || 'lemon';
-	const matchingTheme =
-		themeMap[color as keyof typeof themeMap] ?? themeMap.lemon;
-	return matchingTheme;
+	return `theme-${color}`;
 }
 
 export function useListOrNull(listId: string | null | undefined) {

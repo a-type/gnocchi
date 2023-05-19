@@ -2,7 +2,6 @@
 
 import classNames from 'classnames';
 import { useCallback, useState } from 'react';
-import * as classes from './ImageUploader.css.js';
 import { UploadIcon } from './UploadIcon.jsx';
 
 export interface ImageUploaderProps {
@@ -102,7 +101,7 @@ export function ImageUploader({
 
 	return (
 		<div
-			className={classNames(classes.imageUploader, rest.className)}
+			className={classNames('relative overflow-hidden', rest.className)}
 			onDragEnter={onDragEnter}
 			onDragLeave={onDragLeave}
 			onDragOver={onDragOver}
@@ -110,27 +109,32 @@ export function ImageUploader({
 			onDragStart={onDragStart}
 			onDragEnd={onDragEnd}
 		>
-			{value ? <img src={value} className={classes.image} /> : null}
+			{value ? (
+				<img src={value} className="w-full h-full object-cover object-center" />
+			) : null}
 			<input
 				type="file"
 				accept="image/*"
 				onChange={onFileChange}
 				onClick={onFileClick}
-				className={classes.fileInput}
+				className="absolute inset-0 op-0 w-full h-full cursor-pointer"
 			/>
 			<div
 				className={classNames(
-					classes.dragging,
-					draggingOver && classes.draggingOver,
+					'bg-[rgba(30,20,0,0.1)] flex flex-col items-center justify-center w-full h-full absolute inset-0 gap-3 pointer-events-none',
+					draggingOver && 'bg-[rgba(0,0,0,0.2)]',
 				)}
 			>
-				<UploadIcon className={classes.draggingIcon} />
-				<div className={classes.draggingText}>
+				<UploadIcon className="w-50px h-50px color-white" />
+				<div className="color-white">
 					{dragging ? 'Drop' : 'Tap'} to upload image
 				</div>
 			</div>
 			{value && (
-				<button className={classes.remove} onClick={() => onChange(null)}>
+				<button
+					className="absolute top-2 right-2 w-32px h-32px border-none p-2 cursor-pointer bg-white color-black rounded-full transition-colors shadow-sm hover:bg-gray2"
+					onClick={() => onChange(null)}
+				>
 					✕
 				</button>
 			)}

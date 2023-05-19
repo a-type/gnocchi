@@ -1,22 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { shortenTimeUnits } from '@aglio/tools';
 
 export interface RelativeTimeProps {
 	value: number;
+	abbreviate?: boolean;
 }
 
-export function RelativeTime({ value }: RelativeTimeProps) {
+export function RelativeTime({ value, abbreviate }: RelativeTimeProps) {
+	const asDate = useMemo(() => new Date(value), [value]);
 	const [time, setTime] = useState(() =>
-		shortenTimeUnits(formatDistanceToNowStrict(new Date(value))),
+		abbreviate
+			? shortenTimeUnits(formatDistanceToNowStrict(asDate))
+			: formatDistanceToNowStrict(asDate),
 	);
+
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setTime(shortenTimeUnits(formatDistanceToNowStrict(new Date(value))));
+			setTime(
+				abbreviate
+					? shortenTimeUnits(formatDistanceToNowStrict(asDate))
+					: formatDistanceToNowStrict(asDate),
+			);
 		}, 60 * 1000);
 		return () => clearInterval(interval);
-	}, [value]);
+	}, [asDate, abbreviate]);
+
 	return <>{time}</>;
 }

@@ -2,8 +2,6 @@ import { Recipe } from '@aglio/groceries-client';
 import { FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons';
 import { Editor } from '@tiptap/core';
 import { useSyncedInstructionsEditor } from '../hooks.js';
-import * as classes from './RecipeInstructionsField.css.js';
-import { Box } from '@aglio/ui/components/box';
 import { P } from '@aglio/ui/components/typography';
 import { Button } from '@aglio/ui/components/button';
 import { RichEditor } from '@aglio/ui/components/richEditor';
@@ -22,25 +20,28 @@ export function RecipeInstructionsField({
 	});
 
 	return (
-		<Box gap={2} flexDirection="column">
+		<div className="flex flex-col gap-2">
 			{/* {isMobileOs() && (
-				<Box background="primaryWash" p={2} borderRadius="md">
+				<div className="bg-primary-wash p-2 rounded-md flex flex-col">
 					<P size="xs">
 						Hi, mobile user! Sorry, but the instruction editor doesn't always
 						work correctly on phones. I'm working on it! If you have a sync
 						subscription, I recommend switching to a computer to write up your
 						recipes for now.
 					</P>
-				</Box>
+				</div>
 			)} */}
 			{editor && <Toolbar editor={editor} />}
-			<RichEditor editor={editor} className={classes.editor} />
+			<RichEditor
+				editor={editor}
+				className="[&_.ProseMirror]:(bg-gray1 rounded-md p-4 border-default)"
+			/>
 			<P size="xs">
 				Press <kbd>Enter</kbd> to create a new step. Each step line will have a
 				checkbox you can use to track completion. I recommend keeping steps
 				short and self-contained.
 			</P>
-		</Box>
+		</div>
 	);
 }
 
@@ -53,15 +54,7 @@ function isMobileOs() {
 function Toolbar({ editor }: { editor: Editor }) {
 	return (
 		// Sticks below the action bar
-		<Box
-			flexDirection="row"
-			gap={2}
-			align="center"
-			position="sticky"
-			zIndex="menu"
-			style={{ top: 44, zIndex: 1 }}
-			background="light"
-		>
+		<div className="flex flex-row gap-2 items-center sticky z-1 top-44px bg-wash">
 			<Button
 				color="ghost"
 				onClick={() => {
@@ -69,7 +62,7 @@ function Toolbar({ editor }: { editor: Editor }) {
 				}}
 				disabled={!editor.can().chain().focus().toggleBold().run()}
 				toggled={editor.isActive('bold')}
-				className={classes.controlButton}
+				className="[font-size:12px]"
 			>
 				<FontBoldIcon />
 			</Button>
@@ -80,7 +73,7 @@ function Toolbar({ editor }: { editor: Editor }) {
 				}}
 				disabled={!editor.can().chain().focus().toggleItalic().run()}
 				toggled={editor.isActive('italic')}
-				className={classes.controlButton}
+				className="[font-size:12px]"
 			>
 				<FontItalicIcon />
 			</Button>
@@ -91,10 +84,10 @@ function Toolbar({ editor }: { editor: Editor }) {
 				}}
 				disabled={!editor.can().chain().focus().toggleSectionTitle().run()}
 				toggled={editor.isActive('sectionTitle')}
-				className={classes.controlButton}
+				className="[font-size:12px]"
 			>
 				Heading
 			</Button>
-		</Box>
+		</div>
 	);
 }

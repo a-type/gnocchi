@@ -14,7 +14,6 @@ import {
 	useEditor,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import * as classes from './Instructions.css.js';
 
 export interface InstructionsProps {
 	instructions: HubPublishedRecipeInfo['instructions'];
@@ -146,14 +145,16 @@ function InstructionStepView({
 	return (
 		<NodeViewWrapper
 			data-id={node.attrs.id}
-			className={classes.step}
+			className="flex flex-col mb-5 w-full p-1"
 			contentEditable={false}
 		>
-			<div className={classes.content}>
+			<div>
 				<NodeViewContent />
 			</div>
 			{node.attrs.note && (
-				<Note className={classes.note}>{node.attrs.note}</Note>
+				<Note className="mt-2 ml-8 max-w-80% w-max-content">
+					{node.attrs.note}
+				</Note>
 			)}
 		</NodeViewWrapper>
 	);

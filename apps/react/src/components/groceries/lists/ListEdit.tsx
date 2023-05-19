@@ -5,7 +5,6 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
-import { Box } from '@aglio/ui/components/box';
 import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
 import { hooks } from '@/stores/groceries/index.js';
 import { GearIcon } from '@radix-ui/react-icons';
@@ -37,9 +36,9 @@ export function ListEdit({ listId }: ListEditProps) {
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
-				<Box gap={2} align="flex-start">
+				<div className="flex flex-col gap-2 items-start">
 					<H2>Edit List</H2>
-					<Box flexDirection="row" gap={2}>
+					<div className="flex flex-row gap-2">
 						<LiveUpdateTextField
 							value={list.get('name')}
 							onChange={(name) => list.set('name', name)}
@@ -49,7 +48,7 @@ export function ListEdit({ listId }: ListEditProps) {
 							value={list.get('color') as ThemeName}
 							onChange={(color) => list.set('color', color)}
 						/>
-					</Box>
+					</div>
 					<Button
 						color="destructive"
 						onClick={async () => {
@@ -64,7 +63,7 @@ export function ListEdit({ listId }: ListEditProps) {
 							<Button color="primary">Done</Button>
 						</DialogClose>
 					</DialogActions>
-				</Box>
+				</div>
 			</DialogContent>
 		</Dialog>
 	);

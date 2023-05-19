@@ -13,7 +13,6 @@ import {
 } from '@aglio/ui/components/select';
 import { useCallback } from 'react';
 import { PersonAvatar } from './PersonAvatar.jsx';
-import * as classes from './PersonSelect.css.js';
 
 export interface PersonSelectProps
 	extends Omit<SelectProps, 'value' | 'onChange'> {
@@ -54,7 +53,10 @@ export function PersonSelect({
 			onValueChange={onChangeInternal}
 			{...rest}
 		>
-			<SelectTrigger className={classes.trigger} contentEditable={false}>
+			<SelectTrigger
+				className="border-none p-0 rounded-full [&[data-state=open]]:scale-[1.05]"
+				contentEditable={false}
+			>
 				<SelectValue contentEditable={false}>
 					{value === null ? (
 						<PersonAvatar popIn={false} person={null} />
@@ -71,7 +73,10 @@ export function PersonSelect({
 				<SelectGroup>
 					{label && <SelectLabel>{label}</SelectLabel>}
 					{allowNone && (
-						<SelectItem className={classes.item} value="null">
+						<SelectItem
+							className="flex flex-row gap-2 items-center"
+							value="null"
+						>
 							<PersonAvatar popIn={false} person={null} />{' '}
 							<SelectItemText>None</SelectItemText>
 							<SelectItemIndicator />
@@ -88,7 +93,7 @@ export function PersonSelect({
 
 function PersonSelectItem({ person }: { person: Person }) {
 	return (
-		<SelectItem value={person.id} className={classes.item}>
+		<SelectItem value={person.id} className="flex flex-row gap-2 items-center">
 			<PersonAvatar popIn={false} person={person} />
 			<SelectItemText>{person.profile.name}</SelectItemText>
 			<SelectItemIndicator />

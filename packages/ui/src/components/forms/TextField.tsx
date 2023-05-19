@@ -11,9 +11,9 @@ import {
 } from 'react';
 import useMergedRef from '../../hooks/useMergedRef.js';
 import classNames from 'classnames';
-import * as classes from './TextField.css.js';
 import { Input } from '../input/Input.js';
 import { TextArea, TextAreaProps } from '../textArea/TextArea.jsx';
+import { withClassName } from '../../hooks.js';
 
 export type TextFieldProps = {
 	name: string;
@@ -63,15 +63,15 @@ export const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
 		}, [autoFocusDelay]);
 
 		return (
-			<div className={classNames(classes.fieldGroup, className)} ref={ref}>
-				{label && <label className={classes.fieldLabel}>{label}</label>}
+			<FieldRoot className={className} ref={ref}>
+				{label && <FieldLabel>{label}</FieldLabel>}
 				<Input
 					{...props}
 					{...rest}
 					autoFocus={autoFocus}
 					ref={useMergedRef(innerInputRef, inputRef || emptyRef)}
 				/>
-			</div>
+			</FieldRoot>
 		);
 	},
 );
@@ -95,9 +95,18 @@ export function TextAreaField({
 }: TextAreaFieldProps) {
 	const [props] = useField(name);
 	return (
-		<div className={classNames(classes.fieldGroup, className)}>
-			{label && <label className={classes.fieldLabel}>{label}</label>}
+		<FieldRoot className={className}>
+			{label && <FieldLabel>{label}</FieldLabel>}
 			<TextArea ref={inputRef} {...props} {...rest} />
-		</div>
+		</FieldRoot>
 	);
 }
+
+const FieldRoot = withClassName(
+	'div',
+	'flex flex-col items-stretch gap-1 self-stretch',
+);
+const FieldLabel = withClassName(
+	'label',
+	'inline-flex flex-col gap-1 text-sm font-bold text-dark-blend mb-1',
+);

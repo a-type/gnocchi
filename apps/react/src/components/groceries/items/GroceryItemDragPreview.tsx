@@ -1,5 +1,4 @@
 import { Item } from '@aglio/groceries-client';
-import { container, root } from './GroceryItemDragPreview.css.js';
 import { useItemDisplayText } from './hooks.js';
 
 export interface GroceryItemDragPreviewProps {
@@ -9,8 +8,10 @@ export interface GroceryItemDragPreviewProps {
 export function GroceryItemDragPreview({ item }: GroceryItemDragPreviewProps) {
 	const display = useItemDisplayText(item);
 	return (
-		<div className={root}>
-			<div className={container}>{display}</div>
+		<div className="flex flex-row items-center justify-center pointer-events-none relative w-32px h-32px">
+			<div className="absolute left-[calc(50%-32px)] translate-x--100% p-3 rounded-lg bg-white border-default whitespace-nowrap shadow-lg select-none pointer-events-none max-w-200px overflow-hidden">
+				{display}
+			</div>
 		</div>
 	);
 }

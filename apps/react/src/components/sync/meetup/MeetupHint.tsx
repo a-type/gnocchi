@@ -1,7 +1,6 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { MeetupIcon } from './MeetupIcon.jsx';
 import classNames from 'classnames';
-import * as classes from './MeetupHint.css.js';
 
 export interface MeetupHintProps {
 	className?: string;
@@ -14,7 +13,13 @@ export function MeetupHint({ className, ...props }: MeetupHintProps) {
 
 	if (meetup && meetup.get('createdAt') > Date.now() - 1000 * 60 * 60) {
 		return (
-			<div className={classNames(classes.root, className)} {...props}>
+			<div
+				className={classNames(
+					'bg-attention p-2px rounded-full color-white w-17px h-17px flex items-center justify-center',
+					className,
+				)}
+				{...props}
+			>
 				<MeetupIcon />
 			</div>
 		);

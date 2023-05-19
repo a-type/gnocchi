@@ -1,4 +1,4 @@
-import { recipeSavePromptState } from '@/components/recipes/savePrompt/RecipeSavePrompt.jsx';
+import { recipeSavePromptState } from '@/components/recipes/savePrompt/state.js';
 import { signupDialogState as signupState } from '@/components/sync/state.js';
 import { useListId } from '@/contexts/ListContext.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
@@ -20,16 +20,14 @@ import {
 	useState,
 	useTransition,
 } from 'react';
-import * as classes from './AddBar.css.js';
 import { useSize } from '@aglio/ui/hooks';
 import {
 	Popover,
 	PopoverAnchor,
 	PopoverContent,
 } from '@aglio/ui/components/popover';
-import { Box } from '@aglio/ui/components/box';
 import { Input } from '@aglio/ui/components/input';
-import { sprinkles } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import { Button } from '@aglio/ui/components/button';
 
 export interface AddBarProps {
@@ -179,11 +177,9 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 		return (
 			<Popover open={isOpen}>
 				<PopoverAnchor asChild>
-					<Box
-						width="full"
-						flexDirection="row"
-						gap={2}
+					<div
 						data-state={isOpen ? 'open' : 'closed'}
+						className="flex gap-2 flex-row w-full"
 						{...rest}
 						ref={mergedRef}
 					>
@@ -191,7 +187,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 							data-test="grocery-list-add-input"
 							name="text"
 							required
-							className={sprinkles({ flex: 1 })}
+							className="flex-1"
 							autoComplete="off"
 							{...getInputProps({
 								placeholder,
@@ -206,7 +202,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 						>
 							{inputIsUrl ? 'Scan' : 'Add'}
 						</Button>
-					</Box>
+					</div>
 				</PopoverAnchor>
 				<PopoverContent
 					forceMount
@@ -219,35 +215,40 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 					{...getMenuProps({
 						ref: contentRef,
 					})}
-					className={classes.menu}
+					className="overflow-x-hidden overflow-y-auto max-h-20vh lg:max-h-50vh"
 				>
-					<ul className={classes.menuList}>
+					<ul className="flex flex-col list-none m-0 p-0">
 						{inputIsUrl ? (
-							<li
-								className={classNames(classes.item, classes.itemHighlighted)}
+							<ListItem
+								className="bg-primary-wash"
 								onClick={() => selectItem(inputValue)}
 							>
 								Scan web recipe
-							</li>
+							</ListItem>
 						) : filteredSuggestions.length > 0 ? (
 							filteredSuggestions.map((suggestion, index) => (
-								<li
+								<ListItem
 									key={suggestion}
 									suggestion={suggestion}
 									{...getItemProps({ item: suggestion, index })}
-									className={classNames(classes.item, {
-										[classes.itemHighlighted]: highlightedIndex === index,
+									className={classNames({
+										['bg-primary-wash']: highlightedIndex === index,
 									})}
-								>{`${suggestion}`}</li>
+								>{`${suggestion}`}</ListItem>
 							))
 						) : (
-							<li className={classes.item}>No suggestions</li>
+							<ListItem>No suggestions</ListItem>
 						)}
 					</ul>
 				</PopoverContent>
 			</Popover>
 		);
 	},
+);
+
+const ListItem = withClassName(
+	'li',
+	'text-md list-item flex align-start justify-between w-full rd-0 px-4 py-2 border-width-0 border-black border-style-solid repeated:border-t-1',
 );
 
 export const AddBar = forwardRef<HTMLDivElement, AddBarProps>(function AddBar(
@@ -263,25 +264,19 @@ export const AddBar = forwardRef<HTMLDivElement, AddBarProps>(function AddBar(
 
 function Skeleton() {
 	return (
-		<Box
-			width="full"
-			flexDirection="row"
-			gap={2}
-			data-state="closed"
-			className={sprinkles({ flex: 1 })}
-		>
+		<div data-state="closed" className="flex flex-1 w-full flex-row gap-2">
 			<Input
 				data-test="grocery-list-add-input"
 				name="text"
 				required
 				disabled
-				className={sprinkles({ flex: 1 })}
+				className="flex-1"
 				autoComplete="off"
 				placeholder="Loading..."
 			/>
 			<Button data-test="grocery-list-add-button" color="primary">
 				Add
 			</Button>
-		</Box>
+		</div>
 	);
 }

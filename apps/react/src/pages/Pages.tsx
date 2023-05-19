@@ -14,7 +14,6 @@ import { GlobalLoader } from '@/GlobalLoader.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import TestPage from '@/pages/TestPage.jsx';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import {
 	NavContextProvider,
@@ -249,12 +248,10 @@ export function Pages() {
 					<Suspense fallback={<GlobalLoader />}>
 						<Router routes={routes} onNavigate={handleNavigate}>
 							<TopLoader />
-							<PageRoot>
-								<Outlet />
-								<StartSignupDialog />
-								<LogoutNotice />
-								<RecipeTagEditor />
-							</PageRoot>
+							<Outlet />
+							<StartSignupDialog />
+							<LogoutNotice />
+							<RecipeTagEditor />
 							<NavBar />
 						</Router>
 					</Suspense>
@@ -282,8 +279,8 @@ function ErrorFallback() {
 	};
 
 	return (
-		<Box align="center" justify="center" p={4}>
-			<Box align="flex-start" justify="center" gap={4} maxWidth="content">
+		<div className="flex flex-col items-center justify-center p-4">
+			<div className="flex flex-col items-start justify-center gap-4 max-w-content">
 				<H1>Something went wrong</H1>
 				<P>
 					Sorry about this. The app has crashed.{' '}
@@ -300,7 +297,7 @@ function ErrorFallback() {
 						<ResetToServer />
 					</SubscribedOnly>
 				)}
-			</Box>
-		</Box>
+			</div>
+		</div>
 	);
 }

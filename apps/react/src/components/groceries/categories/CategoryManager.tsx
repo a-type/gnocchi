@@ -9,7 +9,6 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
 import { Formik } from 'formik';
 import { Category } from '@aglio/groceries-client';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
 
@@ -77,7 +76,7 @@ function CategoryList() {
 
 	return (
 		<SortableContext items={categoryIds}>
-			<Box direction="column" minHeight={0} mb={3} overflowY="auto">
+			<div className="flex flex-col min-h-0 mb-3 overflow-y-auto">
 				{categories.map((category) => {
 					const { prev, next } = getNextAndPrevSortKeys(
 						categoryKeys,
@@ -94,7 +93,7 @@ function CategoryList() {
 						/>
 					);
 				})}
-			</Box>
+			</div>
 			<AddCategoryForm />
 		</SortableContext>
 	);
@@ -113,9 +112,9 @@ function CategoryManagerItem({
 	const deleteCategory = hooks.useDeleteCategory();
 
 	return (
-		<Box flexDirection="row" align="center" gap={3} width="full" {...nodeProps}>
+		<div className="flex flex-row items-center gap-3 w-full" {...nodeProps}>
 			<DragHandleDots2Icon {...handleProps} style={{ touchAction: 'none' }} />
-			<Box flexGrow={1}>{category.get('name')}</Box>
+			<div className="flex-grow-1">{category.get('name')}</div>
 			<Button
 				color="ghostDestructive"
 				onClick={() => {
@@ -127,7 +126,7 @@ function CategoryManagerItem({
 			>
 				<TrashIcon />
 			</Button>
-		</Box>
+		</div>
 	);
 }
 

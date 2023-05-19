@@ -2,11 +2,8 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { RecipeTagMenuWrapper } from '@/components/recipes/tags/RecipeTagMenuWrapper.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
-import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { themeMap } from '@aglio/ui/styles';
 import classNames from 'classnames';
 import { forwardRef } from 'react';
-import * as classes from './RecipeTagsList.css.js';
 
 export function RecipeTagsList({
 	onSelect,
@@ -25,7 +22,7 @@ export function RecipeTagsList({
 	);
 
 	return (
-		<div className={classes.tagsList}>
+		<div className="flex flex-wrap gap-1 my-1">
 			{showNone && (
 				<TagButtonBase
 					toggled={!selectedValue}
@@ -42,7 +39,7 @@ export function RecipeTagsList({
 						toggled={tag.get('name') === selectedValue}
 						onClick={() => onSelect(tag.get('name'))}
 						className={classNames(
-							tag.get('color') && themeMap[tag.get('color') as ThemeName],
+							tag.get('color') && `theme-${tag.get('color')}`,
 						)}
 					>
 						<span>{tag.get('icon') ?? <Icon name="tag" />}</span>
@@ -62,7 +59,7 @@ const TagButtonBase = forwardRef<HTMLButtonElement, ButtonProps>(
 				size="small"
 				color="primary"
 				{...props}
-				className={classNames(classes.tagButton, className)}
+				className={classNames('flex items-center gap-1', className)}
 			/>
 		);
 	},

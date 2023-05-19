@@ -4,7 +4,6 @@ import { Recipe } from '@aglio/groceries-client';
 import { ImageUploader } from '@aglio/ui/components/imageUploader';
 import { P } from '@aglio/ui/components/typography';
 import { useToggle } from '@aglio/ui/hooks';
-import * as classes from './AddImagePrompt.css.js';
 
 export interface AddImagePromptProps {
 	recipe: Recipe;
@@ -29,7 +28,7 @@ export function AddImagePrompt({ recipe }: AddImagePromptProps) {
 						updatedAt: Date.now(),
 					});
 				}}
-				className={classes.uploader}
+				className="h-200px rounded-sm overflow-hidden"
 				maxDimension={1080}
 			/>
 		</AppearWithScroll>

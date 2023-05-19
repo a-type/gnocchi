@@ -5,10 +5,8 @@ import classNames from 'classnames';
 import { Suspense, useState } from 'react';
 import { RecipeTagsList } from '../collection/RecipeTagsList.jsx';
 import { NewTagForm } from './NewTagForm.jsx';
-import * as classes from './RecipeTagsEditor.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { themeMap } from '@aglio/ui/styles';
 import {
 	Popover,
 	PopoverArrow,
@@ -16,7 +14,6 @@ import {
 	PopoverTrigger,
 } from '@aglio/ui/components/popover';
 import { Button } from '@aglio/ui/components/button';
-import { Box } from '@aglio/ui/components/box';
 import { H2 } from '@aglio/ui/components/typography';
 
 export interface RecipeTagsEditorProps {
@@ -32,9 +29,9 @@ export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 	const removeTag = (name: string) => tags.removeAll(name);
 
 	return (
-		<div className={classNames(classes.root, className)}>
+		<div className={classNames('flex flex-col gap-2', className)}>
 			<H2>Tags</H2>
-			<div className={classes.list}>
+			<div className="flex flex-wrap gap-1 p-1 items-center">
 				{tags?.map((tag) => (
 					<Suspense key={tag}>
 						<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
@@ -59,15 +56,15 @@ function TagDisplay({
 	const color = data?.get('color') as ThemeName | undefined;
 
 	return (
-		<div className={classNames(classes.tag, color && themeMap[color])}>
+		<div
+			className={classNames(
+				'flex items-center gap-1 px-2 pl-4 rounded-lg bg-primaryLight color-black font-bold text-sm',
+				color && `theme-${color}`,
+			)}
+		>
 			<span>{icon ?? <Icon name="tag" />}</span>
 			<span>{tag}</span>
-			<Button
-				size="small"
-				color="ghost"
-				className={classes.tagRemoveButton}
-				onClick={() => onRemove(tag)}
-			>
+			<Button size="icon" color="ghost" onClick={() => onRemove(tag)}>
 				<Cross2Icon />
 			</Button>
 		</div>
@@ -102,13 +99,13 @@ function TagAdd({
 					{empty && <span>Add tag</span>}
 				</Button>
 			</PopoverTrigger>
-			<PopoverContent className={classes.popover}>
+			<PopoverContent className="max-w-350px">
 				<PopoverArrow />
 				<Suspense>
 					<NewTagForm onCreate={addTag} />
-					<Box mt={4}>
+					<div className="mt-4">
 						<RecipeTagsList onSelect={addTag} omit={tagsSnapshot} />
-					</Box>
+					</div>
 				</Suspense>
 			</PopoverContent>
 		</Popover>

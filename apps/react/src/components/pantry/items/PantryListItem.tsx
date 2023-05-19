@@ -1,6 +1,5 @@
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { LookupFoodName } from '@/components/foods/FoodName.jsx';
-import * as groceryItemClasses from '@/components/groceries/items/GroceryListItem.css.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
@@ -14,11 +13,11 @@ import {
 } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
-import * as classes from './PantryListItem.css.js';
 import { useCallback, useState } from 'react';
 import { groceriesState } from '@/components/groceries/state.js';
 import { TextSkeleton } from '@aglio/ui/components/skeletons';
 import { shortenTimeUnits } from '@aglio/tools';
+import { withClassName } from '@aglio/ui/hooks';
 
 export interface PantryListItemProps {
 	item: Item;
@@ -55,13 +54,8 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 	}, [cloneItem, item]);
 
 	return (
-		<div className={groceryItemClasses.root} data-id={id} {...rest}>
-			<div
-				className={classNames(
-					groceryItemClasses.mainContent,
-					classes.mainContent,
-				)}
-			>
+		<Root data-id={id} {...rest}>
+			<Main>
 				<Button
 					size="icon"
 					color="destructive"
@@ -77,47 +71,58 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 				>
 					{wasRepurchased ? <CheckIcon /> : <PlusIcon />}
 				</Button>
-				<div className={groceryItemClasses.textContent}>
+				<TextContent>
 					<LookupFoodName foodName={food} />
-				</div>
-				{purchasedAt && (
-					<Tooltip disabled={!expiresAt} content={expiresAtText}>
-						<div
-							className={classNames(classes.purchasedAt, {
-								[classes.expiredWarning]: isAlmostOrExpired,
-							})}
-						>
-							<ClockIcon />
-							<RelativeTime value={purchasedAt} />
-							&nbsp;ago
-						</div>
-					</Tooltip>
-				)}
+					{purchasedAt && (
+						<Tooltip disabled={!expiresAt} content={expiresAtText}>
+							<div
+								className={classNames(
+									' color-gray5 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap',
+									{
+										'color-attentionDark': isAlmostOrExpired,
+									},
+								)}
+							>
+								<ClockIcon />
+								<RelativeTime value={purchasedAt} />
+								&nbsp;ago
+							</div>
+						</Tooltip>
+					)}
+				</TextContent>
 				<FoodDetailDialog foodName={food} />
-			</div>
-		</div>
+			</Main>
+		</Root>
 	);
 }
 
+const Root = withClassName(
+	'div',
+	'w-full bg-wash rounded-md relative select-none all:transition-200 all:ease-springy repeated:mt-1',
+);
+const Main = withClassName(
+	'div',
+	'flex flex-row items-start gap-2 pt-4 pr-3 pb-2 relative pl-2',
+);
+const TextContent = withClassName(
+	'div',
+	'flex flex-col flex-1 items-start gap-2 mt-1 max-w-full overflow-hidden text-ellipsis relative',
+);
+
 export const PantryListItemSkeleton = () => {
 	return (
-		<div className={groceryItemClasses.root}>
-			<div
-				className={classNames(
-					groceryItemClasses.mainContent,
-					classes.mainContent,
-				)}
-			>
+		<Root>
+			<Main>
 				<Button size="icon" color="destructive" disabled>
 					<TrashIcon />
 				</Button>
 				<Button size="icon" color="default" disabled>
 					<PlusIcon />
 				</Button>
-				<div className={groceryItemClasses.textContent}>
+				<TextContent>
 					<TextSkeleton maxLength={16} />
-				</div>
-			</div>
-		</div>
+				</TextContent>
+			</Main>
+		</Root>
 	);
 };

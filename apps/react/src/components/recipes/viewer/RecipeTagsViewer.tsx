@@ -1,10 +1,8 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import classNames from 'classnames';
-import * as classes from './RecipeTagsViewer.css.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { themeMap } from '@aglio/ui/styles';
 import { RecipeTagMenuWrapper } from '@/components/recipes/tags/RecipeTagMenuWrapper.jsx';
 
 export interface RecipeTagsViewerProps {
@@ -18,7 +16,7 @@ export function RecipeTagsViewer({ recipe }: RecipeTagsViewerProps) {
 	if (!tags) return null;
 
 	return (
-		<div className={classes.list}>
+		<div className="flex flex-wrap gap-1">
 			{tags.map((tag) => (
 				<RecipeTagViewer key={tag} tag={tag} />
 			))}
@@ -34,8 +32,8 @@ function RecipeTagViewer({ tag }: { tag: string }) {
 		<RecipeTagMenuWrapper tagName={tag}>
 			<div
 				className={classNames(
-					classes.tag,
-					data?.get('color') && themeMap[data.get('color') as ThemeName],
+					'flex flex-row items-center gap-1 px-3 py-1 rounded-lg bg-primaryLight color-black font-bold text-sm',
+					data?.get('color') && `theme-${data.get('color')}`,
 				)}
 			>
 				<span>{data?.get('icon') ?? <Icon name="tag" />}</span>

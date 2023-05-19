@@ -1,6 +1,5 @@
 import { Recipe } from '@aglio/groceries-client';
 import { useSyncedInstructionsEditor } from '../hooks.js';
-import * as classes from './RecipeInstructionsViewer.css.js';
 import { RichEditor } from '@aglio/ui/components/richEditor';
 import classNames from 'classnames';
 
@@ -16,7 +15,7 @@ export function RecipeInstructionsViewer({
 	const editor = useSyncedInstructionsEditor({ recipe, readonly: true });
 	return (
 		<RichEditor
-			className={classNames(classes.root, className)}
+			className={classNames('max-w-600px', className)}
 			editor={editor}
 		/>
 	);

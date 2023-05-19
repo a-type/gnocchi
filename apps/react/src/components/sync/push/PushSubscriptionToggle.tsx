@@ -5,7 +5,6 @@ import {
 	subscribeToPush,
 	unsubscribeFromPush,
 } from '@/push.js';
-import { Box } from '@aglio/ui/components/box';
 import { Switch } from '@aglio/ui/components/switch';
 import { useEffect, useState } from 'react';
 
@@ -52,13 +51,13 @@ export function PushSubscriptionToggle({}: PushSubscriptionToggleProps) {
 	}
 
 	return (
-		<Box direction="row" gap={2} align="center">
+		<div className="flex flex-row gap-2 items-center">
 			<Switch
 				checked={subscribed}
 				onCheckedChange={toggle}
 				disabled={loading}
 			/>
 			<span>Notify me when someone adds or removes from the list</span>
-		</Box>
+		</div>
 	);
 }

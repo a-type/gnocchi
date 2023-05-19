@@ -1,5 +1,4 @@
-import '@aglio/ui/styles';
-import './main.css.js';
+import 'virtual:uno.css';
 import './darkMode.js';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
@@ -24,3 +23,15 @@ function main() {
 main();
 
 attachToPwaEvents();
+
+function debugUno() {
+	setTimeout(
+		() =>
+			navigator.clipboard.writeText(
+				document.querySelector('[data-vite-dev-id="/__uno.css"]')
+					?.textContent ?? 'failed to copy',
+			),
+		3000,
+	);
+}
+(window as any).debugUno = debugUno;

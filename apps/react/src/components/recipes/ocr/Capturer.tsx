@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from 'react';
-import * as classes from './Capturer.css.js';
 import { useCaptureVideo } from '@/hooks/useCaptureVideo.js';
 import { Button } from '@aglio/ui/src/components/button';
 import { ocr } from '@/lib/ocr.js';
@@ -30,22 +29,25 @@ export function Capturer({ onComplete, className }: CapturerProps) {
 	}, [crop, onComplete, stop]);
 
 	return (
-		<div className={classNames(classes.root, className)}>
-			<div className={classNames(classes.cropContainer)}>
+		<div className={classNames('relative flex flex-col', className)}>
+			<div className="w-full flex-1 relative flex flex-col items-stretch justify-center bg-black">
 				<ReactCrop
 					crop={crop}
 					onChange={(_, percentageCrop) => setCrop(percentageCrop)}
 				>
-					<video ref={videoRef} className={classes.video} />
+					<video ref={videoRef} className="w-full h-full" />
 				</ReactCrop>
 				{croppedImage && (
 					<>
-						<img src={croppedImage} className={classes.imagePreview} />
-						<div className={classes.scanLine} />
+						<img
+							src={croppedImage}
+							className="absolute z-1 w-full h-full object-contain bg-black animate-keyframes-fade-in animate-duration-500 animate-ease-out motion-reduce:animate-none"
+						/>
+						<div className="absolute z-2 w-full h-2px bg-[rgba(255,255,255,0.8)] animate-keyframes-scan-line animate-duration-2000 animate-ease-linear animate-iteration-infinite animate-delay-500 motion-reduce:animate-none" />
 					</>
 				)}
 			</div>
-			<div className={classes.controls}>
+			<div className="flex flex-col items-stretch">
 				{stage === 'initial' && (
 					<>
 						<Button
@@ -86,14 +88,3 @@ export function Capturer({ onComplete, className }: CapturerProps) {
 		</div>
 	);
 }
-
-function Cropper({
-	onComplete,
-}: {
-	onComplete: (rect: {
-		x: number;
-		y: number;
-		width: number;
-		height: number;
-	}) => void;
-}) {}

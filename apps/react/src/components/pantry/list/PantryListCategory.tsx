@@ -1,7 +1,13 @@
-import classNames from 'classnames';
-import * as groceryCategoryClasses from '@/components/groceries/categories/GroceryListCategory.css.js';
 import { Category, Item } from '@aglio/groceries-client';
 import { PantryListItem } from '../items/PantryListItem.jsx';
+import {
+	CategoryTitle,
+	CategoryTitleRow,
+} from '@/components/groceries/categories/CategoryTitleRow.jsx';
+import {
+	CategoryItems,
+	CategoryRoot,
+} from '@/components/groceries/categories/GroceryListCategory.jsx';
 
 export interface PantryListCategoryProps {
 	category: Category | null;
@@ -14,22 +20,22 @@ export function PantryListCategory({
 	...rest
 }: PantryListCategoryProps) {
 	return (
-		<div
-			className={classNames('pantryListCategory', groceryCategoryClasses.root)}
+		<CategoryRoot
+			className="pantryListCategory"
 			data-is-empty={!items || items?.length === 0}
 			data-do-not-animate
 			{...rest}
 		>
-			<div className={groceryCategoryClasses.titleRow}>
-				<h2 className={groceryCategoryClasses.title}>
+			<CategoryTitleRow>
+				<CategoryTitle>
 					{category?.get('name') ?? 'Uncategorized'}
-				</h2>
-			</div>
-			<div className={groceryCategoryClasses.items}>
+				</CategoryTitle>
+			</CategoryTitleRow>
+			<CategoryItems>
 				{items?.map((item, index) => {
 					return <PantryListItem key={item.get('id')} item={item} />;
 				})}
-			</div>
-		</div>
+			</CategoryItems>
+		</CategoryRoot>
 	);
 }

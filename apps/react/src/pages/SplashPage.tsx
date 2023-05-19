@@ -1,4 +1,4 @@
-import { leekTheme, sprinkles } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import classNames from 'classnames';
 import {
@@ -11,15 +11,13 @@ import {
 	useRef,
 	useState,
 } from 'react';
-import * as classes from './SplashPage.css.js';
 import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 import { APP_NAME, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
 import { useOnVisible } from '@/hooks/useOnVisible.js';
 import { useSearchParams } from '@verdant-web/react-router';
 import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
-import { H2, P, Span } from '@aglio/ui/components/typography';
-import { Box } from '@aglio/ui/components/box';
+import { H2, P } from '@aglio/ui/components/typography';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { LinkButton } from '@/components/nav/Link.jsx';
 
@@ -47,77 +45,68 @@ export function SplashPage() {
 	}, [jumpToUpgrade]);
 
 	return (
-		<div className={classes.root}>
-			<div className={classes.backgroundSceneContainer}>
+		<div className="bg-white color-black flex flex-col items-stretch">
+			<div className="fixed top-0 left-0 w-full h-80% pointer-events-none">
 				<Suspense>
 					<Scene />
 				</Suspense>
 			</div>
-			<Content className={classes.mainContent}>
-				<div className={classes.demoGrid}>
-					<div className={classes.titleWrap}>
-						<ProductHunt className={classes.productHunt} />
-
-						<h2 className={classes.appName}>{APP_NAME}</h2>
+			<Content className="bg-primary-light">
+				<DemoGrid>
+					<TitleWrap>
+						<ProductHunt className="mb-8 w-250px block md:(fixed top-4 right-4 z-1000000)" />
+						<h2 className="[font-family:'Londrina_Outline',_sans-serif] font-500 text-[6vmax] color-black mb-20vh">
+							{APP_NAME}
+						</h2>
 						<Title>Your weekly cooking, in one place.</Title>
-					</div>
-					<DemoFrame demo="groceries" className={classes.demo} />
+					</TitleWrap>
+					<Demo demo="groceries" />
 					<Section>
-						<H2>How it works</H2>
-						<p className={classes.item}>
-							<span className={classes.emoji}>🧾</span>
-							<span className={classes.itemText}>
+						<H2 className="gutter-bottom">How it works</H2>
+						<Item>
+							<Emoji>🧾</Emoji>
+							<ItemText>
 								Copy, paste, or share items directly into the app.
-							</span>
-						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>🏷️</span>
-							<span className={classes.itemText}>
+							</ItemText>
+						</Item>
+						<Item>
+							<Emoji>🏷️</Emoji>
+							<ItemText>
 								Organize your run by aisle. {APP_NAME} will remember your
 								categorizations!
-							</span>
-						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>🛒</span>
-							<span className={classes.itemText}>
+							</ItemText>
+						</Item>
+						<Item>
+							<Emoji>🛒</Emoji>
+							<ItemText>
 								Get helpful suggestions based on your past purchases.
-							</span>
-						</p>
+							</ItemText>
+						</Item>
 					</Section>
-					<DemoFrame
-						demo="recipe"
-						className={classes.demo}
-						// style={{
-						// 	gridArea: 'recipes',
-						// }}
-					/>
+					<Demo demo="recipe" />
 					<Section>
-						<H2>Collect recipes</H2>
+						<H2 className="gutter-bottom">Collect recipes</H2>
 						<p>
 							{APP_NAME} is a recipe app, too. You can save recipes from the
 							web, or add your own.
 						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>📝</span>
-							<span className={classes.itemText}>
+						<Item>
+							<Emoji>📝</Emoji>
+							<ItemText>
 								Edit recipes to your liking. Add notes, change the serving size,
 								or even swap out your own ingredients.
-							</span>
-						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>➕</span>
-							<span className={classes.itemText}>
+							</ItemText>
+						</Item>
+						<Item>
+							<Emoji>➕</Emoji>
+							<ItemText>
 								Add recipe ingredients directly to your grocery list.
-							</span>
-						</p>
+							</ItemText>
+						</Item>
 					</Section>
-					<DemoFrame
-						demo="groceries-lists"
-						className={classes.demo}
-						// style={{ gridArea: 'lists' }}
-					/>
+					<Demo demo="groceries-lists" />
 					<Section color="white">
-						<H2>Less improv at the grocery store</H2>
+						<H2 className="gutter-bottom">Less improv at the grocery store</H2>
 						<p>
 							If you're like me, you usually leave the grocery store with some
 							foods you didn't plan on buying. But you also get home, start
@@ -132,15 +121,18 @@ export function SplashPage() {
 						</p>
 						<p>&ndash; Grant</p>
 					</Section>
-				</div>
+				</DemoGrid>
 			</Content>
 			<Content
-				className={classNames(classes.upgradeContent, leekTheme)}
+				className={classNames(
+					'bg-primary border-t-20vh border-b-20vh border-solid border-primary-light',
+					'theme-leek',
+				)}
 				ref={upgradeSectionRef}
 			>
-				<div className={classes.upgradeSection}>
-					<div className={classes.upgradeTitleWrap}>
-						<H2 className={classes.upgradeTitle}>
+				<DemoGrid className="mt-20vh">
+					<TitleWrap className="bg-primary-wash border-1 border-solid border-primary-dark rounded-lg p-4">
+						<H2 className="[font-size:5vmax] gutter-bottom">
 							Upgrade to the world's most collaborative cooking app
 						</H2>
 						<P>
@@ -148,63 +140,58 @@ export function SplashPage() {
 							recipes to all your devices, share your list with anyone you shop
 							with, and coordinate with other chefs while cooking.
 						</P>
-					</div>
-					<DemoFrame demo="multiplayer-groceries" className={classes.demo} />
+					</TitleWrap>
+					<Demo demo="multiplayer-groceries" />
 					<Section>
-						<H2>Collaborative groceries</H2>
+						<H2 className="gutter-bottom">Collaborative groceries</H2>
 						<p>
 							Team up with your family, roommates, or friends to plan and shop
 						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>☁️</span>
-							<span className={classes.itemText}>
+						<Item>
+							<Emoji>☁️</Emoji>
+							<ItemText>
 								Sync your list and recipes to all your devices.
-							</span>
-						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>👯</span>
-							<span className={classes.itemText}>
-								Share your list with anyone you shop with.
-							</span>
-						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>📌</span>
-							<span className={classes.itemText}>
+							</ItemText>
+						</Item>
+						<Item>
+							<Emoji>👯</Emoji>
+							<ItemText>Share your list with anyone you shop with.</ItemText>
+						</Item>
+						<Item>
+							<Emoji>📌</Emoji>
+							<ItemText>
 								In-store collaboration, like claiming sections and planning a
 								place to meet up.
-							</span>
-						</p>
+							</ItemText>
+						</Item>
 					</Section>
-					<DemoFrame demo="multiplayer-cooking" className={classes.demo} />
+					<Demo demo="multiplayer-cooking" />
 					<Section>
-						<H2>Sous chef mode</H2>
+						<H2 className="gutter-bottom">Sous chef mode</H2>
 						<p>Stay on task when cooking together</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>🖨️</span>
-							<span className={classes.itemText}>
+						<Item>
+							<Emoji>🖨️</Emoji>
+							<ItemText>
 								Scan a recipe page directly to the app to add all the
 								ingredients to your list.
-							</span>
-						</p>
-						<p className={classes.item}>
-							<span className={classes.emoji}>🧑🏻‍🍳</span>
-							<span className={classes.itemText}>
+							</ItemText>
+						</Item>
+						<Item>
+							<Emoji>🧑🏻‍🍳</Emoji>
+							<ItemText>
 								Assign tasks to each chef, and see who's done what.
-							</span>
-						</p>
+							</ItemText>
+						</Item>
 					</Section>
-					<div className={classes.upgradeCta}>
+					<div className="flex flex-row items-center justify-center gap-4 w-full md:[grid-column-end:span_2]">
 						<PromoteSubscriptionButton color="primary">
 							Upgrade now
 						</PromoteSubscriptionButton>
 					</div>
-				</div>
+				</DemoGrid>
 			</Content>
-			<Content
-				className={classNames(leekTheme, classes.endContent)}
-				style={{ paddingBottom: '20vh' }}
-			>
-				<Box mt={6} gap={4}>
+			<Content className={classNames('theme-leek', 'bg-primary-light pb-20vh')}>
+				<div className="mt-6 gap-4 flex flex-col">
 					<TextLink to="/privacy-policy" newTab>
 						Read the privacy policy
 					</TextLink>
@@ -214,39 +201,45 @@ export function SplashPage() {
 					<TextLink to="https://github.com/a-type/gnocchi" newTab>
 						Gnocchi is open source
 					</TextLink>
-				</Box>
+				</div>
 			</Content>
 			<div
 				className={classNames(
-					classes.fixedContent,
-					staticSectionAccent ? leekTheme : undefined,
+					'flex flex-col fixed bottom-0 bg-primary-light border-0 border-t border-solid border-t-primary-dark m-0 w-full p-6 items-center gap-3 z-2 transition-colors',
+					staticSectionAccent ? 'theme-leek' : undefined,
 				)}
 			>
 				<LinkButton
 					to="/"
 					data-test="get-started"
-					className={sprinkles({
-						justifyContent: 'center',
-
-						alignSelf: 'center',
-					})}
+					className="justify-center self-center"
 					color="default"
 				>
 					Get Started
 				</LinkButton>
 
-				<Span size="sm">
+				<span className="text-sm">
 					Free, no signup required. By continuing you agree to{' '}
 					<TextLink to="/tos" newTab>
 						the terms and conditions of usage.
 					</TextLink>
-				</Span>
+				</span>
 			</div>
 		</div>
 	);
 }
 
 export default SplashPage;
+
+const DemoGrid = withClassName(
+	'div',
+	'grid grid-cols-[1fr] gap-5 items-start md:(grid-cols-[repeat(2,1fr)])',
+);
+const Demo = withClassName(DemoFrame, 'relative z-1 [grid-row-end:span_2]');
+const TitleWrap = withClassName('div', 'md:[grid-column-end:span_2]');
+const Item = withClassName('p', 'flex items-start gap-2');
+const Emoji = withClassName('span', 'block');
+const ItemText = withClassName('span', 'block relative');
 
 const Section = forwardRef<
 	HTMLDivElement,
@@ -260,14 +253,22 @@ const Section = forwardRef<
 	return (
 		<section
 			ref={ref}
-			className={classNames(classes.section[color], className)}
+			className={classNames(
+				'bg-primary-wash relative flex flex-col items-start mb-auto p-6 rounded-lg text-sm border border-solid border-primary-dark [line-height:1.5] color-black',
+				color === 'white' && 'bg-white border-default',
+				className,
+			)}
 			{...rest}
 		/>
 	);
 });
 
 function Title({ children }: { children: string }) {
-	return <h1 className={classes.title}>{children}</h1>;
+	return (
+		<h1 className="w-full m-0 mb-6 font-title [font-size:7vmax] color-black font-black text-shadow-[0_0_4px_var(--color-white)] md:[font-size:7vmin]">
+			{children}
+		</h1>
+	);
 }
 
 const Content = forwardRef<
@@ -279,8 +280,14 @@ const Content = forwardRef<
 	}
 >(function Content({ children, className, ...rest }, ref) {
 	return (
-		<div ref={ref} className={classNames(classes.content, className)} {...rest}>
-			<div className={classes.contentInner}>{children}</div>
+		<div
+			ref={ref}
+			className={classNames('w-full flex flex-col gap-6 bg-primary', className)}
+			{...rest}
+		>
+			<div className="max-w-800px w-full my-0 mx-auto p-6 relative z-1">
+				{children}
+			</div>
 		</div>
 	);
 });

@@ -15,12 +15,11 @@ import { PushSubscriptionToggle } from '@/components/sync/push/PushSubscriptionT
 import { API_HOST_HTTP, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
-import { Box } from '@aglio/ui/components/box';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
 import { Divider } from '@aglio/ui/components/divider';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { H1, H2, Span } from '@aglio/ui/components/typography';
+import { H1, H2 } from '@aglio/ui/components/typography';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
@@ -50,22 +49,15 @@ export function PlanPage() {
 	return (
 		<PageRoot>
 			<PageContent fullHeight noPadding>
-				<Box
-					width="full"
-					direction="column"
-					mt={6}
-					p={4}
-					gap={4}
-					align="flex-start"
-				>
+				<div className="flex flex-col w-full mt-6 p-4 gap-4 items-start">
 					<H1>Settings</H1>
 					<UpdatePrompt />
 					<Contents />
-					<Box fontSize="xs" gap={2}>
+					<div className="text-xs flex flex-col gap-2">
 						<TextLink to="/privacy-policy">Privacy policy</TextLink>
 						<TextLink to="/tos">Terms and conditions of use</TextLink>
-					</Box>
-				</Box>
+					</div>
+				</div>
 			</PageContent>
 		</PageRoot>
 	);
@@ -79,15 +71,13 @@ function ManageSubscriptionButton(props: ButtonProps) {
 			<Button type="submit" {...props}>
 				Manage your payment
 			</Button>
-			<Span size="xs">Update your card or unsubscribe</Span>
+			<span className="text-xs">Update your card or unsubscribe</span>
 		</form>
 	);
 }
 
 const MainContainer = ({ children }: { children: ReactNode }) => (
-	<Box width="full" direction="column" gap={4} align="flex-start">
-		{children}
-	</Box>
+	<div className="flex flex-col items-start w-full gap-4">{children}</div>
 );
 
 function ManageSection() {
@@ -124,7 +114,7 @@ function AnonymousContents() {
 		<MainContainer>
 			<InstallHint />
 			<ColorModeSelect />
-			<Box direction="row" align="center" gap={2}>
+			<div className="flex flex-row items-center gap-2">
 				<PromoteSubscriptionButton color="primary">
 					Upgrade for ${PRICE_MONTHLY_DOLLARS}/mo
 				</PromoteSubscriptionButton>
@@ -132,7 +122,7 @@ function AnonymousContents() {
 					<ArrowRightIcon />
 					<span>Sign in</span>
 				</LoginButton>
-			</Box>
+			</div>
 			<Divider />
 			<ManageSection />
 			<Divider />
@@ -147,9 +137,9 @@ function UnsubscribedContents() {
 		<MainContainer>
 			<InstallHint />
 			<ColorModeSelect />
-			<Box background="primaryWash" color="black" p={4} borderRadius="lg">
+			<div className="bg-primary-wash color-black p-4 rounded-lg">
 				Subscription inactive
-			</Box>
+			</div>
 			<ManageSubscriptionButton />
 			<MemberManager />
 			<ManageSection />
@@ -191,7 +181,7 @@ function ManageCategories() {
 			<ManageCategoriesDialog>
 				<Button>Manage categories</Button>
 			</ManageCategoriesDialog>
-			<Span size="xs">Add, remove, and rearrange categories</Span>
+			<span className="text-xs">Add, remove, and rearrange categories</span>
 		</div>
 	);
 }

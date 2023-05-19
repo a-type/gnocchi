@@ -1,5 +1,4 @@
 import { Recipe } from '@aglio/groceries-client';
-import { sprinkles } from '@aglio/ui/styles';
 import { RecipeNotFound } from '../RecipeNotFound.jsx';
 import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
 import {
@@ -17,7 +16,6 @@ import { RecipePreludeEditor } from './RecipePreludeEditor.jsx';
 import { RecipeTagsEditor } from './RecipeTagsEditor.jsx';
 import { RecipeTitleField } from './RecipeTitleField.jsx';
 import { RecipeUrlField } from './RecipeUrlField.jsx';
-import { Box } from '@aglio/ui/components/box';
 import { H2 } from '@aglio/ui/components/typography';
 import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
@@ -38,11 +36,11 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	useWatchChanges(recipe);
 
 	return (
-		<Box direction="column" gap={8}>
+		<div className="flex flex-col gap-8">
 			<HeaderBar backUrl={makeRecipeLink(recipe, '')}>
 				<RecipeEditActions />
 			</HeaderBar>
-			<Box direction="column" gap={2}>
+			<div className="flex flex-col gap-2">
 				<TitleAndImageLayout>
 					<TitleContainer>
 						<RecipeTitleField recipe={recipe} />
@@ -52,29 +50,26 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 					</ImageContainer>
 				</TitleAndImageLayout>
 				<RecipeUrlField recipe={recipe} />
-			</Box>
+			</div>
 			<RecipeTagsEditor recipe={recipe} />
 			<div>
-				<H2 gutterBottom>Description</H2>
+				<H2 className="gutter-bottom">Description</H2>
 				<RecipePreludeEditor recipe={recipe} />
 			</div>
 			<div>
-				<H2 gutterBottom>Ingredients</H2>
+				<H2 className="gutter-bottom">Ingredients</H2>
 				<RecipeIngredientsEditor recipe={recipe} />
 			</div>
 			<div>
 				<InstructionsProvider isEditing showTools recipeId={recipe.get('id')}>
-					<H2 gutterBottom>Instructions</H2>
+					<H2 className="gutter-bottom">Instructions</H2>
 					<RecipeInstructionsField recipe={recipe} />
 				</InstructionsProvider>
 			</div>
 			<div>
-				<H2>Danger zone</H2>
-				<RecipeDeleteButton
-					className={sprinkles({ alignSelf: 'flex-start' })}
-					recipe={recipe}
-				/>
+				<H2 className="gutter-bottom">Danger zone</H2>
+				<RecipeDeleteButton className="self-start" recipe={recipe} />
 			</div>
-		</Box>
+		</div>
 	);
 }

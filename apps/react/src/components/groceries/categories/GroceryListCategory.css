@@ -1,0 +1,10 @@
+@keyframes category-collapse {
+	from {
+		height: var(--height);
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+		height: 0;
+	}
+}

@@ -1,6 +1,4 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import * as classes from './InstallHint.css.js';
-import { Box } from '@aglio/ui/components/box';
 import { H2, P } from '@aglio/ui/components/typography';
 import { Button } from '@aglio/ui/components/button';
 import {
@@ -10,6 +8,7 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
+import { withClassName } from '@aglio/ui/hooks';
 
 export interface InstallHintProps {}
 
@@ -33,15 +32,9 @@ export function InstallHint({}: InstallHintProps) {
 	const Content = content[os] || (() => null);
 
 	return (
-		<Box className={classes.root}>
+		<div className="bg-primaryWash rounded-lg p-4 flex flex-col gap-4 items-stretch">
 			<P>Get more out of this app by installing it on your device.</P>
-			<Box
-				direction="row"
-				align="center"
-				justify="flex-end"
-				gap={4}
-				width="full"
-			>
+			<div className="flex flex-row items-center justify-end gap-4 w-full">
 				<Button color="ghost" onClick={() => setIsDismissed(true)}>
 					Dismiss
 				</Button>
@@ -58,8 +51,8 @@ export function InstallHint({}: InstallHintProps) {
 						</DialogActions>
 					</DialogContent>
 				</Dialog>
-			</Box>
-		</Box>
+			</div>
+		</div>
 	);
 }
 
@@ -104,15 +97,17 @@ function getIsEdge() {
 	return !!ua.match(/Edge/i);
 }
 
+const Keyword = withClassName('span', 'color-black bg-primaryWash');
+const Video = withClassName('video', 'max-h-60vh');
+
 function IOSTutorial() {
 	const isSafari = getIsSafari();
 	if (isSafari) {
 		return (
-			<Box>
+			<div>
 				<H2>Adding Gnocchi to your homescreen</H2>
 				<P>
-					Open the share menu and tap{' '}
-					<span className={classes.keyword}>"Add to Home Screen"</span>.
+					Open the share menu and tap <Keyword>"Add to Home Screen"</Keyword>.
 				</P>
 				<P>
 					After you've done this, you can open Gnocchi just like any other app.
@@ -128,32 +123,24 @@ function IOSTutorial() {
 					plain more convenient, which is key to keeping up with the weekly
 					groceries.
 				</P>
-				<video
-					src="/videos/iphone-install.mp4"
-					controls
-					autoPlay
-					loop
-					className={classes.video}
-				/>
-			</Box>
+				<Video src="/videos/iphone-install.mp4" controls autoPlay loop />
+			</div>
 		);
 	}
 
 	return (
-		<Box>
+		<div>
 			<H2>Hi, iOS user!</H2>
 			<P>
 				Gnocchi is a website that can act just like a native app, but Apple
 				makes it a little tricky to install.
 			</P>
 			<P>
-				<strong className={classes.keyword}>
-					First, you have to open this website in Safari.
-				</strong>{' '}
-				Once you've done that, open Settings and click this button again to show
-				next steps.
+				<Keyword>First, you have to open this website in Safari.</Keyword> Once
+				you've done that, open Settings and click this button again to show next
+				steps.
 			</P>
-		</Box>
+		</div>
 	);
 }
 
@@ -164,11 +151,10 @@ function AndroidTutorial() {
 		? `/videos/edge-install.mp4`
 		: `/videos/android-install.mp4`;
 	return (
-		<Box>
+		<div>
 			<H2>Adding the Gnocchi app to your phone</H2>
 			<P>
-				Open the browser menu and look for{' '}
-				<span className={classes.keyword}>"Install app"</span>
+				Open the browser menu and look for <Keyword>"Install app"</Keyword>
 			</P>
 			<P>
 				After you've done this, you can open Gnocchi just like any other app.
@@ -180,8 +166,8 @@ function AndroidTutorial() {
 				plain more convenient, which is key to keeping up with the weekly
 				groceries.
 			</P>
-			<video src={videoSrc} controls autoPlay loop className={classes.video} />
-		</Box>
+			<Video src={videoSrc} controls autoPlay loop />
+		</div>
 	);
 }
 

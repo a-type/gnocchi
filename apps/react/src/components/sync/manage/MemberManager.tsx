@@ -14,8 +14,7 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
 import { Button } from '@aglio/ui/components/button';
-import { H2, P, Span } from '@aglio/ui/components/typography';
-import { Box } from '@aglio/ui/components/box';
+import { H2, P } from '@aglio/ui/components/typography';
 import { Checkbox } from '@aglio/ui/components/checkbox';
 
 export interface MemberManagerProps {}
@@ -35,11 +34,11 @@ export function MemberManager({}: MemberManagerProps) {
 				<DialogTrigger asChild>
 					<Button>Manage membership</Button>
 				</DialogTrigger>
-				<Span size="xs">
+				<span className="text-xs">
 					{session.role === 'admin'
 						? 'Update subscription, remove members, etc'
 						: 'Leave your current plan'}
-				</Span>
+				</span>
 			</div>
 			<DialogContent>
 				<DialogTitle>Manage Membership</DialogTitle>
@@ -60,7 +59,7 @@ function AdminMemberManager() {
 	const { session } = data || {};
 
 	return (
-		<Box gap={2}>
+		<div className="flex flex-col gap-2">
 			<P>
 				You're the admin of this plan. You can invite new members and update
 				billing information. If you end your subscription, all members will lose
@@ -77,7 +76,7 @@ function AdminMemberManager() {
 					<AdminMemberItem key={member.id} member={member} onRemove={refetch} />
 				))}
 			{!members?.length && <P>No members yet</P>}
-		</Box>
+		</div>
 	);
 }
 
@@ -97,7 +96,7 @@ function AdminMemberItem({
 	const [confirmOpen, setConfirmOpen] = useState(false);
 
 	return (
-		<Box direction="row" justify="space-between" align="center" gap={2}>
+		<div className="flex justify-between items-center gap-2">
 			<P>
 				{member.fullName} ({member.email})
 			</P>
@@ -131,7 +130,7 @@ function AdminMemberItem({
 					</Button>
 				</DialogContent>
 			</Dialog>
-		</Box>
+		</div>
 	);
 }
 
@@ -151,46 +150,38 @@ function MemberMemberManager() {
 	};
 
 	return (
-		<Box gap={1}>
+		<div className="flex flex-col gap-1">
 			<P>
 				You're a member of this plan. Only the person who invited you can invite
 				new members or update billing.
 			</P>
 
-			<H2 gutterBottom={false}>Leave plan</H2>
+			<H2>Leave plan</H2>
 			<P>
 				You will no longer sync your list{' '}
 				<strong>with other devices you own</strong>, or other members. To resume
 				syncing on your own, you will need to purchase your own subscription
 			</P>
-			<Box direction="row" gap={2} p={2}>
+			<div className="flex gap-2 p-2">
 				<Checkbox
 					checked={confirmed}
 					onCheckedChange={(v) => setConfirmed(v === true)}
 				/>
 				I understand
-			</Box>
-			<Box
-				borderColor="gray70"
-				borderWidth="default"
-				borderStyle="solid"
-				borderRadius="md"
-				background="gray10"
-				p={2}
-				mb={2}
-			>
-				<Box direction="row" gap={2}>
+			</div>
+			<div className="flex flex-col border-light bg-gray1 p-2 mb-2">
+				<div className="flex flex-row gap-2">
 					<Checkbox
 						checked={alsoClear}
 						onCheckedChange={(v) => setAlsoClear(v === true)}
 					/>
 					Also reset my data
-				</Box>
+				</div>
 				<P>Start with a clean slate after leaving</P>
-			</Box>
+			</div>
 			<Button align="start" disabled={!confirmed} onClick={confirmLeave}>
 				Leave Plan
 			</Button>
-		</Box>
+		</div>
 	);
 }

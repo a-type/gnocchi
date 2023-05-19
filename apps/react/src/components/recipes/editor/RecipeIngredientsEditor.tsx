@@ -25,12 +25,10 @@ import {
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import { Formik } from 'formik';
-import * as classes from './RecipeIngredientsEditor.css.js';
 import { NoteEditor } from './NoteEditor.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { useState } from 'react';
 import classNames from 'classnames';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import {
 	DropdownMenu,
@@ -75,7 +73,7 @@ export function RecipeIngredientsEditor({
 	);
 
 	return (
-		<div className={classes.listContainer}>
+		<div className="border-light rounded-lg p-2">
 			<DndContext
 				sensors={sensors}
 				onDragEnd={({ active, over }) => {
@@ -87,7 +85,7 @@ export function RecipeIngredientsEditor({
 				}}
 			>
 				<SortableContext items={ids} strategy={verticalListSortingStrategy}>
-					<div className={classes.list}>
+					<div className="flex flex-col gap-2">
 						{ingredients
 							.filter((i) => !!i)
 							.map((ingredient, index) => (
@@ -133,27 +131,30 @@ function RecipeIngredientItem({
 	return (
 		<div
 			ref={setNodeRef}
-			className={classes.item}
+			className="flex flex-col gap-2 items-stretch p-2"
 			{...attributes}
 			style={style}
 		>
-			<div className={classes.itemMainLine}>
-				<DragHandleDots2Icon className={classes.dragHandle} {...listeners} />
+			<div className="flex flex-row gap-2 items-start">
+				<DragHandleDots2Icon
+					className="touch-none relative top-2"
+					{...listeners}
+				/>
 
 				<span
 					className={classNames(
-						classes.itemText,
-						isSectionHeader && classes.itemHeader,
+						'flex-1 min-w-40px mt-1',
+						isSectionHeader && 'font-bold',
 					)}
 				>
 					{text}
 				</span>
-				<Box direction="row" gap={1} alignItems="center">
+				<div className="flex flex-row gap-1 items-center">
 					<Button color="ghost" onClick={addNote}>
 						<Icon name="add_note" />
 					</Button>
 					<IngredientMenu ingredient={ingredient} onDelete={onDelete} />
-				</Box>
+				</div>
 			</div>
 			<IngredientNote ingredient={ingredient} />
 		</div>
@@ -191,7 +192,10 @@ function IngredientMenu({
 					<DropdownMenuItem onSelect={() => setDetailsOpen(true)}>
 						Edit details
 					</DropdownMenuItem>
-					<DropdownMenuItem onSelect={onDelete} color="destructive">
+					<DropdownMenuItem
+						className="color-attention-dark"
+						onSelect={onDelete}
+					>
 						<span>Delete</span>
 						<DropdownMenuItemRightSlot>
 							<TrashIcon />
@@ -295,18 +299,12 @@ function AddIngredientsForm({
 						autoSize
 						padBottomPixels={40}
 					/>
-					<Box
-						direction="row"
-						gap={1}
-						justify="space-between"
-						align="center"
-						width="full"
-					>
+					<div className="flex flex-row gap-1 justify-between items-center w-full">
 						<SubmitButton>Add</SubmitButton>
 						<FeatureFlag flag="ocr">
 							<OcrButton onText={(text) => setFieldValue('text', text)} />
 						</FeatureFlag>
-					</Box>
+					</div>
 				</Form>
 			)}
 		</Formik>

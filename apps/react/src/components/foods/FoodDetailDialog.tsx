@@ -1,8 +1,6 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { ReactNode, Suspense, useState } from 'react';
-import { capitalize } from '@aglio/tools';
 import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
-import * as classes from './FoodDetailDialog.css.js';
 import { Icon } from '../icons/Icon.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
 import { useToggle } from '@aglio/ui/hooks';
@@ -15,8 +13,7 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
 import { Button } from '@aglio/ui/components/button';
-import { Box } from '@aglio/ui/components/box';
-import { H3, P, Span } from '@aglio/ui/components/typography';
+import { H3 } from '@aglio/ui/components/typography';
 import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
 import { Checkbox } from '@aglio/ui/src/components/checkbox';
 import { FoodName } from '@/components/foods/FoodName.jsx';
@@ -84,30 +81,29 @@ function FoodDetailView({
 
 	if (!food)
 		return (
-			<Box direction="column" align="center" gap={4}>
+			<div className="flex flex-col items-center gap-4">
 				<div>No food data for "{foodName}"</div>
 				{justDeleted && (
 					<Button color="ghost" onClick={() => client.undoHistory.undo()}>
 						Undo delete
 					</Button>
 				)}
-			</Box>
+			</div>
 		);
 
 	return (
-		<Box gap={3}>
+		<div className="flex flex-col gap-3">
 			<DialogTitle>
 				<FoodName food={food} capitalize />
 			</DialogTitle>
-			<Box gap={1} direction="row" alignItems="center">
+			<div className="flex gap-1 items-center">
 				<span>Category:</span>
 				<CategorySelect
 					value={food.get('categoryId')}
 					onChange={(val) => food.set('categoryId', val)}
-					contentClassName={classes.categoryContent}
 				/>
-			</Box>
-			<Box gap={1} direction="row" alignItems="center">
+			</div>
+			<div className="flex gap-1 items-center">
 				<span>Default list:</span>
 				<ListSelect
 					value={food.get('defaultListId')}
@@ -115,11 +111,11 @@ function FoodDetailView({
 					includeAll={false}
 					inDialog
 				/>
-			</Box>
+			</div>
 			<Divider />
-			<Box gap={1} direction="column">
-				<Box gap={1} direction="row" alignItems="center">
-					<Span noWrap>Expires after</Span>
+			<div className="flex gap-1 flex-col">
+				<div className="gap-1 flex flex-row items-center">
+					<span className="whitespace-nowrap">Expires after</span>
 					<LiveUpdateTextField
 						type="number"
 						value={food.get('expiresAfterDays')?.toString() ?? ''}
@@ -135,24 +131,24 @@ function FoodDetailView({
 						}}
 					/>
 					<span>days</span>
-				</Box>
-				<Span size="xs">
+				</div>
+				<span className="text-xs">
 					Set this and the app will remind you when something is about to
 					expire. Only affects newly purchased items.
-				</Span>
-			</Box>
+				</span>
+			</div>
 			<Divider />
 			<H3>Alternate names</H3>
 			<FoodNamesEditor names={food.get('alternateNames')} />
-			<Box gap={1} direction="row" alignItems="center">
+			<div className="flex gap-1 items-center">
 				<Checkbox
 					checked={food.get('pluralizeName')}
 					onCheckedChange={(val) => food.set('pluralizeName', val === true)}
 				/>
-				<Span>Use pluralized name</Span>
-			</Box>
+				<span>Use pluralized name</span>
+			</div>
 			<Divider />
-			<Box gap={1} direction="row" alignItems="center">
+			<div className="flex flex-row items-center gap-1">
 				<Button
 					onClick={() => {
 						client.foods.delete(food.get('canonicalName'));
@@ -162,7 +158,7 @@ function FoodDetailView({
 				>
 					Delete
 				</Button>
-			</Box>
-		</Box>
+			</div>
+		</div>
 	);
 }

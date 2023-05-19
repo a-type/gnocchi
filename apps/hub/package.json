@@ -4,10 +4,12 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "next dev --port 4446",
-		"build": "next build",
+		"dev:next": "next dev --port 4446",
+		"build:next": "next build",
 		"start": "next start",
-		"lint": "next lint"
+		"lint": "next lint",
+		"dev": "concurrently npm:dev:*",
+		"build": "concurrently npm:build:*"
 	},
 	"dependencies": {
 		"@aglio/tools": "workspace:*",
@@ -28,9 +30,6 @@
 		"@types/node": "18.11.19",
 		"@types/react": "^18.0.14",
 		"@types/react-dom": "^18.0.5",
-		"@vanilla-extract/css": "^1.9.1",
-		"@vanilla-extract/css-utils": "^0.1.3",
-		"@vanilla-extract/next-plugin": "^2.1.1",
 		"classnames": "^2.3.2",
 		"eslint": "8.33.0",
 		"eslint-config-next": "13.2.4",
@@ -44,5 +43,11 @@
 		"patchedDependencies": {
 			"@tiptap/react@2.0.2": "patches/@tiptap__react@2.0.2.patch"
 		}
+	},
+	"devDependencies": {
+		"@unocss/transformer-variant-group": "^0.51.12",
+		"@unocss/webpack": "^0.51.13",
+		"concurrently": "^7.5.0",
+		"unocss": "^0.51.12"
 	}
 }

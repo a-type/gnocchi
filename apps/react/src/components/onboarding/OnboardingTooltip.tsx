@@ -1,7 +1,6 @@
 import { Onboarding } from '@/onboarding/createOnboarding.js';
 import { ReactNode, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import * as classes from './OnboardingTooltip.css.js';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import {
 	Popover,
@@ -9,7 +8,6 @@ import {
 	PopoverArrow,
 	PopoverContent,
 } from '@aglio/ui/components/popover';
-import { leekTheme } from '@aglio/ui/styles';
 import { Button } from '@aglio/ui/components/button';
 
 export interface OnboardingTooltipProps<O extends Onboarding<any>> {
@@ -52,7 +50,7 @@ export const OnboardingTooltip = function OnboardingTooltip<
 			<PopoverAnchor asChild>{children}</PopoverAnchor>
 			<PopoverContent
 				disableBlur
-				className={classNames(leekTheme, classes.content)}
+				className={classNames('theme-leek', 'important:bg-primaryWash flex')}
 				onInteractOutside={(event) => {
 					// if the user interacts outside the popover,
 					// and it's with anything besides a button or input,
@@ -63,8 +61,8 @@ export const OnboardingTooltip = function OnboardingTooltip<
 					}
 				}}
 			>
-				<PopoverArrow className={classes.arrow} />
-				<div className={classes.innerContent}>
+				<PopoverArrow className="important:fill-primaryWash" />
+				<div className="flex flex-row gap-3 items-center">
 					{content}
 					{!disableNext && (
 						<Button color={isLast ? 'primary' : 'ghost'} onClick={next}>

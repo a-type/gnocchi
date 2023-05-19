@@ -6,7 +6,6 @@ import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Box } from '@aglio/ui/components/box';
 import { Button } from '@aglio/ui/components/button';
 import {
 	DropdownMenu,
@@ -18,7 +17,7 @@ import {
 import { InfiniteLoadTrigger } from '@aglio/ui/components/infiniteLoadTrigger';
 import { PageFixedArea } from '@aglio/ui/components/layouts';
 import { Spinner } from '@aglio/ui/src/components/spinner';
-import { sprinkles } from '@aglio/ui/styles';
+import { withClassName } from '@aglio/ui/hooks';
 import {
 	DotsVerticalIcon,
 	PlayIcon,
@@ -28,7 +27,6 @@ import {
 import { Suspense } from 'react';
 import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
-import * as classes from './RecipeList.css.js';
 import { RecipeListActions } from './RecipeListActions.jsx';
 import { useFilteredRecipes } from './hooks.js';
 import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
@@ -38,14 +36,11 @@ export interface RecipeListProps {}
 
 export function RecipeList({}: RecipeListProps) {
 	return (
-		<div className={classes.root}>
-			<div className={classes.topRow}>
+		<div className="flex flex-col gap-4 p-0 m-0">
+			<div className="flex flex-row items-center justify-between">
 				<Suspense
 					fallback={
-						<Button
-							color="primary"
-							className={sprinkles({ alignSelf: 'flex-start' })}
-						>
+						<Button color="primary" className="self-start">
 							Create New
 						</Button>
 					}
@@ -55,18 +50,18 @@ export function RecipeList({}: RecipeListProps) {
 				<RecipeCollectionMenu />
 			</div>
 			<Suspense>
-				<PageFixedArea className={classes.fixedArea}>
-					<RecipeSearchBar className={classes.searchBar} />
+				<PageFixedArea className="pt-2">
+					<RecipeSearchBar className="w-full" />
 					<RecipeListActions />
 				</PageFixedArea>
 			</Suspense>
 			<Suspense
 				fallback={
-					<div className={classes.list}>
+					<List>
 						<RecipePlaceholderItem />
 						<RecipePlaceholderItem />
 						<RecipePlaceholderItem />
-					</div>
+					</List>
 				}
 			>
 				<RecipeListContent />
@@ -74,6 +69,11 @@ export function RecipeList({}: RecipeListProps) {
 		</div>
 	);
 }
+
+const List = withClassName(
+	'div',
+	'grid grid-cols-[1fr] [grid-auto-rows:auto] gap-4 p-0 m-0 md:(grid-cols-[repeat(2,1fr)] [grid-auto-rows:1fr] items-end)',
+);
 
 function RecipeListContent() {
 	const [recipes, { loadMore, hasMore }] = useFilteredRecipes();
@@ -84,16 +84,13 @@ function RecipeListContent() {
 
 	return (
 		<>
-			<div className={classes.list}>
+			<List>
 				{recipes.map((recipe) => (
 					<RecipeListItem key={recipe.get('id')} recipe={recipe} />
 				))}
-			</div>
+			</List>
 			{hasMore && (
-				<InfiniteLoadTrigger
-					onVisible={loadMore}
-					className={sprinkles({ mt: 6, width: 'full' })}
-				>
+				<InfiniteLoadTrigger onVisible={loadMore} className="mt-6 w-full">
 					<Spinner />
 				</InfiniteLoadTrigger>
 			)}
@@ -101,48 +98,50 @@ function RecipeListContent() {
 	);
 }
 
+const Item = withClassName(
+	'div',
+	'flex flex-col border-light rounded-lg text-lg overflow-hidden h-max-content relative bg-gray1 min-h-200px md:(h-30vh max-h-400px)',
+);
+
 function RecipeListItem({ recipe }: { recipe: Recipe }) {
 	const { title } = hooks.useWatch(recipe);
 
 	const deleteRecipe = hooks.useDeleteRecipe();
 
 	return (
-		<div className={classes.item}>
-			<Link className={classes.itemContent} to={makeRecipeLink(recipe)}>
-				<div className={classes.tags}>
+		<Item>
+			<Link
+				className="flex flex-col gap-1 cursor-pointer transition p-4 pb-2 flex-1 relative z-1 hover:(bg-lightBlend color-black) md:pt-4"
+				to={makeRecipeLink(recipe)}
+			>
+				<div className="text-md">
 					<Suspense>
 						<RecipeTagsViewer recipe={recipe} />
 					</Suspense>
 				</div>
-				<div className={classes.itemTitle}>
+				<div className="flex flex-col gap-1 mt-auto bg-white p-2 rounded-lg w-auto mr-auto border border-solid border-grayDarkBlend">
 					<span>{title}</span>
 				</div>
 			</Link>
-			<RecipeMainImageViewer recipe={recipe} className={classes.itemImage} />
-			<div className={classes.itemActions}>
-				<div className={classes.itemActionsStart}>
+			<RecipeMainImageViewer
+				recipe={recipe}
+				className="absolute z-0 right-0 top-0 bottom-0 w-full h-full"
+			/>
+			<div className="flex flex-row p-2 bg-white relative z-1 border-0 border-t border-t-grayDarkBlend border-solid">
+				<div className="ml-0 mr-auto flex flex-row gap-1 items-center">
 					<RecipeStartCookingButton recipe={recipe} size="icon" color="primary">
-						<PlayIcon style={{ position: 'relative', left: 1 }} />
+						<PlayIcon className="relative left-1px" />
 					</RecipeStartCookingButton>
-					<AddToListButton
-						recipe={recipe}
-						color="ghost"
-						size="small"
-						className={classes.itemActionButton}
-					>
-						<PlusCircledIcon className={classes.actionIcon} />
+					<AddToListButton recipe={recipe} color="ghost" size="small">
+						<PlusCircledIcon className="w-20px h-20px" />
 						<span>Add to List</span>
 					</AddToListButton>
 				</div>
-				<div className={classes.itemActionsEnd}>
+				<div className="mr-0 ml-auto flex flex-row gap-1 items-center">
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button
-								size="icon"
-								color="ghost"
-								className={classes.itemActionButton}
-							>
-								<DotsVerticalIcon className={classes.actionIcon} />
+							<Button size="icon" color="ghost">
+								<DotsVerticalIcon className="w-20px h-20px" />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
@@ -159,10 +158,10 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 					</DropdownMenu>
 				</div>
 			</div>
-		</div>
+		</Item>
 	);
 }
 
 function RecipePlaceholderItem() {
-	return <Box className={classes.item}>&nbsp;</Box>;
+	return <Item>&nbsp;</Item>;
 }

@@ -1,9 +1,7 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { themeMap } from '@aglio/ui/styles';
 import classNames from 'classnames';
 import { forwardRef, Suspense, useState } from 'react';
 import { useRecipeFoodFilter, useRecipeTagFilter } from './hooks.js';
-import * as classes from './RecipeFilterAction.css.js';
 import { RecipeTagsList } from './RecipeTagsList.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import {
@@ -12,7 +10,6 @@ import {
 	PopoverContent,
 	PopoverTrigger,
 } from '@aglio/ui/components/popover';
-import { ThemeName } from '@aglio/ui/components/colorPicker';
 import { ActionButton } from '@aglio/ui/components/actions';
 import { Formik } from 'formik';
 import { Form, SubmitButton, TextField } from '@aglio/ui/src/components/forms';
@@ -30,7 +27,7 @@ export function RecipeTagFilterAction({}: RecipeFilterActionProps) {
 					<SelectedTagDisplay />
 				</PopoverTrigger>
 			</Suspense>
-			<PopoverContent containerClassName={classes.popoverContainer}>
+			<PopoverContent containerClassName="w-full">
 				<PopoverArrow />
 				<Suspense>
 					<RecipeTagsList
@@ -76,9 +73,8 @@ const SelectedTagDisplay = forwardRef<HTMLButtonElement, any>(
 				}}
 				ref={ref}
 				className={classNames(
-					classes.button,
-					selectedTag.get('color') &&
-						themeMap[selectedTag.get('color') as ThemeName],
+					'flex items-center justify-center gap-2',
+					selectedTag.get('color') && `theme-${selectedTag.get('color')}}`,
 				)}
 			>
 				{selectedTag.get('name')}
@@ -97,7 +93,7 @@ export function RecipeFoodFilterAction() {
 					<SelectedFoodDisplay />
 				</PopoverTrigger>
 			</Suspense>
-			<PopoverContent containerClassName={classes.popoverContainer}>
+			<PopoverContent containerClassName="w-full">
 				<PopoverArrow />
 				<FoodFilterContent onSubmit={() => setOpen(false)} />
 			</PopoverContent>
