@@ -387,6 +387,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 		),
 });
 
+const DEBUG = localStorage.getItem('DEBUG') === 'true';
 export function createClientDescriptor(options: { namespace: string }) {
 	return new ClientDescriptor<Presence, Profile>({
 		sync: {
@@ -402,9 +403,10 @@ export function createClientDescriptor(options: { namespace: string }) {
 		},
 		migrations,
 		namespace: options.namespace,
-		log: import.meta.env.DEV
-			? (...args: any[]) => console.debug('🎧', ...args)
-			: undefined,
+		log:
+			import.meta.env.DEV || DEBUG
+				? (...args: any[]) => console.debug('🎧', ...args)
+				: undefined,
 	});
 }
 
