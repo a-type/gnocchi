@@ -400,6 +400,7 @@ export function createClientDescriptor(options: { namespace: string }) {
 				id: '',
 				name: '',
 			},
+			useBroadcastChannel: true,
 		},
 		migrations,
 		namespace: options.namespace,
