@@ -1,4 +1,3 @@
-import { PantryHeader } from '@/components/pantry/PantryHeader.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';
 import {
@@ -10,15 +9,10 @@ import { Suspense } from 'react';
 
 export interface PantryPageProps {}
 
-const innerProps = {
-	gap: 3,
-} as const;
-
 export function PantryPage({}: PantryPageProps) {
 	return (
 		<PageRoot>
-			<PageContent fullHeight nav innerProps={innerProps}>
-				<PantryHeader />
+			<PageContent fullHeight innerProps={{ className: 'gap-3' }}>
 				<PageFixedArea>
 					<PantryActionBar />
 				</PageFixedArea>

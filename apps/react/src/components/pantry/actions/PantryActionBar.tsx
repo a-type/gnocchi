@@ -3,6 +3,7 @@ import { UndoAction } from '@/components/groceries/actions/UndoAction.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { ActionBar, ActionButton } from '@aglio/ui/components/actions';
 import { TrashIcon } from '@radix-ui/react-icons';
+import { AddItemAction } from './AddItemAction.jsx';
 
 export interface PantryActionBarProps {}
 
@@ -11,6 +12,7 @@ export function PantryActionBar({}: PantryActionBarProps) {
 		<ActionBar>
 			<UndoAction />
 			<RedoAction />
+			<AddItemAction />
 			<DeleteAllAction />
 		</ActionBar>
 	);

@@ -8,13 +8,11 @@ export function PageContent({
 	noPadding,
 	innerProps,
 	className,
-	nav = true,
 	...rest
 }: HTMLAttributes<HTMLDivElement> & {
 	fullHeight?: boolean;
 	noPadding?: boolean;
 	innerProps?: HTMLAttributes<HTMLDivElement>;
-	nav?: boolean;
 }) {
 	return (
 		<div
