@@ -13,6 +13,7 @@ import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
 import { TooltipProvider } from '@aglio/ui/components/tooltip';
 import { P, H1 } from '@aglio/ui/components/typography';
 import { ParticleLayer } from '@aglio/ui/components/particles';
+import { GlobalSyncingIndicator } from '@/components/sync/GlobalSyncingIndicator.jsx';
 
 export function App() {
 	const [queryClient] = useState(() => new QueryClient());
@@ -43,6 +44,7 @@ export function App() {
 										<Pages />
 										<Toaster position="bottom-center" />
 										<IconSpritesheet />
+										<GlobalSyncingIndicator />
 									</ParticleLayer>
 								</GroceriesProvider>
 							</QueryClientProvider>
