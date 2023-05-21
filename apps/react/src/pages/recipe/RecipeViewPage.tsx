@@ -8,7 +8,7 @@ export interface RecipeViewPageProps {}
 export function RecipeViewPage({}: RecipeViewPageProps) {
 	return (
 		<PageRoot>
-			<PageContent nav>
+			<PageContent>
 				<Outlet />
 			</PageContent>
 		</PageRoot>

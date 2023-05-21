@@ -8,7 +8,7 @@ export interface RecipesPageProps {}
 export function RecipesPage({}: RecipesPageProps) {
 	return (
 		<PageRoot>
-			<PageContent nav>
+			<PageContent>
 				<Suspense>
 					<RecipeList />
 				</Suspense>

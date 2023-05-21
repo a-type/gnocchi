@@ -8,7 +8,7 @@ import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import { useCallback, useRef } from 'react';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
-import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
+import { RecipeMultiplierField } from '../viewer/RecipeMultiplierField.jsx';
 
 export interface CookingToolbarProps {
 	recipe: Recipe;
@@ -23,7 +23,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 	return (
 		<PageNowPlaying
 			unstyled
-			className="w-full flex flex-col items-center relative bottom-[calc(0.25rem*-1)]"
+			className="w-full flex flex-col items-center relative bottom-[calc(0.25rem*-1)] max-w-600px"
 		>
 			<div className="flex flex-row gap-2 mb-3">
 				<Button

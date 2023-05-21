@@ -124,7 +124,7 @@ function TempAccessGroceriesView({ code }: { code: string }) {
 			<Suspense>
 				<ListContext.Provider value={listId}>
 					<ThemedPageRoot listId={listId}>
-						<PageContent fullHeight noPadding nav={false}>
+						<PageContent fullHeight noPadding>
 							<div className="flex flex-col p-3 gap-1 items-start bg-accent-wash color-accent-ink rounded-lg">
 								<P>This link lets you view someone else's list.</P>
 								<LinkButton size="small" to="/welcome" newTab color="accent">

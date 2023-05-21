@@ -3,7 +3,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
 import classNames from 'classnames';
-import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
+import { RecipeIngredientViewer } from '../viewer/RecipeIngredientViewer.jsx';
 
 export interface IngredientCheckoffViewProps {
 	recipe: Recipe;

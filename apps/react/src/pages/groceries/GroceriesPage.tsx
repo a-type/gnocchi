@@ -61,7 +61,7 @@ export function GroceriesPage() {
 		<ListContext.Provider value={listId}>
 			<RecipeSavePrompt />
 			<ThemedPageRoot listId={listId}>
-				<PageContent fullHeight noPadding nav>
+				<PageContent fullHeight noPadding>
 					<TopControls>
 						<ListSelectWrapper>
 							<ListSelect includeAll value={listId} onChange={onListChange} />

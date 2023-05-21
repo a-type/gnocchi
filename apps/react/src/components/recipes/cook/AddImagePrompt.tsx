@@ -1,4 +1,4 @@
-import { AppearWithScroll } from '@/components/recipes/viewer/AppearWithScroll.jsx';
+import { AppearWithScroll } from '@/components/recipes/cook/AppearWithScroll.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { ImageUploader } from '@aglio/ui/components/imageUploader';

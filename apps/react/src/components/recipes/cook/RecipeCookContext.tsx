@@ -1,7 +1,7 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { createContext, ReactNode, useContext, useEffect } from 'react';
-import { RecipeNotFound } from '../RecipeNotFound.jsx';
+import { RecipeNotFound } from '../RecipeNotFound.js';
 
 const RecipeCookContext = createContext<Recipe | null>(null);
 

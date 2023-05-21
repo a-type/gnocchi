@@ -1,7 +1,7 @@
-import { RecipeCookView } from '@/components/recipes/viewer/RecipeCookView.jsx';
+import { RecipeCookView } from '@/components/recipes/cook/RecipeCookView.jsx';
 
 export function RecipeCookStepsPage() {
-	return <RecipeCookView tab="cook" />;
+	return <RecipeCookView />;
 }
 
 export default RecipeCookStepsPage;

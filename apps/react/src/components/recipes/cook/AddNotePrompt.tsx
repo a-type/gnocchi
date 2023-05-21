@@ -1,4 +1,4 @@
-import { AppearWithScroll } from '@/components/recipes/viewer/AppearWithScroll.jsx';
+import { AppearWithScroll } from '@/components/recipes/cook/AppearWithScroll.jsx';
 import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 import { Recipe } from '@aglio/groceries-client';
 import { P } from '@aglio/ui/src/components/typography';
