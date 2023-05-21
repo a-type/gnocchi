@@ -35,6 +35,13 @@ const SUGGESTION_INTERVAL_END = addDays(NOW, 5).getTime();
 export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 	const [open, setOpen] = useLocalStorage('grocery-suggestions-open', true);
 
+	const alreadyPresent = hooks.useAllItems({
+		index: {
+			where: 'purchased',
+			equals: 'no',
+		},
+	});
+
 	const guessedFoodsRaw = hooks.useAllFoods({
 		index: {
 			where: 'repurchaseAfter',
@@ -44,7 +51,14 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 		},
 	});
 	// TODO: limit in lo-fi
-	const guessedFoods = guessedFoodsRaw.slice(0, 5);
+	const guessedFoods = guessedFoodsRaw
+		.filter(
+			(food) =>
+				!alreadyPresent.some(
+					(item) => item.get('food') === food.get('canonicalName'),
+				),
+		)
+		.slice(0, 5);
 	const guessedRecipesRaw = hooks.useAllRecipes({
 		index: {
 			where: 'suggestAfter',
@@ -54,7 +68,16 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 		},
 	});
 	const guessedRecipes = guessedRecipesRaw.slice(0, 5);
-	const expiresSoonItems = useExpiresSoonItems();
+	const expiresSoonItemsRaw = useExpiresSoonItems();
+	const expiresSoonItems = expiresSoonItemsRaw
+		.filter(
+			(item) =>
+				!alreadyPresent.some(
+					(alreadyPresentItem) =>
+						alreadyPresentItem.get('food') === item.get('food'),
+				),
+		)
+		.slice(0, 5);
 
 	if (
 		!guessedFoods.length &&
