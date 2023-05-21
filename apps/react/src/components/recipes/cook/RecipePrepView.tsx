@@ -9,9 +9,9 @@ export function RecipePrepView({}: RecipePrepViewProps) {
 
 	return (
 		<div className="flex flex-col gap-3 animate-fade-in-up">
-			<P className="text-xs">
+			<P className="text-xs mb-2">
 				Prepping ingredients by collecting them and pre-measuring quantities can
-				help cooking go faster. Use the button below to skip ahead.
+				help cooking go faster.
 			</P>
 			<IngredientCheckoffView recipe={recipe} />
 		</div>
