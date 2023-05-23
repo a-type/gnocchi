@@ -1,3 +1,4 @@
+import { useAnimationFrame } from '@/hooks/useAnimationFrame.js';
 import { preventDefault } from '@/lib/eventHandlers.js';
 import {
 	ActionButton,
@@ -17,22 +18,60 @@ export type LongPressActionProps = ActionButtonProps & {
 	onActivate: () => void;
 	duration?: number;
 	progressColor?: 'attentionLight' | 'accentLight' | 'primaryLight';
+	delay?: number;
 };
+
+/**
+ * The press gesture must remain within THRESHOLD_DISTANCE until delay time has passed
+ * to be considered a press.
+ *
+ * After delay, the gesture must remain within CANCEL_DISTANCE or be cancelled.
+ */
+const THRESHOLD_DISTANCE = 10;
+const CANCEL_DISTANCE = 20;
 
 export function LongPressAction({
 	onActivate,
 	progressColor = 'attentionLight',
 	children,
 	duration = 2000,
+	delay = 200,
 	...rest
 }: LongPressActionProps) {
-	const [state, setState] = useState<'holding' | 'idle' | 'failed'>('idle');
+	const [gestureState, setGestureState] = useState<'released' | 'pressed'>(
+		'released',
+	);
+	const [state, setState] = useState<'holding' | 'idle' | 'failed' | 'pending'>(
+		'idle',
+	);
 	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 	const ref = useRef<HTMLButtonElement>(null);
 
+	const gestureStateRef = useRef<{ distance: number; startedAt: number }>({
+		distance: 0,
+		startedAt: 0,
+	});
 	useDrag(
-		({ first, cancel, elapsedTime, down, distance, tap }) => {
+		({ first, cancel, elapsedTime, down, distance }) => {
+			const totalDistance = Math.sqrt(
+				Math.pow(distance[0], 2) + Math.pow(distance[1], 2),
+			);
+			gestureStateRef.current.distance = totalDistance;
+
+			if (elapsedTime < delay && totalDistance > THRESHOLD_DISTANCE) {
+				cancel();
+				setGestureState('released');
+				return;
+			}
+
+			if (totalDistance > CANCEL_DISTANCE) {
+				cancel();
+				setGestureState('released');
+				return;
+			}
+
 			if (first) {
+				gestureStateRef.current.startedAt = Date.now();
 				try {
 					navigator?.vibrate?.(200);
 				} catch (err) {
@@ -40,39 +79,59 @@ export function LongPressAction({
 				}
 			}
 
-			if (!down) {
-				if (elapsedTime < 300) {
-					setState('failed');
-					try {
-						navigator?.vibrate?.(200);
-					} catch (err) {
-						console.log(err);
-					}
-					cancel();
-				} else if (elapsedTime > duration) {
-					onActivate();
-					setState('idle');
-				} else {
-					setState('idle');
-				}
+			if (down) {
+				setGestureState('pressed');
 			} else {
-				if (
-					down &&
-					Math.sqrt(Math.pow(distance[0], 2) + Math.pow(distance[1], 2)) > 20
-				) {
-					cancel();
-					setState('failed');
-				} else {
-					setState('holding');
-				}
+				setGestureState('released');
 			}
 		},
 		{
-			triggerAllEvents: true,
-			preventDefault: true,
+			// triggerAllEvents: true,
+			// preventDefault: true,
 			target: ref,
 		},
 	);
+
+	useAnimationFrame(() => {
+		const gestureDuration = gestureStateRef.current.startedAt
+			? Date.now() - gestureStateRef.current.startedAt
+			: 0;
+		const distance = gestureStateRef.current.distance;
+
+		// nothing to do in this case
+		if (
+			gestureState === 'released' &&
+			(state === 'idle' || state === 'failed')
+		) {
+			return;
+		}
+
+		if (gestureState === 'released') {
+			if (state === 'holding') {
+				// holding for longer than duration - activate
+				if (gestureDuration >= duration + delay && distance < CANCEL_DISTANCE) {
+					onActivate();
+					setState('idle');
+				} else {
+					// normal release before duration - cancel
+					setState('idle');
+				}
+			} else if (state === 'pending' && distance < THRESHOLD_DISTANCE) {
+				setState('failed');
+			}
+		} else if (gestureState === 'pressed') {
+			// begin a new press
+			if (state === 'idle' || state === 'failed') {
+				setState('pending');
+			} else if (state === 'pending' && gestureDuration >= delay) {
+				// begin holding after delay has passed
+				setState('holding');
+			} else if (distance > CANCEL_DISTANCE) {
+				// cancel if moved too far
+				setState('idle');
+			}
+		}
+	});
 
 	useEffect(() => {
 		if (state === 'failed') {
@@ -86,14 +145,14 @@ export function LongPressAction({
 	}, [state]);
 
 	return (
-		<Popover modal={false} open={state !== 'idle'}>
+		<Popover modal={false} open={state !== 'idle' && state !== 'pending'}>
 			<PopoverAnchor asChild>
 				<ActionButton
 					size="small"
 					onContextMenu={preventDefault}
 					ref={ref}
 					{...rest}
-					className={classNames('touch-none', rest.className)}
+					className={classNames(rest.className)}
 				>
 					{children}
 				</ActionButton>
