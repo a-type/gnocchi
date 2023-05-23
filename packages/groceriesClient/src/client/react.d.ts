@@ -9,8 +9,6 @@ import type {
   ItemFilter,
   Food,
   FoodFilter,
-  Suggestion,
-  SuggestionFilter,
   List,
   ListFilter,
   CollaborationInfo,
@@ -173,37 +171,6 @@ export interface GeneratedHooks<Presence, Profile> {
   >(
     config?: Config
   ) => [Food[], { loadMore: () => void; hasMore: boolean }];
-
-  useSuggestion(id: string, config?: { skip?: boolean }): Suggestion | null;
-  useOneSuggestion: <Config extends SkippableFilterConfig<SuggestionFilter>>(
-    config?: Config
-  ) => Suggestion | null;
-  useAllSuggestions: <Config extends SkippableFilterConfig<SuggestionFilter>>(
-    config?: Config
-  ) => Suggestion[];
-  useAllSuggestionsPaginated: <
-    Config extends SkippableFilterConfig<SuggestionFilter> & {
-      pageSize?: number;
-    }
-  >(
-    config?: Config
-  ) => [
-    Suggestion[],
-    {
-      next: () => void;
-      previous: () => void;
-      setPage: (page: number) => void;
-      hasNext: boolean;
-      hasPrevious: boolean;
-    }
-  ];
-  useAllSuggestionsInfinite: <
-    Config extends SkippableFilterConfig<SuggestionFilter> & {
-      pageSize?: number;
-    }
-  >(
-    config?: Config
-  ) => [Suggestion[], { loadMore: () => void; hasMore: boolean }];
 
   useList(id: string, config?: { skip?: boolean }): List | null;
   useOneList: <Config extends SkippableFilterConfig<ListFilter>>(

@@ -137,7 +137,7 @@ function FoodFilterContent({ onSubmit }: { onSubmit?: () => void }) {
 				const lookup = await client.foods.findOne({
 					index: {
 						where: 'nameLookup',
-						equals: foodName,
+						startsWith: foodName,
 					},
 				}).resolved;
 

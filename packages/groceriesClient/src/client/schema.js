@@ -97,10 +97,10 @@ const foods = collection({
     synthetics: {
         nameLookup: {
             type: 'string[]',
-            compute: (food)=>[
+            compute: (food)=>Array.from(new Set([
                     food.canonicalName,
                     ...food.alternateNames
-                ]
+                ].map(fullTextIndex))).flat()
         },
         repurchaseAfter: {
             type: 'number',
@@ -234,20 +234,6 @@ const items = collection({
                 'purchased',
                 'listId'
             ]
-        }
-    }
-});
-const suggestions = collection({
-    name: 'suggestion',
-    primaryKey: 'text',
-    fields: {
-        text: {
-            type: 'string'
-        },
-        usageCount: {
-            type: 'number',
-            default: 0,
-            indexed: true
         }
     }
 });
@@ -506,12 +492,11 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 32,
+    version: 33,
     collections: {
         categories,
         items,
         foods,
-        suggestions,
         lists,
         collaborationInfo,
         recipes,

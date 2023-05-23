@@ -586,29 +586,6 @@ export async function addItems(
 					});
 				}
 			}
-
-			// increment usage count for this food
-			const matchingSuggestion = await client.suggestions.get(parsed.food)
-				.resolved;
-			if (matchingSuggestion) {
-				client
-					.batch({ undoable: false })
-					.run(() => {
-						matchingSuggestion.set(
-							'usageCount',
-							matchingSuggestion.get('usageCount') + 1,
-						);
-					})
-					.flush();
-			} else {
-				await client.suggestions.put(
-					{
-						text: parsed.food,
-						usageCount: 1,
-					},
-					{ undoable: false },
-				);
-			}
 		}),
 	);
 

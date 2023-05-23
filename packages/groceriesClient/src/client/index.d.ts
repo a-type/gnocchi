@@ -46,12 +46,6 @@ export class Client<Presence = any, Profile = any> {
 
   readonly foods: CollectionQueries<Food, FoodInit, FoodFilter>;
 
-  readonly suggestions: CollectionQueries<
-    Suggestion,
-    SuggestionInit,
-    SuggestionFilter
-  >;
-
   readonly lists: CollectionQueries<List, ListInit, ListFilter>;
 
   readonly collaborationInfo: CollectionQueries<
@@ -516,6 +510,12 @@ export interface FoodNameLookupRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface FoodNameLookupStartsWithFilter {
+  where: "nameLookup";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
 export interface FoodRepurchaseAfterMatchFilter {
   where: "repurchaseAfter";
   equals: number;
@@ -537,6 +537,7 @@ export type FoodFilter =
   | FoodCategoryIdStartsWithFilter
   | FoodNameLookupMatchFilter
   | FoodNameLookupRangeFilter
+  | FoodNameLookupStartsWithFilter
   | FoodRepurchaseAfterMatchFilter
   | FoodRepurchaseAfterRangeFilter;
 
@@ -627,50 +628,6 @@ export type FoodPluralizeName = boolean;
 export type FoodPluralizeNameInit = FoodPluralizeName | undefined;
 export type FoodPluralizeNameSnapshot = FoodPluralizeName;
 export type FoodPluralizeNameDestructured = FoodPluralizeName;
-
-export type Suggestion = ObjectEntity<SuggestionInit, SuggestionDestructured>;
-
-export interface SuggestionUsageCountMatchFilter {
-  where: "usageCount";
-  equals: number;
-  order?: "asc" | "desc";
-}
-
-export interface SuggestionUsageCountRangeFilter {
-  where: "usageCount";
-  gte?: number;
-  gt?: number;
-  lte?: number;
-  lt?: number;
-  order?: "asc" | "desc";
-}
-
-export type SuggestionFilter =
-  | SuggestionUsageCountMatchFilter
-  | SuggestionUsageCountRangeFilter;
-
-export type SuggestionDestructured = {
-  text: string;
-  usageCount: number;
-};
-export type SuggestionInit = {
-  text: string;
-  usageCount?: number;
-};
-export type SuggestionSnapshot = {
-  text: string;
-  usageCount: number;
-};
-/** Suggestion sub-object types */
-
-export type SuggestionText = string;
-export type SuggestionTextInit = SuggestionText;
-export type SuggestionTextSnapshot = SuggestionText;
-export type SuggestionTextDestructured = SuggestionText;
-export type SuggestionUsageCount = number;
-export type SuggestionUsageCountInit = SuggestionUsageCount | undefined;
-export type SuggestionUsageCountSnapshot = SuggestionUsageCount;
-export type SuggestionUsageCountDestructured = SuggestionUsageCount;
 
 export type List = ObjectEntity<ListInit, ListDestructured>;
 
@@ -814,6 +771,12 @@ export interface RecipeTagRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipeTagStartsWithFilter {
+  where: "tag";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
 export interface RecipeSuggestAfterMatchFilter {
   where: "suggestAfter";
   equals: number;
@@ -844,6 +807,12 @@ export interface RecipeFoodRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipeFoodStartsWithFilter {
+  where: "food";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
 export interface RecipeTitleMatchMatchFilter {
   where: "titleMatch";
   equals: string;
@@ -856,6 +825,12 @@ export interface RecipeTitleMatchRangeFilter {
   gt?: string;
   lte?: string;
   lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface RecipeTitleMatchStartsWithFilter {
+  where: "titleMatch";
+  startsWith: string;
   order?: "asc" | "desc";
 }
 
@@ -882,12 +857,15 @@ export type RecipeFilter =
   | RecipeUpdatedAtRangeFilter
   | RecipeTagMatchFilter
   | RecipeTagRangeFilter
+  | RecipeTagStartsWithFilter
   | RecipeSuggestAfterMatchFilter
   | RecipeSuggestAfterRangeFilter
   | RecipeFoodMatchFilter
   | RecipeFoodRangeFilter
+  | RecipeFoodStartsWithFilter
   | RecipeTitleMatchMatchFilter
   | RecipeTitleMatchRangeFilter
+  | RecipeTitleMatchStartsWithFilter
   | RecipeSessionStartedAtMatchFilter
   | RecipeSessionStartedAtRangeFilter;
 

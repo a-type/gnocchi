@@ -13,7 +13,7 @@ export function GlobalSyncingIndicator({}: GlobalSyncingIndicatorProps) {
 
 	if (syncing) {
 		return (
-			<div className="fixed top-2 right-2 z-tooltip bg-gray-1 rounded-full p-1 text-xs flex flex-row gap-1 items-center">
+			<div className="fixed top-2 right-2 z-tooltip bg-gray-1 rounded-full p-1 text-xs flex flex-row gap-1 items-center animate-fade-in animate-delay-500">
 				<ReloadIcon className="animate-spin" />
 				<span>Syncing</span>
 			</div>

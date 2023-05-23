@@ -29,6 +29,7 @@ import {
 import { Input } from '@aglio/ui/components/input';
 import { withClassName } from '@aglio/ui/hooks';
 import { Button } from '@aglio/ui/components/button';
+import pluralize from 'pluralize';
 
 export interface AddBarProps {
 	className?: string;
@@ -81,16 +82,26 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			useState(getRandomPlaceholder);
 		const placeholder = randomPlaceholder;
 
-		// all suggestions are loaded. filtering is done in-memory.
-		const suggestions = hooks.useAllSuggestions({
+		const [suggestionPrompt, setSuggestionPrompt] = useState('');
+		const [_, startTransition] = useTransition();
+
+		const suggestions = hooks.useAllFoods({
 			index: {
-				where: 'usageCount',
-				order: 'desc',
+				where: 'nameLookup',
+				startsWith: suggestionPrompt,
 			},
 		});
 
-		const [suggestionPrompt, setSuggestionPrompt] = useState('');
-		const [_, startTransition] = useTransition();
+		const filteredSuggestions = useMemo(() => {
+			return suggestions
+				.sort((a, b) => {
+					return a.get('purchaseCount') > b.get('purchaseCount') ? -1 : 1;
+				})
+				.map((s) => {
+					if (s.get('pluralizeName')) return pluralize(s.get('canonicalName'));
+					else return s.get('canonicalName');
+				});
+		}, [suggestions]);
 
 		const contentRef = useRef<HTMLDivElement>(null);
 		const innerRef = useSize(({ width }) => {
@@ -98,24 +109,6 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 				contentRef.current.style.width = width + 'px';
 			}
 		});
-
-		const filteredSuggestions = useMemo(() => {
-			if (!suggestionPrompt) {
-				return suggestions
-					.slice(0, 10)
-					.map((suggestion) => suggestion.get('text'));
-			} else {
-				return suggestions
-					.filter((suggestion) =>
-						suggestion
-							.get('text')
-							.toLocaleLowerCase()
-							.startsWith(suggestionPrompt.toLocaleLowerCase()),
-					)
-					.slice(0, 10)
-					.map((suggestion) => suggestion.get('text'));
-			}
-		}, [suggestionPrompt]);
 
 		const {
 			isOpen,
@@ -215,7 +208,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 					{...getMenuProps({
 						ref: contentRef,
 					})}
-					className="overflow-x-hidden overflow-y-auto max-h-20vh lg:max-h-50vh"
+					className="overflow-x-hidden overflow-y-auto max-h-20vh lg:max-h-50vh rounded-lg w-full max-w-none"
 				>
 					<ul className="flex flex-col list-none m-0 p-0">
 						{inputIsUrl ? (
