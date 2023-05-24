@@ -62,7 +62,7 @@ function ExpiresSoonItem({ item }: { item: Item }) {
 				<div className="flex-1">
 					<LookupFoodName foodName={food} />
 				</div>
-				<div className="flex flex-col gap-1 text-sm">
+				<div className="flex flex-col gap-1 text-xs">
 					<div className="ml-auto color-attentionDark">
 						{inThePast ? 'Expired' : 'Expires'}{' '}
 						{formatDistanceToNowStrict(expiresAt, { addSuffix: true })}

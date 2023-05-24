@@ -1,8 +1,8 @@
-import { UserInfo } from '@verdant-web/store';
 import { Profile } from '@/stores/groceries/index.js';
 import classNames from 'classnames';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { CSSProperties } from 'react';
+import { UserInfo } from '@aglio/groceries-client';
 
 export function PersonAvatar({
 	person,
@@ -19,10 +19,10 @@ export function PersonAvatar({
 		<div
 			data-pop={popIn}
 			className={classNames(
-				'flex items-center justify-center rounded-full border-default p-2px overflow-hidden w-24px h-24px select-none relative bg-white',
+				'layer-components:(flex items-center justify-center rounded-full border-default p-2px overflow-hidden w-24px h-24px select-none relative bg-white flex-shrink-0)',
 				popIn &&
-					'animate-pop-in-from-half animate-ease-springy animate-duration-200',
-				!person && 'border-dashed bg-gray2',
+					'layer-variants:(animate-pop-in-from-half animate-ease-springy animate-duration-200)',
+				!person && 'layer-components(border-dashed bg-gray2)',
 				className,
 			)}
 			{...rest}

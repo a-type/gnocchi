@@ -25,6 +25,7 @@ import { toast } from 'react-hot-toast';
 export interface Presence {
 	lastInteractedItem: string | null;
 	viewingRecipeId: string | null;
+	lastInteractedCategory: string | null;
 }
 
 export interface Profile {
@@ -37,8 +38,12 @@ export type Person = UserInfo<Profile, Presence>;
 
 export const hooks = createHooks<Presence, Profile>().withMutations({
 	useDeleteItem: (client) => {
-		return useCallback((item: Item) => {
-			return client.items.delete(item.get('id'));
+		return useCallback(async (item: Item) => {
+			await client.items.delete(item.get('id'));
+			client.sync.presence.update({
+				lastInteractedItem: item.get('id'),
+				lastInteractedCategory: item.get('categoryId') ?? null,
+			});
 		}, []);
 	},
 	useDeleteItems: (client) =>
@@ -104,6 +109,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				}
 				client.sync.presence.update({
 					lastInteractedItem: item.get('id'),
+					lastInteractedCategory: item.get('categoryId') ?? null,
 				});
 			},
 			[client],
@@ -152,6 +158,11 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						food.set('purchaseCount', previousPurchaseCount + 1);
 					}
 				});
+
+				client.sync.presence.update({
+					lastInteractedItem: item.get('id'),
+					lastInteractedCategory: item.get('categoryId') ?? null,
+				});
 			},
 			[client],
 		),
@@ -180,6 +191,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				item.update(updates);
 				client.sync.presence.update({
 					lastInteractedItem: item.get('id'),
+					lastInteractedCategory: item.get('categoryId'),
 				});
 			},
 			[client],
@@ -199,6 +211,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				}
 				client.sync.presence.update({
 					lastInteractedItem: item.get('id'),
+					lastInteractedCategory: categoryId,
 				});
 			},
 			[client],
@@ -395,6 +408,7 @@ export function createClientDescriptor(options: { namespace: string }) {
 			initialPresence: {
 				lastInteractedItem: null,
 				viewingRecipeId: null,
+				lastInteractedCategory: null,
 			},
 			defaultProfile: {
 				id: '',

@@ -1,7 +1,12 @@
 import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
-import { hooks } from '@/stores/groceries/index.js';
+import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
-import { ReactNode } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
+import { UserInfo } from '@aglio/groceries-client';
+
+const PeopleContext = createContext<{ size: number }>({
+	size: 24,
+});
 
 export function People({
 	hideIfAlone,
@@ -38,19 +43,23 @@ export function People({
 export function PeopleList({
 	children,
 	count,
+	size = 24,
 }: {
 	children: ReactNode;
 	count: number;
+	size?: number;
 }) {
-	const width = count > 0 ? 24 + (count - 1) * 16 : 0;
+	const width = count > 0 ? size + (count - 1) * ((size * 2) / 3) : 0;
 
 	return (
-		<div
-			className="relative h-24px flex-basis-auto"
-			style={{ width, minWidth: width }}
-		>
-			{children}
-		</div>
+		<PeopleContext.Provider value={{ size }}>
+			<div
+				className="relative flex-basis-auto"
+				style={{ width, minWidth: width, height: size }}
+			>
+				{children}
+			</div>
+		</PeopleContext.Provider>
 	);
 }
 
@@ -61,10 +70,15 @@ export function PeopleListItem({
 	index: number;
 	children: ReactNode;
 }) {
+	const { size } = useContext(PeopleContext);
 	return (
 		<div
 			className="absolute"
-			style={{ left: index === 0 ? 0 : index * 16, zIndex: index, top: 0 }}
+			style={{
+				left: index === 0 ? 0 : index * ((size * 2) / 3),
+				zIndex: index,
+				top: 0,
+			}}
 		>
 			{children}
 		</div>
@@ -95,6 +109,27 @@ function PeerAvatar({
 	return (
 		<PeopleListItem index={index}>
 			<PersonAvatar person={peer} className={className} />
+		</PeopleListItem>
+	);
+}
+
+export function PeopleListAvatar({
+	person,
+	index,
+	...rest
+}: {
+	person: UserInfo<Profile, Presence> | null;
+	index: number;
+	popIn?: boolean;
+}) {
+	const { size } = useContext(PeopleContext);
+	return (
+		<PeopleListItem index={index}>
+			<PersonAvatar
+				person={person}
+				style={{ width: size, height: size }}
+				{...rest}
+			/>
 		</PeopleListItem>
 	);
 }

@@ -103,7 +103,7 @@ export function GrocerySuggestions({}: GrocerySuggestionsProps) {
 				<CategoryTitleRow className="cursor-pointer">
 					<CaretDownIcon className="mr-2 transition-transform-200 [div[aria-expanded=true]>&]:transform-rotate-180deg" />
 					<CategoryTitle className="text-xs">Suggested</CategoryTitle>
-					<Icon name="magic" className="mr-3 color-gray-7" />
+					<Icon name="magic" className="mr-4 color-gray-7" />
 				</CategoryTitleRow>
 			</CollapsibleTrigger>
 			<CollapsibleContent>

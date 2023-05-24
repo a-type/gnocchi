@@ -31,7 +31,7 @@ function RecipePresenceNotificationContent() {
 	const [dismissedId, setDismissedId] = useState('');
 
 	const viewingRecipe = hooks.useFindPeer((peer) => {
-		return !!peer.presence.viewingRecipeId;
+		return !!peer?.presence?.viewingRecipeId;
 	});
 
 	const recipeId = viewingRecipe?.presence.viewingRecipeId;

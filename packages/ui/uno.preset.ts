@@ -171,6 +171,14 @@ export default function presetAglio(): Preset {
             from { width: var(--radix-collapsible-content-width) }
             to { width: 0 }
           }`,
+					'radix-collapsible-open-both': `{
+						from { width: 0; height: 0 }
+						to { width: var(--radix-collapsible-content-width); height: var(--radix-collapsible-content-height) }
+					}`,
+					'radix-collapsible-close-both': `{
+						from { width: var(--radix-collapsible-content-width); height: var(--radix-collapsible-content-height) }
+						to { width: 0; height: 0 }
+					}`,
 					'peek-close': `{
 						from { height: calc(var(--collapsible-height) + 80px); max-height: none; }
 						to { height: min(var(--peek-height, 120px), var(--collapsible-height)); max-height: var(--peek-height, 120px); }
@@ -216,6 +224,16 @@ export default function presetAglio(): Preset {
 					'fade-in': 'ease-out',
 					'fade-out': 'ease-in',
 					'scan-line': 'linear',
+					'radix-collapsible-open-vertical':
+						'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'radix-collapsible-close-vertical':
+						'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'radix-collapsible-open-horizontal':
+						'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'radix-collapsible-close-horizontal':
+						'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'radix-collapsible-open-both': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'radix-collapsible-close-both': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
 				},
 				durations: {
 					'fade-in-up': '300ms',
@@ -232,6 +250,13 @@ export default function presetAglio(): Preset {
 					'fade-in-right-big': '400ms',
 					'fade-in': '200ms',
 					'fade-out': '200ms',
+					'scan-line': '1.5s',
+					'radix-collapsible-open-vertical': '300ms',
+					'radix-collapsible-close-vertical': '300ms',
+					'radix-collapsible-open-horizontal': '300ms',
+					'radix-collapsible-close-horizontal': '300ms',
+					'radix-collapsible-open-both': '300ms',
+					'radix-collapsible-close-both': '300ms',
 				},
 			},
 		},
