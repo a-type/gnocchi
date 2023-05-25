@@ -61,9 +61,11 @@ export function RecipeIngredientViewer({
 	const convertOptions: string[] = useMemo(() => {
 		if (!officialUnit) return [];
 		try {
-			return convertUnits()
+			const possibilities = convertUnits()
 				.from(officialUnit.abbr)
-				.possibilities()
+				.possibilities();
+			console.log(possibilities);
+			return possibilities
 				.filter((opt: string) => usefulUnits.includes(opt))
 				.filter((opt: string) => opt !== officialUnit.abbr);
 		} catch {
@@ -168,9 +170,7 @@ const usefulUnits = [
 	'lb',
 	'cup',
 	'tsp',
-	'tbsp',
-	'tb',
-	'T',
+	'Tbs',
 	'pt',
 	'qt',
 	'gal',
