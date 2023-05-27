@@ -102,6 +102,13 @@ const foods = collection({
                     ...food.alternateNames
                 ].map(fullTextIndex))).flat()
         },
+        anyName: {
+            type: 'string[]',
+            compute: (food)=>[
+                    food.canonicalName,
+                    ...food.alternateNames
+                ]
+        },
         repurchaseAfter: {
             type: 'number',
             compute: (food)=>{
@@ -492,7 +499,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 33,
+    version: 34,
     collections: {
         categories,
         items,

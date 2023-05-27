@@ -70,7 +70,7 @@ function FoodDetailView({
 	const client = hooks.useClient();
 	const food = hooks.useOneFood({
 		index: {
-			where: 'nameLookup',
+			where: 'anyName',
 			equals: foodName,
 		},
 		skip: !open,

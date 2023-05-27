@@ -516,6 +516,27 @@ export interface FoodNameLookupStartsWithFilter {
   order?: "asc" | "desc";
 }
 
+export interface FoodAnyNameMatchFilter {
+  where: "anyName";
+  equals: string;
+  order?: "asc" | "desc";
+}
+
+export interface FoodAnyNameRangeFilter {
+  where: "anyName";
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
+  order?: "asc" | "desc";
+}
+
+export interface FoodAnyNameStartsWithFilter {
+  where: "anyName";
+  startsWith: string;
+  order?: "asc" | "desc";
+}
+
 export interface FoodRepurchaseAfterMatchFilter {
   where: "repurchaseAfter";
   equals: number;
@@ -538,6 +559,9 @@ export type FoodFilter =
   | FoodNameLookupMatchFilter
   | FoodNameLookupRangeFilter
   | FoodNameLookupStartsWithFilter
+  | FoodAnyNameMatchFilter
+  | FoodAnyNameRangeFilter
+  | FoodAnyNameStartsWithFilter
   | FoodRepurchaseAfterMatchFilter
   | FoodRepurchaseAfterRangeFilter;
 
