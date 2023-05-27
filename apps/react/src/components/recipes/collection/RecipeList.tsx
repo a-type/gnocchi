@@ -113,6 +113,7 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 			<Link
 				className="flex flex-col gap-1 cursor-pointer transition p-4 pb-2 flex-1 relative z-1 hover:(bg-lightBlend color-black) md:pt-4"
 				to={makeRecipeLink(recipe)}
+				preserveQuery
 			>
 				<div className="text-md">
 					<Suspense>
@@ -129,7 +130,12 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 			/>
 			<div className="flex flex-row p-2 bg-white relative z-1 border-0 border-t border-t-grayDarkBlend border-solid">
 				<div className="ml-0 mr-auto flex flex-row gap-1 items-center">
-					<RecipeStartCookingButton recipe={recipe} size="icon" color="primary">
+					<RecipeStartCookingButton
+						preserveQuery
+						recipe={recipe}
+						size="icon"
+						color="primary"
+					>
 						<PlayIcon className="relative left-1px" />
 					</RecipeStartCookingButton>
 					<AddToListButton recipe={recipe} color="ghost" size="small">

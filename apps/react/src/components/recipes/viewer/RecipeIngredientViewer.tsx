@@ -64,7 +64,6 @@ export function RecipeIngredientViewer({
 			const possibilities = convertUnits()
 				.from(officialUnit.abbr)
 				.possibilities();
-			console.log(possibilities);
 			return possibilities
 				.filter((opt: string) => usefulUnits.includes(opt))
 				.filter((opt: string) => opt !== officialUnit.abbr);
