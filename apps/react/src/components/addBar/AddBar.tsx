@@ -88,7 +88,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 		const suggestions = hooks.useAllFoods({
 			index: {
 				where: 'nameLookup',
-				startsWith: suggestionPrompt,
+				startsWith: suggestionPrompt?.toLowerCase().trim() ?? '',
 			},
 		});
 
