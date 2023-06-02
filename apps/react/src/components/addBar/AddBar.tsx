@@ -208,7 +208,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 					{...getMenuProps({
 						ref: contentRef,
 					})}
-					className="overflow-x-hidden overflow-y-auto max-h-20vh lg:max-h-50vh rounded-lg w-full max-w-none"
+					className="overflow-x-hidden overflow-y-auto max-h-30vh lg:max-h-50vh rounded-lg w-full max-w-none"
 				>
 					<ul className="flex flex-col list-none m-0 p-0">
 						{inputIsUrl ? (

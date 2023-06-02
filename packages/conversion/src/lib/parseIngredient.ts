@@ -7,6 +7,7 @@ import {
 	reverseGreedyMatchComment,
 } from './greedyMatchers.js';
 import { numberParser } from './numberParser.js';
+import { sanitize } from './sanitize.js';
 import { unitParser } from './unitParser.js';
 
 const DEFAULT_UNIT = '';
@@ -36,7 +37,7 @@ export function parseIngredient(source: string): {
 	comments: string[];
 	isSectionHeader: boolean;
 } {
-	const numberResult = greedyMatchNumber(source);
+	const numberResult = greedyMatchNumber(sanitize(source));
 	const unitResult = greedyMatchUnit(numberResult.remaining);
 	const ofResult = greedyMatchOf(unitResult.remaining);
 	const commentResult = reverseGreedyMatchComment(ofResult.remaining);

@@ -5,8 +5,8 @@ import {
 	numberWords,
 	unitAbbreviationPlurals,
 	unitAbbreviations,
+	knownUnitSingulars,
 } from './lists.js';
-import { knownUnitSingulars } from './units.js';
 
 export function greedyMatchNumber(
 	input: string,
