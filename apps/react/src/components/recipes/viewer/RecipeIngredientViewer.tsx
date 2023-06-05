@@ -21,6 +21,7 @@ import {
 	CollapsibleRoot,
 } from '@aglio/ui/components/collapsible';
 import { useToggle } from '@aglio/ui/hooks';
+import { useUnitConversion } from '@/components/recipes/viewer/unitConversion.js';
 
 (window as any).convertUnits = convertUnits;
 
@@ -39,6 +40,7 @@ export function RecipeIngredientViewer({
 }: RecipeIngredientViewerProps) {
 	const { note, isSectionHeader, quantity, unit } = hooks.useWatch(ingredient);
 	const officialUnit = lookupUnit(unit);
+	const [conversion, setConversion] = useUnitConversion(officialUnit?.abbr);
 
 	const [showNote, toggleShowNote] = useToggle(false);
 
@@ -48,14 +50,15 @@ export function RecipeIngredientViewer({
 		}
 	}, [note, toggleShowNote]);
 
-	const [conversion, setConversion] = useState<string>();
-
 	const convertedValue = useMemo(() => {
 		if (!conversion || !officialUnit) return undefined;
 		const result = convertUnits(quantity)
 			.from(officialUnit.abbr)
 			.to(conversion);
-		return `${fractionToText(result)} ${friendlyUnit(conversion, result <= 1)}`;
+		return `${fractionToText(result)} ${friendlyUnit(
+			conversion,
+			result === 1,
+		)}`;
 	}, [conversion, officialUnit, quantity]);
 
 	const convertOptions: string[] = useMemo(() => {
@@ -75,24 +78,32 @@ export function RecipeIngredientViewer({
 	const conversionEnabled =
 		!!officialUnit && !!convertOptions.length && !isSectionHeader;
 
+	const resetConversion = useCallback(() => {
+		setConversion(undefined);
+	}, [setConversion]);
+
 	return (
 		<div
 			className={classNames(
-				'flex flex-col items-end gap-2',
+				'flex flex-col items-end gap-1',
 				isSectionHeader && 'font-bold',
 				className,
 			)}
 		>
 			<div className="flex flex-row w-full">
 				<IngredientText
-					className="flex-1 block"
+					className="flex-1 block mt-2"
 					multiplier={multiplier}
 					ingredient={ingredient}
 				/>
 				<div className="flex flex-row gap-2 items-center">
 					{conversionEnabled && (
 						<>
-							<DropdownMenu>
+							<DropdownMenu
+								onOpenChange={(open) => {
+									if (open) resetConversion();
+								}}
+							>
 								<Tooltip content="Convert">
 									<DropdownMenuTrigger asChild>
 										<Button size="icon" color="ghost">
@@ -137,7 +148,7 @@ export function RecipeIngredientViewer({
 				className="mr-auto self-start italic color-gray7"
 			>
 				<CollapsibleContent className="pr-2">
-					<span className="text-sm">Converted: {convertedValue}</span>
+					<span className="text-xs">{convertedValue}</span>
 				</CollapsibleContent>
 			</CollapsibleRoot>
 			<CollapsibleRoot open={showNote}>
