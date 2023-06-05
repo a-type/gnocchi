@@ -15,6 +15,7 @@ import {
 } from '@aglio/ui/components/popover';
 import { Button } from '@aglio/ui/components/button';
 import { H2 } from '@aglio/ui/components/typography';
+import { RecipeAddTag } from '@/components/recipes/editor/RecipeAddTag.jsx';
 
 export interface RecipeTagsEditorProps {
 	recipe: Recipe;
@@ -37,7 +38,7 @@ export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 						<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
 					</Suspense>
 				))}
-				<TagAdd recipe={recipe} empty={tags?.length === 0} />
+				<RecipeAddTag recipe={recipe} empty={tags?.length === 0} />
 			</div>
 		</div>
 	);
@@ -68,46 +69,5 @@ function TagDisplay({
 				<Cross2Icon />
 			</Button>
 		</div>
-	);
-}
-
-function TagAdd({
-	recipe,
-	onAdd,
-	empty,
-}: {
-	recipe: Recipe;
-	onAdd?: () => void;
-	empty?: boolean;
-}) {
-	const [open, setOpen] = useState(false);
-	const addTag = (tagName: string | null) => {
-		if (tagName === null) return;
-		recipe.get('tags').add(tagName);
-		onAdd?.();
-		setOpen(false);
-	};
-	const { tags } = hooks.useWatch(recipe);
-	hooks.useWatch(tags);
-	const tagsSnapshot = tags?.getSnapshot() ?? [];
-
-	return (
-		<Popover open={open} onOpenChange={setOpen}>
-			<PopoverTrigger asChild>
-				<Button size="small">
-					<PlusIcon />
-					{empty && <span>Add tag</span>}
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent className="max-w-350px">
-				<PopoverArrow />
-				<Suspense>
-					<NewTagForm onCreate={addTag} />
-					<div className="mt-4">
-						<RecipeTagsList onSelect={addTag} omit={tagsSnapshot} />
-					</div>
-				</Suspense>
-			</PopoverContent>
-		</Popover>
 	);
 }

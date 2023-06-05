@@ -22,15 +22,17 @@ import {
 	DotsVerticalIcon,
 	PlayIcon,
 	PlusCircledIcon,
+	PlusIcon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import { RecipeListActions } from './RecipeListActions.jsx';
 import { useFilteredRecipes } from './hooks.js';
 import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
 import { RecipeStartCookingButton } from '@/components/recipes/viewer/RecipeStartCookingButton.jsx';
+import { RecipeAddTag } from '@/components/recipes/editor/RecipeAddTag.jsx';
 
 export interface RecipeListProps {}
 
@@ -108,6 +110,8 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 
 	const deleteRecipe = hooks.useDeleteRecipe();
 
+	const [menuOpen, setMenuOpen] = useState(false);
+
 	return (
 		<Item>
 			<Link
@@ -144,16 +148,37 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 					</AddToListButton>
 				</div>
 				<div className="mr-0 ml-auto flex flex-row gap-1 items-center">
-					<DropdownMenu>
+					<DropdownMenu
+						open={menuOpen}
+						onOpenChange={(open) => {
+							if (open) setMenuOpen(true);
+						}}
+					>
 						<DropdownMenuTrigger asChild>
 							<Button size="icon" color="ghost">
 								<DotsVerticalIcon className="w-20px h-20px" />
 							</Button>
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
+							<RecipeAddTag
+								recipe={recipe}
+								onAdd={() => {
+									setMenuOpen(false);
+								}}
+							>
+								<DropdownMenuItem>
+									<span>Add Tag</span>
+									<DropdownMenuItemRightSlot>
+										<PlusIcon />
+									</DropdownMenuItemRightSlot>
+								</DropdownMenuItem>
+							</RecipeAddTag>
 							<DropdownMenuItem
 								color="destructive"
-								onSelect={() => deleteRecipe(recipe.get('id'))}
+								onSelect={() => {
+									deleteRecipe(recipe.get('id'));
+									setMenuOpen(false);
+								}}
 							>
 								<span>Delete</span>
 								<DropdownMenuItemRightSlot>
