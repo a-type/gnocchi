@@ -9,6 +9,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import StarterKit from '@tiptap/starter-kit';
 import { SESSION_TIMEOUT } from '@/components/recipes/constants.js';
+import Link from '@tiptap/extension-link';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -64,7 +65,7 @@ export function useSyncedInstructionsEditor({
 }
 
 export function useSyncedPreludeEditor(recipe: Recipe, readonly = false) {
-	return useSyncedEditor(recipe, 'prelude', readonly, [StarterKit]);
+	return useSyncedEditor(recipe, 'prelude', readonly, [StarterKit, Link]);
 }
 
 function useSyncedEditor(

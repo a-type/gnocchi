@@ -6,6 +6,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import { InstructionStepNodeView } from './InstructionStepNodeView.jsx';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import cuid from 'cuid';
+import Link from '@tiptap/extension-link';
 
 declare module '@tiptap/core' {
 	interface Commands<ReturnType> {
@@ -215,5 +216,6 @@ export function createTiptapExtensions(recipe?: Recipe, basicEditor = false) {
 		Step,
 		SectionTitle,
 		RecipeDocument,
+		Link,
 	];
 }
