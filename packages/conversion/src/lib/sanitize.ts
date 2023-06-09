@@ -8,4 +8,4 @@ export function sanitize(text: string) {
 	return text.trim();
 }
 
-const removeLeadingChars = ['-', '*', '•', '□', '▪', '▫'];
+const removeLeadingChars = ['-', '*', '•', '□', '▪', '▫', '▢'];
