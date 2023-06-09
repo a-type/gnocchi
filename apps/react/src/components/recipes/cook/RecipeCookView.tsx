@@ -18,7 +18,12 @@ export function RecipeCookView({ className }: RecipeCookViewProps) {
 	const recipe = useCookingRecipe();
 
 	return (
-		<div className={classNames('w-full flex flex-col items-center', className)}>
+		<div
+			className={classNames(
+				'w-full flex flex-col items-center pb-30vh',
+				className,
+			)}
+		>
 			<Suspense>
 				<InstructionsProvider
 					isEditing={false}
@@ -29,8 +34,10 @@ export function RecipeCookView({ className }: RecipeCookViewProps) {
 				</InstructionsProvider>
 			</Suspense>
 			<Suspense>
-				<AddImagePrompt recipe={recipe} />
-				<AddNotePrompt recipe={recipe} />
+				<div className="w-full flex flex-col items-stretch mt-10 gap-3">
+					<AddImagePrompt recipe={recipe} />
+					<AddNotePrompt recipe={recipe} />
+				</div>
 			</Suspense>
 		</div>
 	);

@@ -18,7 +18,7 @@ export function AddImagePrompt({ recipe }: AddImagePromptProps) {
 	}
 
 	return (
-		<AppearWithScroll>
+		<AppearWithScroll className="flex flex-col gap-2">
 			<P>Enjoy! Now would be a good time to add a photo to this recipe 🙂</P>
 			<ImageUploader
 				value={mainImage?.url || null}

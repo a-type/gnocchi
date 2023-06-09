@@ -9,7 +9,7 @@ export interface AddNotePromptProps {
 
 export function AddNotePrompt({ recipe }: AddNotePromptProps) {
 	return (
-		<AppearWithScroll>
+		<AppearWithScroll className="flex flex-col gap-2">
 			<P>Any notes for next time?</P>
 			<RecipeNote recipe={recipe} />
 		</AppearWithScroll>
