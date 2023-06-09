@@ -67,3 +67,98 @@ export function useSizeCssVars<E extends HTMLElement>(
 	const ref = useSize<E>(update);
 	return ref;
 }
+
+export function useBounds<E extends HTMLElement>(
+	callback: (payload: {
+		left: number;
+		top: number;
+		width: number;
+		height: number;
+	}) => void,
+) {
+	const ref = useRef<E>(null);
+	const cb = useStableCallback(callback);
+	useLayoutEffect(() => {
+		const target = ref.current;
+		if (!target) {
+			return () => {
+				//
+			};
+		}
+		const resizeObserver = new ResizeObserver((entries) => {
+			entries.forEach((entry) => {
+				const { left, top, width, height } =
+					entry.target.getBoundingClientRect();
+				cb({ left, top, width, height });
+			});
+		});
+		resizeObserver.observe(target);
+		return () => {
+			resizeObserver.unobserve(target);
+			resizeObserver.disconnect();
+		};
+	}, [ref, cb]);
+	return ref;
+}
+
+export function useBoundsCssVars<E extends HTMLElement>(
+	debounceMs?: number,
+	applyToRef?: RefObject<HTMLElement>,
+	propertyNames?: {
+		left: string;
+		top: string;
+		width: string;
+		height: string;
+		ready: string;
+	},
+) {
+	const update = useMemo(() => {
+		const doupdate = ({
+			left,
+			top,
+			width,
+			height,
+		}: {
+			left: number;
+			top: number;
+			width: number;
+			height: number;
+		}) => {
+			const usedRef = applyToRef || ref;
+			usedRef.current?.style.setProperty(
+				propertyNames?.left ?? '--left',
+				left + 'px',
+			);
+			usedRef.current?.style.setProperty(
+				propertyNames?.top ?? '--top',
+				top + 'px',
+			);
+			usedRef.current?.style.setProperty(
+				propertyNames?.width ?? '--width',
+				width + 'px',
+			);
+			usedRef.current?.style.setProperty(
+				propertyNames?.height ?? '--height',
+				height + 'px',
+			);
+			usedRef.current?.style.setProperty(
+				propertyNames?.ready ?? '--ready',
+				'1',
+			);
+		};
+		if (debounceMs) {
+			return debounce(doupdate, debounceMs);
+		} else {
+			return doupdate;
+		}
+	}, [
+		debounceMs,
+		applyToRef,
+		propertyNames?.left,
+		propertyNames?.top,
+		propertyNames?.width,
+		propertyNames?.height,
+	]);
+	const ref = useBounds<E>(update);
+	return ref;
+}

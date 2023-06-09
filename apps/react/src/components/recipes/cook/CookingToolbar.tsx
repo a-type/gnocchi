@@ -21,10 +21,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 	const { containerRef, containerStyle, bind } = useExpandingContainer();
 
 	return (
-		<PageNowPlaying
-			unstyled
-			className="w-full flex flex-col items-center relative bottom-[calc(0.25rem*-1)] max-w-600px"
-		>
+		<div className="w-full flex flex-col items-center relative bottom-[calc(0.25rem*-1)] max-w-600px">
 			<div className="flex flex-row gap-2 mb-3">
 				<Button
 					className="important:(rounded-full w-40px h-40px p-0 flex items-center justify-center touch-none)"
@@ -67,7 +64,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 					<IngredientCheckoffView recipe={recipe} className="important:p-2" />
 				</div>
 			</animated.div>
-		</PageNowPlaying>
+		</div>
 	);
 }
 

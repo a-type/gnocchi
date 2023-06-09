@@ -27,7 +27,7 @@ export function RecipesNowPlaying({
 	}
 
 	return (
-		<PageNowPlaying className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-light overflow-hidden animate-keyframes-fade-in-up animate-duration-300 animate-ease-out">
+		<div className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-default overflow-hidden">
 			<CollapsibleRoot defaultOpen={defaultOpen} className="w-full">
 				<CollapsibleTrigger asChild>
 					<div className="flex flex-row items-center justify-between w-full pr-5 py-1 px-1">
@@ -44,6 +44,6 @@ export function RecipesNowPlaying({
 					</div>
 				</CollapsibleContent>
 			</CollapsibleRoot>
-		</PageNowPlaying>
+		</div>
 	);
 }

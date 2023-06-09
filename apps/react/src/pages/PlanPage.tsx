@@ -23,6 +23,7 @@ import { H1, H2 } from '@aglio/ui/components/typography';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
+import { NavBar } from '@/components/nav/NavBar.jsx';
 
 const contents = {
 	offline: OfflineContents,
@@ -47,19 +48,17 @@ export function PlanPage() {
 	const Contents = contents[state];
 
 	return (
-		<PageRoot>
-			<PageContent fullHeight noPadding>
-				<div className="flex flex-col w-full mt-6 p-4 gap-4 items-start">
-					<H1>Settings</H1>
-					<UpdatePrompt />
-					<Contents />
-					<div className="text-xs flex flex-col gap-2">
-						<TextLink to="/privacy-policy">Privacy policy</TextLink>
-						<TextLink to="/tos">Terms and conditions of use</TextLink>
-					</div>
+		<PageContent fullHeight noPadding>
+			<div className="flex flex-col w-full mt-6 p-4 gap-4 items-start">
+				<H1>Settings</H1>
+				<UpdatePrompt />
+				<Contents />
+				<div className="text-xs flex flex-col gap-2">
+					<TextLink to="/privacy-policy">Privacy policy</TextLink>
+					<TextLink to="/tos">Terms and conditions of use</TextLink>
 				</div>
-			</PageContent>
-		</PageRoot>
+			</div>
+		</PageContent>
 	);
 }
 

@@ -6,4 +6,15 @@ import presetAglio from '@aglio/ui/uno-preset';
 export default defineConfig({
 	presets: [presetAglio()],
 	transformers: [variantGroup()],
+	preflights: [
+		{
+			getCSS: () => `
+			#root {
+				display: flex;
+				flex-direction: column;
+				height: 100%;
+			}
+		`,
+		},
+	],
 });

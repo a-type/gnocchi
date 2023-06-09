@@ -293,6 +293,7 @@ export default function presetAglio(): Preset {
 			'z-dialog-backdrop': 'z-[var(--z-dialogBackdrop)]',
 			'z-tooltip': 'z-[var(--z-tooltip)]',
 			'z-overdraw': 'z-[var(--z-overdraw)]',
+			'z-now-playing': 'z-[var(--z-nowPlaying)]',
 			'outline-off': '[outline:none]',
 			'bg-wash': 'bg-[var(--color-wash)]',
 			unset: '[all:unset]',
@@ -300,7 +301,6 @@ export default function presetAglio(): Preset {
 
 		preflights: [
 			{
-				// TODO: other themes...
 				getCSS: (ctx) => `
 				@layer components, variants, utilities;
 
@@ -382,6 +382,7 @@ export default function presetAglio(): Preset {
 					--palette-light-gray-blend: rgba(255, 255, 255, 0.05);
 					--palette-light-gray-dark-blend: rgba(255, 255, 255, 0.1);
 
+					--z-nowPlaying: 40;
 					--z-nav: 50;
 					--z-menu: 100;
 					--z-menuTrigger: 101;
@@ -610,12 +611,6 @@ export default function presetAglio(): Preset {
           background-color: var(--color-wash);
           color: var(--color-black);
           overflow: overlay;
-        }
-
-        #root {
-          display: flex;
-          flex-direction: column;
-          min-height: 100%;
         }
 
         a {

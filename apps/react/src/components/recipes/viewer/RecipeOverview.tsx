@@ -26,6 +26,8 @@ import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
 import { RecipePreludeViewer } from './RecipePreludeViewer.jsx';
 import { RecipePublishControl } from './RecipePublishControl.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
+import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
+import { Suspense } from 'react';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -109,6 +111,9 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							Start cooking
 						</RecipeStartCookingButton>
 					</div>
+					<Suspense>
+						<RecipesNowPlaying showSingle />
+					</Suspense>
 				</PageNowPlaying>
 			</div>
 		</>

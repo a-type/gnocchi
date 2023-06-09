@@ -1,3 +1,4 @@
+import { NavBar } from '@/components/nav/NavBar.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
 import { PantryList } from '@/components/pantry/list/PantryList.jsx';
 import {
@@ -11,16 +12,14 @@ export interface PantryPageProps {}
 
 export function PantryPage({}: PantryPageProps) {
 	return (
-		<PageRoot>
-			<PageContent fullHeight innerProps={{ className: 'gap-3' }}>
-				<PageFixedArea>
-					<PantryActionBar />
-				</PageFixedArea>
-				<Suspense>
-					<PantryList />
-				</Suspense>
-			</PageContent>
-		</PageRoot>
+		<PageContent fullHeight innerProps={{ className: 'gap-3' }}>
+			<PageFixedArea>
+				<PantryActionBar />
+			</PageFixedArea>
+			<Suspense>
+				<PantryList />
+			</Suspense>
+		</PageContent>
 	);
 }
 

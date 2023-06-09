@@ -3,6 +3,7 @@ import { Outlet } from '@verdant-web/react-router';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
 import { Link } from '@/components/nav/Link.jsx';
+import { NavBar } from '@/components/nav/NavBar.jsx';
 
 export function AdminPage() {
 	const { data: isAdmin, isLoading } = trpc.auth.isProductAdmin.useQuery();

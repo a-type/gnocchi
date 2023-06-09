@@ -17,7 +17,7 @@ export function EmptyState({ className }: EmptyStateProps) {
 		return (
 			<div
 				className={classNames(
-					'flex m-auto flex-col items-center gap-4 mt-12',
+					'flex m-auto flex-col items-center gap-4 mt-12 select-none',
 					className,
 				)}
 			>
@@ -30,7 +30,7 @@ export function EmptyState({ className }: EmptyStateProps) {
 	return (
 		<div
 			className={classNames(
-				'm-auto flex flex-col gap-4 items-center mt-12',
+				'm-auto flex flex-col gap-4 items-center mt-12 select-none',
 				className,
 			)}
 		>

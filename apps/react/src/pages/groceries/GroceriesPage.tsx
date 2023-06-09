@@ -15,7 +15,7 @@ import {
 	AddBar,
 	List,
 	ListSelectWrapper,
-	ThemedPageRoot,
+	ThemedPageContent,
 	TopControls,
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
@@ -26,6 +26,7 @@ import {
 	useParams,
 	useSearchParams,
 } from '@verdant-web/react-router';
+import { NavBar } from '@/components/nav/NavBar.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -60,32 +61,30 @@ export function GroceriesPage() {
 	return (
 		<ListContext.Provider value={listId}>
 			<RecipeSavePrompt />
-			<ThemedPageRoot listId={listId}>
-				<PageContent fullHeight noPadding>
-					<TopControls>
-						<ListSelectWrapper>
-							<ListSelect includeAll value={listId} onChange={onListChange} />
-							{listId && <ListEdit listId={listId} />}
-						</ListSelectWrapper>
+			<ThemedPageContent listId={listId}>
+				<TopControls>
+					<ListSelectWrapper>
+						<ListSelect includeAll value={listId} onChange={onListChange} />
+						{listId && <ListEdit listId={listId} />}
+					</ListSelectWrapper>
 
-						<div className="flex flex-row gap-2 items-center">
-							<UnsubscribedOnly>
-								<PromoteSubscriptionButton size="small" color="accent">
-									Upgrade
-								</PromoteSubscriptionButton>
-							</UnsubscribedOnly>
-							<OfflineIndicator />
-						</div>
-					</TopControls>
-					<AddBar />
-					<List />
-					<SubscriptionExpiredDialog />
-					<CompleteSignupDialog />
-					<SignupSuccessBanner />
-					<UnknownListRedirect listId={listId} />
-				</PageContent>
+					<div className="flex flex-row gap-2 items-center">
+						<UnsubscribedOnly>
+							<PromoteSubscriptionButton size="small" color="accent">
+								Upgrade
+							</PromoteSubscriptionButton>
+						</UnsubscribedOnly>
+						<OfflineIndicator />
+					</div>
+				</TopControls>
+				<AddBar />
+				<List />
+				<SubscriptionExpiredDialog />
+				<CompleteSignupDialog />
+				<SignupSuccessBanner />
+				<UnknownListRedirect listId={listId} />
 				<RecipePresenceNotification />
-			</ThemedPageRoot>
+			</ThemedPageContent>
 		</ListContext.Provider>
 	);
 }

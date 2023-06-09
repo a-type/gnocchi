@@ -90,13 +90,13 @@ export function RecipeIngredientViewer({
 				className,
 			)}
 		>
-			<div className="flex flex-row w-full">
+			<div className="flex flex-row w-full items-start">
 				<IngredientText
-					className="flex-1 block mt-2"
+					className="flex-1 block mt-1"
 					multiplier={multiplier}
 					ingredient={ingredient}
 				/>
-				<div className="flex flex-row gap-2 items-center">
+				<div className="flex flex-row gap-2 items-center relative top--1">
 					{conversionEnabled && (
 						<>
 							<DropdownMenu
@@ -148,7 +148,10 @@ export function RecipeIngredientViewer({
 				className="mr-auto self-start italic color-gray7"
 			>
 				<CollapsibleContent className="pr-2">
-					<span className="text-xs">{convertedValue}</span>
+					<span className="text-xs inline-flex items-center gap-1">
+						<Icon name="convert" size={15} />
+						{convertedValue}
+					</span>
 				</CollapsibleContent>
 			</CollapsibleRoot>
 			<CollapsibleRoot open={showNote}>

@@ -15,7 +15,7 @@ export function RecipeInstructionsViewer({
 	const editor = useSyncedInstructionsEditor({ recipe, readonly: true });
 	return (
 		<RichEditor
-			className={classNames('max-w-600px', className)}
+			className={classNames('max-w-600px w-full', className)}
 			editor={editor}
 		/>
 	);

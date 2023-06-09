@@ -1,5 +1,9 @@
 import { ReactNode, Suspense, useEffect } from 'react';
-import { PageFixedArea, PageRoot } from '@aglio/ui/components/layouts';
+import {
+	PageContent,
+	PageFixedArea,
+	PageRoot,
+} from '@aglio/ui/components/layouts';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
 import { GroceryListAdd } from '@/components/groceries/addBar/GroceryListAdd.jsx';
 import GroceryList from '@/components/groceries/GroceryList.jsx';
@@ -49,7 +53,7 @@ export const List = () => (
 	</>
 );
 
-export function ThemedPageRoot({
+export function ThemedPageContent({
 	children,
 	listId,
 }: {
@@ -58,12 +62,14 @@ export function ThemedPageRoot({
 }) {
 	return (
 		<Suspense fallback={<PageRoot>{children}</PageRoot>}>
-			<ThemedPageRootInner listId={listId}>{children}</ThemedPageRootInner>
+			<ThemedPageContentInner listId={listId}>
+				{children}
+			</ThemedPageContentInner>
 		</Suspense>
 	);
 }
 
-function ThemedPageRootInner({
+function ThemedPageContentInner({
 	children,
 	listId,
 }: {
@@ -74,7 +80,9 @@ function ThemedPageRootInner({
 
 	return (
 		<Suspense fallback={children}>
-			<PageRoot className={theme}>{children}</PageRoot>
+			<PageContent fullHeight noPadding className={theme}>
+				{children}
+			</PageContent>
 		</Suspense>
 	);
 }

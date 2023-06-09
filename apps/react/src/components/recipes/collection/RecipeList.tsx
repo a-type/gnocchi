@@ -38,7 +38,7 @@ export interface RecipeListProps {}
 
 export function RecipeList({}: RecipeListProps) {
 	return (
-		<div className="flex flex-col gap-4 p-0 m-0">
+		<div className="flex flex-col gap-4 p-0 m-0 mb-6">
 			<div className="flex flex-row items-center justify-between">
 				<Suspense
 					fallback={

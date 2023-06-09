@@ -1,47 +1,24 @@
 'use client';
 
-import {
-	createContext,
-	HTMLAttributes,
-	ReactNode,
-	useContext,
-	useMemo,
-	useState,
-} from 'react';
 import classNames from 'classnames';
-import { createPortal } from 'react-dom';
-import { NowPlayingContext } from './PageNowPlayingContext.js';
-
-export const NowPlayingProvider = ({ children }: { children: ReactNode }) => {
-	const [container, setContainer] = useState<HTMLDivElement>();
-	const value = useMemo(() => ({ container, setContainer }), [container]);
-
-	return (
-		<NowPlayingContext.Provider value={value}>
-			{children}
-		</NowPlayingContext.Provider>
-	);
-};
+import { HTMLAttributes } from 'react';
 
 export function PageNowPlaying({
 	className,
 	unstyled,
 	...props
 }: HTMLAttributes<HTMLDivElement> & { unstyled?: boolean }) {
-	const { container } = useContext(NowPlayingContext);
-	if (container) {
-		return createPortal(
-			<div
-				{...props}
-				className={classNames(
-					unstyled
-						? undefined
-						: 'layer-components:(bg-wash p-2px rounded-xl border-light shadow-md min-w-32px items-center justify-center)',
-					className,
-				)}
-			/>,
-			container,
-		);
-	}
-	return null;
+	return (
+		<div
+			{...props}
+			className={classNames(
+				'fixed bottom-[var(--now-playing-bottom,60px)] left-0 right-0 z-now-playing w-full flex flex-col gap-2 items-end p-2',
+				'sm:(fixed bottom-3 left-[var(--content-left,20%)] transition-opacity top-auto items-end w-[var(--content-width,100%)] max-w-80vw p-0 opacity-[var(--content-ready,0)])',
+				unstyled
+					? undefined
+					: 'layer-components:(bg-wash p-2px rounded-xl border-light shadow-md min-w-32px items-center justify-center)',
+				className,
+			)}
+		/>
+	);
 }

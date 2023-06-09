@@ -12,30 +12,26 @@ export function VerifyEmailPage({}: VerifyEmailPageProps) {
 
 	if (!code) {
 		return (
-			<PageRoot>
-				<PageContent>
-					<H1>Invalid code</H1>
-					<P>
-						The code you provided is invalid. Please check the link you followed
-						and try again.
-					</P>
-				</PageContent>
-			</PageRoot>
+			<PageContent>
+				<H1>Invalid code</H1>
+				<P>
+					The code you provided is invalid. Please check the link you followed
+					and try again.
+				</P>
+			</PageContent>
 		);
 	}
 
 	return (
-		<PageRoot>
-			<PageContent>
-				<H1>Create your account</H1>
-				<EmailCompleteSignUpForm
-					code={code}
-					onSuccess={() => {
-						navigate(params.get('returnTo') || '/');
-					}}
-				/>
-			</PageContent>
-		</PageRoot>
+		<PageContent>
+			<H1>Create your account</H1>
+			<EmailCompleteSignUpForm
+				code={code}
+				onSuccess={() => {
+					navigate(params.get('returnTo') || '/');
+				}}
+			/>
+		</PageContent>
 	);
 }
 

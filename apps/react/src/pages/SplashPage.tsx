@@ -190,7 +190,12 @@ export function SplashPage() {
 					</div>
 				</DemoGrid>
 			</Content>
-			<Content className={classNames('theme-leek', 'bg-primary-light pb-20vh')}>
+			<Content
+				className={classNames(
+					'theme-leek',
+					'important:bg-primary-light pb-20vh',
+				)}
+			>
 				<div className="mt-6 gap-4 flex flex-col">
 					<TextLink to="/privacy-policy" newTab>
 						Read the privacy policy

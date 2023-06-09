@@ -12,7 +12,7 @@ export function RecipeCookProvider({
 	children: ReactNode;
 	slug: string;
 }) {
-	const slugPortion = slug.split('-').pop();
+	const slugPortion = slug?.split('-').pop() ?? '';
 	const recipe = hooks.useOneRecipe({
 		index: {
 			where: 'slug',

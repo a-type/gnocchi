@@ -4,7 +4,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage.jsx';
 import {
 	AddBar,
 	List,
-	ThemedPageRoot,
+	ThemedPageContent,
 	TopControls,
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
@@ -41,52 +41,49 @@ export function TempAccessGroceriesPage() {
 
 	if (!data.name) {
 		return (
-			<PageRoot>
-				<PageContent>
-					<H1>Join {data.listName} for today</H1>
-					<P>Welcome to Gnocchi.club, your new favorite cooking app!</P>
-					<P>
-						You've been invited to collaborate on this grocery list for the next
-						day.
-					</P>
-					<P>
-						Want to start your own list? It's already waiting for you, just
-						click{' '}
-						<TextLink to="/" newTab>
-							here
-						</TextLink>
-						. No signup necessary.
-					</P>
-					{/* TODO: more tutorial stuff here */}
-					<Formik
-						initialValues={{ name: '' }}
-						onSubmit={async ({ name }, bag) => {
-							try {
-								await claim.mutateAsync({
-									name,
-									code,
-								});
-								refetch();
-							} catch (err) {
-								toast.error(`Failed to claim this invite`);
-							} finally {
-								bag.setSubmitting(false);
-							}
-						}}
-					>
-						<Form>
-							<TextField name="name" required placeholder="Your name" />
-							<SubmitButton>Join in</SubmitButton>
-							<div className="text-sm">
-								By continuing you agree to the{' '}
-								<TextLink to="/tos" newTab>
-									Terms of Service
-								</TextLink>
-							</div>
-						</Form>
-					</Formik>
-				</PageContent>
-			</PageRoot>
+			<PageContent>
+				<H1>Join {data.listName} for today</H1>
+				<P>Welcome to Gnocchi.club, your new favorite cooking app!</P>
+				<P>
+					You've been invited to collaborate on this grocery list for the next
+					day.
+				</P>
+				<P>
+					Want to start your own list? It's already waiting for you, just click{' '}
+					<TextLink to="/" newTab>
+						here
+					</TextLink>
+					. No signup necessary.
+				</P>
+				{/* TODO: more tutorial stuff here */}
+				<Formik
+					initialValues={{ name: '' }}
+					onSubmit={async ({ name }, bag) => {
+						try {
+							await claim.mutateAsync({
+								name,
+								code,
+							});
+							refetch();
+						} catch (err) {
+							toast.error(`Failed to claim this invite`);
+						} finally {
+							bag.setSubmitting(false);
+						}
+					}}
+				>
+					<Form>
+						<TextField name="name" required placeholder="Your name" />
+						<SubmitButton>Join in</SubmitButton>
+						<div className="text-sm">
+							By continuing you agree to the{' '}
+							<TextLink to="/tos" newTab>
+								Terms of Service
+							</TextLink>
+						</div>
+					</Form>
+				</Formik>
+			</PageContent>
 		);
 	}
 
@@ -123,22 +120,20 @@ function TempAccessGroceriesView({ code }: { code: string }) {
 		<hooks.Provider value={clientDescriptor} sync>
 			<Suspense>
 				<ListContext.Provider value={listId}>
-					<ThemedPageRoot listId={listId}>
-						<PageContent fullHeight noPadding>
-							<div className="flex flex-col p-3 gap-1 items-start bg-accent-wash color-accent-ink rounded-lg">
-								<P>This link lets you view someone else's list.</P>
-								<LinkButton size="small" to="/welcome" newTab color="accent">
-									Start your own list
-								</LinkButton>
-							</div>
-							<TopControls>
-								<ListSelect includeAll value={listId} onChange={onListChange} />
-							</TopControls>
-							<AddBar />
-							<List />
-							<UnknownListRedirect listId={listId} />
-						</PageContent>
-					</ThemedPageRoot>
+					<ThemedPageContent listId={listId}>
+						<div className="flex flex-col p-3 gap-1 items-start bg-accent-wash color-accent-ink rounded-lg">
+							<P>This link lets you view someone else's list.</P>
+							<LinkButton size="small" to="/welcome" newTab color="accent">
+								Start your own list
+							</LinkButton>
+						</div>
+						<TopControls>
+							<ListSelect includeAll value={listId} onChange={onListChange} />
+						</TopControls>
+						<AddBar />
+						<List />
+						<UnknownListRedirect listId={listId} />
+					</ThemedPageContent>
 				</ListContext.Provider>
 			</Suspense>
 		</hooks.Provider>

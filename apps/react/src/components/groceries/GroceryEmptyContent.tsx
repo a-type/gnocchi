@@ -5,7 +5,7 @@ import { InstallHint } from '../promotional/InstallHint.jsx';
 
 export function GroceryEmptyContent() {
 	return (
-		<div className="flex flex-col p-4 gap-6">
+		<div className="flex flex-col p-4 gap-6 select-none">
 			<div className="flex flex-col items-center justify-center flex-grow-1 text-center color-gray7 italic text-sm gap-3 p-4">
 				<Cart
 					width="15vmax"

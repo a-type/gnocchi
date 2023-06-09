@@ -6,6 +6,8 @@ import { AddImagePrompt } from './AddImagePrompt.jsx';
 import { CookingToolbar } from './CookingToolbar.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
 import classNames from 'classnames';
+import { PageNowPlaying } from '@aglio/ui/src/components/layouts';
+import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
 
 export interface RecipeCookViewProps {
 	className?: string;
@@ -16,7 +18,7 @@ export function RecipeCookView({ className }: RecipeCookViewProps) {
 	const recipe = useCookingRecipe();
 
 	return (
-		<div className={classNames('animate-fade-in-up', className)}>
+		<div className={classNames('w-full flex flex-col items-center', className)}>
 			<Suspense>
 				<InstructionsProvider
 					isEditing={false}
@@ -29,7 +31,6 @@ export function RecipeCookView({ className }: RecipeCookViewProps) {
 			<Suspense>
 				<AddImagePrompt recipe={recipe} />
 				<AddNotePrompt recipe={recipe} />
-				<CookingToolbar recipe={recipe} />
 			</Suspense>
 		</div>
 	);

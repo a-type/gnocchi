@@ -1,5 +1,6 @@
 import { ReactNode, Suspense } from 'react';
 import classNames from 'classnames';
+import { stopPropagation } from '@aglio/tools';
 
 export interface ActionBarProps {
 	children: ReactNode;
@@ -29,6 +30,10 @@ export function ActionBar({
 						'flex flex-row items-center justify-start w-full overflow-y-hidden overflow-x-auto pr-80px relative h-full [&::-webkit-scrollbar]:display-none',
 						wrap && 'flex-wrap',
 					)}
+					// stop scroll pointer events from bubbling up to the parent
+					onPointerDown={stopPropagation}
+					onPointerMove={stopPropagation}
+					onPointerUp={stopPropagation}
 				>
 					{children}
 				</div>

@@ -15,20 +15,23 @@ import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import TestPage from '@/pages/TestPage.jsx';
 import { Button } from '@aglio/ui/components/button';
-import {
-	NavContextProvider,
-	NowPlayingProvider,
-	PageRoot,
-} from '@aglio/ui/components/layouts';
 import { H1, P } from '@aglio/ui/components/typography';
 import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
-import { makeRoutes, Outlet, Router } from '@verdant-web/react-router';
+import {
+	makeRoutes,
+	Outlet,
+	Router,
+	useNextMatchingRoute,
+} from '@verdant-web/react-router';
 import { lazy, Suspense, useCallback } from 'react';
 import { lazyWithPreload } from 'react-lazy-with-preload';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import { RecipeTagEditor } from '@/components/recipes/tags/RecipeTagEditor.jsx';
+import { SwipeOutlet } from '@/components/nav/SwipeOutlet.jsx';
+import { PageRoot } from '@aglio/ui/src/components/layouts';
+import { useMediaQuery } from '@/hooks/useMediaQuery.js';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -78,126 +81,6 @@ function scrollToTop() {
 
 const routes = makeRoutes([
 	{
-		path: '/',
-		exact: true,
-		component: GroceriesPage,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/list/:listId',
-		component: GroceriesPage,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/settings',
-		component: PlanPage,
-		onAccessible: PlanPage.preload,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/claim/:inviteId',
-		component: ClaimInvitePage,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/purchased',
-		component: PantryPage,
-		onAccessible: PantryPage.preload,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/nevermind',
-		component: NevermindPage,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/welcome',
-		component: SplashPage,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/join',
-		component: JoinPage,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/verify',
-		component: VerifyEmailPage,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/admin',
-		component: AdminPage,
-		onVisited: scrollToTop,
-		children: [
-			{
-				path: 'categories',
-				component: AdminCategoriesPage,
-			},
-			{
-				path: 'plans',
-				component: AdminPlanManagerPage,
-			},
-			{
-				path: 'sync',
-				component: AdminSyncPage,
-			},
-			{
-				path: 'foods',
-				component: AdminFoodsPage,
-			},
-		],
-	},
-	{
-		path: '/recipes',
-		exact: true,
-		component: RecipesPage,
-		onAccessible: RecipesPage.preload,
-		onVisited: scrollToTop,
-	},
-	{
-		path: '/recipes/:slug',
-		component: RecipeViewPage,
-		onAccessible: RecipeViewPage.preload,
-		onVisited: scrollToTop,
-		children: [
-			{
-				path: '',
-				exact: true,
-				component: RecipeOverviewPage,
-				onAccessible: RecipeOverviewPage.preload,
-			},
-			{
-				path: 'edit',
-				component: RecipeEditPage,
-				onAccessible: RecipeEditPage.preload,
-			},
-			{
-				path: 'cook',
-				component: RecipeCookPage,
-				onAccessible: RecipeCookPage.preload,
-				children: [
-					{
-						// back compat
-						path: '',
-						exact: true,
-						component: RecipeCookStepsPage,
-					},
-					{
-						path: 'prep',
-						component: RecipeCookPrepPage,
-						onAccessible: RecipeCookPrepPage.preload,
-					},
-					{
-						path: 'steps',
-						component: RecipeCookStepsPage,
-						onAccessible: RecipeCookStepsPage.preload,
-					},
-				],
-			},
-		],
-	},
-	{
 		path: '/temp/:code/:listId',
 		component: TempAccessGroceriesPage,
 		onVisited: scrollToTop,
@@ -213,25 +96,205 @@ const routes = makeRoutes([
 		onVisited: scrollToTop,
 	},
 	{
-		path: '/privacy-policy',
-		component: PrivacyPolicyPage,
+		path: '/claim/:inviteId',
+		component: ClaimInvitePage,
 		onVisited: scrollToTop,
 	},
 	{
-		path: '/tos',
-		component: TermsAndConditionsPage,
-		onVisited: scrollToTop,
+		path: '/welcome',
+		component: SplashPage,
+		onVisited: () => {
+			scrollToTop();
+		},
 	},
 	{
-		path: '/test',
-		component: TestPage,
-	},
-	{
-		path: '',
-		component: NotFoundPage,
+		path: '/',
+		component: LayoutWithNavBar,
 		onVisited: scrollToTop,
+		children: [
+			{
+				index: true,
+				component: GroceriesPage,
+				onVisited: () => {
+					scrollToTop();
+					PantryPage.preload();
+					PlanPage.preload();
+					RecipesPage.preload();
+				},
+				data: {
+					right: '/purchased',
+				},
+			},
+			{
+				path: 'list/:listId',
+				component: GroceriesPage,
+				onVisited: scrollToTop,
+			},
+			{
+				path: 'settings',
+				component: PlanPage,
+				onVisited: scrollToTop,
+				data: {
+					left: '/recipes',
+				},
+			},
+			{
+				path: 'purchased',
+				component: PantryPage,
+				onVisited: () => {
+					scrollToTop();
+					RecipesPage.preload();
+				},
+				data: {
+					left: '/',
+					right: '/recipes',
+				},
+			},
+			{
+				path: 'nevermind',
+				component: NevermindPage,
+				onVisited: scrollToTop,
+			},
+			{
+				path: 'join',
+				component: JoinPage,
+				onVisited: scrollToTop,
+			},
+			{
+				path: 'verify',
+				component: VerifyEmailPage,
+				onVisited: scrollToTop,
+			},
+			{
+				path: 'admin',
+				component: AdminPage,
+				onVisited: scrollToTop,
+				children: [
+					{
+						path: 'categories',
+						component: AdminCategoriesPage,
+					},
+					{
+						path: 'plans',
+						component: AdminPlanManagerPage,
+					},
+					{
+						path: 'sync',
+						component: AdminSyncPage,
+					},
+					{
+						path: 'foods',
+						component: AdminFoodsPage,
+					},
+				],
+			},
+			{
+				path: 'recipes',
+				exact: true,
+				component: RecipesPage,
+				onVisited: () => {
+					scrollToTop();
+					RecipeViewPage.preload();
+					RecipeOverviewPage.preload();
+					RecipeCookPage.preload();
+					RecipeCookStepsPage.preload();
+				},
+				data: {
+					left: '/purchased',
+					right: '/settings',
+				},
+			},
+			{
+				path: 'recipes/:slug',
+				component: RecipeViewPage,
+				onVisited: () => {
+					scrollToTop();
+					RecipeEditPage.preload();
+					RecipeCookPage.preload();
+					RecipeCookStepsPage.preload();
+				},
+				data: {
+					left: '/purchased',
+					right: '/settings',
+				},
+				children: [
+					{
+						path: '',
+						exact: true,
+						component: RecipeOverviewPage,
+					},
+					{
+						path: 'edit',
+						component: RecipeEditPage,
+					},
+					{
+						path: 'cook',
+						component: RecipeCookPage,
+						onVisited: () => {
+							scrollToTop();
+							RecipeCookPrepPage.preload();
+						},
+						children: [
+							{
+								// back compat
+								path: '',
+								exact: true,
+								component: RecipeCookStepsPage,
+								data: {
+									left: '/recipes/:slug/cook/prep',
+								},
+							},
+							{
+								path: 'prep',
+								component: RecipeCookPrepPage,
+								data: {
+									right: '/recipes/:slug/cook/steps',
+								},
+							},
+							{
+								path: 'steps',
+								component: RecipeCookStepsPage,
+								data: {
+									left: '/recipes/:slug/cook/prep',
+								},
+							},
+						],
+					},
+				],
+			},
+			{
+				path: 'privacy-policy',
+				component: PrivacyPolicyPage,
+			},
+			{
+				path: 'tos',
+				component: TermsAndConditionsPage,
+			},
+			{
+				path: '',
+				component: NotFoundPage,
+			},
+		],
 	},
 ]);
+
+function LayoutWithNavBar() {
+	const big = useMediaQuery('(min-width: 640px)');
+	if (big) {
+		return (
+			<PageRoot>
+				<Outlet />
+				<NavBar />
+			</PageRoot>
+		);
+	}
+	return (
+		<PageRoot>
+			<SwipeOutlet scroll className="[grid-area:content]" />
+			<NavBar />
+		</PageRoot>
+	);
+}
 
 export function Pages() {
 	const handleNavigate = useCallback(() => {
@@ -242,22 +305,17 @@ export function Pages() {
 		}
 	}, []);
 	return (
-		<NowPlayingProvider>
-			<NavContextProvider>
-				<ErrorBoundary fallback={<ErrorFallback />}>
-					<Suspense fallback={<GlobalLoader />}>
-						<Router routes={routes} onNavigate={handleNavigate}>
-							<TopLoader />
-							<Outlet />
-							<StartSignupDialog />
-							<LogoutNotice />
-							<RecipeTagEditor />
-							<NavBar />
-						</Router>
-					</Suspense>
-				</ErrorBoundary>
-			</NavContextProvider>
-		</NowPlayingProvider>
+		<ErrorBoundary fallback={<ErrorFallback />}>
+			<Suspense fallback={<GlobalLoader />}>
+				<Router routes={routes} onNavigate={handleNavigate}>
+					<TopLoader />
+					<Outlet />
+					<StartSignupDialog />
+					<LogoutNotice />
+					<RecipeTagEditor />
+				</Router>
+			</Suspense>
+		</ErrorBoundary>
 	);
 }
 

@@ -13,9 +13,7 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 
 	return (
 		<div className="flex flex-col items-stretch w-full" {...rest}>
-			<Suspense>
-				<ExpiresSoonSection />
-			</Suspense>
+			<ExpiresSoonSection />
 			<div>
 				{groupedItems.map(({ category, items }) => {
 					return (
