@@ -19,12 +19,14 @@ export function CategorySelect({
 	children,
 	contentClassName,
 	open,
+	inDialog,
 }: {
 	value: string | null;
 	onChange: (v: string | null) => void;
 	children?: ReactNode;
 	contentClassName?: string;
 	open?: boolean;
+	inDialog?: boolean;
 }) {
 	const [state, setState] = useState<
 		'idle' | 'scrubbing' | 'picking' | 'create'
@@ -64,7 +66,7 @@ export function CategorySelect({
 						{!children ? <SelectIcon /> : undefined}
 					</Button>
 				</SelectTrigger>
-				<SelectContent className={contentClassName}>
+				<SelectContent className={contentClassName} inDialog={inDialog}>
 					<Suspense>
 						<CategoryList />
 					</Suspense>

@@ -101,6 +101,7 @@ function FoodDetailView({
 				<CategorySelect
 					value={food.get('categoryId')}
 					onChange={(val) => food.set('categoryId', val)}
+					inDialog
 				/>
 			</div>
 			<div className="flex gap-1 items-center">

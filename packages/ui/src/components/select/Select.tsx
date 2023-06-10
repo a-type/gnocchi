@@ -80,26 +80,45 @@ export const SelectContent = forwardRef<
 	HTMLDivElement,
 	SelectPrimitive.SelectContentProps & { inDialog?: boolean }
 >(({ children, inDialog, className, ...props }, forwardedRef) => {
+	const commonContent = (
+		<>
+			<SelectPrimitive.ScrollUpButton className="flex items-center justify-center h-25px bg-white color-primary-dark cursor-default">
+				<ChevronUpIcon />
+			</SelectPrimitive.ScrollUpButton>
+			<SelectPrimitive.Viewport className="p-1">
+				{children}
+			</SelectPrimitive.Viewport>
+			<SelectPrimitive.ScrollDownButton className="flex items-center justify-center h-25px bg-white color-primary-dark cursor-default">
+				<ChevronDownIcon />
+			</SelectPrimitive.ScrollDownButton>
+		</>
+	);
+	if (inDialog) {
+		return (
+			<SelectPrimitive.Content
+				className={classNames(
+					'overflow-hidden bg-white rounded-md z-menu shadow-lg',
+					className,
+				)}
+				ref={forwardedRef}
+				{...props}
+			>
+				{commonContent}
+			</SelectPrimitive.Content>
+		);
+	}
+
 	return (
 		<SelectPrimitive.Portal className={className} style={zIndex}>
 			<SelectPrimitive.Content
 				className={classNames(
 					'overflow-hidden bg-white rounded-md z-menu shadow-lg',
 					inDialog && 'z-[calc(var(--z-dialog)+1)]',
-					// className,
 				)}
 				{...props}
 				ref={forwardedRef}
 			>
-				<SelectPrimitive.ScrollUpButton className="flex items-center justify-center h-25px bg-white color-primary-dark cursor-default">
-					<ChevronUpIcon />
-				</SelectPrimitive.ScrollUpButton>
-				<SelectPrimitive.Viewport className="p-1">
-					{children}
-				</SelectPrimitive.Viewport>
-				<SelectPrimitive.ScrollDownButton className="flex items-center justify-center h-25px bg-white color-primary-dark cursor-default">
-					<ChevronDownIcon />
-				</SelectPrimitive.ScrollDownButton>
+				{commonContent}
 			</SelectPrimitive.Content>
 		</SelectPrimitive.Portal>
 	);
