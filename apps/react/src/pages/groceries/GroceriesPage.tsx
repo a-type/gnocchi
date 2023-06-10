@@ -19,14 +19,12 @@ import {
 	TopControls,
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
-import { PageContent } from '@aglio/ui/components/layouts';
 import { useCallback, useEffect } from 'react';
 import {
 	useNavigate,
 	useParams,
 	useSearchParams,
 } from '@verdant-web/react-router';
-import { NavBar } from '@/components/nav/NavBar.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();

@@ -1,5 +1,4 @@
 import { useListId } from '@/contexts/ListContext.jsx';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
@@ -20,7 +19,7 @@ import {
 	useSensors,
 } from '@dnd-kit/core';
 import { snapCenterToCursor } from '@dnd-kit/modifiers';
-import { Suspense, forwardRef, memo, useCallback, useState } from 'react';
+import { forwardRef, memo, useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { ref as valtioRef } from 'valtio';
 import { OnboardingBanner } from '../onboarding/OnboardingBanner.jsx';
@@ -38,7 +37,6 @@ import {
 } from './hooks.js';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 import { groceriesState } from './state.js';
-import { GrocerySuggestions } from './suggestions/GrocerySuggestions.jsx';
 
 export interface GroceryListProps {
 	className?: string;
@@ -56,8 +54,6 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 		const sensors = useGroceryDndSensors();
 
 		useTransitionPurchasedItems();
-
-		const showSuggestions = useFeatureFlag('suggestions');
 
 		return (
 			<DndContext
@@ -84,11 +80,11 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 						<PromoteSubscriptionButton>Upgrade now</PromoteSubscriptionButton>
 					</div>
 				</OnboardingBanner>
-				{showSuggestions && (
+				{/* {showSuggestions && (
 					<Suspense>
 						<GrocerySuggestions />
 					</Suspense>
-				)}
+				)} */}
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />
 			</DndContext>

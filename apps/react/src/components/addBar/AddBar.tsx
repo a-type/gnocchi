@@ -4,7 +4,7 @@ import { useListId } from '@/contexts/ListContext.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { isUrl } from '@aglio/tools';
+import { isUrl, stopPropagation, preventDefault } from '@aglio/tools';
 import classNames from 'classnames';
 import {
 	UseComboboxState,
@@ -12,6 +12,7 @@ import {
 	useCombobox,
 } from 'downshift';
 import {
+	ReactNode,
 	Suspense,
 	forwardRef,
 	useCallback,
@@ -27,33 +28,51 @@ import {
 	PopoverContent,
 } from '@aglio/ui/components/popover';
 import { Input } from '@aglio/ui/components/input';
-import { withClassName } from '@aglio/ui/hooks';
-import { Button } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
 import pluralize from 'pluralize';
+import { Food, Recipe } from '@aglio/groceries-client';
+import startOfDay from 'date-fns/startOfDay';
+import addDays from 'date-fns/addDays';
+import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
+import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
+import { useDebouncedValue } from '@/hooks/useDebouncedValue.js';
 
 export interface AddBarProps {
 	className?: string;
 	onAdd: (text: string[]) => Promise<void> | void;
+	showRichSuggestions?: boolean;
 }
 
 function stateReducer(
-	state: UseComboboxState<string>,
-	{ type, changes }: UseComboboxStateChangeOptions<string>,
+	state: UseComboboxState<SuggestionData>,
+	{ type, changes }: UseComboboxStateChangeOptions<SuggestionData>,
 ) {
 	if (
+		changes.inputValue &&
 		type === useCombobox.stateChangeTypes.InputKeyDownEnter &&
 		!changes.selectedItem
 	) {
+		if (isUrl(changes.inputValue)) {
+			return {
+				...changes,
+				selectedItem: {
+					type: 'url' as const,
+					url: changes.inputValue,
+					id: changes.inputValue,
+				} as SuggestionData,
+			};
+		}
+
 		return {
 			...changes,
-			selectedItem: changes.inputValue,
+			selectedItem: {
+				type: 'food' as const,
+				name: changes.inputValue,
+				id: changes.inputValue,
+			} as SuggestionData,
 		};
 	}
 	return changes;
-}
-
-function preventDefault(ev: any) {
-	ev.preventDefault();
 }
 
 const randomPlaceholders = [
@@ -74,34 +93,156 @@ function getRandomPlaceholder() {
 	];
 }
 
+type SuggestionData =
+	| {
+			type: 'food';
+			name: string;
+			id: string;
+	  }
+	| {
+			type: 'recipe';
+			recipe: Recipe;
+			id: string;
+	  }
+	| {
+			type: 'url';
+			url: string;
+			id: string;
+	  };
+
+function suggestionToString(item: SuggestionData | undefined | null) {
+	if (!item) return '';
+	if (item.type === 'food') return item.name;
+	if (item.type === 'recipe') return item.recipe.get('title');
+	return '';
+}
+
+const NOW = startOfDay(new Date()).getTime();
+const SUGGESTION_INTERVAL_END = addDays(NOW, 5).getTime();
+
 export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
-	function GroceryListAddImpl({ onAdd, ...rest }, ref) {
+	function GroceryListAddImpl({ onAdd, showRichSuggestions, ...rest }, ref) {
 		const isSubscribed = useIsSubscribed();
 		const listId = useListId() || null;
 		const [randomPlaceholder, setRandomPlaceholder] =
 			useState(getRandomPlaceholder);
-		const placeholder = randomPlaceholder;
 
 		const [suggestionPrompt, setSuggestionPrompt] = useState('');
 		const [_, startTransition] = useTransition();
 
-		const suggestions = hooks.useAllFoods({
+		const [addingRecipe, setAddingRecipe] = useState<Recipe | null>(null);
+		const clearAddingRecipe = useCallback(() => {
+			setAddingRecipe(null);
+		}, []);
+
+		const existingItems = hooks.useAllItems({
+			index: {
+				where: 'purchased',
+				equals: 'no',
+			},
+		});
+		const existingFoods = useMemo(() => {
+			const foods = new Set<string>();
+			existingItems.forEach((item) => {
+				foods.add(item.get('food'));
+			});
+			return foods;
+		}, [existingItems]);
+
+		const searchFoods = hooks.useAllFoods({
 			index: {
 				where: 'nameLookup',
 				startsWith: suggestionPrompt?.toLowerCase().trim() ?? '',
 			},
 		});
 
-		const filteredSuggestions = useMemo(() => {
-			return suggestions
-				.sort((a, b) => {
-					return a.get('purchaseCount') > b.get('purchaseCount') ? -1 : 1;
-				})
-				.map((s) => {
-					if (s.get('pluralizeName')) return pluralize(s.get('canonicalName'));
-					else return s.get('canonicalName');
-				});
-		}, [suggestions]);
+		const frequencyFoods = hooks.useAllFoods({
+			index: {
+				where: 'repurchaseAfter',
+				gt: NOW,
+				lt: SUGGESTION_INTERVAL_END,
+				order: 'desc',
+			},
+			skip: !showRichSuggestions,
+		});
+
+		const expiresSoonItems = useExpiresSoonItems({
+			skip: !showRichSuggestions,
+		});
+		const expiresSoonSuggestions = useMemo<SuggestionData[]>(() => {
+			return expiresSoonItems.slice(0, 5).map((item) => ({
+				type: 'food',
+				name: item.get('food'),
+				id: item.get('id'),
+			}));
+		}, [expiresSoonItems]);
+
+		const mapFoodsToSuggestions = useCallback(
+			(foods: Food[], limit = 5): SuggestionData[] => {
+				return foods
+					.filter((item) => !existingFoods.has(item.get('canonicalName')))
+					.slice(0, limit)
+					.sort((a, b) => {
+						return a.get('purchaseCount') > b.get('purchaseCount') ? -1 : 1;
+					})
+					.map((s) => {
+						if (s.get('pluralizeName'))
+							return pluralize(s.get('canonicalName'));
+						else return s.get('canonicalName');
+					})
+					.map((s) => ({
+						type: 'food',
+						name: s,
+						id: s,
+					}));
+			},
+			[existingFoods],
+		);
+
+		const frequencyFoodsSuggestions = useMemo<SuggestionData[]>(() => {
+			return mapFoodsToSuggestions(frequencyFoods);
+		}, [frequencyFoods, mapFoodsToSuggestions]);
+
+		const frequencyRecipes = hooks.useAllRecipes({
+			index: {
+				where: 'suggestAfter',
+				gt: NOW,
+				lt: SUGGESTION_INTERVAL_END,
+				order: 'desc',
+			},
+			skip: !showRichSuggestions,
+		});
+		const recipeSuggestions = useMemo<SuggestionData[]>(() => {
+			return frequencyRecipes.slice(0, 5).map((r) => ({
+				type: 'recipe',
+				recipe: r,
+				id: r.get('id'),
+			}));
+		}, [frequencyRecipes]);
+
+		const hasFewSuggestions =
+			frequencyFoodsSuggestions.length +
+				recipeSuggestions.length +
+				expiresSoonSuggestions.length <
+			10;
+
+		const searchFoodsSuggestions = useMemo<SuggestionData[]>(() => {
+			return mapFoodsToSuggestions(searchFoods, hasFewSuggestions ? 20 : 10);
+		}, [searchFoods, mapFoodsToSuggestions, hasFewSuggestions]);
+
+		const allSuggestions = useMemo(() => {
+			return [
+				...frequencyFoodsSuggestions,
+				...recipeSuggestions,
+				...expiresSoonSuggestions,
+				...searchFoodsSuggestions,
+			];
+		}, [
+			searchFoodsSuggestions,
+			frequencyFoodsSuggestions,
+			recipeSuggestions,
+			expiresSoonSuggestions,
+		]);
 
 		const contentRef = useRef<HTMLDivElement>(null);
 		const innerRef = useSize(({ width }) => {
@@ -109,6 +250,20 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 				contentRef.current.style.width = width + 'px';
 			}
 		});
+
+		const randomSuggestion = useDebouncedValue(
+			() => {
+				if (allSuggestions.length === 0) return null;
+				return allSuggestions[
+					Math.floor(Math.random() * allSuggestions.length)
+				];
+			},
+			3000,
+			[allSuggestions],
+		);
+		const placeholder = randomSuggestion
+			? suggestionToString(randomSuggestion)
+			: randomPlaceholder;
 
 		const {
 			isOpen,
@@ -121,29 +276,33 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			setInputValue,
 			selectItem,
 			openMenu,
-		} = useCombobox({
+		} = useCombobox<SuggestionData>({
 			onInputValueChange({ inputValue }) {
 				startTransition(() => {
 					setSuggestionPrompt(inputValue || '');
 				});
 			},
-			items: filteredSuggestions,
-			itemToString(item) {
-				return item ?? '';
-			},
-			async onSelectedItemChange({ selectedItem }) {
+			items: allSuggestions,
+			itemToString: suggestionToString,
+			async onSelectedItemChange({ selectedItem, inputValue }) {
 				if (selectedItem) {
-					if (isUrl(selectedItem)) {
+					reset();
+					if (selectedItem.type === 'url') {
 						if (isSubscribed) {
-							recipeSavePromptState.url = selectedItem;
+							recipeSavePromptState.url = selectedItem.url;
 						} else {
 							signupState.status = 'open';
 						}
+					} else if (selectedItem.type === 'food') {
+						try {
+							await onAdd([selectedItem.name]);
+						} catch (e) {
+							setInputValue(inputValue || '');
+						}
 					} else {
-						await onAdd([selectedItem]);
+						setAddingRecipe(selectedItem.recipe);
 					}
 					setRandomPlaceholder(getRandomPlaceholder());
-					reset();
 				}
 			},
 			stateReducer,
@@ -167,81 +326,136 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 
 		const mergedRef = useMergedRef(ref, innerRef);
 
+		let itemIndex = 0;
+
+		const noSuggestions = allSuggestions.length === 0;
+
 		return (
-			<Popover open={isOpen}>
-				<PopoverAnchor asChild>
-					<div
-						data-state={isOpen ? 'open' : 'closed'}
-						className="flex gap-2 flex-row w-full"
-						{...rest}
-						ref={mergedRef}
-					>
-						<Input
-							data-test="grocery-list-add-input"
-							name="text"
-							required
-							className="flex-1"
-							autoComplete="off"
-							{...getInputProps({
-								placeholder,
-							})}
-							onPaste={onInputPaste}
-							onPointerDown={openMenu}
-						/>
-						<Button
-							data-test="grocery-list-add-button"
-							color="primary"
-							onClick={() => selectItem(inputValue)}
+			<>
+				<Popover open={isOpen}>
+					<PopoverAnchor asChild>
+						<div
+							data-state={isOpen ? 'open' : 'closed'}
+							className="flex gap-2 flex-row w-full"
+							{...rest}
+							ref={mergedRef}
 						>
-							{inputIsUrl ? 'Scan' : 'Add'}
-						</Button>
-					</div>
-				</PopoverAnchor>
-				<PopoverContent
-					forceMount
-					disableBlur
-					radius="md"
-					align="start"
-					sideOffset={12}
-					onOpenAutoFocus={preventDefault}
-					padding="none"
-					{...getMenuProps({
-						ref: contentRef,
-					})}
-					className="overflow-x-hidden overflow-y-auto max-h-30vh lg:max-h-50vh rounded-lg w-full max-w-none"
-				>
-					<ul className="flex flex-col list-none m-0 p-0">
-						{inputIsUrl ? (
-							<ListItem
-								className="bg-primary-wash"
-								onClick={() => selectItem(inputValue)}
+							<Input
+								data-test="grocery-list-add-input"
+								name="text"
+								required
+								className="flex-1"
+								autoComplete="off"
+								{...getInputProps({
+									placeholder,
+								})}
+								onPaste={onInputPaste}
+								onPointerDown={openMenu}
+							/>
+							<Button
+								data-test="grocery-list-add-button"
+								color="primary"
+								onClick={() =>
+									selectItem({
+										type: 'food',
+										name: inputValue,
+										id: inputValue,
+									})
+								}
 							>
-								Scan web recipe
-							</ListItem>
-						) : filteredSuggestions.length > 0 ? (
-							filteredSuggestions.map((suggestion, index) => (
-								<ListItem
-									key={suggestion}
-									suggestion={suggestion}
-									{...getItemProps({ item: suggestion, index })}
-									className={classNames({
-										['bg-primary-wash']: highlightedIndex === index,
-									})}
-								>{`${suggestion}`}</ListItem>
-							))
-						) : (
-							<ListItem>No suggestions</ListItem>
+								{inputIsUrl ? 'Scan' : 'Add'}
+							</Button>
+						</div>
+					</PopoverAnchor>
+					<PopoverContent
+						forceMount
+						disableBlur
+						radius="md"
+						align="start"
+						sideOffset={12}
+						onOpenAutoFocus={preventDefault}
+						{...getMenuProps({
+							ref: contentRef,
+						})}
+						className={classNames(
+							'overflow-x-hidden overflow-y-auto overscroll-contain max-h-[calc(var(--viewport-height,40vh)-140px)] lg:max-h-50vh rounded-lg w-full max-w-none gap-4 p-3',
 						)}
-					</ul>
-				</PopoverContent>
-			</Popover>
+						onPointerDown={stopPropagation}
+						onPointerMove={stopPropagation}
+						onPointerUp={stopPropagation}
+						onScroll={stopPropagation}
+						onTouchDown={stopPropagation}
+						onTouchMove={stopPropagation}
+						onTouchUp={stopPropagation}
+					>
+						{!inputValue &&
+							showRichSuggestions &&
+							frequencyFoodsSuggestions.length + recipeSuggestions.length >
+								0 && (
+								<SuggestionGroup title="Suggested">
+									{frequencyFoodsSuggestions.map((suggestion) => (
+										<SuggestionItem
+											key={suggestion.id}
+											value={suggestion}
+											highlighted={highlightedIndex === itemIndex}
+											{...getItemProps({
+												item: suggestion,
+												index: itemIndex++,
+											})}
+										/>
+									))}
+									{recipeSuggestions.map((suggestion) => (
+										<SuggestionItem
+											key={suggestion.id}
+											value={suggestion}
+											highlighted={highlightedIndex === itemIndex}
+											{...getItemProps({
+												item: suggestion,
+												index: itemIndex++,
+											})}
+										/>
+									))}
+								</SuggestionGroup>
+							)}
+						{!inputValue &&
+							showRichSuggestions &&
+							expiresSoonSuggestions.length > 0 && (
+								<SuggestionGroup title="Expiring Soon">
+									{expiresSoonSuggestions.map((suggestion) => (
+										<SuggestionItem
+											key={suggestion.id}
+											value={suggestion}
+											highlighted={highlightedIndex === itemIndex}
+											{...getItemProps({
+												item: suggestion,
+												index: itemIndex++,
+											})}
+										/>
+									))}
+								</SuggestionGroup>
+							)}
+						{searchFoodsSuggestions.length > 0 && (
+							<SuggestionGroup title={inputValue ? 'Matches' : 'Favorites'}>
+								{searchFoodsSuggestions.map((suggestion) => (
+									<SuggestionItem
+										key={suggestion.id}
+										value={suggestion}
+										highlighted={highlightedIndex === itemIndex}
+										{...getItemProps({ item: suggestion, index: itemIndex++ })}
+									/>
+								))}
+							</SuggestionGroup>
+						)}
+						{noSuggestions && <div>No suggestions</div>}
+					</PopoverContent>
+				</Popover>
+				<AddRecipeDialog
+					recipe={addingRecipe}
+					onOpenChange={clearAddingRecipe}
+				/>
+			</>
 		);
 	},
-);
-
-const ListItem = withClassName(
-	'li',
-	'text-md list-item flex align-start justify-between w-full rd-0 px-4 py-2 border-width-0 border-black border-style-solid repeated:border-t-1',
 );
 
 export const AddBar = forwardRef<HTMLDivElement, AddBarProps>(function AddBar(
@@ -271,5 +485,79 @@ function Skeleton() {
 				Add
 			</Button>
 		</div>
+	);
+}
+
+function SuggestionGroup({
+	title,
+	children,
+	className,
+	...rest
+}: {
+	title: string;
+	children?: ReactNode;
+	className?: string;
+}) {
+	return (
+		<div className={classNames('flex flex-col gap-2', className)} {...rest}>
+			<div className="text-xs uppercase text-gray-7 font-bold ml-1">
+				{title}
+			</div>
+			<div className="flex flex-row gap-2 flex-wrap">{children}</div>
+		</div>
+	);
+}
+
+const SuggestionItem = forwardRef<
+	HTMLButtonElement,
+	ButtonProps & {
+		highlighted?: boolean;
+		value: SuggestionData;
+	}
+>(function SuggestionItem({ highlighted, className, value, ...rest }, ref) {
+	let displayString;
+	if (value.type === 'food') {
+		displayString = value.name;
+	} else if (value.type === 'recipe') {
+		displayString = value.recipe.get('title');
+	} else {
+		displayString = value.url;
+	}
+
+	return (
+		<Button
+			size="small"
+			color="default"
+			ref={ref}
+			className={classNames(
+				'rounded-full font-normal border-gray-5 max-w-100% overflow-hidden text-ellipsis',
+				{
+					'bg-primary-wash': highlighted,
+				},
+				className,
+			)}
+			{...rest}
+		>
+			<span className="width-full overflow-hidden text-ellipsis">
+				{displayString}
+			</span>
+		</Button>
+	);
+});
+
+function AddRecipeDialog({
+	recipe,
+	onOpenChange,
+}: {
+	recipe: Recipe | null;
+	onOpenChange: (open: boolean) => void;
+}) {
+	if (!recipe) return null;
+	return (
+		<AddToListDialog
+			recipe={recipe}
+			open={!!recipe}
+			onOpenChange={onOpenChange}
+		/>
 	);
 }

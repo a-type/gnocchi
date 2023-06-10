@@ -159,7 +159,9 @@ function RecipeListItem({ recipe }: { recipe: Recipe }) {
 								<DotsVerticalIcon className="w-20px h-20px" />
 							</Button>
 						</DropdownMenuTrigger>
-						<DropdownMenuContent>
+						<DropdownMenuContent
+							onPointerDownOutside={() => setMenuOpen(false)}
+						>
 							<RecipeAddTag
 								recipe={recipe}
 								onAdd={() => {

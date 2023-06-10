@@ -28,7 +28,7 @@ export type LongPressActionProps = ActionButtonProps & {
  * After delay, the gesture must remain within CANCEL_DISTANCE or be cancelled.
  */
 const THRESHOLD_DISTANCE = 10;
-const CANCEL_DISTANCE = 20;
+const CANCEL_DISTANCE = 30;
 
 export function LongPressAction({
 	onActivate,

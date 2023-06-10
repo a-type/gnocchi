@@ -1,4 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
+import { preventDefault } from '@aglio/tools';
 import { ActionButton } from '@aglio/ui/src/components/actions';
 import { Button } from '@aglio/ui/src/components/button';
 import {
@@ -23,11 +24,12 @@ export function AddItemAction() {
 			<DialogTrigger asChild>
 				<ActionButton icon={<PlusIcon />}>Add items</ActionButton>
 			</DialogTrigger>
-			<DialogContent>
+			<DialogContent onOpenAutoFocus={preventDefault}>
 				<FormikForm
 					initialValues={{ name: '' }}
-					onSubmit={async (values) => {
+					onSubmit={async (values, bag) => {
 						await addItems([values.name], { purchased: true });
+						bag.resetForm();
 					}}
 				>
 					<TextField name="name" label="Name" placeholder="garlic" />

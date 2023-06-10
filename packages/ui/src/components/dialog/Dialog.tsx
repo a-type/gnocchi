@@ -115,7 +115,11 @@ export const DialogTitle = StyledTitle;
 export const DialogDescription = StyledDescription;
 export const DialogClose = DialogPrimitive.Close;
 
+export type { DialogProps } from '@radix-ui/react-dialog';
+
 export const DialogActions = withClassName(
 	'div',
-	'flex justify-end sticky bottom-0 w-full gap-3 items-center bg-white py-3 translate-y-6 flex-wrap',
+	'flex justify-end sticky w-full gap-3 items-center bg-white py-3 translate-y-6 flex-wrap',
+	'bottom--6',
+	'sm:(bottom-0)',
 );

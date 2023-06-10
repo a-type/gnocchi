@@ -49,12 +49,13 @@ export function useItemsGroupedAndSorted() {
 
 // keeping this static to make the query reusable
 const THREE_DAYS_FROM_NOW = addDays(endOfDay(new Date()), 3).getTime();
-export function useExpiresSoonItems() {
+export function useExpiresSoonItems({ skip }: { skip?: boolean } = {}) {
 	return hooks.useAllItems({
 		index: {
 			where: 'purchasedAndExpiresAt',
 			lt: THREE_DAYS_FROM_NOW,
 		},
+		skip,
 	});
 }
 

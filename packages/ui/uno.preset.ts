@@ -639,7 +639,7 @@ export default function presetAglio(): Preset {
         }
 
 				@media (display-mode: standalone) {
-					html {
+					html, body {
 						overscroll-behavior: none;
 					}
 				}
