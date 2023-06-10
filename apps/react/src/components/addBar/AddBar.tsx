@@ -181,10 +181,10 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			(foods: Food[], limit = 5): SuggestionData[] => {
 				return foods
 					.filter((item) => !existingFoods.has(item.get('canonicalName')))
-					.slice(0, limit)
 					.sort((a, b) => {
 						return a.get('purchaseCount') > b.get('purchaseCount') ? -1 : 1;
 					})
+					.slice(0, limit)
 					.map((s) => {
 						if (s.get('pluralizeName'))
 							return pluralize(s.get('canonicalName'));
