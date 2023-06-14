@@ -254,20 +254,40 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			return mapRecipesToSuggestions(searchRecipes);
 		}, [searchRecipes, mapRecipesToSuggestions]);
 
+		const showSuggested =
+			!suggestionPrompt &&
+			showRichSuggestions &&
+			frequencyFoodsSuggestions.length + recipeSuggestions.length > 0;
+		const showExpiring =
+			!suggestionPrompt &&
+			showRichSuggestions &&
+			expiresSoonSuggestions.length > 0;
+
+		const showRecipeMatches = !!suggestionPrompt && showRichSuggestions;
+
 		const allSuggestions = useMemo(() => {
-			return [
-				...frequencyFoodsSuggestions,
-				...recipeSuggestions,
-				...expiresSoonSuggestions,
-				...searchFoodsSuggestions,
-				...searchRecipeSuggestions,
-			];
+			let allSuggestions: SuggestionData[] = [];
+			if (showSuggested) {
+				allSuggestions.push(...frequencyFoodsSuggestions);
+				allSuggestions.push(...recipeSuggestions);
+			}
+			if (showExpiring) {
+				allSuggestions.push(...expiresSoonSuggestions);
+			}
+			allSuggestions.push(...searchFoodsSuggestions);
+			if (showRecipeMatches) {
+				allSuggestions.push(...searchRecipeSuggestions);
+			}
+			return allSuggestions;
 		}, [
 			searchFoodsSuggestions,
 			frequencyFoodsSuggestions,
 			recipeSuggestions,
 			expiresSoonSuggestions,
 			searchRecipeSuggestions,
+			showSuggested,
+			showExpiring,
+			showRecipeMatches,
 		]);
 
 		const contentRef = useRef<HTMLDivElement>(null);
@@ -415,54 +435,48 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 						onTouchMove={stopPropagation}
 						onTouchUp={stopPropagation}
 					>
-						{!inputValue &&
-							showRichSuggestions &&
-							frequencyFoodsSuggestions.length + recipeSuggestions.length >
-								0 && (
-								<SuggestionGroup title="Suggested">
-									{frequencyFoodsSuggestions.map((suggestion) => (
-										<SuggestionItem
-											key={suggestion.id}
-											value={suggestion}
-											highlighted={highlightedIndex === itemIndex}
-											{...getItemProps({
-												item: suggestion,
-												index: itemIndex++,
-											})}
-										/>
-									))}
-									{recipeSuggestions.map((suggestion) => (
-										<SuggestionItem
-											key={suggestion.id}
-											value={suggestion}
-											highlighted={highlightedIndex === itemIndex}
-											{...getItemProps({
-												item: suggestion,
-												index: itemIndex++,
-											})}
-										/>
-									))}
-								</SuggestionGroup>
-							)}
-						{!inputValue &&
-							showRichSuggestions &&
-							expiresSoonSuggestions.length > 0 && (
-								<SuggestionGroup title="Expiring Soon">
-									{expiresSoonSuggestions.map((suggestion) => (
-										<SuggestionItem
-											key={suggestion.id}
-											value={suggestion}
-											highlighted={highlightedIndex === itemIndex}
-											{...getItemProps({
-												item: suggestion,
-												index: itemIndex++,
-											})}
-										/>
-									))}
-								</SuggestionGroup>
-							)}
-						{searchFoodsSuggestions.length + searchRecipeSuggestions.length >
-							0 && (
+						{showSuggested && (
+							<SuggestionGroup title="Suggested">
+								{frequencyFoodsSuggestions.map((suggestion) => (
+									<SuggestionItem
+										key={suggestion.id}
+										value={suggestion}
+										highlighted={highlightedIndex === itemIndex}
+										{...getItemProps({
+											item: suggestion,
+											index: itemIndex++,
+										})}
+									/>
+								))}
+								{recipeSuggestions.map((suggestion) => (
+									<SuggestionItem
+										key={suggestion.id}
+										value={suggestion}
+										highlighted={highlightedIndex === itemIndex}
+										{...getItemProps({
+											item: suggestion,
+											index: itemIndex++,
+										})}
+									/>
+								))}
+							</SuggestionGroup>
+						)}
+						{showExpiring && (
+							<SuggestionGroup title="Expiring Soon">
+								{expiresSoonSuggestions.map((suggestion) => (
+									<SuggestionItem
+										key={suggestion.id}
+										value={suggestion}
+										highlighted={highlightedIndex === itemIndex}
+										{...getItemProps({
+											item: suggestion,
+											index: itemIndex++,
+										})}
+									/>
+								))}
+							</SuggestionGroup>
+						)}
+						{!noSuggestions && (
 							<SuggestionGroup title={inputValue ? 'Matches' : 'Favorites'}>
 								{searchFoodsSuggestions.map((suggestion) => (
 									<SuggestionItem
@@ -472,14 +486,18 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 										{...getItemProps({ item: suggestion, index: itemIndex++ })}
 									/>
 								))}
-								{searchRecipeSuggestions.map((suggestion) => (
-									<SuggestionItem
-										key={suggestion.id}
-										value={suggestion}
-										highlighted={highlightedIndex === itemIndex}
-										{...getItemProps({ item: suggestion, index: itemIndex++ })}
-									/>
-								))}
+								{showRecipeMatches &&
+									searchRecipeSuggestions.map((suggestion) => (
+										<SuggestionItem
+											key={suggestion.id}
+											value={suggestion}
+											highlighted={highlightedIndex === itemIndex}
+											{...getItemProps({
+												item: suggestion,
+												index: itemIndex++,
+											})}
+										/>
+									))}
 							</SuggestionGroup>
 						)}
 						{noSuggestions && <div>No suggestions</div>}
