@@ -2,15 +2,10 @@ import { EmailSignInForm } from '@/components/auth/EmailSignInForm.jsx';
 import { EmailSignUpForm } from '@/components/auth/EmailSignUpForm.jsx';
 import { useSearchParams } from '@verdant-web/react-router';
 import { OAuthSignInButton } from '../components/auth/OAuthSignInButton.jsx';
-import {
-	PageContent,
-	PageRoot,
-	PageSection,
-} from '@aglio/ui/components/layouts';
+import { PageContent, PageSection } from '@aglio/ui/components/layouts';
 import { H1, H2 } from '@aglio/ui/components/typography';
 import { Divider } from '@aglio/ui/components/divider';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { NavBar } from '@/components/nav/NavBar.jsx';
 
 export interface JoinPageProps {}
 

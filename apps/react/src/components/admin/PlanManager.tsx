@@ -8,6 +8,8 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/src/components/dialog';
 import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
+import classNames from 'classnames';
+import { useState } from 'react';
 
 export interface PlanManagerProps {}
 
@@ -62,6 +64,7 @@ function FeatureFlagPlanManager({
 	const flags = JSON.parse(plan.featureFlags || '{}');
 	const updateFlags = trpc.admin.updateFeatureFlags.useMutation();
 	const updateMember = trpc.admin.updateProfile.useMutation();
+	const [open, setOpen] = useState(false);
 
 	return (
 		<div className="flex flex-row justify-between items-center border-light p-2">
@@ -87,7 +90,7 @@ function FeatureFlagPlanManager({
 						<i>📉 No subscription</i>
 					))}
 			</div>
-			<Dialog>
+			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogTrigger asChild>
 					<Button>Edit</Button>
 				</DialogTrigger>
@@ -141,6 +144,8 @@ function FeatureFlagPlanManager({
 							</li>
 						))}
 					</ul>
+					<H2>Library Info</H2>
+					{open && <PlanLibraryInfo planId={plan.id} />}
 				</DialogContent>
 			</Dialog>
 		</div>
@@ -148,3 +153,36 @@ function FeatureFlagPlanManager({
 }
 
 export default PlanManager;
+
+function PlanLibraryInfo({ planId }: { planId: string }) {
+	const { data } = trpc.admin.planLibraryInfo.useQuery({ planId });
+
+	return (
+		<div>
+			<div>
+				<ul>
+					<li>Operations: {data?.operationsCount}</li>
+					<li>Baselines: {data?.baselinesCount}</li>
+					<li>Server Order: {data?.latestServerOrder}</li>
+				</ul>
+			</div>
+			<div>
+				<ul>
+					{data?.replicas.map((replica) => (
+						<li
+							key={replica.id}
+							className={classNames({
+								'opacity-50': replica.truant,
+							})}
+						>
+							<b>
+								Replica {replica.id} ({(replica as any).profile.name}):
+							</b>
+							<span>Acked Server Order: {replica.ackedServerOrder}</span>
+						</li>
+					))}
+				</ul>
+			</div>
+		</div>
+	);
+}

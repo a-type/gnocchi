@@ -27,6 +27,19 @@ export const adminRouter = t.router({
 		});
 		return allPlans;
 	}),
+	planLibraryInfo: t.procedure
+		.input(
+			z.object({
+				planId: z.string(),
+			}),
+		)
+		.query(async ({ input, ctx }) => {
+			if (!ctx.isProductAdmin) {
+				throw new RequestError(403, 'Not authorized');
+			}
+			const { planId } = input;
+			return ctx.lofi.getLibraryInfo(getGroceryLibraryName(planId));
+		}),
 	updateFeatureFlags: t.procedure
 		.input(
 			z.object({

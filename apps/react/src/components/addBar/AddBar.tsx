@@ -36,6 +36,7 @@ import addDays from 'date-fns/addDays';
 import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
 import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue.js';
+import { FileTextIcon } from '@radix-ui/react-icons';
 
 export interface AddBarProps {
 	className?: string;
@@ -199,6 +200,22 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			[existingFoods],
 		);
 
+		const mapRecipesToSuggestions = useCallback(
+			(recipes: Recipe[], limit = 5): SuggestionData[] => {
+				return recipes
+					.sort((a, b) => {
+						return a.get('cookCount') > b.get('cookCount') ? -1 : 1;
+					})
+					.slice(0, limit)
+					.map((s) => ({
+						type: 'recipe',
+						recipe: s,
+						id: s.get('id'),
+					}));
+			},
+			[],
+		);
+
 		const frequencyFoodsSuggestions = useMemo<SuggestionData[]>(() => {
 			return mapFoodsToSuggestions(frequencyFoods);
 		}, [frequencyFoods, mapFoodsToSuggestions]);
@@ -213,11 +230,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			skip: !showRichSuggestions,
 		});
 		const recipeSuggestions = useMemo<SuggestionData[]>(() => {
-			return frequencyRecipes.slice(0, 5).map((r) => ({
-				type: 'recipe',
-				recipe: r,
-				id: r.get('id'),
-			}));
+			return mapRecipesToSuggestions(frequencyRecipes);
 		}, [frequencyRecipes]);
 
 		const hasFewSuggestions =
@@ -230,18 +243,31 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			return mapFoodsToSuggestions(searchFoods, hasFewSuggestions ? 20 : 10);
 		}, [searchFoods, mapFoodsToSuggestions, hasFewSuggestions]);
 
+		const searchRecipes = hooks.useAllRecipes({
+			index: {
+				where: 'titleMatch',
+				startsWith: suggestionPrompt?.toLowerCase().trim() ?? '',
+			},
+			skip: !showRichSuggestions || !suggestionPrompt,
+		});
+		const searchRecipeSuggestions = useMemo<SuggestionData[]>(() => {
+			return mapRecipesToSuggestions(searchRecipes);
+		}, [searchRecipes, mapRecipesToSuggestions]);
+
 		const allSuggestions = useMemo(() => {
 			return [
 				...frequencyFoodsSuggestions,
 				...recipeSuggestions,
 				...expiresSoonSuggestions,
 				...searchFoodsSuggestions,
+				...searchRecipeSuggestions,
 			];
 		}, [
 			searchFoodsSuggestions,
 			frequencyFoodsSuggestions,
 			recipeSuggestions,
 			expiresSoonSuggestions,
+			searchRecipeSuggestions,
 		]);
 
 		const contentRef = useRef<HTMLDivElement>(null);
@@ -258,7 +284,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 					Math.floor(Math.random() * allSuggestions.length)
 				];
 			},
-			3000,
+			15000,
 			[allSuggestions],
 		);
 		const placeholder = randomSuggestion
@@ -435,9 +461,18 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 									))}
 								</SuggestionGroup>
 							)}
-						{searchFoodsSuggestions.length > 0 && (
+						{searchFoodsSuggestions.length + searchRecipeSuggestions.length >
+							0 && (
 							<SuggestionGroup title={inputValue ? 'Matches' : 'Favorites'}>
 								{searchFoodsSuggestions.map((suggestion) => (
+									<SuggestionItem
+										key={suggestion.id}
+										value={suggestion}
+										highlighted={highlightedIndex === itemIndex}
+										{...getItemProps({ item: suggestion, index: itemIndex++ })}
+									/>
+								))}
+								{searchRecipeSuggestions.map((suggestion) => (
 									<SuggestionItem
 										key={suggestion.id}
 										value={suggestion}
@@ -531,7 +566,7 @@ const SuggestionItem = forwardRef<
 			color="default"
 			ref={ref}
 			className={classNames(
-				'rounded-full font-normal border-gray-5 max-w-100% overflow-hidden text-ellipsis',
+				'rounded-full font-normal border-gray-5 max-w-100% overflow-hidden text-ellipsis flex flex-row',
 				{
 					'bg-primary-wash': highlighted,
 				},
@@ -539,7 +574,8 @@ const SuggestionItem = forwardRef<
 			)}
 			{...rest}
 		>
-			<span className="width-full overflow-hidden text-ellipsis">
+			{value.type === 'recipe' && <FileTextIcon />}
+			<span className="flex-1 overflow-hidden text-ellipsis">
 				{displayString}
 			</span>
 		</Button>
