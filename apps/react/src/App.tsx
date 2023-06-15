@@ -58,8 +58,8 @@ export function App() {
 
 function ErrorFallback() {
 	return (
-		<div className="flex items-center justify-center p-4">
-			<div className="flex items-start justify-center gap-4 max-w-700px">
+		<div className="flex flex-col items-center justify-center p-4">
+			<div className="flex flex-col items-start justify-center gap-4 max-w-700px">
 				<H1>Something went wrong</H1>
 				<P>
 					Sorry about this. The app has crashed. You can try refreshing, but if

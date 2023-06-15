@@ -15,13 +15,6 @@ describe('ingredient parsing', () => {
 		['4 tbsps butter', 4, 'tablespoon', 'butter', []],
 		['2 zucchini', 2, '', 'zucchini', []],
 		['3/4 lb fettuccine pasta', 0.75, 'pound', 'fettuccine pasta', []],
-		[
-			'4 boneless, skinless chicken breasts',
-			4,
-			'',
-			'boneless, skinless chicken breast',
-			[],
-		],
 		['3 slices of bread', 3, 'slice', 'bread', []],
 		['1 can cream of mushroom soup', 1, 'can', 'cream of mushroom soup', []],
 		[
@@ -58,9 +51,23 @@ describe('ingredient parsing', () => {
 		['1/2 T salt', 0.5, 'tablespoon', 'salt', []],
 		['□ ¼ cup rice', 0.25, 'cup', 'rice', []],
 		['1 tin of smoked mussels', 1, 'tin', 'smoked mussel', []],
-
-		// TODO:
-		// ["3 12oz cans of tomato paste", 3, "12oz can", "tomato paste", []],
+		[
+			'fennel bulb (about 6 oz.), thinly sliced, plus frond',
+			1,
+			'',
+			'fennel bulb',
+			['about 6 oz.', 'thinly sliced', 'plus frond'],
+		],
+		// not ideal but good enough
+		['3 12oz cans of tomato paste', 36, 'oz can', 'tomato paste', []],
+		// tricky cases
+		[
+			'4 boneless, skinless chicken breasts',
+			4,
+			'',
+			'boneless, skinless chicken breast',
+			[],
+		],
 	] as const;
 
 	testData.forEach((test) => {

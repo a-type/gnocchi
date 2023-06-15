@@ -1,3 +1,4 @@
+import { isAllAdjectives } from './adjectives.js';
 import { commentsParser } from './commentsParser.js';
 import { depluralize } from './depluralize.js';
 import {
@@ -41,6 +42,8 @@ export function parseIngredient(source: string): {
 	const unitResult = greedyMatchUnit(numberResult.remaining);
 	const ofResult = greedyMatchOf(unitResult.remaining);
 	const commentResult = reverseGreedyMatchComment(ofResult.remaining);
+	const food = commentResult.remaining.trim();
+
 	const isSectionHeader =
 		source.endsWith(':') || source.toLocaleLowerCase().startsWith('for the');
 
@@ -52,7 +55,7 @@ export function parseIngredient(source: string): {
 		unit: unitResult.matched
 			? depluralize(unitParser(unitResult.matched.trim())).toLowerCase()
 			: DEFAULT_UNIT,
-		food: depluralize(commentResult.remaining.trim()).toLowerCase(),
+		food: depluralize(food).toLowerCase(),
 		comments: commentResult.matched
 			? commentsParser(commentResult.matched.trim())
 			: [],

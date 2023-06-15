@@ -1,3 +1,4 @@
+import { isAllAdjectives } from './adjectives.js';
 import {
 	articles,
 	knownComments,
@@ -223,6 +224,19 @@ export function reverseGreedyMatchComment(
 			input.slice(0, -trailingParentheticalClauseMatch[0].length),
 			ctx,
 		);
+	}
+
+	const trailingCommaStatementMatch = /,\s+([^,]+)$/.exec(input);
+	if (trailingCommaStatementMatch) {
+		const remaining = input.slice(0, -trailingCommaStatementMatch[0].length);
+		// avoid leaving only adjectives left as the final food string -
+		// that might indicate the comment was part of a food description
+		// which includes commas in a list of qualifying adjectives.
+		// see the test case "4 boneless, skinless chicken breasts"
+		if (!isAllAdjectives(remaining)) {
+			ctx.runningText = trailingCommaStatementMatch[0] + ctx.runningText;
+			return reverseGreedyMatchComment(remaining, ctx);
+		}
 	}
 
 	return {
