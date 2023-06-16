@@ -1,4 +1,5 @@
 export function sanitize(text: string) {
+	text = text.trim();
 	// remove weird characters
 	for (const char of removeLeadingChars) {
 		if (text.startsWith(char)) {
