@@ -34,7 +34,7 @@ export function RecipeInstructionsField({
 			{editor && <Toolbar editor={editor} />}
 			<RichEditor
 				editor={editor}
-				className="[&_.ProseMirror]:(bg-gray1 rounded-md p-4 border-default)"
+				className="[&_.ProseMirror]:(bg-gray1 rounded-lg p-4 border-default)"
 			/>
 			<P size="xs">
 				Press <kbd>Enter</kbd> to create a new step. Each step line will have a

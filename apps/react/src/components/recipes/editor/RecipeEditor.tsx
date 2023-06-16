@@ -19,6 +19,7 @@ import { RecipeUrlField } from './RecipeUrlField.jsx';
 import { H2 } from '@aglio/ui/components/typography';
 import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
+import { RecipeTimeFields } from '@/components/recipes/editor/RecipeTimeFields.jsx';
 
 export interface RecipeEditorProps {
 	slug: string;
@@ -55,6 +56,9 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 			<div>
 				<H2 className="gutter-bottom">Description</H2>
 				<RecipePreludeEditor recipe={recipe} />
+			</div>
+			<div>
+				<RecipeTimeFields recipe={recipe} />
 			</div>
 			<div>
 				<H2 className="gutter-bottom">Ingredients</H2>

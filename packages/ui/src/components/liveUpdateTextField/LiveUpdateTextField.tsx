@@ -27,6 +27,7 @@ export type LiveUpdateTextFieldProps = {
 	required?: boolean;
 	placeholder?: string;
 	type?: InputProps['type'];
+	id?: string;
 };
 
 /**
@@ -48,6 +49,7 @@ export const LiveUpdateTextField = forwardRef<
 		onBlur,
 		textArea,
 		type,
+		id,
 		...rest
 	},
 	ref,
@@ -112,6 +114,7 @@ export const LiveUpdateTextField = forwardRef<
 				value={displayValue}
 				onChange={handleChange}
 				autoSize
+				id={id}
 				{...rest}
 			/>
 		);
@@ -124,6 +127,7 @@ export const LiveUpdateTextField = forwardRef<
 				value={displayValue}
 				onChange={handleChange}
 				type={type}
+				id={id}
 				{...rest}
 			/>
 		);

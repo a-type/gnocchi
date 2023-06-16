@@ -12,7 +12,7 @@ export function RecipePreludeEditor({ recipe }: RecipePreludeEditor) {
 		<div>
 			<RichEditor
 				editor={editor}
-				className="[&>.ProseMirror]:(bg-gray1 rounded-md p-4 border-default)"
+				className="[&>.ProseMirror]:(bg-gray1 rounded-lg p-4 border-default)"
 			/>
 		</div>
 	);

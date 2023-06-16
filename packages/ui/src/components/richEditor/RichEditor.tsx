@@ -22,7 +22,7 @@ export const RichEditor = forwardRef<any, RichEditorProps>(function RichEditor(
 		<EditorContent
 			ref={ref as any}
 			className={classNames(
-				'w-full',
+				'layer-components:(w-full rounded-lg)',
 				'[&_.ProseMirror:focus]:(outline-none bg-gray1)',
 				'[&_.ProseMirror_h1,h2,h3,p]:mt-0',
 				'[&_.ProseMirror_h1]:(text-xl font-medium)',

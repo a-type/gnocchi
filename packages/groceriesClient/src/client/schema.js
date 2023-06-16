@@ -92,6 +92,10 @@ const foods = collection({
         pluralizeName: {
             type: 'boolean',
             default: false
+        },
+        doNotSuggest: {
+            type: 'boolean',
+            default: false
         }
     },
     synthetics: {
@@ -314,6 +318,18 @@ const recipes = collection({
             default: ()=>Date.now(),
             indexed: true
         },
+        prepTimeMinutes: {
+            type: 'number',
+            nullable: true
+        },
+        cookTimeMinutes: {
+            type: 'number',
+            nullable: true
+        },
+        totalTimeMinutes: {
+            type: 'number',
+            nullable: true
+        },
         prelude: {
             type: 'any',
             default: {
@@ -499,7 +515,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 34,
+    version: 35,
     collections: {
         categories,
         items,

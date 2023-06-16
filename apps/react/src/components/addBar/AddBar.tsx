@@ -181,6 +181,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 		const mapFoodsToSuggestions = useCallback(
 			(foods: Food[], limit = 5): SuggestionData[] => {
 				return foods
+					.filter((item) => !item.get('doNotSuggest'))
 					.filter((item) => !existingFoods.has(item.get('canonicalName')))
 					.sort((a, b) => {
 						return a.get('purchaseCount') > b.get('purchaseCount') ? -1 : 1;

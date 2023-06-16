@@ -576,6 +576,7 @@ export type FoodDestructured = {
   purchaseCount: number;
   defaultListId: string | null;
   pluralizeName: boolean;
+  doNotSuggest: boolean;
 };
 export type FoodInit = {
   canonicalName: string;
@@ -588,6 +589,7 @@ export type FoodInit = {
   purchaseCount?: number;
   defaultListId?: string | null;
   pluralizeName?: boolean;
+  doNotSuggest?: boolean;
 };
 export type FoodSnapshot = {
   canonicalName: string;
@@ -600,6 +602,7 @@ export type FoodSnapshot = {
   purchaseCount: number;
   defaultListId: string | null;
   pluralizeName: boolean;
+  doNotSuggest: boolean;
 };
 /** Food sub-object types */
 
@@ -652,6 +655,10 @@ export type FoodPluralizeName = boolean;
 export type FoodPluralizeNameInit = FoodPluralizeName | undefined;
 export type FoodPluralizeNameSnapshot = FoodPluralizeName;
 export type FoodPluralizeNameDestructured = FoodPluralizeName;
+export type FoodDoNotSuggest = boolean;
+export type FoodDoNotSuggestInit = FoodDoNotSuggest | undefined;
+export type FoodDoNotSuggestSnapshot = FoodDoNotSuggest;
+export type FoodDoNotSuggestDestructured = FoodDoNotSuggest;
 
 export type List = ObjectEntity<ListInit, ListDestructured>;
 
@@ -900,6 +907,9 @@ export type RecipeDestructured = {
   title: string;
   createdAt: number;
   updatedAt: number;
+  prepTimeMinutes: number | null;
+  cookTimeMinutes: number | null;
+  totalTimeMinutes: number | null;
   prelude: any;
   note: string | null;
   ingredients: RecipeIngredients;
@@ -920,6 +930,9 @@ export type RecipeInit = {
   title?: string;
   createdAt?: number;
   updatedAt?: number;
+  prepTimeMinutes?: number | null;
+  cookTimeMinutes?: number | null;
+  totalTimeMinutes?: number | null;
   prelude?: any;
   note?: string | null;
   ingredients?: RecipeIngredientsInit;
@@ -940,6 +953,9 @@ export type RecipeSnapshot = {
   title: string;
   createdAt: number;
   updatedAt: number;
+  prepTimeMinutes: number | null;
+  cookTimeMinutes: number | null;
+  totalTimeMinutes: number | null;
   prelude: any;
   note: string | null;
   ingredients: RecipeIngredientsSnapshot;
@@ -979,6 +995,18 @@ export type RecipeUpdatedAt = number;
 export type RecipeUpdatedAtInit = RecipeUpdatedAt | undefined;
 export type RecipeUpdatedAtSnapshot = RecipeUpdatedAt;
 export type RecipeUpdatedAtDestructured = RecipeUpdatedAt;
+export type RecipePrepTimeMinutes = number | null;
+export type RecipePrepTimeMinutesInit = RecipePrepTimeMinutes | undefined;
+export type RecipePrepTimeMinutesSnapshot = RecipePrepTimeMinutes;
+export type RecipePrepTimeMinutesDestructured = RecipePrepTimeMinutes;
+export type RecipeCookTimeMinutes = number | null;
+export type RecipeCookTimeMinutesInit = RecipeCookTimeMinutes | undefined;
+export type RecipeCookTimeMinutesSnapshot = RecipeCookTimeMinutes;
+export type RecipeCookTimeMinutesDestructured = RecipeCookTimeMinutes;
+export type RecipeTotalTimeMinutes = number | null;
+export type RecipeTotalTimeMinutesInit = RecipeTotalTimeMinutes | undefined;
+export type RecipeTotalTimeMinutesSnapshot = RecipeTotalTimeMinutes;
+export type RecipeTotalTimeMinutesDestructured = RecipeTotalTimeMinutes;
 export type RecipePrelude = any;
 export type RecipePreludeInit = RecipePrelude | undefined;
 export type RecipePreludeSnapshot = RecipePrelude;

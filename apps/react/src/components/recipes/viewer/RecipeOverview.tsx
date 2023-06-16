@@ -28,6 +28,8 @@ import { RecipePublishControl } from './RecipePublishControl.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
 import { Suspense } from 'react';
+import { formatMinutes } from '@aglio/tools';
+import { withClassName } from '@aglio/ui/hooks';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -44,7 +46,15 @@ export function RecipeOverview({ slug }: RecipeOverviewProps) {
 }
 
 function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
-	const { title, createdAt, url, mainImage } = hooks.useWatch(recipe);
+	const {
+		title,
+		createdAt,
+		url,
+		mainImage,
+		cookTimeMinutes,
+		prepTimeMinutes,
+		totalTimeMinutes,
+	} = hooks.useWatch(recipe);
 	useWatchChanges(recipe);
 
 	return (
@@ -61,9 +71,22 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							<H1>{title}</H1>
 							<RecipeNote recipe={recipe} />
 							<div className="flex flex-row justify-between items-start w-full gap-3">
-								<p className="m-0 flex-1 mt-2">
-									Created on {format(createdAt, 'LLL do, yyyy')}
-								</p>
+								<div className="flex flex-row gap-1 flex-wrap">
+									<Detail>
+										Created on {format(createdAt, 'LLL do, yyyy')}
+									</Detail>
+									{totalTimeMinutes && (
+										<Detail>
+											Total time: {formatMinutes(totalTimeMinutes)}
+										</Detail>
+									)}
+									{prepTimeMinutes && (
+										<Detail>Prep time: {formatMinutes(prepTimeMinutes)}</Detail>
+									)}
+									{cookTimeMinutes && (
+										<Detail>Cook time: {formatMinutes(cookTimeMinutes)}</Detail>
+									)}
+								</div>
 								<div className="flex flex-row gap-1 flex-wrap justify-end">
 									<RecipePublishControl recipe={recipe} />
 									<RecipeViewerEditButton recipe={recipe} />
@@ -135,3 +158,8 @@ function PreludeSection({ recipe }: { recipe: Recipe }) {
 		</div>
 	);
 }
+
+const Detail = withClassName(
+	'div',
+	'inline-flex flex-row gap-1 items-center whitespace-nowrap border-light border-solid border-1 rounded-full px-2 py-1',
+);

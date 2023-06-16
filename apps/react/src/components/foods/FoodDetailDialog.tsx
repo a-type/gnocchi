@@ -3,7 +3,7 @@ import { ReactNode, Suspense, useState } from 'react';
 import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
 import { Icon } from '../icons/Icon.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
-import { useToggle } from '@aglio/ui/hooks';
+import { useToggle, withClassName } from '@aglio/ui/hooks';
 import {
 	Dialog,
 	DialogActions,
@@ -96,15 +96,15 @@ function FoodDetailView({
 			<DialogTitle>
 				<FoodName food={food} capitalize />
 			</DialogTitle>
-			<div className="flex gap-1 items-center">
+			<Row>
 				<span>Category:</span>
 				<CategorySelect
 					value={food.get('categoryId')}
 					onChange={(val) => food.set('categoryId', val)}
 					inDialog
 				/>
-			</div>
-			<div className="flex gap-1 items-center">
+			</Row>
+			<Row>
 				<span>Default list:</span>
 				<ListSelect
 					value={food.get('defaultListId')}
@@ -112,10 +112,10 @@ function FoodDetailView({
 					includeAll={false}
 					inDialog
 				/>
-			</div>
+			</Row>
 			<Divider />
 			<div className="flex gap-1 flex-col">
-				<div className="gap-1 flex flex-row items-center">
+				<Row>
 					<span className="whitespace-nowrap">Expires after</span>
 					<LiveUpdateTextField
 						type="number"
@@ -132,7 +132,7 @@ function FoodDetailView({
 						}}
 					/>
 					<span>days</span>
-				</div>
+				</Row>
 				<span className="text-xs">
 					Set this and the app will remind you when something is about to
 					expire. Only affects newly purchased items.
@@ -141,15 +141,22 @@ function FoodDetailView({
 			<Divider />
 			<H3>Alternate names</H3>
 			<FoodNamesEditor names={food.get('alternateNames')} />
-			<div className="flex gap-1 items-center">
+			<Row>
 				<Checkbox
 					checked={food.get('pluralizeName')}
 					onCheckedChange={(val) => food.set('pluralizeName', val === true)}
 				/>
 				<span>Use pluralized name</span>
-			</div>
+			</Row>
 			<Divider />
-			<div className="flex flex-row items-center gap-1">
+			<Row>
+				<Checkbox
+					checked={food.get('doNotSuggest')}
+					onCheckedChange={(val) => food.set('doNotSuggest', val === true)}
+				/>
+				<span>Do not suggest</span>
+			</Row>
+			<Row>
 				<Button
 					onClick={() => {
 						client.foods.delete(food.get('canonicalName'));
@@ -159,7 +166,9 @@ function FoodDetailView({
 				>
 					Delete
 				</Button>
-			</div>
+			</Row>
 		</div>
 	);
 }
+
+const Row = withClassName('div', 'flex flex-row items-center gap-1');

@@ -10,3 +10,9 @@ export function shortenTimeUnits(time: string) {
 		.replace(/minute/, 'min')
 		.replace(/second/, 'sec');
 }
+
+export function formatMinutes(minutes: number) {
+	const hours = Math.floor(minutes / 60);
+	const min = minutes % 60;
+	return `${hours ? `${hours} hr` : ''}${min ? ` ${min} min` : ''}`;
+}
