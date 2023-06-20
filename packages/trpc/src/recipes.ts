@@ -28,6 +28,9 @@ export const recipesRouter = t.router({
 				input.recipeId,
 			) as {
 				title: string;
+				prepTimeMinutes: number | null;
+				cookTimeMinutes: number | null;
+				totalTimeMinutes: number | null;
 				ingredients: {
 					id: string;
 					text: string;
@@ -104,6 +107,9 @@ export const recipesRouter = t.router({
 					unpublishedAt: null,
 					mainImageUrl: snapshot.mainImage?.url ?? null,
 					instructionsSerialized: JSON.stringify(instructions),
+					prepTimeMinutes: snapshot.prepTimeMinutes,
+					cookTimeMinutes: snapshot.cookTimeMinutes,
+					totalTimeMinutes: snapshot.totalTimeMinutes,
 				},
 				create: {
 					recipeId: input.recipeId,
@@ -114,6 +120,9 @@ export const recipesRouter = t.router({
 					preludeSerialized,
 					mainImageUrl: snapshot.mainImage?.url ?? null,
 					instructionsSerialized: JSON.stringify(instructions),
+					prepTimeMinutes: snapshot.prepTimeMinutes,
+					cookTimeMinutes: snapshot.cookTimeMinutes,
+					totalTimeMinutes: snapshot.totalTimeMinutes,
 				},
 				include: {
 					ingredients: true,

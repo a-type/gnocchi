@@ -183,6 +183,9 @@ model PublishedRecipe {
   mainImageUrl           String?                     @map("main_image_url")
   instructionsSerialized String?                     @map("instructions_serialized")
   publisher              Profile                     @relation(fields: [publisherId], references: [id])
+  prepTimeMinutes        Int?                        @map("prep_time_minutes")
+  cookTimeMinutes        Int?                        @map("cook_time_minutes")
+  totalTimeMinutes       Int?                        @map("total_time_minutes")
 
   @@unique([recipeId, libraryId])
   @@map("published_recipes")

@@ -753,9 +753,9 @@ async function getScannedRecipe(
 				? JSON.parse(scanned.preludeSerialized)
 				: undefined;
 			// TODO: add to internal recipe model
-			// result.prepTimeMinutes = scanned.prepTimeMinutes ?? undefined;
-			// result.cookTimeMinutes = scanned.cookTimeMinutes ?? undefined;
-			// result.totalTimeMinutes = scanned.totalTimeMinutes ?? undefined;
+			result.prepTimeMinutes = scanned.prepTimeMinutes ?? undefined;
+			result.cookTimeMinutes = scanned.cookTimeMinutes ?? undefined;
+			result.totalTimeMinutes = scanned.totalTimeMinutes ?? undefined;
 		} else {
 			throw new Error('Unrecognized scan result type');
 		}
