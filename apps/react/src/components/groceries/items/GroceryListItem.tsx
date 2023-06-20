@@ -60,6 +60,7 @@ import { ItemDeleteButton } from './ItemDeleteButton.js';
 import { useItemDisplayText } from './hooks.js';
 import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
 import { useDraggable } from '@dnd-kit/core';
+import { preventDefault, stopPropagation } from '@aglio/tools';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -70,13 +71,6 @@ export interface GroceryListItemProps {
 		ref?: Ref<HTMLButtonElement>;
 	};
 	first?: boolean;
-}
-
-function stopPropagation(e: React.MouseEvent | React.PointerEvent) {
-	e.stopPropagation();
-}
-function preventDefault(e: React.MouseEvent | React.PointerEvent) {
-	e.preventDefault();
 }
 
 export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
@@ -178,28 +172,37 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					</div>
 					<RecentPeople item={item} />
 					<ListTag item={item} collapsed={menuOpen} />
-					<CollapsibleTrigger asChild>
-						<Button
-							color="ghost"
-							className="relative"
-							size="small"
-							onContextMenu={preventDefault}
-							{...menuProps}
-						>
-							{first ? (
-								<OnboardingTooltip
-									onboarding={categorizeOnboarding}
-									step="categorize"
-									content="Tap and hold to change category"
-									disableNext
-								>
+					<div
+						onTouchStart={stopPropagation}
+						onTouchMove={stopPropagation}
+						onTouchEnd={stopPropagation}
+						onPointerDown={stopPropagation}
+						onPointerMove={stopPropagation}
+						onPointerUp={stopPropagation}
+					>
+						<CollapsibleTrigger asChild>
+							<Button
+								color="ghost"
+								className="relative"
+								size="small"
+								onContextMenu={preventDefault}
+								{...menuProps}
+							>
+								{first ? (
+									<OnboardingTooltip
+										onboarding={categorizeOnboarding}
+										step="categorize"
+										content="Tap and hold to change category"
+										disableNext
+									>
+										<HamburgerMenuIcon />
+									</OnboardingTooltip>
+								) : (
 									<HamburgerMenuIcon />
-								</OnboardingTooltip>
-							) : (
-								<HamburgerMenuIcon />
-							)}
-						</Button>
-					</CollapsibleTrigger>
+								)}
+							</Button>
+						</CollapsibleTrigger>
+					</div>
 				</div>
 				<CollapsibleContent className="[grid-area:secondary]">
 					<Suspense>
