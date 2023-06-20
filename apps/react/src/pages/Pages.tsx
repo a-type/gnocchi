@@ -250,12 +250,18 @@ const routes = makeRoutes([
 								data: {
 									right: '/recipes/:slug/cook/steps',
 								},
+								onVisited: () => {
+									scrollToTop();
+								},
 							},
 							{
 								path: 'steps',
 								component: RecipeCookStepsPage,
 								data: {
 									left: '/recipes/:slug/cook/prep',
+								},
+								onVisited: () => {
+									scrollToTop();
 								},
 							},
 						],

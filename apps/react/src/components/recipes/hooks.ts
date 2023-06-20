@@ -18,7 +18,6 @@ export function useRecipeFromSlugUrl(url: string) {
 			where: 'slug',
 			equals: slug,
 		},
-		// TODO: update lo-fi types to add |null
 	});
 	hooks.useWatch(recipe);
 	return recipe;

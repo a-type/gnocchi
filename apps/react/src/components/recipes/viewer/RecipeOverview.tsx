@@ -70,7 +70,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						<div className="w-full flex flex-col items-start self-start text-xs my-3 gap-4">
 							<H1>{title}</H1>
 							<RecipeNote recipe={recipe} />
-							<div className="flex flex-row justify-between items-start w-full gap-3">
+							<div className="flex flex-col sm:flex-row justify-between items-start w-full gap-3">
 								<div className="flex flex-row gap-1 flex-wrap">
 									<Detail>
 										Created on {format(createdAt, 'LLL do, yyyy')}
