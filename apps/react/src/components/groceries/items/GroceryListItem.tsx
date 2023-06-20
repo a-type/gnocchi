@@ -435,7 +435,7 @@ function QuantityEditor({
 					<Pencil1Icon />
 				</Button>
 			</DialogTrigger>
-			<DialogContent>
+			<DialogContent onOpenAutoFocus={preventDefault}>
 				<DialogTitle>Edit item</DialogTitle>
 				<div className="flex flex-row items-center gap-4">
 					<LiveUpdateTextField
