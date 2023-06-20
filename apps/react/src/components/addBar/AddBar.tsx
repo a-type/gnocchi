@@ -37,6 +37,7 @@ import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
 import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue.js';
 import { FileTextIcon } from '@radix-ui/react-icons';
+import { depluralize } from '@aglio/conversion/src/lib/depluralize.js';
 
 export interface AddBarProps {
 	className?: string;
@@ -150,10 +151,14 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			return foods;
 		}, [existingItems]);
 
+		const foodSearchPrompt = suggestionPrompt
+			? depluralize(suggestionPrompt.toLowerCase().trim())
+			: '';
+
 		const searchFoods = hooks.useAllFoods({
 			index: {
 				where: 'nameLookup',
-				startsWith: suggestionPrompt?.toLowerCase().trim() ?? '',
+				startsWith: foodSearchPrompt,
 			},
 		});
 
