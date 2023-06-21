@@ -52,6 +52,9 @@ export function RecipeSavePrompt({}: RecipeSavePromptProps) {
 		if (isGnocchi && !hasScannedBefore) {
 			beginOnboarding();
 			// abort first-time onboarding; superseded by this flow.
+			console.debug(
+				'Abort first-time onboarding in favor of recipe onboarding flow',
+			);
 			cancelFirstTimeOnboarding();
 		}
 	}, [isGnocchi, hasScannedBefore, beginOnboarding, cancelFirstTimeOnboarding]);

@@ -437,9 +437,9 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 						onPointerMove={stopPropagation}
 						onPointerUp={stopPropagation}
 						onScroll={stopPropagation}
-						onTouchDown={stopPropagation}
+						onTouchStart={stopPropagation}
 						onTouchMove={stopPropagation}
-						onTouchUp={stopPropagation}
+						onTouchEnd={stopPropagation}
 					>
 						{showSuggested && (
 							<SuggestionGroup title="Suggested">

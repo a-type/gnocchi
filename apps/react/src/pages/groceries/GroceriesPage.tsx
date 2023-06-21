@@ -45,16 +45,21 @@ export function GroceriesPage() {
 	const listId = listIdParam === 'null' ? null : listIdParam;
 
 	const start = firstTimeOnboarding.useBegin();
-	const neverSeenBefore = useNeverSeenBefore(start);
 
 	const [search] = useSearchParams();
 	const skipWelcome = search.get('skipWelcome') === 'true';
 
+	const neverSeenBefore = useNeverSeenBefore();
+	const redirectToWelcome = !skipWelcome && neverSeenBefore;
 	useEffect(() => {
-		if (!skipWelcome && neverSeenBefore) {
+		if (redirectToWelcome) {
 			navigate('/welcome');
 		}
-	}, [neverSeenBefore, navigate, skipWelcome]);
+	}, [navigate, redirectToWelcome]);
+	// start onboarding if not redirecting to welcome
+	useEffect(() => {
+		if (!redirectToWelcome) start();
+	}, [redirectToWelcome, start]);
 
 	return (
 		<ListContext.Provider value={listId}>

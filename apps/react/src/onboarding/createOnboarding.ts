@@ -47,6 +47,7 @@ export function createOnboarding<Steps extends StringTuple>(
 	function useBegin() {
 		return useCallback(() => {
 			if (state.active === null) {
+				console.debug('Begin onboarding', name);
 				state.active = steps[0];
 			}
 		}, []);

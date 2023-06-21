@@ -1,7 +1,7 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { useEffect, useState } from 'react';
 
-export function useNeverSeenBefore(onNeverSeenBefore: () => void) {
+export function useNeverSeenBefore(onNeverSeenBefore?: () => void) {
 	const [seenBefore, setSeenBefore] = useLocalStorage<number>(
 		'last-seen',
 		0,
@@ -13,7 +13,7 @@ export function useNeverSeenBefore(onNeverSeenBefore: () => void) {
 	useEffect(() => {
 		if (!seenBefore) {
 			setSeenBefore(true);
-			onNeverSeenBefore();
+			onNeverSeenBefore?.();
 		}
 	}, [seenBefore, setSeenBefore, onNeverSeenBefore]);
 

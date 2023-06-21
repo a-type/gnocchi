@@ -50,7 +50,10 @@ export const OnboardingTooltip = function OnboardingTooltip<
 			<PopoverAnchor asChild>{children}</PopoverAnchor>
 			<PopoverContent
 				disableBlur
-				className={classNames('theme-leek', 'important:bg-primaryWash flex')}
+				className={classNames(
+					'theme-leek',
+					'important:bg-primaryWash flex py-2 px-3',
+				)}
 				onInteractOutside={(event) => {
 					// if the user interacts outside the popover,
 					// and it's with anything besides a button or input,
@@ -60,12 +63,17 @@ export const OnboardingTooltip = function OnboardingTooltip<
 						next();
 					}
 				}}
+				collisionPadding={16}
 			>
 				<PopoverArrow className="important:fill-primaryWash" />
 				<div className="flex flex-row gap-3 items-center">
 					{content}
 					{!disableNext && (
-						<Button color={isLast ? 'primary' : 'ghost'} onClick={next}>
+						<Button
+							color={isLast ? 'primary' : 'ghost'}
+							size="small"
+							onClick={next}
+						>
 							{isLast ? 'Finish' : <Cross2Icon />}
 						</Button>
 					)}

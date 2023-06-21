@@ -113,14 +113,19 @@ function AnonymousContents() {
 		<MainContainer>
 			<InstallHint />
 			<ColorModeSelect />
-			<div className="flex flex-row items-center gap-2">
-				<PromoteSubscriptionButton color="primary">
-					Upgrade for ${PRICE_MONTHLY_DOLLARS}/mo
-				</PromoteSubscriptionButton>
-				<LoginButton color="default" returnTo="/">
-					<ArrowRightIcon />
-					<span>Sign in</span>
-				</LoginButton>
+			<div>
+				<div className="flex flex-row items-center gap-2">
+					<PromoteSubscriptionButton color="primary">
+						Upgrade for ${PRICE_MONTHLY_DOLLARS}/mo
+					</PromoteSubscriptionButton>
+					<LoginButton color="default" returnTo="/">
+						<ArrowRightIcon />
+						<span>Sign in</span>
+					</LoginButton>
+				</div>
+				<span className="text-xs">
+					Sync devices, collaborate with others, and more
+				</span>
 			</div>
 			<Divider />
 			<ManageSection />
