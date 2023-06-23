@@ -25,7 +25,8 @@ export function GroceryListCategory({
 	items: Item[];
 	first?: boolean;
 }) {
-	const { empty, mountedEmpty } = useCategoryItemVisibilityState(items);
+	const { empty, mountedEmpty, justMounted } =
+		useCategoryItemVisibilityState(items);
 
 	const isDragging = useIsDragging();
 	const internalRef = useRef<HTMLDivElement>(null);
@@ -50,7 +51,7 @@ export function GroceryListCategory({
 			data-dragged-over={isOver}
 			data-is-item-dragging={isDragging}
 			data-is-empty={empty}
-			data-do-not-animate={mountedEmpty}
+			data-do-not-animate={mountedEmpty || justMounted}
 			ref={finalRef}
 			{...rest}
 		>
@@ -194,9 +195,14 @@ function useCategoryItemVisibilityState(items: Item[]) {
 			setMountedEmpty(false);
 		}
 	}, [empty]);
+	const justMounted = useRef(true);
+	useEffect(() => {
+		justMounted.current = false;
+	}, []);
 
 	return {
 		empty,
 		mountedEmpty,
+		justMounted: justMounted.current,
 	};
 }

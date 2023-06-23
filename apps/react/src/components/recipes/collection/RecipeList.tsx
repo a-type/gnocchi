@@ -33,6 +33,7 @@ import { useFilteredRecipes } from './hooks.js';
 import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
 import { RecipeStartCookingButton } from '@/components/recipes/viewer/RecipeStartCookingButton.jsx';
 import { RecipeAddTag } from '@/components/recipes/editor/RecipeAddTag.jsx';
+import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 
 export interface RecipeListProps {}
 
@@ -57,7 +58,7 @@ export function RecipeList({}: RecipeListProps) {
 					<RecipeListActions />
 				</PageFixedArea>
 			</Suspense>
-			<Suspense
+			{/* <Suspense
 				fallback={
 					<List>
 						<RecipePlaceholderItem />
@@ -65,9 +66,10 @@ export function RecipeList({}: RecipeListProps) {
 						<RecipePlaceholderItem />
 					</List>
 				}
-			>
-				<RecipeListContent />
-			</Suspense>
+			> */}
+			<RecipeListContent />
+			<AutoRestoreScroll id="recipesList" />
+			{/* </Suspense> */}
 		</div>
 	);
 }

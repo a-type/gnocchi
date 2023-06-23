@@ -47,9 +47,9 @@ export const AddBar = () => (
 
 export const List = () => (
 	<>
-		<Suspense>
-			<GroceryList />
-		</Suspense>
+		{/* <Suspense> */}
+		<GroceryList />
+		{/* </Suspense> */}
 	</>
 );
 

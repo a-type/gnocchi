@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useDrag } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
 import {
@@ -6,21 +6,27 @@ import {
 	Outlet,
 	useNavigate,
 	useNextMatchingRoute,
+	RestoreScroll,
 } from '@verdant-web/react-router';
 import classNames from 'classnames';
+import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 
 export function SwipeOutlet({
 	preload,
 	scroll,
 	className,
+	restoreScroll,
 	...rest
 }: {
 	preload?: boolean;
 	scroll?: boolean;
 	className?: string;
+	restoreScroll?: boolean;
 }) {
 	const navigate = useNavigate();
 	const match = useNextMatchingRoute();
+
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
 
 	const { left, right } = (match?.route.data ?? {}) as {
 		left?: string;
@@ -180,8 +186,10 @@ export function SwipeOutlet({
 						'flex flex-col items-center w-full h-full',
 						scroll && 'overflow-y-auto touch-pan-y',
 					)}
+					ref={scrollContainerRef}
 				>
 					<Outlet />
+					{restoreScroll && <AutoRestoreScroll id="swipeOutlet" />}
 				</div>
 			</animated.div>
 			{renderRight && (

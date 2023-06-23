@@ -21,6 +21,7 @@ import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 import { SwipeOutlet } from '@/components/nav/SwipeOutlet.jsx';
 import { stopPropagation } from '@aglio/tools';
 import { CookingToolbar } from '@/components/recipes/cook/CookingToolbar.jsx';
+import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 
 export interface RecipeCookPageProps {}
 

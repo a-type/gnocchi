@@ -130,7 +130,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					'[&[data-dragging=true]]:(shadow-xl cursor-grabbing touch-none border-light)',
 					'[&[data-highlighted=true]]:bg-primary-wash',
 					'[&[data-menu-open=true]]:(bg-white border-light)',
-					'[&[data-just-moved=true][data-hidden-state=visible]]:(animate-keyframes-pop-up animate-duration-400 animate-springy)',
+					'[&[data-just-moved=true][data-hidden-state=visible]]:(animate-keyframes-pop-up animate-duration-400)',
 					'[&[data-state=hidden]]:(animate-keyframes-item-disappear duration-3000 animate-ease-out animate-mode-forwards)',
 					className,
 				)}

@@ -3,6 +3,7 @@ import { PantryListCategory } from './PantryListCategory.jsx';
 import { ExpiresSoonSection } from './ExpiresSoonSection.jsx';
 import { Suspense } from 'react';
 import { PantryListItemSkeleton } from '@/components/pantry/items/PantryListItem.jsx';
+import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 
 export interface PantryListProps {
 	className?: string;
@@ -30,6 +31,7 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 					Nothing here yet...
 				</div>
 			)}
+			<AutoRestoreScroll id="pantryList" />
 		</div>
 	);
 }

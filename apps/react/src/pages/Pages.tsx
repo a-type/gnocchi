@@ -32,6 +32,7 @@ import { RecipeTagEditor } from '@/components/recipes/tags/RecipeTagEditor.jsx';
 import { SwipeOutlet } from '@/components/nav/SwipeOutlet.jsx';
 import { PageRoot } from '@aglio/ui/src/components/layouts';
 import { useMediaQuery } from '@/hooks/useMediaQuery.js';
+import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -83,40 +84,31 @@ const routes = makeRoutes([
 	{
 		path: '/temp/:code/:listId',
 		component: TempAccessGroceriesPage,
-		onVisited: scrollToTop,
 	},
 	{
 		path: '/temp/:code',
 		component: TempAccessGroceriesPage,
-		onVisited: scrollToTop,
 	},
 	{
 		path: '/reset-password',
 		component: VerifyPasswordResetPage,
-		onVisited: scrollToTop,
 	},
 	{
 		path: '/claim/:inviteId',
 		component: ClaimInvitePage,
-		onVisited: scrollToTop,
 	},
 	{
 		path: '/welcome',
 		component: SplashPage,
-		onVisited: () => {
-			scrollToTop();
-		},
 	},
 	{
 		path: '/',
 		component: LayoutWithNavBar,
-		onVisited: scrollToTop,
 		children: [
 			{
 				index: true,
 				component: GroceriesPage,
 				onVisited: () => {
-					scrollToTop();
 					PantryPage.preload();
 					PlanPage.preload();
 					RecipesPage.preload();
@@ -128,12 +120,10 @@ const routes = makeRoutes([
 			{
 				path: 'list/:listId',
 				component: GroceriesPage,
-				onVisited: scrollToTop,
 			},
 			{
 				path: 'settings',
 				component: PlanPage,
-				onVisited: scrollToTop,
 				data: {
 					left: '/recipes',
 				},
@@ -142,7 +132,6 @@ const routes = makeRoutes([
 				path: 'purchased',
 				component: PantryPage,
 				onVisited: () => {
-					scrollToTop();
 					RecipesPage.preload();
 				},
 				data: {
@@ -153,22 +142,19 @@ const routes = makeRoutes([
 			{
 				path: 'nevermind',
 				component: NevermindPage,
-				onVisited: scrollToTop,
 			},
 			{
 				path: 'join',
 				component: JoinPage,
-				onVisited: scrollToTop,
 			},
 			{
 				path: 'verify',
 				component: VerifyEmailPage,
-				onVisited: scrollToTop,
 			},
 			{
 				path: 'admin',
 				component: AdminPage,
-				onVisited: scrollToTop,
+
 				children: [
 					{
 						path: 'categories',
@@ -193,7 +179,6 @@ const routes = makeRoutes([
 				exact: true,
 				component: RecipesPage,
 				onVisited: () => {
-					scrollToTop();
 					RecipeViewPage.preload();
 					RecipeOverviewPage.preload();
 					RecipeCookPage.preload();
@@ -208,7 +193,6 @@ const routes = makeRoutes([
 				path: 'recipes/:slug',
 				component: RecipeViewPage,
 				onVisited: () => {
-					scrollToTop();
 					RecipeEditPage.preload();
 					RecipeCookPage.preload();
 					RecipeCookStepsPage.preload();
@@ -231,7 +215,6 @@ const routes = makeRoutes([
 						path: 'cook',
 						component: RecipeCookPage,
 						onVisited: () => {
-							scrollToTop();
 							RecipeCookPrepPage.preload();
 						},
 						children: [
@@ -250,18 +233,12 @@ const routes = makeRoutes([
 								data: {
 									right: '/recipes/:slug/cook/steps',
 								},
-								onVisited: () => {
-									scrollToTop();
-								},
 							},
 							{
 								path: 'steps',
 								component: RecipeCookStepsPage,
 								data: {
 									left: '/recipes/:slug/cook/prep',
-								},
-								onVisited: () => {
-									scrollToTop();
 								},
 							},
 						],

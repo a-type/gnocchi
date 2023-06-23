@@ -37,6 +37,7 @@ import {
 } from './hooks.js';
 import { GroceryItemDragPreview } from './items/GroceryItemDragPreview.jsx';
 import { groceriesState } from './state.js';
+import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 
 export interface GroceryListProps {
 	className?: string;
@@ -80,13 +81,9 @@ export const GroceryList = forwardRef<HTMLDivElement, GroceryListProps>(
 						<PromoteSubscriptionButton>Upgrade now</PromoteSubscriptionButton>
 					</div>
 				</OnboardingBanner>
-				{/* {showSuggestions && (
-					<Suspense>
-						<GrocerySuggestions />
-					</Suspense>
-				)} */}
 				<GroceryListCategories {...rest} ref={ref} />
 				<GroceryListDragOverlay />
+				<AutoRestoreScroll id="groceriesList" debug />
 			</DndContext>
 		);
 	},

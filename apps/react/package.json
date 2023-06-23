@@ -45,7 +45,7 @@
 		"@verdant-web/cli": "^2.1.0",
 		"@verdant-web/common": "^1.13.4",
 		"@verdant-web/react": "^20.0.1",
-		"@verdant-web/react-router": "^0.3.1",
+		"@verdant-web/react-router": "^0.4.1",
 		"@verdant-web/store": "^2.5.1",
 		"@zip.js/zip.js": "^2.7.6",
 		"classnames": "^2.3.2",
