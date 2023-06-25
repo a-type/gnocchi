@@ -38,6 +38,9 @@ import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx
 import { useDebouncedValue } from '@/hooks/useDebouncedValue.js';
 import { FileTextIcon } from '@radix-ui/react-icons';
 import { depluralize } from '@aglio/conversion/src/lib/depluralize.js';
+import { trpc } from '@/trpc.js';
+import { useAISuggestions } from '@/components/addBar/aiSuggestions.js';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export interface AddBarProps {
 	className?: string;
@@ -100,6 +103,7 @@ type SuggestionData =
 			type: 'food';
 			name: string;
 			id: string;
+			ai?: boolean;
 	  }
 	| {
 			type: 'recipe';
@@ -260,6 +264,20 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			return mapRecipesToSuggestions(searchRecipes);
 		}, [searchRecipes, mapRecipesToSuggestions]);
 
+		const aiItems = useAISuggestions();
+		const aiSuggestions = useMemo<SuggestionData[]>(
+			() =>
+				aiItems
+					.filter((name) => !existingFoods.has(name))
+					.map((item) => ({
+						type: 'food',
+						name: item,
+						id: item,
+						ai: true,
+					})),
+			[aiItems],
+		);
+
 		const showSuggested =
 			!suggestionPrompt &&
 			showRichSuggestions &&
@@ -275,6 +293,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			let allSuggestions: SuggestionData[] = [];
 			if (showSuggested) {
 				allSuggestions.push(...frequencyFoodsSuggestions);
+				allSuggestions.push(...aiSuggestions);
 				allSuggestions.push(...recipeSuggestions);
 			}
 			if (showExpiring) {
@@ -294,6 +313,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			showSuggested,
 			showExpiring,
 			showRecipeMatches,
+			aiSuggestions,
 		]);
 
 		const contentRef = useRef<HTMLDivElement>(null);
@@ -454,6 +474,17 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 										})}
 									/>
 								))}
+								{aiSuggestions.map((suggestion) => (
+									<SuggestionItem
+										key={suggestion.id}
+										value={suggestion}
+										highlighted={highlightedIndex === itemIndex}
+										{...getItemProps({
+											item: suggestion,
+											index: itemIndex++,
+										})}
+									/>
+								))}
 								{recipeSuggestions.map((suggestion) => (
 									<SuggestionItem
 										key={suggestion.id}
@@ -599,6 +630,7 @@ const SuggestionItem = forwardRef<
 			{...rest}
 		>
 			{value.type === 'recipe' && <FileTextIcon />}
+			{value.type === 'food' && value.ai && <Icon name="magic" />}
 			<span className="flex-1 overflow-hidden text-ellipsis">
 				{displayString}
 			</span>

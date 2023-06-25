@@ -9,6 +9,7 @@
 		"link-verdant": "pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/server"
 	},
 	"dependencies": {
+		"@aglio/ai": "workspace:*",
 		"@aglio/auth": "workspace:*",
 		"@aglio/email": "workspace:*",
 		"@aglio/prisma": "workspace:*",

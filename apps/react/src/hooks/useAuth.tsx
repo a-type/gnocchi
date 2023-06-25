@@ -46,7 +46,12 @@ async function getSession(): Promise<{
 }
 
 export function useAuth() {
-	return useQuery(['session'], getSession);
+	return useQuery(['session'], getSession, {
+		refetchOnWindowFocus: false,
+		refetchOnMount: false,
+		refetchOnReconnect: false,
+		refetchInterval: false,
+	});
 }
 
 export function useIsSubscribed() {

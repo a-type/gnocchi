@@ -14,6 +14,7 @@
 		"vapid": "node ./scripts/generateVapidKeys.js"
 	},
 	"dependencies": {
+		"@aglio/ai": "workspace:*",
 		"@aglio/auth": "workspace:*",
 		"@aglio/prisma": "workspace:*",
 		"@aglio/tools": "workspace:*",

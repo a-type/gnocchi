@@ -4,6 +4,7 @@ import type { Request, Response } from 'express';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { Server } from '@verdant-web/server';
 import { getIsHubAuthorizedRequest } from '@aglio/tools';
+import type { AISuggestions } from '@aglio/ai';
 
 type Context = {
 	req: Request;
@@ -20,6 +21,7 @@ type Context = {
 	 * This is an authenticated request from the hub service
 	 */
 	isHubRequest: boolean;
+	ai: AISuggestions;
 };
 
 export const createContext = async ({
@@ -27,6 +29,7 @@ export const createContext = async ({
 	res,
 	deployedContext,
 	lofi,
+	ai,
 }: trpcExpress.CreateExpressContextOptions & {
 	deployedContext: {
 		apiHost: string;
@@ -34,6 +37,7 @@ export const createContext = async ({
 		hubHost: string;
 	};
 	lofi: Server;
+	ai: AISuggestions;
 }) => {
 	const session = await getLoginSession(req);
 	const isHubRequest = getIsHubAuthorizedRequest(req.headers);
@@ -46,6 +50,7 @@ export const createContext = async ({
 		isProductAdmin: session?.isProductAdmin ?? false,
 		lofi,
 		isHubRequest,
+		ai,
 	};
 };
 

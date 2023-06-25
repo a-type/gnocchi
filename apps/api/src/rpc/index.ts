@@ -2,6 +2,7 @@ import * as trpcExpress from '@trpc/server/adapters/express';
 import { appRouter, createContext } from '@aglio/trpc';
 import * as deployedContext from '../config/deployedContext.js';
 import { Server } from '@verdant-web/server';
+import { ai } from '../data/ai.js';
 
 export const createTrpcMiddleware = (lofi: Server) =>
 	trpcExpress.createExpressMiddleware({
@@ -15,5 +16,6 @@ export const createTrpcMiddleware = (lofi: Server) =>
 					hubHost: deployedContext.HUB_ORIGIN,
 				},
 				lofi,
+				ai,
 			}),
 	});
