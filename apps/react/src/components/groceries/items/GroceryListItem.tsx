@@ -131,7 +131,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					'[&[data-highlighted=true]]:bg-primary-wash',
 					'[&[data-menu-open=true]]:(bg-white border-light)',
 					'[&[data-just-moved=true][data-hidden-state=visible]]:(animate-keyframes-pop-up animate-duration-400)',
-					'[&[data-state=hidden]]:(animate-keyframes-item-disappear duration-3000 animate-ease-out animate-mode-forwards)',
+					'[&[data-hidden-state=hidden]]:(animate-item-disappear animate-mode-forwards)',
 					className,
 				)}
 				open={menuOpen}

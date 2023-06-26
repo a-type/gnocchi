@@ -122,10 +122,11 @@ export default function presetAglio(): Preset {
 				keyframes: {
 					'progress-bar': `{0% { width: 0% } 100% { width: 100% }}`,
 					'pop-up': `{from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); }}`,
+					// TODO: move this out to app
 					'item-disappear': `{
 					0% {opacity:1;transform:translateY(0);height:var(--height);}
 					25% {opacity:1;transform:translateY(0);height:var(--height);}
-					100% {opacity:0;transform:translateY(30px);height:0;marginTop:0;}
+					100% {opacity:0;transform:translateY(30px);height:0;margin-top:0;}
 				}`,
 					'expand-scale-x': `{
 					from { transform: scaleX(0) }
@@ -234,6 +235,7 @@ export default function presetAglio(): Preset {
 						'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
 					'radix-collapsible-open-both': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
 					'radix-collapsible-close-both': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'item-disappear': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
 				},
 				durations: {
 					'fade-in-up': '300ms',
@@ -257,6 +259,7 @@ export default function presetAglio(): Preset {
 					'radix-collapsible-close-horizontal': '300ms',
 					'radix-collapsible-open-both': '300ms',
 					'radix-collapsible-close-both': '300ms',
+					'item-disappear': '300ms',
 				},
 			},
 		},

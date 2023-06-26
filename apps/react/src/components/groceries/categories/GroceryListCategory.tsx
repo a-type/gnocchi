@@ -51,7 +51,8 @@ export function GroceryListCategory({
 			data-dragged-over={isOver}
 			data-is-item-dragging={isDragging}
 			data-is-empty={empty}
-			data-do-not-animate={mountedEmpty || justMounted}
+			data-do-not-animate={justMounted}
+			data-pop-in={mountedEmpty && !empty}
 			ref={finalRef}
 			{...rest}
 		>
@@ -88,7 +89,7 @@ export const CategoryRoot = withClassName(
 	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 op-0 pointer-events-none mb-0 [animation-name:category-collapse] animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
 	'important:[&[data-do-not-animate=true]]:(animate-none) important:motion-reduce:animate-none',
 	'[&[data-is-item-dragging=true][data-dragged-over=false]]:(scale-95)',
-	'[&[data-is-empty=false][data-dragged-over=false][data-is-item-dragging=false]]:(animate-keyframes-fade-in-up animate-duration-200 animate-ease-springy)',
+	'[&[data-pop-in=true][data-dragged-over=false][data-is-item-dragging=false]]:(animate-keyframes-fade-in-up animate-duration-200 animate-ease-springy)',
 	'focus-visible:(color-primary-dark outline-1 outline-solid outline-primary)',
 );
 
@@ -186,23 +187,15 @@ const MemoizedDraggableItem = memo(GroceryListItemDraggable);
 
 function useCategoryItemVisibilityState(items: Item[]) {
 	const empty = items.length === 0;
-	// set a flag if the component mounted empty. we don't animate
-	// the collapse if this is the case to avoid rendering empty
-	// categories on first mount
-	const [mountedEmpty, setMountedEmpty] = useState(empty);
-	useEffect(() => {
-		if (!empty) {
-			setMountedEmpty(false);
-		}
-	}, [empty]);
 	const justMounted = useRef(true);
 	useEffect(() => {
 		justMounted.current = false;
 	}, []);
+	const mountedEmpty = useRef(empty);
 
 	return {
 		empty,
-		mountedEmpty,
+		mountedEmpty: mountedEmpty.current,
 		justMounted: justMounted.current,
 	};
 }
