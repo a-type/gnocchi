@@ -100,7 +100,7 @@ export default defineConfig({
 	],
 	optimizeDeps: {
 		exclude: ['@aglio/ui'],
-		include: ['react/jsx-runtime', 'react', 'react-dom'],
+		include: ['react/jsx-runtime', 'react', 'react-dom', 'react-dom/client'],
 	},
 	resolve: {
 		alias: {

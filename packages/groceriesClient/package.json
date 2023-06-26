@@ -17,8 +17,8 @@
 		"@trpc/server": "^10.5.0",
 		"@verdant-web/cli": "^2.1.0",
 		"@verdant-web/common": "^1.13.4",
-		"@verdant-web/react": "^20.0.1",
-		"@verdant-web/store": "^2.5.1",
+		"@verdant-web/react": "^20.0.3",
+		"@verdant-web/store": "^2.5.2",
 		"cuid": "^2.1.8",
 		"stopword": "^2.0.8"
 	},
