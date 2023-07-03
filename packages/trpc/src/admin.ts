@@ -64,6 +64,38 @@ export const adminRouter = t.router({
 			});
 			return plan;
 		}),
+	deletePlan: t.procedure
+		.input(
+			z.object({
+				planId: z.string(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.isProductAdmin) {
+				throw new RequestError(403, 'Not authorized');
+			}
+			const { planId } = input;
+			const plan = await prisma.plan.findUnique({
+				where: {
+					id: planId,
+				},
+				include: {
+					members: true,
+				},
+			});
+			if (!plan) {
+				throw new RequestError(404, 'Plan not found');
+			}
+			if (plan.members.length >= 1) {
+				throw new RequestError(400, 'Plan members must be empty');
+			}
+
+			await prisma.plan.delete({
+				where: {
+					id: planId,
+				},
+			});
+		}),
 	resetSync: t.procedure
 		.input(
 			z.object({

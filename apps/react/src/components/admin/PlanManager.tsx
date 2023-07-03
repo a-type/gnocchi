@@ -64,6 +64,7 @@ function FeatureFlagPlanManager({
 	const flags = JSON.parse(plan.featureFlags || '{}');
 	const updateFlags = trpc.admin.updateFeatureFlags.useMutation();
 	const updateMember = trpc.admin.updateProfile.useMutation();
+	const deletePlan = trpc.admin.deletePlan.useMutation();
 	const [open, setOpen] = useState(false);
 
 	return (
@@ -146,6 +147,18 @@ function FeatureFlagPlanManager({
 					</ul>
 					<H2>Library Info</H2>
 					{open && <PlanLibraryInfo planId={plan.id} />}
+					<H2>Danger zone</H2>
+					{plan.members.length === 0 && (
+						<Button
+							onClick={async () => {
+								await deletePlan.mutateAsync({ planId: plan.id });
+								onChange?.();
+							}}
+							color="destructive"
+						>
+							Delete
+						</Button>
+					)}
 				</DialogContent>
 			</Dialog>
 		</div>
