@@ -330,6 +330,10 @@ const recipes = collection({
             type: 'number',
             nullable: true
         },
+        servings: {
+            type: 'number',
+            nullable: true
+        },
         prelude: {
             type: 'any',
             default: {
@@ -515,7 +519,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 35,
+    version: 36,
     collections: {
         categories,
         items,

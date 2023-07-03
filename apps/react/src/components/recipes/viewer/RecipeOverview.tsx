@@ -30,6 +30,7 @@ import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPla
 import { Suspense } from 'react';
 import { formatMinutes } from '@aglio/tools';
 import { withClassName } from '@aglio/ui/hooks';
+import classNames from 'classnames';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -54,8 +55,12 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 		cookTimeMinutes,
 		prepTimeMinutes,
 		totalTimeMinutes,
+		servings,
+		multiplier,
 	} = hooks.useWatch(recipe);
 	useWatchChanges(recipe);
+
+	const multipliedServings = Math.round((servings ?? 0) * multiplier);
 
 	return (
 		<>
@@ -85,6 +90,18 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 									)}
 									{cookTimeMinutes && (
 										<Detail>Cook time: {formatMinutes(cookTimeMinutes)}</Detail>
+									)}
+									{!!servings && (
+										<Detail>
+											Serves{' '}
+											<span
+												className={classNames({
+													'font-bold text-accent-dark': multiplier !== 1,
+												})}
+											>
+												{multipliedServings.toLocaleString()}
+											</span>
+										</Detail>
 									)}
 								</div>
 								<div className="flex flex-row gap-1 flex-wrap justify-end">

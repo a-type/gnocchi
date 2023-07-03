@@ -910,6 +910,7 @@ export type RecipeDestructured = {
   prepTimeMinutes: number | null;
   cookTimeMinutes: number | null;
   totalTimeMinutes: number | null;
+  servings: number | null;
   prelude: any;
   note: string | null;
   ingredients: RecipeIngredients;
@@ -933,6 +934,7 @@ export type RecipeInit = {
   prepTimeMinutes?: number | null;
   cookTimeMinutes?: number | null;
   totalTimeMinutes?: number | null;
+  servings?: number | null;
   prelude?: any;
   note?: string | null;
   ingredients?: RecipeIngredientsInit;
@@ -956,6 +958,7 @@ export type RecipeSnapshot = {
   prepTimeMinutes: number | null;
   cookTimeMinutes: number | null;
   totalTimeMinutes: number | null;
+  servings: number | null;
   prelude: any;
   note: string | null;
   ingredients: RecipeIngredientsSnapshot;
@@ -1007,6 +1010,10 @@ export type RecipeTotalTimeMinutes = number | null;
 export type RecipeTotalTimeMinutesInit = RecipeTotalTimeMinutes | undefined;
 export type RecipeTotalTimeMinutesSnapshot = RecipeTotalTimeMinutes;
 export type RecipeTotalTimeMinutesDestructured = RecipeTotalTimeMinutes;
+export type RecipeServings = number | null;
+export type RecipeServingsInit = RecipeServings | undefined;
+export type RecipeServingsSnapshot = RecipeServings;
+export type RecipeServingsDestructured = RecipeServings;
 export type RecipePrelude = any;
 export type RecipePreludeInit = RecipePrelude | undefined;
 export type RecipePreludeSnapshot = RecipePrelude;

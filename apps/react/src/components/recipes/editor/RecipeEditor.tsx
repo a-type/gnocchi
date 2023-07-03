@@ -20,6 +20,7 @@ import { H2 } from '@aglio/ui/components/typography';
 import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { RecipeTimeFields } from '@/components/recipes/editor/RecipeTimeFields.jsx';
+import { LiveUpdateTextField } from '@aglio/ui/src/components/liveUpdateTextField';
 
 export interface RecipeEditorProps {
 	slug: string;
@@ -57,9 +58,20 @@ function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 				<H2 className="gutter-bottom">Description</H2>
 				<RecipePreludeEditor recipe={recipe} />
 			</div>
-			<div>
-				<RecipeTimeFields recipe={recipe} />
-			</div>
+			<RecipeTimeFields recipe={recipe} />
+			<label className="flex flex-row items-center justify-between mt-1">
+				<span>Servings</span>
+				<LiveUpdateTextField
+					value={recipe.get('servings')?.toString() ?? ''}
+					onChange={(value) => {
+						const asNumber = parseInt(value, 10);
+						if (isNaN(asNumber)) return;
+						recipe.set('servings', asNumber);
+					}}
+					type="number"
+					className="w-24"
+				/>
+			</label>
 			<div>
 				<H2 className="gutter-bottom">Ingredients</H2>
 				<RecipeIngredientsEditor recipe={recipe} />
