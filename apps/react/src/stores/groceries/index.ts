@@ -688,7 +688,7 @@ async function getScannedRecipe(
 					result.ingredients = scanned.rawIngredients.map((line: string) => {
 						const parsed = parseIngredient(line);
 						return {
-							text: parsed.original,
+							text: parsed.sanitized,
 							food: parsed.food,
 							unit: parsed.unit,
 							comments: parsed.comments,

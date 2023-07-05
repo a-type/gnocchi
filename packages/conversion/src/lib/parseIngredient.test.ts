@@ -50,6 +50,7 @@ describe('ingredient parsing', () => {
 		['2 t salt', 2, 'teaspoon', 'salt', []],
 		['1/2 T salt', 0.5, 'tablespoon', 'salt', []],
 		['□ ¼ cup rice', 0.25, 'cup', 'rice', []],
+		['▢ 1 1/4 cup rice', 1.25, 'cup', 'rice', []],
 		['1 tin of smoked mussels', 1, 'tin', 'smoked mussel', []],
 		[
 			'fennel bulb (about 6 oz.), thinly sliced, plus frond',
@@ -79,5 +80,29 @@ describe('ingredient parsing', () => {
 			expect(result.food).toBe(test[3]);
 			expect(result.comments).toEqual(test[4]);
 		});
+	});
+
+	it('removes item glyphs', () => {
+		expect(parseIngredient('- 1 cup of sugar').sanitized).toBe(
+			'1 cup of sugar',
+		);
+		expect(parseIngredient('* 1 cup of sugar').sanitized).toBe(
+			'1 cup of sugar',
+		);
+		expect(parseIngredient('• 1 cup of sugar').sanitized).toBe(
+			'1 cup of sugar',
+		);
+		expect(parseIngredient('□ 1 cup of sugar').sanitized).toBe(
+			'1 cup of sugar',
+		);
+		expect(parseIngredient('▪ 1 cup of sugar').sanitized).toBe(
+			'1 cup of sugar',
+		);
+		expect(parseIngredient('▫ 1 cup of sugar').sanitized).toBe(
+			'1 cup of sugar',
+		);
+		expect(parseIngredient('▢ 1 cup of sugar').sanitized).toBe(
+			'1 cup of sugar',
+		);
 	});
 });

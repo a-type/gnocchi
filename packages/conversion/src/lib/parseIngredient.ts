@@ -32,13 +32,15 @@ const DEFAULT_FOOD = null;
  */
 export function parseIngredient(source: string): {
 	original: string;
+	sanitized: string;
 	quantity: number;
 	unit: string;
 	food: string;
 	comments: string[];
 	isSectionHeader: boolean;
 } {
-	const numberResult = greedyMatchNumber(sanitize(source));
+	const sanitized = sanitize(source);
+	const numberResult = greedyMatchNumber(sanitized);
 	const unitResult = greedyMatchUnit(numberResult.remaining);
 	const ofResult = greedyMatchOf(unitResult.remaining);
 	const commentResult = reverseGreedyMatchComment(ofResult.remaining);
@@ -49,6 +51,7 @@ export function parseIngredient(source: string): {
 
 	return {
 		original: source,
+		sanitized,
 		quantity: numberResult.matched
 			? numberParser(numberResult.matched.trim())
 			: DEFAULT_QUANTITY,

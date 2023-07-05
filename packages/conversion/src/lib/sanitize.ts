@@ -6,7 +6,11 @@ export function sanitize(text: string) {
 			text = text.slice(char.length);
 		}
 	}
+	for (const char of removeCharsAnywhere) {
+		text = text.replaceAll(char, '');
+	}
 	return text.trim();
 }
 
-const removeLeadingChars = ['-', '*', '•', '□', '▪', '▫', '▢'];
+const removeLeadingChars = ['-', '*'];
+const removeCharsAnywhere = ['•', '□', '▪', '▫', '▢', '\n', '\r', '\t'];
