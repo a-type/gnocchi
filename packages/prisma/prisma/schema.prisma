@@ -186,6 +186,7 @@ model PublishedRecipe {
   prepTimeMinutes        Int?                        @map("prep_time_minutes")
   cookTimeMinutes        Int?                        @map("cook_time_minutes")
   totalTimeMinutes       Int?                        @map("total_time_minutes")
+  servings               Int?
 
   @@unique([recipeId, libraryId])
   @@map("published_recipes")

@@ -726,6 +726,7 @@ async function getScannedRecipe(
 				result.cookTimeMinutes = scanned.cookTimeMinutes ?? undefined;
 				result.totalTimeMinutes = scanned.totalTimeMinutes ?? undefined;
 				result.instructions = instructionsToDoc(scanned.steps || []);
+				result.servings = scanned.servings ?? undefined;
 			}
 		} else if (scanResult.type === 'hub') {
 			const scanned = scanResult.data;
@@ -756,6 +757,7 @@ async function getScannedRecipe(
 			result.prepTimeMinutes = scanned.prepTimeMinutes ?? undefined;
 			result.cookTimeMinutes = scanned.cookTimeMinutes ?? undefined;
 			result.totalTimeMinutes = scanned.totalTimeMinutes ?? undefined;
+			result.servings = scanned.servings ?? undefined;
 		} else {
 			throw new Error('Unrecognized scan result type');
 		}
