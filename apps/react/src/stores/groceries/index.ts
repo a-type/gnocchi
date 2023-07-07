@@ -490,7 +490,7 @@ export async function addItems(
 			} else {
 				const lookup = await client.foods.findOne({
 					index: {
-						where: 'nameLookup',
+						where: 'anyName',
 						equals: parsed.food,
 					},
 				}).resolved;
