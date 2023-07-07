@@ -58,7 +58,7 @@ export function RecipeList({}: RecipeListProps) {
 					<RecipeListActions />
 				</PageFixedArea>
 			</Suspense>
-			{/* <Suspense
+			<Suspense
 				fallback={
 					<List>
 						<RecipePlaceholderItem />
@@ -66,10 +66,10 @@ export function RecipeList({}: RecipeListProps) {
 						<RecipePlaceholderItem />
 					</List>
 				}
-			> */}
-			<RecipeListContent />
-			<AutoRestoreScroll id="recipesList" />
-			{/* </Suspense> */}
+			>
+				<RecipeListContent />
+				<AutoRestoreScroll id="recipesList" />
+			</Suspense>
 		</div>
 	);
 }
