@@ -12,10 +12,20 @@ export function useWakeLock(screenOn: boolean = true) {
 				}
 			};
 			requestWakeLock();
+
+			// request on page/tab visible
+			const onVisibilityChange = () => {
+				if (wakeLock !== null && document.visibilityState === 'visible') {
+					requestWakeLock();
+				}
+			};
+			document.addEventListener('visibilitychange', onVisibilityChange);
+
 			return () => {
 				if (wakeLock) {
 					wakeLock.release();
 				}
+				document.removeEventListener('visibilitychange', onVisibilityChange);
 			};
 		}
 	}, [screenOn]);
