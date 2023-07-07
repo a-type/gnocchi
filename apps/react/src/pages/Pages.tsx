@@ -58,12 +58,6 @@ const RecipeEditPage = lazyWithPreload(
 const RecipeCookPage = lazyWithPreload(
 	() => import('./recipe/cook/RecipeCookPage.jsx'),
 );
-const RecipeCookPrepPage = lazyWithPreload(
-	() => import('./recipe/cook/RecipeCookPrepPage.jsx'),
-);
-const RecipeCookStepsPage = lazyWithPreload(
-	() => import('./recipe/cook/RecipeCookStepsPage.jsx'),
-);
 const RecipeOverviewPage = lazyWithPreload(
 	() => import('./recipe/RecipeOverviewPage.jsx'),
 );
@@ -182,7 +176,6 @@ const routes = makeRoutes([
 					RecipeViewPage.preload();
 					RecipeOverviewPage.preload();
 					RecipeCookPage.preload();
-					RecipeCookStepsPage.preload();
 				},
 				data: {
 					left: '/purchased',
@@ -195,7 +188,6 @@ const routes = makeRoutes([
 				onVisited: () => {
 					RecipeEditPage.preload();
 					RecipeCookPage.preload();
-					RecipeCookStepsPage.preload();
 				},
 				data: {
 					left: '/purchased',
@@ -214,34 +206,6 @@ const routes = makeRoutes([
 					{
 						path: 'cook',
 						component: RecipeCookPage,
-						onVisited: () => {
-							RecipeCookPrepPage.preload();
-						},
-						children: [
-							{
-								// back compat
-								path: '',
-								exact: true,
-								component: RecipeCookStepsPage,
-								data: {
-									left: '/recipes/:slug/cook/prep',
-								},
-							},
-							{
-								path: 'prep',
-								component: RecipeCookPrepPage,
-								data: {
-									right: '/recipes/:slug/cook/steps',
-								},
-							},
-							{
-								path: 'steps',
-								component: RecipeCookStepsPage,
-								data: {
-									left: '/recipes/:slug/cook/prep',
-								},
-							},
-						],
 					},
 				],
 			},

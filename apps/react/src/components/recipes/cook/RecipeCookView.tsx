@@ -1,13 +1,10 @@
 import { AddNotePrompt } from '@/components/recipes/cook/AddNotePrompt.jsx';
+import classNames from 'classnames';
 import { Suspense } from 'react';
 import { InstructionsProvider } from '../editor/InstructionStepNodeView.jsx';
 import { RecipeInstructionsViewer } from '../viewer/RecipeInstructionsViewer.jsx';
 import { AddImagePrompt } from './AddImagePrompt.jsx';
-import { CookingToolbar } from './CookingToolbar.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
-import classNames from 'classnames';
-import { PageNowPlaying } from '@aglio/ui/src/components/layouts';
-import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
 
 export interface RecipeCookViewProps {
 	className?: string;
@@ -20,7 +17,7 @@ export function RecipeCookView({ className }: RecipeCookViewProps) {
 	return (
 		<div
 			className={classNames(
-				'w-full flex flex-col items-center pb-30vh',
+				'w-full flex flex-col items-start pb-30vh gap-3',
 				className,
 			)}
 		>

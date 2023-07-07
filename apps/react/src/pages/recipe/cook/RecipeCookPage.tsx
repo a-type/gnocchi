@@ -22,6 +22,7 @@ import { SwipeOutlet } from '@/components/nav/SwipeOutlet.jsx';
 import { stopPropagation } from '@aglio/tools';
 import { CookingToolbar } from '@/components/recipes/cook/CookingToolbar.jsx';
 import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
+import { RecipeCookView } from '@/components/recipes/cook/RecipeCookView.jsx';
 
 export interface RecipeCookPageProps {}
 
@@ -66,28 +67,8 @@ function CookPageContents() {
 			</PageFixedArea>
 			<H1>{recipe.get('title')}</H1>
 			<RecipeNote recipe={recipe} />
-			<TabsRoot
-				value={window.location.pathname.split('/').pop()}
-				className="w-full"
-			>
-				<TabsList className="w-full">
-					<Link to={makeRecipeLink(recipe, '/cook/prep')} skipTransition>
-						<TabsTrigger value="prep">Prep</TabsTrigger>
-					</Link>
-					<Link to={makeRecipeLink(recipe, '/cook/steps')} skipTransition>
-						<TabsTrigger value="steps">Cook</TabsTrigger>
-					</Link>
-				</TabsList>
-			</TabsRoot>
-			<div
-				onPointerDown={stopPropagation}
-				onPointerMove={stopPropagation}
-				onPointerUp={stopPropagation}
-				className="flex-1 min-h-90vh flex flex-col w-full"
-			>
-				<Suspense>
-					<SwipeOutlet preload />
-				</Suspense>
+			<div className="flex-1 min-h-90vh flex flex-col w-full">
+				<RecipeCookView />
 			</div>
 			<PageNowPlaying unstyled>
 				{!isPrep && <CookingToolbar recipe={recipe} />}

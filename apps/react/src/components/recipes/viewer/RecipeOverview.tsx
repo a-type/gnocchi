@@ -31,6 +31,7 @@ import { Suspense } from 'react';
 import { formatMinutes } from '@aglio/tools';
 import { withClassName } from '@aglio/ui/hooks';
 import classNames from 'classnames';
+import { Link } from '@verdant-web/react-router';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -110,14 +111,9 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 								</div>
 							</div>
 							{url && (
-								<a
-									href={url}
-									target="_blank"
-									rel="noreferrer"
-									className="font-bold"
-								>
+								<Link to={url} newTab className="font-bold">
 									View original
-								</a>
+								</Link>
 							)}
 						</div>
 					</TitleContainer>
