@@ -3,6 +3,7 @@ import {
 	extractNumber,
 	findFirstMatch,
 	findFirstMatches,
+	humanTimeToMinutes,
 	minutesToIsoDuration,
 	toYield,
 } from './utils.js';
@@ -18,12 +19,14 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.recipe h1',
 		'.title',
 		'.mv-create-title',
+		'o-AssetTitle__a-Headline',
 	]);
 	let authorElement = findFirstMatch($, [
 		'.recipe .author',
 		'.recipe [class*="author"]',
 		'.author',
 		'[class*="author"]',
+		'o-Attribution__a-Name',
 	]);
 	let prepTimeElement = findFirstMatch($, [
 		'.recipe .prep-time',
@@ -40,6 +43,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.cook-time',
 		'.cookTime',
 		'.mv-create-time-active > .mv-create-time-format',
+		'm-RecipeInfo__a-Description--Active',
 	]);
 	let totalTimeElement = findFirstMatch($, [
 		'.recipe .total-time',
@@ -48,6 +52,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.total-time',
 		'.totalTime',
 		'.mv-create-time-total > .mv-create-time-format',
+		'm-RecipeInfo__a-Description--Total',
 	]);
 	let servingsElement = findFirstMatch($, [
 		'.recipe .servings',
@@ -55,6 +60,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.servings',
 		'[class*="servings"]',
 		'.mv-create-time-yield > .mv-create-time-format',
+		'o-RecipeInfo__m-Yield o_RecipeInfo__a-Description',
 	]);
 	let ingredientsList = findFirstMatches($, [
 		'.recipe .ingredients .ingredient',
@@ -66,6 +72,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.recipe-ingredients li',
 		'[class*=ingredients] li',
 		'.mv-create-ingredients li',
+		'.o-Ingredients__a-Ingredient',
 	]);
 	let instructionsList = findFirstMatches($, [
 		'.recipe .instructions .instruction',
@@ -85,11 +92,13 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'[class*=instructions] li',
 		'[class*=steps] li',
 		'.mv-create-instructions p',
+		'o-Method__m-Step',
 	]);
 	let imageElement = findFirstMatch($, [
 		'.recipe img.image',
 		'.recipe img[class*="image"]',
 		'.recipe img',
+		'.m-MediaBlock__a-Image',
 		'img',
 	]);
 
@@ -112,13 +121,13 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 	let totalTime: number | undefined = undefined;
 
 	if (prepTimeElement) {
-		prepTime = extractNumber($(prepTimeElement).text());
+		prepTime = humanTimeToMinutes($(prepTimeElement).text());
 	}
 	if (cookTimeElement) {
-		cookTime = extractNumber($(cookTimeElement).text());
+		cookTime = humanTimeToMinutes($(cookTimeElement).text());
 	}
 	if (totalTimeElement) {
-		totalTime = extractNumber($(totalTimeElement).text());
+		totalTime = humanTimeToMinutes($(totalTimeElement).text());
 	}
 
 	return {

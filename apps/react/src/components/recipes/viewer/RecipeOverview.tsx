@@ -81,15 +81,15 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 									<Detail>
 										Created on {format(createdAt, 'LLL do, yyyy')}
 									</Detail>
-									{totalTimeMinutes && (
+									{!!totalTimeMinutes && (
 										<Detail>
 											Total time: {formatMinutes(totalTimeMinutes)}
 										</Detail>
 									)}
-									{prepTimeMinutes && (
+									{!!prepTimeMinutes && (
 										<Detail>Prep time: {formatMinutes(prepTimeMinutes)}</Detail>
 									)}
-									{cookTimeMinutes && (
+									{!!cookTimeMinutes && (
 										<Detail>Cook time: {formatMinutes(cookTimeMinutes)}</Detail>
 									)}
 									{!!servings && (

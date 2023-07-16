@@ -341,16 +341,15 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	useUpdateRecipeFromUrl: (client) =>
 		useCallback(
 			async (recipe: Recipe, url: string) => {
-				const scanned = await getScannedRecipe(url, client);
-				recipe.update({
-					title: scanned.title,
-					url: scanned.url,
-					ingredients: scanned.ingredients,
-				});
+				const { instructions, ...scanned } = await getScannedRecipe(
+					url,
+					client,
+				);
+				recipe.update(scanned);
 
 				// set this separately - do not merge
-				if (scanned.instructions) {
-					recipe.set('instructions', scanned.instructions);
+				if (instructions) {
+					recipe.set('instructions', instructions);
 				}
 			},
 			[client],

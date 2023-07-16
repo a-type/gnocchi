@@ -37,7 +37,8 @@ export function RecipeNowPlayingLink({ recipe }: { recipe: Recipe }) {
 			<ConfirmedButton
 				confirmText="This will reset recipe progress"
 				confirmTitle={`Stop cooking ${title}?`}
-				confirmAction="Stop Cooking"
+				confirmAction="Stop"
+				cancelAction="Keep Cooking"
 				onConfirm={stopCooking}
 				color="ghost"
 				skip={progress === 1}
