@@ -1,6 +1,6 @@
 import { t } from './common.js';
 import * as z from 'zod';
-import { scanWebRecipe } from '@aglio/scanning';
+import { scanWebRecipe, ScanForbiddenError } from '@aglio/scanning';
 import { isSubscribed } from '@aglio/auth';
 import { TRPCError } from '@trpc/server';
 import { prisma } from '@aglio/prisma';
@@ -43,14 +43,24 @@ export const scansRouter = t.router({
 				const ok = await isSubscribed(ctx.session);
 				if (!ok) {
 					throw new TRPCError({
-						code: 'FORBIDDEN',
+						code: 'UNAUTHORIZED',
 					});
 				}
-				const result = await scanWebRecipe(url);
-				return {
-					type: 'web',
-					data: result,
-				} as const;
+				try {
+					const result = await scanWebRecipe(url);
+					return {
+						type: 'web',
+						data: result,
+					} as const;
+				} catch (e) {
+					if (e instanceof ScanForbiddenError) {
+						throw new TRPCError({
+							code: 'FORBIDDEN',
+							message: e.message,
+						});
+					}
+					throw e;
+				}
 			}
 		}),
 });

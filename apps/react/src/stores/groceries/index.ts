@@ -763,8 +763,14 @@ async function getScannedRecipe(
 
 		return result;
 	} catch (err) {
-		if (err instanceof TRPCClientError && err.message === 'FORBIDDEN') {
+		console.error(err);
+		if (err instanceof TRPCClientError && err.data.code === 'UNAUTHORIZED') {
 			signupDialogState.status = 'open';
+		} else if (
+			err instanceof TRPCClientError &&
+			err.data.code === 'FORBIDDEN'
+		) {
+			toast.error(err.message);
 		} else {
 			toast.error('Something went wrong.');
 		}

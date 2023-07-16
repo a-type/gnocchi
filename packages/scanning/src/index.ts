@@ -3,6 +3,12 @@ import cheerio from 'cheerio';
 import { extract } from './extractor.js';
 import { default as robotsParser } from 'robots-parser';
 
+export class ScanForbiddenError extends Error {
+	constructor() {
+		super("Sorry, this website doesn't allow Gnocchi to scan recipes.");
+	}
+}
+
 export async function scanWebRecipe(siteUrl: string) {
 	const siteAsUrl = new URL(siteUrl);
 	const robotsUrl = `${siteAsUrl.origin}/robots.txt`;
@@ -32,6 +38,10 @@ export async function scanWebRecipe(siteUrl: string) {
 		const $ = cheerio.load(text);
 		return extract($, siteUrl);
 	} else {
+		if (response.status === 403) {
+			throw new ScanForbiddenError();
+		}
+
 		throw new Error(
 			`Could not load site: ${response.status} ${response.statusText}, ${text}`,
 		);
