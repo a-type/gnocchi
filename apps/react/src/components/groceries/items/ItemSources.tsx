@@ -11,7 +11,7 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
-import { TextLink } from '@/components/nav/Link.jsx';
+import { LinkButton, TextLink } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { H2, H3, P } from '@aglio/ui/components/typography';
 
@@ -94,9 +94,9 @@ function RecipePreview({
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<TextLink role="button" to="#">
+				<span className="font-bold">
 					{title ? truncate(title) : 'a recipe'}
-				</TextLink>
+				</span>
 			</DialogTrigger>
 			<DialogContent>
 				<Suspense>
@@ -137,11 +137,11 @@ function RecipePreviewContent({
 	const { title, ingredients } = live;
 
 	return (
-		<div>
+		<div className="flex flex-col gap-3">
 			<H2>{title}</H2>
-			<TextLink className="mb-3" to={makeRecipeLink(recipe)}>
+			<LinkButton color="primary" align="start" to={makeRecipeLink(recipe)}>
 				View recipe
-			</TextLink>
+			</LinkButton>
 			<H3>Ingredients</H3>
 			{multiplier !== 1 && (
 				<span>(with {fractionToText(multiplier)} multiplication applied)</span>
