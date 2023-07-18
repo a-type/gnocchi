@@ -106,6 +106,7 @@ export async function wprm($: CheerioAPI): Promise<ExtractorData | null> {
 		totalTimeMinutes: totalTime,
 		servings: extractNumber(servingsElement?.text().trim()),
 		detailedIngredients,
+		rawIngredients: detailedIngredients.map((i) => i.original),
 		steps: instructionsText,
 		copyrightHolder: authorElement?.text().trim(),
 	};
