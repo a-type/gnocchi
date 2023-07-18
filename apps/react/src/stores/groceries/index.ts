@@ -660,16 +660,9 @@ async function getScannedRecipe(
 			if (!scanned) {
 				toast.error('Sorry, we had trouble finding a recipe on that webpage.');
 			} else {
-				if (scanned.detailedIngredients?.length) {
+				/*if (scanned.detailedIngredients?.length) {
 					result.ingredients = scanned.detailedIngredients.map(
-						(i: {
-							original: string;
-							quantity: number;
-							foodName: string;
-							unit?: string | null;
-							comments?: string[];
-							preparations?: string[];
-						}) => {
+						(i) => {
 							const unitMatch = i.unit ? lookupUnit(i.unit) : null;
 							return {
 								food: i.foodName,
@@ -683,7 +676,7 @@ async function getScannedRecipe(
 							};
 						},
 					);
-				} else if (scanned.rawIngredients?.length) {
+				} else */ if (scanned.rawIngredients?.length) {
 					result.ingredients = scanned.rawIngredients.map((line: string) => {
 						const parsed = parseIngredient(line);
 						return {
