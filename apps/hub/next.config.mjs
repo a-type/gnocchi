@@ -2,21 +2,14 @@ import UnoCSS from '@unocss/webpack';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	experimental: {
+		appDir: true,
+	},
 	webpack: (config, { dev, buildId }) => {
 		config.resolve.extensionAlias = {
 			'.js': ['.ts', '.tsx', '.js', '.jsx'],
 			'.jsx': ['.ts', '.tsx', '.js', '.jsx'],
 		};
-		config.mode = dev ? 'production' : config.mode;
-
-		config.plugins.push(UnoCSS());
-
-		if (buildId !== 'development') {
-			// * disable filesystem cache for build
-			// * https://github.com/unocss/unocss/issues/419
-			// * https://webpack.js.org/configuration/cache/
-			config.cache = false;
-		}
 
 		return config;
 	},

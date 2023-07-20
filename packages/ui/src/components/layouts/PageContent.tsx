@@ -1,3 +1,4 @@
+'use client';
 import classNames from 'classnames';
 import { HTMLAttributes } from 'react';
 import { useBoundsCssVars } from '../../hooks.js';

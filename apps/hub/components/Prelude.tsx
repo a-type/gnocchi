@@ -1,3 +1,5 @@
+'use client';
+
 import { Peek } from '@aglio/ui/components/peek';
 import { RichEditor } from '@aglio/ui/components/richEditor';
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
@@ -5,6 +7,7 @@ import { HubPublishedRecipeInfo } from '@aglio/trpc';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import classNames from 'classnames';
+import Link from '@tiptap/extension-link';
 
 export interface PreludeProps {
 	content: Exclude<HubPublishedRecipeInfo['prelude'], null>;
@@ -12,7 +15,7 @@ export interface PreludeProps {
 
 export function Prelude({ content }: PreludeProps) {
 	const editor = useEditor({
-		extensions: [StarterKit.configure({})],
+		extensions: [StarterKit.configure({}), Link],
 		content,
 		editable: false,
 	});

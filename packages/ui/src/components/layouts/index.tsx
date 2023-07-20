@@ -1,3 +1,4 @@
+'use client';
 export * from './PageRoot.jsx';
 export * from './PageContent.jsx';
 export * from './PageFixedArea.jsx';

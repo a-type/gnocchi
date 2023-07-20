@@ -1,3 +1,5 @@
+'use client';
+
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
 import { Note } from '@aglio/ui/components/note';
 import { RichEditor } from '@aglio/ui/components/richEditor';
@@ -14,6 +16,7 @@ import {
 	useEditor,
 } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
 
 export interface InstructionsProps {
 	instructions: HubPublishedRecipeInfo['instructions'];
@@ -27,6 +30,7 @@ export function Instructions({ instructions }: InstructionsProps) {
 			}),
 			Step,
 			SectionTitle,
+			Link,
 		],
 		content: instructions,
 		editable: false,
