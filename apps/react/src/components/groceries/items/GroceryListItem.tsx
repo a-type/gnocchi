@@ -36,6 +36,8 @@ import { useSizeCssVars } from '@aglio/ui/hooks';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@verdant-web/store';
 import {
+	DragHandleDots1Icon,
+	DragHandleDots2Icon,
 	HamburgerMenuIcon,
 	Pencil1Icon,
 	TrashIcon,
@@ -67,9 +69,7 @@ export interface GroceryListItemProps {
 	item: Item;
 	isDragActive?: boolean;
 	style?: CSSProperties;
-	menuProps?: Omit<ButtonProps, 'item'> & {
-		ref?: Ref<HTMLButtonElement>;
-	};
+	menuProps?: any;
 	first?: boolean;
 }
 
@@ -153,39 +153,37 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					isPartiallyPurchased={isPartiallyPurchased}
 					togglePurchased={togglePurchased}
 				/>
-				<div className="flex flex-row items-start gap-2 [grid-area:main] pt-2 pr-3 pb-2 relative">
-					<div className="flex flex-col gap-2 items-start flex-1">
-						<div className="flex flex-row items-start gap-1 mt-1 max-w-full overflow-hidden text-ellipsis relative">
-							<span>{displayString}</span>
-							{menuOpen && (
-								<QuantityEditor className="relative top--1" item={item} />
+				<CollapsibleTrigger asChild>
+					<div className="flex flex-row items-start gap-2 [grid-area:main] pt-2 pr-3 pb-2 relative cursor-pointer focus:(shadow-focus)">
+						<div className="flex flex-col gap-2 items-start flex-1">
+							<div className="flex flex-row items-start gap-1 mt-1 max-w-full overflow-hidden text-ellipsis relative">
+								<span>{displayString}</span>
+								{menuOpen && (
+									<QuantityEditor className="relative top--1" item={item} />
+								)}
+							</div>
+							{isPurchased && (
+								<div className="absolute left-0 right-52px top-20px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
+							)}
+							{comment && !menuOpen && (
+								<div className="text-xs text-gray7 italic [grid-area:comment]">
+									{comment}
+								</div>
 							)}
 						</div>
-						{isPurchased && (
-							<div className="absolute left-0 right-52px top-20px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
-						)}
-						{comment && !menuOpen && (
-							<div className="text-xs text-gray7 italic [grid-area:comment]">
-								{comment}
-							</div>
-						)}
-					</div>
-					<RecentPeople item={item} />
-					<ListTag item={item} collapsed={menuOpen} />
-					<div
-						onTouchStart={stopPropagation}
-						onTouchMove={stopPropagation}
-						onTouchEnd={stopPropagation}
-						onPointerDown={stopPropagation}
-						onPointerMove={stopPropagation}
-						onPointerUp={stopPropagation}
-					>
-						<CollapsibleTrigger asChild>
-							<Button
-								color="ghost"
-								className="relative"
-								size="small"
-								onContextMenu={preventDefault}
+						<RecentPeople item={item} />
+						<ListTag item={item} collapsed={menuOpen} />
+						<div
+							onTouchStart={stopPropagation}
+							onTouchMove={stopPropagation}
+							onTouchEnd={stopPropagation}
+							onPointerDown={stopPropagation}
+							onPointerMove={stopPropagation}
+							onPointerUp={stopPropagation}
+						>
+							<div
+								className="relative py-1 px-2"
+								// onContextMenu={preventDefault}
 								{...menuProps}
 							>
 								{first ? (
@@ -195,15 +193,15 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 										content="Tap and hold to change category"
 										disableNext
 									>
-										<HamburgerMenuIcon />
+										<DragHandleDots2Icon />
 									</OnboardingTooltip>
 								) : (
-									<HamburgerMenuIcon />
+									<DragHandleDots2Icon />
 								)}
-							</Button>
-						</CollapsibleTrigger>
+							</div>
+						</div>
 					</div>
-				</div>
+				</CollapsibleTrigger>
 				<CollapsibleContent className="[grid-area:secondary]">
 					<Suspense>
 						<div className="flex flex-col gap-2 justify-end p-3 pt-0 items-end">
@@ -261,8 +259,6 @@ function useDidQuantityJustChange(item: Item) {
 	return didQuantityChange;
 }
 
-const touchActionNoneStyle = { touchAction: 'none' };
-
 export function GroceryListItemDraggable({
 	item,
 	...rest
@@ -289,10 +285,13 @@ export function GroceryListItemDraggable({
 		() => ({
 			...listeners,
 			...attributes,
-			style: touchActionNoneStyle,
+			style: {
+				cursor: isDragging ? 'grabbing' : 'grab',
+				touchAction: 'none',
+			},
 			ref: setActivatorNodeRef,
 		}),
-		[listeners, attributes, setActivatorNodeRef],
+		[listeners, attributes, setActivatorNodeRef, isDragging],
 	);
 
 	const transformString = CSS.Transform.toString(transform);

@@ -10,7 +10,7 @@ const CheckboxRoot = withClassName(
 	CheckboxPrimitive.Root,
 	classNames(
 		'layer-components:(w-28px h-28px flex-shrink-0 relative bg-white border-default transition rounded-[6px])',
-		'layer-components:focus-visible:(outline-off shadow-focus)',
+		'layer-components:focus-visible:(outline-off) focus-visible:shadow-focus',
 		'layer-components:[&[data-state=checked]]:(bg-primary-light border-primary-dark)',
 		'layer-components:[&:hover:not(:disabled)]:shadow-[0_0_0_1px_var(--color-black)]',
 	),
