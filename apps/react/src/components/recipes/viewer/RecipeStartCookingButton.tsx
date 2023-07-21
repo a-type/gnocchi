@@ -21,6 +21,7 @@ export const RecipeStartCookingButton = forwardRef<
 			onClick={() => {
 				startSession();
 			}}
+			skipTransition
 			{...rest}
 		/>
 	);
