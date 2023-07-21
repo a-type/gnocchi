@@ -45,7 +45,7 @@ export function Peek({ peekHeight = 120, children, className }: PeekProps) {
 	return (
 		<div
 			className={classNames(
-				'relative animate-ease-default animate-forwards overflow-hidden [&[data-state=closed]]:(animate-keyframes-peek-close animate-duration-300 max-h-[var(--peek-height,120px)]) [&[data-state=open]]:(animate-keyframes-peek-open animate-duration-600)',
+				'relative animate-ease-default overflow-hidden [&[data-state=closed]]:(animate-keyframes-peek-close animate-forwards animate-duration-300 max-h-[var(--peek-height,120px)]) [&[data-state=open]]:(animate-keyframes-peek-open animate-forwards animate-duration-600)',
 				className,
 			)}
 			ref={containerRef}

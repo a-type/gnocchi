@@ -137,9 +137,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				<Divider />
 				<div className="w-full">
 					<H2 className="gutter-bottom">Instructions</H2>
-					<Peek>
-						<RecipeInstructionsViewer recipe={recipe} />
-					</Peek>
+					<RecipeInstructionsViewer recipe={recipe} />
 				</div>
 				<PageNowPlaying unstyled>
 					<div className="flex flex-row gap-2 items-center justify-end w-full">

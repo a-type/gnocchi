@@ -261,6 +261,10 @@ export default function presetAglio(): Preset {
 					'radix-collapsible-close-both': '300ms',
 					'item-disappear': '300ms',
 				},
+				fillModes: {
+					'peek-open': 'forwards',
+					'peek-close': 'forwards',
+				},
 			},
 		},
 
