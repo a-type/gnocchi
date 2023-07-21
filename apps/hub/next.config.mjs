@@ -1,5 +1,3 @@
-import UnoCSS from '@unocss/webpack';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	experimental: {
