@@ -16,6 +16,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'h2.title',
 		'h3.title',
 		'.recipe__title',
+		'.Recipe__title',
 		'.recipe h1',
 		'.title',
 		'.mv-create-title',
@@ -25,6 +26,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.recipe .author',
 		'.recipe [class*="author"]',
 		'.author',
+		'.Post__authorName',
 		'[class*="author"]',
 		'o-Attribution__a-Name',
 	]);
@@ -35,6 +37,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.prep-time',
 		'.prepTime',
 		'.mv-create-time-prep > .mv-create-time-format',
+		'.RecipePostIntro__infoEntry--prepTime > .RecipePostIntro__infoText',
 	]);
 	let cookTimeElement = findFirstMatch($, [
 		'.recipe .cook-time',
@@ -44,6 +47,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.cookTime',
 		'.mv-create-time-active > .mv-create-time-format',
 		'm-RecipeInfo__a-Description--Active',
+		'.RecipePostIntro__infoEntry--cookTime > .RecipePostIntro__infoText',
 	]);
 	let totalTimeElement = findFirstMatch($, [
 		'.recipe .total-time',
@@ -70,6 +74,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.ingredients > *',
 		'.recipe__list--ingredients li',
 		'.recipe-ingredients li',
+		'.Recipe__ingredient',
 		'[class*=ingredients] li',
 		'.mv-create-ingredients li',
 		'.o-Ingredients__a-Ingredient',
@@ -87,6 +92,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.steps > *',
 		'.recipe__list-step',
 		'.recipe-instructions li',
+		'.Recipe__instructionStep',
 		'.recipe-steps li',
 		'.recipeSteps li',
 		'[class*=instructions] li',
@@ -99,6 +105,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		'.recipe img[class*="image"]',
 		'.recipe img',
 		'.m-MediaBlock__a-Image',
+		'.Figure__image--original',
 		'img',
 	]);
 
