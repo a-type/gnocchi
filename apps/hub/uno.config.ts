@@ -5,5 +5,6 @@ import presetAglio from '@aglio/ui/uno-preset';
 
 export default defineConfig({
 	presets: [presetAglio()],
+	// @ts-ignore
 	transformers: [variantGroup()],
 });
