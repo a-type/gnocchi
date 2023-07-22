@@ -125,6 +125,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						equals: item.get('food'),
 					},
 				}).resolved;
+
 				const expirationDays = food?.get('expiresAfterDays');
 				const now = Date.now();
 
@@ -158,6 +159,26 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						food.set('purchaseCount', previousPurchaseCount + 1);
 					}
 				});
+
+				/** TODO: need to be able to batch this delete with the purchase
+				// look up other purchased items with this food and delete them
+				const otherPurchasedItems = await client.items.findAll({
+					index: {
+						where: 'purchased_food_listId',
+						match: {
+							purchased: 'yes',
+							food: item.get('food'),
+						},
+						order: 'asc',
+					},
+				}).resolved;
+
+				await client.items.deleteAll(
+					otherPurchasedItems
+						.map((i) => i.get('id'))
+						.filter((id) => id !== item.get('id')),
+				);
+				*/
 
 				client.sync.presence.update({
 					lastInteractedItem: item.get('id'),
