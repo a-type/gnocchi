@@ -34,6 +34,7 @@ import v33 from "./v33.js";
 import v34 from "./v34.js";
 import v35 from "./v35.js";
 import v36 from "./v36.js";
+import v37 from "./v37.js";
 
 export default [
   v1,
@@ -72,4 +73,5 @@ export default [
   v34,
   v35,
   v36,
+  v37,
 ];

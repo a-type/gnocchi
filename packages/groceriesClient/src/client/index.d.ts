@@ -1,8 +1,8 @@
 import type schema from "./schema.js";
 import type { StorageSchema } from "@verdant-web/common";
 import type {
-  Storage,
-  StorageInitOptions,
+  Client as Storage,
+  ClientDescriptorOptions as StorageInitOptions,
   ObjectEntity,
   ListEntity,
   Query,
@@ -75,6 +75,8 @@ export class Client<Presence = any, Profile = any> {
   export: Storage["export"];
   import: Storage["import"];
 
+  subscribe: Storage["subscribe"];
+
   stats: () => Promise<any>;
   /**
    * Resets all local data. Use with caution. If this replica
@@ -86,7 +88,10 @@ export class Client<Presence = any, Profile = any> {
 
 // schema is provided internally. loadInitialData must be revised to pass the typed Client
 interface ClientInitOptions<Presence = any, Profile = any>
-  extends Omit<StorageInitOptions<Presence, Profile>, "schema"> {}
+  extends Omit<StorageInitOptions<Presence, Profile>, "schema"> {
+  /** WARNING: overriding the schema is dangerous. Use with caution. */
+  schema?: StorageSchema;
+}
 
 export class ClientDescriptor<Presence = any, Profile = any> {
   constructor(init: ClientInitOptions<Presence, Profile>);
@@ -232,20 +237,26 @@ export interface ItemFoodStartsWithFilter {
   order?: "asc" | "desc";
 }
 
+export interface ItemPurchasedAtMatchFilter {
+  where: "purchasedAt";
+  equals: number | null;
+  order?: "asc" | "desc";
+}
+
+export interface ItemPurchasedAtRangeFilter {
+  where: "purchasedAt";
+  gte?: number | null;
+  gt?: number | null;
+  lte?: number | null;
+  lt?: number | null;
+  order?: "asc" | "desc";
+}
+
 export interface ItemPurchasedFoodListIdCompoundFilter {
   where: "purchased_food_listId";
   match: {
     purchased?: string;
     food?: string;
-    listId?: string;
-  };
-  order: "asc" | "desc";
-}
-
-export interface ItemPurchasedListIdCompoundFilter {
-  where: "purchased_listId";
-  match: {
-    purchased?: string;
     listId?: string;
   };
   order: "asc" | "desc";
@@ -292,22 +303,6 @@ export interface ItemListIdStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
-
-export interface ItemPurchasedAndExpiresAtMatchFilter {
-  where: "purchasedAndExpiresAt";
-  equals: number;
-  order?: "asc" | "desc";
-}
-
-export interface ItemPurchasedAndExpiresAtRangeFilter {
-  where: "purchasedAndExpiresAt";
-  gte?: number;
-  gt?: number;
-  lte?: number;
-  lt?: number;
-  order?: "asc" | "desc";
-}
-
 export type ItemFilter =
   | ItemCategoryIdMatchFilter
   | ItemCategoryIdRangeFilter
@@ -315,16 +310,15 @@ export type ItemFilter =
   | ItemFoodMatchFilter
   | ItemFoodRangeFilter
   | ItemFoodStartsWithFilter
+  | ItemPurchasedAtMatchFilter
+  | ItemPurchasedAtRangeFilter
   | ItemPurchasedFoodListIdCompoundFilter
-  | ItemPurchasedListIdCompoundFilter
   | ItemPurchasedMatchFilter
   | ItemPurchasedRangeFilter
   | ItemPurchasedStartsWithFilter
   | ItemListIdMatchFilter
   | ItemListIdRangeFilter
-  | ItemListIdStartsWithFilter
-  | ItemPurchasedAndExpiresAtMatchFilter
-  | ItemPurchasedAndExpiresAtRangeFilter;
+  | ItemListIdStartsWithFilter;
 
 export type ItemDestructured = {
   id: string;
@@ -335,7 +329,6 @@ export type ItemDestructured = {
   food: string;
   inputs: ItemInputs;
   purchasedAt: number | null;
-  expiresAt: number | null;
   listId: string | null;
   comment: string | null;
   textOverride: string | null;
@@ -349,7 +342,6 @@ export type ItemInit = {
   food: string;
   inputs?: ItemInputsInit;
   purchasedAt?: number | null;
-  expiresAt?: number | null;
   listId?: string | null;
   comment?: string | null;
   textOverride?: string | null;
@@ -363,7 +355,6 @@ export type ItemSnapshot = {
   food: string;
   inputs: ItemInputsSnapshot;
   purchasedAt: number | null;
-  expiresAt: number | null;
   listId: string | null;
   comment: string | null;
   textOverride: string | null;
@@ -455,10 +446,6 @@ export type ItemPurchasedAt = number | null;
 export type ItemPurchasedAtInit = ItemPurchasedAt | undefined;
 export type ItemPurchasedAtSnapshot = ItemPurchasedAt;
 export type ItemPurchasedAtDestructured = ItemPurchasedAt;
-export type ItemExpiresAt = number | null;
-export type ItemExpiresAtInit = ItemExpiresAt | undefined;
-export type ItemExpiresAtSnapshot = ItemExpiresAt;
-export type ItemExpiresAtDestructured = ItemExpiresAt;
 export type ItemListId = string | null;
 export type ItemListIdInit = ItemListId | undefined;
 export type ItemListIdSnapshot = ItemListId;
@@ -493,6 +480,15 @@ export interface FoodCategoryIdStartsWithFilter {
   where: "categoryId";
   startsWith: string;
   order?: "asc" | "desc";
+}
+
+export interface FoodCategoryIdLastPurchasedAtCompoundFilter {
+  where: "categoryId_lastPurchasedAt";
+  match: {
+    categoryId?: string | null;
+    lastPurchasedAtOrForever?: number;
+  };
+  order: "asc" | "desc";
 }
 
 export interface FoodNameLookupMatchFilter {
@@ -552,10 +548,41 @@ export interface FoodRepurchaseAfterRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface FoodPurchasedAndExpiresAtMatchFilter {
+  where: "purchasedAndExpiresAt";
+  equals: number;
+  order?: "asc" | "desc";
+}
+
+export interface FoodPurchasedAndExpiresAtRangeFilter {
+  where: "purchasedAndExpiresAt";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
+}
+
+export interface FoodLastPurchasedAtOrForeverMatchFilter {
+  where: "lastPurchasedAtOrForever";
+  equals: number;
+  order?: "asc" | "desc";
+}
+
+export interface FoodLastPurchasedAtOrForeverRangeFilter {
+  where: "lastPurchasedAtOrForever";
+  gte?: number;
+  gt?: number;
+  lte?: number;
+  lt?: number;
+  order?: "asc" | "desc";
+}
+
 export type FoodFilter =
   | FoodCategoryIdMatchFilter
   | FoodCategoryIdRangeFilter
   | FoodCategoryIdStartsWithFilter
+  | FoodCategoryIdLastPurchasedAtCompoundFilter
   | FoodNameLookupMatchFilter
   | FoodNameLookupRangeFilter
   | FoodNameLookupStartsWithFilter
@@ -563,7 +590,11 @@ export type FoodFilter =
   | FoodAnyNameRangeFilter
   | FoodAnyNameStartsWithFilter
   | FoodRepurchaseAfterMatchFilter
-  | FoodRepurchaseAfterRangeFilter;
+  | FoodRepurchaseAfterRangeFilter
+  | FoodPurchasedAndExpiresAtMatchFilter
+  | FoodPurchasedAndExpiresAtRangeFilter
+  | FoodLastPurchasedAtOrForeverMatchFilter
+  | FoodLastPurchasedAtOrForeverRangeFilter;
 
 export type FoodDestructured = {
   canonicalName: string;
@@ -571,6 +602,7 @@ export type FoodDestructured = {
   categoryId: string | null;
   expiresAfterDays: number | null;
   lastPurchasedAt: number | null;
+  expiresAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
   purchaseCount: number;
@@ -584,6 +616,7 @@ export type FoodInit = {
   categoryId?: string | null;
   expiresAfterDays?: number | null;
   lastPurchasedAt?: number | null;
+  expiresAt?: number | null;
   purchaseIntervalGuess?: number | null;
   lastAddedAt?: number | null;
   purchaseCount?: number;
@@ -597,6 +630,7 @@ export type FoodSnapshot = {
   categoryId: string | null;
   expiresAfterDays: number | null;
   lastPurchasedAt: number | null;
+  expiresAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
   purchaseCount: number;
@@ -633,6 +667,10 @@ export type FoodLastPurchasedAt = number | null;
 export type FoodLastPurchasedAtInit = FoodLastPurchasedAt | undefined;
 export type FoodLastPurchasedAtSnapshot = FoodLastPurchasedAt;
 export type FoodLastPurchasedAtDestructured = FoodLastPurchasedAt;
+export type FoodExpiresAt = number | null;
+export type FoodExpiresAtInit = FoodExpiresAt | undefined;
+export type FoodExpiresAtSnapshot = FoodExpiresAt;
+export type FoodExpiresAtDestructured = FoodExpiresAt;
 export type FoodPurchaseIntervalGuess = number | null;
 export type FoodPurchaseIntervalGuessInit =
   | FoodPurchaseIntervalGuess

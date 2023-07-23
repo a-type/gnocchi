@@ -126,16 +126,19 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 					},
 				}).resolved;
 
-				const expirationDays = food?.get('expiresAfterDays');
 				const now = Date.now();
 
 				client.batch({ batchName }).run(() => {
 					item.set('purchasedAt', now);
-					if (expirationDays) {
-						item.set('expiresAt', now + expirationDays * 24 * 60 * 60 * 1000);
-					}
 
 					if (food) {
+						const expiresAfterDays = food.get('expiresAfterDays');
+						if (expiresAfterDays) {
+							food.set(
+								'expiresAt',
+								now + expiresAfterDays * 24 * 60 * 60 * 1000,
+							);
+						}
 						const previousPurchaseCount = food.get('purchaseCount');
 						const previousPurchasedAt = food.get('lastPurchasedAt');
 						food.set('lastPurchasedAt', now);
@@ -288,7 +291,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	useCloneItem: (client) =>
 		useCallback(
 			async (item: Item) => {
-				const { id, purchasedAt, expiresAt, ...snapshot } = item.getSnapshot();
+				const { id, purchasedAt, ...snapshot } = item.getSnapshot();
 				// make a clone of the remaining data
 				const clone = JSON.parse(JSON.stringify(snapshot));
 				const newItem = await client.items.put(clone);
@@ -414,6 +417,26 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				);
 				for (const item of parsed) {
 					ingredients.push(item);
+				}
+			},
+			[client],
+		),
+	useAddPantryItem: (client) =>
+		useCallback(
+			async (foodName: string) => {
+				const food = await client.foods.findOne({
+					index: {
+						where: 'nameLookup',
+						equals: foodName,
+					},
+				}).resolved;
+				if (food) {
+					const now = Date.now();
+					food.set('lastPurchasedAt', now);
+					const expiry = food.get('expiresAfterDays');
+					if (expiry) {
+						food.set('expiresAt', now + expiry * 24 * 60 * 60 * 1000);
+					}
 				}
 			},
 			[client],

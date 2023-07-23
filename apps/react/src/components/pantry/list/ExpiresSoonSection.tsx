@@ -2,7 +2,7 @@ import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { LookupFoodName } from '@/components/foods/FoodName.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Item } from '@aglio/groceries-client';
+import { Food, Item } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
 import { H2 } from '@aglio/ui/components/typography';
 import { ClockIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
@@ -26,15 +26,19 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 			<H2 className="important:text-md gutter-bottom">Expiring soon</H2>
 			<div className="flex flex-col gap-3">
 				{expiresSoonItems.map((item) => (
-					<ExpiresSoonItem item={item} key={item.get('id')} />
+					<ExpiresSoonItem item={item} key={item.get('canonicalName')} />
 				))}
 			</div>
 		</div>
 	);
 }
 
-function ExpiresSoonItem({ item }: { item: Item }) {
-	const { food, expiresAt, purchasedAt } = hooks.useWatch(item);
+function ExpiresSoonItem({ item }: { item: Food }) {
+	const {
+		canonicalName: food,
+		expiresAt,
+		lastPurchasedAt: purchasedAt,
+	} = hooks.useWatch(item);
 	const deleteItem = hooks.useDeleteItem();
 	const cloneItem = hooks.useCloneItem();
 

@@ -1,7 +1,7 @@
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { LookupFoodName } from '@/components/foods/FoodName.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Item } from '@aglio/groceries-client';
+import { Food, Item } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
 import { RelativeTime } from '@aglio/ui/components/relativeTime';
 import { Tooltip } from '@aglio/ui/components/tooltip';
@@ -13,18 +13,22 @@ import {
 } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
-import { useCallback, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { groceriesState } from '@/components/groceries/state.js';
 import { TextSkeleton } from '@aglio/ui/components/skeletons';
 import { shortenTimeUnits } from '@aglio/tools';
 import { withClassName } from '@aglio/ui/hooks';
 
 export interface PantryListItemProps {
-	item: Item;
+	item: Food;
 }
 
 export function PantryListItem({ item, ...rest }: PantryListItemProps) {
-	const { id, purchasedAt, food, expiresAt } = hooks.useWatch(item);
+	const {
+		lastPurchasedAt: purchasedAt,
+		canonicalName: food,
+		expiresAt,
+	} = hooks.useWatch(item);
 	const deleteItem = hooks.useDeleteItem();
 
 	// within 3 days
@@ -54,7 +58,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 	}, [cloneItem, item]);
 
 	return (
-		<Root data-id={id} {...rest}>
+		<Root {...rest}>
 			<Main>
 				<Button
 					size="icon"
@@ -72,7 +76,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 					{wasRepurchased ? <CheckIcon /> : <PlusIcon />}
 				</Button>
 				<TextContent>
-					<LookupFoodName foodName={food} />
+					<span>{food}</span>
 					{purchasedAt && (
 						<Tooltip disabled={!expiresAt} content={expiresAtText}>
 							<div
@@ -90,7 +94,9 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 						</Tooltip>
 					)}
 				</TextContent>
-				<FoodDetailDialog foodName={food} />
+				<Suspense>
+					<FoodDetailDialog foodName={food} />
+				</Suspense>
 			</Main>
 		</Root>
 	);

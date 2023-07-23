@@ -4,33 +4,30 @@ import { ExpiresSoonSection } from './ExpiresSoonSection.jsx';
 import { Suspense } from 'react';
 import { PantryListItemSkeleton } from '@/components/pantry/items/PantryListItem.jsx';
 import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
+import { hooks } from '@/stores/groceries/index.js';
 
 export interface PantryListProps {
 	className?: string;
 }
 
 function PantryListInner({ className, ...rest }: PantryListProps) {
-	const { groupedItems, empty } = useItemsGroupedAndSorted();
+	const categories = hooks.useAllCategories();
 
 	return (
 		<div className="flex flex-col items-stretch w-full" {...rest}>
 			<ExpiresSoonSection />
 			<div>
-				{groupedItems.map(({ category, items }) => {
+				{categories.map((category) => {
 					return (
-						<PantryListCategory
-							key={category?.get('id') ?? 'null'}
-							category={category}
-							items={items}
-						/>
+						<Suspense key={category.get('id')}>
+							<PantryListCategory category={category} />
+						</Suspense>
 					);
 				})}
+				<Suspense>
+					<PantryListCategory category={null} />
+				</Suspense>
 			</div>
-			{empty && (
-				<div className="flex flex-col items-center justify-center text-center w-full p-8 opacity-70">
-					Nothing here yet...
-				</div>
-			)}
 			<AutoRestoreScroll id="pantryList" />
 		</div>
 	);

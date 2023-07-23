@@ -17,7 +17,7 @@ import {
 import { PlusIcon } from '@radix-ui/react-icons';
 
 export function AddItemAction() {
-	const addItems = hooks.useAddItems();
+	const addItem = hooks.useAddPantryItem();
 
 	return (
 		<Dialog>
@@ -28,7 +28,7 @@ export function AddItemAction() {
 				<FormikForm
 					initialValues={{ name: '' }}
 					onSubmit={async (values, bag) => {
-						await addItems([values.name], { purchased: true });
+						await addItem(values.name);
 						bag.resetForm();
 					}}
 				>

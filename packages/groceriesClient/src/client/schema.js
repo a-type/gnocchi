@@ -73,6 +73,13 @@ const foods = collection({
             type: 'number',
             nullable: true
         },
+        /**
+		 * This can be, and is, set in the future at the time of purchase
+		 * based on expiration.
+		 */ expiresAt: {
+            type: 'number',
+            nullable: true
+        },
         purchaseIntervalGuess: {
             type: 'number',
             nullable: true
@@ -120,6 +127,31 @@ const foods = collection({
                 const lastAdded = food.lastAddedAt || 0;
                 return Math.max(food.lastPurchasedAt, lastAdded) + food.purchaseIntervalGuess;
             }
+        },
+        purchasedAndExpiresAt: {
+            type: 'number',
+            compute: (food)=>{
+                if (!food.lastPurchasedAt) return Number.MAX_SAFE_INTEGER;
+                return food.expiresAt || Number.MAX_SAFE_INTEGER;
+            }
+        },
+        // if no purchased time is recorded, sorts to the bottom instead
+        // of the top.
+        lastPurchasedAtOrForever: {
+            type: 'number',
+            compute: (food)=>{
+                return food.lastPurchasedAt || Number.MAX_SAFE_INTEGER;
+            }
+        }
+    },
+    compounds: {
+        // allows showing recently purchased items in pages under category sections
+        // on the purchased page.
+        categoryId_lastPurchasedAt: {
+            of: [
+                'categoryId',
+                'lastPurchasedAtOrForever'
+            ]
         }
     }
 });
@@ -185,14 +217,8 @@ const items = collection({
 		 * Mark this when the item is purchased. It moves to the pantry.
 		 */ purchasedAt: {
             type: 'number',
-            nullable: true
-        },
-        /**
-		 * This can be, and is, set in the future at the time of purchase
-		 * based on category expiration settings.
-		 */ expiresAt: {
-            type: 'number',
-            nullable: true
+            nullable: true,
+            indexed: true
         },
         /**
 		 * If assigned to a list, this ID will be
@@ -223,26 +249,16 @@ const items = collection({
         listId: {
             type: 'string',
             compute: (doc)=>doc.listId
-        },
-        purchasedAndExpiresAt: {
-            type: 'number',
-            compute: (doc)=>{
-                if (!doc.purchasedAt || !doc.expiresAt) return Number.MAX_SAFE_INTEGER;
-                return doc.expiresAt;
-            }
         }
     },
     compounds: {
+        // used when adding items to find items with the same food
+        // and list that aren't purchased, and if so, add the quantity
+        // instead of creating a new item.
         purchased_food_listId: {
             of: [
                 'purchased',
                 'food',
-                'listId'
-            ]
-        },
-        purchased_listId: {
-            of: [
-                'purchased',
                 'listId'
             ]
         }
@@ -519,7 +535,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 36,
+    version: 37,
     collections: {
         categories,
         items,
