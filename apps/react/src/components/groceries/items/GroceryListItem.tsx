@@ -36,6 +36,7 @@ import { useSizeCssVars } from '@aglio/ui/hooks';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@verdant-web/store';
 import {
+	ClockIcon,
 	DragHandleDots1Icon,
 	DragHandleDots2Icon,
 	HamburgerMenuIcon,
@@ -64,6 +65,7 @@ import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
 import { useDraggable } from '@dnd-kit/core';
 import { preventDefault, stopPropagation } from '@aglio/tools';
 import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
+import { useExpiresText, usePurchasedText } from '@/components/pantry/hooks.js';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -172,6 +174,9 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 								</div>
 							)}
 						</div>
+						<Suspense>
+							<RecentPurchaseHint compact className="mt-1" foodName={food} />
+						</Suspense>
 						<RecentPeople item={item} />
 						<ListTag item={item} collapsed={menuOpen} />
 						<div
@@ -218,9 +223,12 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 								<ListSelect
 									value={item.get('listId')}
 									onChange={(listId) => item.set('listId', listId)}
-									className="flex-basis-50% flex-grow-1 flex-shrink-1 md:flex-basis-80px"
+									className="flex-basis-25% flex-grow-1 flex-shrink-1 md:flex-basis-80px"
 								/>
-								<OpenFoodDetailButton foodName={food} />
+								<Suspense>
+									<RecentPurchaseHint foodName={food} />
+								</Suspense>
+								{/* <OpenFoodDetailButton foodName={food} /> */}
 								{/* <CategoryPicker item={item} /> */}
 								<ItemDeleteButton
 									size="icon"
@@ -497,5 +505,69 @@ function ItemCheckbox({
 			data-test="grocery-list-item-checkbox"
 			className="[grid-area:check] mt-2 mx-3"
 		/>
+	);
+}
+
+function useFood(foodName: string) {
+	return hooks.useOneFood({
+		index: {
+			where: 'anyName',
+			equals: foodName,
+		},
+	});
+}
+
+function RecentPurchaseHint({
+	foodName,
+	compact,
+	className,
+}: {
+	foodName: string;
+	compact?: boolean;
+	className?: string;
+}) {
+	const food = useFood(foodName);
+	hooks.useWatch(food);
+
+	if (!food) {
+		return null;
+	}
+
+	const lastPurchasedAt = food.get('lastPurchasedAt');
+	// default to 1 week for non-perishables
+	const expiresAfterDays = food.get('expiresAfterDays') ?? 7;
+
+	const purchasedText = usePurchasedText(food, true);
+
+	// only show small version if the food was purchased less than expiresAfterDays ago
+	if (
+		compact &&
+		(!lastPurchasedAt ||
+			Date.now() - lastPurchasedAt > expiresAfterDays * 24 * 60 * 60 * 1000)
+	) {
+		return null;
+	}
+
+	if (compact) {
+		return (
+			<Tooltip content={purchasedText}>
+				<ClockIcon className={classNames('color-primary-dark', className)} />
+			</Tooltip>
+		);
+	}
+
+	// only show the large version if it was purchased at all
+	if (!lastPurchasedAt) return null;
+
+	return (
+		<div
+			className={classNames(
+				'text-xs text-gray-7 italic flex flex-row gap-1 items-center',
+				className,
+			)}
+		>
+			<ClockIcon />
+			<span>{purchasedText}</span>
+		</div>
 	);
 }

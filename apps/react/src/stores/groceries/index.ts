@@ -6,6 +6,7 @@ import { lookupUnit, parseIngredient } from '@aglio/conversion';
 import {
 	Client,
 	ClientDescriptor,
+	Food,
 	Item,
 	ItemDestructured,
 	ItemInputsItemInit,
@@ -434,6 +435,17 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 			},
 			[client],
 		),
+
+	useClearPantryItem: (client) =>
+		useCallback(
+			async (food: Food) => {
+				food.update({
+					lastPurchasedAt: null,
+					expiresAt: null,
+				});
+			},
+			[client],
+		),
 });
 
 const DEBUG = localStorage.getItem('DEBUG') === 'true';
@@ -827,4 +839,23 @@ document.addEventListener('keydown', async (e) => {
 			console.log('Nothing to redo');
 		}
 	}
+});
+
+// startup tasks
+_groceries.then(async (g) => {
+	// delete any purchased items older than 1 year
+	const purchased = await g.items.findAll({
+		index: {
+			where: 'purchased',
+			equals: 'yes',
+		},
+	}).resolved;
+	const now = Date.now();
+	const itemsToDelete = purchased
+		.filter((item) => {
+			const purchasedAt = item.get('purchasedAt');
+			return purchasedAt && purchasedAt < now - 365 * 24 * 60 * 60 * 1000;
+		})
+		.map((i) => i.get('id'));
+	await g.items.deleteAll(itemsToDelete);
 });

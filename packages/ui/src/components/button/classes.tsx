@@ -21,7 +21,7 @@ export function getButtonClassName({
 		'important:disabled:(opacity-50 cursor-default bg-[(--var-bg)] shadow-none)',
 		'important:[&[data-disabled=true]]:(opacity-50 cursor-default bg-[(--var-bg)] shadow-none)',
 		colors[color ?? 'default'],
-		`color-${color ?? 'default'}`,
+		`btn-color-${color ?? 'default'}`,
 		sizes[size ?? 'default'],
 		`size-${size ?? 'default'}`,
 		toggled && toggledClass,
@@ -32,12 +32,12 @@ export function getButtonClassName({
 }
 
 const colors = {
-	primary: `layer-variants:[&.color-primary]:([--bg:var(--color-primary-light)] [--hover:var(--color-primary)] [--active:var(--color-primary)] color-black border-black focus-visible:([--bg:var(--color-primary)]))`,
-	accent: `layer-variants:[&.color-accent]:([--bg:var(--color-accent-wash)] [--hover:var(--color-accent-light)] [--active:var(--color-accent-light)] color-black border-black focus-visible:([--bg:var(--color-accent-light)]))`,
-	default: `layer-variants:[&.color-default]:([--bg:var(--color-white)] [--hover:var(--color-gray-2)] [--active:var(--color-gray-3)] color-black border-black)`,
-	ghost: `layer-variants:[&.color-ghost]:([--bg:transparent] [--hover:var(--color-gray-blend)] [--active:var(--color-gray-dark-blend)] color-dark-blend hover:([--bg:var(--color-gray-blend)]) focus-visible:([--bg:var(--color-gray-blend)]))`,
-	destructive: `layer-variants:[&.color-destructive]:([--bg:var(--color-attention-light)] [--hover:var(--color-attention-light)] [--active:var(--color-attention-light)] border-black color-black hover:([--bg:var(--colors-attention)]))`,
-	ghostDestructive: `layer-variants:[&.color-ghostDestructive]:([--bg:transparent] [--hover:var(--color-attention-light)] [--active:var(-color-attention-light)] color-attention-dark)`,
+	primary: `layer-variants:[&.btn-color-primary]:([--bg:var(--color-primary-light)] [--hover:var(--color-primary)] [--active:var(--color-primary)] color-black border-black focus-visible:([--bg:var(--color-primary)]))`,
+	accent: `layer-variants:[&.btn-color-accent]:([--bg:var(--color-accent-wash)] [--hover:var(--color-accent-light)] [--active:var(--color-accent-light)] color-black border-black focus-visible:([--bg:var(--color-accent-light)]))`,
+	default: `layer-variants:[&.btn-color-default]:([--bg:var(--color-white)] [--hover:var(--color-gray-2)] [--active:var(--color-gray-3)] color-black border-black)`,
+	ghost: `layer-variants:[&.btn-color-ghost]:([--bg:transparent] [--hover:var(--color-gray-blend)] [--active:var(--color-gray-dark-blend)] color-dark-blend hover:([--bg:var(--color-gray-blend)]) focus-visible:([--bg:var(--color-gray-blend)]))`,
+	destructive: `layer-variants:[&.btn-color-destructive]:([--bg:var(--color-attention-light)] [--hover:var(--color-attention-light)] [--active:var(--color-attention-light)] border-black color-black hover:([--bg:var(--colors-attention)]))`,
+	ghostDestructive: `layer-variants:[&.btn-color-ghostDestructive]:([--bg:transparent] [--hover:var(--color-attention-light)] [--active:var(-color-attention-light)] color-attention-dark)`,
 };
 
 const sizes = {

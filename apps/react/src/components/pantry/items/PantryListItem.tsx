@@ -1,7 +1,19 @@
+import { FoodName } from '@/components/foods/FoodName.jsx';
+import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
+import { groceriesState } from '@/components/groceries/state.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Food } from '@aglio/groceries-client';
+import { shortenTimeUnits } from '@aglio/tools';
 import { Button } from '@aglio/ui/components/button';
+import {
+	CardActions,
+	CardFooter,
+	CardMain,
+	CardRoot,
+	CardTitle,
+} from '@aglio/ui/components/card';
 import { RelativeTime } from '@aglio/ui/components/relativeTime';
+import { TextSkeleton } from '@aglio/ui/components/skeletons';
 import { Tooltip } from '@aglio/ui/components/tooltip';
 import {
 	CheckIcon,
@@ -12,21 +24,7 @@ import {
 } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
-import { Suspense, useCallback, useState } from 'react';
-import { groceriesState } from '@/components/groceries/state.js';
-import { TextSkeleton } from '@aglio/ui/components/skeletons';
-import { shortenTimeUnits } from '@aglio/tools';
-import { withClassName } from '@aglio/ui/hooks';
-import {
-	CardActions,
-	CardFooter,
-	CardMain,
-	CardRoot,
-	CardTitle,
-} from '@aglio/ui/components/card';
-import pluralize from 'pluralize';
-import { FoodName } from '@/components/foods/FoodName.jsx';
-import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
+import { Suspense, useCallback } from 'react';
 
 export interface PantryListItemProps {
 	item: Food;
@@ -37,8 +35,9 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 		lastPurchasedAt: purchasedAt,
 		canonicalName: food,
 		expiresAt,
-		pluralizeName,
 	} = hooks.useWatch(item);
+
+	const clear = hooks.useClearPantryItem(item);
 
 	// within 3 days
 	const isAlmostOrExpired =
@@ -57,16 +56,6 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 			}),
 		);
 	}
-
-	const [wasRepurchased, setWasRepurchased] = useState(false);
-	const addItems = hooks.useAddItems();
-	const repurchaseItem = useCallback(async () => {
-		addItems([item.get('canonicalName')], {
-			listId: item.get('defaultListId') || null,
-		});
-		groceriesState.justAddedSomething = true;
-		setWasRepurchased(true);
-	}, [addItems, item]);
 
 	return (
 		<Suspense>
@@ -92,7 +81,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 								</div>
 							</Tooltip>
 						)}
-						<CardTitle>
+						<CardTitle className="text-sm">
 							<FoodName food={item} capitalize />
 						</CardTitle>
 						<OpenInNewWindowIcon className="absolute right-2 top-2 z-1 color-gray-5 bg-white" />
@@ -100,25 +89,11 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 				</CardMain>
 				<CardFooter>
 					<CardActions>
-						<Button
-							size="icon"
-							color="default"
-							onClick={repurchaseItem}
-							disabled={wasRepurchased}
-						>
-							{wasRepurchased ? <CheckIcon /> : <PlusIcon />}
-						</Button>
+						<Suspense fallback={<Button size="icon" color="default" />}>
+							<QuickAddButton food={item} />
+						</Suspense>
 						{!!purchasedAt && (
-							<Button
-								size="icon"
-								color="ghostDestructive"
-								onClick={() => {
-									item.update({
-										lastPurchasedAt: null,
-										expiresAt: null,
-									});
-								}}
-							>
+							<Button size="icon" color="ghostDestructive" onClick={clear}>
 								<TrashIcon />
 							</Button>
 						)}
@@ -145,5 +120,41 @@ export const PantryListItemSkeleton = () => {
 				</CardActions>
 			</CardFooter>
 		</CardRoot>
+	);
+};
+
+const QuickAddButton = ({ food }: { food: Food }) => {
+	const { canonicalName: foodName } = hooks.useWatch(food);
+
+	const addItems = hooks.useAddItems();
+
+	const repurchaseItem = useCallback(async () => {
+		addItems([food.get('canonicalName')], {
+			listId: food.get('defaultListId') || null,
+		});
+		groceriesState.justAddedSomething = true;
+	}, [addItems, food]);
+
+	const matchingItem = hooks.useOneItem({
+		index: {
+			where: 'purchased_food_listId',
+			match: {
+				purchased: 'no',
+				food: foodName,
+			},
+			order: 'asc',
+		},
+	});
+	const isOnList = !!matchingItem;
+
+	return (
+		<Button
+			size="icon"
+			color="default"
+			onClick={repurchaseItem}
+			disabled={isOnList}
+		>
+			{isOnList ? <CheckIcon /> : <PlusIcon />}
+		</Button>
 	);
 };

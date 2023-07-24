@@ -8,7 +8,7 @@ import { ClockIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import { useCallback } from 'react';
-import { useExpiresSoonItems } from '../hooks.js';
+import { useExpiresSoonItems, useExpiresText } from '../hooks.js';
 import { groceriesState } from '@/components/groceries/state.js';
 import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 
@@ -57,9 +57,9 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 		item.set('expiresAt', Date.now() + 6 * 24 * 60 * 60 * 1000);
 	}, [item]);
 
-	if (!expiresAt) return null;
+	const expiresAtText = useExpiresText(item);
 
-	const inThePast = expiresAt < Date.now();
+	if (!expiresAtText) return null;
 
 	return (
 		<div className="flex flex-col gap-2 p-3 rounded-lg bg-white border-light">
@@ -68,10 +68,7 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 					<LookupFoodName foodName={food} />
 				</div>
 				<div className="flex flex-col gap-1 text-xs">
-					<div className="ml-auto color-attentionDark">
-						{inThePast ? 'Expired' : 'Expires'}{' '}
-						{formatDistanceToNowStrict(expiresAt, { addSuffix: true })}
-					</div>
+					<div className="ml-auto color-attentionDark">{expiresAtText}</div>
 					{purchasedAt && (
 						<div className="color-gray8">
 							Purchased{' '}

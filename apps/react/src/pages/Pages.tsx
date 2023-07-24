@@ -109,6 +109,7 @@ const routes = makeRoutes([
 				component: GroceriesPage,
 				onVisited: () => {
 					PantryPage.preload();
+					PantryListPage.preload();
 					PlanPage.preload();
 					RecipesPage.preload();
 				},
@@ -193,6 +194,8 @@ const routes = makeRoutes([
 					RecipeViewPage.preload();
 					RecipeOverviewPage.preload();
 					RecipeCookPage.preload();
+					PantryPage.preload();
+					PantryListPage.preload();
 				},
 				data: {
 					left: '/pantry',
