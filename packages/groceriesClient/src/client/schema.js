@@ -137,10 +137,10 @@ const foods = collection({
         },
         // if no purchased time is recorded, sorts to the bottom instead
         // of the top.
-        lastPurchasedAtOrForever: {
+        lastPurchasedAtOrZero: {
             type: 'number',
             compute: (food)=>{
-                return food.lastPurchasedAt || Number.MAX_SAFE_INTEGER;
+                return food.lastPurchasedAt || 0;
             }
         }
     },
@@ -150,7 +150,7 @@ const foods = collection({
         categoryId_lastPurchasedAt: {
             of: [
                 'categoryId',
-                'lastPurchasedAtOrForever'
+                'lastPurchasedAtOrZero'
             ]
         }
     }

@@ -63,6 +63,7 @@ import { useItemDisplayText } from './hooks.js';
 import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
 import { useDraggable } from '@dnd-kit/core';
 import { preventDefault, stopPropagation } from '@aglio/tools';
+import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -219,7 +220,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									onChange={(listId) => item.set('listId', listId)}
 									className="flex-basis-50% flex-grow-1 flex-shrink-1 md:flex-basis-80px"
 								/>
-								<FoodDetailDialog foodName={food} />
+								<OpenFoodDetailButton foodName={food} />
 								{/* <CategoryPicker item={item} /> */}
 								<ItemDeleteButton
 									size="icon"

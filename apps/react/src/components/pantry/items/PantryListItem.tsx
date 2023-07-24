@@ -1,13 +1,12 @@
-import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
-import { LookupFoodName } from '@/components/foods/FoodName.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Food, Item } from '@aglio/groceries-client';
+import { Food } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
 import { RelativeTime } from '@aglio/ui/components/relativeTime';
 import { Tooltip } from '@aglio/ui/components/tooltip';
 import {
 	CheckIcon,
 	ClockIcon,
+	OpenInNewWindowIcon,
 	PlusIcon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
@@ -18,6 +17,16 @@ import { groceriesState } from '@/components/groceries/state.js';
 import { TextSkeleton } from '@aglio/ui/components/skeletons';
 import { shortenTimeUnits } from '@aglio/tools';
 import { withClassName } from '@aglio/ui/hooks';
+import {
+	CardActions,
+	CardFooter,
+	CardMain,
+	CardRoot,
+	CardTitle,
+} from '@aglio/ui/components/card';
+import pluralize from 'pluralize';
+import { FoodName } from '@/components/foods/FoodName.jsx';
+import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 
 export interface PantryListItemProps {
 	item: Food;
@@ -28,8 +37,8 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 		lastPurchasedAt: purchasedAt,
 		canonicalName: food,
 		expiresAt,
+		pluralizeName,
 	} = hooks.useWatch(item);
-	const deleteItem = hooks.useDeleteItem();
 
 	// within 3 days
 	const isAlmostOrExpired =
@@ -50,85 +59,91 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 	}
 
 	const [wasRepurchased, setWasRepurchased] = useState(false);
-	const cloneItem = hooks.useCloneItem();
+	const addItems = hooks.useAddItems();
 	const repurchaseItem = useCallback(async () => {
-		await cloneItem(item);
+		addItems([item.get('canonicalName')], {
+			listId: item.get('defaultListId') || null,
+		});
 		groceriesState.justAddedSomething = true;
 		setWasRepurchased(true);
-	}, [cloneItem, item]);
+	}, [addItems, item]);
 
 	return (
-		<Root {...rest}>
-			<Main>
-				<Button
-					size="icon"
-					color="destructive"
-					onClick={() => deleteItem(item)}
-				>
-					<TrashIcon />
-				</Button>
-				<Button
-					size="icon"
-					color="default"
-					onClick={repurchaseItem}
-					disabled={wasRepurchased}
-				>
-					{wasRepurchased ? <CheckIcon /> : <PlusIcon />}
-				</Button>
-				<TextContent>
-					<span>{food}</span>
-					{purchasedAt && (
-						<Tooltip disabled={!expiresAt} content={expiresAtText}>
-							<div
-								className={classNames(
-									' color-gray5 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap',
-									{
-										'color-attentionDark': isAlmostOrExpired,
-									},
-								)}
+		<Suspense>
+			<CardRoot {...rest}>
+				<CardMain compact asChild>
+					<OpenFoodDetailButton
+						foodName={food}
+						className="font-normal border-none rounded-none items-start text-sm"
+					>
+						{purchasedAt && (
+							<Tooltip disabled={!expiresAt} content={expiresAtText}>
+								<div
+									className={classNames(
+										'color-gray7 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-3 m-1 px-2 py-1',
+										{
+											'color-attentionDark': isAlmostOrExpired,
+										},
+									)}
+								>
+									<ClockIcon />
+									<RelativeTime value={purchasedAt} abbreviate />
+									&nbsp;ago
+								</div>
+							</Tooltip>
+						)}
+						<CardTitle>
+							<FoodName food={item} capitalize />
+						</CardTitle>
+						<OpenInNewWindowIcon className="absolute right-2 top-2 z-1 color-gray-5 bg-white" />
+					</OpenFoodDetailButton>
+				</CardMain>
+				<CardFooter>
+					<CardActions>
+						<Button
+							size="icon"
+							color="default"
+							onClick={repurchaseItem}
+							disabled={wasRepurchased}
+						>
+							{wasRepurchased ? <CheckIcon /> : <PlusIcon />}
+						</Button>
+						{!!purchasedAt && (
+							<Button
+								size="icon"
+								color="ghostDestructive"
+								onClick={() => {
+									item.update({
+										lastPurchasedAt: null,
+										expiresAt: null,
+									});
+								}}
 							>
-								<ClockIcon />
-								<RelativeTime value={purchasedAt} />
-								&nbsp;ago
-							</div>
-						</Tooltip>
-					)}
-				</TextContent>
-				<Suspense>
-					<FoodDetailDialog foodName={food} />
-				</Suspense>
-			</Main>
-		</Root>
+								<TrashIcon />
+							</Button>
+						)}
+					</CardActions>
+				</CardFooter>
+			</CardRoot>
+		</Suspense>
 	);
 }
 
-const Root = withClassName(
-	'div',
-	'w-full bg-wash rounded-md relative select-none all:transition-200 all:ease-springy repeated:mt-1',
-);
-const Main = withClassName(
-	'div',
-	'flex flex-row items-start gap-2 pt-4 pr-3 pb-2 relative pl-2',
-);
-const TextContent = withClassName(
-	'div',
-	'flex flex-col flex-1 items-start gap-2 mt-1 max-w-full overflow-hidden text-ellipsis relative',
-);
-
 export const PantryListItemSkeleton = () => {
 	return (
-		<Root>
-			<Main>
-				<Button size="icon" color="destructive" disabled>
-					<TrashIcon />
-				</Button>
-				<Button size="icon" color="default" disabled>
-					<PlusIcon />
-				</Button>
-				<TextContent>
-					<TextSkeleton maxLength={16} />
-				</TextContent>
-			</Main>
-		</Root>
+		<CardRoot>
+			<CardMain compact>
+				<CardTitle>
+					<TextSkeleton maxLength={12} />
+				</CardTitle>
+			</CardMain>
+			<CardFooter>
+				<CardActions>
+					<Button size="icon" color="default">
+						<PlusIcon />
+					</Button>
+				</CardActions>
+			</CardFooter>
+		</CardRoot>
 	);
 };

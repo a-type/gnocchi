@@ -28,7 +28,7 @@ export function NavBar({}: NavBarProps) {
 	const matchDefaultList = location.pathname === '/';
 	const matchList = location.pathname.startsWith('/list');
 	const matchGroceries = matchDefaultList || matchList;
-	const matchPurchased = location.pathname.startsWith('/purchased');
+	const matchPurchased = location.pathname.startsWith('/pantry');
 	const matchRecipes = location.pathname.startsWith('/recipes');
 	const matchSettings = location.pathname.startsWith('/settings');
 
@@ -162,13 +162,13 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 			step="pantry"
 		>
 			<NavBarLink
-				to="/purchased"
+				to="/pantry"
 				icon={<NavIcon name="fridge" />}
 				animate={recent}
 				active={active}
 				onClick={onSeen}
 			>
-				<span>Purchased</span>
+				<span>Pantry</span>
 				{newExpiredTime && <Pip />}
 			</NavBarLink>
 		</OnboardingTooltip>

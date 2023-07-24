@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { PantryListItemSkeleton } from '@/components/pantry/items/PantryListItem.jsx';
 import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 import { hooks } from '@/stores/groceries/index.js';
+import { CardGrid } from '@aglio/ui/components/card';
 
 export interface PantryListProps {
 	className?: string;
@@ -45,9 +46,11 @@ function SkeletonList() {
 	return (
 		<div className="flex flex-col items-stretch">
 			<div style={{ height: 30 }} />
-			{new Array(8).fill(null).map((_, i) => (
-				<PantryListItemSkeleton key={i} />
-			))}
+			<CardGrid>
+				{new Array(8).fill(null).map((_, i) => (
+					<PantryListItemSkeleton key={i} />
+				))}
+			</CardGrid>
 		</div>
 	);
 }

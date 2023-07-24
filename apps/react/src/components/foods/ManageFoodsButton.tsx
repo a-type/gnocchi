@@ -1,5 +1,5 @@
-import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { FoodName } from '@/components/foods/FoodName.jsx';
+import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Button } from '@aglio/ui/src/components/button';
 import {
@@ -46,7 +46,7 @@ function FoodsList() {
 					<div className="flex flex-1 text-md font-bold">
 						<FoodName food={food} />
 					</div>
-					<FoodDetailDialog foodName={food.get('canonicalName')} />
+					<OpenFoodDetailButton foodName={food.get('canonicalName')} />
 				</div>
 			))}
 		</div>

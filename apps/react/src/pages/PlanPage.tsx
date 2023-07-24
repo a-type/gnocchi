@@ -83,7 +83,7 @@ function ManageSection() {
 	return (
 		<>
 			<ManageCategories />
-			<ManageFoodsButton />
+			{/* <ManageFoodsButton /> */}
 		</>
 	);
 }

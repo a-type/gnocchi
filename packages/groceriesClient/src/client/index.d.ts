@@ -486,7 +486,7 @@ export interface FoodCategoryIdLastPurchasedAtCompoundFilter {
   where: "categoryId_lastPurchasedAt";
   match: {
     categoryId?: string | null;
-    lastPurchasedAtOrForever?: number;
+    lastPurchasedAtOrZero?: number;
   };
   order: "asc" | "desc";
 }
@@ -563,14 +563,14 @@ export interface FoodPurchasedAndExpiresAtRangeFilter {
   order?: "asc" | "desc";
 }
 
-export interface FoodLastPurchasedAtOrForeverMatchFilter {
-  where: "lastPurchasedAtOrForever";
+export interface FoodLastPurchasedAtOrZeroMatchFilter {
+  where: "lastPurchasedAtOrZero";
   equals: number;
   order?: "asc" | "desc";
 }
 
-export interface FoodLastPurchasedAtOrForeverRangeFilter {
-  where: "lastPurchasedAtOrForever";
+export interface FoodLastPurchasedAtOrZeroRangeFilter {
+  where: "lastPurchasedAtOrZero";
   gte?: number;
   gt?: number;
   lte?: number;
@@ -593,8 +593,8 @@ export type FoodFilter =
   | FoodRepurchaseAfterRangeFilter
   | FoodPurchasedAndExpiresAtMatchFilter
   | FoodPurchasedAndExpiresAtRangeFilter
-  | FoodLastPurchasedAtOrForeverMatchFilter
-  | FoodLastPurchasedAtOrForeverRangeFilter;
+  | FoodLastPurchasedAtOrZeroMatchFilter
+  | FoodLastPurchasedAtOrZeroRangeFilter;
 
 export type FoodDestructured = {
   canonicalName: string;

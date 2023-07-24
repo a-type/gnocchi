@@ -1,4 +1,3 @@
-import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { LookupFoodName } from '@/components/foods/FoodName.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
@@ -11,6 +10,7 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import { useCallback } from 'react';
 import { useExpiresSoonItems } from '../hooks.js';
 import { groceriesState } from '@/components/groceries/state.js';
+import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 
 export interface ExpiresSoonSectionProps {
 	className?: string;
@@ -40,17 +40,18 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 		lastPurchasedAt: purchasedAt,
 	} = hooks.useWatch(item);
 	const deleteItem = hooks.useDeleteItem();
-	const cloneItem = hooks.useCloneItem();
+	const addItems = hooks.useAddItems();
 
 	const deleteThisItem = useCallback(() => {
-		deleteItem(item);
+		item.set('lastPurchasedAt', null);
+		item.set('expiresAt', null);
 	}, [item, deleteItem]);
 
 	const repurchaseItem = useCallback(async () => {
-		await cloneItem(item);
+		await addItems([item.get('canonicalName')]);
 		deleteThisItem();
 		groceriesState.justAddedSomething = true;
-	}, [deleteThisItem, cloneItem, item]);
+	}, [deleteThisItem, addItems, item]);
 
 	const snooze = useCallback(() => {
 		item.set('expiresAt', Date.now() + 6 * 24 * 60 * 60 * 1000);
@@ -63,7 +64,7 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 	return (
 		<div className="flex flex-col gap-2 p-3 rounded-lg bg-white border-light">
 			<div className="flex flex-row items-start gap-2">
-				<div className="flex-1">
+				<div className="flex-1 text-md">
 					<LookupFoodName foodName={food} />
 				</div>
 				<div className="flex flex-col gap-1 text-xs">
@@ -92,11 +93,7 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 					<ClockIcon />
 					<span>Snooze</span>
 				</Button>
-				<FoodDetailDialog foodName={food}>
-					<Button color="ghost" size="icon" className="ml-auto">
-						<Icon name="food" />
-					</Button>
-				</FoodDetailDialog>
+				<OpenFoodDetailButton foodName={food} className="ml-auto" />
 			</div>
 		</div>
 	);

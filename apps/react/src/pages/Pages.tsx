@@ -13,7 +13,6 @@ import {
 import { GlobalLoader } from '@/GlobalLoader.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import TestPage from '@/pages/TestPage.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { H1, P } from '@aglio/ui/components/typography';
 import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
@@ -32,7 +31,7 @@ import { RecipeTagEditor } from '@/components/recipes/tags/RecipeTagEditor.jsx';
 import { SwipeOutlet } from '@/components/nav/SwipeOutlet.jsx';
 import { PageRoot } from '@aglio/ui/src/components/layouts';
 import { useMediaQuery } from '@/hooks/useMediaQuery.js';
-import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
+import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -66,7 +65,13 @@ const TermsAndConditionsPage = lazy(() => import('./TermsAndConditions.jsx'));
 const TempAccessGroceriesPage = lazy(
 	() => import('./groceries/TempAccessGroceriesPage.jsx'),
 );
-const PantryPage = lazyWithPreload(() => import('./PantryPage.jsx'));
+const PantryPage = lazyWithPreload(() => import('./pantry/PantryPage.js'));
+const PantryListPage = lazyWithPreload(
+	() => import('./pantry/PantryListPage.js'),
+);
+const PantrySearchPage = lazyWithPreload(
+	() => import('./pantry/PantrySearchPage.js'),
+);
 const RecipesPage = lazyWithPreload(() => import('./recipe/RecipesPage.jsx'));
 const VerifyPasswordResetPage = lazy(() => import('./VerifyPasswordReset.jsx'));
 
@@ -108,7 +113,7 @@ const routes = makeRoutes([
 					RecipesPage.preload();
 				},
 				data: {
-					right: '/purchased',
+					right: '/pantry',
 				},
 			},
 			{
@@ -123,15 +128,27 @@ const routes = makeRoutes([
 				},
 			},
 			{
-				path: 'purchased',
+				path: 'pantry',
 				component: PantryPage,
 				onVisited: () => {
 					RecipesPage.preload();
+					PantryListPage.preload();
+					PantrySearchPage.preload();
 				},
 				data: {
 					left: '/',
 					right: '/recipes',
 				},
+				children: [
+					{
+						index: true,
+						component: PantryListPage,
+					},
+					{
+						path: 'search/:query',
+						component: PantrySearchPage,
+					},
+				],
 			},
 			{
 				path: 'nevermind',
@@ -178,7 +195,7 @@ const routes = makeRoutes([
 					RecipeCookPage.preload();
 				},
 				data: {
-					left: '/purchased',
+					left: '/pantry',
 					right: '/settings',
 				},
 			},
@@ -190,7 +207,7 @@ const routes = makeRoutes([
 					RecipeCookPage.preload();
 				},
 				data: {
-					left: '/purchased',
+					left: '/pantry',
 					right: '/settings',
 				},
 				children: [
@@ -260,6 +277,7 @@ export function Pages() {
 					<StartSignupDialog />
 					<LogoutNotice />
 					<RecipeTagEditor />
+					<FoodDetailDialog />
 				</Router>
 			</Suspense>
 		</ErrorBoundary>

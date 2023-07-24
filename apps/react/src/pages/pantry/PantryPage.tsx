@@ -1,11 +1,8 @@
-import { NavBar } from '@/components/nav/NavBar.jsx';
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
-import { PantryList } from '@/components/pantry/list/PantryList.jsx';
-import {
-	PageContent,
-	PageFixedArea,
-	PageRoot,
-} from '@aglio/ui/components/layouts';
+import { useSearch } from '@/components/pantry/hooks.js';
+import { PantrySearch } from '@/components/pantry/search/PantrySearch.jsx';
+import { PageContent, PageFixedArea } from '@aglio/ui/components/layouts';
+import { Outlet } from '@verdant-web/react-router';
 import { Suspense } from 'react';
 
 export interface PantryPageProps {}
@@ -13,11 +10,12 @@ export interface PantryPageProps {}
 export function PantryPage({}: PantryPageProps) {
 	return (
 		<PageContent fullHeight innerProps={{ className: 'gap-3' }}>
+			<PantrySearch />
 			<PageFixedArea>
 				<PantryActionBar />
 			</PageFixedArea>
 			<Suspense>
-				<PantryList />
+				<Outlet />
 			</Suspense>
 		</PageContent>
 	);

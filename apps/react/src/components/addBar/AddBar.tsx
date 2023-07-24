@@ -182,8 +182,8 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 		const expiresSoonSuggestions = useMemo<SuggestionData[]>(() => {
 			return expiresSoonItems.slice(0, 5).map((item) => ({
 				type: 'food',
-				name: item.get('food'),
-				id: item.get('id'),
+				name: item.get('canonicalName'),
+				id: item.get('canonicalName'),
 			}));
 		}, [expiresSoonItems]);
 

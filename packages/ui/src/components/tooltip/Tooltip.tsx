@@ -38,15 +38,20 @@ export function Tooltip({
 	content,
 	children,
 	open,
+	disabled,
 	...rest
 }: { content: React.ReactNode; open?: boolean } & ComponentPropsWithoutRef<
 	typeof TooltipPrimitive.TooltipTrigger
 >) {
 	return (
 		<TooltipPrimitive.Root open={open}>
-			<TooltipPrimitive.TooltipTrigger asChild {...rest}>
-				{children}
-			</TooltipPrimitive.TooltipTrigger>
+			{disabled ? (
+				children
+			) : (
+				<TooltipPrimitive.TooltipTrigger asChild {...rest}>
+					{children}
+				</TooltipPrimitive.TooltipTrigger>
+			)}
 			<Content sideOffset={15}>{content}</Content>
 		</TooltipPrimitive.Root>
 	);

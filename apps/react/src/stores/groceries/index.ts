@@ -121,7 +121,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				// also set expiration based on food info
 				const food = await client.foods.findOne({
 					index: {
-						where: 'nameLookup',
+						where: 'anyName',
 						equals: item.get('food'),
 					},
 				}).resolved;
@@ -163,25 +163,18 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 					}
 				});
 
-				/** TODO: need to be able to batch this delete with the purchase
-				// look up other purchased items with this food and delete them
-				const otherPurchasedItems = await client.items.findAll({
-					index: {
-						where: 'purchased_food_listId',
-						match: {
-							purchased: 'yes',
-							food: item.get('food'),
-						},
-						order: 'asc',
-					},
-				}).resolved;
-
-				await client.items.deleteAll(
-					otherPurchasedItems
-						.map((i) => i.get('id'))
-						.filter((id) => id !== item.get('id')),
-				);
-				*/
+				if (!food) {
+					// TODO: make this a part of the batch above
+					await client.foods.put({
+						canonicalName: item.get('food'),
+						categoryId: item.get('categoryId'),
+						alternateNames: [],
+						lastPurchasedAt: Date.now(),
+						lastAddedAt: item.get('createdAt'),
+						purchaseCount: 1,
+						defaultListId: item.get('listId'),
+					});
+				}
 
 				client.sync.presence.update({
 					lastInteractedItem: item.get('id'),

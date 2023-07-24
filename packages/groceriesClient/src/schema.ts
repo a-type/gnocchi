@@ -150,10 +150,10 @@ const foods = collection({
 		},
 		// if no purchased time is recorded, sorts to the bottom instead
 		// of the top.
-		lastPurchasedAtOrForever: {
+		lastPurchasedAtOrZero: {
 			type: 'number',
 			compute: (food) => {
-				return food.lastPurchasedAt || Number.MAX_SAFE_INTEGER;
+				return food.lastPurchasedAt || 0;
 			},
 		},
 	},
@@ -161,7 +161,7 @@ const foods = collection({
 		// allows showing recently purchased items in pages under category sections
 		// on the purchased page.
 		categoryId_lastPurchasedAt: {
-			of: ['categoryId', 'lastPurchasedAtOrForever'],
+			of: ['categoryId', 'lastPurchasedAtOrZero'],
 		},
 	},
 });

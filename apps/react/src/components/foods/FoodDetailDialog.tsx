@@ -19,34 +19,25 @@ import { Checkbox } from '@aglio/ui/src/components/checkbox';
 import { FoodName } from '@/components/foods/FoodName.jsx';
 import { FoodNamesEditor } from '@/components/foods/FoodNamesEditor.jsx';
 import { Divider } from '@aglio/ui/src/components/divider';
+import { useSearchParams } from '@verdant-web/react-router';
 
-export interface FoodDetailDialogProps {
-	foodName: string;
-	children?: ReactNode;
-}
+export interface FoodDetailDialogProps {}
 
-export function FoodDetailDialog({
-	foodName,
-	children,
-}: FoodDetailDialogProps) {
-	const [open, toggleOpen] = useToggle(false);
-
+export function FoodDetailDialog({}: FoodDetailDialogProps) {
+	const [params, setParams] = useSearchParams();
+	const foodName = params.get('showFood');
+	const open = !!foodName;
+	const onClose = () => {
+		setParams((old) => {
+			old.delete('showFood');
+			return old;
+		});
+	};
 	return (
-		<Dialog open={open} onOpenChange={toggleOpen}>
-			<DialogTrigger asChild>
-				{children || (
-					<Button size="icon" color="ghost">
-						<Icon name="food" />
-					</Button>
-				)}
-			</DialogTrigger>
+		<Dialog open={open} onOpenChange={onClose}>
 			<DialogContent>
 				<Suspense>
-					<FoodDetailView
-						foodName={foodName}
-						open={open}
-						toggleOpen={toggleOpen}
-					/>
+					{foodName && <FoodDetailView foodName={foodName} open={open} />}
 				</Suspense>
 				<DialogActions>
 					<DialogClose asChild>
@@ -61,11 +52,9 @@ export function FoodDetailDialog({
 function FoodDetailView({
 	foodName,
 	open,
-	toggleOpen,
 }: {
 	foodName: string;
 	open: boolean;
-	toggleOpen: () => void;
 }) {
 	const client = hooks.useClient();
 	const food = hooks.useOneFood({

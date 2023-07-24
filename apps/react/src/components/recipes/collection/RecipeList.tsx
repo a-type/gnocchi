@@ -1,39 +1,21 @@
-import { Link, LinkButton } from '@/components/nav/Link.jsx';
+import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 import { EmptyState } from '@/components/recipes/collection/EmptyState.jsx';
 import { RecipeCollectionMenu } from '@/components/recipes/collection/RecipeCollectionMenu.jsx';
 import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
-import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
-import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
-import { hooks } from '@/stores/groceries/index.js';
-import { Recipe } from '@aglio/groceries-client';
+import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
 import { Button } from '@aglio/ui/components/button';
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuItemRightSlot,
-	DropdownMenuTrigger,
-} from '@aglio/ui/components/dropdownMenu';
 import { InfiniteLoadTrigger } from '@aglio/ui/components/infiniteLoadTrigger';
 import { PageFixedArea } from '@aglio/ui/components/layouts';
-import { Spinner } from '@aglio/ui/src/components/spinner';
 import { withClassName } from '@aglio/ui/hooks';
-import {
-	DotsVerticalIcon,
-	PlayIcon,
-	PlusCircledIcon,
-	PlusIcon,
-	TrashIcon,
-} from '@radix-ui/react-icons';
-import { Suspense, useState } from 'react';
-import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
-import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
+import { Spinner } from '@aglio/ui/src/components/spinner';
+import { Suspense } from 'react';
 import { RecipeListActions } from './RecipeListActions.jsx';
 import { useFilteredRecipes } from './hooks.js';
-import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
-import { RecipeStartCookingButton } from '@/components/recipes/viewer/RecipeStartCookingButton.jsx';
-import { RecipeAddTag } from '@/components/recipes/editor/RecipeAddTag.jsx';
-import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
+import {
+	RecipeListItem,
+	RecipePlaceholderItem,
+} from '@/components/recipes/collection/RecipeListItem.jsx';
+import { CardGrid } from '@aglio/ui/components/card';
 
 export interface RecipeListProps {}
 
@@ -60,11 +42,11 @@ export function RecipeList({}: RecipeListProps) {
 			</Suspense>
 			<Suspense
 				fallback={
-					<List>
+					<CardGrid>
 						<RecipePlaceholderItem />
 						<RecipePlaceholderItem />
 						<RecipePlaceholderItem />
-					</List>
+					</CardGrid>
 				}
 			>
 				<RecipeListContent />
@@ -73,11 +55,6 @@ export function RecipeList({}: RecipeListProps) {
 		</div>
 	);
 }
-
-const List = withClassName(
-	'div',
-	'grid grid-cols-[1fr] [grid-auto-rows:auto] gap-4 p-0 m-0 md:(grid-cols-[repeat(2,1fr)] [grid-auto-rows:1fr] items-end)',
-);
 
 function RecipeListContent() {
 	const [recipes, { loadMore, hasMore }] = useFilteredRecipes();
@@ -88,11 +65,11 @@ function RecipeListContent() {
 
 	return (
 		<>
-			<List>
+			<CardGrid>
 				{recipes.map((recipe) => (
 					<RecipeListItem key={recipe.get('id')} recipe={recipe} />
 				))}
-			</List>
+			</CardGrid>
 			{hasMore && (
 				<InfiniteLoadTrigger onVisible={loadMore} className="mt-6 w-full">
 					<Spinner />
@@ -100,103 +77,4 @@ function RecipeListContent() {
 			)}
 		</>
 	);
-}
-
-const Item = withClassName(
-	'div',
-	'flex flex-col border-light rounded-lg text-lg overflow-hidden h-max-content relative bg-gray1 min-h-200px md:(h-30vh max-h-400px)',
-);
-
-function RecipeListItem({ recipe }: { recipe: Recipe }) {
-	const { title } = hooks.useWatch(recipe);
-
-	const deleteRecipe = hooks.useDeleteRecipe();
-
-	const [menuOpen, setMenuOpen] = useState(false);
-
-	return (
-		<Item>
-			<Link
-				className="flex flex-col gap-1 cursor-pointer transition p-4 pb-2 flex-1 relative z-1 hover:(bg-lightBlend color-black) md:pt-4"
-				to={makeRecipeLink(recipe)}
-				preserveQuery
-			>
-				<div className="text-md">
-					<Suspense>
-						<RecipeTagsViewer recipe={recipe} />
-					</Suspense>
-				</div>
-				<div className="flex flex-col gap-1 mt-auto bg-white p-2 rounded-lg w-auto mr-auto border border-solid border-grayDarkBlend">
-					<span>{title}</span>
-				</div>
-			</Link>
-			<RecipeMainImageViewer
-				recipe={recipe}
-				className="absolute z-0 right-0 top-0 bottom-0 w-full h-full"
-			/>
-			<div className="flex flex-row p-2 bg-white relative z-1 border-0 border-t border-t-grayDarkBlend border-solid">
-				<div className="ml-0 mr-auto flex flex-row gap-1 items-center">
-					<RecipeStartCookingButton
-						preserveQuery
-						recipe={recipe}
-						size="icon"
-						color="primary"
-					>
-						<PlayIcon className="relative left-1px" />
-					</RecipeStartCookingButton>
-					<AddToListButton recipe={recipe} color="ghost" size="small">
-						<PlusCircledIcon className="w-20px h-20px" />
-						<span>Add to List</span>
-					</AddToListButton>
-				</div>
-				<div className="mr-0 ml-auto flex flex-row gap-1 items-center">
-					<DropdownMenu
-						open={menuOpen}
-						onOpenChange={(open) => {
-							if (open) setMenuOpen(true);
-						}}
-					>
-						<DropdownMenuTrigger asChild>
-							<Button size="icon" color="ghost">
-								<DotsVerticalIcon className="w-20px h-20px" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent
-							onPointerDownOutside={() => setMenuOpen(false)}
-						>
-							<RecipeAddTag
-								recipe={recipe}
-								onAdd={() => {
-									setMenuOpen(false);
-								}}
-							>
-								<DropdownMenuItem>
-									<span>Add Tag</span>
-									<DropdownMenuItemRightSlot>
-										<PlusIcon />
-									</DropdownMenuItemRightSlot>
-								</DropdownMenuItem>
-							</RecipeAddTag>
-							<DropdownMenuItem
-								color="destructive"
-								onSelect={() => {
-									deleteRecipe(recipe.get('id'));
-									setMenuOpen(false);
-								}}
-							>
-								<span>Delete</span>
-								<DropdownMenuItemRightSlot>
-									<TrashIcon />
-								</DropdownMenuItemRightSlot>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
-				</div>
-			</div>
-		</Item>
-	);
-}
-
-function RecipePlaceholderItem() {
-	return <Item>&nbsp;</Item>;
 }
