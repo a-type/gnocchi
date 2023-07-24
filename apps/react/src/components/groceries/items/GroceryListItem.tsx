@@ -174,9 +174,11 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 								</div>
 							)}
 						</div>
-						<Suspense>
-							<RecentPurchaseHint compact className="mt-1" foodName={food} />
-						</Suspense>
+						{!isPurchased && (
+							<Suspense>
+								<RecentPurchaseHint compact className="mt-1" foodName={food} />
+							</Suspense>
+						)}
 						<RecentPeople item={item} />
 						<ListTag item={item} collapsed={menuOpen} />
 						<div
