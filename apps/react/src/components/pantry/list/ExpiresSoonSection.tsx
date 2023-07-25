@@ -1,16 +1,30 @@
-import { LookupFoodName } from '@/components/foods/FoodName.jsx';
+import { FoodName, LookupFoodName } from '@/components/foods/FoodName.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Food, Item } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
 import { H2 } from '@aglio/ui/components/typography';
-import { ClockIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons';
+import {
+	ClockIcon,
+	ExclamationTriangleIcon,
+	OpenInNewWindowIcon,
+	PlusIcon,
+	TrashIcon,
+} from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import { useCallback } from 'react';
 import { useExpiresSoonItems, useExpiresText } from '../hooks.js';
 import { groceriesState } from '@/components/groceries/state.js';
 import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
+import {
+	CardActions,
+	CardFooter,
+	CardMain,
+	CardRoot,
+	CardTitle,
+} from '@aglio/ui/components/card';
+import { RelativeTime } from '@aglio/ui/components/relativeTime';
 
 export interface ExpiresSoonSectionProps {
 	className?: string;
@@ -23,7 +37,7 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 
 	return (
 		<div className={classNames('flex flex-col mb-6', className)}>
-			<H2 className="important:text-md gutter-bottom">Expiring soon</H2>
+			<H2 className="important:text-md gutter-bottom ml-3">Expiring soon</H2>
 			<div className="flex flex-col gap-3">
 				{expiresSoonItems.map((item) => (
 					<ExpiresSoonItem item={item} key={item.get('canonicalName')} />
@@ -58,35 +72,59 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 	if (!expiresAtText) return null;
 
 	return (
-		<div className="flex flex-col gap-2 p-3 rounded-lg bg-white border-light">
-			<div className="flex flex-row items-start gap-2">
-				<div className="flex-1 text-md">
-					<LookupFoodName foodName={food} />
-				</div>
-				<div className="flex flex-col gap-1 text-xs">
-					<div className="ml-auto color-attentionDark">{expiresAtText}</div>
-					{purchasedAt && (
-						<div className="color-gray8">
-							Purchased{' '}
-							{formatDistanceToNowStrict(purchasedAt, { addSuffix: true })}
+		<CardRoot>
+			<CardMain compact asChild>
+				<OpenFoodDetailButton
+					foodName={food}
+					className="font-normal border-none rounded-none items-start text-sm"
+				>
+					<div className="flex flex-row items-center gap-1 flex-wrap">
+						<div
+							className={classNames(
+								'color-attentionDark italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-5 m-1 px-2 py-1',
+							)}
+						>
+							<ExclamationTriangleIcon />
+							{expiresAtText}
 						</div>
-					)}
-				</div>
-			</div>
-			<div className="flex flex-row items-center w-full gap-2 flex-wrap">
-				<Button size="small" color="destructive" onClick={deleteThisItem}>
-					<TrashIcon />
-					<span>Delete</span>
-				</Button>
-				<Button size="small" color="default" onClick={repurchaseItem}>
-					<PlusIcon />
-					<span>Add to list</span>
-				</Button>
-				<Button size="small" color="ghost" onClick={snooze}>
-					<ClockIcon />
-					<span>Snooze</span>
-				</Button>
-			</div>
-		</div>
+						{purchasedAt && (
+							<div
+								className={classNames(
+									'color-gray-7 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-5 m-1 px-2 py-1',
+								)}
+							>
+								<ClockIcon />
+								Purchased <RelativeTime value={purchasedAt} abbreviate />
+								&nbsp;ago
+							</div>
+						)}
+					</div>
+					<CardTitle>
+						<FoodName food={item} capitalize />
+					</CardTitle>
+					<OpenInNewWindowIcon className="absolute right-2 top-2 z-1 color-gray-5 bg-white" />
+				</OpenFoodDetailButton>
+			</CardMain>
+			<CardFooter>
+				<CardActions>
+					<Button size="small" color="default" onClick={repurchaseItem}>
+						<PlusIcon />
+						<span>Add to list</span>
+					</Button>
+					<Button
+						size="small"
+						color="ghostDestructive"
+						onClick={deleteThisItem}
+					>
+						<TrashIcon />
+						<span>Clear</span>
+					</Button>
+					<Button size="small" color="ghost" onClick={snooze}>
+						<ClockIcon />
+						<span>Snooze</span>
+					</Button>
+				</CardActions>
+			</CardFooter>
+		</CardRoot>
 	);
 }
