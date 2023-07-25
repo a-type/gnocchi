@@ -17,7 +17,7 @@ export default migrate(v36Schema, v37Schema, async ({ queries, migrate }) => {
 		foodsToExpirations[purchasedItem.food] = purchasedItem.expiresAt;
 	}
 
-	migrate('foods', async (old) => {
+	await migrate('foods', async (old) => {
 		const expiresAt =
 			foodsToExpirations[old.canonicalName] ||
 			old.alternateNames.reduce((expiresAt, alternateName) => {

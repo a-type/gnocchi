@@ -28,7 +28,9 @@ export function PantrySearchResults({}: PantrySearchResultsProps) {
 				})}
 			</CardGrid>
 			{pagination.hasMore && (
-				<Button onClick={pagination.loadMore}>Load more</Button>
+				<Button color="ghost" onClick={pagination.loadMore}>
+					Load more
+				</Button>
 			)}
 		</div>
 	);
