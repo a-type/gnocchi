@@ -37,7 +37,10 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 		expiresAt,
 	} = hooks.useWatch(item);
 
-	const clear = hooks.useClearPantryItem(item);
+	const clearItem = hooks.useClearPantryItem();
+	const clear = () => {
+		clearItem(item);
+	};
 
 	// within 3 days
 	const isAlmostOrExpired =
@@ -69,9 +72,9 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 							<Tooltip disabled={!expiresAt} content={expiresAtText}>
 								<div
 									className={classNames(
-										'color-gray7 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-3 m-1 px-2 py-1',
+										'color-gray7 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-5 m-1 px-2 py-1',
 										{
-											'color-attentionDark': isAlmostOrExpired,
+											'important:color-attentionDark': isAlmostOrExpired,
 										},
 									)}
 								>

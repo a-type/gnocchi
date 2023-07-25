@@ -228,7 +228,10 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									className="flex-basis-25% flex-grow-1 flex-shrink-1 md:flex-basis-80px"
 								/>
 								<Suspense>
-									<RecentPurchaseHint foodName={food} />
+									<RecentPurchaseHint
+										foodName={food}
+										className="flex-basis-50% justify-end"
+									/>
 								</Suspense>
 								{/* <OpenFoodDetailButton foodName={food} /> */}
 								{/* <CategoryPicker item={item} /> */}
@@ -531,15 +534,15 @@ function RecentPurchaseHint({
 	const food = useFood(foodName);
 	hooks.useWatch(food);
 
+	const lastPurchasedAt = food?.get('lastPurchasedAt');
+	// default to 1 week for non-perishables
+	const expiresAfterDays = food?.get('expiresAfterDays') ?? 7;
+
+	const purchasedText = usePurchasedText(food, true);
+
 	if (!food) {
 		return null;
 	}
-
-	const lastPurchasedAt = food.get('lastPurchasedAt');
-	// default to 1 week for non-perishables
-	const expiresAfterDays = food.get('expiresAfterDays') ?? 7;
-
-	const purchasedText = usePurchasedText(food, true);
 
 	// only show small version if the food was purchased less than expiresAfterDays ago
 	if (

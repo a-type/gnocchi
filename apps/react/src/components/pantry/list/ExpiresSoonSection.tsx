@@ -34,18 +34,14 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 }
 
 function ExpiresSoonItem({ item }: { item: Food }) {
-	const {
-		canonicalName: food,
-		expiresAt,
-		lastPurchasedAt: purchasedAt,
-	} = hooks.useWatch(item);
-	const deleteItem = hooks.useDeleteItem();
+	const { canonicalName: food, lastPurchasedAt: purchasedAt } =
+		hooks.useWatch(item);
 	const addItems = hooks.useAddItems();
 
+	const resetItem = hooks.useClearPantryItem();
 	const deleteThisItem = useCallback(() => {
-		item.set('lastPurchasedAt', null);
-		item.set('expiresAt', null);
-	}, [item, deleteItem]);
+		return resetItem(item);
+	}, [resetItem, item]);
 
 	const repurchaseItem = useCallback(async () => {
 		await addItems([item.get('canonicalName')]);
@@ -90,7 +86,6 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 					<ClockIcon />
 					<span>Snooze</span>
 				</Button>
-				<OpenFoodDetailButton foodName={food} className="ml-auto" />
 			</div>
 		</div>
 	);

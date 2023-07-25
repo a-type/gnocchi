@@ -4,7 +4,7 @@ import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { PageNav } from '@aglio/ui/components/layouts';
-import { useMatch } from '@verdant-web/react-router';
+import { useMatch, useOnLocationChange } from '@verdant-web/react-router';
 import classNames from 'classnames';
 import {
 	ReactNode,
@@ -13,6 +13,7 @@ import {
 	memo,
 	useCallback,
 	useEffect,
+	useState,
 } from 'react';
 import { useSnapshot } from 'valtio';
 import { groceriesState } from '../groceries/state.js';
@@ -25,12 +26,14 @@ import { withClassName } from '@aglio/ui/hooks';
 export interface NavBarProps {}
 
 export function NavBar({}: NavBarProps) {
-	const matchDefaultList = location.pathname === '/';
-	const matchList = location.pathname.startsWith('/list');
+	const [pathname, setPathname] = useState(() => window.location.pathname);
+	useOnLocationChange((location) => setPathname(location.pathname));
+	const matchDefaultList = pathname === '/';
+	const matchList = pathname.startsWith('/list');
 	const matchGroceries = matchDefaultList || matchList;
-	const matchPurchased = location.pathname.startsWith('/pantry');
-	const matchRecipes = location.pathname.startsWith('/recipes');
-	const matchSettings = location.pathname.startsWith('/settings');
+	const matchPurchased = pathname.startsWith('/pantry');
+	const matchRecipes = pathname.startsWith('/recipes');
+	const matchSettings = pathname.startsWith('/settings');
 
 	return (
 		<PageNav
@@ -163,7 +166,7 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 		>
 			<NavBarLink
 				to="/pantry"
-				icon={<NavIcon name="fridge" />}
+				icon={<NavIcon name="food" />}
 				animate={recent}
 				active={active}
 				onClick={onSeen}

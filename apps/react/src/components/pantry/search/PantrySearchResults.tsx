@@ -11,7 +11,7 @@ export function PantrySearchResults({}: PantrySearchResultsProps) {
 	const [results, pagination] = hooks.useAllFoodsInfinite({
 		index: {
 			where: 'nameLookup',
-			startsWith: search,
+			startsWith: search.toLowerCase(),
 		},
 		key: 'food-search',
 	});
@@ -22,7 +22,7 @@ export function PantrySearchResults({}: PantrySearchResultsProps) {
 
 	return (
 		<div>
-			<CardGrid>
+			<CardGrid className="grid-cols-[repeat(2,1fr)]">
 				{results.map((item) => {
 					return <PantryListItem key={item.get('canonicalName')} item={item} />;
 				})}

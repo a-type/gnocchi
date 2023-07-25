@@ -1,4 +1,3 @@
-import { useItemsGroupedAndSorted } from '../hooks.js';
 import { PantryListCategory } from './PantryListCategory.jsx';
 import { ExpiresSoonSection } from './ExpiresSoonSection.jsx';
 import { Suspense } from 'react';
@@ -20,14 +19,10 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 			<div>
 				{categories.map((category) => {
 					return (
-						<Suspense key={category.get('id')}>
-							<PantryListCategory category={category} />
-						</Suspense>
+						<PantryListCategory key={category.get('id')} category={category} />
 					);
 				})}
-				<Suspense>
-					<PantryListCategory category={null} />
-				</Suspense>
+				<PantryListCategory category={null} />
 			</div>
 			<AutoRestoreScroll id="pantryList" />
 		</div>

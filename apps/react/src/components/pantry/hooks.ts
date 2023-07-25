@@ -10,7 +10,7 @@ import {
 import addDays from 'date-fns/addDays';
 import endOfDay from 'date-fns/endOfDay';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 // keeping this static to make the query reusable
 const THREE_DAYS_FROM_NOW = addDays(endOfDay(new Date()), 3).getTime();
@@ -59,8 +59,9 @@ export function useExpiresText(food: Food, abbreviate = false) {
 	}`;
 }
 
-export function usePurchasedText(food: Food, abbreviate = false) {
-	const purchasedAt = hooks.useWatch(food, 'lastPurchasedAt');
+export function usePurchasedText(food: Food | null, abbreviate = false) {
+	hooks.useWatch(food);
+	const purchasedAt = food?.get('lastPurchasedAt');
 	if (!purchasedAt) return '';
 	const toNow = formatDistanceToNowStrict(purchasedAt, { addSuffix: true });
 	return `Purchased ${abbreviate ? shortenTimeUnits(toNow) : toNow}`;
@@ -85,14 +86,20 @@ export function useFilter() {
 
 export function useSearch() {
 	const navigate = useNavigate();
-	const params = useParams<{ query?: string }>();
-	const setSearch = (search: string) => {
-		if (!search) {
-			navigate('/pantry');
-			return;
-		} else {
-			navigate(`/pantry/search/${encodeURIComponent(search)}`);
-		}
-	};
-	return [params.query || '', setSearch] as const;
+	const [searchParams, setSearchParams] = useSearchParams();
+	const query = searchParams.get('query') || '';
+	const setSearch = useCallback(
+		(search: string) => {
+			if (!search) {
+				navigate(`/pantry`);
+				return;
+			} else {
+				navigate(
+					`/pantry/search?query=${encodeURIComponent(search.toLowerCase())}`,
+				);
+			}
+		},
+		[setSearchParams, navigate],
+	);
+	return [query.toLowerCase(), setSearch] as const;
 }

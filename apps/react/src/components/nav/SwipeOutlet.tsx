@@ -2,7 +2,7 @@ import { Suspense, useEffect, useRef, useState } from 'react';
 import { useDrag } from '@use-gesture/react';
 import { useSpring, animated } from '@react-spring/web';
 import {
-	RouteByPath,
+	RouteTree,
 	Outlet,
 	useNavigate,
 	useNextMatchingRoute,
@@ -162,7 +162,7 @@ export function SwipeOutlet({
 					)}
 				>
 					<Suspense>
-						<RouteByPath path={leftPath} />
+						<RouteTree skip={1} path={leftPath} />
 					</Suspense>
 				</animated.div>
 			)}
@@ -206,7 +206,7 @@ export function SwipeOutlet({
 					)}
 				>
 					<Suspense>
-						<RouteByPath path={rightPath} />
+						<RouteTree skip={1} path={rightPath} />
 					</Suspense>
 				</animated.div>
 			)}

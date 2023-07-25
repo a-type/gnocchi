@@ -146,7 +146,7 @@ const routes = makeRoutes([
 						component: PantryListPage,
 					},
 					{
-						path: 'search/:query',
+						path: 'search',
 						component: PantrySearchPage,
 					},
 				],

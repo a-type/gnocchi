@@ -431,6 +431,12 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 					if (expiry) {
 						food.set('expiresAt', now + expiry * 24 * 60 * 60 * 1000);
 					}
+				} else {
+					await client.foods.put({
+						canonicalName: foodName,
+						lastPurchasedAt: Date.now(),
+						purchaseCount: 1,
+					});
 				}
 			},
 			[client],
@@ -439,10 +445,8 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	useClearPantryItem: (client) =>
 		useCallback(
 			async (food: Food) => {
-				food.update({
-					lastPurchasedAt: null,
-					expiresAt: null,
-				});
+				food.set('lastPurchasedAt', null);
+				food.set('expiresAt', null);
 			},
 			[client],
 		),
