@@ -418,6 +418,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	useAddPantryItem: (client) =>
 		useCallback(
 			async (foodName: string) => {
+				foodName = foodName.toLowerCase();
 				const food = await client.foods.findOne({
 					index: {
 						where: 'nameLookup',
