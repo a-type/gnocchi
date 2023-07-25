@@ -171,13 +171,13 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 								</div>
 							)}
 						</div>
+						<RecentPeople item={item} />
+						<ListTag item={item} collapsed={menuOpen} />
 						{!isPurchased && (
 							<Suspense>
 								<RecentPurchaseHint compact className="mt-1" foodName={food} />
 							</Suspense>
 						)}
-						<RecentPeople item={item} />
-						<ListTag item={item} collapsed={menuOpen} />
 						<div
 							onTouchStart={stopPropagation}
 							onTouchMove={stopPropagation}

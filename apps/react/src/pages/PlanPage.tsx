@@ -162,6 +162,7 @@ function OnlineContents() {
 			<ColorModeSelect />
 			<H2>Collaborate</H2>
 			<Invite />
+			<span className="text-xs">All members are free</span>
 			<TemporaryAccessLinkButton />
 			<PushSubscriptionToggle />
 			<Divider />

@@ -25,6 +25,10 @@ import {
 	useParams,
 	useSearchParams,
 } from '@verdant-web/react-router';
+import { SubscribedOnly } from '@/components/auth/SubscribedOnly.jsx';
+import { InviteLinkButton } from '@/components/sync/InviteLinkButton.jsx';
+import { PersonIcon } from '@radix-ui/react-icons';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -77,6 +81,15 @@ export function GroceriesPage() {
 								Upgrade
 							</PromoteSubscriptionButton>
 						</UnsubscribedOnly>
+						<SubscribedOnly>
+							<InviteLinkButton
+								size="icon"
+								color="ghost"
+								className="opacity-70"
+							>
+								<Icon name="add_person" />
+							</InviteLinkButton>
+						</SubscribedOnly>
 						<OfflineIndicator />
 					</div>
 				</TopControls>

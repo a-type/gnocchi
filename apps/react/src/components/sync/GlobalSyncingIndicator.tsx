@@ -15,7 +15,7 @@ export function GlobalSyncingIndicator({}: GlobalSyncingIndicatorProps) {
 	return (
 		<div
 			className={classNames(
-				'fixed top-2 right-2 z-tooltip bg-gray-1 rounded-full p-1 text-xs flex flex-row gap-1 items-center transition-opacity transition-delay-500 opacity-0',
+				'fixed top-2 right-2 z-tooltip bg-gray-1 rounded-full p-1 text-xs flex flex-row gap-1 items-center transition-opacity transition-delay-500 opacity-0 pointer-events-none',
 				{
 					'opacity-100': syncing,
 				},

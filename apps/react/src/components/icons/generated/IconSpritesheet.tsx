@@ -254,6 +254,11 @@ export const IconSpritesheet = (props: any) => (
 				<circle cx="7.5" cy="3.5" r="3" stroke="currentColor" />
 				<path d="M1.5 15C1.5 6.99998 13.5 7 13.5 15" stroke="currentColor" />
 			</symbol>
+			<symbol id="icon-add_person" viewBox="0 0 15 15">
+				<circle cx="6" cy="5" r="2.5" stroke="currentColor" />
+				<path d="M1 15C1 8.33331 11 8.33333 11 15" stroke="currentColor" />
+				<path d="M10 7.5H15M12.5 5V10" stroke="currentColor" />
+			</symbol>
 		</defs>
 	</svg>
 );

@@ -31,18 +31,22 @@ export function ShareLink({ onGenerate, ...rest }: ShareLinkProps) {
 					<Input disabled value={value} className="cursor-pointer w-full" />
 				</button>
 			)}
-			<GenerateButton onGenerate={handleGenerate} {...rest} />
+			<GenerateButton onGenerate={handleGenerate} value={value} {...rest} />
 		</div>
 	);
 }
 
-function GenerateButton({ onGenerate, shareTitle }: ShareLinkProps) {
+function GenerateButton({
+	onGenerate,
+	shareTitle,
+	value,
+}: ShareLinkProps & { value: string | null }) {
 	if ('share' in (navigator || {})) {
 		return (
 			<Button
 				color="primary"
 				onClick={async () => {
-					const link = await onGenerate();
+					const link = value || (await onGenerate());
 					navigator.share({
 						title: shareTitle,
 						text: shareTitle,
@@ -51,7 +55,7 @@ function GenerateButton({ onGenerate, shareTitle }: ShareLinkProps) {
 				}}
 			>
 				<Share1Icon />
-				<span>Share link</span>
+				<span>{value ? 'Share' : 'Generate'} link</span>
 			</Button>
 		);
 	}

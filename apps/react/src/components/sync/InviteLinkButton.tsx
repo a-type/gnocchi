@@ -31,14 +31,15 @@ async function generateLink() {
 	}
 }
 
-export function InviteLinkButton(props: InviteLinkButtonProps) {
+export function InviteLinkButton({
+	children,
+	...props
+}: InviteLinkButtonProps) {
 	return (
 		<div>
 			<Dialog>
 				<DialogTrigger asChild>
-					<Button {...props} onClick={generateLink}>
-						Invite people to your plan
-					</Button>
+					<Button {...props}>{children || 'Invite people to your plan'}</Button>
 				</DialogTrigger>
 				<DialogContent>
 					<LinkContent />
@@ -49,26 +50,19 @@ export function InviteLinkButton(props: InviteLinkButtonProps) {
 					</DialogActions>
 				</DialogContent>
 			</Dialog>
-			<span className="text-xs">All members are free</span>
 		</div>
 	);
 }
 
 function LinkContent() {
-	const [link, setLink] = useState<string | null>(null);
-	useEffect(() => {
-		generateLink()
-			.then((link) => setLink(link))
-			.catch((err: Error) => {
-				toast.error(err.message);
-			});
-	}, []);
-
 	return (
-		<div className="flex flex-col gap-1">
+		<div className="flex flex-col gap-3 items-center">
 			<P>
 				Send this link to someone you want to join your plan. The link only
-				works for one person.
+				works for one person, but you can make unlimited links.
+			</P>
+			<P>
+				Whoever uses this link can view and edit your groceries and recipes.
 			</P>
 			<ShareLink onGenerate={generateLink} shareTitle="Join my grocery list" />
 		</div>
