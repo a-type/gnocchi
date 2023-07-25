@@ -161,9 +161,6 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 						<div className="flex flex-col gap-2 items-start flex-1">
 							<div className="flex flex-row items-start gap-1 mt-1 max-w-full overflow-hidden text-ellipsis relative">
 								<span>{displayString}</span>
-								{menuOpen && (
-									<QuantityEditor className="relative top--1" item={item} />
-								)}
 							</div>
 							{isPurchased && (
 								<div className="absolute left-0 right-52px top-20px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
@@ -213,20 +210,21 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				<CollapsibleContent className="[grid-area:secondary]">
 					<Suspense>
 						<div className="flex flex-col gap-2 justify-end p-3 pt-0 items-end">
-							<ItemSources item={item} />
-
-							<div className="flex flex-row gap-3 flex-wrap justify-end w-full items-center">
+							<div className="flex flex-row gap-3 justify-end w-full items-center">
 								<LiveUpdateTextField
 									value={comment || ''}
 									onChange={(val) => item.set('comment', val)}
 									placeholder="Add a comment"
-									className="important:text-xs important:border-gray5 flex-grow-2 flex-shrink-1 flex-basis-50% md:flex-basis-120px"
+									className="important:text-xs important:border-gray5 flex-grow-2 flex-shrink-1 flex-basis-50% md:flex-basis-120px rounded-md"
 								/>
 								<ListSelect
 									value={item.get('listId')}
 									onChange={(listId) => item.set('listId', listId)}
 									className="flex-basis-25% flex-grow-1 flex-shrink-1 md:flex-basis-80px"
 								/>
+							</div>
+							<div className="flex flex-row gap-3 justify-end w-full items-center">
+								<QuantityEditor className="mr-auto" item={item} />
 								<Suspense>
 									<RecentPurchaseHint
 										foodName={food}
@@ -243,6 +241,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									<TrashIcon />
 								</ItemDeleteButton>
 							</div>
+							<ItemSources item={item} />
 						</div>
 					</Suspense>
 				</CollapsibleContent>
@@ -442,23 +441,26 @@ function QuantityEditor({
 			<DialogTrigger asChild>
 				<Button
 					size="icon"
-					className={classNames('p-1', className)}
+					className={classNames('p-1 font-normal', className)}
 					color="ghost"
 				>
 					<Pencil1Icon />
+					<span>Edit</span>
 				</Button>
 			</DialogTrigger>
 			<DialogContent onOpenAutoFocus={preventDefault}>
 				<DialogTitle>Edit item</DialogTitle>
-				<div className="flex flex-row items-center gap-4">
+				<div className="flex flex-row items-center justify-center gap-4 flex-wrap">
 					<LiveUpdateTextField
 						placeholder={displayText}
 						value={textOverride || ''}
 						onChange={(v) => item.set('textOverride', v)}
+						className="flex-basis-240px flex-1"
 					/>
 					<NumberStepper
 						value={totalQuantity}
 						onChange={(v) => item.set('totalQuantity', v)}
+						className=""
 					/>
 				</div>
 				<DialogActions>
