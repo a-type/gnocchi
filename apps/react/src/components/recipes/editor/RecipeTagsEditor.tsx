@@ -31,7 +31,6 @@ export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 
 	return (
 		<div className={classNames('flex flex-col gap-2', className)}>
-			<H2>Tags</H2>
 			<div className="flex flex-wrap gap-1 p-1 items-center">
 				{tags?.map((tag) => (
 					<Suspense key={tag}>

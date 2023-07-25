@@ -32,6 +32,7 @@ import { formatMinutes } from '@aglio/tools';
 import { withClassName } from '@aglio/ui/hooks';
 import classNames from 'classnames';
 import { Link } from '@verdant-web/react-router';
+import { PlayIcon, PlusIcon } from '@radix-ui/react-icons';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -123,15 +124,14 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						</ImageContainer>
 					)}
 				</TitleAndImageLayout>
-				<div className="w-auto flex flex-row items-center self-start gap-6">
-					<AddToListButton color="primary" recipe={recipe} />
-					<RecipeMultiplierField recipe={recipe} />
-				</div>
-				<RecipeTagsEditor className="mt-3" recipe={recipe} />
+				<RecipeTagsEditor recipe={recipe} />
 				<PreludeSection recipe={recipe} />
 				<Divider />
 				<div className="w-full">
-					<H2 className="gutter-bottom">Ingredients</H2>
+					<div className="w-auto flex flex-row items-center justify-between self-start gap-6 mb-4">
+						<H2>Ingredients</H2>
+						<RecipeMultiplierField recipe={recipe} />
+					</div>
 					<RecipeIngredientsViewer recipe={recipe} />
 				</div>
 				<Divider />
@@ -141,8 +141,13 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				</div>
 				<PageNowPlaying unstyled>
 					<div className="flex flex-row gap-2 items-center justify-end w-full">
+						<AddToListButton color="default" recipe={recipe}>
+							<PlusIcon />
+							<span>Add to list</span>
+						</AddToListButton>
 						<RecipeStartCookingButton recipe={recipe} className="shadow-lg">
-							Start cooking
+							<PlayIcon />
+							<span>Cook</span>
 						</RecipeStartCookingButton>
 					</div>
 					<Suspense>

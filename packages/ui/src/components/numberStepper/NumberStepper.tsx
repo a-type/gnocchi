@@ -62,11 +62,21 @@ export function NumberStepper({
 			)}
 			{...rest}
 		>
-			<Button color="ghost" onClick={decrement} disabled={!canDecrement}>
+			<Button
+				color="ghost"
+				size="small"
+				onClick={decrement}
+				disabled={!canDecrement}
+			>
 				<MinusIcon />
 			</Button>
 			<div className="w-80px text-center">{renderValue(value)}</div>
-			<Button color="ghost" onClick={increment} disabled={!canIncrement}>
+			<Button
+				color="ghost"
+				size="small"
+				onClick={increment}
+				disabled={!canIncrement}
+			>
 				<PlusIcon />
 			</Button>
 		</div>
