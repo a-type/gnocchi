@@ -87,7 +87,7 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 						<CardTitle className="text-sm">
 							<FoodName food={item} capitalize />
 						</CardTitle>
-						<OpenInNewWindowIcon className="absolute right-2 top-2 z-1 color-gray-5 bg-white" />
+						<OpenInNewWindowIcon className="absolute right-2 top-2 z-1 color-gray-9 opacity-50" />
 					</OpenFoodDetailButton>
 				</CardMain>
 				<CardFooter>

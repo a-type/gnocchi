@@ -21,7 +21,7 @@ export function PantrySearchResults({}: PantrySearchResultsProps) {
 	}
 
 	return (
-		<div>
+		<div className="flex flex-col gap-4 items-center">
 			<CardGrid className="grid-cols-[repeat(2,1fr)]">
 				{results.map((item) => {
 					return <PantryListItem key={item.get('canonicalName')} item={item} />;
