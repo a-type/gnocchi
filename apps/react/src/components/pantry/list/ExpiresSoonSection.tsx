@@ -109,7 +109,7 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 				<CardActions>
 					<Button size="small" color="default" onClick={repurchaseItem}>
 						<PlusIcon />
-						<span>Add to list</span>
+						<span>Buy again</span>
 					</Button>
 					<Button
 						size="small"
@@ -117,7 +117,7 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 						onClick={deleteThisItem}
 					>
 						<TrashIcon />
-						<span>Clear</span>
+						<span>Used</span>
 					</Button>
 					<Button size="small" color="ghost" onClick={snooze}>
 						<ClockIcon />

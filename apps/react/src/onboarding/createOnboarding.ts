@@ -7,7 +7,9 @@ type StringTuple = readonly string[];
 export type Onboarding<Steps extends StringTuple> = {
 	useBegin: () => () => void;
 	useSkip: () => () => void;
-	useStep: (name: Steps[number]) => readonly [boolean, () => void, boolean];
+	useStep: (
+		name: Steps[number],
+	) => readonly [boolean, () => void, boolean, boolean];
 	useCancel: () => () => void;
 };
 
@@ -69,6 +71,7 @@ export function createOnboarding<Steps extends StringTuple>(
 			}
 		}, [name]);
 		const isLast = steps.indexOf(name) === steps.length - 1;
+		const isOnly = steps.length === 1;
 
 		useEffectOnce(() => {
 			stepUnmounted[name] = false;
@@ -87,7 +90,7 @@ export function createOnboarding<Steps extends StringTuple>(
 			};
 		});
 
-		return [active === name, next, isLast] as const;
+		return [active === name, next, isLast, isOnly] as const;
 	}
 	function useCancel() {
 		return useCallback(() => {

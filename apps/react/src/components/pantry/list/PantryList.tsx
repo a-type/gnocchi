@@ -5,6 +5,8 @@ import { PantryListItemSkeleton } from '@/components/pantry/items/PantryListItem
 import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { CardGrid } from '@aglio/ui/components/card';
+import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
+import { pantryOnboarding } from '@/onboarding/pantryOnboarding.js';
 
 export interface PantryListProps {
 	className?: string;
@@ -15,6 +17,14 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 
 	return (
 		<div className="flex flex-col items-stretch w-full" {...rest}>
+			<OnboardingBanner
+				onboarding={pantryOnboarding}
+				step="expirations"
+				className="mb-3"
+			>
+				You can add expiration dates to foods to get notified when they're about
+				to expire. Tap any food to get started.
+			</OnboardingBanner>
 			<ExpiresSoonSection />
 			<div>
 				{categories.map((category) => {

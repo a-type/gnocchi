@@ -22,7 +22,7 @@ export function OnboardingBanner<O extends Onboarding<any>>({
 	className,
 	disableNext,
 }: OnboardingBannerProps<O>) {
-	const [show, next, isLast] = onboarding.useStep(step);
+	const [show, next, isLast, isOnly] = onboarding.useStep(step);
 
 	return (
 		<CollapsibleRoot
@@ -35,7 +35,7 @@ export function OnboardingBanner<O extends Onboarding<any>>({
 					<div className="flex justify-end gap-3">
 						{!disableNext && (
 							<Button color="ghost" onClick={next}>
-								{isLast ? 'Finish' : 'Next'}
+								{isLast ? (isOnly ? 'Ok' : 'Finish') : 'Next'}
 							</Button>
 						)}
 					</div>
