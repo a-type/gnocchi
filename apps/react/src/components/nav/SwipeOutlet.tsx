@@ -132,6 +132,7 @@ export function SwipeOutlet({
 		},
 		{
 			axis: 'x',
+			threshold: 10,
 		},
 	);
 
