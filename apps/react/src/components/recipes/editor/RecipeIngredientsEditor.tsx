@@ -121,6 +121,12 @@ function RecipeIngredientItem({
 		ingredient.set('note', '');
 	};
 
+	if (transform) {
+		// fixes the stretching effect as the item moves to different spots...
+		transform.scaleY = 1;
+		transform.scaleX = 1;
+	}
+
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
