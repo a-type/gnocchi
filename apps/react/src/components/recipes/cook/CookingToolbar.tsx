@@ -28,7 +28,7 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 			<div className="flex flex-row gap-2 mb-3">
 				<Button
 					size="small"
-					className="rounded-full flex items-center justify-center touch-none gap-2 shadow-lg"
+					className="rounded-full flex items-center justify-center touch-none gap-2 shadow-lg py-2"
 					{...bind()}
 				>
 					<animated.span
