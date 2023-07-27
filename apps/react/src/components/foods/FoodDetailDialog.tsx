@@ -20,6 +20,13 @@ import { FoodName } from '@/components/foods/FoodName.jsx';
 import { FoodNamesEditor } from '@/components/foods/FoodNamesEditor.jsx';
 import { Divider } from '@aglio/ui/src/components/divider';
 import { useSearchParams } from '@verdant-web/react-router';
+import { RelativeTime } from '@aglio/ui/components/relativeTime';
+import { useExpiresText } from '@/components/pantry/hooks.js';
+import {
+	ClockIcon,
+	ExclamationTriangleIcon,
+	ReloadIcon,
+} from '@radix-ui/react-icons';
 
 export interface FoodDetailDialogProps {}
 
@@ -80,6 +87,7 @@ function FoodDetailView({
 			</div>
 		);
 
+	const lastPurchasedAt = food.get('lastPurchasedAt');
 	const purchaseIntervalDays = food.get('purchaseIntervalGuess')
 		? Math.round(
 				Math.max(
@@ -88,12 +96,40 @@ function FoodDetailView({
 				),
 		  )
 		: 0;
+	const expiresText = useExpiresText(food);
 
 	return (
 		<div className="flex flex-col gap-3">
 			<DialogTitle>
 				<FoodName food={food} capitalize />
 			</DialogTitle>
+			{lastPurchasedAt || expiresText || purchaseIntervalDays ? (
+				<div className="flex flex-col gap-2">
+					{lastPurchasedAt && (
+						<Row>
+							<ClockIcon />
+							<div className="text-xs italic">
+								Added <RelativeTime value={lastPurchasedAt} /> ago
+							</div>
+						</Row>
+					)}
+					{expiresText && (
+						<Row>
+							<ExclamationTriangleIcon />
+							<div className="text-xs italic">{expiresText}</div>
+						</Row>
+					)}
+					{purchaseIntervalDays && (
+						<Row>
+							<ReloadIcon />
+							<div className="text-xs italic">
+								You buy this about every {purchaseIntervalDays} day
+								{purchaseIntervalDays === 1 ? '' : 's'}
+							</div>
+						</Row>
+					)}
+				</div>
+			) : null}
 			<Row>
 				<span>Category:</span>
 				<CategorySelect
@@ -121,11 +157,19 @@ function FoodDetailView({
 						onChange={(val) => {
 							if (val === '') {
 								food.set('expiresAfterDays', null);
+								food.set('expiresAt', null);
 								return;
 							} else {
 								const v = parseInt(val);
 								if (isNaN(v)) return;
 								food.set('expiresAfterDays', v);
+								const lastPurchasedAt = food.get('lastPurchasedAt');
+								if (lastPurchasedAt) {
+									food.set(
+										'expiresAt',
+										lastPurchasedAt + v * 1000 * 60 * 60 * 24,
+									);
+								}
 							}
 						}}
 					/>
@@ -135,12 +179,6 @@ function FoodDetailView({
 					Set this and the app will remind you when something is about to
 					expire. Only affects newly purchased items.
 				</span>
-				{purchaseIntervalDays && (
-					<span className="text-xs italic">
-						You buy this about every {purchaseIntervalDays} day
-						{purchaseIntervalDays === 1 ? '' : 's'}
-					</span>
-				)}
 			</div>
 			<Divider />
 			<H3>Alternate names</H3>
