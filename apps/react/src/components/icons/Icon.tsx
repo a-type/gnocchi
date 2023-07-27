@@ -14,7 +14,10 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
 	return (
 		<svg
 			ref={ref}
-			className={classNames('flex-shrink-0 fill-none', className)}
+			className={classNames(
+				'flex-shrink-0 layer-components:fill-none',
+				className,
+			)}
 			width={size}
 			height={size}
 			{...rest}

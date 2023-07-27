@@ -12,7 +12,7 @@ export function Note({ className, children, ...rest }: NoteProps) {
 				{children}
 				<div className="w-20px h-[calc(100%-18px)] absolute bottom--0.5px right--20px border-0 border-solid border-primary-dark border-r border-b bg-primary-wash">
 					<div
-						className={`absolute top--20px left-0 border-10px border-0 border-solid border-transparent border-b-primary-dark border-l-primary-dark after:(content-[""] absolute top--7px left--9px border-8px border-solid border-transparent border-b-primary-wash border-l-primary-wash)`}
+						className={`absolute top--20px left-0 border-10px border-solid border-transparent border-b-primary-dark border-l-primary-dark after:(content-[""] absolute top--7px left--9px border-8px border-solid border-transparent border-b-primary-wash border-l-primary-wash)`}
 					/>
 				</div>
 			</div>

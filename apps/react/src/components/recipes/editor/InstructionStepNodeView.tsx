@@ -126,7 +126,7 @@ export function InstructionStepNodeView({
 				<CollapsibleContent>
 					<Note className="focus-within:shadow-focus" contentEditable={false}>
 						<TextArea
-							className="p-0 m-0 border-none bg-none w-full text-inherit [font-style:inherit] focus:(outline-none bg-none shadow-none)"
+							className="p-0 m-0 border-none bg-transparent text-sm w-full text-inherit [font-style:inherit] focus:(outline-none bg-transparent shadow-none)"
 							value={note || ''}
 							onChange={updateNote}
 							onBlur={onNoteBlur}
