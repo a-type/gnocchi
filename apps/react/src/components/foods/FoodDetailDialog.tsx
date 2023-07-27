@@ -177,7 +177,7 @@ function FoodDetailView({
 				</Row>
 				<span className="text-xs">
 					Set this and the app will remind you when something is about to
-					expire. Only affects newly purchased items.
+					expire.
 				</span>
 			</div>
 			<Divider />
