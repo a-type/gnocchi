@@ -45,8 +45,8 @@ function FoodNameTag({
 	onDelete: (name: string) => void;
 }) {
 	return (
-		<div className="inline-flex flex-row items-center whitespace-nowrap gap-1 px-3 py-1 rounded-2xl border border-solid border-black text-sm">
-			<span>{name}</span>
+		<div className="inline-flex flex-row items-center whitespace-nowrap gap-1 px-3 py-1 rounded-2xl border border-solid border-black text-sm max-w-full overflow-hidden">
+			<span className="overflow-hidden text-ellipsis">{name}</span>
 			<Button
 				size="icon"
 				onClick={() => onDelete(name)}
