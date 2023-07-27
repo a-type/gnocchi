@@ -103,6 +103,7 @@ export const knownUnitSingulars = [
 	'head',
 	'carton',
 	'tin',
+	'sprig',
 ];
 export const knownUnitPlurals = knownUnitSingulars.map((w) => pluralize(w));
 
