@@ -80,6 +80,15 @@ function FoodDetailView({
 			</div>
 		);
 
+	const purchaseIntervalDays = food.get('purchaseIntervalGuess')
+		? Math.round(
+				Math.max(
+					1,
+					(food.get('purchaseIntervalGuess') ?? 0) / (1000 * 60 * 60 * 24),
+				),
+		  )
+		: 0;
+
 	return (
 		<div className="flex flex-col gap-3">
 			<DialogTitle>
@@ -126,6 +135,12 @@ function FoodDetailView({
 					Set this and the app will remind you when something is about to
 					expire. Only affects newly purchased items.
 				</span>
+				{purchaseIntervalDays && (
+					<span className="text-xs italic">
+						You buy this about every {purchaseIntervalDays} day
+						{purchaseIntervalDays === 1 ? '' : 's'}
+					</span>
+				)}
 			</div>
 			<Divider />
 			<H3>Alternate names</H3>

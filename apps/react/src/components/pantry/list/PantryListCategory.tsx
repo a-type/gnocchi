@@ -1,4 +1,4 @@
-import { Category, Item } from '@aglio/groceries-client';
+import { Category } from '@aglio/groceries-client';
 import { PantryListItem } from '../items/PantryListItem.jsx';
 import {
 	CategoryTitle,
@@ -12,7 +12,6 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Button } from '@aglio/ui/components/button';
 import { CardGrid } from '@aglio/ui/components/card';
 import { useFilter } from '@/components/pantry/hooks.js';
-import { useMemo } from 'react';
 
 export interface PantryListCategoryProps {
 	category: Category | null;
@@ -24,31 +23,35 @@ export function PantryListCategory({
 	category,
 	...rest
 }: PantryListCategoryProps) {
+	const [filter] = useFilter();
 	const [items, pagination] = hooks.useAllFoodsInfinite({
-		index: {
-			where: 'categoryId_lastPurchasedAt',
-			match: {
-				categoryId: category?.get('id') ?? 'null',
-			},
-			order: 'desc',
-		},
+		index:
+			filter === 'all'
+				? {
+						where: 'categoryId_lastPurchasedAt',
+						match: {
+							categoryId: category?.get('id') ?? 'null',
+						},
+						order: 'desc',
+				  }
+				: {
+						where: 'inInventory_categoryId_lastPurchasedAt',
+						match: {
+							inInventory: true,
+							categoryId: category?.get('id') ?? 'null',
+						},
+						order: 'desc',
+				  },
 		key: `pantry-category-${category?.get('id') ?? 'null'}`,
 		pageSize,
 	});
-	const [filter] = useFilter();
-	const filteredItems = useMemo(() => {
-		if (filter === 'all') {
-			return items;
-		}
-		return items.filter((i) => !!i.get('lastPurchasedAt'));
-	}, [items, filter]);
 
-	const showShowMore = pagination.hasMore && filteredItems.length === pageSize;
+	const showShowMore = pagination.hasMore;
 
 	return (
 		<CategoryRoot
 			className="pantryListCategory"
-			data-is-empty={filteredItems.length === 0 && !showShowMore}
+			data-is-empty={items.length === 0 && !showShowMore}
 			data-do-not-animate
 			{...rest}
 		>
@@ -59,7 +62,7 @@ export function PantryListCategory({
 			</CategoryTitleRow>
 			<CategoryItems>
 				<CardGrid className="grid-cols-[repeat(2,1fr)]">
-					{filteredItems.map((item) => {
+					{items.map((item) => {
 						return (
 							<PantryListItem key={item.get('canonicalName')} item={item} />
 						);

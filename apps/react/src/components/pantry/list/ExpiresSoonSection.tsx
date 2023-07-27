@@ -67,7 +67,7 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 		item.set('expiresAt', Date.now() + 6 * 24 * 60 * 60 * 1000);
 	}, [item]);
 
-	const expiresAtText = useExpiresText(item);
+	const expiresAtText = useExpiresText(item, true);
 
 	if (!expiresAtText) return null;
 
@@ -94,7 +94,7 @@ function ExpiresSoonItem({ item }: { item: Food }) {
 								)}
 							>
 								<ClockIcon />
-								Purchased <RelativeTime value={purchasedAt} abbreviate />
+								Added <RelativeTime value={purchasedAt} abbreviate />
 								&nbsp;ago
 							</div>
 						)}

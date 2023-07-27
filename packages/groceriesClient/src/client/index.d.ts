@@ -491,6 +491,16 @@ export interface FoodCategoryIdLastPurchasedAtCompoundFilter {
   order: "asc" | "desc";
 }
 
+export interface FoodInInventoryCategoryIdLastPurchasedAtCompoundFilter {
+  where: "inInventory_categoryId_lastPurchasedAt";
+  match: {
+    inInventory?: boolean;
+    categoryId?: string | null;
+    lastPurchasedAtOrZero?: number;
+  };
+  order: "asc" | "desc";
+}
+
 export interface FoodNameLookupMatchFilter {
   where: "nameLookup";
   equals: string;
@@ -583,6 +593,7 @@ export type FoodFilter =
   | FoodCategoryIdRangeFilter
   | FoodCategoryIdStartsWithFilter
   | FoodCategoryIdLastPurchasedAtCompoundFilter
+  | FoodInInventoryCategoryIdLastPurchasedAtCompoundFilter
   | FoodNameLookupMatchFilter
   | FoodNameLookupRangeFilter
   | FoodNameLookupStartsWithFilter
@@ -602,6 +613,7 @@ export type FoodDestructured = {
   categoryId: string | null;
   expiresAfterDays: number | null;
   lastPurchasedAt: number | null;
+  inInventory: boolean;
   expiresAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
@@ -616,6 +628,7 @@ export type FoodInit = {
   categoryId?: string | null;
   expiresAfterDays?: number | null;
   lastPurchasedAt?: number | null;
+  inInventory?: boolean;
   expiresAt?: number | null;
   purchaseIntervalGuess?: number | null;
   lastAddedAt?: number | null;
@@ -630,6 +643,7 @@ export type FoodSnapshot = {
   categoryId: string | null;
   expiresAfterDays: number | null;
   lastPurchasedAt: number | null;
+  inInventory: boolean;
   expiresAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
@@ -667,6 +681,10 @@ export type FoodLastPurchasedAt = number | null;
 export type FoodLastPurchasedAtInit = FoodLastPurchasedAt | undefined;
 export type FoodLastPurchasedAtSnapshot = FoodLastPurchasedAt;
 export type FoodLastPurchasedAtDestructured = FoodLastPurchasedAt;
+export type FoodInInventory = boolean;
+export type FoodInInventoryInit = FoodInInventory | undefined;
+export type FoodInInventorySnapshot = FoodInInventory;
+export type FoodInInventoryDestructured = FoodInInventory;
 export type FoodExpiresAt = number | null;
 export type FoodExpiresAtInit = FoodExpiresAt | undefined;
 export type FoodExpiresAtSnapshot = FoodExpiresAt;

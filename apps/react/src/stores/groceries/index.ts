@@ -143,6 +143,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						const previousPurchaseCount = food.get('purchaseCount');
 						const previousPurchasedAt = food.get('lastPurchasedAt');
 						food.set('lastPurchasedAt', now);
+						food.set('inInventory', true);
 						const currentGuess = food.get('purchaseIntervalGuess') || 0;
 						if (previousPurchasedAt) {
 							const newInterval = now - previousPurchasedAt;
@@ -174,6 +175,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						lastAddedAt: item.get('createdAt'),
 						purchaseCount: 1,
 						defaultListId: item.get('listId'),
+						inInventory: true,
 					});
 				}
 
@@ -428,6 +430,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 				if (food) {
 					const now = Date.now();
 					food.set('lastPurchasedAt', now);
+					food.set('inInventory', true);
 					const expiry = food.get('expiresAfterDays');
 					if (expiry) {
 						food.set('expiresAt', now + expiry * 24 * 60 * 60 * 1000);
@@ -437,6 +440,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						canonicalName: foodName,
 						lastPurchasedAt: Date.now(),
 						purchaseCount: 1,
+						inInventory: true,
 					});
 				}
 			},
@@ -446,7 +450,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	useClearPantryItem: (client) =>
 		useCallback(
 			async (food: Food) => {
-				food.set('lastPurchasedAt', null);
+				food.set('inInventory', false);
 				food.set('expiresAt', null);
 			},
 			[client],

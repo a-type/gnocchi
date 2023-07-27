@@ -73,6 +73,10 @@ const foods = collection({
             type: 'number',
             nullable: true
         },
+        inInventory: {
+            type: 'boolean',
+            default: false
+        },
         /**
 		 * This can be, and is, set in the future at the time of purchase
 		 * based on expiration.
@@ -149,6 +153,13 @@ const foods = collection({
         // on the purchased page.
         categoryId_lastPurchasedAt: {
             of: [
+                'categoryId',
+                'lastPurchasedAtOrZero'
+            ]
+        },
+        inInventory_categoryId_lastPurchasedAt: {
+            of: [
+                'inInventory',
                 'categoryId',
                 'lastPurchasedAtOrZero'
             ]
@@ -535,7 +546,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 37,
+    version: 38,
     collections: {
         categories,
         items,
