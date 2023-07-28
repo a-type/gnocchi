@@ -105,7 +105,7 @@ function FoodDetailView({
 			</DialogTitle>
 			{lastPurchasedAt || expiresText || purchaseIntervalDays ? (
 				<div className="flex flex-col gap-2">
-					{lastPurchasedAt && (
+					{!!lastPurchasedAt && (
 						<Row>
 							<ClockIcon />
 							<div className="text-xs italic">
@@ -113,13 +113,13 @@ function FoodDetailView({
 							</div>
 						</Row>
 					)}
-					{expiresText && (
+					{!!expiresText && (
 						<Row>
 							<ExclamationTriangleIcon />
 							<div className="text-xs italic">{expiresText}</div>
 						</Row>
 					)}
-					{purchaseIntervalDays && (
+					{!!purchaseIntervalDays && (
 						<Row>
 							<ReloadIcon />
 							<div className="text-xs italic">
