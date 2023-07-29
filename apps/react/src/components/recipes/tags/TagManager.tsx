@@ -11,8 +11,10 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
 import { Divider } from '@aglio/ui/components/divider';
+import { Form, TextField } from '@aglio/ui/components/forms';
 import { TrashIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
+import { Formik } from 'formik';
 import { ReactNode } from 'react';
 
 export function TagManager({
@@ -22,11 +24,18 @@ export function TagManager({
 	children: ReactNode;
 	onClose?: () => void;
 }) {
-	const tags = hooks.useAllRecipeTagMetadata();
+	const tags = hooks.useAllRecipeTagMetadata().sort((a, b) => {
+		return a.get('name').localeCompare(b.get('name'));
+	});
 
 	const client = hooks.useClient();
 	const deleteTag = (tagName: string) => {
 		client.recipeTagMetadata.delete(tagName);
+	};
+	const createTag = (tagName: string) => {
+		client.recipeTagMetadata.put({
+			name: tagName,
+		});
 	};
 
 	return (
@@ -40,12 +49,14 @@ export function TagManager({
 				<ActionBar>
 					<UndoAction />
 				</ActionBar>
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col gap-2 overflow-y-auto min-h-0 flex-1">
 					{tags.map((tag) => (
 						<>
 							<div
 								key={tag.get('name')}
-								className={classNames('flex flex-row gap-2 items-center')}
+								className={classNames(
+									'flex flex-row gap-2 items-center flex-shrink-0',
+								)}
 							>
 								<ColorPicker
 									onChange={(color) => tag.set('color', color)}
@@ -60,9 +71,28 @@ export function TagManager({
 									<TrashIcon />
 								</Button>
 							</div>
-							<Divider />
+							<Divider className="opacity-50" />
 						</>
 					))}
+				</div>
+				<div className="mt-4">
+					<Formik
+						initialValues={{ tagName: '' }}
+						onSubmit={(values) => {
+							createTag(values.tagName);
+						}}
+					>
+						<Form className="flex flex-row gap-2 items-end">
+							<TextField
+								className="flex-1 min-w-64px"
+								name="tagName"
+								label="New Tag Name"
+							/>
+							<Button type="submit" color="primary">
+								Create
+							</Button>
+						</Form>
+					</Formik>
 				</div>
 				<DialogActions>
 					<DialogClose asChild>

@@ -19,7 +19,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
 					width: compensate ? `calc(100% - ${compensate} * 0.5rem)` : undefined,
 				}}
 				{...props}
-				className={classNames(padded && 'my-4', className)}
+				className={classNames('flex-shrink-0', padded && 'my-4', className)}
 			/>
 		);
 	},
