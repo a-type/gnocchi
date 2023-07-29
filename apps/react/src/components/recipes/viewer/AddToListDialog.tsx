@@ -86,7 +86,7 @@ export function AddToListDialog({
 							Select none
 						</ActionButton>
 					</ActionBar>
-					<ul className="flex flex-col items-start list-none p-0 m-0 gap-3">
+					<ul className="flex flex-col items-start list-none p-0 m-0 gap-3 w-full">
 						{items.map((ingredient, index) => {
 							const isSectionHeader = ingredient.get('isSectionHeader');
 							return (
