@@ -1,4 +1,5 @@
 import PaprikaImporter from '@/components/import/PaprikaImporter.jsx';
+import { TagManager } from '@/components/recipes/tags/TagManager.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { Button } from '@aglio/ui/src/components/button';
 import {
@@ -15,7 +16,7 @@ export interface RecipeCollectionMenuProps {}
 export function RecipeCollectionMenu({}: RecipeCollectionMenuProps) {
 	const [open, setOpen] = useState(false);
 	const paprika = useFeatureFlag('paprikaImport');
-	const onImporterClose = useCallback(() => setOpen(false), []);
+	const onSubmenuClose = useCallback(() => setOpen(false), []);
 
 	if (!paprika) return null;
 
@@ -33,10 +34,15 @@ export function RecipeCollectionMenu({}: RecipeCollectionMenuProps) {
 					}}
 					asChild
 				>
-					<PaprikaImporter onClose={onImporterClose}>
+					<PaprikaImporter onClose={onSubmenuClose}>
 						Import from Paprika 3
 					</PaprikaImporter>
 				</DropdownMenuItem>
+				<TagManager onClose={onSubmenuClose}>
+					<DropdownMenuItem onSelect={(ev) => ev.preventDefault()}>
+						Edit Tags
+					</DropdownMenuItem>
+				</TagManager>
 			</DropdownMenuContent>
 		</DropdownMenu>
 	);
