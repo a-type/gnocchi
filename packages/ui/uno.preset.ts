@@ -1,4 +1,5 @@
 import { Preset, presetUno } from 'unocss';
+import { entriesToCss, toArray, PreflightContext } from '@unocss/core';
 
 export default function presetAglio(): Preset {
 	return {
@@ -308,8 +309,22 @@ export default function presetAglio(): Preset {
 
 		preflights: [
 			{
+				layer: 'preflights',
+				getCSS: (ctx: PreflightContext<any>) => {
+					if (ctx.theme.preflightBase) {
+						const css = entriesToCss(Object.entries(ctx.theme.preflightBase));
+						const roots = toArray(
+							ctx.theme.preflightRoot ?? ['*,::before,::after', '::backdrop'],
+						);
+						return roots
+							.map((root) => `@layer preflightBase{${root}{${css}}}`)
+							.join('');
+					}
+				},
+			} as any,
+			{
 				getCSS: (ctx) => `
-				@layer components, variants, utilities;
+				@layer preflightBase, components, variants, utilities;
 
 				:root {
 					--palette-red-90: #ffede7;
@@ -654,7 +669,11 @@ export default function presetAglio(): Preset {
 			},
 		],
 
-		presets: [presetUno({})],
+		presets: [
+			presetUno({
+				preflight: false,
+			}),
+		],
 	};
 }
 

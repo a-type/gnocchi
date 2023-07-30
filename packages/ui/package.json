@@ -67,9 +67,10 @@
 		"@types/pluralize": "^0.0.29",
 		"@types/react": "^18.0.14",
 		"@types/react-dom": "^18.0.5",
-		"@unocss/transformer-variant-group": "^0.53.5",
+		"@unocss/transformer-variant-group": "^0.54.0",
+		"@unocss/core": "^0.54.0",
 		"typescript": "^5.0.2",
-		"unocss": "^0.53.5"
+		"unocss": "^0.54.0"
 	},
 	"pnpm": {
 		"patchedDependencies": {

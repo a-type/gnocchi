@@ -141,7 +141,11 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				</div>
 				<PageNowPlaying unstyled>
 					<div className="flex flex-row gap-2 items-center justify-end w-full">
-						<AddToListButton color="default" recipe={recipe}>
+						<AddToListButton
+							color="default"
+							recipe={recipe}
+							className="shadow-lg"
+						>
 							<PlusIcon />
 							<span>Add to list</span>
 						</AddToListButton>
