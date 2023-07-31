@@ -73,13 +73,13 @@ export function useItemsGroupedAndSorted(
 }
 
 export function useTransitionPurchasedItems() {
-	const { purchasedStillVisibleItems, purchasedHidingItems } =
-		useSnapshot(groceriesState);
+	const { purchasedStillVisibleItems } = useSnapshot(groceriesState);
 	// no cleanups in these effects since we want them to run even if
 	// the user navigates away
 	useEffect(() => {
 		if (purchasedStillVisibleItems.size) {
 			debouncedMovePurchasedItemsToHiding();
+			groceriesState.beganMoveToHidingAt = Date.now();
 		}
 	}, [purchasedStillVisibleItems.size]);
 }

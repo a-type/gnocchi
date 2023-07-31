@@ -6,7 +6,7 @@ import { CheckIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import { withClassName } from '../../hooks/withClassName.js';
 
-const CheckboxRoot = withClassName(
+export const CheckboxRoot = withClassName(
 	CheckboxPrimitive.Root,
 	classNames(
 		'layer-components:(w-28px h-28px flex-shrink-0 relative bg-white border-default transition rounded-[6px])',

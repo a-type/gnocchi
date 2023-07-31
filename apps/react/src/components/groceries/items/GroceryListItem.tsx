@@ -1,4 +1,3 @@
-import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { Link } from '@/components/nav/Link.jsx';
 import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
@@ -14,8 +13,12 @@ import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
 import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
 import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
-import { Checkbox } from '@aglio/ui/components/checkbox';
+import { Button } from '@aglio/ui/components/button';
+import {
+	Checkbox,
+	CheckboxIndicator,
+	CheckboxRoot,
+} from '@aglio/ui/components/checkbox';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
@@ -64,8 +67,8 @@ import { useItemDisplayText } from './hooks.js';
 import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
 import { useDraggable } from '@dnd-kit/core';
 import { preventDefault, stopPropagation } from '@aglio/tools';
-import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
-import { useExpiresText, usePurchasedText } from '@/components/pantry/hooks.js';
+import { usePurchasedText } from '@/components/pantry/hooks.js';
+import { animated, useSpring } from '@react-spring/web';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -485,6 +488,8 @@ function ItemCheckbox({
 	const ref = useRef<HTMLButtonElement>(null);
 	const particles = useParticles();
 
+	const { beganMoveToHidingAt } = useSnapshot(groceriesState);
+
 	useEffect(() => {
 		if (isPurchased && ref.current) {
 			particles?.addParticles(
@@ -497,7 +502,7 @@ function ItemCheckbox({
 	}, [isPurchased]);
 
 	return (
-		<Checkbox
+		<CheckboxRoot
 			ref={ref}
 			checked={
 				isPurchased ? true : isPartiallyPurchased ? 'indeterminate' : false
@@ -510,8 +515,14 @@ function ItemCheckbox({
 			onPointerDown={stopPropagation}
 			onPointerUp={stopPropagation}
 			data-test="grocery-list-item-checkbox"
-			className="[grid-area:check] mt-2 mx-3"
-		/>
+			className="[grid-area:check] mt-2 mx-3 overflow-hidden"
+		>
+			{isPurchased && !!beganMoveToHidingAt && (
+				<HideProgress startedAt={beganMoveToHidingAt} />
+			)}
+			{/* <HideProgress startedAt={Date.now()} /> */}
+			<CheckboxIndicator />
+		</CheckboxRoot>
 	);
 }
 
@@ -576,5 +587,47 @@ function RecentPurchaseHint({
 			<ClockIcon />
 			<span>{purchasedText}</span>
 		</div>
+	);
+}
+
+function HideProgress({ startedAt }: { startedAt: number }) {
+	const circleRef = useRef<SVGCircleElement>(null);
+	useEffect(() => {
+		if (!startedAt) return;
+		const circle = circleRef.current;
+		if (!circle) return;
+		const circumference = 32 * Math.PI;
+		const duration = 5000;
+		const start = Date.now();
+		const end = start + duration;
+		const animate = () => {
+			const now = Date.now();
+			const elapsed = now - start;
+			const progress = elapsed / duration;
+			const strokeDashoffset = circumference * (1 - progress);
+			circle.style.strokeDashoffset = String(strokeDashoffset);
+			if (now < end) {
+				requestAnimationFrame(animate);
+			}
+		};
+		animate();
+	}, [startedAt]);
+
+	return (
+		<svg
+			viewBox="0 0 32 32"
+			className="w-32px h-32px flex-shrink-0 rounded-full overflow-hidden absolute left-50% right-50% [transform:translate(-50%,-50%)]"
+		>
+			<circle
+				ref={circleRef}
+				r="50%"
+				cx="50%"
+				cy="50%"
+				fill="transparent"
+				opacity="0.25"
+				strokeDasharray={`${32 * Math.PI}`}
+				className="stroke-primary-dark stroke-32px transform rotate-270 origin-center"
+			/>
+		</svg>
 	);
 }
