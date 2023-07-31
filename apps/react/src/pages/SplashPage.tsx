@@ -20,6 +20,7 @@ import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
 import { H2, P } from '@aglio/ui/components/typography';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { LinkButton } from '@/components/nav/Link.jsx';
+import { SubscribeButton } from '@/components/sync/SubscribeButton.jsx';
 
 // dynamically import Scene
 const Scene = lazy(() => import('@/components/3d/Scene.jsx'));
@@ -214,13 +215,14 @@ export function SplashPage() {
 					staticSectionAccent ? 'theme-leek' : undefined,
 				)}
 			>
+				{jumpToUpgrade && <SubscribeButton />}
 				<LinkButton
 					to="/"
 					data-test="get-started"
 					className="justify-center self-center"
 					color="default"
 				>
-					Get Started
+					{jumpToUpgrade ? 'Use for free' : 'Get Started'}
 				</LinkButton>
 
 				<span className="text-sm">

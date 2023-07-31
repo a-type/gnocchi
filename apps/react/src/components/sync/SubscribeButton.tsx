@@ -1,11 +1,17 @@
 import { Button } from '@aglio/ui/components/button';
 import { API_HOST_HTTP, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 
-export interface SubscribeButtonProps {}
+export interface SubscribeButtonProps {
+	className?: string;
+}
 
-export function SubscribeButton({}: SubscribeButtonProps) {
+export function SubscribeButton(props: SubscribeButtonProps) {
 	return (
-		<form action={`${API_HOST_HTTP}/api/stripe/create-checkout`} method="POST">
+		<form
+			action={`${API_HOST_HTTP}/api/stripe/create-checkout`}
+			method="POST"
+			{...props}
+		>
 			<input type="hidden" name="priceKey" value="default" />
 			<Button color="primary" type="submit">
 				Subscribe for ${PRICE_MONTHLY_DOLLARS}/month
