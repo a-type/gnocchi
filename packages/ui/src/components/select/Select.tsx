@@ -45,7 +45,7 @@ export const Select = SelectPrimitive.Root;
 export type SelectProps = SelectPrimitive.SelectProps;
 export const SelectTrigger = withClassName(
 	SelectPrimitive.Trigger,
-	'[all:unset] inline-flex items-center justify-center rounded-md px-2 py-1 text-sm gap-1 color-black border-solid border border-gray5 hover:border-gray7 focus:shadow-focus [&[data-placeholder]]:color-gray8',
+	'[all:unset] inline-flex items-center justify-center rounded-md px-2 py-1 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:shadow-focus [&[data-placeholder]]:color-gray8',
 );
 export const UnstyledSelectTrigger = SelectPrimitive.Trigger;
 export const SelectValue = withClassName(

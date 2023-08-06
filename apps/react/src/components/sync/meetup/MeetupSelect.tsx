@@ -1,3 +1,4 @@
+import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import {
 	Select,
@@ -10,13 +11,16 @@ import {
 	SelectValue,
 	UnstyledSelectTrigger,
 } from '@aglio/ui/components/select';
+import classNames from 'classnames';
 import { ReactNode, useCallback, useEffect } from 'react';
 
 export interface MeetupSelectProps {
 	children?: (value: string | undefined) => ReactNode;
+	id?: string;
+	emptyLabel?: string;
 }
 
-export function MeetupSelect({ children }: MeetupSelectProps) {
+export function MeetupSelect({ children, id, emptyLabel }: MeetupSelectProps) {
 	const client = hooks.useClient();
 	const info = hooks.useCollaborationInfo('default');
 	hooks.useWatch(info);
@@ -58,18 +62,28 @@ export function MeetupSelect({ children }: MeetupSelectProps) {
 
 	return (
 		<Select value={location || ''} onValueChange={setMeetup}>
-			<Trigger asChild={!!children}>
+			<Trigger
+				asChild={!!children}
+				className={classNames(
+					'py-3 px-6',
+					!!location && 'bg-accent-wash color-accent-dark',
+				)}
+				id={id}
+			>
 				{children ? (
 					children(location)
 				) : (
 					<>
+						<Icon name="locate" />
 						<SelectValue />
 						<SelectIcon />
 					</>
 				)}
 			</Trigger>
 			<SelectContent>
-				<SelectItem value="">{location ? 'Clear' : 'Regroup'}</SelectItem>
+				<SelectItem value="">
+					{location ? 'Clear' : emptyLabel || 'Regroup'}
+				</SelectItem>
 				<SelectGroup>
 					<SelectLabel>Choose a location</SelectLabel>
 					<SelectItem value="Checkout Lanes">Checkout Lanes</SelectItem>
