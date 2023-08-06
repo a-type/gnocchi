@@ -48,6 +48,6 @@
 		"@unocss/transformer-variant-group": "^0.54.0",
 		"@unocss/postcss": "^0.54.0",
 		"concurrently": "^7.5.0",
-		"unocss": "^0.53.5"
+		"unocss": "^0.54.0"
 	}
 }
