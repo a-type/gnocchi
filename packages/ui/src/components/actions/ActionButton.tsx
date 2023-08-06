@@ -46,8 +46,7 @@ export const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 						ref={ref}
 						size="small"
 						className={classNames(
-							'font-normal whitespace-nowrap my-2 mx-2 flex flex-row gap-2 items-center h-30px rounded-15px mx-1',
-							// 'important:focus-visible:shadow-[0_0_0_3px_var(--color-gray-4)]',
+							'font-normal whitespace-nowrap my-2 flex flex-row gap-2 items-center h-30px rounded-15px mx-1',
 							rest.color === 'default' && 'border-gray-7 hover:bg-gray2',
 							// make the focus shadow smaller
 							'important:focus-visible:shadow-[0_0_0_2px_var(--focus,var(--hover))]',
