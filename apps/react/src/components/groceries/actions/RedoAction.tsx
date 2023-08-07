@@ -2,7 +2,7 @@ import { ActionButton } from '@aglio/ui/components/actions';
 import { hooks } from '@/stores/groceries/index.js';
 import { ResetIcon } from '@radix-ui/react-icons';
 
-export function RedoAction() {
+export function RedoAction({ showName }: { showName?: boolean }) {
 	const canRedo = hooks.useCanRedo();
 	const groceries = hooks.useClient();
 
@@ -14,6 +14,8 @@ export function RedoAction() {
 			}}
 			icon={<ResetIcon style={{ transform: 'scaleX(-1)' }} />}
 			visible={canRedo}
-		></ActionButton>
+		>
+			{showName ? 'Redo' : undefined}
+		</ActionButton>
 	);
 }

@@ -44,7 +44,7 @@ export function InstructionStepNodeView({
 
 	const { id, note } = node.attrs;
 
-	const [showNote, toggleShowNote] = useToggle(false);
+	const [showNote, toggleShowNote] = useToggle(!!note);
 
 	const maybeRecipe = extension.storage.recipe;
 	hooks.useWatch(maybeRecipe || null);
@@ -86,10 +86,6 @@ export function InstructionStepNodeView({
 	);
 
 	const isAssignedToMe = hasPeers && assignedPersonId === self.id;
-
-	const onNoteButtonClick = useCallback(() => {
-		updateAttributes({ note: '' });
-	}, [updateAttributes]);
 
 	const updateNote = useCallback(
 		(event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -192,7 +188,15 @@ export function InstructionStepNodeView({
 				className="flex flex-col items-center gap-2 [grid-area:endTools] w-32px ml-3"
 				contentEditable={false}
 			>
-				<Tooltip content={note === undefined ? 'Add a note' : 'Show note'}>
+				<Tooltip
+					content={
+						note === undefined
+							? 'Add a note'
+							: showNote
+							? 'Hide note'
+							: 'Show note'
+					}
+				>
 					<Button color="ghost" size="icon" onClick={toggleShowNote}>
 						{!!note ? (
 							<Icon

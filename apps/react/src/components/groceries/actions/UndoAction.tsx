@@ -3,7 +3,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { ResetIcon } from '@radix-ui/react-icons';
 import { Tooltip } from '@aglio/ui/components/tooltip';
 
-export function UndoAction() {
+export function UndoAction({ showName }: { showName?: boolean }) {
 	const canUndo = hooks.useCanUndo();
 	const groceries = hooks.useClient();
 
@@ -16,7 +16,9 @@ export function UndoAction() {
 				}}
 				icon={<ResetIcon />}
 				visuallyDisabled={!canUndo}
-			></ActionButton>
+			>
+				{showName ? 'Undo' : undefined}
+			</ActionButton>
 		</Tooltip>
 	);
 }

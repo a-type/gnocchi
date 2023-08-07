@@ -7,8 +7,8 @@ export interface RecipeEditActionsProps {}
 export function RecipeEditActions({}: RecipeEditActionsProps) {
 	return (
 		<ActionBar>
-			<UndoAction />
-			<RedoAction />
+			<UndoAction showName />
+			<RedoAction showName />
 		</ActionBar>
 	);
 }

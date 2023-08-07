@@ -42,7 +42,7 @@ export function RecipeIngredientViewer({
 	const officialUnit = lookupUnit(unit);
 	const [conversion, setConversion] = useUnitConversion(officialUnit?.abbr);
 
-	const [showNote, toggleShowNote] = useToggle(false);
+	const [showNote, toggleShowNote] = useToggle(!!note);
 
 	const onNoteBlur = useCallback(() => {
 		if (!note) {
