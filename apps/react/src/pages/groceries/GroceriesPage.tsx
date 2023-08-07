@@ -29,9 +29,12 @@ import { SubscribedOnly } from '@/components/auth/SubscribedOnly.jsx';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.jsx';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
+
+	usePageTitle('Groceries');
 
 	const onListChange = useCallback(
 		(listId: string | null | undefined) => {

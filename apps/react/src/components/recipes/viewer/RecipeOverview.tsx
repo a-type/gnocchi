@@ -33,6 +33,7 @@ import { withClassName } from '@aglio/ui/hooks';
 import classNames from 'classnames';
 import { Link } from '@verdant-web/react-router';
 import { PlayIcon, PlusIcon } from '@radix-ui/react-icons';
+import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -63,6 +64,8 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	useWatchChanges(recipe);
 
 	const multipliedServings = Math.round((servings ?? 0) * multiplier);
+
+	usePageTitle(title.slice(0, 20));
 
 	return (
 		<>

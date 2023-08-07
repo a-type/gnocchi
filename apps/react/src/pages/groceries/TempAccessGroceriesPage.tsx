@@ -20,6 +20,7 @@ import { Formik } from 'formik';
 import { Suspense, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from '@verdant-web/react-router';
+import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 
 export function TempAccessGroceriesPage() {
 	const params = useParams();
@@ -30,6 +31,9 @@ export function TempAccessGroceriesPage() {
 			code,
 		});
 	const claim = trpc.invites.claimTemporary.useMutation();
+
+	const listName = data?.listName || 'Groceries';
+	usePageTitle(listName);
 
 	if (isLoading) {
 		return <FullScreenSpinner />;

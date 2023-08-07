@@ -21,6 +21,7 @@ import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { RecipeTimeFields } from '@/components/recipes/editor/RecipeTimeFields.jsx';
 import { LiveUpdateTextField } from '@aglio/ui/src/components/liveUpdateTextField';
+import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 
 export interface RecipeEditorProps {
 	slug: string;
@@ -36,6 +37,8 @@ export function RecipeEditor({ slug }: RecipeEditorProps) {
 
 function RecipeEditorContent({ recipe }: { recipe: Recipe }) {
 	useWatchChanges(recipe);
+
+	usePageTitle('Editing ' + recipe.get('title').slice(0, 20));
 
 	return (
 		<div className="flex flex-col gap-8">

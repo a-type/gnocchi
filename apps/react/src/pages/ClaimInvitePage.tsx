@@ -1,6 +1,7 @@
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
+import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 import { trpc } from '@/trpc.js';
 import { Button } from '@aglio/ui/components/button';
 import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
@@ -10,6 +11,8 @@ import { useNavigate, useParams } from '@verdant-web/react-router';
 export function ClaimInvitePage() {
 	const { data, refetch } = useAuth();
 	const { session, isSubscribed } = data || {};
+
+	usePageTitle('Claim Invite');
 
 	const navigate = useNavigate();
 

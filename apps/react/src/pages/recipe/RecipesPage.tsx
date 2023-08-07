@@ -6,10 +6,12 @@ import {
 import { RecipeList } from '@/components/recipes/collection/RecipeList.jsx';
 import { Suspense } from 'react';
 import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
+import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 
 export interface RecipesPageProps {}
 
 export function RecipesPage({}: RecipesPageProps) {
+	usePageTitle('Recipes');
 	return (
 		<PageContent>
 			<Suspense>

@@ -5,6 +5,7 @@ import { InstructionsProvider } from '../editor/InstructionStepNodeView.jsx';
 import { RecipeInstructionsViewer } from '../viewer/RecipeInstructionsViewer.jsx';
 import { AddImagePrompt } from './AddImagePrompt.jsx';
 import { useCookingRecipe } from './RecipeCookContext.jsx';
+import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 
 export interface RecipeCookViewProps {
 	className?: string;
@@ -13,6 +14,7 @@ export interface RecipeCookViewProps {
 
 export function RecipeCookView({ className }: RecipeCookViewProps) {
 	const recipe = useCookingRecipe();
+	usePageTitle('Cooking ' + recipe.get('title').slice(0, 20));
 
 	return (
 		<div
