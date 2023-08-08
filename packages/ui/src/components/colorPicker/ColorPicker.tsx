@@ -30,7 +30,7 @@ export function ColorPicker({ value, onChange }: ColorPickerProps) {
 		: 'lemon';
 
 	return (
-		<Select value={resolvedValue} onValueChange={onChange}>
+		<Select noNative value={resolvedValue} onValueChange={onChange}>
 			<SelectTrigger>
 				<SelectValue />
 			</SelectTrigger>

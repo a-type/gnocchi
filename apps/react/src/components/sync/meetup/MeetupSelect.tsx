@@ -61,7 +61,11 @@ export function MeetupSelect({ children, id, emptyLabel }: MeetupSelectProps) {
 	const Trigger = children ? UnstyledSelectTrigger : SelectTrigger;
 
 	return (
-		<Select value={location || ''} onValueChange={setMeetup}>
+		<Select
+			value={location || ''}
+			onValueChange={setMeetup}
+			noNative={!!children}
+		>
 			<Trigger
 				asChild={!!children}
 				className={classNames(
