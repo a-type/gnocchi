@@ -1,6 +1,7 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
+import { useActiveCookingSession } from '@/components/recipes/hooks.js';
 import { InviteLinkButton } from '@/components/sync/InviteLinkButton.jsx';
 import {
 	PeopleList,
@@ -24,6 +25,7 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
 import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
+import { Cross2Icon } from '@radix-ui/react-icons';
 
 export interface CookingActionBarProps {
 	recipe: Recipe;
@@ -34,6 +36,7 @@ export function CookingActionBar({ recipe }: CookingActionBarProps) {
 		<ActionBar>
 			<CookingPeople recipeId={recipe.get('id')} />
 			<AddChefsAction />
+			<StopCookingAction recipe={recipe} />
 		</ActionBar>
 	);
 }
@@ -131,5 +134,22 @@ function AddChefsAction() {
 				</DialogActions>
 			</DialogContent>
 		</Dialog>
+	);
+}
+
+function StopCookingAction({ recipe }: { recipe: Recipe }) {
+	const session = useActiveCookingSession(recipe);
+	const stopCooking = () => {
+		recipe.set('session', null);
+	};
+
+	return (
+		<ActionButton
+			visible={!!session}
+			icon={<Cross2Icon />}
+			onClick={stopCooking}
+		>
+			Stop cooking
+		</ActionButton>
 	);
 }

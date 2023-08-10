@@ -1,9 +1,6 @@
 import { Recipe } from '@aglio/groceries-client';
 
-export function makeRecipeLink(
-	recipe: Recipe,
-	path: '' | '/edit' | '/cook/prep' | '/cook/steps' = '',
-) {
+export function makeRecipeLink(recipe: Recipe, path: '' | '/edit' = '') {
 	return `/recipes/${sanitizeForUrl(
 		recipe.get('title') || 'recipe',
 	)}-${recipe.get('slug')}${path}`;

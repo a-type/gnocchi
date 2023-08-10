@@ -2,6 +2,7 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { PersonSelect } from '@/components/sync/people/PersonSelect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
+// @ts-ignore
 import { NodeViewContent, NodeViewWrapper } from '@tiptap/react';
 import classNames from 'classnames';
 import {
@@ -22,6 +23,7 @@ import { Tooltip } from '@aglio/ui/components/tooltip';
 import { Button } from '@aglio/ui/components/button';
 import { useToggle } from '@aglio/ui/hooks';
 import { InstructionsContext } from '@/components/recipes/editor/InstructionsContext.jsx';
+import { useCookSessionAction } from '@/components/recipes/hooks.js';
 
 export interface InstructionStepNodeViewProps {
 	node: {
@@ -48,7 +50,7 @@ export function InstructionStepNodeView({
 
 	const maybeRecipe = extension.storage.recipe;
 	hooks.useWatch(maybeRecipe || null);
-	const maybeSession = maybeRecipe?.get('session');
+	let maybeSession = maybeRecipe?.get('session');
 	hooks.useWatch(maybeSession || null);
 	const maybeCompletedSteps = maybeSession
 		? maybeSession.get('completedInstructions')
@@ -60,6 +62,8 @@ export function InstructionStepNodeView({
 	hooks.useWatch(maybeAssignments);
 
 	const completed = maybeCompletedSteps?.has(id);
+
+	const sessionAction = useCookSessionAction(maybeRecipe || null);
 
 	const assignedPersonId = maybeAssignments?.get(id) ?? null;
 
@@ -76,11 +80,13 @@ export function InstructionStepNodeView({
 				return;
 			}
 
-			if (personId) {
-				maybeAssignments?.set(id, personId);
-			} else {
-				maybeAssignments?.delete(id);
-			}
+			sessionAction((session) => {
+				if (personId) {
+					session.get('instructionAssignments').set(id, personId);
+				} else {
+					session.get('instructionAssignments').delete(id);
+				}
+			});
 		},
 		[maybeAssignments, id],
 	);
@@ -135,7 +141,7 @@ export function InstructionStepNodeView({
 			{!isEditing && isAssignedToMe && (
 				<label
 					contentEditable={false}
-					className="[grid-area:label] text-xs italic color-black animate-keyframes-fade-in-up animate-duration-200 animate-ease-out mb-1"
+					className="[grid-area:label] text-xs italic color-black animate-keyframes-fade-in-up animate-duration-200 animate-ease-out mb-2"
 				>
 					Assigned to you
 				</label>
@@ -155,20 +161,13 @@ export function InstructionStepNodeView({
 									return;
 								}
 
-								if (!maybeCompletedSteps) {
-									if (maybeRecipe) {
-										maybeRecipe.set('session', {
-											completedInstructions: [id],
-										});
+								sessionAction((session) => {
+									if (checked) {
+										session.get('completedInstructions').add(id);
+									} else {
+										session.get('completedInstructions').removeAll(id);
 									}
-									return;
-								}
-
-								if (checked) {
-									maybeCompletedSteps.add(id);
-								} else {
-									maybeCompletedSteps.removeAll(id);
-								}
+								});
 							}}
 							className="relative top--1"
 						/>

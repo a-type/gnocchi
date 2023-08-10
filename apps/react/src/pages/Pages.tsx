@@ -54,9 +54,6 @@ const RecipeViewPage = lazyWithPreload(
 const RecipeEditPage = lazyWithPreload(
 	() => import('./recipe/RecipeEditPage.jsx'),
 );
-const RecipeCookPage = lazyWithPreload(
-	() => import('./recipe/cook/RecipeCookPage.jsx'),
-);
 const RecipeOverviewPage = lazyWithPreload(
 	() => import('./recipe/RecipeOverviewPage.jsx'),
 );
@@ -193,7 +190,6 @@ const routes = makeRoutes([
 				onVisited: () => {
 					RecipeViewPage.preload();
 					RecipeOverviewPage.preload();
-					RecipeCookPage.preload();
 					PantryPage.preload();
 					PantryListPage.preload();
 				},
@@ -207,7 +203,6 @@ const routes = makeRoutes([
 				component: RecipeViewPage,
 				onVisited: () => {
 					RecipeEditPage.preload();
-					RecipeCookPage.preload();
 				},
 				data: {
 					left: '/pantry',
@@ -224,8 +219,9 @@ const routes = makeRoutes([
 						component: RecipeEditPage,
 					},
 					{
+						// legacy path
 						path: 'cook',
-						component: RecipeCookPage,
+						component: RecipeOverviewPage,
 					},
 				],
 			},

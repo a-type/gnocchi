@@ -26,7 +26,7 @@ export function RecipeNowPlayingLink({ recipe }: { recipe: Recipe }) {
 	return (
 		<div className="flex flex-row items-center justify-between gap-2 pr-2">
 			<Link
-				to={makeRecipeLink(recipe, '/cook/steps')}
+				to={makeRecipeLink(recipe, '')}
 				className="flex flex-row gap-2 items-center p-2 w-full overflow-hidden"
 			>
 				<PieProgress value={progress} />

@@ -38,7 +38,7 @@ function RecipePresenceNotificationContent() {
 
 	if (recipeId && recipeId !== dismissedId) {
 		return (
-			<PageNowPlaying className="w-full pb-[env(safe-area-inset-bottom,0px)]">
+			<PageNowPlaying className="important:w-auto m-2 p-1">
 				<RecipePresenceLink
 					person={viewingRecipe}
 					recipeId={recipeId}
@@ -65,20 +65,22 @@ function RecipePresenceLink({
 	if (!recipe) return null;
 
 	return (
-		<div className="flex flex-row gap-2 items-center p-2">
-			<Button size="small" onClick={onDismiss} color="ghost">
+		<div className="flex flex-row gap-2 items-center p-2 min-w-0 max-w-full">
+			<Button size="icon" onClick={onDismiss} color="ghost">
 				<Cross2Icon />
 			</Button>
 			<PersonAvatar person={person} />
 			<div className="flex flex-col gap-2px flex-[1_1_0] min-w-0">
-				<div className="text-xxs">&nbsp;{person.profile.name} is cooking</div>
+				<div className="text-xxs ml--2px">
+					&nbsp;{person.profile.name} is cooking
+				</div>
 				<div className="text-xs font-bold overflow-hidden text-ellipsis whitespace-nowrap">
 					{recipe.get('title')}
 				</div>
 			</div>
 			<LinkButton
 				size="small"
-				to={makeRecipeLink(recipe, '/cook/prep')}
+				to={makeRecipeLink(recipe)}
 				className="whitespace-nowrap"
 				onClick={onDismiss}
 			>

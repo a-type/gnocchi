@@ -1,35 +1,41 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { Recipe } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
-import { PageNowPlaying } from '@aglio/ui/components/layouts';
-import { H5 } from '@aglio/ui/components/typography';
-import { ListBulletIcon } from '@radix-ui/react-icons';
+import { ArrowUpIcon, ListBulletIcon } from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
+import classNames from 'classnames';
 import { useCallback, useRef } from 'react';
 import { IngredientCheckoffView } from './IngredientCheckoffView.jsx';
-import { RecipeMultiplierField } from '../viewer/RecipeMultiplierField.jsx';
-import { hooks } from '@/stores/groceries/index.js';
-import { Link } from '@verdant-web/react-router';
 
 export interface CookingToolbarProps {
 	recipe: Recipe;
+	className?: string;
 }
 
-const PEEK_HEIGHT = 150;
-const MAX_HEIGHT = 400;
+const PEEK_HEIGHT = 200;
+const MAX_HEIGHT = 500;
 
-export function CookingToolbar({ recipe }: CookingToolbarProps) {
+const AnimatedButton = animated(Button);
+
+export function CookingToolbar({ recipe, className }: CookingToolbarProps) {
 	const { containerRef, containerStyle, bind } = useExpandingContainer();
-	const { url } = hooks.useWatch(recipe);
 
 	return (
-		<div className="w-full flex flex-col items-center relative bottom-[calc(0.25rem*-1)] max-w-600px">
-			<div className="flex flex-row gap-2 mb-3">
-				<Button
+		<div
+			className={classNames(
+				'w-full flex flex-col items-center relative bottom-[calc(0.25rem*-1)] mb-2 max-w-600px',
+				className,
+			)}
+		>
+			<div className="w-full grid grid-cols-[1fr_auto_1fr] grid-rows-[1fr] grid-areas-[empty_ingredients_top] gap-2 items-center relative z-1">
+				<AnimatedButton
 					size="small"
-					className="rounded-full flex items-center justify-center touch-none gap-2 shadow-lg py-2"
+					className="[grid-area:ingredients] rounded-full flex items-center justify-center touch-none gap-2 shadow-lg py-2"
 					{...bind()}
+					style={{
+						y: containerStyle.height.to((h) => (h > 0 ? '50%' : '0%')),
+					}}
 				>
 					<animated.span
 						className="inline-flex h-15px items-center justify-center"
@@ -51,7 +57,23 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 					>
 						<Icon name="drag_vertical" />
 					</animated.span>
-					<span>Ingredients</span>
+					<animated.span>
+						{containerStyle.height.to((h) =>
+							h > 0 ? 'Resize / Close' : 'Ingredients',
+						)}
+					</animated.span>
+				</AnimatedButton>
+				<Button
+					size="icon"
+					color="default"
+					className="shadow-lg [grid-area:top] justify-self-end mr-2"
+					onClick={() => {
+						// careful, this relies on page structure in RecipeOverview...
+						const top = document.getElementById('pageTop');
+						top?.scrollIntoView({ behavior: 'smooth' });
+					}}
+				>
+					<ArrowUpIcon />
 				</Button>
 			</div>
 
@@ -66,13 +88,6 @@ export function CookingToolbar({ recipe }: CookingToolbarProps) {
 				}}
 			>
 				<div className="overflow-overlay h-full mt-3 pb-[calc(40px+env(safe-area-inset-bottom,0px))] flex flex-col items-center px-1">
-					<RecipeMultiplierField recipe={recipe} className="mb-2" />
-					{url && (
-						<Link className="font-bold mb-2" newTab to={url}>
-							View original
-						</Link>
-					)}
-					<H5 className="mx-2">Ingredients</H5>
 					<IngredientCheckoffView recipe={recipe} className="important:p-2" />
 				</div>
 			</animated.div>

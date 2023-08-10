@@ -4,6 +4,7 @@ import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
 import classNames from 'classnames';
 import { RecipeIngredientViewer } from '../viewer/RecipeIngredientViewer.jsx';
+import { useCookSessionAction } from '@/components/recipes/hooks.js';
 
 export interface IngredientCheckoffViewProps {
 	recipe: Recipe;
@@ -16,6 +17,7 @@ export const IngredientCheckoffView = forwardRef<
 >(function IngredientCheckoffView({ recipe, className }, ref) {
 	const { session } = hooks.useWatch(recipe);
 	hooks.useWatch(session);
+	const sessionAction = useCookSessionAction(recipe);
 	const completedIngredients = session?.get('completedIngredients') ?? null;
 	hooks.useWatch(completedIngredients);
 	const { ingredients, multiplier } = hooks.useWatch(recipe);
@@ -36,17 +38,15 @@ export const IngredientCheckoffView = forwardRef<
 					multiplier={multiplier}
 					checked={completedIngredients?.has(ingredient.get('id')) ?? false}
 					onCheckedChange={(checked) => {
-						if (!completedIngredients) {
-							recipe.set('session', {
-								completedIngredients: [ingredient.get('id')],
-							});
-						} else {
+						sessionAction((session) => {
 							if (checked) {
-								completedIngredients.add(ingredient.get('id'));
+								session.get('completedIngredients').add(ingredient.get('id'));
 							} else {
-								completedIngredients.removeAll(ingredient.get('id'));
+								session
+									.get('completedIngredients')
+									.removeAll(ingredient.get('id'));
 							}
-						}
+						});
 					}}
 				/>
 			))}

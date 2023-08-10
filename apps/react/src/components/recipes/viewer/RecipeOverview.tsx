@@ -1,25 +1,26 @@
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
 import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
-import { RecipeStartCookingButton } from '@/components/recipes/viewer/RecipeStartCookingButton.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { Divider } from '@aglio/ui/components/divider';
 import { PageNowPlaying } from '@aglio/ui/components/layouts';
-import { Peek } from '@aglio/ui/components/peek';
 import { H1, H2, P } from '@aglio/ui/components/typography';
 import { format } from 'date-fns/esm';
 import { RecipeNotFound } from '../RecipeNotFound.jsx';
 import { RecipeTagsEditor } from '../editor/RecipeTagsEditor.jsx';
-import { useRecipeFromSlugUrl, useWatchChanges } from '../hooks.js';
+import {
+	useActiveCookingSession,
+	useRecipeFromSlugUrl,
+	useWatchChanges,
+} from '../hooks.js';
 import {
 	ImageContainer,
 	TitleAndImageLayout,
 	TitleContainer,
 } from '../layout/TitleAndImageLayout.jsx';
 import { AddToListButton } from './AddToListButton.jsx';
-import { RecipeIngredientsViewer } from './RecipeIngredientsViewer.jsx';
 import { RecipeInstructionsViewer } from './RecipeInstructionsViewer.jsx';
 import { RecipeMainImageViewer } from './RecipeMainImageViewer.jsx';
 import { RecipeMultiplierField } from './RecipeMultiplierField.jsx';
@@ -27,13 +28,25 @@ import { RecipePreludeViewer } from './RecipePreludeViewer.jsx';
 import { RecipePublishControl } from './RecipePublishControl.jsx';
 import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { formatMinutes } from '@aglio/tools';
 import { withClassName } from '@aglio/ui/hooks';
 import classNames from 'classnames';
 import { Link } from '@verdant-web/react-router';
-import { PlayIcon, PlusIcon } from '@radix-ui/react-icons';
+import { PlusIcon } from '@radix-ui/react-icons';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
+import {
+	CollapsibleRoot,
+	CollapsibleContent,
+} from '@aglio/ui/components/collapsible';
+import { useSnapshot } from 'valtio';
+import { viewerState } from '@/components/recipes/viewer/state.js';
+import { CookingToolbar } from '@/components/recipes/cook/CookingToolbar.jsx';
+import { IngredientCheckoffView } from '@/components/recipes/cook/IngredientCheckoffView.jsx';
+import { InstructionsProvider } from '@/components/recipes/editor/InstructionStepNodeView.jsx';
+import { AddNotePrompt } from '@/components/recipes/cook/AddNotePrompt.jsx';
+import { AddImagePrompt } from '@/components/recipes/cook/AddImagePrompt.jsx';
+import { CookingActionBar } from '@/components/recipes/cook/CookingActionBar.jsx';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -63,13 +76,20 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	} = hooks.useWatch(recipe);
 	useWatchChanges(recipe);
 
+	useViewingRecipePresence(recipe);
+
 	const multipliedServings = Math.round((servings ?? 0) * multiplier);
 
 	usePageTitle(title.slice(0, 20));
 
+	const stepsRef = useShowToolsWhenStepsVisible();
+
 	return (
 		<>
-			<HeaderBar backUrl="/recipes" />
+			<div id="pageTop" className="w-0 h-0" />
+			<HeaderBar backUrl="/recipes">
+				<CookingActionBar recipe={recipe} />
+			</HeaderBar>
 			<OnboardingBanner onboarding={saveHubRecipeOnboarding} step="recipe">
 				<H2>This is your copy!</H2>
 				<P>Feel free to make changes, add notes, etc.</P>
@@ -127,7 +147,13 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						</ImageContainer>
 					)}
 				</TitleAndImageLayout>
-				<RecipeTagsEditor recipe={recipe} />
+				<div className="w-full flex flex-row gap-4">
+					<RecipeTagsEditor recipe={recipe} className="flex-1" />
+					<AddToListButton color="primary" recipe={recipe}>
+						<PlusIcon />
+						<span>Add to list</span>
+					</AddToListButton>
+				</div>
 				<PreludeSection recipe={recipe} />
 				<Divider />
 				<div className="w-full">
@@ -135,32 +161,21 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						<H2>Ingredients</H2>
 						<RecipeMultiplierField recipe={recipe} />
 					</div>
-					<RecipeIngredientsViewer recipe={recipe} />
+					<IngredientCheckoffView recipe={recipe} />
 				</div>
 				<Divider />
-				<div className="w-full">
+				<div className="w-full" ref={stepsRef}>
 					<H2 className="gutter-bottom">Instructions</H2>
-					<RecipeInstructionsViewer recipe={recipe} />
+					<InstructionsProvider
+						isEditing={false}
+						showTools
+						recipeId={recipe.get('id')}
+					>
+						<RecipeInstructionsViewer recipe={recipe} />
+					</InstructionsProvider>
 				</div>
-				<PageNowPlaying unstyled>
-					<div className="flex flex-row gap-2 items-center justify-end w-full">
-						<AddToListButton
-							color="default"
-							recipe={recipe}
-							className="shadow-lg"
-						>
-							<PlusIcon />
-							<span>Add to list</span>
-						</AddToListButton>
-						<RecipeStartCookingButton recipe={recipe} className="shadow-lg">
-							<PlayIcon />
-							<span>Cook</span>
-						</RecipeStartCookingButton>
-					</div>
-					<Suspense>
-						<RecipesNowPlaying showSingle />
-					</Suspense>
-				</PageNowPlaying>
+				<PostCooking recipe={recipe} />
+				<OverviewNowPlaying recipe={recipe} />
 			</div>
 		</>
 	);
@@ -186,3 +201,72 @@ const Detail = withClassName(
 	'div',
 	'inline-flex flex-row gap-1 items-center whitespace-nowrap border-light border-solid border-1 rounded-full px-2 py-1',
 );
+
+function OverviewNowPlaying({ recipe }: { recipe: Recipe }) {
+	const { showCookTools } = useSnapshot(viewerState);
+	return (
+		<PageNowPlaying unstyled>
+			<div className="flex flex-row gap-2 items-center justify-end w-full">
+				{showCookTools && (
+					<CookingToolbar
+						recipe={recipe}
+						className="animate-pop-up animate-duration-200 animate-springy"
+					/>
+				)}
+			</div>
+			<Suspense>
+				<RecipesNowPlaying showSingle={false} />
+			</Suspense>
+		</PageNowPlaying>
+	);
+}
+
+function useShowToolsWhenStepsVisible() {
+	const ref = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		const el = ref.current;
+		if (!el) {
+			return;
+		}
+		const observer = new IntersectionObserver((entries) => {
+			const entry = entries[0];
+			if (entry.isIntersecting) {
+				viewerState.showCookTools = true;
+			} else {
+				viewerState.showCookTools = false;
+			}
+		});
+		observer.observe(el);
+		return () => {
+			observer.disconnect();
+		};
+	}, []);
+	return ref;
+}
+
+function useViewingRecipePresence(recipe: Recipe) {
+	const recipeId = recipe?.get('id') ?? null;
+	const client = hooks.useClient();
+	useEffect(() => {
+		client.sync.presence.update({ viewingRecipeId: recipeId });
+	}, [recipeId, client]);
+	useEffect(() => {
+		return () => {
+			client.sync.presence.update({ viewingRecipeId: null });
+		};
+	}, [client]);
+}
+
+function PostCooking({ recipe }: { recipe: Recipe }) {
+	const activeSession = useActiveCookingSession(recipe);
+	if (!activeSession) return null;
+
+	return (
+		<Suspense>
+			<div className="w-full flex flex-col items-stretch mt-10 gap-3">
+				<AddImagePrompt recipe={recipe} />
+				<AddNotePrompt recipe={recipe} />
+			</div>
+		</Suspense>
+	);
+}

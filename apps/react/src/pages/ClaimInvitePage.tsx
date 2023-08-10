@@ -1,3 +1,4 @@
+import { DemoFrame } from '@/components/promotional/DemoFrame.jsx';
 import { LoginButton } from '@/components/sync/LoginButton.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
@@ -80,10 +81,20 @@ export function ClaimInvitePage() {
 	return (
 		<PageRoot>
 			<PageContent>
-				<div className="flex flex-col p-2">
+				<div className="flex flex-col p-2 gap-6">
+					<img src="/android-chrome-192x192.png" className="w-40px h-40px" />
+
 					<H1>Sign up to join {inviterName}'s grocery list</H1>
+					<div className="flex flex-row gap-4">
+						<DemoFrame demo="multiplayer-groceries" />
+						<DemoFrame demo="multiplayer-cooking" />
+					</div>
 					<P>
 						Collaborate on shopping together in the store or during the week.
+					</P>
+					<P>
+						Collect recipes and cook as a team with live progress tracking and
+						step assignment.
 					</P>
 					<LoginButton
 						align="end"

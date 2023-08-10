@@ -2,14 +2,17 @@ import {
 	ObjectEntity,
 	Recipe,
 	RecipeDestructured,
+	RecipeSession,
 } from '@aglio/groceries-client';
 import { hooks } from '@/stores/groceries/index.js';
+// @ts-ignore
 import { ExtensionConfig, useEditor } from '@tiptap/react';
 import { useCallback, useEffect, useRef } from 'react';
 import { createTiptapExtensions } from './editor/tiptapExtensions.js';
 import StarterKit from '@tiptap/starter-kit';
 import { SESSION_TIMEOUT } from '@/components/recipes/constants.js';
 import Link from '@tiptap/extension-link';
+import { assert } from '@aglio/tools';
 
 export function useRecipeFromSlugUrl(url: string) {
 	const slug = url.split('-').pop();
@@ -23,27 +26,49 @@ export function useRecipeFromSlugUrl(url: string) {
 	return recipe;
 }
 
-export function useStartNewSessionIfNeeded(recipe: Recipe) {
+/**
+ * Clears any expired session, forces that a session exists,
+ * then runs the action with that session.
+ */
+export function useCookSessionAction(recipe: Recipe | null) {
 	const client = hooks.useClient();
-	return useCallback(() => {
-		const session = recipe.get('session');
-		if (!session || session.get('startedAt') < Date.now() - SESSION_TIMEOUT) {
-			client
-				.batch({ undoable: false })
-				.run(() => {
-					recipe.set('session', {
-						completedIngredients: [],
-						completedInstructions: [],
-						ingredientAssignments: {},
-						instructionAssignments: {},
-						startedAt: Date.now(),
-					});
-					recipe.set('cookCount', recipe.get('cookCount') + 1);
-					recipe.set('lastCookedAt', Date.now());
-				})
-				.flush();
-		}
-	}, [recipe, client]);
+	return useCallback(
+		(action: (session: RecipeSession) => void) => {
+			if (!recipe) {
+				return;
+			}
+			let session = recipe.get('session');
+			if (!session || session.get('startedAt') < Date.now() - SESSION_TIMEOUT) {
+				client
+					.batch({ undoable: false })
+					.run(() => {
+						recipe.set('session', {
+							completedIngredients: [],
+							completedInstructions: [],
+							ingredientAssignments: {},
+							instructionAssignments: {},
+							startedAt: Date.now(),
+						});
+						recipe.set('cookCount', recipe.get('cookCount') + 1);
+						recipe.set('lastCookedAt', Date.now());
+						session = recipe.get('session');
+					})
+					.flush();
+			}
+			assert(session);
+			action(session);
+		},
+		[recipe, client],
+	);
+}
+
+export function useActiveCookingSession(recipe: Recipe) {
+	const session = hooks.useWatch(recipe, 'session');
+	if (!session) {
+		return null;
+	}
+	const active = session.get('startedAt') > Date.now() - SESSION_TIMEOUT;
+	return active ? session : null;
 }
 
 export function useSyncedInstructionsEditor({
@@ -77,7 +102,7 @@ function useSyncedEditor(
 	const field = live[fieldName] as ObjectEntity<any, any>;
 	const updatingRef = useRef(false);
 	const update = useCallback(
-		(editor) => {
+		(editor: any) => {
 			if (updatingRef.current) {
 				return;
 			}

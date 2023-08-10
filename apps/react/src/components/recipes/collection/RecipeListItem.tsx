@@ -2,7 +2,6 @@ import { Link } from '@/components/nav/Link.jsx';
 import { RecipeAddTag } from '@/components/recipes/editor/RecipeAddTag.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
-import { RecipeStartCookingButton } from '@/components/recipes/viewer/RecipeStartCookingButton.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
@@ -59,14 +58,6 @@ export function RecipeListItem({ recipe }: { recipe: Recipe }) {
 			</CardImage>
 			<CardFooter>
 				<CardActions>
-					<RecipeStartCookingButton
-						preserveQuery
-						recipe={recipe}
-						size="icon"
-						color="primary"
-					>
-						<PlayIcon className="relative left-1px" />
-					</RecipeStartCookingButton>
 					<AddToListButton recipe={recipe} color="ghost" size="small">
 						<PlusCircledIcon className="w-20px h-20px" />
 						<span>Add to List</span>
