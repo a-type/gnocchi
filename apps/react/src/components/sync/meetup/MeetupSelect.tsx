@@ -69,7 +69,7 @@ export function MeetupSelect({ children, id, emptyLabel }: MeetupSelectProps) {
 			<Trigger
 				asChild={!!children}
 				className={classNames(
-					'py-3 px-6',
+					!children && 'py-3 px-6',
 					!!location && 'bg-accent-wash color-accent-dark',
 				)}
 				id={id}
