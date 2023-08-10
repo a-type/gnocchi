@@ -72,7 +72,7 @@ function RecipePresenceLink({
 			<PersonAvatar person={person} />
 			<div className="flex flex-col gap-2px flex-[1_1_0] min-w-0">
 				<div className="text-xxs ml--2px">
-					&nbsp;{person.profile.name} is cooking
+					&nbsp;{person.profile.name} is viewing
 				</div>
 				<div className="text-xs font-bold overflow-hidden text-ellipsis whitespace-nowrap">
 					{recipe.get('title')}
