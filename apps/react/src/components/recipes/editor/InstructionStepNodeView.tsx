@@ -112,7 +112,7 @@ export function InstructionStepNodeView({
 			className={classNames(
 				'grid grid-areas-[label_label_label]-[tools_content_endTools]-[note_note_note]',
 				'grid-cols-[min-content_1fr_min-content] grid-rows-[repeat(3,min-content)]',
-				'mb-3 rounded-md w-full p-1 transition-colors',
+				'mb-4 rounded-md w-full transition-colors',
 				completed && !isEditing && 'opacity-60',
 				isAssignedToMe && !isEditing && 'bg-primaryWash mb-2',
 			)}
@@ -148,7 +148,7 @@ export function InstructionStepNodeView({
 			)}
 			{showTools && (
 				<div
-					className="flex flex-col items-center gap-2 [grid-area:tools] w-32px mr-3"
+					className="flex flex-col items-center gap-2 [grid-area:tools] w-32px mr-2"
 					contentEditable={false}
 				>
 					{!isEditing && (

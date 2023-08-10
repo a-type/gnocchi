@@ -29,6 +29,7 @@ export function AddToListButton({
 	recipe,
 	children,
 	listId = null,
+	className,
 	...rest
 }: AddToListButtonProps) {
 	return (
@@ -43,7 +44,7 @@ export function AddToListButton({
 			// from skipping the step
 			ignoreOutsideInteraction={(el) => !!el.closest('role="dialog"')}
 		>
-			<div>
+			<div className={className}>
 				<AddToListDialog recipe={recipe} listId={listId}>
 					<DialogTrigger asChild>
 						<Button color="default" {...rest}>

@@ -33,7 +33,7 @@ import { formatMinutes } from '@aglio/tools';
 import { withClassName } from '@aglio/ui/hooks';
 import classNames from 'classnames';
 import { Link } from '@verdant-web/react-router';
-import { PlusIcon } from '@radix-ui/react-icons';
+import { OpenInNewWindowIcon, PlusIcon } from '@radix-ui/react-icons';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 import {
 	CollapsibleRoot,
@@ -99,7 +99,18 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					<TitleContainer>
 						<div className="w-full flex flex-col items-start self-start text-xs my-3 gap-4">
 							<H1>{title}</H1>
-							<RecipeNote recipe={recipe} />
+							<div className="flex flex-row gap-1 flex-wrap items-center w-full">
+								<RecipePublishControl recipe={recipe} />
+								<RecipeViewerEditButton recipe={recipe} />
+								<AddToListButton
+									color="primary"
+									recipe={recipe}
+									className="ml-auto mr-0"
+								>
+									<PlusIcon />
+									<span>Add to list</span>
+								</AddToListButton>
+							</div>
 							<div className="flex flex-col sm:flex-row justify-between items-start w-full gap-3">
 								<div className="flex flex-row gap-1 flex-wrap">
 									<Detail>
@@ -129,16 +140,8 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 										</Detail>
 									)}
 								</div>
-								<div className="flex flex-row gap-1 flex-wrap justify-end">
-									<RecipePublishControl recipe={recipe} />
-									<RecipeViewerEditButton recipe={recipe} />
-								</div>
+								<RecipeTagsEditor recipe={recipe} className="flex-1" />
 							</div>
-							{url && (
-								<Link to={url} newTab className="font-bold">
-									View original
-								</Link>
-							)}
 						</div>
 					</TitleContainer>
 					{mainImage && (
@@ -147,14 +150,14 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 						</ImageContainer>
 					)}
 				</TitleAndImageLayout>
-				<div className="w-full flex flex-row gap-4">
-					<RecipeTagsEditor recipe={recipe} className="flex-1" />
-					<AddToListButton color="primary" recipe={recipe}>
-						<PlusIcon />
-						<span>Add to list</span>
-					</AddToListButton>
-				</div>
 				<PreludeSection recipe={recipe} />
+				{url && (
+					<Link to={url} newTab className="font-bold">
+						View original <OpenInNewWindowIcon className="ml-2 relative b--1" />
+					</Link>
+				)}
+				<RecipeNote recipe={recipe} />
+
 				<Divider />
 				<div className="w-full">
 					<div className="w-auto flex flex-row items-center justify-between self-start gap-6 mb-4">
@@ -164,8 +167,8 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					<IngredientCheckoffView recipe={recipe} />
 				</div>
 				<Divider />
-				<div className="w-full" ref={stepsRef}>
-					<H2 className="gutter-bottom">Instructions</H2>
+				<div className="w-full flex flex-col gap-4" ref={stepsRef}>
+					<H2>Instructions</H2>
 					<InstructionsProvider
 						isEditing={false}
 						showTools
