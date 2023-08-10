@@ -14,6 +14,7 @@ import {
 } from '@aglio/ui/components/dropdownMenu';
 import {
 	DotsVerticalIcon,
+	Pencil1Icon,
 	PlayIcon,
 	PlusCircledIcon,
 	PlusIcon,
@@ -31,6 +32,7 @@ import {
 	CardRoot,
 	CardTitle,
 } from '@aglio/ui/components/card';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export function RecipeListItem({ recipe }: { recipe: Recipe }) {
 	const { title } = hooks.useWatch(recipe);
@@ -91,6 +93,14 @@ export function RecipeListItem({ recipe }: { recipe: Recipe }) {
 									</DropdownMenuItemRightSlot>
 								</DropdownMenuItem>
 							</RecipeAddTag>
+							<DropdownMenuItem asChild>
+								<Link to={makeRecipeLink(recipe, '/edit')} preserveQuery>
+									<span>Edit</span>
+									<DropdownMenuItemRightSlot>
+										<Pencil1Icon />
+									</DropdownMenuItemRightSlot>
+								</Link>
+							</DropdownMenuItem>
 							<DropdownMenuItem
 								color="destructive"
 								onSelect={() => {
