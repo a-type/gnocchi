@@ -1,5 +1,6 @@
 import { toSeconds, parse } from 'iso8601-duration';
-import { AnyNode, Cheerio, CheerioAPI } from 'cheerio';
+import $, { AnyNode, Cheerio, CheerioAPI } from 'cheerio';
+import { DetailedStep } from 'src/extractors/types.js';
 
 export function extractNumber(
 	numberOrString?: number | string,
@@ -120,4 +121,56 @@ export function humanTimeToMinutes(timeString: string) {
 		totalMinutes += parseInt(minutes[1]);
 	}
 	return totalMinutes;
+}
+
+/**
+ * Parses an instruction element, splitting any paragraphs
+ * into new steps.
+ *
+ * Returns detailed steps.
+ */
+export function parseInstructionInternalText($el: Cheerio<AnyNode>) {
+	// iterate over child nodes. text nodes are appended together into one step,
+	// paragraphs are split into new steps
+	const steps: DetailedStep[] = [];
+	let currentStep: DetailedStep = { type: 'step', content: '' };
+	$el.contents().each((_, el) => {
+		if (el.type === 'text') {
+			currentStep.content += el.data;
+		} else if (el.type === 'tag' && el.name === 'br') {
+			steps.push(currentStep);
+			currentStep = { type: 'step', content: '' };
+		} else if (
+			el.type === 'tag' &&
+			((el.name.startsWith('h') && el.name.length === 2) ||
+				el.name === 'strong')
+		) {
+			steps.push(currentStep);
+			steps.push({ type: 'sectionTitle', content: $(el).text() });
+			currentStep = { type: 'step', content: '' };
+		} else if (el.type === 'tag' && el.name === 'a') {
+			// TODO: support embedded links...
+			currentStep.content += $(el).text();
+		} else {
+			steps.push(currentStep);
+			currentStep = { type: 'step', content: '' };
+			steps.push(...parseInstructionInternalText($(el)));
+		}
+	});
+	steps.push(currentStep);
+
+	return steps
+		.map((step) => ({
+			...step,
+			content: collapseWhitespace(step.content),
+		}))
+		.filter((step) => !!step.content);
+}
+
+export function detailedInstructionsToSimple(
+	detailedInstructions: DetailedStep[],
+) {
+	return detailedInstructions.map((step) => {
+		return step.content;
+	});
 }

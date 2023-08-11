@@ -1,6 +1,6 @@
 import { signupDialogState } from '@/components/sync/state.js';
 import { API_HOST_HTTP } from '@/config.js';
-import { instructionsToDoc } from '@/lib/tiptap.js';
+import { detailedInstructionsToDoc, instructionsToDoc } from '@/lib/tiptap.js';
 import { trpcClient } from '@/trpc.js';
 import { lookupUnit, parseIngredient } from '@aglio/conversion';
 import {
@@ -775,7 +775,9 @@ async function getScannedRecipe(
 				result.prepTimeMinutes = scanned.prepTimeMinutes ?? undefined;
 				result.cookTimeMinutes = scanned.cookTimeMinutes ?? undefined;
 				result.totalTimeMinutes = scanned.totalTimeMinutes ?? undefined;
-				result.instructions = instructionsToDoc(scanned.steps || []);
+				result.instructions = scanned.detailedSteps
+					? detailedInstructionsToDoc(scanned.detailedSteps)
+					: instructionsToDoc(scanned.steps || []);
 				result.servings = scanned.servings ?? undefined;
 			}
 		} else if (scanResult.type === 'hub') {

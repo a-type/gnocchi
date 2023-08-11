@@ -1,23 +1,11 @@
 import { Cheerio, CheerioAPI, Element } from 'cheerio';
-import { extractNumber, isoToMinutes } from './utils.js';
+import {
+	detailedInstructionsToSimple,
+	extractNumber,
+	isoToMinutes,
+	parseInstructionInternalText,
+} from './utils.js';
 import { ExtractorData } from './types.js';
-
-type RecipeMicrodata = {
-	name?: string;
-	author?: string;
-	description?: string;
-	image?: string;
-	datePublished?: string;
-	cookTime?: string;
-	cookingMethod?: string;
-	nutrition?: any;
-	recipeCategory?: string;
-	recipeCuisine?: string;
-	recipeIngredient?: string[];
-	recipeInstructions?: string[] | string;
-	recipeYield?: string;
-	suitableForDiet?: string;
-};
 
 export async function microdata($: CheerioAPI): Promise<ExtractorData | null> {
 	let elems = $('[itemscope][itemtype="http://schema.org/Recipe"]');
@@ -29,7 +17,7 @@ export async function microdata($: CheerioAPI): Promise<ExtractorData | null> {
 	}
 
 	const first = $(elems.get(0)!);
-	const name = first.find('[itemprop="name"]').text().trim();
+	const name = first.find(' > [itemprop="name"]').text().trim();
 	const author = first.find('[itemprop="author"]').text().trim();
 	const copyrightHolder = first
 		.find('[itemprop="copyrightHolder"]')
@@ -53,10 +41,14 @@ export async function microdata($: CheerioAPI): Promise<ExtractorData | null> {
 		.find('[itemprop="recipeIngredient"]')
 		.map((i, e) => $(e).text().trim())
 		.get();
-	const recipeInstructions = first
+	const recipeInstructionElements = first
 		.find('[itemprop="recipeInstructions"]')
-		.map((i, e) => $(e).text().trim())
 		.get();
+	const recipeInstructionsDetailed = recipeInstructionElements
+		.map((e) => {
+			return parseInstructionInternalText($(e));
+		})
+		.flat();
 
 	return {
 		title: name,
@@ -69,7 +61,8 @@ export async function microdata($: CheerioAPI): Promise<ExtractorData | null> {
 		prepTimeMinutes: isoToMinutes(prepTime),
 		totalTimeMinutes: isoToMinutes(totalTime),
 		rawIngredients: recipeIngredient,
-		steps: recipeInstructions,
+		steps: detailedInstructionsToSimple(recipeInstructionsDetailed),
+		detailedSteps: recipeInstructionsDetailed,
 		servings: extractNumber(recipeYield),
 	};
 }

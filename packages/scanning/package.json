@@ -4,11 +4,16 @@
 	"private": true,
 	"main": "src/index.ts",
 	"type": "module",
-	"scripts": {},
+	"scripts": {
+		"test": "vitest"
+	},
 	"dependencies": {
 		"@aglio/tools": "workspace:*",
 		"cheerio": "^1.0.0-rc.12",
 		"iso8601-duration": "^2.1.1",
 		"robots-parser": "^3.0.1"
+	},
+	"devDependencies": {
+		"vitest": "^0.22.1"
 	}
 }

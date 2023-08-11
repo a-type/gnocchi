@@ -1,5 +1,5 @@
 export type { ExtractorData } from './extractors/types.js';
-import cheerio from 'cheerio';
+import { load } from 'cheerio';
 import { extract } from './extractor.js';
 import { default as robotsParser } from 'robots-parser';
 
@@ -35,7 +35,7 @@ export async function scanWebRecipe(siteUrl: string) {
 	});
 	const text = await response.text();
 	if (response.ok) {
-		const $ = cheerio.load(text);
+		const $ = load(text);
 		return extract($, siteUrl);
 	} else {
 		if (response.status === 403) {

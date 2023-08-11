@@ -3,7 +3,7 @@ import cuid from 'cuid';
 export type RecipeInstructionsDocument = {
 	type: 'doc';
 	content: {
-		type: 'header' | 'step';
+		type: 'sectionTitle' | 'step';
 		attrs: {
 			id: string;
 		};
@@ -32,6 +32,30 @@ export function instructionsToDoc(
 						},
 					],
 				})),
+		  }
+		: undefined;
+}
+
+export function detailedInstructionsToDoc(
+	steps: { type: 'step' | 'sectionTitle'; content: string }[],
+): undefined | RecipeInstructionsDocument {
+	return steps?.length
+		? {
+				type: 'doc',
+				content: steps
+					.filter((step) => !!step.content)
+					.map((step) => ({
+						type: step.type,
+						attrs: {
+							id: cuid(),
+						},
+						content: [
+							{
+								type: 'text',
+								text: step.content,
+							},
+						],
+					})),
 		  }
 		: undefined;
 }
