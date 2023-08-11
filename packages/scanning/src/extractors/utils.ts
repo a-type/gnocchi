@@ -1,6 +1,6 @@
 import { toSeconds, parse } from 'iso8601-duration';
 import $, { AnyNode, Cheerio, CheerioAPI } from 'cheerio';
-import { DetailedStep } from 'src/extractors/types.js';
+import { DetailedStep } from './types.js';
 
 export function extractNumber(
 	numberOrString?: number | string,
