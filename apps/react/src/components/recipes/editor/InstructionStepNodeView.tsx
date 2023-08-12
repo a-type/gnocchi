@@ -23,7 +23,10 @@ import { Tooltip } from '@aglio/ui/components/tooltip';
 import { Button } from '@aglio/ui/components/button';
 import { useToggle } from '@aglio/ui/hooks';
 import { InstructionsContext } from '@/components/recipes/editor/InstructionsContext.jsx';
-import { useCookSessionAction } from '@/components/recipes/hooks.js';
+import {
+	isActiveCookingSession,
+	useCookSessionAction,
+} from '@/components/recipes/hooks.js';
 
 export interface InstructionStepNodeViewProps {
 	node: {
@@ -50,7 +53,10 @@ export function InstructionStepNodeView({
 
 	const maybeRecipe = extension.storage.recipe;
 	hooks.useWatch(maybeRecipe || null);
-	let maybeSession = maybeRecipe?.get('session');
+	let maybeSession = maybeRecipe?.get('session') ?? null;
+	if (!isActiveCookingSession(maybeSession)) {
+		maybeSession = null;
+	}
 	hooks.useWatch(maybeSession || null);
 	const maybeCompletedSteps = maybeSession
 		? maybeSession.get('completedInstructions')

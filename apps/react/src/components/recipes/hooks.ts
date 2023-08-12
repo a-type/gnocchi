@@ -67,8 +67,14 @@ export function useActiveCookingSession(recipe: Recipe) {
 	if (!session) {
 		return null;
 	}
-	const active = session.get('startedAt') > Date.now() - SESSION_TIMEOUT;
-	return active ? session : null;
+	return isActiveCookingSession(session) ? session : null;
+}
+
+export function isActiveCookingSession(session: RecipeSession | null) {
+	if (!session) {
+		return false;
+	}
+	return session.get('startedAt') > Date.now() - SESSION_TIMEOUT;
 }
 
 export function useSyncedInstructionsEditor({
