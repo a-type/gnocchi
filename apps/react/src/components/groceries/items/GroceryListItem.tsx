@@ -131,7 +131,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				className={classNames(
 					'item',
 					'grid grid-areas-[check_main]-[check_comment]-[secondary_secondary] grid-cols-[min-content_1fr_min-content] grid-rows-[min-content_min-content_min-content]',
-					'w-full bg-wash rounded-md relative select-none transition ease-springy',
+					'w-full bg-wash rounded-lg relative select-none transition ease-springy',
 					'repeated:mt-1',
 					'[&[data-dragging=true]]:(shadow-xl cursor-grabbing touch-none border-light)',
 					'[&[data-highlighted=true]]:bg-primary-wash',
@@ -218,7 +218,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									value={comment || ''}
 									onChange={(val) => item.set('comment', val)}
 									placeholder="Add a comment"
-									className="important:text-xs important:border-gray5 flex-grow-2 flex-shrink-1 flex-basis-50% md:flex-basis-120px rounded-md"
+									className="important:text-xs important:border-gray5 flex-grow-2 flex-shrink-1 flex-basis-50% md:flex-basis-120px"
 								/>
 								<ListSelect
 									value={item.get('listId')}

@@ -13,7 +13,7 @@ export interface CookingToolbarProps {
 	className?: string;
 }
 
-const PEEK_HEIGHT = 200;
+const PEEK_HEIGHT = 300;
 const MAX_HEIGHT = 500;
 
 const AnimatedButton = animated(Button);

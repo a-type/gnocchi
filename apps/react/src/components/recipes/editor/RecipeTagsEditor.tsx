@@ -58,7 +58,7 @@ function TagDisplay({
 	return (
 		<div
 			className={classNames(
-				'flex items-center gap-1 px-2 pl-4 rounded-lg bg-primaryLight color-black font-bold text-sm',
+				'flex items-center gap-1 px-2 pl-4 rounded-full bg-primaryLight color-black font-bold text-sm',
 				color && `theme-${color}`,
 			)}
 		>

@@ -13,7 +13,7 @@ export function getButtonClassName({
 	align?: ButtonProps['align'];
 }) {
 	return classNames(
-		'layer-components:(px-4 py-3 bg-[var(--bg)] [--webkit-tap-highlight-color:transparent] [line-height:1] text-size-md font-sans border border-solid border-transparent rounded-lg cursor-pointer font-bold flex flex-row gap-1 items-center relative overflow-visible select-none all:transition duration-200 shadow-none whitespace-nowrap)',
+		'layer-components:(px-4 py-2 bg-[var(--bg)] [--webkit-tap-highlight-color:transparent] [line-height:1] text-size-md font-sans border border-solid border-transparent rounded-full cursor-pointer font-bold flex flex-row gap-1 items-center relative overflow-visible select-none all:transition duration-200 shadow-none whitespace-nowrap)',
 		'layer-components:hover:(bg-[var(--hover)] shadow-[0_0_0_6px_var(--hover)])',
 		'layer-components:focus:outline-off',
 		'layer-components:focus-visible:(outline-off shadow-[0_0_0_6px_var(--focus,var(--hover))])',
@@ -42,7 +42,7 @@ const colors = {
 
 const sizes = {
 	default: '',
-	small: 'layer-variants:[&.size-small]:(px-4 py-1 text-sm rounded-lg)',
+	small: 'layer-variants:[&.size-small]:(px-4 py-1 text-sm rounded-full)',
 	icon: 'layer-variants:[&.size-icon]:(p-2 text-sm rounded-full)',
 };
 

@@ -69,7 +69,7 @@ export function RecipeAddTag({
 
 const DefaultTrigger = forwardRef<HTMLButtonElement, { empty: boolean }>(
 	({ empty, ...rest }, ref) => (
-		<Button size="icon" className="rounded-lg" ref={ref} {...rest}>
+		<Button size="icon" ref={ref} {...rest}>
 			<PlusIcon />
 			{empty && <span>Add tag</span>}
 		</Button>

@@ -54,11 +54,7 @@ export function RecipePublishControl({ recipe }: RecipePublishControlProps) {
 		<Dialog>
 			<DialogTrigger asChild>
 				<Button color={isOutOfDate ? 'accent' : 'default'} size="small">
-					{isOutOfDate
-						? 'Republish changes'
-						: isPublished
-						? 'Published'
-						: 'Publish'}
+					{isOutOfDate ? 'Republish' : isPublished ? 'Published' : 'Publish'}
 				</Button>
 			</DialogTrigger>
 			{data ? (

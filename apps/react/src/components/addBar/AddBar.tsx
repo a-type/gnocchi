@@ -36,7 +36,7 @@ import addDays from 'date-fns/addDays';
 import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
 import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue.js';
-import { FileTextIcon } from '@radix-ui/react-icons';
+import { Cross2Icon, FileTextIcon, PlusIcon } from '@radix-ui/react-icons';
 import { depluralize } from '@aglio/conversion/src/lib/depluralize.js';
 import { trpc } from '@/trpc.js';
 import { useAISuggestions } from '@/components/addBar/aiSuggestions.js';
@@ -408,7 +408,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 					<PopoverAnchor asChild>
 						<div
 							data-state={isOpen ? 'open' : 'closed'}
-							className="flex gap-2 flex-row w-full"
+							className="flex gap-2 flex-row w-full relative"
 							{...rest}
 							ref={mergedRef}
 						>
@@ -416,7 +416,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 								data-test="grocery-list-add-input"
 								name="text"
 								required
-								className="flex-1"
+								className="flex-1 pr-[72px]"
 								autoComplete="off"
 								{...getInputProps({
 									placeholder,
@@ -424,19 +424,34 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 								onPaste={onInputPaste}
 								onPointerDown={openMenu}
 							/>
-							<Button
-								data-test="grocery-list-add-button"
-								color="primary"
-								onClick={() =>
-									selectItem({
-										type: 'food',
-										name: inputValue,
-										id: inputValue,
-									})
-								}
-							>
-								{inputIsUrl ? 'Scan' : 'Add'}
-							</Button>
+							<div className="absolute flex flex-row-reverse gap-1 right-1 top-1">
+								<Button
+									data-test="grocery-list-add-button"
+									color="primary"
+									size="icon"
+									className="w-34px h-34px p-0 items-center justify-center"
+									onClick={() =>
+										selectItem({
+											type: 'food',
+											name: inputValue,
+											id: inputValue,
+										})
+									}
+									aria-label={inputIsUrl ? 'scan recipe page' : 'add item'}
+								>
+									{inputIsUrl ? <Icon name="scan" /> : <PlusIcon />}
+								</Button>
+								{!!inputValue && (
+									<Button
+										size="icon"
+										color="ghost"
+										onClick={() => setInputValue('')}
+										aria-label="clear input"
+									>
+										<Cross2Icon />
+									</Button>
+								)}
+							</div>
 						</div>
 					</PopoverAnchor>
 					<PopoverContent
@@ -562,7 +577,7 @@ export const AddBar = forwardRef<HTMLDivElement, AddBarProps>(function AddBar(
 
 function Skeleton() {
 	return (
-		<div data-state="closed" className="flex flex-1 w-full flex-row gap-2">
+		<div className="flex flex-1 w-full flex-row gap-2">
 			<Input
 				data-test="grocery-list-add-input"
 				name="text"
@@ -572,9 +587,6 @@ function Skeleton() {
 				autoComplete="off"
 				placeholder="Loading..."
 			/>
-			<Button data-test="grocery-list-add-button" color="primary">
-				Add
-			</Button>
 		</div>
 	);
 }

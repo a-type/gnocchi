@@ -6,7 +6,7 @@ import { Cross2Icon } from '@radix-ui/react-icons';
 export function PantrySearch() {
 	const [search, setSearch] = useSearch();
 	return (
-		<div className="flex flex-row gap-1 items-stretch">
+		<div className="flex flex-row gap-1 items-center">
 			<LiveUpdateTextField
 				placeholder="Search foods"
 				value={search}
@@ -14,7 +14,7 @@ export function PantrySearch() {
 				className="flex-1"
 			/>
 			{!!search && (
-				<Button size="small" color="default" onClick={() => setSearch('')}>
+				<Button size="icon" color="default" onClick={() => setSearch('')}>
 					<Cross2Icon />
 				</Button>
 			)}

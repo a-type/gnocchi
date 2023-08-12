@@ -72,7 +72,7 @@ export const SelectRoot = SelectPrimitive.Root;
 export const SelectTrigger = withNoNativeRender(
 	withClassName(
 		SelectPrimitive.Trigger,
-		'layer-components:([all:unset] inline-flex items-center justify-center rounded-md px-2 py-1 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:shadow-focus [&[data-placeholder]]:color-gray8)',
+		'layer-components:([all:unset] inline-flex items-center justify-center rounded-full px-3 py-1 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:shadow-focus [&[data-placeholder]]:color-gray8)',
 	),
 );
 export const UnstyledSelectTrigger = withNoNativeRender(
@@ -114,7 +114,7 @@ export const SelectContent = withPassthroughNativeRender(
 			<SelectPrimitive.Portal className={className} style={zIndex}>
 				<SelectPrimitive.Content
 					className={classNames(
-						'overflow-hidden bg-white rounded-md z-menu shadow-lg',
+						'overflow-hidden bg-white rounded-lg border border-solid border-1 border-black z-menu shadow-lg',
 						inDialog && 'z-[calc(var(--z-dialog)+1)]',
 					)}
 					{...props}
@@ -143,7 +143,7 @@ export const NativeSelect = forwardRef<
 		<div className={classNames('relative', className)}>
 			<select
 				className={classNames(
-					'appearance-none bg-white inline-flex items-center justify-center rounded-md px-2 py-1 pr-6 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:outline-none focus-visible:shadow-focus [&[data-placeholder]]:color-gray8',
+					'appearance-none bg-white inline-flex items-center justify-center rounded-full px-3 py-1 pr-8 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:outline-none focus-visible:shadow-focus [&[data-placeholder]]:color-gray8',
 				)}
 				{...props}
 				ref={forwardedRef}

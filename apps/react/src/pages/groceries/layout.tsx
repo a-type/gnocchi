@@ -31,13 +31,13 @@ export const ListSelectWrapper = ({
 }: {
 	children: ReactNode;
 }) => (
-	<div className="flex flex-row items-center gap-2" {...props}>
+	<div className="flex flex-row items-center gap-2 pl-1" {...props}>
 		<Suspense fallback={<div className="h-28px w-full" />}>{children}</Suspense>
 	</div>
 );
 
 export const AddBar = () => (
-	<PageFixedArea className="flex flex-col gap-2 p-2">
+	<PageFixedArea className="flex flex-col gap-2 px-3 py-2">
 		<Suspense fallback={<div className="w-full h-41px" />}>
 			<GroceryListAdd />
 		</Suspense>
