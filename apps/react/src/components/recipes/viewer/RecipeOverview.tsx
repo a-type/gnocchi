@@ -111,7 +111,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 									<span>Add to list</span>
 								</AddToListButton>
 							</div>
-							<div className="flex flex-col sm:flex-row justify-between items-start w-full gap-3">
+							<div className="flex flex-col justify-between items-start w-full gap-3">
 								<div className="flex flex-row gap-1 flex-wrap">
 									<Detail>
 										Created on {format(createdAt, 'LLL do, yyyy')}
