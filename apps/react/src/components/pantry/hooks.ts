@@ -49,8 +49,9 @@ export function useHasNewExpirations() {
 	return [!!newerExpireTime, onSeen] as const;
 }
 
-export function useExpiresText(food: Food, abbreviate = false) {
-	const expiresAt = hooks.useWatch(food, 'expiresAt');
+export function useExpiresText(food: Food | null, abbreviate = false) {
+	hooks.useWatch(food);
+	const expiresAt = food?.get('expiresAt');
 	if (!expiresAt) return '';
 	const inThePast = expiresAt < Date.now();
 	const toNow = formatDistanceToNowStrict(expiresAt, { addSuffix: true });

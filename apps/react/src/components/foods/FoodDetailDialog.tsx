@@ -74,6 +74,7 @@ function FoodDetailView({
 	hooks.useWatch(food);
 
 	const [justDeleted, setJustDeleted] = useState(false);
+	const expiresText = useExpiresText(food);
 
 	if (!food)
 		return (
@@ -96,7 +97,6 @@ function FoodDetailView({
 				),
 		  )
 		: 0;
-	const expiresText = useExpiresText(food);
 
 	return (
 		<div className="flex flex-col gap-3">
