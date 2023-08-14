@@ -47,6 +47,7 @@ import { InstructionsProvider } from '@/components/recipes/editor/InstructionSte
 import { AddNotePrompt } from '@/components/recipes/cook/AddNotePrompt.jsx';
 import { AddImagePrompt } from '@/components/recipes/cook/AddImagePrompt.jsx';
 import { CookingActionBar } from '@/components/recipes/cook/CookingActionBar.jsx';
+import { useWakeLock } from '@/hooks/useWakeLock.js';
 
 export interface RecipeOverviewProps {
 	slug: string;
@@ -83,6 +84,8 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 	usePageTitle(title.slice(0, 20));
 
 	const stepsRef = useShowToolsWhenStepsVisible();
+
+	useWakeLock();
 
 	return (
 		<>
