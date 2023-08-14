@@ -61,10 +61,10 @@ export function CategorySelect({
 				open={open}
 			>
 				<SelectTrigger asChild>
-					<Button color="ghost">
+					<button>
 						<SelectValue asChild={!!children}>{children}</SelectValue>
 						{!children ? <SelectIcon /> : undefined}
-					</Button>
+					</button>
 				</SelectTrigger>
 				<SelectContent className={contentClassName} inDialog={inDialog}>
 					<Suspense>

@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 export const CardRoot = withClassName(
 	'div',
-	'layer-components:(flex flex-col border-light rounded-lg text-lg overflow-hidden h-max-content relative bg-gray1)',
+	'layer-components:(flex flex-col border-light rounded-lg text-lg overflow-hidden h-max-content relative bg-gray-1)',
 );
 
 export const CardMain = forwardRef<

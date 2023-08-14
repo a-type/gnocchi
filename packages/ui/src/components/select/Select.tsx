@@ -143,7 +143,7 @@ export const NativeSelect = forwardRef<
 		<div className={classNames('relative', className)}>
 			<select
 				className={classNames(
-					'appearance-none bg-white inline-flex items-center justify-center rounded-full px-3 py-1 pr-8 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:outline-none focus-visible:shadow-focus [&[data-placeholder]]:color-gray8',
+					'appearance-none font-inherit bg-white inline-flex items-center justify-center rounded-full px-3 py-1 pr-8 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:outline-none focus-visible:shadow-focus [&[data-placeholder]]:color-gray8',
 				)}
 				{...props}
 				ref={forwardedRef}

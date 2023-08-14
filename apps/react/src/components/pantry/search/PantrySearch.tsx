@@ -11,7 +11,7 @@ export function PantrySearch() {
 				placeholder="Search foods"
 				value={search}
 				onChange={setSearch}
-				className="flex-1"
+				className="flex-1 rounded-full"
 			/>
 			{!!search && (
 				<Button size="icon" color="default" onClick={() => setSearch('')}>

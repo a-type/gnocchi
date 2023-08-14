@@ -417,6 +417,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 								name="text"
 								required
 								className="flex-1 pr-[72px]"
+								variant="primary"
 								autoComplete="off"
 								{...getInputProps({
 									placeholder,
