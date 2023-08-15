@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "vite --host",
 		"build": "vite build",
-		"preview": "vite preview",
+		"preview": "vite preview --host",
 		"link-verdant": "pnpm link --global @verdant-web/store && pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/react && pnpm link --global @verdant-web/cli && pnpm link --global @verdant-web/react-router",
 		"clear": "rm -rf node_modules/.vite",
 		"icons": "node ./scripts/generateIcons.js",

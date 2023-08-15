@@ -9,6 +9,9 @@ import {
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
 import { withClassName } from '@aglio/ui/hooks';
+import { useSnapshot } from 'valtio';
+import { installState, triggerInstall } from '@/install.js';
+import { DownloadIcon } from '@radix-ui/react-icons';
 
 export interface InstallHintProps {}
 
@@ -17,6 +20,8 @@ export function InstallHint({}: InstallHintProps) {
 		'pwa-install-hint-dismissed',
 		false,
 	);
+
+	const { installReady } = useSnapshot(installState);
 
 	if (isDismissed || getIsPWAInstalled()) {
 		return null;
@@ -29,28 +34,35 @@ export function InstallHint({}: InstallHintProps) {
 		return null; // TODO: desktop tutorial
 	}
 
-	const Content = content[os] || (() => null);
+	const Content = (isMobile && content[os]) || (() => null);
 
 	return (
 		<div className="bg-primaryWash rounded-lg p-4 flex flex-col gap-4 items-stretch">
-			<P>Get more out of this app by installing it on your device.</P>
+			<P>Always have your list on hand. Install the app!</P>
 			<div className="flex flex-row items-center justify-end gap-4 w-full">
 				<Button color="ghost" onClick={() => setIsDismissed(true)}>
 					Dismiss
 				</Button>
-				<Dialog>
-					<DialogTrigger asChild>
-						<Button color="primary">Learn how</Button>
-					</DialogTrigger>
-					<DialogContent>
-						<Content />
-						<DialogActions>
-							<DialogClose asChild>
-								<Button color="default">Close</Button>
-							</DialogClose>
-						</DialogActions>
-					</DialogContent>
-				</Dialog>
+				{installReady ? (
+					<Button color="primary" onClick={triggerInstall}>
+						<DownloadIcon />
+						<span>Install</span>
+					</Button>
+				) : (
+					<Dialog>
+						<DialogTrigger asChild>
+							<Button color="primary">Learn how</Button>
+						</DialogTrigger>
+						<DialogContent>
+							<Content />
+							<DialogActions>
+								<DialogClose asChild>
+									<Button color="default">Close</Button>
+								</DialogClose>
+							</DialogActions>
+						</DialogContent>
+					</Dialog>
+				)}
 			</div>
 		</div>
 	);

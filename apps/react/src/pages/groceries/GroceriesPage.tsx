@@ -30,6 +30,7 @@ import { InviteLinkButton } from '@/components/sync/InviteLinkButton.jsx';
 import { PersonIcon } from '@radix-ui/react-icons';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
+import { InstallButton } from '@/components/promotional/InstallButton.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -79,6 +80,7 @@ export function GroceriesPage() {
 					</ListSelectWrapper>
 
 					<div className="flex flex-row gap-2 items-center">
+						<InstallButton />
 						<UnsubscribedOnly>
 							<PromoteSubscriptionButton size="small" color="accent">
 								Upgrade
