@@ -17,6 +17,7 @@ export function RecipeInstructionsViewer({
 		<RichEditor
 			className={classNames('max-w-600px w-full', className)}
 			editor={editor}
+			readOnly
 		/>
 	);
 }

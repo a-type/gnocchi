@@ -92,7 +92,7 @@ function AddChefsAction() {
 					icon={<Icon name="add_person" />}
 					color="accent"
 				>
-					Invite chefs
+					<span className="display-none sm:display-inline">Invite chefs</span>
 				</ActionButton>
 			</DialogTrigger>
 			<DialogContent>
