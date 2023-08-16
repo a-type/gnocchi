@@ -12,6 +12,8 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Button } from '@aglio/ui/components/button';
 import { CardGrid } from '@aglio/ui/components/card';
 import { useFilter } from '@/components/pantry/hooks.js';
+import { useEffect } from 'react';
+import { pantryOnboarding } from '@/onboarding/pantryOnboarding.js';
 
 export interface PantryListCategoryProps {
 	category: Category | null;
@@ -45,6 +47,12 @@ export function PantryListCategory({
 		key: `pantry-category-${category?.get('id') ?? 'null'}`,
 		pageSize,
 	});
+
+	// trigger onboarding once items exist
+	const hasItems = !!items.length;
+	useEffect(() => {
+		if (hasItems) pantryOnboarding.begin();
+	}, [hasItems]);
 
 	const showShowMore = pagination.hasMore;
 

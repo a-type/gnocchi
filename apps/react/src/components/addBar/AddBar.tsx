@@ -584,7 +584,7 @@ function Skeleton() {
 				name="text"
 				required
 				disabled
-				className="flex-1"
+				className="flex-1 rounded-full"
 				autoComplete="off"
 				placeholder="Loading..."
 			/>
