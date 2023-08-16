@@ -135,7 +135,6 @@ function FoodDetailView({
 				<CategorySelect
 					value={food.get('categoryId')}
 					onChange={(val) => food.set('categoryId', val)}
-					inDialog
 				/>
 			</Row>
 			<Row>

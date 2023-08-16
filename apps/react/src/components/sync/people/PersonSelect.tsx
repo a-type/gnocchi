@@ -51,7 +51,6 @@ export function PersonSelect({
 		<Select
 			value={value === null ? 'null' : value}
 			onValueChange={onChangeInternal}
-			noNative
 			{...rest}
 		>
 			<SelectTrigger

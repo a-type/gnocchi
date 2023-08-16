@@ -52,7 +52,6 @@ export function ListSelect({
 	return (
 		<>
 			<Select
-				noNative
 				value={value ?? `${value}`}
 				onValueChange={(val) => {
 					if (val === 'null') onChange(null);

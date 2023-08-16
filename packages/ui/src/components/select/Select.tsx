@@ -69,11 +69,10 @@ export const SelectGroup = (props: SelectPrimitive.SelectGroupProps) => {
 };
 
 export const SelectRoot = SelectPrimitive.Root;
+export const selectTriggerClassName =
+	'layer-components:([all:unset] inline-flex items-center justify-center rounded-full px-3 py-1 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:shadow-focus [&[data-placeholder]]:color-gray8) select-none';
 export const SelectTrigger = withNoNativeRender(
-	withClassName(
-		SelectPrimitive.Trigger,
-		'layer-components:([all:unset] inline-flex items-center justify-center rounded-full px-3 py-1 text-sm gap-2 color-black border-solid border border-gray5 hover:border-gray7 focus:shadow-focus [&[data-placeholder]]:color-gray8)',
-	),
+	withClassName(SelectPrimitive.Trigger, selectTriggerClassName),
 );
 export const UnstyledSelectTrigger = withNoNativeRender(
 	SelectPrimitive.Trigger,
@@ -83,7 +82,10 @@ export const SelectValue = withNoNativeRender(
 	withClassName(SelectPrimitive.Value, 'flex flex-row'),
 );
 export const SelectLabel = withNoNativeRender(
-	withClassName(SelectPrimitive.Label, 'px-25px text-xs leading-6 color-black'),
+	withClassName(
+		SelectPrimitive.Label,
+		'px-25px text-xs leading-6 color-black select-none',
+	),
 );
 export const SelectSeparator = withNoNativeRender(
 	withClassName(SelectPrimitive.Separator, 'h-1px bg-gray50 m-1'),
@@ -161,11 +163,11 @@ export type SelectProps<T extends string = string> = {
 	onValueChange?: (value: T) => void;
 	className?: string;
 	id?: string;
-	/** Disable native on mobile; force custom select impl */
-	noNative?: boolean;
-	/** won't work on mobile unless noNative is true */
+	/** Native on mobile; otherwise use custom select impl */
+	mobileNative?: boolean;
+	/** won't work on mobile and mobileNative=true */
 	open?: boolean;
-	/** won't work on mobile unless noNative is true */
+	/** won't work on mobile and mobileNative=true */
 	onOpenChange?: (open: boolean) => void;
 };
 /**
@@ -175,12 +177,12 @@ export const Select = <T extends string = string>({
 	children,
 	value,
 	onValueChange,
-	noNative,
+	mobileNative,
 	...rest
 }: SelectProps<T>) => {
 	const mobile = isMobile();
 
-	if (mobile && !noNative) {
+	if (mobile && mobileNative) {
 		return (
 			<IsNativeContext.Provider value={true}>
 				<NativeSelect

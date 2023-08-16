@@ -1,39 +1,40 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
-import { ReactNode, Suspense, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { NewCategoryForm } from '../NewCategoryForm.js';
-import {
-	Select,
-	SelectContent,
-	SelectIcon,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@aglio/ui/components/select';
 import { Button } from '@aglio/ui/components/button';
-import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogSelectItem,
+	DialogSelectList,
+	DialogSelectTrigger,
+} from '@aglio/ui/components/dialog';
+import { withSuspense } from '../../../hocs/withSuspense.jsx';
 
-export function CategorySelect({
+export const CategorySelect = withSuspense(function CategorySelect({
 	value,
 	onChange,
 	children,
-	contentClassName,
-	open,
-	inDialog,
 }: {
 	value: string | null;
 	onChange: (v: string | null) => void;
 	children?: ReactNode;
-	contentClassName?: string;
-	open?: boolean;
-	inDialog?: boolean;
 }) {
-	const [state, setState] = useState<
-		'idle' | 'scrubbing' | 'picking' | 'create'
-	>('idle');
+	const [open, onOpenChange] = useState(false);
+	const [state, setState] = useState<'idle' | 'create'>('idle');
 
-	const setCategory = useCallback(
-		(incomingValue: string) => {
+	const categories = hooks.useAllCategories({
+		index: {
+			where: 'sortKey',
+			order: 'asc',
+		},
+	});
+
+	const selectCategory = useCallback(
+		(incomingValue: string | null) => {
 			const realValue = incomingValue === 'null' ? null : incomingValue;
 			if (realValue === value) return;
 
@@ -44,36 +45,51 @@ export function CategorySelect({
 			} else {
 				onChange(realValue);
 			}
+			// onOpenChange(false);
 		},
-		[onChange],
+		[onChange, onOpenChange],
 	);
 
 	const onCreateCategory = (category: Category) => {
-		onChange(category?.get('id'));
+		selectCategory(category?.get('id'));
 		setState('idle');
 	};
 
+	const category = categories.find((c) => c.get('id') === value) ?? null;
+
 	return (
 		<>
-			<Select
-				value={value === null ? 'null' : value}
-				onValueChange={setCategory}
-				open={open}
-			>
-				<SelectTrigger asChild>
-					<button>
-						<SelectValue asChild={!!children}>{children}</SelectValue>
-						{!children ? <SelectIcon /> : undefined}
-					</button>
-				</SelectTrigger>
-				<SelectContent className={contentClassName} inDialog={inDialog}>
-					<Suspense>
-						<CategoryList />
-					</Suspense>
-					<SelectItem value="null">Uncategorized</SelectItem>
-					<SelectItem value="new">Create new category</SelectItem>
-				</SelectContent>
-			</Select>
+			<Dialog open={open} onOpenChange={onOpenChange}>
+				<DialogSelectTrigger asChild={!!children}>
+					{children || category?.get('name') || 'Uncategorized'}
+				</DialogSelectTrigger>
+				<DialogContent>
+					<DialogSelectList
+						className="mb-4"
+						value={value || 'null'}
+						onValueChange={selectCategory}
+					>
+						{categories.map((category) => (
+							<DialogSelectItem
+								key={category.get('id')}
+								value={category.get('id')}
+							>
+								{category.get('name')}
+							</DialogSelectItem>
+						))}
+						<DialogSelectItem value="null">Uncategorized</DialogSelectItem>
+					</DialogSelectList>
+
+					<DialogActions className="justify-between">
+						<Button color="primary" onClick={() => setState('create')}>
+							New category
+						</Button>
+						<DialogClose asChild>
+							<Button>Close</Button>
+						</DialogClose>
+					</DialogActions>
+				</DialogContent>
+			</Dialog>
 			<CreateCategory
 				onCreate={onCreateCategory}
 				open={state === 'create'}
@@ -83,26 +99,7 @@ export function CategorySelect({
 			/>
 		</>
 	);
-}
-
-function CategoryList() {
-	const categories = hooks.useAllCategories({
-		index: {
-			where: 'sortKey',
-			order: 'asc',
-		},
-	});
-
-	return (
-		<>
-			{categories.map((category, index) => (
-				<SelectItem key={category.get('id')} value={category.get('id')}>
-					{category.get('name')}
-				</SelectItem>
-			))}
-		</>
-	);
-}
+});
 
 function CreateCategory({
 	onCreate,
