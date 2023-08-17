@@ -162,7 +162,8 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 		const searchFoods = hooks.useAllFoods({
 			index: {
 				where: 'nameLookup',
-				startsWith: foodSearchPrompt,
+				// only use first word... only one word can match the index.
+				startsWith: foodSearchPrompt.split(/\s/)[0],
 			},
 		});
 
@@ -250,8 +251,22 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			10;
 
 		const searchFoodsSuggestions = useMemo<SuggestionData[]>(() => {
-			return mapFoodsToSuggestions(searchFoods, hasFewSuggestions ? 20 : 10);
-		}, [searchFoods, mapFoodsToSuggestions, hasFewSuggestions]);
+			return mapFoodsToSuggestions(
+				searchFoods.filter((food) => {
+					if (food.get('canonicalName').includes(foodSearchPrompt)) return true;
+					for (const name in food.get('alternateNames')) {
+						if (name.includes(foodSearchPrompt)) return true;
+					}
+					return false;
+				}),
+				hasFewSuggestions ? 20 : 10,
+			);
+		}, [
+			searchFoods,
+			mapFoodsToSuggestions,
+			hasFewSuggestions,
+			foodSearchPrompt,
+		]);
 
 		const searchRecipes = hooks.useAllRecipes({
 			index: {
