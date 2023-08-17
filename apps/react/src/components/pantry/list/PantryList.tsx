@@ -13,7 +13,12 @@ export interface PantryListProps {
 }
 
 function PantryListInner({ className, ...rest }: PantryListProps) {
-	const categories = hooks.useAllCategories();
+	const categories = hooks.useAllCategories({
+		index: {
+			where: 'sortKey',
+			order: 'asc',
+		},
+	});
 
 	return (
 		<div className="flex flex-col items-stretch w-full" {...rest}>
