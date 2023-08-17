@@ -178,21 +178,21 @@ export function InstructionStepNodeView({
 							className="relative top--1"
 						/>
 					)}
-					{!isEditing && hasPeers && (
-						<PersonSelect
-							includeSelf
-							allowNone
-							value={assignedPersonId}
-							onChange={assignPersonId}
-							label="Assign to:"
-						/>
-					)}
 				</div>
 			)}
 			<div
 				className="flex flex-col items-center gap-2 [grid-area:endTools] w-32px ml-3"
 				contentEditable={false}
 			>
+				{!isEditing && hasPeers && (
+					<PersonSelect
+						includeSelf
+						allowNone
+						value={assignedPersonId}
+						onChange={assignPersonId}
+						label="Assign to:"
+					/>
+				)}
 				<Tooltip
 					content={
 						note === undefined

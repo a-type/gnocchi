@@ -38,6 +38,8 @@ export function PersonSelect({
 	...rest
 }: PersonSelectProps) {
 	const people = hooks.useFindPeers(filter, { includeSelf });
+	// oops, don't know which one is self specifically lol
+	const self = hooks.useSelf();
 
 	const onChangeInternal = useCallback(
 		(value: string) => {
@@ -59,7 +61,7 @@ export function PersonSelect({
 			>
 				<SelectValue contentEditable={false}>
 					{value === null ? (
-						<PersonAvatar popIn={false} person={null} />
+						<PersonAvatar popIn={false} person={null} className="opacity-50" />
 					) : (
 						<PersonAvatar
 							popIn={false}
@@ -83,7 +85,11 @@ export function PersonSelect({
 						</SelectItem>
 					)}
 					{people.map((person) => (
-						<PersonSelectItem key={person.id} person={person} />
+						<PersonSelectItem
+							key={person.id}
+							person={person}
+							isSelf={person.id === self.id}
+						/>
 					))}
 				</SelectGroup>
 			</SelectContent>
@@ -91,11 +97,17 @@ export function PersonSelect({
 	);
 }
 
-function PersonSelectItem({ person }: { person: Person }) {
+function PersonSelectItem({
+	person,
+	isSelf,
+}: {
+	person: Person;
+	isSelf: boolean;
+}) {
 	return (
 		<SelectItem value={person.id} className="flex flex-row gap-2 items-center">
 			<PersonAvatar popIn={false} person={person} />
-			<SelectItemText>{person.profile.name}</SelectItemText>
+			<SelectItemText>{isSelf ? 'Me' : person.profile.name}</SelectItemText>
 			<SelectItemIndicator />
 		</SelectItem>
 	);
