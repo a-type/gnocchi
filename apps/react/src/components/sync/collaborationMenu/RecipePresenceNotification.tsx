@@ -38,7 +38,7 @@ function RecipePresenceNotificationContent() {
 
 	if (recipeId && recipeId !== dismissedId) {
 		return (
-			<PageNowPlaying className="important:w-auto m-2 p-1">
+			<PageNowPlaying className="p-1">
 				<RecipePresenceLink
 					person={viewingRecipe}
 					recipeId={recipeId}
@@ -65,8 +65,13 @@ function RecipePresenceLink({
 	if (!recipe) return null;
 
 	return (
-		<div className="flex flex-row gap-2 items-center p-2 min-w-0 max-w-full">
-			<Button size="icon" onClick={onDismiss} color="ghost">
+		<div className="flex flex-row gap-2 items-center p-2 w-full">
+			<Button
+				size="icon"
+				onClick={onDismiss}
+				color="ghost"
+				className="flex-0-0-auto"
+			>
 				<Cross2Icon />
 			</Button>
 			<PersonAvatar person={person} />
