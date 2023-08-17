@@ -162,9 +162,13 @@ export function parseInstructionInternalText($el: Cheerio<AnyNode>) {
 	return steps
 		.map((step) => ({
 			...step,
-			content: collapseWhitespace(step.content),
+			content: removeAnyHTMLTags(collapseWhitespace(step.content)),
 		}))
 		.filter((step) => !!step.content);
+}
+
+function removeAnyHTMLTags(text: string) {
+	return text.replace(/<\w[^>]*>/gm, '');
 }
 
 export function detailedInstructionsToSimple(
