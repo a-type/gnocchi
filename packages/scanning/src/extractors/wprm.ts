@@ -1,6 +1,11 @@
 import { CheerioAPI } from 'cheerio';
-import { extractNumber, findFirstMatch } from './utils.js';
-import { ExtractorData } from './types.js';
+import {
+	detailedInstructionsToSimple,
+	extractNumber,
+	findFirstMatch,
+	instructionListToSteps,
+} from './utils.js';
+import { DetailedStep, ExtractorData } from './types.js';
 
 function parseTime(text?: string) {
 	if (!text) {
@@ -85,11 +90,12 @@ export async function wprm($: CheerioAPI): Promise<ExtractorData | null> {
 		});
 	}
 
-	const instructionsText = new Array<string>();
-	stepsList.each(function (i, el) {
-		const text = $(el).text().trim();
-		instructionsText.push(text);
-	});
+	let detailedSteps = new Array<DetailedStep>();
+	let steps = new Array<string>();
+	if (stepsList) {
+		detailedSteps = instructionListToSteps($, stepsList);
+		steps = detailedInstructionsToSimple(detailedSteps);
+	}
 
 	const prepTime = parseTime(prepTimeElement?.text());
 	const cookTime = parseTime(cookTimeElement?.text());
@@ -107,7 +113,8 @@ export async function wprm($: CheerioAPI): Promise<ExtractorData | null> {
 		servings: extractNumber(servingsElement?.text().trim()),
 		detailedIngredients,
 		rawIngredients: detailedIngredients.map((i) => i.original),
-		steps: instructionsText,
+		steps,
+		detailedSteps,
 		copyrightHolder: authorElement?.text().trim(),
 	};
 }

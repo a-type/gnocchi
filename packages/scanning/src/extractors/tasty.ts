@@ -1,12 +1,14 @@
 import { CheerioAPI } from 'cheerio';
-import { ExtractorData } from './types.js';
+import { DetailedStep, ExtractorData } from './types.js';
 import {
 	collapseWhitespace,
+	detailedInstructionsToSimple,
 	extractNumber,
 	extractText,
 	findFirstMatch,
 	findFirstMatches,
 	humanTimeToMinutes,
+	instructionListToSteps,
 	listToStrings,
 } from './utils.js';
 
@@ -39,9 +41,11 @@ export async function tasty($: CheerioAPI): Promise<ExtractorData | null> {
 		basicIngredients = listToStrings($, ingredientsList);
 	}
 
+	let detailedSteps = new Array<DetailedStep>();
 	let steps = new Array<string>();
 	if (stepsList) {
-		steps = listToStrings($, stepsList);
+		detailedSteps = instructionListToSteps($, stepsList);
+		steps = detailedInstructionsToSimple(detailedSteps);
 	}
 
 	const prepTimeMinutes = prepTimeElement
@@ -70,6 +74,7 @@ export async function tasty($: CheerioAPI): Promise<ExtractorData | null> {
 		servings,
 		rawIngredients: basicIngredients,
 		steps,
+		detailedSteps,
 		copyrightHolder: author,
 	};
 }

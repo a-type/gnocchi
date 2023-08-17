@@ -1,13 +1,15 @@
 import { CheerioAPI } from 'cheerio';
 import {
+	detailedInstructionsToSimple,
 	extractNumber,
 	findFirstMatch,
 	findFirstMatches,
 	humanTimeToMinutes,
+	instructionListToSteps,
 	minutesToIsoDuration,
 	toYield,
 } from './utils.js';
-import { ExtractorData } from './types.js';
+import { DetailedStep, ExtractorData } from './types.js';
 
 export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 	let titleElement = findFirstMatch($, [
@@ -117,10 +119,10 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 	}
 
 	let stepsText: string[] = [];
+	let detailedSteps: DetailedStep[] = [];
 	if (instructionsList) {
-		instructionsList.each(function (i, el) {
-			stepsText.push($(el).text().trim());
-		});
+		detailedSteps = instructionListToSteps($, instructionsList);
+		stepsText = detailedInstructionsToSimple(detailedSteps);
 	}
 
 	let prepTime: number | undefined = undefined;
@@ -147,6 +149,7 @@ export async function naive($: CheerioAPI): Promise<ExtractorData | null> {
 		servings: servingsElement && toYield($(servingsElement).text().trim()),
 		rawIngredients: ingredientsText,
 		steps: stepsText,
+		detailedSteps,
 		copyrightHolder: authorElement?.text().trim(),
 	};
 }

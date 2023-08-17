@@ -817,7 +817,7 @@ async function getScannedRecipe(
 		return result;
 	} catch (err) {
 		console.error(err);
-		if (err instanceof TRPCClientError && err.data.code === 'UNAUTHORIZED') {
+		if (err instanceof TRPCClientError && err.data?.code === 'UNAUTHORIZED') {
 			signupDialogState.status = 'open';
 		} else if (
 			err instanceof TRPCClientError &&

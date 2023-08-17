@@ -94,7 +94,17 @@ export function listToStrings($: CheerioAPI, list: Cheerio<AnyNode>) {
 	return list
 		.toArray()
 		.map((el) => $(el).text().trim())
-		.map((s) => collapseWhitespace(s));
+		.map((s) => removeAnyHTMLTags(collapseWhitespace(s)));
+}
+
+export function instructionListToSteps(
+	$: CheerioAPI,
+	list: Cheerio<AnyNode>,
+): DetailedStep[] {
+	return list
+		.toArray()
+		.map((el) => parseInstructionInternalText($(el)))
+		.flat();
 }
 
 /**
@@ -151,6 +161,8 @@ export function parseInstructionInternalText($el: Cheerio<AnyNode>) {
 		} else if (el.type === 'tag' && el.name === 'a') {
 			// TODO: support embedded links...
 			currentStep.content += $(el).text();
+		} else if (el.type === 'tag' && el.name === 'img') {
+			// ignore images
 		} else {
 			steps.push(currentStep);
 			currentStep = { type: 'step', content: '' };
