@@ -42,10 +42,6 @@ export function SwipeOutlet({
 
 	const [style, spring] = useSpring(() => ({
 		x: 0,
-		// IMPORTANT: forces translate3d, which creates a GPU
-		// layer and lets the now playing layout be position: fixed
-		// without ending up on adjacent pages
-		// z: 1,
 	}));
 
 	useEffect(() => {
@@ -79,6 +75,9 @@ export function SwipeOutlet({
 
 		navigate(rightPath, {
 			skipTransition: true,
+			state: {
+				isSwipeNavigation: true,
+			},
 		});
 		spring.set({
 			x: style.x.get() + window.innerWidth,

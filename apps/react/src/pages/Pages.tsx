@@ -260,13 +260,16 @@ function LayoutWithNavBar() {
 }
 
 export function Pages() {
-	const handleNavigate = useCallback(() => {
-		if (updateState.updateAvailable) {
-			console.info('Update ready to install, intercepting navigation...');
-			updateApp();
-			return false;
-		}
-	}, []);
+	const handleNavigate = useCallback(
+		(_path: string, ev: { state?: any; skipTransition?: boolean }) => {
+			if (updateState.updateAvailable) {
+				console.info('Update ready to install, intercepting navigation...');
+				updateApp(ev?.state?.isSwipeNavigation);
+				return false;
+			}
+		},
+		[],
+	);
 	return (
 		<ErrorBoundary fallback={<ErrorFallback />}>
 			<Suspense fallback={<GlobalLoader />}>
