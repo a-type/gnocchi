@@ -805,7 +805,6 @@ async function getScannedRecipe(
 			result.prelude = scanned.preludeSerialized
 				? JSON.parse(scanned.preludeSerialized)
 				: undefined;
-			// TODO: add to internal recipe model
 			result.prepTimeMinutes = scanned.prepTimeMinutes ?? undefined;
 			result.cookTimeMinutes = scanned.cookTimeMinutes ?? undefined;
 			result.totalTimeMinutes = scanned.totalTimeMinutes ?? undefined;

@@ -68,7 +68,6 @@ import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
 import { useDraggable } from '@dnd-kit/core';
 import { preventDefault, stopPropagation } from '@aglio/tools';
 import { usePurchasedText } from '@/components/pantry/hooks.js';
-import { animated, useSpring } from '@react-spring/web';
 
 export interface GroceryListItemProps {
 	className?: string;

@@ -3,6 +3,7 @@ import { SubscriptionError } from '@aglio/tools';
 import { LogoutButton } from '../auth/LogoutButton.js';
 import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
 import { H2 } from '@aglio/ui/components/typography';
+import { ManageSubscriptionButton } from '@/components/sync/ManageSubscriptionButton.jsx';
 
 export interface SubscriptionExpiredDialogProps {}
 
@@ -21,7 +22,7 @@ export function SubscriptionExpiredDialog({}: SubscriptionExpiredDialogProps) {
 					Looks like you either cancelled your subscription, or your payment
 					didn't go through. To keep using sync, please check your card details.
 				</p>
-				{/* TODO: stripe checkout button here */}
+				<ManageSubscriptionButton />
 				<p>
 					If you intended to cancel your subscription, log out to dismiss this
 					message.

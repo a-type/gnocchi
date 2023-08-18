@@ -3,6 +3,7 @@ import type {
   Client,
   ClientDescriptor,
   Schema,
+  QueryStatus,
   Category,
   CategoryFilter,
   Item,
@@ -110,13 +111,17 @@ export interface GeneratedHooks<Presence, Profile> {
       setPage: (page: number) => void;
       hasNext: boolean;
       hasPrevious: boolean;
+      status: QueryStatus;
     }
   ];
   useAllCategoriesInfinite: <
     Config extends SkippableFilterConfig<CategoryFilter> & { pageSize?: number }
   >(
     config?: Config
-  ) => [Category[], { loadMore: () => void; hasMore: boolean }];
+  ) => [
+    Category[],
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+  ];
 
   useItem(id: string, config?: { skip?: boolean }): Item | null;
   useOneItem: <Config extends SkippableFilterConfig<ItemFilter>>(
@@ -137,13 +142,17 @@ export interface GeneratedHooks<Presence, Profile> {
       setPage: (page: number) => void;
       hasNext: boolean;
       hasPrevious: boolean;
+      status: QueryStatus;
     }
   ];
   useAllItemsInfinite: <
     Config extends SkippableFilterConfig<ItemFilter> & { pageSize?: number }
   >(
     config?: Config
-  ) => [Item[], { loadMore: () => void; hasMore: boolean }];
+  ) => [
+    Item[],
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+  ];
 
   useFood(id: string, config?: { skip?: boolean }): Food | null;
   useOneFood: <Config extends SkippableFilterConfig<FoodFilter>>(
@@ -164,13 +173,17 @@ export interface GeneratedHooks<Presence, Profile> {
       setPage: (page: number) => void;
       hasNext: boolean;
       hasPrevious: boolean;
+      status: QueryStatus;
     }
   ];
   useAllFoodsInfinite: <
     Config extends SkippableFilterConfig<FoodFilter> & { pageSize?: number }
   >(
     config?: Config
-  ) => [Food[], { loadMore: () => void; hasMore: boolean }];
+  ) => [
+    Food[],
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+  ];
 
   useList(id: string, config?: { skip?: boolean }): List | null;
   useOneList: <Config extends SkippableFilterConfig<ListFilter>>(
@@ -191,13 +204,17 @@ export interface GeneratedHooks<Presence, Profile> {
       setPage: (page: number) => void;
       hasNext: boolean;
       hasPrevious: boolean;
+      status: QueryStatus;
     }
   ];
   useAllListsInfinite: <
     Config extends SkippableFilterConfig<ListFilter> & { pageSize?: number }
   >(
     config?: Config
-  ) => [List[], { loadMore: () => void; hasMore: boolean }];
+  ) => [
+    List[],
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+  ];
 
   useCollaborationInfo(
     id: string,
@@ -227,6 +244,7 @@ export interface GeneratedHooks<Presence, Profile> {
       setPage: (page: number) => void;
       hasNext: boolean;
       hasPrevious: boolean;
+      status: QueryStatus;
     }
   ];
   useAllCollaborationInfoInfinite: <
@@ -235,7 +253,10 @@ export interface GeneratedHooks<Presence, Profile> {
     }
   >(
     config?: Config
-  ) => [CollaborationInfo[], { loadMore: () => void; hasMore: boolean }];
+  ) => [
+    CollaborationInfo[],
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+  ];
 
   useRecipe(id: string, config?: { skip?: boolean }): Recipe | null;
   useOneRecipe: <Config extends SkippableFilterConfig<RecipeFilter>>(
@@ -256,13 +277,17 @@ export interface GeneratedHooks<Presence, Profile> {
       setPage: (page: number) => void;
       hasNext: boolean;
       hasPrevious: boolean;
+      status: QueryStatus;
     }
   ];
   useAllRecipesInfinite: <
     Config extends SkippableFilterConfig<RecipeFilter> & { pageSize?: number }
   >(
     config?: Config
-  ) => [Recipe[], { loadMore: () => void; hasMore: boolean }];
+  ) => [
+    Recipe[],
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+  ];
 
   useRecipeTagMetadata(
     id: string,
@@ -292,6 +317,7 @@ export interface GeneratedHooks<Presence, Profile> {
       setPage: (page: number) => void;
       hasNext: boolean;
       hasPrevious: boolean;
+      status: QueryStatus;
     }
   ];
   useAllRecipeTagMetadataInfinite: <
@@ -300,7 +326,10 @@ export interface GeneratedHooks<Presence, Profile> {
     }
   >(
     config?: Config
-  ) => [RecipeTagMetadata[], { loadMore: () => void; hasMore: boolean }];
+  ) => [
+    RecipeTagMetadata[],
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+  ];
 }
 
 type HookName = `use${string}`;
