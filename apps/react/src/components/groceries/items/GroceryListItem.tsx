@@ -68,6 +68,7 @@ import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
 import { useDraggable } from '@dnd-kit/core';
 import { preventDefault, stopPropagation } from '@aglio/tools';
 import { usePurchasedText } from '@/components/pantry/hooks.js';
+import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 
 export interface GroceryListItemProps {
 	className?: string;
@@ -225,7 +226,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 									className="flex-basis-25% flex-grow-1 flex-shrink-1 md:flex-basis-80px"
 								/>
 							</div>
-							<div className="flex flex-row gap-3 justify-end w-full items-center">
+							<div className="flex flex-row gap-1 justify-end w-full items-center">
 								<QuantityEditor className="mr-auto" item={item} />
 								<Suspense>
 									<RecentPurchaseHint
@@ -233,7 +234,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 										className="flex-basis-50% justify-end"
 									/>
 								</Suspense>
-								{/* <OpenFoodDetailButton foodName={food} /> */}
+								<OpenFoodDetailButton foodName={food} />
 								{/* <CategoryPicker item={item} /> */}
 								<ItemDeleteButton
 									size="icon"
