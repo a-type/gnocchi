@@ -14,6 +14,7 @@ export function AdminPage() {
 	return (
 		<PageContent>
 			<div class="flex flex-row gap-2 mb-6">
+				<Link to="/admin/changelog">Changelog</Link>
 				<Link to="/admin/categories">Categories</Link>
 				<Link to="/admin/foods">Foods</Link>
 				<Link to="/admin/plans">Plans</Link>

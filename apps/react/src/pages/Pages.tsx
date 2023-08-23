@@ -32,6 +32,7 @@ import { SwipeOutlet } from '@/components/nav/SwipeOutlet.jsx';
 import { PageRoot } from '@aglio/ui/src/components/layouts';
 import { useMediaQuery } from '@/hooks/useMediaQuery.js';
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
+import AdminChangelogPage from '@/pages/admin/AdminChangelogPage.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -181,6 +182,10 @@ const routes = makeRoutes([
 						path: 'foods',
 						component: AdminFoodsPage,
 					},
+					{
+						path: 'changelog',
+						component: AdminChangelogPage,
+					},
 				],
 			},
 			{
@@ -293,12 +298,14 @@ function ErrorFallback() {
 		0,
 	);
 
-	const hadRecentError = lastErrorReload > Date.now() - 1000 * 60 * 60;
+	const hadRecentError =
+		lastErrorReload < Date.now() &&
+		lastErrorReload > Date.now() - 1000 * 60 * 60;
 
 	const { updateServiceWorker } = useRegisterSW();
 
 	const refresh = () => {
-		setLastErrorReload(Date.now());
+		setLastErrorReload(Date.now() + 500);
 		updateServiceWorker();
 		window.location.reload();
 	};

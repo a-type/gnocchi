@@ -10,6 +10,7 @@ import { planRouter } from './plan.js';
 import { hubRouter } from './hub.js';
 import { foodRouter } from './food.js';
 import { suggestionsRouter } from './suggestions.js';
+import { changelogRouter } from './changelog.js';
 
 export const appRouter = t.router({
 	invites: invitesRouter,
@@ -23,6 +24,7 @@ export const appRouter = t.router({
 	hub: hubRouter,
 	food: foodRouter,
 	suggestions: suggestionsRouter,
+	changelog: changelogRouter,
 });
 
 export type AppRouter = typeof appRouter;
