@@ -31,6 +31,7 @@ import { PersonIcon } from '@radix-ui/react-icons';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 import { InstallButton } from '@/components/promotional/InstallButton.jsx';
+import { ChangelogDisplay } from '@/components/changelog/ChangelogDisplay.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -68,6 +69,7 @@ export function GroceriesPage() {
 					</ListSelectWrapper>
 
 					<div className="flex flex-row gap-2 items-center">
+						<ChangelogDisplay className="sm:display-none" hideOnSeen />
 						<InstallButton />
 						<UnsubscribedOnly>
 							<PromoteSubscriptionButton size="small" color="accent">

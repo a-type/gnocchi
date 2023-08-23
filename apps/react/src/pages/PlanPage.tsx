@@ -24,6 +24,8 @@ import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
+import { ChangelogDisplay } from '@/components/changelog/ChangelogDisplay.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 const contents = {
 	offline: OfflineContents,
@@ -54,6 +56,12 @@ export function PlanPage() {
 				<UpdatePrompt />
 				<Contents />
 				<div className="text-xs flex flex-col gap-2">
+					<ChangelogDisplay>
+						<Button>
+							<Icon name="gift" />
+							<span>What's new</span>
+						</Button>
+					</ChangelogDisplay>
 					<TextLink to="/privacy-policy">Privacy policy</TextLink>
 					<TextLink to="/tos">Terms and conditions of use</TextLink>
 				</div>

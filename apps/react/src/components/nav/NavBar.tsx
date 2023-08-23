@@ -22,6 +22,7 @@ import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
 import { useHasNewExpirations } from '../pantry/hooks.js';
 import { PopEffect } from './PopEffect.jsx';
 import { withClassName } from '@aglio/ui/hooks';
+import { ChangelogDisplay } from '@/components/changelog/ChangelogDisplay.jsx';
 
 export interface NavBarProps {}
 
@@ -52,6 +53,7 @@ export function NavBar({}: NavBarProps) {
 				<PantryNavBarLink active={matchPurchased} />
 				<RecipesNavBarLink active={matchRecipes} />
 				<SettingsNavBarLink active={matchSettings} />
+				<NavBarChangelog />
 			</Suspense>
 			<ProductHunt className="display-none md:(display-block w-160px)" />
 		</PageNav>
@@ -84,35 +86,41 @@ const NavBarLink = memo(
 		return (
 			<Link
 				to={to}
-				className={classNames(
-					'flex flex-col items-center justify-center whitespace-nowrap py-1 px-3 bg-transparent rounded-md border-none cursor-pointer text-sm transition-colors h-full gap-6px relative',
-					'sm:(flex-row-reverse h-auto justify-start gap-2 overflow-visible)',
-					'hover:bg-primaryWash',
-					'focus-visible:(outline-none bg-primaryWash)',
-					'active:bg-primaryWash',
-					{
-						'important:(color-black bg-primaryWash)': active,
-						active: active,
-					},
-				)}
+				className={classNames(navBarLinkRootClass, {
+					'important:(color-black bg-primaryWash)': active,
+					active: active,
+				})}
 				data-active={active}
 				onClick={handleClick}
 				onMouseOver={onHover}
 				ref={ref}
 			>
-				<div className="relative flex sm:(p-6px rounded-full bg-lightBlend)">
+				<NavBarLinkIcon>
 					<PopEffect active={animate} />
 					{icon}
-				</div>
-				<span
-					className="overflow-hidden pl-1 inline-block text-xxs whitespace-nowrap text-ellipsis sm:(text-md leading-normal)"
-					data-active={!!active}
-				>
-					{children}
-				</span>
+				</NavBarLinkIcon>
+				<NavBarLinkText data-active={!!active}>{children}</NavBarLinkText>
 			</Link>
 		);
 	}),
+);
+
+const navBarLinkRootClass = classNames(
+	'layer-components:(flex flex-col items-center justify-center whitespace-nowrap py-1 px-3 bg-transparent rounded-md border-none cursor-pointer text-sm transition-colors h-full gap-6px relative text-inherit)',
+	'layer-components:sm:(flex-row-reverse h-auto justify-start gap-2 overflow-visible)',
+	'layer-components:hover:bg-primaryWash',
+	'layer-components:focus-visible:(outline-none bg-primaryWash)',
+	'layer-components:active:bg-primaryWash',
+);
+
+const NavBarLinkIcon = withClassName(
+	'div',
+	'relative flex sm:(p-6px rounded-full bg-lightBlend)',
+);
+
+const NavBarLinkText = withClassName(
+	'span',
+	'overflow-hidden pl-1 inline-block text-xxs whitespace-nowrap text-ellipsis sm:(text-md leading-normal)',
 );
 
 const NavIcon = withClassName(
@@ -229,3 +237,22 @@ function SettingsNavBarLink({ active }: { active: boolean }) {
 		</OnboardingTooltip>
 	);
 }
+
+function NavBarChangelog() {
+	return (
+		<ChangelogDisplay hideOnSeen className="display-none md:display-flex">
+			<NavBarChangelogButton>
+				<NavBarLinkIcon>
+					<NavIcon name="gift" />
+				</NavBarLinkIcon>
+				<NavBarLinkText>What's new</NavBarLinkText>
+			</NavBarChangelogButton>
+		</ChangelogDisplay>
+	);
+}
+
+const NavBarChangelogButton = withClassName(
+	'button',
+	navBarLinkRootClass,
+	'[&[data-new=true]]:(bg-accent-wash text-accent-dark)',
+);

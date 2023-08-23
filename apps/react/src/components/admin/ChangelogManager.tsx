@@ -2,6 +2,8 @@ import { trpc } from '@/trpc.js';
 import { Button } from '@aglio/ui/components/button';
 import {
 	Dialog,
+	DialogActions,
+	DialogClose,
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
@@ -42,20 +44,40 @@ function ChangelogEditor({
 	onChange: () => void;
 }) {
 	const { mutateAsync } = trpc.changelog.updateChangelog.useMutation();
+	const { mutateAsync: deleteItem } =
+		trpc.changelog.deleteChangelog.useMutation();
 	return (
-		<Formik
-			initialValues={changelog}
-			onSubmit={async (values) => {
-				await mutateAsync(values);
-				onChange();
-			}}
-		>
-			<Form>
-				<TextField name="title" label="Title" />
-				<TextField name="details" label="Details" />
-				<Button type="submit">Save</Button>
-			</Form>
-		</Formik>
+		<>
+			<Formik
+				initialValues={changelog}
+				onSubmit={async (values) => {
+					await mutateAsync(values);
+					onChange();
+				}}
+			>
+				<Form>
+					<TextField name="title" label="Title" />
+					<TextAreaField name="details" label="Details" />
+					<Button type="submit">Save</Button>
+				</Form>
+			</Formik>
+			<DialogActions>
+				<Button
+					color="destructive"
+					onClick={async () => {
+						await deleteItem({
+							id: changelog.id,
+						});
+						onChange();
+					}}
+				>
+					Delete
+				</Button>
+				<DialogClose asChild>
+					<Button>Close</Button>
+				</DialogClose>
+			</DialogActions>
+		</>
 	);
 }
 

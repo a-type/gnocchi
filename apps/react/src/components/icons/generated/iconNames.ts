@@ -21,6 +21,7 @@ export const iconNames = [
 	'offline',
 	'profile',
 	'add_person',
+	'gift',
 ] as const;
 
 export type IconName = (typeof iconNames)[number];

@@ -14,7 +14,8 @@
 		"link-verdant": "turbo run link-verdant && pnpm -r run clear",
 		"up-verdant": "pnpm --recursive update \"@verdant-web/*\" --latest",
 		"generate": "pnpm --filter @aglio/groceries-client generate",
-		"stripe": "stripe listen --forward-to localhost:4445/api/stripe/webhook"
+		"stripe": "stripe listen --forward-to localhost:4445/api/stripe/webhook",
+		"icons": "pnpm --filter @aglio/react run icons"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",

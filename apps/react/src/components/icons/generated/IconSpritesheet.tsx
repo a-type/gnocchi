@@ -259,6 +259,12 @@ export const IconSpritesheet = (props: any) => (
 				<path d="M1 15C1 8.33331 11 8.33333 11 15" stroke="currentColor" />
 				<path d="M10 7.5H15M12.5 5V10" stroke="currentColor" />
 			</symbol>
+			<symbol id="icon-gift" viewBox="0 0 15 15">
+				<path
+					d="M2.5 6.5H1.5V4.5L7.5 4.40638M2.5 6.5V13.5H7.5M2.5 6.5H12.5M12.5 6.5H13.5V4.40638H7.5M12.5 6.5V13.5H7.5M7.5 13.5V4.40638M7.5 4.40638C0.533333 2.35059 7.13333 -2.10357 7.5 4.40638ZM7.5 4.40638C7.86667 -2.10357 14.4667 2.3506 7.5 4.40638Z"
+					stroke="currentColor"
+				/>
+			</symbol>
 		</defs>
 	</svg>
 );
