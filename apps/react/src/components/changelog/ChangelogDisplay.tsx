@@ -36,8 +36,8 @@ export function ChangelogDisplay({
 		limit: 5,
 	});
 	const lastSeenIndex = data.findIndex((x) => x.id === capturedSeen);
-	const hasUnseen = lastSeenIndex !== 0;
-	const hasNew = data.findIndex((x) => x.id === seen) !== 0;
+	const hasUnseen = !!data.length && lastSeenIndex !== 0;
+	const hasNew = !!data.length && data.findIndex((x) => x.id === seen) !== 0;
 
 	if (!hasUnseen && hideOnSeen) return null;
 
@@ -46,7 +46,7 @@ export function ChangelogDisplay({
 			{...rest}
 			onOpenChange={(open) => {
 				rest.onOpenChange?.(open);
-				if (open) {
+				if (open && data[0]) {
 					setSeen(data[0].id);
 				}
 			}}
