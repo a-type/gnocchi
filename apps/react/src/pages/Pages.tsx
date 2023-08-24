@@ -276,7 +276,7 @@ export function Pages() {
 		[],
 	);
 	return (
-		<ErrorBoundary fallback={<ErrorFallback />}>
+		<ErrorBoundary fallback={(props) => <ErrorFallback {...props} />}>
 			<Suspense fallback={<GlobalLoader />}>
 				<Router routes={routes} onNavigate={handleNavigate}>
 					<TopLoader />
@@ -291,7 +291,7 @@ export function Pages() {
 	);
 }
 
-function ErrorFallback() {
+function ErrorFallback({ clearError }: { clearError: () => void }) {
 	const isSubscribed = useIsSubscribed();
 	const [lastErrorReload, setLastErrorReload] = useLocalStorage(
 		'lastErrorReload',
@@ -321,7 +321,9 @@ function ErrorFallback() {
 						: `You can try refreshing, but if
 					that doesn't work, use the button below to report the issue.`}
 				</P>
-				<LinkButton to="/">Go Home</LinkButton>
+				<LinkButton to="/" onClick={clearError}>
+					Go Home
+				</LinkButton>
 				<Button onClick={refresh}>Refresh</Button>
 				<BugButton />
 				{hadRecentError && isSubscribed && (
