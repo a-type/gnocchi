@@ -2,18 +2,11 @@ import { useCategoryClaimPresence } from '@/components/groceries/categories/hook
 import {
 	PeopleList,
 	PeopleListAvatar,
-	PeopleListItem,
 } from '@/components/sync/people/People.jsx';
-import { PersonAvatar } from '@/components/sync/people/PersonAvatar.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
-import {
-	CollapsibleContent,
-	CollapsibleRoot,
-} from '@aglio/ui/components/collapsible';
-import { Tooltip } from '@aglio/ui/src/components/tooltip';
 import classNames from 'classnames';
 import { forwardRef, memo, useCallback, useEffect, useState } from 'react';
 
@@ -24,6 +17,7 @@ export const CategoryClaim = memo(function CategoryClaim({
 }) {
 	const { isMyClaim, claimer } = useCategoryClaimPresence(category);
 	const me = hooks.useSelf();
+	const isSubscribed = useIsSubscribed();
 
 	const claim = useCallback(() => {
 		if (isMyClaim) {
@@ -53,15 +47,13 @@ export const CategoryClaim = memo(function CategoryClaim({
 		}
 	}, [showTooltip]);
 
-	const peerIds = hooks.usePeerIds();
-	const hasPeers = peerIds.length > 0;
 	const presences = hooks.useFindPeers(
 		(peer) =>
 			!!peer.presence?.lastInteractedCategory &&
 			peer.presence?.lastInteractedCategory === category?.get('id'),
 	);
 
-	if (!hasPeers) {
+	if (!isSubscribed) {
 		return null;
 	}
 
@@ -83,7 +75,14 @@ export const CategoryClaim = memo(function CategoryClaim({
 						popIn
 					/>
 				))}
-				{!people.length && <PeopleListAvatar index={0} person={null} popIn />}
+				{!people.length && (
+					<PeopleListAvatar
+						index={0}
+						person={null}
+						popIn
+						className="opacity-50"
+					/>
+				)}
 			</PeopleList>
 		</Button>
 	);

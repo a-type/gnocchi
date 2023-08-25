@@ -3,6 +3,7 @@ import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
 import { ReactNode, createContext, useContext } from 'react';
 import { UserInfo } from '@aglio/groceries-client';
+import classNames from 'classnames';
 
 const PeopleContext = createContext<{ size: number }>({
 	size: 24,
@@ -66,14 +67,16 @@ export function PeopleList({
 export function PeopleListItem({
 	index,
 	children,
+	className,
 }: {
 	index: number;
 	children: ReactNode;
+	className?: string;
 }) {
 	const { size } = useContext(PeopleContext);
 	return (
 		<div
-			className="absolute"
+			className={classNames('absolute', className)}
 			style={{
 				left: index === 0 ? 0 : index * ((size * 2) / 3),
 				zIndex: index,
@@ -116,15 +119,17 @@ function PeerAvatar({
 export function PeopleListAvatar({
 	person,
 	index,
+	className,
 	...rest
 }: {
 	person: UserInfo<Profile, Presence> | null;
 	index: number;
 	popIn?: boolean;
+	className?: string;
 }) {
 	const { size } = useContext(PeopleContext);
 	return (
-		<PeopleListItem index={index}>
+		<PeopleListItem index={index} className={className}>
 			<PersonAvatar
 				person={person}
 				style={{ width: size, height: size }}

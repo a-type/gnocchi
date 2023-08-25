@@ -61,7 +61,7 @@ export function GroceryListCategory({
 					{category?.get('name') ?? 'Uncategorized'}
 				</CategoryTitle>
 				{category && (
-					<div className="ml-auto mr-3 flex flex-row items-center justify-between flex-grow-0 flex-shrink-0 flex-basis-auto">
+					<div className="ml-auto mr-1 flex flex-row items-center justify-between flex-grow-0 flex-shrink-0 flex-basis-auto">
 						<CategoryClaim category={category} />
 					</div>
 				)}

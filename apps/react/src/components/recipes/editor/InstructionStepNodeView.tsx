@@ -27,6 +27,7 @@ import {
 	isActiveCookingSession,
 	useCookSessionAction,
 } from '@/components/recipes/hooks.js';
+import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 
 export interface InstructionStepNodeViewProps {
 	node: {
@@ -45,7 +46,7 @@ export function InstructionStepNodeView({
 	...rest
 }: InstructionStepNodeViewProps) {
 	const self = hooks.useSelf();
-	const { isEditing, hasPeers, showTools } = useContext(InstructionsContext);
+	const { isEditing, showTools } = useContext(InstructionsContext);
 
 	const { id, note } = node.attrs;
 
@@ -97,7 +98,7 @@ export function InstructionStepNodeView({
 		[maybeAssignments, id],
 	);
 
-	const isAssignedToMe = hasPeers && assignedPersonId === self.id;
+	const isAssignedToMe = assignedPersonId === self.id;
 
 	const updateNote = useCallback(
 		(event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -111,6 +112,8 @@ export function InstructionStepNodeView({
 			updateAttributes({ note: undefined });
 		}
 	}, [note, updateAttributes]);
+
+	const isSubscribed = useIsSubscribed();
 
 	return (
 		<NodeViewWrapper
@@ -184,7 +187,7 @@ export function InstructionStepNodeView({
 				className="flex flex-col items-center gap-2 [grid-area:endTools] w-32px ml-3"
 				contentEditable={false}
 			>
-				{!isEditing && hasPeers && (
+				{!isEditing && isSubscribed && (
 					<PersonSelect
 						includeSelf
 						allowNone
