@@ -1,7 +1,9 @@
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
-import { ManageFoodsButton } from '@/components/foods/ManageFoodsButton.jsx';
+import { ChangelogDisplay } from '@/components/changelog/ChangelogDisplay.jsx';
+import { Icon } from '@/components/icons/Icon.jsx';
 import { BugButton } from '@/components/menu/BugButton.jsx';
 import { ManageCategoriesDialog } from '@/components/menu/ManageCategoriesDialog.jsx';
+import { TextLink } from '@/components/nav/Link.jsx';
 import { InstallHint } from '@/components/promotional/InstallHint.jsx';
 import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubscriptionButton.jsx';
 import { ColorModeSelect } from '@/components/settings/ColorModeSelect.jsx';
@@ -12,20 +14,17 @@ import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
 import { ResetToServer } from '@/components/sync/ResetToServer.jsx';
 import { MemberManager } from '@/components/sync/manage/MemberManager.jsx';
 import { PushSubscriptionToggle } from '@/components/sync/push/PushSubscriptionToggle.jsx';
+import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
+import { checkForUpdate } from '@/components/updatePrompt/updateState.js';
 import { API_HOST_HTTP, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
 import { Button, ButtonProps } from '@aglio/ui/components/button';
 import { Divider } from '@aglio/ui/components/divider';
-import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { TextLink } from '@/components/nav/Link.jsx';
+import { PageContent } from '@aglio/ui/components/layouts';
 import { H1, H2 } from '@aglio/ui/components/typography';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
-import { ReactNode } from 'react';
-import { UpdatePrompt } from '@/components/updatePrompt/UpdatePrompt.jsx';
-import { NavBar } from '@/components/nav/NavBar.jsx';
-import { ChangelogDisplay } from '@/components/changelog/ChangelogDisplay.jsx';
-import { Icon } from '@/components/icons/Icon.jsx';
+import { ReactNode, useEffect } from 'react';
 
 const contents = {
 	offline: OfflineContents,
@@ -48,6 +47,10 @@ export function PlanPage() {
 	}
 
 	const Contents = contents[state];
+
+	useEffect(() => {
+		checkForUpdate();
+	}, []);
 
 	return (
 		<PageContent fullHeight noPadding>

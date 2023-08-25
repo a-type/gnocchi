@@ -5,6 +5,8 @@ export const updateState = proxy({
 	updateAvailable: false,
 });
 
+let check: (() => void) | undefined = undefined;
+
 const update = registerSW({
 	onNeedRefresh() {
 		updateState.updateAvailable = true;
@@ -15,6 +17,7 @@ const update = registerSW({
 		if (registration) {
 			setInterval(() => {
 				registration.update();
+				check = registration.update;
 				// hourly
 			}, 60 * 60 * 1000);
 		}
@@ -26,4 +29,8 @@ const update = registerSW({
 
 export async function updateApp(reload?: boolean) {
 	await update(!!reload);
+}
+
+export function checkForUpdate() {
+	check?.();
 }
