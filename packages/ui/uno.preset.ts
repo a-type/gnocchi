@@ -206,25 +206,57 @@ export default function presetAglio(): Preset {
 						70% { opacity: 1; transform: scale(1); }
 						100% { opacity: 0.2; transform: scale(0.6); }
 					}`,
+					'fade-in-down': `{
+						0% { opacity: 0; transform: translate3d(0, -100px, 0); }
+						100% { opacity: 1; transform: translate3d(0, 0, 0); }
+					}`,
+					'fade-in-left': `{
+						0% { opacity: 0; transform: translate3d(-100px, 0, 0); }
+						100% { opacity: 1; transform: translate3d(0, 0, 0); }
+					}`,
+					'fade-in-bottom': `{
+						0% { opacity: 0; transform: translate3d(0, 100px, 0); }
+						100% { opacity: 1; transform: translate3d(0, 0, 0); }
+					}`,
+					'fade-in-right': `{
+						0% { opacity: 0; transform: translate3d(100px, 0, 0); }
+						100% { opacity: 1; transform: translate3d(0, 0, 0); }
+					}`,
+					'fade-out-down': `{
+						0% { opacity: 1; transform: translate3d(0, 0, 0); }
+						100% { opacity: 0; transform: translate3d(0, -100px, 0); }
+					}`,
+					'fade-out-left': `{
+						0% { opacity: 1; transform: translate3d(0, 0, 0); }
+						100% { opacity: 0; transform: translate3d(-100px, 0, 0); }
+					}`,
+					'fade-out-bottom': `{
+						0% { opacity: 1; transform: translate3d(0, 0, 0); }
+						100% { opacity: 0; transform: translate3d(0, 100px, 0); }
+					}`,
+					'fade-out-right': `{
+						0% { opacity: 1; transform: translate3d(0, 0, 0); }
+						100% { opacity: 0; transform: translate3d(100px, 0, 0); }
+					}`,
 				},
 				timingFns: {
 					linear: 'linear',
 					springy: 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
 					'ease-out': 'ease-out',
-					'fade-in-up': 'ease-out',
-					'fade-in-down': 'ease-out',
-					'fade-in-left': 'ease-out',
-					'fade-in-right': 'ease-out',
-					'fade-out-up': 'ease-in',
-					'fade-out-down': 'ease-in',
-					'fade-out-left': 'ease-in',
-					'fade-out-right': 'ease-in',
-					'fade-in-up-big': 'ease-out',
-					'fade-in-down-big': 'ease-out',
-					'fade-in-left-big': 'ease-out',
-					'fade-in-right-big': 'ease-out',
-					'fade-in': 'ease-out',
-					'fade-out': 'ease-in',
+					'fade-in-up': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in-down': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in-left': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in-right': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-out-up': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-out-down': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-out-left': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-out-right': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in-up-big': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in-down-big': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in-left-big': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in-right-big': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-in': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
+					'fade-out': 'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
 					'scan-line': 'linear',
 					'radix-collapsible-open-vertical':
 						'cubic-bezier(0.64, -0.25, 0.1, 1.4)',
