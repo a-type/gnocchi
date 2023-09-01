@@ -486,6 +486,11 @@ const recipes = collection({
         addIntervalGuess: {
             type: 'number',
             nullable: true
+        },
+        pinnedAt: {
+            type: 'number',
+            nullable: true,
+            indexed: true
         }
     },
     synthetics: {
@@ -546,7 +551,7 @@ const recipes = collection({
     }
 });
 export default schema({
-    version: 38,
+    version: 39,
     collections: {
         categories,
         items,

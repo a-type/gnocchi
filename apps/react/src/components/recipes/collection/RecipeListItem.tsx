@@ -6,6 +6,15 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
 import {
+	CardActions,
+	CardFooter,
+	CardImage,
+	CardMain,
+	CardMenu,
+	CardRoot,
+	CardTitle,
+} from '@aglio/ui/components/card';
+import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
@@ -13,36 +22,45 @@ import {
 	DropdownMenuTrigger,
 } from '@aglio/ui/components/dropdownMenu';
 import {
+	Cross2Icon,
 	DotsVerticalIcon,
+	DrawingPinFilledIcon,
+	DrawingPinIcon,
 	Pencil1Icon,
-	PlayIcon,
 	PlusCircledIcon,
 	PlusIcon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
-import { Suspense, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
-import {
-	CardMain,
-	CardActions,
-	CardFooter,
-	CardImage,
-	CardMenu,
-	CardRoot,
-	CardTitle,
-} from '@aglio/ui/components/card';
-import { Icon } from '@/components/icons/Icon.jsx';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 
-export function RecipeListItem({ recipe }: { recipe: Recipe }) {
-	const { title } = hooks.useWatch(recipe);
+export function RecipeListItem({
+	recipe,
+	className,
+}: {
+	recipe: Recipe;
+	className?: string;
+}) {
+	const { title, pinnedAt } = hooks.useWatch(recipe);
 
 	const deleteRecipe = hooks.useDeleteRecipe();
 
 	const [menuOpen, setMenuOpen] = useState(false);
 
+	const togglePinned = useCallback(() => {
+		if (recipe.get('pinnedAt')) {
+			recipe.set('pinnedAt', null);
+		} else {
+			recipe.set('pinnedAt', Date.now());
+		}
+	}, [recipe]);
+
+	const showPin = useFeatureFlag('pinnedRecipes');
+
 	return (
-		<CardRoot className="min-h-200px md:(h-30vh max-h-400px)">
+		<CardRoot className={className}>
 			<CardMain asChild>
 				<Link to={makeRecipeLink(recipe)} preserveQuery>
 					<div className="text-md">
@@ -60,6 +78,34 @@ export function RecipeListItem({ recipe }: { recipe: Recipe }) {
 			</CardImage>
 			<CardFooter>
 				<CardActions>
+					{(showPin || pinnedAt) && (
+						<Button
+							size="icon"
+							color={pinnedAt ? 'primary' : 'default'}
+							onClick={togglePinned}
+							className="relative"
+						>
+							<DrawingPinIcon
+								className={pinnedAt ? 'relative top--2px left-0px' : undefined}
+							/>
+							{pinnedAt && (
+								// slash through
+								// <svg
+								// 	className="absolute top-[50%] left-[50%] translate-[-50%] w-[15px] h-[15px] z-1"
+								// 	viewBox="0 0 10 10"
+								// >
+								// 	<path
+								// 		d="M 0 0 L 10 10"
+								// 		stroke="currentColor"
+								// 		strokeWidth="1"
+								// 		strokeLinecap="round"
+								// 		vectorEffect="non-scaling-stroke"
+								// 	/>
+								// </svg>
+								<Cross2Icon className="absolute w-10px h-10px bottom-5px right-8px" />
+							)}
+						</Button>
+					)}
 					<AddToListButton recipe={recipe} color="ghost" size="small">
 						<PlusCircledIcon className="w-20px h-20px" />
 						<span>Add to List</span>
@@ -121,8 +167,6 @@ export function RecipeListItem({ recipe }: { recipe: Recipe }) {
 	);
 }
 
-export function RecipePlaceholderItem() {
-	return (
-		<CardRoot className="min-h-200px md:(h-30vh max-h-400px)">&nbsp;</CardRoot>
-	);
+export function RecipePlaceholderItem({ className }: { className?: string }) {
+	return <CardRoot className={className}>&nbsp;</CardRoot>;
 }

@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useSearchParams } from '@verdant-web/react-router';
 import { hooks } from '@/stores/groceries/index.js';
+import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 
 export function useRecipeTagFilter() {
 	const [params, setParams] = useSearchParams();
@@ -83,6 +84,8 @@ export function useIsFiltered() {
 }
 
 export function useFilteredRecipes() {
+	const hidePinned = useFeatureFlag('pinnedRecipes');
+
 	const [tagFilter] = useRecipeTagFilter();
 	const [foodFilter] = useRecipeFoodFilter();
 	const [titleFilter] = useRecipeTitleFilter();
@@ -156,6 +159,8 @@ export function useFilteredRecipes() {
 			)
 				return false;
 		}
+
+		if (hidePinned && recipe.get('pinnedAt')) return false;
 
 		return true;
 	});

@@ -843,6 +843,21 @@ export interface RecipeUpdatedAtRangeFilter {
   order?: "asc" | "desc";
 }
 
+export interface RecipePinnedAtMatchFilter {
+  where: "pinnedAt";
+  equals: number | null;
+  order?: "asc" | "desc";
+}
+
+export interface RecipePinnedAtRangeFilter {
+  where: "pinnedAt";
+  gte?: number | null;
+  gt?: number | null;
+  lte?: number | null;
+  lt?: number | null;
+  order?: "asc" | "desc";
+}
+
 export interface RecipeTagMatchFilter {
   where: "tag";
   equals: string;
@@ -942,6 +957,8 @@ export type RecipeFilter =
   | RecipeSlugStartsWithFilter
   | RecipeUpdatedAtMatchFilter
   | RecipeUpdatedAtRangeFilter
+  | RecipePinnedAtMatchFilter
+  | RecipePinnedAtRangeFilter
   | RecipeTagMatchFilter
   | RecipeTagRangeFilter
   | RecipeTagStartsWithFilter
@@ -979,6 +996,7 @@ export type RecipeDestructured = {
   lastCookedAt: number | null;
   lastAddedAt: number | null;
   addIntervalGuess: number | null;
+  pinnedAt: number | null;
 };
 export type RecipeInit = {
   id?: string;
@@ -1003,6 +1021,7 @@ export type RecipeInit = {
   lastCookedAt?: number | null;
   lastAddedAt?: number | null;
   addIntervalGuess?: number | null;
+  pinnedAt?: number | null;
 };
 export type RecipeSnapshot = {
   id: string;
@@ -1027,6 +1046,7 @@ export type RecipeSnapshot = {
   lastCookedAt: number | null;
   lastAddedAt: number | null;
   addIntervalGuess: number | null;
+  pinnedAt: number | null;
 };
 /** Recipe sub-object types */
 
@@ -1324,6 +1344,10 @@ export type RecipeAddIntervalGuess = number | null;
 export type RecipeAddIntervalGuessInit = RecipeAddIntervalGuess | undefined;
 export type RecipeAddIntervalGuessSnapshot = RecipeAddIntervalGuess;
 export type RecipeAddIntervalGuessDestructured = RecipeAddIntervalGuess;
+export type RecipePinnedAt = number | null;
+export type RecipePinnedAtInit = RecipePinnedAt | undefined;
+export type RecipePinnedAtSnapshot = RecipePinnedAt;
+export type RecipePinnedAtDestructured = RecipePinnedAt;
 
 export type RecipeTagMetadata = ObjectEntity<
   RecipeTagMetadataInit,
