@@ -342,13 +342,13 @@ importers:
         version: 1.14.0
       '@verdant-web/react':
         specifier: ^21.0.2
-        version: 21.0.2(@verdant-web/store@2.5.6)(react@18.2.0)
+        version: 21.0.2(@verdant-web/store@2.5.7)(react@18.2.0)
       '@verdant-web/react-router':
         specifier: ^0.5.3
         version: 0.5.3(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.5.6
-        version: 2.5.6
+        specifier: ^2.5.7
+        version: 2.5.7
       '@zip.js/zip.js':
         specifier: ^2.7.6
         version: 2.7.6
@@ -610,10 +610,10 @@ importers:
         version: 1.14.0
       '@verdant-web/react':
         specifier: ^21.0.2
-        version: 21.0.2(@verdant-web/store@2.5.6)(react@18.2.0)
+        version: 21.0.2(@verdant-web/store@2.5.7)(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.5.6
-        version: 2.5.6
+        specifier: ^2.5.7
+        version: 2.5.7
       cuid:
         specifier: ^2.1.8
         version: 2.1.8
@@ -1418,7 +1418,7 @@ packages:
       '@aws-sdk/url-parser': 3.267.0
       '@aws-sdk/util-config-provider': 3.208.0
       '@aws-sdk/util-middleware': 3.267.0
-      tslib: 2.6.1
+      tslib: 2.5.0
     dev: false
 
   /@aws-sdk/middleware-expect-continue@3.267.0:
@@ -1649,7 +1649,7 @@ packages:
       '@aws-sdk/util-middleware': 3.267.0
       '@aws-sdk/util-uri-escape': 3.201.0
       '@aws-sdk/util-utf8': 3.254.0
-      tslib: 2.6.1
+      tslib: 2.5.0
     dev: false
 
   /@aws-sdk/smithy-client@3.267.0:
@@ -1658,7 +1658,7 @@ packages:
     dependencies:
       '@aws-sdk/middleware-stack': 3.267.0
       '@aws-sdk/types': 3.267.0
-      tslib: 2.6.1
+      tslib: 2.5.0
     dev: false
 
   /@aws-sdk/token-providers@3.267.0:
@@ -1729,7 +1729,7 @@ packages:
     resolution: {integrity: sha512-DSRqwrERUsT34ug+anlMBIFooBEGwM8GejC7q00Y/9IPrQy50KnG5PW2NiTjuLKNi7pdEOlwTSEocJE15eDZIg==}
     engines: {node: '>=14.0.0'}
     dependencies:
-      tslib: 2.6.1
+      tslib: 2.5.0
     dev: false
 
   /@aws-sdk/util-defaults-mode-browser@3.267.0:
@@ -1780,7 +1780,7 @@ packages:
     resolution: {integrity: sha512-7nvqBZVz3RdwYv6lU958g6sWI2Qt8lzxDVn0uwfnPH+fAiX7Ln1Hen2A0XeW5cL5uYUJy6wNM5cyfTzFZosE0A==}
     engines: {node: '>=14.0.0'}
     dependencies:
-      tslib: 2.6.1
+      tslib: 2.5.0
     dev: false
 
   /@aws-sdk/util-retry@3.267.0:
@@ -1816,7 +1816,7 @@ packages:
     resolution: {integrity: sha512-TeTWbGx4LU2c5rx0obHeDFeO9HvwYwQtMh1yniBz00pQb6Qt6YVOETVQikRZ+XRQwEyCg/dA375UplIpiy54mA==}
     engines: {node: '>=14.0.0'}
     dependencies:
-      tslib: 2.6.1
+      tslib: 2.5.0
     dev: false
 
   /@aws-sdk/util-user-agent-browser@3.267.0:
@@ -2319,7 +2319,6 @@ packages:
   /@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2(@babel/core@7.22.11):
     resolution: {integrity: sha512-SOSkfJDddaM7mak6cPEpswyTRnuRltl429hMraQEglW+OkovnCzsiszTmsrlY//qLFjCpQDFRvjdm2wA5pPm9w==}
     engines: {node: '>=6.9.0'}
-    deprecated: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
@@ -6585,14 +6584,14 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/react@21.0.2(@verdant-web/store@2.5.6)(react@18.2.0):
+  /@verdant-web/react@21.0.2(@verdant-web/store@2.5.7)(react@18.2.0):
     resolution: {integrity: sha512-YChqakTS5GS37ge6eDQvNbFm6wiwPEMn+8bAxO6o5WGTtKNwa/BmIiQQhPJ4hKkQ9FVjyJaUdDuKkR3RUDYDCg==}
     peerDependencies:
       '@verdant-web/store': ^2.5.6
       react: ^18.2.0
     dependencies:
       '@verdant-web/common': 1.14.0
-      '@verdant-web/store': 2.5.6
+      '@verdant-web/store': 2.5.7
       react: 18.2.0
       suspend-react: 0.0.8(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
@@ -6612,8 +6611,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@verdant-web/store@2.5.6:
-    resolution: {integrity: sha512-zAZYzck9aXVAec/DWpk6y5sf6y2v41KlSK4YHJ4gd0MGxXptjIz/dechlfAPLYU3RM9ga9gbAk69vtitpbRQzQ==}
+  /@verdant-web/store@2.5.7:
+    resolution: {integrity: sha512-XsE+kR4xT5HnD44F+dubJoUz19S2U5tOmesNMEGNlp76j7nhJCEVcPMrxRZQQDxeZ5Jk38UjDDH/W1g4kSkbbA==}
     dependencies:
       '@verdant-web/common': 1.14.0
       cuid: 2.1.8

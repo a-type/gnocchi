@@ -46,7 +46,7 @@
 		"@verdant-web/common": "^1.14.0",
 		"@verdant-web/react": "^21.0.2",
 		"@verdant-web/react-router": "^0.5.3",
-		"@verdant-web/store": "^2.5.6",
+		"@verdant-web/store": "^2.5.7",
 		"@zip.js/zip.js": "^2.7.6",
 		"classnames": "^2.3.2",
 		"color-interpolate": "^1.0.5",
