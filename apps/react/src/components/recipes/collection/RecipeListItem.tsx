@@ -35,6 +35,7 @@ import { Suspense, useCallback, useState } from 'react';
 import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
+import { Icon } from '@/components/icons/Icon.jsx';
 
 export function RecipeListItem({
 	recipe,
@@ -44,10 +45,6 @@ export function RecipeListItem({
 	className?: string;
 }) {
 	const { title, pinnedAt } = hooks.useWatch(recipe);
-
-	const deleteRecipe = hooks.useDeleteRecipe();
-
-	const [menuOpen, setMenuOpen] = useState(false);
 
 	const togglePinned = useCallback(() => {
 		if (recipe.get('pinnedAt')) {
@@ -107,60 +104,11 @@ export function RecipeListItem({
 						</Button>
 					)}
 					<AddToListButton recipe={recipe} color="ghost" size="small">
-						<PlusCircledIcon className="w-20px h-20px" />
-						<span>Add to List</span>
+						<Icon name="add_to_list" />
 					</AddToListButton>
 				</CardActions>
 				<CardMenu>
-					<DropdownMenu
-						open={menuOpen}
-						onOpenChange={(open) => {
-							if (open) setMenuOpen(true);
-						}}
-					>
-						<DropdownMenuTrigger asChild>
-							<Button size="icon" color="ghost">
-								<DotsVerticalIcon className="w-20px h-20px" />
-							</Button>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent
-							onPointerDownOutside={() => setMenuOpen(false)}
-						>
-							<RecipeAddTag
-								recipe={recipe}
-								onAdd={() => {
-									setMenuOpen(false);
-								}}
-							>
-								<DropdownMenuItem>
-									<span>Add Tag</span>
-									<DropdownMenuItemRightSlot>
-										<PlusIcon />
-									</DropdownMenuItemRightSlot>
-								</DropdownMenuItem>
-							</RecipeAddTag>
-							<DropdownMenuItem asChild>
-								<Link to={makeRecipeLink(recipe, '/edit')} preserveQuery>
-									<span>Edit</span>
-									<DropdownMenuItemRightSlot>
-										<Pencil1Icon />
-									</DropdownMenuItemRightSlot>
-								</Link>
-							</DropdownMenuItem>
-							<DropdownMenuItem
-								color="destructive"
-								onSelect={() => {
-									deleteRecipe(recipe.get('id'));
-									setMenuOpen(false);
-								}}
-							>
-								<span>Delete</span>
-								<DropdownMenuItemRightSlot>
-									<TrashIcon />
-								</DropdownMenuItemRightSlot>
-							</DropdownMenuItem>
-						</DropdownMenuContent>
-					</DropdownMenu>
+					<RecipeListItemMenu recipe={recipe} />
 				</CardMenu>
 			</CardFooter>
 		</CardRoot>
@@ -169,4 +117,80 @@ export function RecipeListItem({
 
 export function RecipePlaceholderItem({ className }: { className?: string }) {
 	return <CardRoot className={className}>&nbsp;</CardRoot>;
+}
+
+export function RecipeListItemMenu({
+	recipe,
+	...rest
+}: {
+	recipe: Recipe;
+	className?: string;
+}) {
+	const deleteRecipe = hooks.useDeleteRecipe();
+	const { pinnedAt } = hooks.useWatch(recipe);
+
+	const [menuOpen, setMenuOpen] = useState(false);
+
+	return (
+		<DropdownMenu
+			open={menuOpen}
+			onOpenChange={(open) => {
+				if (open) setMenuOpen(true);
+			}}
+		>
+			<DropdownMenuTrigger asChild>
+				<Button size="icon" color="ghost" {...rest}>
+					<DotsVerticalIcon className="w-20px h-20px" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent onPointerDownOutside={() => setMenuOpen(false)}>
+				<RecipeAddTag
+					recipe={recipe}
+					onAdd={() => {
+						setMenuOpen(false);
+					}}
+				>
+					<DropdownMenuItem>
+						<span>Add Tag</span>
+						<DropdownMenuItemRightSlot>
+							<PlusIcon />
+						</DropdownMenuItemRightSlot>
+					</DropdownMenuItem>
+				</RecipeAddTag>
+				<DropdownMenuItem asChild>
+					<Link to={makeRecipeLink(recipe, '/edit')} preserveQuery>
+						<span>Edit</span>
+						<DropdownMenuItemRightSlot>
+							<Pencil1Icon />
+						</DropdownMenuItemRightSlot>
+					</Link>
+				</DropdownMenuItem>
+				{pinnedAt && (
+					<DropdownMenuItem
+						onSelect={() => {
+							recipe.set('pinnedAt', null);
+							setMenuOpen(false);
+						}}
+					>
+						<span>Remove pin</span>
+						<DropdownMenuItemRightSlot>
+							<DrawingPinFilledIcon />
+						</DropdownMenuItemRightSlot>
+					</DropdownMenuItem>
+				)}
+				<DropdownMenuItem
+					color="destructive"
+					onSelect={() => {
+						deleteRecipe(recipe.get('id'));
+						setMenuOpen(false);
+					}}
+				>
+					<span>Delete</span>
+					<DropdownMenuItemRightSlot>
+						<TrashIcon />
+					</DropdownMenuItemRightSlot>
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	);
 }

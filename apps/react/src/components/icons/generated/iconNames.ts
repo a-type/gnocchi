@@ -22,6 +22,7 @@ export const iconNames = [
 	'profile',
 	'add_person',
 	'gift',
+	'add_to_list',
 ] as const;
 
 export type IconName = (typeof iconNames)[number];
