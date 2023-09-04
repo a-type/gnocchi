@@ -342,13 +342,13 @@ importers:
         version: 1.14.0
       '@verdant-web/react':
         specifier: ^21.0.2
-        version: 21.0.2(@verdant-web/store@2.5.7)(react@18.2.0)
+        version: 21.0.2(@verdant-web/store@2.5.8)(react@18.2.0)
       '@verdant-web/react-router':
         specifier: ^0.5.3
         version: 0.5.3(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.5.7
-        version: 2.5.7
+        specifier: ^2.5.8
+        version: 2.5.8
       '@zip.js/zip.js':
         specifier: ^2.7.6
         version: 2.7.6
@@ -610,10 +610,10 @@ importers:
         version: 1.14.0
       '@verdant-web/react':
         specifier: ^21.0.2
-        version: 21.0.2(@verdant-web/store@2.5.7)(react@18.2.0)
+        version: 21.0.2(@verdant-web/store@2.5.8)(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.5.7
-        version: 2.5.7
+        specifier: ^2.5.8
+        version: 2.5.8
       cuid:
         specifier: ^2.1.8
         version: 2.1.8
@@ -6584,14 +6584,14 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/react@21.0.2(@verdant-web/store@2.5.7)(react@18.2.0):
+  /@verdant-web/react@21.0.2(@verdant-web/store@2.5.8)(react@18.2.0):
     resolution: {integrity: sha512-YChqakTS5GS37ge6eDQvNbFm6wiwPEMn+8bAxO6o5WGTtKNwa/BmIiQQhPJ4hKkQ9FVjyJaUdDuKkR3RUDYDCg==}
     peerDependencies:
       '@verdant-web/store': ^2.5.6
       react: ^18.2.0
     dependencies:
       '@verdant-web/common': 1.14.0
-      '@verdant-web/store': 2.5.7
+      '@verdant-web/store': 2.5.8
       react: 18.2.0
       suspend-react: 0.0.8(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
@@ -6611,8 +6611,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@verdant-web/store@2.5.7:
-    resolution: {integrity: sha512-XsE+kR4xT5HnD44F+dubJoUz19S2U5tOmesNMEGNlp76j7nhJCEVcPMrxRZQQDxeZ5Jk38UjDDH/W1g4kSkbbA==}
+  /@verdant-web/store@2.5.8:
+    resolution: {integrity: sha512-fPFtqKcuf2BrPcIUBDYolhziIalnVdT+f9dLrUzcN+KNDbszFwtChxB5sWKPUlL/MoiPMz0gGqcTSfL4WRwSgQ==}
     dependencies:
       '@verdant-web/common': 1.14.0
       cuid: 2.1.8
