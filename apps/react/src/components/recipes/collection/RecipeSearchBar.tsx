@@ -13,12 +13,12 @@ export function RecipeSearchBar({
 	const [value, setValue] = useRecipeTitleFilter();
 
 	return (
-		<div className="flex flex-row gap-3">
+		<div className={classNames('flex flex-row gap-3', className)}>
 			<LiveUpdateTextField
 				placeholder="Search recipes"
 				value={value}
 				onChange={setValue}
-				className={classNames('rounded-full', className)}
+				className="rounded-full flex-1"
 				{...props}
 			/>
 			{!!value && (

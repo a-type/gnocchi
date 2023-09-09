@@ -24,22 +24,13 @@ export function RecipeList({}: RecipeListProps) {
 	const showPinned = useFeatureFlag('pinnedRecipes');
 
 	return (
-		<div className="flex flex-col gap-4 p-0 m-0 mb-6">
-			<div className="flex flex-row items-center justify-between">
-				<Suspense
-					fallback={
-						<Button color="primary" className="self-start">
-							Create New
-						</Button>
-					}
-				>
-					<RecipeCreateButton />
-				</Suspense>
-				<RecipeCollectionMenu />
-			</div>
+		<div className="flex flex-col p-0 m-0 mb-6">
 			<Suspense>
-				<PageFixedArea className="pt-2">
-					<RecipeSearchBar className="w-full" />
+				<PageFixedArea className="pt-2 w-full mb-4">
+					<div className="flex flex-row items-center justify-stretch w-full">
+						<RecipeSearchBar className="flex-1" />
+						<RecipeCollectionMenu className="flex-0-0-auto" />
+					</div>
 					<RecipeListActions />
 				</PageFixedArea>
 			</Suspense>

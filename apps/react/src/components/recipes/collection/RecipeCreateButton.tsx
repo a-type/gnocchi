@@ -1,9 +1,9 @@
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { Button } from '@aglio/ui/src/components/button';
+import { Button, ButtonProps } from '@aglio/ui/src/components/button';
 import { useNavigate } from '@verdant-web/react-router';
 
-export function RecipeCreateButton() {
+export function RecipeCreateButton({ children, ...rest }: ButtonProps) {
 	const navigate = useNavigate();
 	const client = hooks.useClient();
 
@@ -16,8 +16,9 @@ export function RecipeCreateButton() {
 				});
 			}}
 			color="primary"
+			{...rest}
 		>
-			New Recipe
+			{children || 'New Recipe'}
 		</Button>
 	);
 }

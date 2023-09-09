@@ -7,6 +7,8 @@ import { RecipeList } from '@/components/recipes/collection/RecipeList.jsx';
 import { Suspense } from 'react';
 import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
+import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
+import { PlusIcon } from '@radix-ui/react-icons';
 
 export interface RecipesPageProps {}
 
@@ -18,7 +20,12 @@ export function RecipesPage({}: RecipesPageProps) {
 				<RecipeList />
 			</Suspense>
 			<Suspense>
-				<PageNowPlaying unstyled>
+				<PageNowPlaying unstyled className="flex flex-col">
+					<Suspense>
+						<RecipeCreateButton className="w-48px h-48px mr-4 mb-1 shadow-lg">
+							<PlusIcon />
+						</RecipeCreateButton>
+					</Suspense>
 					<RecipesNowPlaying showSingle defaultOpen />
 				</PageNowPlaying>
 			</Suspense>

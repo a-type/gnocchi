@@ -1,25 +1,32 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { HelpTip } from '@/components/promotional/HelpTip.jsx';
 import { RecipeListItemMenu } from '@/components/recipes/collection/RecipeListItem.jsx';
+import {
+	useRecipeFoodFilter,
+	useRecipeTagFilter,
+	useRecipeTitleFilter,
+} from '@/components/recipes/collection/hooks.js';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
 import { RecipeTagsViewer } from '@/components/recipes/viewer/RecipeTagsViewer.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 import { Button } from '@aglio/ui/components/button';
-import { CardGrid } from '@aglio/ui/components/card';
+import { CollapsibleSimple } from '@aglio/ui/components/collapsible';
 import { Divider } from '@aglio/ui/components/divider';
 import { H2 } from '@aglio/ui/components/typography';
-import { Cross2Icon, DrawingPinFilledIcon } from '@radix-ui/react-icons';
+import { DrawingPinFilledIcon } from '@radix-ui/react-icons';
 import { Link } from '@verdant-web/react-router';
 import classNames from 'classnames';
 import addWeeks from 'date-fns/addWeeks';
 
-export interface PinnedRecipesProps {}
+export interface PinnedRecipesProps {
+	className?: string;
+}
 
 const THREE_WEEKS_AGO = addWeeks(Date.now(), -3).getTime();
 
-export function PinnedRecipes({}: PinnedRecipesProps) {
+export function PinnedRecipes({ className }: PinnedRecipesProps) {
 	const pinnedRecipes = hooks.useAllRecipes({
 		index: {
 			where: 'pinnedAt',
@@ -28,12 +35,18 @@ export function PinnedRecipes({}: PinnedRecipesProps) {
 		key: 'pinnedRecipes',
 	});
 
-	if (!pinnedRecipes.length) {
-		return null;
-	}
+	const [tagFilter] = useRecipeTagFilter();
+	const [foodFilter] = useRecipeFoodFilter();
+	const [titleFilter] = useRecipeTitleFilter();
+
+	const show =
+		!!pinnedRecipes.length && !(tagFilter || foodFilter || titleFilter);
 
 	return (
-		<div className="flex flex-col">
+		<CollapsibleSimple
+			open={show}
+			className={classNames('flex flex-col', className)}
+		>
 			<div className="flex flex-row gap-2 items-center">
 				<H2 className="mb-0">Pinned</H2>
 				<HelpTip>
@@ -45,8 +58,8 @@ export function PinnedRecipes({}: PinnedRecipesProps) {
 					<PinnedRecipeListItem recipe={recipe} key={recipe.get('id')} />
 				))}
 			</div>
-			<Divider className="mt-3" />
-		</div>
+			<Divider className="my-4" />
+		</CollapsibleSimple>
 	);
 }
 

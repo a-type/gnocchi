@@ -11,9 +11,11 @@ import {
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { Suspense, lazy, useCallback, useState } from 'react';
 
-export interface RecipeCollectionMenuProps {}
+export interface RecipeCollectionMenuProps {
+	className?: string;
+}
 
-export function RecipeCollectionMenu({}: RecipeCollectionMenuProps) {
+export function RecipeCollectionMenu({ className }: RecipeCollectionMenuProps) {
 	const [open, setOpen] = useState(false);
 	const paprika = useFeatureFlag('paprikaImport');
 	const onSubmenuClose = useCallback(() => setOpen(false), []);
@@ -23,7 +25,7 @@ export function RecipeCollectionMenu({}: RecipeCollectionMenuProps) {
 	return (
 		<DropdownMenu open={open} onOpenChange={setOpen}>
 			<DropdownMenuTrigger asChild>
-				<Button size="icon" color="ghost">
+				<Button size="icon" color="ghost" className={className}>
 					<DotsVerticalIcon />
 				</Button>
 			</DropdownMenuTrigger>

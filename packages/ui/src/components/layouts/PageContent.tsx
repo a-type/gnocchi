@@ -34,7 +34,7 @@ export function PageContent({
 			<div
 				{...innerProps}
 				className={classNames(
-					'w-full min-w-0 flex flex-col mb-120px px-4 py-6',
+					'w-full min-w-0 flex flex-col mb-120px px-4 py-4',
 					'sm:(max-w-700px w-full)',
 					{
 						'flex-1': fullHeight,
