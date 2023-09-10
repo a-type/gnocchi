@@ -132,7 +132,7 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 					'item',
 					'grid grid-areas-[check_main]-[check_comment]-[secondary_secondary] grid-cols-[min-content_1fr_min-content] grid-rows-[min-content_min-content_min-content]',
 					'w-full bg-wash rounded-lg relative select-none transition ease-springy',
-					'repeated:mt-1',
+					'mt-1',
 					'[&[data-dragging=true]]:(shadow-xl cursor-grabbing touch-none border-light)',
 					'[&[data-highlighted=true]]:bg-primary-wash',
 					'[&[data-menu-open=true]]:(bg-white border-light)',

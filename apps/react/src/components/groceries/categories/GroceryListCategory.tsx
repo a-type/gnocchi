@@ -83,7 +83,7 @@ export function GroceryListCategory({
 
 export const CategoryRoot = withClassName(
 	'div',
-	'flex flex-col gap-1 rounded-md bg-wash overflow-hidden ease-springy transition mb-2',
+	'flex flex-col rounded-md bg-wash overflow-hidden ease-springy transition mb-2',
 	'[&[data-dragged-over=true]]:(bg-primary-wash shadow-[0_0_0_1px_var(--color-primary-dark)])',
 	'[&[data-is-item-dragging=true]]:(shadow-[0_0_0_1px_var(--color-gray-3)] mb-0)',
 	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 op-0 pointer-events-none mb-0 [animation-name:category-collapse] animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
