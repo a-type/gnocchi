@@ -141,7 +141,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			setAddingRecipe(null);
 		}, []);
 
-		const existingItems = hooks.useAllItems({
+		const { data: existingItems } = hooks.useAllItemsUnsuspended({
 			index: {
 				where: 'purchased',
 				equals: 'no',
@@ -159,12 +159,14 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			? depluralize(suggestionPrompt.toLowerCase().trim())
 			: '';
 
-		const searchFoods = hooks.useAllFoods({
+		const { data: searchFoods } = hooks.useAllFoodsUnsuspended({
 			index: {
 				where: 'nameLookup',
 				// only use first word... only one word can match the index.
 				startsWith: foodSearchPrompt.split(/\s/)[0],
 			},
+			limit: 20,
+			// skip: !showRichSuggestions || !foodSearchPrompt,
 		});
 
 		const frequencyFoods = hooks.useAllFoods({
@@ -268,7 +270,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			foodSearchPrompt,
 		]);
 
-		const searchRecipes = hooks.useAllRecipes({
+		const { data: searchRecipes } = hooks.useAllRecipesUnsuspended({
 			index: {
 				where: 'titleMatch',
 				startsWith: suggestionPrompt?.toLowerCase().trim() ?? '',

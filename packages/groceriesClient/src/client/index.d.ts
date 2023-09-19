@@ -170,7 +170,8 @@ export type CategoryExpirationDaysSnapshot = CategoryExpirationDays;
 export type CategoryExpirationDaysDestructured = CategoryExpirationDays;
 export type CategoryClaim = ObjectEntity<
   CategoryClaimInit,
-  CategoryClaimDestructured
+  CategoryClaimDestructured,
+  CategoryClaimSnapshot
 >;
 export type CategoryClaimInit = {
   claimedBy: string;
@@ -385,13 +386,18 @@ export type ItemFood = string;
 export type ItemFoodInit = ItemFood;
 export type ItemFoodSnapshot = ItemFood;
 export type ItemFoodDestructured = ItemFood;
-export type ItemInputs = ListEntity<ItemInputsInit, ItemInputsDestructured>;
+export type ItemInputs = ListEntity<
+  ItemInputsInit,
+  ItemInputsDestructured,
+  ItemInputsSnapshot
+>;
 export type ItemInputsInit = Array<ItemInputsItemInit>;
 export type ItemInputsDestructured = Array<ItemInputsItem>;
 export type ItemInputsSnapshot = Array<ItemInputsItemSnapshot>;
 export type ItemInputsItem = ObjectEntity<
   ItemInputsItemInit,
-  ItemInputsItemDestructured
+  ItemInputsItemDestructured,
+  ItemInputsItemSnapshot
 >;
 export type ItemInputsItemInit = {
   text: string;
@@ -660,7 +666,8 @@ export type FoodCanonicalNameSnapshot = FoodCanonicalName;
 export type FoodCanonicalNameDestructured = FoodCanonicalName;
 export type FoodAlternateNames = ListEntity<
   FoodAlternateNamesInit,
-  FoodAlternateNamesDestructured
+  FoodAlternateNamesDestructured,
+  FoodAlternateNamesSnapshot
 >;
 export type FoodAlternateNamesInit = Array<FoodAlternateNamesItemInit>;
 export type FoodAlternateNamesDestructured = Array<FoodAlternateNamesItem>;
@@ -775,7 +782,8 @@ export type CollaborationInfoIdSnapshot = CollaborationInfoId;
 export type CollaborationInfoIdDestructured = CollaborationInfoId;
 export type CollaborationInfoMeetup = ObjectEntity<
   CollaborationInfoMeetupInit,
-  CollaborationInfoMeetupDestructured
+  CollaborationInfoMeetupDestructured,
+  CollaborationInfoMeetupSnapshot
 >;
 export type CollaborationInfoMeetupInit = {
   createdAt?: number;
@@ -1100,14 +1108,16 @@ export type RecipeNoteSnapshot = RecipeNote;
 export type RecipeNoteDestructured = RecipeNote;
 export type RecipeIngredients = ListEntity<
   RecipeIngredientsInit,
-  RecipeIngredientsDestructured
+  RecipeIngredientsDestructured,
+  RecipeIngredientsSnapshot
 >;
 export type RecipeIngredientsInit = Array<RecipeIngredientsItemInit>;
 export type RecipeIngredientsDestructured = Array<RecipeIngredientsItem>;
 export type RecipeIngredientsSnapshot = Array<RecipeIngredientsItemSnapshot>;
 export type RecipeIngredientsItem = ObjectEntity<
   RecipeIngredientsItemInit,
-  RecipeIngredientsItemDestructured
+  RecipeIngredientsItemDestructured,
+  RecipeIngredientsItemSnapshot
 >;
 export type RecipeIngredientsItemInit = {
   id?: string;
@@ -1169,7 +1179,8 @@ export type RecipeIngredientsItemQuantityDestructured =
   RecipeIngredientsItemQuantity;
 export type RecipeIngredientsItemComments = ListEntity<
   RecipeIngredientsItemCommentsInit,
-  RecipeIngredientsItemCommentsDestructured
+  RecipeIngredientsItemCommentsDestructured,
+  RecipeIngredientsItemCommentsSnapshot
 >;
 export type RecipeIngredientsItemCommentsInit =
   Array<RecipeIngredientsItemCommentsItemInit>;
@@ -1209,7 +1220,8 @@ export type RecipeUrlSnapshot = RecipeUrl;
 export type RecipeUrlDestructured = RecipeUrl;
 export type RecipeSession = ObjectEntity<
   RecipeSessionInit,
-  RecipeSessionDestructured
+  RecipeSessionDestructured,
+  RecipeSessionSnapshot
 >;
 export type RecipeSessionInit = {
   startedAt?: number;
@@ -1238,7 +1250,8 @@ export type RecipeSessionStartedAtSnapshot = RecipeSessionStartedAt;
 export type RecipeSessionStartedAtDestructured = RecipeSessionStartedAt;
 export type RecipeSessionCompletedInstructions = ListEntity<
   RecipeSessionCompletedInstructionsInit,
-  RecipeSessionCompletedInstructionsDestructured
+  RecipeSessionCompletedInstructionsDestructured,
+  RecipeSessionCompletedInstructionsSnapshot
 >;
 export type RecipeSessionCompletedInstructionsInit =
   Array<RecipeSessionCompletedInstructionsItemInit>;
@@ -1255,7 +1268,8 @@ export type RecipeSessionCompletedInstructionsItemDestructured =
   RecipeSessionCompletedInstructionsItem;
 export type RecipeSessionCompletedIngredients = ListEntity<
   RecipeSessionCompletedIngredientsInit,
-  RecipeSessionCompletedIngredientsDestructured
+  RecipeSessionCompletedIngredientsDestructured,
+  RecipeSessionCompletedIngredientsSnapshot
 >;
 export type RecipeSessionCompletedIngredientsInit =
   Array<RecipeSessionCompletedIngredientsItemInit>;
@@ -1272,7 +1286,8 @@ export type RecipeSessionCompletedIngredientsItemDestructured =
   RecipeSessionCompletedIngredientsItem;
 export type RecipeSessionInstructionAssignments = ObjectEntity<
   RecipeSessionInstructionAssignmentsInit,
-  RecipeSessionInstructionAssignmentsDestructured
+  RecipeSessionInstructionAssignmentsDestructured,
+  RecipeSessionInstructionAssignmentsSnapshot
 >;
 export type RecipeSessionInstructionAssignmentsInit = Record<
   string,
@@ -1295,7 +1310,8 @@ export type RecipeSessionInstructionAssignmentsValueDestructured =
 
 export type RecipeSessionIngredientAssignments = ObjectEntity<
   RecipeSessionIngredientAssignmentsInit,
-  RecipeSessionIngredientAssignmentsDestructured
+  RecipeSessionIngredientAssignmentsDestructured,
+  RecipeSessionIngredientAssignmentsSnapshot
 >;
 export type RecipeSessionIngredientAssignmentsInit = Record<
   string,
@@ -1316,7 +1332,11 @@ export type RecipeSessionIngredientAssignmentsValueSnapshot =
 export type RecipeSessionIngredientAssignmentsValueDestructured =
   RecipeSessionIngredientAssignmentsValue;
 
-export type RecipeTags = ListEntity<RecipeTagsInit, RecipeTagsDestructured>;
+export type RecipeTags = ListEntity<
+  RecipeTagsInit,
+  RecipeTagsDestructured,
+  RecipeTagsSnapshot
+>;
 export type RecipeTagsInit = Array<RecipeTagsItemInit>;
 export type RecipeTagsDestructured = Array<RecipeTagsItem>;
 export type RecipeTagsSnapshot = Array<RecipeTagsItemSnapshot>;

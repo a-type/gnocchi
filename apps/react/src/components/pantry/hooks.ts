@@ -15,13 +15,13 @@ import { useCallback, useMemo } from 'react';
 // keeping this static to make the query reusable
 const THREE_DAYS_FROM_NOW = addDays(endOfDay(new Date()), 3).getTime();
 export function useExpiresSoonItems({ skip }: { skip?: boolean } = {}) {
-	return hooks.useAllFoods({
+	return hooks.useAllFoodsUnsuspended({
 		index: {
 			where: 'purchasedAndExpiresAt',
 			lt: THREE_DAYS_FROM_NOW,
 		},
 		skip,
-	});
+	}).data;
 }
 
 // something weird is going on in this hook, or the
