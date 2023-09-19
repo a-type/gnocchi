@@ -71,8 +71,8 @@ function stateReducer(
 		return {
 			...changes,
 			selectedItem: {
-				type: 'food' as const,
-				name: changes.inputValue,
+				type: 'raw' as const,
+				text: changes.inputValue,
 				id: changes.inputValue,
 			} as SuggestionData,
 		};
@@ -99,6 +99,11 @@ function getRandomPlaceholder() {
 }
 
 type SuggestionData =
+	| {
+			type: 'raw';
+			text: string;
+			id: string;
+	  }
 	| {
 			type: 'food';
 			name: string;
@@ -159,11 +164,14 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			? depluralize(suggestionPrompt.toLowerCase().trim())
 			: '';
 
+		const { firstWord, quantity } = destructureSearchPrompt(foodSearchPrompt);
+		const foodMatchPrompt = foodSearchPrompt.replace(quantity, '').trim();
+
 		const { data: searchFoods } = hooks.useAllFoodsUnsuspended({
 			index: {
 				where: 'nameLookup',
 				// only use first word... only one word can match the index.
-				startsWith: foodSearchPrompt.split(/\s/)[0],
+				startsWith: firstWord,
 			},
 			limit: 20,
 			// skip: !showRichSuggestions || !foodSearchPrompt,
@@ -255,9 +263,9 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 		const searchFoodsSuggestions = useMemo<SuggestionData[]>(() => {
 			return mapFoodsToSuggestions(
 				searchFoods.filter((food) => {
-					if (food.get('canonicalName').includes(foodSearchPrompt)) return true;
+					if (food.get('canonicalName').includes(foodMatchPrompt)) return true;
 					for (const name in food.get('alternateNames')) {
-						if (name.includes(foodSearchPrompt)) return true;
+						if (name.includes(foodMatchPrompt)) return true;
 					}
 					return false;
 				}),
@@ -267,7 +275,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			searchFoods,
 			mapFoodsToSuggestions,
 			hasFewSuggestions,
-			foodSearchPrompt,
+			foodMatchPrompt,
 		]);
 
 		const { data: searchRecipes } = hooks.useAllRecipesUnsuspended({
@@ -376,7 +384,9 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			async onSelectedItemChange({ selectedItem, inputValue }) {
 				if (selectedItem) {
 					reset();
-					if (selectedItem.type === 'url') {
+					if (selectedItem.type === 'raw') {
+						await onAdd([selectedItem.text]);
+					} else if (selectedItem.type === 'url') {
 						if (isSubscribed) {
 							recipeSavePromptState.url = selectedItem.url;
 						} else {
@@ -384,7 +394,11 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 						}
 					} else if (selectedItem.type === 'food') {
 						try {
-							await onAdd([selectedItem.name]);
+							if (quantity) {
+								await onAdd([`${quantity} ${selectedItem.name}`]);
+							} else {
+								await onAdd([selectedItem.name]);
+							}
 						} catch (e) {
 							setInputValue(inputValue || '');
 						}
@@ -450,8 +464,8 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 									className="w-34px h-34px p-0 items-center justify-center"
 									onClick={() =>
 										selectItem({
-											type: 'food',
-											name: inputValue,
+											type: 'raw',
+											text: inputValue,
 											id: inputValue,
 										})
 									}
@@ -637,7 +651,9 @@ const SuggestionItem = forwardRef<
 	}
 >(function SuggestionItem({ highlighted, className, value, ...rest }, ref) {
 	let displayString;
-	if (value.type === 'food') {
+	if (value.type === 'raw') {
+		displayString = value.text;
+	} else if (value.type === 'food') {
 		displayString = value.name;
 	} else if (value.type === 'recipe') {
 		displayString = value.recipe.get('title');
@@ -683,4 +699,19 @@ function AddRecipeDialog({
 			onOpenChange={onOpenChange}
 		/>
 	);
+}
+
+/**
+ * Pulls out any leading quantity number, and the first
+ * whole word, then the rest of the string.
+ */
+function destructureSearchPrompt(prompt: string): {
+	quantity: string;
+	firstWord: string;
+	rest: string;
+} {
+	const match = prompt.match(/^(\d+)?\s?(\w+)?\s?(.*)$/);
+	if (!match) return { firstWord: '', rest: '', quantity: '' };
+	const [, quantity = '', firstWord = '', rest = ''] = match;
+	return { quantity, firstWord, rest };
 }
