@@ -1,8 +1,10 @@
+import { pickBestNameMatch } from '@/components/foods/lookup.jsx';
 import { signupDialogState } from '@/components/sync/state.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { detailedInstructionsToDoc, instructionsToDoc } from '@/lib/tiptap.js';
 import { trpcClient } from '@/trpc.js';
 import { lookupUnit, parseIngredient } from '@aglio/conversion';
+import { depluralize } from '@aglio/conversion/src/lib/depluralize.js';
 import {
 	Client,
 	ClientDescriptor,
@@ -420,13 +422,20 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	useAddPantryItem: (client) =>
 		useCallback(
 			async (foodName: string) => {
-				foodName = foodName.toLowerCase();
-				const food = await client.foods.findOne({
+				foodName = depluralize(foodName).toLowerCase();
+				const firstWord = foodName.split(' ')[0];
+				const possibleMatches = await client.foods.findAll({
 					index: {
 						where: 'nameLookup',
-						equals: foodName,
+						equals: firstWord,
 					},
 				}).resolved;
+				console.log(
+					`Possible matches for ${foodName}:`,
+					possibleMatches.map((f) => f.get('canonicalName')),
+				);
+				const food = pickBestNameMatch(possibleMatches, foodName, true);
+				console.log('picked', food?.get('canonicalName'));
 				if (food) {
 					const now = Date.now();
 					food.set('lastPurchasedAt', now);
