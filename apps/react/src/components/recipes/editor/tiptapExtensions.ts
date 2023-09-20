@@ -1,4 +1,10 @@
-import { mergeAttributes, Node, textblockTypeInputRule } from '@tiptap/core';
+import {
+	mergeAttributes,
+	Node,
+	textblockTypeInputRule,
+	wrappingInputRule,
+	nodeInputRule,
+} from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Document from '@tiptap/extension-document';
 import { Recipe } from '@aglio/groceries-client';
@@ -7,6 +13,7 @@ import { InstructionStepNodeView } from './InstructionStepNodeView.jsx';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import cuid from 'cuid';
 import Link from '@tiptap/extension-link';
+import { InstructionTimerNodeView } from '@/components/recipes/editor/InstructionTimerNodeView.jsx';
 
 declare module '@tiptap/core' {
 	interface Commands<ReturnType> {
@@ -17,6 +24,10 @@ declare module '@tiptap/core' {
 			setSectionTitle: () => ReturnType;
 			toggleSectionTitle: () => ReturnType;
 		};
+		timer: {
+			setTimer: () => ReturnType;
+			toggleTimer: () => ReturnType;
+		};
 	}
 }
 
@@ -25,6 +36,10 @@ interface StepOptions {
 }
 
 interface SectionTitleOptions {
+	HTMLAttributes: Record<string, any>;
+}
+
+interface TimerOptions {
 	HTMLAttributes: Record<string, any>;
 }
 
@@ -159,11 +174,82 @@ export function createTiptapExtensions(recipe?: Recipe, basicEditor = false) {
 		addInputRules() {
 			return [
 				textblockTypeInputRule({
-					find: /^#\\s$/,
+					find: /^#\s$/,
 					type: this.type,
 				}),
 			];
 		},
+	});
+
+	const Timer = Node.create<TimerOptions>({
+		name: 'timer',
+		group: 'inline',
+		inline: true,
+		selectable: false,
+		atom: true,
+		content: 'text?',
+
+		addAttributes() {
+			return {
+				id: {
+					default: null,
+					keepOnSplit: false,
+					rendered: false,
+					parseHTML: (element) => element.getAttribute('data-id'),
+					renderHTML: (attributes) => {
+						return {
+							'data-id': attributes.id,
+						};
+					},
+				},
+			};
+		},
+
+		parseHTML() {
+			return [{}];
+		},
+
+		renderHTML({ HTMLAttributes }) {
+			return [
+				'div',
+				mergeAttributes(this.options.HTMLAttributes, HTMLAttributes),
+				0,
+			];
+		},
+
+		addCommands() {
+			return {
+				toggleTimer:
+					() =>
+					({ commands }) => {
+						return commands.toggleWrap(this.name);
+					},
+			};
+		},
+
+		addInputRules() {
+			return [
+				// wrappingInputRule({
+				// 	find: /\d+\smin(ute)?s?\s$/,
+				// 	type: this.type,
+				// 	keepMarks: true,
+				// 	keepAttributes: true,
+				// 	editor: this.editor,
+				// }),
+				nodeInputRule({
+					find: /\d+\smin(ute)?s?\s$/,
+					type: this.type,
+				}),
+			];
+		},
+
+		...(!basicEditor
+			? {
+					addNodeView() {
+						return ReactNodeViewRenderer(InstructionTimerNodeView);
+					},
+			  }
+			: {}),
 	});
 
 	const RecipeDocument = Document.extend({
@@ -215,6 +301,7 @@ export function createTiptapExtensions(recipe?: Recipe, basicEditor = false) {
 		StarterKit.configure({ history: false, document: false }),
 		Step,
 		SectionTitle,
+		Timer,
 		RecipeDocument,
 		Link,
 	];

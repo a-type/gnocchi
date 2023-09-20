@@ -1,5 +1,9 @@
 import { Recipe } from '@aglio/groceries-client';
-import { FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons';
+import {
+	FontBoldIcon,
+	FontItalicIcon,
+	StopwatchIcon,
+} from '@radix-ui/react-icons';
 import { Editor } from '@tiptap/core';
 import { useSyncedInstructionsEditor } from '../hooks.js';
 import { P } from '@aglio/ui/components/typography';
@@ -87,6 +91,17 @@ function Toolbar({ editor }: { editor: Editor }) {
 				className="[font-size:12px]"
 			>
 				Heading
+			</Button>
+			<Button
+				color="ghost"
+				onClick={() => {
+					editor.chain().focus().toggleTimer().run();
+				}}
+				// disabled={!editor.can().chain().focus().toggleTimer().run()}
+				toggled={editor.isActive('timer')}
+				className="[font-size:12px]"
+			>
+				<StopwatchIcon /> <span>Timer</span>
 			</Button>
 		</div>
 	);
