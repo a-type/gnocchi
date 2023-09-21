@@ -302,7 +302,8 @@ function AddIngredientsForm({
 			initialValues={{ text: storedValue || '' }}
 			onSubmit={async ({ text }, bag) => {
 				await addIngredients(ingredients, text);
-				bag.resetForm();
+				setStoredValue('');
+				bag.resetForm({ values: { text: '' } });
 			}}
 			validate={({ text }) => {
 				setStoredValue(text);
