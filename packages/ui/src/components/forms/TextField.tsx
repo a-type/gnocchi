@@ -91,9 +91,17 @@ export function TextAreaField({
 	label,
 	className,
 	inputRef,
+	onChange,
+	onFocus,
+	onBlur,
 	...rest
 }: TextAreaFieldProps) {
-	const [props] = useField(name);
+	const [props] = useField({
+		name,
+		onChange,
+		onFocus,
+		onBlur,
+	});
 	return (
 		<FieldRoot className={className}>
 			{label && <FieldLabel>{label}</FieldLabel>}

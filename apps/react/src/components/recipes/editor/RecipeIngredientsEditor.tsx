@@ -53,6 +53,7 @@ import {
 } from '@aglio/ui/components/forms';
 import { OcrButton } from '@/components/recipes/ocr/OcrButton.jsx';
 import { FeatureFlag } from '@/components/auth/FeatureFlag.jsx';
+import { useSessionStorage } from '@/hooks/useLocalStorage.js';
 
 export interface RecipeIngredientsEditorProps {
 	recipe: Recipe;
@@ -61,7 +62,7 @@ export interface RecipeIngredientsEditorProps {
 export function RecipeIngredientsEditor({
 	recipe,
 }: RecipeIngredientsEditorProps) {
-	const { ingredients } = hooks.useWatch(recipe);
+	const { ingredients, id } = hooks.useWatch(recipe);
 	hooks.useWatch(ingredients);
 	const ids = ingredients.map((ingredient) => ingredient.get('id'));
 
@@ -100,7 +101,7 @@ export function RecipeIngredientsEditor({
 					</div>
 				</SortableContext>
 			</DndContext>
-			<AddIngredientsForm ingredients={ingredients} />
+			<AddIngredientsForm ingredients={ingredients} recipeId={id} />
 		</div>
 	);
 }
@@ -284,17 +285,29 @@ function IngredientNote({ ingredient }: { ingredient: RecipeIngredientsItem }) {
 
 function AddIngredientsForm({
 	ingredients,
+	recipeId,
 }: {
 	ingredients: RecipeIngredients;
+	recipeId: string;
 }) {
+	const [storedValue, setStoredValue] = useSessionStorage<string>(
+		`recipe-${recipeId}-ingredients`,
+		'',
+		false,
+	);
+
 	const addIngredients = hooks.useAddRecipeIngredients();
 	return (
 		<Formik
-			initialValues={{ text: '' }}
+			initialValues={{ text: storedValue || '' }}
 			onSubmit={async ({ text }, bag) => {
 				await addIngredients(ingredients, text);
 				bag.resetForm();
 			}}
+			validate={({ text }) => {
+				setStoredValue(text);
+			}}
+			validateOnBlur
 		>
 			{({ setFieldValue }) => (
 				<Form>

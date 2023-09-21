@@ -12,7 +12,7 @@ export function useNeverSeenBefore(onNeverSeenBefore?: () => void) {
 
 	useEffect(() => {
 		if (!seenBefore) {
-			setSeenBefore(true);
+			setSeenBefore(Date.now());
 			onNeverSeenBefore?.();
 		}
 	}, [seenBefore, setSeenBefore, onNeverSeenBefore]);
