@@ -174,6 +174,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 				startsWith: firstWord,
 			},
 			limit: 20,
+			key: 'addBar_searchFoods',
 			// skip: !showRichSuggestions || !foodSearchPrompt,
 		});
 
@@ -185,10 +186,12 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 				order: 'desc',
 			},
 			skip: !showRichSuggestions,
+			key: 'addBar_frequencyFoods',
 		});
 
 		const expiresSoonItems = useExpiresSoonItems({
 			skip: !showRichSuggestions,
+			key: 'addBar_expiresSoon',
 		});
 		const expiresSoonSuggestions = useMemo<SuggestionData[]>(() => {
 			return expiresSoonItems.slice(0, 5).map((item) => ({
@@ -249,6 +252,7 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 				order: 'desc',
 			},
 			skip: !showRichSuggestions,
+			key: 'addBar_frequencyRecipes',
 		});
 		const recipeSuggestions = useMemo<SuggestionData[]>(() => {
 			return mapRecipesToSuggestions(frequencyRecipes);

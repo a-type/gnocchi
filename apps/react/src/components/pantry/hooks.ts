@@ -14,13 +14,17 @@ import { useCallback, useMemo } from 'react';
 
 // keeping this static to make the query reusable
 const THREE_DAYS_FROM_NOW = addDays(endOfDay(new Date()), 3).getTime();
-export function useExpiresSoonItems({ skip }: { skip?: boolean } = {}) {
+export function useExpiresSoonItems({
+	skip,
+	key,
+}: { skip?: boolean; key?: string } = {}) {
 	return hooks.useAllFoodsUnsuspended({
 		index: {
 			where: 'purchasedAndExpiresAt',
 			lt: THREE_DAYS_FROM_NOW,
 		},
 		skip,
+		key,
 	}).data;
 }
 
