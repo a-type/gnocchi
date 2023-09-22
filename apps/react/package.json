@@ -44,7 +44,7 @@
 		"@vercel/analytics": "^0.1.6",
 		"@verdant-web/cli": "^2.2.0",
 		"@verdant-web/common": "^1.14.0",
-		"@verdant-web/react": "^21.1.1",
+		"@verdant-web/react": "^21.1.2",
 		"@verdant-web/react-router": "^0.5.3",
 		"@verdant-web/store": "^2.5.8",
 		"@zip.js/zip.js": "^2.7.6",
