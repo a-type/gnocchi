@@ -14,14 +14,20 @@ export function IngredientText({
 	multiplier,
 	className,
 }: IngredientTextProps) {
-	const { text, quantity, unit, food } = hooks.useWatch(ingredient);
+	const { text, quantity, unit, food, comments } = hooks.useWatch(ingredient);
 
 	if (multiplier !== 1) {
 		const finalQuantity = quantity * multiplier;
+		const showPlural = finalQuantity !== 1;
 		return (
 			<span className={className}>
 				{fractionToText(finalQuantity)}{' '}
-				{unit ? (finalQuantity <= 1 ? unit : pluralize(unit)) : ''} {food}
+				{unit ? (showPlural ? pluralize(unit) : unit) : ''}{' '}
+				{showPlural && !unit ? pluralize(food || '') : food}
+				{comments.length > 0
+					? `,
+				${comments.map((comment) => comment).join(', ')}`
+					: ''}
 			</span>
 		);
 	}
