@@ -430,12 +430,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						equals: firstWord,
 					},
 				}).resolved;
-				console.log(
-					`Possible matches for ${foodName}:`,
-					possibleMatches.map((f) => f.get('canonicalName')),
-				);
 				const food = pickBestNameMatch(possibleMatches, foodName, true);
-				console.log('picked', food?.get('canonicalName'));
 				if (food) {
 					const now = Date.now();
 					food.set('lastPurchasedAt', now);
