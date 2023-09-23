@@ -105,14 +105,6 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							<div className="flex flex-row gap-1 flex-wrap items-center w-full">
 								<RecipePublishControl recipe={recipe} />
 								<RecipeViewerEditButton recipe={recipe} />
-								<AddToListButton
-									color="primary"
-									recipe={recipe}
-									className="ml-auto mr-0"
-								>
-									<PlusIcon />
-									<span>Add to list</span>
-								</AddToListButton>
 							</div>
 							<div className="flex flex-col justify-between items-start w-full gap-3">
 								<div className="flex flex-row gap-1 flex-wrap">
@@ -162,11 +154,16 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 				<RecipeNote recipe={recipe} />
 
 				<Divider />
-				<div className="w-full">
-					<div className="w-auto flex flex-row items-center justify-between self-start gap-6 mb-4">
+				<div className="w-full gap-4 flex flex-col">
+					<div className="w-auto flex flex-row items-center justify-between self-start gap-6 w-full">
 						<H2>Ingredients</H2>
 						<RecipeMultiplierField recipe={recipe} />
 					</div>
+					{/* Seems redundant now? */}
+					<AddToListButton color="primary" recipe={recipe}>
+						<PlusIcon />
+						<span>Add all to list</span>
+					</AddToListButton>
 					<IngredientCheckoffView recipe={recipe} />
 				</div>
 				<Divider />

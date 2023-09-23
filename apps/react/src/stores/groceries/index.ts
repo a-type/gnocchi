@@ -1,4 +1,5 @@
 import { pickBestNameMatch } from '@/components/foods/lookup.jsx';
+import { groceriesState } from '@/components/groceries/state.js';
 import { signupDialogState } from '@/components/sync/state.js';
 import { API_HOST_HTTP } from '@/config.js';
 import { detailedInstructionsToDoc, instructionsToDoc } from '@/lib/tiptap.js';
@@ -22,6 +23,7 @@ import {
 } from '@aglio/groceries-client';
 import { TRPCClientError } from '@trpc/client';
 import cuid from 'cuid';
+import pluralize from 'pluralize';
 import { useCallback } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -514,10 +516,12 @@ export async function addItems(
 		sourceInfo,
 		listId = null,
 		purchased,
+		showToast,
 	}: {
 		listId?: string | null;
 		sourceInfo?: Omit<ItemInputsItemInit, 'text' | 'quantity'>;
 		purchased?: boolean;
+		showToast?: boolean;
 	},
 ) {
 	if (!lines.length) return;
@@ -702,6 +706,16 @@ export async function addItems(
 		client.sync.presence.update({
 			lastInteractedItem: lastItemId,
 		});
+	}
+
+	if (showToast) {
+		toast.success(
+			'Added ' + lines.length + ' ' + pluralize('item', lines.length),
+			{
+				id: 'add-items',
+			},
+		);
+		groceriesState.justAddedSomething = true;
 	}
 }
 

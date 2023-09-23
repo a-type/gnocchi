@@ -1,24 +1,9 @@
-import { groceriesState } from '@/components/groceries/state.js';
 import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
-import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
-import { hooks } from '@/stores/groceries/index.js';
-import { Recipe } from '@aglio/groceries-client';
-import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import { MultiplierStepper } from './MultiplierStepper.jsx';
-import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
-import {
-	Dialog,
-	DialogActions,
-	DialogClose,
-	DialogContent,
-	DialogTitle,
-	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { Checkbox } from '@aglio/ui/components/checkbox';
-import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
+import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
+import { Recipe } from '@aglio/groceries-client';
+import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { DialogTrigger } from '@aglio/ui/components/dialog';
 
 export interface AddToListButtonProps extends ButtonProps {
 	recipe: Recipe;

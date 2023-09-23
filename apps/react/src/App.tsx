@@ -42,7 +42,10 @@ export function App() {
 								<GroceriesProvider>
 									<ParticleLayer>
 										<Pages />
-										<Toaster position="bottom-center" />
+										<Toaster
+											position="bottom-center"
+											containerClassName="mb-10 sm:mb-0"
+										/>
 										<IconSpritesheet />
 										<GlobalSyncingIndicator />
 									</ParticleLayer>

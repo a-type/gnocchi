@@ -121,6 +121,7 @@ export function AddToListDialog({
 											multiplier={multiplier}
 											className="w-full"
 											disableAddNote
+											recipeId={recipe.get('id')}
 										/>
 									</label>
 								</li>
@@ -159,9 +160,9 @@ export function AddToListDialog({
 										recipeId: recipe.get('id'),
 									},
 									listId,
+									showToast: true,
 								},
 							);
-							groceriesState.justAddedSomething = true;
 							setAdding(false);
 							onOpenChange?.(false);
 							next();

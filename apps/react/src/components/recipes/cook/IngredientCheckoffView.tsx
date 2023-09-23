@@ -30,7 +30,7 @@ export const IngredientCheckoffView = forwardRef<
 		<ul
 			ref={ref}
 			className={classNames(
-				'list-none m-0 flex flex-col gap-4 p-0 w-full max-w-600px',
+				'list-none m-0 flex flex-col gap-4 p-0 w-full',
 				className,
 			)}
 		>
@@ -40,6 +40,7 @@ export const IngredientCheckoffView = forwardRef<
 					ingredient={ingredient}
 					multiplier={multiplier}
 					checked={completedIngredients?.has(ingredient.get('id')) ?? false}
+					recipeId={recipe.get('id')}
 					onCheckedChange={(checked) => {
 						sessionAction((session) => {
 							if (checked) {
@@ -62,11 +63,13 @@ function IngredientCheckoffItem({
 	onCheckedChange,
 	checked,
 	multiplier,
+	recipeId,
 }: {
 	ingredient: RecipeIngredientsItem;
 	checked: boolean;
 	onCheckedChange: (checked: boolean) => void;
 	multiplier?: number;
+	recipeId: string;
 }) {
 	const isSectionHeader = hooks.useWatch(ingredient, 'isSectionHeader');
 	return (
@@ -81,6 +84,7 @@ function IngredientCheckoffItem({
 				className="flex-1"
 				ingredient={ingredient}
 				multiplier={multiplier}
+				recipeId={recipeId}
 			/>
 		</li>
 	);

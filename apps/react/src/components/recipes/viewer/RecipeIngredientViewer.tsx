@@ -30,6 +30,7 @@ export interface RecipeIngredientViewerProps {
 	multiplier?: number;
 	className?: string;
 	disableAddNote?: boolean;
+	recipeId: string;
 }
 
 export function RecipeIngredientViewer({
@@ -37,6 +38,7 @@ export function RecipeIngredientViewer({
 	multiplier = 1,
 	className,
 	disableAddNote,
+	recipeId,
 }: RecipeIngredientViewerProps) {
 	const { note, isSectionHeader, quantity, unit } = hooks.useWatch(ingredient);
 	const officialUnit = lookupUnit(unit);
@@ -82,6 +84,27 @@ export function RecipeIngredientViewer({
 		setConversion(undefined);
 	}, [setConversion]);
 
+	const add = hooks.useAddItems();
+	const addToList = useCallback(() => {
+		add(
+			[
+				{
+					original: ingredient.get('text'),
+					quantity: quantity * (multiplier || 1),
+					unit,
+					food: ingredient.get('food'),
+				},
+			],
+			{
+				sourceInfo: {
+					multiplier: multiplier !== 1 ? multiplier : undefined,
+					recipeId,
+				},
+				showToast: true,
+			},
+		);
+	}, [ingredient, multiplier, add, recipeId]);
+
 	return (
 		<div
 			className={classNames(
@@ -125,6 +148,9 @@ export function RecipeIngredientViewer({
 							</DropdownMenu>
 						</>
 					)}
+					<Button size="icon" color="ghost" onClick={addToList}>
+						<Icon name="add_to_list" className="color-gray7" />
+					</Button>
 					{!disableAddNote && (
 						<Button size="icon" color="ghost" onClick={toggleShowNote}>
 							{!!note ? (
