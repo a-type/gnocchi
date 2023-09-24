@@ -13,5 +13,5 @@ export function useFeatureFlag(name: keyof typeof featureFlags) {
 		enabled: !globalValue && isLoggedIn,
 	});
 
-	return globalValue || !!remoteValue;
+	return globalValue || remoteValue === true;
 }
