@@ -12,19 +12,14 @@ export function useVisualViewportOffset() {
 		}
 
 		const update = () => {
-			requestAnimationFrame(() => {
-				const offset = viewport.height - viewport.offsetTop;
-				console.log(viewport.height, viewport.offsetTop);
-				document.documentElement.style.setProperty(
-					'--viewport-bottom-offset',
-					`${window.innerHeight - offset}px`,
-				);
-				document.documentElement.style.setProperty(
-					'--viewport-height',
-					`${viewport.height}px`,
-				);
-				console.log('bottom offset', window.innerHeight - offset);
-			});
+			document.documentElement.style.setProperty(
+				'--viewport-bottom-offset',
+				`${window.innerHeight - viewport.height}px`,
+			);
+			document.documentElement.style.setProperty(
+				'--viewport-height',
+				`${viewport.height}px`,
+			);
 		};
 
 		update();
