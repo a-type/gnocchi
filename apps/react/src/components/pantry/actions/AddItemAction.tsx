@@ -24,7 +24,7 @@ export function AddItemAction() {
 			<DialogTrigger asChild>
 				<ActionButton icon={<PlusIcon />}>Add items</ActionButton>
 			</DialogTrigger>
-			<DialogContent onOpenAutoFocus={preventDefault}>
+			<DialogContent>
 				<FormikForm
 					initialValues={{ name: '' }}
 					onSubmit={async (values, bag) => {

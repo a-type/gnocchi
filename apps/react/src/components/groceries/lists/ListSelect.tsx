@@ -91,7 +91,7 @@ export function ListSelect({
 				</SelectContent>
 			</Select>
 			<Dialog open={isCreating} onOpenChange={() => setIsCreating(false)}>
-				<DialogContent onOpenAutoFocus={preventDefault}>
+				<DialogContent>
 					<Formik
 						initialValues={{ name: '' }}
 						onSubmit={async ({ name }, bag) => {

@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import { CheckIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import { selectTriggerClassName } from '../select.js';
 import { useDrag } from '@use-gesture/react';
+import { preventDefault } from '@aglio/tools';
 
 const StyledOverlay = withClassName(
 	DialogPrimitive.Overlay,
@@ -26,7 +27,7 @@ const StyledOverlay = withClassName(
 
 const StyledContent = withClassName(
 	DialogPrimitive.Content,
-	'z-dialog fixed bottom-[calc(var(--viewport-bottom-offset,0px)+var(--gesture-y,0px))] left-0 right-0 h-min-content max-h-[calc(0.85*var(--viewport-height,100vh))]',
+	'z-dialog fixed bottom-[calc(0px+var(--gesture-y,0px))] left-0 right-0 h-min-content max-h-[calc(0.85*var(--viewport-height,100vh))]',
 	'translate-0 transform-gpu',
 	'animate-ease-out',
 	'shadow-xl bg-white rounded-tl-xl rounded-tr-xl p-6 pt-8 border-default border-b-0 overflow-y-auto flex flex-col pb-[calc(3rem+env(safe-area-inset-bottom,0px))]',
@@ -87,7 +88,7 @@ export const Content = forwardRef<
 
 	return (
 		<DialogPrimitive.Portal>
-			<StyledOverlay />
+			<StyledOverlay onPointerMove={preventDefault} />
 			<StyledContent
 				data-dialog-content
 				ref={finalRef}
