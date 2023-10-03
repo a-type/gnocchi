@@ -45,6 +45,9 @@ export function fractionToText(decimal: number) {
 	let error = startx - matrix[0][0] / matrix[1][0];
 
 	if (numerator === 0) {
+		if (error) {
+			return error.toFixed(2);
+		}
 		return '0';
 	}
 

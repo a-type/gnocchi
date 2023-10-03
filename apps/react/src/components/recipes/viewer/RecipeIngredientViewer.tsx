@@ -54,14 +54,14 @@ export function RecipeIngredientViewer({
 
 	const convertedValue = useMemo(() => {
 		if (!conversion || !officialUnit) return undefined;
-		const result = convertUnits(quantity)
+		const result = convertUnits(quantity * multiplier)
 			.from(officialUnit.abbr)
 			.to(conversion);
 		return `${fractionToText(result)} ${friendlyUnit(
 			conversion,
 			result === 1,
 		)}`;
-	}, [conversion, officialUnit, quantity]);
+	}, [conversion, officialUnit, quantity, multiplier]);
 
 	const convertOptions: string[] = useMemo(() => {
 		if (!officialUnit) return [];
