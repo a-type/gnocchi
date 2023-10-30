@@ -136,22 +136,14 @@ function RecipesNavBarLink({ active }: { active: boolean }) {
 	}, []);
 
 	return (
-		<OnboardingTooltip
-			content={
-				<div>Add your favorite recipes to always have them on hand.</div>
-			}
-			onboarding={firstTimeOnboarding}
-			step="recipes"
+		<NavBarLink
+			to="/recipes"
+			icon={<NavIcon name="book" />}
+			active={active}
+			onHover={preload}
 		>
-			<NavBarLink
-				to="/recipes"
-				icon={<NavIcon name="book" />}
-				active={active}
-				onHover={preload}
-			>
-				Recipes
-			</NavBarLink>
-		</OnboardingTooltip>
+			Recipes
+		</NavBarLink>
 	);
 }
 
@@ -167,22 +159,16 @@ function PantryNavBarLink({ active }: { active: boolean }) {
 	const [newExpiredTime, onSeen] = useHasNewExpirations();
 
 	return (
-		<OnboardingTooltip
-			content={<div>When you purchase items, they'll show up here.</div>}
-			onboarding={firstTimeOnboarding}
-			step="pantry"
+		<NavBarLink
+			to="/pantry"
+			icon={<NavIcon name="food" />}
+			animate={recent}
+			active={active}
+			onClick={onSeen}
 		>
-			<NavBarLink
-				to="/pantry"
-				icon={<NavIcon name="food" />}
-				animate={recent}
-				active={active}
-				onClick={onSeen}
-			>
-				<span>Pantry</span>
-				{newExpiredTime && <Pip />}
-			</NavBarLink>
-		</OnboardingTooltip>
+			<span>Pantry</span>
+			{newExpiredTime && <Pip />}
+		</NavBarLink>
 	);
 }
 
