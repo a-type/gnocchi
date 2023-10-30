@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api.outputs.any_changed }}
-      ui: ${{ steps.ui.outputs.any_changed }}
     steps:
       - uses: actions/checkout@v2
         with:
