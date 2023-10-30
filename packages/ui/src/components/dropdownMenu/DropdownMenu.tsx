@@ -6,18 +6,19 @@ import classNames from 'classnames';
 
 const StyledContent = withClassName(
 	DropdownMenuPrimitive.Content,
-	'min-w-220px bg-white z-menu shadow-lg rounded-xl p-2 border-default',
-	'[&[data-state=open][data-side=top]]animate-fade-in-up',
-	'[&[data-state=open][data-side=right]]animate-fade-in-right',
-	'[&[data-state=open][data-side=bottom]]animate-fade-in-down',
-	'[&[data-state=open][data-side=left]]animate-fade-in-left',
+	'min-w-220px bg-white z-menu shadow-lg rounded-xl border-default',
+	'layer-components:transform-origin-[var(--radix-dropdown-menu-transform-origin)]',
+	'layer-components:[&[data-state=open]]:animate-popover-in',
+	'layer-components:[&[data-state=closed]]:animate-popover-out',
+	'layer-components:(max-h-[var(--radix-dropdown-menu-content-available-height)])',
 	'important:motion-reduce:animate-none',
 	'will-change-transform',
 );
 const itemClassName = classNames(
-	'text-md leading-4 color-black rounded-sm flex items-center h-36px pr-1 pl-6 relative text-left select-none cursor-pointer',
+	'text-md leading-4 color-black rounded-sm flex items-center pr-4 pl-8 py-3 relative text-left select-none cursor-pointer',
 	'[&[data-disabled]]:(color-gray9 pointer-events-none)',
 	'focus-visible:(bg-gray2 color-gray9)',
+	'focus:outline-none',
 );
 const StyledItem = withClassName(DropdownMenuPrimitive.Item, itemClassName);
 const StyledCheckboxItem = withClassName(
@@ -46,7 +47,7 @@ const StyledItemIndicator = withClassName(
 
 const StyledArrow = withClassName(
 	DropdownMenuPrimitive.Arrow,
-	'fill-white stroke-black',
+	'fill-white stroke-black stroke-1',
 );
 
 const StyledTrigger = withClassName(
@@ -77,7 +78,10 @@ export const DropdownMenuContent = ({
 }) => {
 	return (
 		<StyledPortal forceMount={forceMount}>
-			<StyledContent {...props}>{children}</StyledContent>
+			<StyledContent {...props}>
+				<div className="overflow-hidden rounded-xl">{children}</div>
+				<StyledArrow />
+			</StyledContent>
 		</StyledPortal>
 	);
 };

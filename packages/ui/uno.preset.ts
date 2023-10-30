@@ -238,6 +238,14 @@ export default function presetAglio(): Preset {
 						0% { opacity: 1; transform: translate3d(0, 0, 0); }
 						100% { opacity: 0; transform: translate3d(100px, 0, 0); }
 					}`,
+					'popover-in': `{
+						0% { opacity: 0; transform: scale(0.95); }
+						100% { opacity: 1; transform: scale(1); }
+					}`,
+					'popover-out': `{
+						0% { opacity: 1; transform: scale(1); }
+						100% { opacity: 0; transform: scale(0.95); }
+					}`,
 				},
 				timingFns: {
 					linear: 'linear',
@@ -293,6 +301,8 @@ export default function presetAglio(): Preset {
 					'radix-collapsible-open-both': '200ms',
 					'radix-collapsible-close-both': '200ms',
 					'item-disappear': '300ms',
+					'popover-in': '100ms',
+					'popover-out': '100ms',
 				},
 				fillModes: {
 					'peek-open': 'forwards',

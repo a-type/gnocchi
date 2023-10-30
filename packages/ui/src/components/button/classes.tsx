@@ -43,7 +43,7 @@ const colors = {
 const sizes = {
 	default: '',
 	small: 'layer-variants:[&.size-small]:(px-4 py-1 text-sm rounded-full)',
-	icon: 'layer-variants:[&.size-icon]:(p-2 text-sm rounded-full)',
+	icon: 'layer-variants:[&.size-icon]:(p-2 text-sm rounded-full) layer-variants:focus-visible:shadow-[0_0_0_2px_var(--focus,var(--hover))]',
 };
 
 const toggledClass = 'hover:(filter-brightness-[1.1])';
