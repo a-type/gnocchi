@@ -116,7 +116,11 @@ export const SelectContent = withPassthroughNativeRender(
 			<SelectPrimitive.Portal className={className} style={zIndex}>
 				<SelectPrimitive.Content
 					className={classNames(
-						'overflow-hidden bg-white rounded-lg border border-solid border-1 border-black z-menu shadow-lg',
+						'layer-components:(overflow-hidden bg-white rounded-lg border border-solid border-1 border-black z-menu shadow-lg)',
+						'layer-components:transform-origin-[var(--radix-select-content-transform-origin)]',
+						'layer-components:[&[data-state=open]]:animate-popover-in',
+						'layer-components:[&[data-state=closed]]:animate-popover-out',
+						'layer-components:(min-w-[var(--radix-select-trigger-width)] max-h-[var(--radix-select-content-available-height)])',
 						inDialog && 'z-[calc(var(--z-dialog)+1)]',
 					)}
 					{...props}

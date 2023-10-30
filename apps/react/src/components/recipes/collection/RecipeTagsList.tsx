@@ -23,7 +23,7 @@ export function RecipeTagsList({
 
 	return (
 		<div className="flex flex-wrap gap-1 my-1">
-			{showNone && (
+			{(showNone || allTags.length === 0) && (
 				<TagButtonBase
 					toggled={!selectedValue}
 					onClick={() => {
