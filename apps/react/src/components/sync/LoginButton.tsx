@@ -15,7 +15,7 @@ export const LoginButton = forwardRef<
 	return (
 		<LinkButton
 			className={className}
-			to={`/join?returnTo=${returnTo}`}
+			to={`/join${returnTo ? `?returnTo=${returnTo}` : ''}`}
 			{...rest}
 			ref={ref}
 		>

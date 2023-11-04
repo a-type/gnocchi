@@ -19,12 +19,14 @@ export function RecipeAddTag({
 	empty,
 	children,
 	contentClassName,
+	className,
 }: {
 	recipe: Recipe;
 	onAdd?: () => void;
 	empty?: boolean;
 	children?: ReactNode;
 	contentClassName?: string;
+	className?: string;
 }) {
 	const [open, setOpen] = useState(false);
 	const addTag = (tagName: string | null) => {
@@ -47,8 +49,8 @@ export function RecipeAddTag({
 			{children ? (
 				<PopoverTrigger asChild>{children}</PopoverTrigger>
 			) : (
-				<PopoverTrigger asChild>
-					<DefaultTrigger empty={!!empty} />
+				<PopoverTrigger asChild className={className}>
+					<DefaultTrigger />
 				</PopoverTrigger>
 			)}
 			<PopoverContent
@@ -58,7 +60,7 @@ export function RecipeAddTag({
 				<PopoverArrow />
 				<Suspense>
 					<NewTagForm onCreate={addTag} />
-					<div className="mt-4">
+					<div>
 						<RecipeTagsList onSelect={addTag} omit={tagsSnapshot} />
 					</div>
 				</Suspense>
@@ -67,11 +69,16 @@ export function RecipeAddTag({
 	);
 }
 
-const DefaultTrigger = forwardRef<HTMLButtonElement, { empty: boolean }>(
-	({ empty, ...rest }, ref) => (
-		<Button size={empty ? 'small' : 'icon'} ref={ref} {...rest}>
+const DefaultTrigger = forwardRef<HTMLButtonElement, { className?: string }>(
+	({ className, ...rest }, ref) => (
+		<Button
+			size="small"
+			className={classNames('py-1 px-2 text-xs', className)}
+			ref={ref}
+			{...rest}
+		>
 			<PlusIcon />
-			{empty && <span>Add tag</span>}
+			<span>Tag</span>
 		</Button>
 	),
 );

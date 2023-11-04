@@ -16,6 +16,7 @@ import {
 import { Button } from '@aglio/ui/components/button';
 import { H2 } from '@aglio/ui/components/typography';
 import { RecipeAddTag } from '@/components/recipes/editor/RecipeAddTag.jsx';
+import { Chip } from '@aglio/ui/components/chip';
 
 export interface RecipeTagsEditorProps {
 	recipe: Recipe;
@@ -30,15 +31,17 @@ export function RecipeTagsEditor({ recipe, className }: RecipeTagsEditorProps) {
 	const removeTag = (name: string) => tags.removeAll(name);
 
 	return (
-		<div className={classNames('flex flex-col gap-2', className)}>
-			<div className="flex flex-wrap gap-1 p-1 items-center">
-				{tags?.map((tag) => (
-					<Suspense key={tag}>
-						<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
-					</Suspense>
-				))}
-				<RecipeAddTag recipe={recipe} empty={tags?.length === 0} />
-			</div>
+		<div className={classNames('flex flex-wrap gap-1 items-center')}>
+			{tags?.map((tag) => (
+				<Suspense key={tag}>
+					<TagDisplay key={tag} tag={tag} onRemove={removeTag} />
+				</Suspense>
+			))}
+			<RecipeAddTag
+				recipe={recipe}
+				empty={tags?.length === 0}
+				className="text-xs"
+			/>
 		</div>
 	);
 }
@@ -56,17 +59,23 @@ function TagDisplay({
 	const color = data?.get('color') as ThemeName | undefined;
 
 	return (
-		<div
+		<Chip
+			color="primary"
 			className={classNames(
-				'flex items-center gap-1 px-2 pl-4 rounded-full bg-primaryLight color-black font-bold text-sm',
+				'flex items-center gap-1 px-2 rounded-full bg-primaryLight color-black font-bold text-xs',
 				color && `theme-${color}`,
 			)}
 		>
-			<span>{icon ?? <Icon name="tag" />}</span>
+			<span>{icon ?? <Icon name="tag" className="w-[10px] h-[10px]" />}</span>
 			<span>{tag}</span>
-			<Button size="icon" color="ghost" onClick={() => onRemove(tag)}>
-				<Cross2Icon />
+			<Button
+				size="icon"
+				color="ghost"
+				className="p-0"
+				onClick={() => onRemove(tag)}
+			>
+				<Cross2Icon className="w-[10px] h-[10px]" />
 			</Button>
-		</div>
+		</Chip>
 	);
 }

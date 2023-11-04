@@ -30,15 +30,11 @@ import { RecipeViewerEditButton } from './RecipeViewerEditButton.jsx';
 import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';
 import { Suspense, useEffect, useRef } from 'react';
 import { formatMinutes } from '@aglio/tools';
-import { withClassName } from '@aglio/ui/hooks';
 import classNames from 'classnames';
 import { Link } from '@verdant-web/react-router';
 import { OpenInNewWindowIcon, PlusIcon } from '@radix-ui/react-icons';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
-import {
-	CollapsibleRoot,
-	CollapsibleContent,
-} from '@aglio/ui/components/collapsible';
+import { Chip } from '@aglio/ui/components/chip';
 import { useSnapshot } from 'valtio';
 import { viewerState } from '@/components/recipes/viewer/state.js';
 import { CookingToolbar } from '@/components/recipes/cook/CookingToolbar.jsx';
@@ -108,22 +104,18 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 							</div>
 							<div className="flex flex-col justify-between items-start w-full gap-3">
 								<div className="flex flex-row gap-1 flex-wrap">
-									<Detail>
-										Created on {format(createdAt, 'LLL do, yyyy')}
-									</Detail>
+									<Chip>Created on {format(createdAt, 'LLL do, yyyy')}</Chip>
 									{!!totalTimeMinutes && (
-										<Detail>
-											Total time: {formatMinutes(totalTimeMinutes)}
-										</Detail>
+										<Chip>Total time: {formatMinutes(totalTimeMinutes)}</Chip>
 									)}
 									{!!prepTimeMinutes && (
-										<Detail>Prep time: {formatMinutes(prepTimeMinutes)}</Detail>
+										<Chip>Prep time: {formatMinutes(prepTimeMinutes)}</Chip>
 									)}
 									{!!cookTimeMinutes && (
-										<Detail>Cook time: {formatMinutes(cookTimeMinutes)}</Detail>
+										<Chip>Cook time: {formatMinutes(cookTimeMinutes)}</Chip>
 									)}
 									{!!servings && (
-										<Detail>
+										<Chip>
 											Serves{' '}
 											<span
 												className={classNames({
@@ -132,10 +124,18 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 											>
 												{multipliedServings.toLocaleString()}
 											</span>
-										</Detail>
+										</Chip>
 									)}
+									{url && (
+										<Chip asChild color="accent">
+											<Link to={url} newTab>
+												View original{' '}
+												<OpenInNewWindowIcon className="ml-2 relative b--1" />
+											</Link>
+										</Chip>
+									)}
+									<RecipeTagsEditor recipe={recipe} className="flex-1" />
 								</div>
-								<RecipeTagsEditor recipe={recipe} className="flex-1" />
 							</div>
 						</div>
 					</TitleContainer>
@@ -146,11 +146,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					)}
 				</TitleAndImageLayout>
 				<PreludeSection recipe={recipe} />
-				{url && (
-					<Link to={url} newTab className="font-bold">
-						View original <OpenInNewWindowIcon className="ml-2 relative b--1" />
-					</Link>
-				)}
+
 				<RecipeNote recipe={recipe} />
 
 				<Divider />
@@ -199,11 +195,6 @@ function PreludeSection({ recipe }: { recipe: Recipe }) {
 		</div>
 	);
 }
-
-const Detail = withClassName(
-	'div',
-	'inline-flex flex-row gap-1 items-center whitespace-nowrap border-light border-solid border-1 rounded-full px-2 py-1',
-);
 
 function OverviewNowPlaying({ recipe }: { recipe: Recipe }) {
 	const { showCookTools } = useSnapshot(viewerState);
