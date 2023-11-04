@@ -227,6 +227,7 @@ function IngredientDetailsDialog({
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 }) {
+	const { isSectionHeader } = hooks.useWatch(ingredient);
 	return (
 		<Dialog {...rest}>
 			<DialogContent>
@@ -254,9 +255,11 @@ function IngredientDetailsDialog({
 				>
 					<Form>
 						<TextField name="text" label="Text" />
-						<TextField name="food" label="Food" />
-						<TextField name="quantity" label="Quantity" type="number" />
-						<TextField name="unit" label="Unit" />
+						{!isSectionHeader && <TextField name="food" label="Food" />}
+						{!isSectionHeader && (
+							<TextField name="quantity" label="Quantity" type="number" />
+						)}
+						{!isSectionHeader && <TextField name="unit" label="Unit" />}
 						<DialogActions>
 							<DialogClose asChild>
 								<Button>Cancel</Button>

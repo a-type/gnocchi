@@ -148,9 +148,11 @@ export function RecipeIngredientViewer({
 							</DropdownMenu>
 						</>
 					)}
-					<Button size="icon" color="ghost" onClick={addToList}>
-						<Icon name="add_to_list" className="color-gray7" />
-					</Button>
+					{!isSectionHeader && (
+						<Button size="icon" color="ghost" onClick={addToList}>
+							<Icon name="add_to_list" className="color-gray7" />
+						</Button>
+					)}
 					{!disableAddNote && (
 						<Button size="icon" color="ghost" onClick={toggleShowNote}>
 							{!!note ? (
