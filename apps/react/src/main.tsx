@@ -4,6 +4,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.js';
 import { attachToPwaEvents } from './pwaEventListener.js';
+import { requestPersistentStorage } from '@/lib/platform.js';
 
 if (!import.meta.env.DEV) {
 	import('@vercel/analytics').then((mod) => {
@@ -23,6 +24,7 @@ function main() {
 main();
 
 attachToPwaEvents();
+requestPersistentStorage();
 
 function debugUno() {
 	setTimeout(

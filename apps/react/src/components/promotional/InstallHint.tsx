@@ -12,6 +12,13 @@ import { withClassName } from '@aglio/ui/hooks';
 import { useSnapshot } from 'valtio';
 import { installState, triggerInstall } from '@/install.js';
 import { DownloadIcon } from '@radix-ui/react-icons';
+import {
+	getIsEdge,
+	getIsFirefox,
+	getIsPWAInstalled,
+	getIsSafari,
+	getOS,
+} from '@/lib/platform.js';
 
 export interface InstallHintProps {}
 
@@ -66,47 +73,6 @@ export function InstallHint({}: InstallHintProps) {
 			</div>
 		</div>
 	);
-}
-
-function getIsPWAInstalled() {
-	return window.matchMedia('(display-mode: standalone)').matches;
-}
-
-function getOS() {
-	const userAgent = window.navigator.userAgent;
-	const platform = window.navigator.platform;
-	const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
-	const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
-	const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
-
-	if (macosPlatforms.indexOf(platform) !== -1) {
-		return 'Mac OS';
-	} else if (iosPlatforms.indexOf(platform) !== -1) {
-		return 'iOS';
-	} else if (windowsPlatforms.indexOf(platform) !== -1) {
-		return 'Windows';
-	} else if (/Android/.test(userAgent)) {
-		return 'Android';
-	} else if (!platform && /Linux/.test(userAgent)) {
-		return 'Linux';
-	}
-
-	return 'Other';
-}
-
-function getIsSafari() {
-	const ua = navigator.userAgent.toLowerCase();
-	return !!ua.match(/WebKit/i) && !ua.match(/CriOS/i);
-}
-
-function getIsFirefox() {
-	const ua = navigator.userAgent.toLowerCase();
-	return !!ua.match(/Firefox/i);
-}
-
-function getIsEdge() {
-	const ua = navigator.userAgent.toLowerCase();
-	return !!ua.match(/Edge/i);
 }
 
 const Keyword = withClassName('span', 'color-black bg-primaryWash');
