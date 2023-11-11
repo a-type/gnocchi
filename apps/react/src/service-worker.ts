@@ -18,12 +18,15 @@ import {
 } from 'workbox-precaching';
 import { NavigationRoute, registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import * as navigationPreload from 'workbox-navigation-preload';
 
 declare const self: ServiceWorkerGlobalScope;
 
 // auto-update on ready
 // self.skipWaiting();
 // clientsClaim();
+
+navigationPreload.enable();
 
 cleanupOutdatedCaches();
 
