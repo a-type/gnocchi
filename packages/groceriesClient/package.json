@@ -16,7 +16,7 @@
 		"@aglio/trpc": "workspace:*",
 		"@trpc/client": "^10.5.0",
 		"@trpc/server": "^10.5.0",
-		"@verdant-web/cli": "^4.0.1",
+		"@verdant-web/cli": "^4.0.2",
 		"@verdant-web/common": "^1.15.0",
 		"@verdant-web/react": "^23.0.0",
 		"@verdant-web/store": "^2.7.0",

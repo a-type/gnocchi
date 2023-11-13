@@ -338,8 +338,8 @@ importers:
         specifier: ^0.1.6
         version: 0.1.6(react@18.2.0)
       '@verdant-web/cli':
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^4.0.2
+        version: 4.0.2
       '@verdant-web/common':
         specifier: ^1.15.0
         version: 1.15.0
@@ -609,8 +609,8 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0
       '@verdant-web/cli':
-        specifier: ^4.0.1
-        version: 4.0.1
+        specifier: ^4.0.2
+        version: 4.0.2
       '@verdant-web/common':
         specifier: ^1.15.0
         version: 1.15.0
@@ -6800,8 +6800,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/cli@4.0.1:
-    resolution: {integrity: sha512-m2Y57u9TIOF7Fh0lUhufO0UJwq9h33n1S5uAnmUF40f+cBwhAwQMQNLC7w3LLox+lejyudB1kjBpueFYrNf7DQ==}
+  /@verdant-web/cli@4.0.2:
+    resolution: {integrity: sha512-UgR1zFDXtH+fijcZB+9Io1nOKL0TIKqjy4PNNs6q7ld8tw1Q4YUIG6MMCoyzfK/+sRzPPwNmNWIPBW3HIGY5Jg==}
     hasBin: true
     dependencies:
       '@clack/prompts': 0.5.1
