@@ -73,11 +73,11 @@ export type SuggestionSnapshot = { text: string; usageCount: number };
 export type SuggestionInit = { text: string; usageCount?: number };
 
 export type MigrationTypes = {
-  category: { init: CategoryInit; snapshot: CategorySnapshot };
-  item: { init: ItemInit; snapshot: ItemSnapshot };
-  foodCategoryAssignment: {
+  categories: { init: CategoryInit; snapshot: CategorySnapshot };
+  items: { init: ItemInit; snapshot: ItemSnapshot };
+  foodCategoryAssignments: {
     init: FoodCategoryAssignmentInit;
     snapshot: FoodCategoryAssignmentSnapshot;
   };
-  suggestion: { init: SuggestionInit; snapshot: SuggestionSnapshot };
+  suggestions: { init: SuggestionInit; snapshot: SuggestionSnapshot };
 };
