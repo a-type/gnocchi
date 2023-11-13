@@ -78,11 +78,11 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3
       '@verdant-web/common':
-        specifier: ^1.15.0
-        version: 1.15.0
+        specifier: ^1.15.1
+        version: 1.15.1
       '@verdant-web/server':
-        specifier: ^1.8.11
-        version: 1.8.11(utf-8-validate@5.0.9)
+        specifier: ^1.8.12
+        version: 1.8.12(utf-8-validate@5.0.9)
       better-sqlite3:
         specifier: ^7.6.2
         version: 7.6.2
@@ -341,17 +341,17 @@ importers:
         specifier: ^4.0.2
         version: 4.0.2
       '@verdant-web/common':
-        specifier: ^1.15.0
-        version: 1.15.0
+        specifier: ^1.15.1
+        version: 1.15.1
       '@verdant-web/react':
-        specifier: ^23.0.0
-        version: 23.0.0(@verdant-web/store@2.7.0)(react@18.2.0)
+        specifier: ^23.0.1
+        version: 23.0.1(@verdant-web/store@2.7.1)(react@18.2.0)
       '@verdant-web/react-router':
         specifier: ^0.5.4
         version: 0.5.4(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.7.0
-        version: 2.7.0
+        specifier: ^2.7.1
+        version: 2.7.1
       '@zip.js/zip.js':
         specifier: ^2.7.6
         version: 2.7.6
@@ -612,14 +612,14 @@ importers:
         specifier: ^4.0.2
         version: 4.0.2
       '@verdant-web/common':
-        specifier: ^1.15.0
-        version: 1.15.0
+        specifier: ^1.15.1
+        version: 1.15.1
       '@verdant-web/react':
-        specifier: ^23.0.0
-        version: 23.0.0(@verdant-web/store@2.7.0)(react@18.2.0)
+        specifier: ^23.0.1
+        version: 23.0.1(@verdant-web/store@2.7.1)(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.7.0
-        version: 2.7.0
+        specifier: ^2.7.1
+        version: 2.7.1
       cuid:
         specifier: ^2.1.8
         version: 2.1.8
@@ -705,11 +705,11 @@ importers:
         specifier: ^10.10.0
         version: 10.18.0
       '@verdant-web/common':
-        specifier: ^1.15.0
-        version: 1.15.0
+        specifier: ^1.15.1
+        version: 1.15.1
       '@verdant-web/server':
-        specifier: ^1.8.11
-        version: 1.8.11(utf-8-validate@5.0.9)
+        specifier: ^1.8.12
+        version: 1.8.12(utf-8-validate@5.0.9)
       cuid:
         specifier: ^3.0.0
         version: 3.0.0
@@ -6815,8 +6815,8 @@ packages:
       - '@swc/helpers'
     dev: false
 
-  /@verdant-web/common@1.15.0:
-    resolution: {integrity: sha512-QVaoqUiqnyyZn3ALrnfU0LyCDOszS+aqT2m8XYjP+5AbU34jtj1J6jZB/Xl1j/7I5YITb5mrr9bF/3Ooy+tXnA==}
+  /@verdant-web/common@1.15.1:
+    resolution: {integrity: sha512-saK/PBDUNNzcoXJ/VWJjdT97YJRRtoZtvH31+DzYwbckodtBuqIhMukN/BzFconDx6vWYCglIwEFRR9jQd7XQA==}
     dependencies:
       cuid: 2.1.8
       object-hash: 3.0.0
@@ -6832,23 +6832,23 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/react@23.0.0(@verdant-web/store@2.7.0)(react@18.2.0):
-    resolution: {integrity: sha512-avSjQnsz+KbfogcdIaFYpXQq1Gzfko2eihWtA/iCmPa98InUzvetTMCpXAC8q0RSlUe4U6IiXhvaRxcPsNz7hg==}
+  /@verdant-web/react@23.0.1(@verdant-web/store@2.7.1)(react@18.2.0):
+    resolution: {integrity: sha512-M5Ik+ilP9ApYfJK9YNQIBK2ZjZA3sNrLiolI8O7GEdH2BOPtpu/vMST5Jb4AqEUhjrmSq/DNaaU6Vh1AYEXq+g==}
     peerDependencies:
-      '@verdant-web/store': ^2.7.0
+      '@verdant-web/store': ^2.7.1
       react: ^18.2.0
     dependencies:
-      '@verdant-web/common': 1.15.0
-      '@verdant-web/store': 2.7.0
+      '@verdant-web/common': 1.15.1
+      '@verdant-web/store': 2.7.1
       react: 18.2.0
       suspend-react: 0.0.8(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  /@verdant-web/server@1.8.11(utf-8-validate@5.0.9):
-    resolution: {integrity: sha512-40j5chePvCt1vuSXRzwVrnkLJPMflobW1JnBzy6Mj3R6mlVxuQ0q9cyqOawn/P/MIG6iXgp1l3PTU8eCLKOo7g==}
+  /@verdant-web/server@1.8.12(utf-8-validate@5.0.9):
+    resolution: {integrity: sha512-Yuxgw39mhetjF6NSFH4C+mPCspCAPshafejx3XOBdjxlSim0zyw7wSE/pt3HjTqyIwBVZUI7DpQyeZgeMS7QFQ==}
     dependencies:
-      '@verdant-web/common': 1.15.0
+      '@verdant-web/common': 1.15.1
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       busboy: 1.6.0
@@ -6859,10 +6859,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@verdant-web/store@2.7.0:
-    resolution: {integrity: sha512-KlsbsF+gMgnjAOT7xg0b63ali598sGTlw6XxtnEus10+FdVcoqrHIXZ6qXu6HCcpWp1VNs9HMQR993KMNNoe0w==}
+  /@verdant-web/store@2.7.1:
+    resolution: {integrity: sha512-wINs0sVLchnIT51NZw0pOWIZXuuFUtB4pMcPMcicn5TljJqfv9Fupp+Apm7iZ7MlTCZDwktSNiPJxoLJc9ZtKg==}
     dependencies:
-      '@verdant-web/common': 1.15.0
+      '@verdant-web/common': 1.15.1
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false
