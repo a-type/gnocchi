@@ -78,11 +78,11 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3
       '@verdant-web/common':
-        specifier: ^1.15.1
-        version: 1.15.1
+        specifier: ^1.15.2
+        version: 1.15.2
       '@verdant-web/server':
-        specifier: ^1.8.12
-        version: 1.8.12(utf-8-validate@5.0.9)
+        specifier: ^1.8.13
+        version: 1.8.13(utf-8-validate@5.0.9)
       better-sqlite3:
         specifier: ^7.6.2
         version: 7.6.2
@@ -338,20 +338,20 @@ importers:
         specifier: ^0.1.6
         version: 0.1.6(react@18.2.0)
       '@verdant-web/cli':
-        specifier: ^4.0.2
-        version: 4.0.2
+        specifier: ^4.0.3
+        version: 4.0.3
       '@verdant-web/common':
-        specifier: ^1.15.1
-        version: 1.15.1
+        specifier: ^1.15.2
+        version: 1.15.2
       '@verdant-web/react':
-        specifier: ^23.0.1
-        version: 23.0.1(@verdant-web/store@2.7.1)(react@18.2.0)
+        specifier: ^23.0.2
+        version: 23.0.2(@verdant-web/store@2.7.4)(react@18.2.0)
       '@verdant-web/react-router':
         specifier: ^0.5.4
         version: 0.5.4(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.7.1
-        version: 2.7.1
+        specifier: ^2.7.4
+        version: 2.7.4
       '@zip.js/zip.js':
         specifier: ^2.7.6
         version: 2.7.6
@@ -609,17 +609,17 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0
       '@verdant-web/cli':
-        specifier: ^4.0.2
-        version: 4.0.2
+        specifier: ^4.0.3
+        version: 4.0.3
       '@verdant-web/common':
-        specifier: ^1.15.1
-        version: 1.15.1
+        specifier: ^1.15.2
+        version: 1.15.2
       '@verdant-web/react':
-        specifier: ^23.0.1
-        version: 23.0.1(@verdant-web/store@2.7.1)(react@18.2.0)
+        specifier: ^23.0.2
+        version: 23.0.2(@verdant-web/store@2.7.4)(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.7.1
-        version: 2.7.1
+        specifier: ^2.7.4
+        version: 2.7.4
       cuid:
         specifier: ^2.1.8
         version: 2.1.8
@@ -705,11 +705,11 @@ importers:
         specifier: ^10.10.0
         version: 10.18.0
       '@verdant-web/common':
-        specifier: ^1.15.1
-        version: 1.15.1
+        specifier: ^1.15.2
+        version: 1.15.2
       '@verdant-web/server':
-        specifier: ^1.8.12
-        version: 1.8.12(utf-8-validate@5.0.9)
+        specifier: ^1.8.13
+        version: 1.8.13(utf-8-validate@5.0.9)
       cuid:
         specifier: ^3.0.0
         version: 3.0.0
@@ -2336,6 +2336,7 @@ packages:
   /@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2(@babel/core@7.23.3):
     resolution: {integrity: sha512-SOSkfJDddaM7mak6cPEpswyTRnuRltl429hMraQEglW+OkovnCzsiszTmsrlY//qLFjCpQDFRvjdm2wA5pPm9w==}
     engines: {node: '>=6.9.0'}
+    deprecated: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
@@ -6800,23 +6801,23 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/cli@4.0.2:
-    resolution: {integrity: sha512-UgR1zFDXtH+fijcZB+9Io1nOKL0TIKqjy4PNNs6q7ld8tw1Q4YUIG6MMCoyzfK/+sRzPPwNmNWIPBW3HIGY5Jg==}
+  /@verdant-web/cli@4.0.3:
+    resolution: {integrity: sha512-rrG8ZOwhjW0hPkx5MJyJBdI3j+cG1HLJu03K9Zea7oDN6Gez5K29aPz3DYrNTwR9HflvLoLGylazwfkzUx7H4g==}
     hasBin: true
     dependencies:
       '@clack/prompts': 0.5.1
       '@swc/core': 1.3.96
       change-case: 4.1.2
       esbuild: 0.19.5
-      prettier: 3.0.3
+      prettier: 3.1.0
       yargs: 17.7.2
       zod: 3.22.4
     transitivePeerDependencies:
       - '@swc/helpers'
     dev: false
 
-  /@verdant-web/common@1.15.1:
-    resolution: {integrity: sha512-saK/PBDUNNzcoXJ/VWJjdT97YJRRtoZtvH31+DzYwbckodtBuqIhMukN/BzFconDx6vWYCglIwEFRR9jQd7XQA==}
+  /@verdant-web/common@1.15.2:
+    resolution: {integrity: sha512-6PKFLcDE9nk82qTaqXE9GzEB7KtotGjRP3RemJpAJyx8gXQzXX5W+B4mI9zWWHHsSor5Gh8eVpeRkpSrX1ELZg==}
     dependencies:
       cuid: 2.1.8
       object-hash: 3.0.0
@@ -6832,23 +6833,23 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/react@23.0.1(@verdant-web/store@2.7.1)(react@18.2.0):
-    resolution: {integrity: sha512-M5Ik+ilP9ApYfJK9YNQIBK2ZjZA3sNrLiolI8O7GEdH2BOPtpu/vMST5Jb4AqEUhjrmSq/DNaaU6Vh1AYEXq+g==}
+  /@verdant-web/react@23.0.2(@verdant-web/store@2.7.4)(react@18.2.0):
+    resolution: {integrity: sha512-1ldWPxBXdScy8v9XmxPCPvZvprW2alp28oga+rqPDNQBekzHnqYOSq9e5ywDtTSPM4dHKLDUoIb50ycsG2IK0A==}
     peerDependencies:
-      '@verdant-web/store': ^2.7.1
+      '@verdant-web/store': ^2.7.2
       react: ^18.2.0
     dependencies:
-      '@verdant-web/common': 1.15.1
-      '@verdant-web/store': 2.7.1
+      '@verdant-web/common': 1.15.2
+      '@verdant-web/store': 2.7.4
       react: 18.2.0
       suspend-react: 0.0.8(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  /@verdant-web/server@1.8.12(utf-8-validate@5.0.9):
-    resolution: {integrity: sha512-Yuxgw39mhetjF6NSFH4C+mPCspCAPshafejx3XOBdjxlSim0zyw7wSE/pt3HjTqyIwBVZUI7DpQyeZgeMS7QFQ==}
+  /@verdant-web/server@1.8.13(utf-8-validate@5.0.9):
+    resolution: {integrity: sha512-yOruKzuoPb9Du4brUPL83M/lKLOy4rQjAllwkdalOtHgDqTtWtiVVAtIoJ1Clq4qwfjqaeaQip9fVjkPblDGDQ==}
     dependencies:
-      '@verdant-web/common': 1.15.1
+      '@verdant-web/common': 1.15.2
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       busboy: 1.6.0
@@ -6859,10 +6860,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@verdant-web/store@2.7.1:
-    resolution: {integrity: sha512-wINs0sVLchnIT51NZw0pOWIZXuuFUtB4pMcPMcicn5TljJqfv9Fupp+Apm7iZ7MlTCZDwktSNiPJxoLJc9ZtKg==}
+  /@verdant-web/store@2.7.4:
+    resolution: {integrity: sha512-6EgksLTQwcWq8WXHMd9m5H7xBIOTUYDcjihKP1TLcWGru+bGlMGng41GSaIZ57CLoAT7USwhLt1kg1ewz+UPxA==}
     dependencies:
-      '@verdant-web/common': 1.15.1
+      '@verdant-web/common': 1.15.2
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false
@@ -11508,8 +11509,8 @@ packages:
     hasBin: true
     dev: true
 
-  /prettier@3.0.3:
-    resolution: {integrity: sha512-L/4pUDMxcNa8R/EthV08Zt42WBO4h1rarVtK0K+QJG0X187OLo7l699jWw0GKuwzkPQ//jMFA/8Xm6Fh3J/DAg==}
+  /prettier@3.1.0:
+    resolution: {integrity: sha512-TQLvXjq5IAibjh8EpBIkNKxO749UEWABoiIZehEPiY4GNpVdhaFKqSTu+QrlU6D2dPAfubRmtJTi4K4YkQ5eXw==}
     engines: {node: '>=14'}
     hasBin: true
     dev: false
