@@ -1,19 +1,16 @@
-import v4Schema from '../client/schemaVersions/v4.js';
-import v5Schema from '../client/schemaVersions/v5.js';
-import { migrate } from '@verdant-web/store';
+import v4Schema, {
+	MigrationTypes as V4Types,
+} from '../client/schemaVersions/v4.js';
+import v5Schema, {
+	MigrationTypes as V5Types,
+} from '../client/schemaVersions/v5.js';
+import { createMigration } from '@verdant-web/store';
 import { trpcClient } from '../trpc.js';
 
-export default migrate(
+export default createMigration<V4Types, V5Types>(
 	v4Schema,
 	v5Schema,
-	async ({ withDefaults, migrate, mutations }) => {
-		await Promise.all([
-			migrate('items', (old) => withDefaults('items', old)),
-			migrate('categories', (old) => withDefaults('categories', old)),
-			migrate('foodCategoryAssignments', (old) =>
-				withDefaults('foodCategoryAssignments', old),
-			),
-		]);
+	async ({ mutations }) => {
 		try {
 			const defaultCategories = await trpcClient.categories.defaults.query();
 			for (const defaultCategory of defaultCategories) {

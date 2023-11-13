@@ -1,11 +1,5 @@
-import { migrate } from '@verdant-web/store';
+import { createMigration } from '@verdant-web/store';
 import v1Schema from '../client/schemaVersions/v1.js';
 import v2Schema from '../client/schemaVersions/v2.js';
 
-export default migrate(v1Schema, v2Schema, async ({ identity, migrate }) => {
-	await Promise.all([
-		migrate('items', identity),
-		migrate('categories', identity),
-		migrate('foodCategoryLookups', identity),
-	]);
-});
+export default createMigration(v1Schema, v2Schema);

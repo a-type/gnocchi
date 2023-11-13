@@ -1,8 +1,10 @@
-import v34Schema from '../client/schemaVersions/v34.js';
-import { migrate } from '@verdant-web/store';
+import v34Schema, {
+	MigrationTypes as V34Types,
+} from '../client/schemaVersions/v34.js';
+import { createMigration } from '@verdant-web/store';
 import { trpcClient } from '../trpc.js';
 
-export default migrate(v34Schema, async ({ mutations }) => {
+export default createMigration<V34Types>(v34Schema, async ({ mutations }) => {
 	await mutations.collaborationInfo.put({});
 	try {
 		const defaultCategories = await trpcClient.categories.defaults.query();

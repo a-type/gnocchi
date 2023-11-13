@@ -1,10 +1,9 @@
-import v38Schema from "../client/schemaVersions/v38.js";
-import v39Schema from "../client/schemaVersions/v39.js";
-import { migrate } from "@verdant-web/store";
+import v38Schema, {
+	MigrationTypes as V38Types,
+} from '../client/schemaVersions/v38.js';
+import v39Schema, {
+	MigrationTypes as V39Types,
+} from '../client/schemaVersions/v39.js';
+import { createMigration } from '@verdant-web/store';
 
-export default migrate(v38Schema, v39Schema, async ({ migrate }) => {
-  // add or modify migration logic here. you must provide migrations for
-  // any collections that have changed field types or added new non-nullable
-  // fields without defaults
-  // migrate('collectionName', async (old) => ({ /* new */ }));
-});
+export default createMigration<V38Types, V39Types>(v38Schema, v39Schema);
