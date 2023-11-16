@@ -120,7 +120,7 @@ export function attachSocketServer(httpServer: HttpServer) {
 		tokenSecret: process.env.LOFI_SECRET!,
 		profiles: new Profiles(),
 		replicaTruancyMinutes: 14 * 60 * 24,
-		log: process.env.DEBUG ? console.debug : undefined,
+		log: console.debug,
 		fileStorage:
 			process.env.NODE_ENV === 'production'
 				? new S3FileBackend()

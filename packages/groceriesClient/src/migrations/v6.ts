@@ -1,17 +1,9 @@
-import v5Schema from '../client/schemaVersions/v5.js';
-import v6Schema from '../client/schemaVersions/v6.js';
-import { migrate } from '@verdant-web/store';
+import v5Schema, {
+  MigrationTypes as V5Types,
+} from "../client/schemaVersions/v5.js";
+import v6Schema, {
+  MigrationTypes as V6Types,
+} from "../client/schemaVersions/v6.js";
+import { createMigration } from "@verdant-web/store";
 
-export default migrate(
-	v5Schema,
-	v6Schema,
-	async ({ migrate, withDefaults }) => {
-		// add or modify migration logic here
-		// if a line has a type error, that indicates the shape of your models may have changed
-		await migrate('categories', (old) => withDefaults('categories', old));
-		await migrate('items', (old) => withDefaults('items', old));
-		await migrate('foodCategoryAssignments', (old) =>
-			withDefaults('foodCategoryAssignments', old),
-		);
-	},
-);
+export default createMigration(v5Schema, v6Schema);

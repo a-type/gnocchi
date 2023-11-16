@@ -1,26 +1,9 @@
-import v19Schema from '../client/schemaVersions/v19.js';
-import v20Schema from '../client/schemaVersions/v20.js';
-import { migrate } from '@verdant-web/store';
+import v19Schema, {
+  MigrationTypes as V19Types,
+} from "../client/schemaVersions/v19.js";
+import v20Schema, {
+  MigrationTypes as V20Types,
+} from "../client/schemaVersions/v20.js";
+import { createMigration } from "@verdant-web/store";
 
-export default migrate(
-	v19Schema,
-	v20Schema,
-	async ({ migrate, withDefaults, info }) => {
-		// add or modify migration logic here
-		// if a line has a type error, that indicates the shape of your models may have changed
-		await migrate('categories', (old) => withDefaults('categories', old));
-		await migrate('items', (old) => withDefaults('items', old));
-		await migrate('foodCategoryAssignments', (old) =>
-			withDefaults('foodCategoryAssignments', old),
-		);
-		await migrate('suggestions', (old) => withDefaults('suggestions', old));
-		await migrate('lists', (old) => withDefaults('lists', old));
-		await migrate('collaborationInfo', (old) =>
-			withDefaults('collaborationInfo', old),
-		);
-		await migrate('recipes', (old) => withDefaults('recipes', old));
-		await migrate('recipeTagMetadata', (old) =>
-			withDefaults('recipeTagMetadata', old),
-		);
-	},
-);
+export default createMigration(v19Schema, v20Schema);

@@ -464,21 +464,24 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 });
 
 const DEBUG = localStorage.getItem('DEBUG') === 'true';
+const NO_SYNC = window.location.search.includes('nosync');
 export function createClientDescriptor(options: { namespace: string }) {
 	return new ClientDescriptor<Presence, Profile>({
-		sync: {
-			authEndpoint: `${API_HOST_HTTP}/api/lofi/groceries`,
-			initialPresence: {
-				lastInteractedItem: null,
-				viewingRecipeId: null,
-				lastInteractedCategory: null,
-			},
-			defaultProfile: {
-				id: '',
-				name: '',
-			},
-			useBroadcastChannel: true,
-		},
+		sync: NO_SYNC
+			? undefined
+			: {
+					authEndpoint: `${API_HOST_HTTP}/api/lofi/groceries`,
+					initialPresence: {
+						lastInteractedItem: null,
+						viewingRecipeId: null,
+						lastInteractedCategory: null,
+					},
+					defaultProfile: {
+						id: '',
+						name: '',
+					},
+					useBroadcastChannel: true,
+			  },
 		migrations,
 		namespace: options.namespace,
 		log:

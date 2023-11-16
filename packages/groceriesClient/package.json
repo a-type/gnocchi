@@ -7,7 +7,7 @@
 	"scripts": {
 		"generate": "verdant -s ./src/schema.ts -o ./src/client -r",
 		"link-verdant": "pnpm link --global @verdant-web/store && pnpm link --global @verdant-web/cli && pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/react",
-		"preflight": "verdant-preflight -o ./src/client"
+		"preflight": "verdant preflight -s ./src/schema.ts -o ./src/client"
 	},
 	"peerDependencies": {
 		"react": "^18.2.0"
@@ -16,10 +16,10 @@
 		"@aglio/trpc": "workspace:*",
 		"@trpc/client": "^10.5.0",
 		"@trpc/server": "^10.5.0",
-		"@verdant-web/cli": "^3.0.0",
-		"@verdant-web/common": "^1.14.1",
-		"@verdant-web/react": "^22.0.0",
-		"@verdant-web/store": "^2.6.0",
+		"@verdant-web/cli": "^4.0.3",
+		"@verdant-web/common": "^1.15.2",
+		"@verdant-web/react": "^23.0.2",
+		"@verdant-web/store": "^2.7.4",
 		"cuid": "^2.1.8",
 		"stopword": "^2.0.8"
 	},

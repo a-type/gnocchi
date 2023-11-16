@@ -1,14 +1,9 @@
-import v30Schema from '../client/schemaVersions/v30.js';
-import v31Schema from '../client/schemaVersions/v31.js';
-import { migrate } from '@verdant-web/store';
+import v30Schema, {
+  MigrationTypes as V30Types,
+} from "../client/schemaVersions/v30.js";
+import v31Schema, {
+  MigrationTypes as V31Types,
+} from "../client/schemaVersions/v31.js";
+import { createMigration } from "@verdant-web/store";
 
-export default migrate(
-	v30Schema,
-	v31Schema,
-	async ({ migrate, withDefaults, info }) => {
-		// add or modify migration logic here
-		// if a line has a type error, that indicates the shape of your models may have changed
-		await migrate('items', (old) => withDefaults('items', old));
-		await migrate('recipes', (old) => withDefaults('recipes', old));
-	},
-);
+export default createMigration(v30Schema, v31Schema);

@@ -4,6 +4,15 @@ import type {
   ClientDescriptor,
   Schema,
   QueryStatus,
+  UserInfo,
+  ObjectEntity,
+  ListEntity,
+  Entity,
+  AccessibleEntityProperty,
+  EntityShape,
+  AnyEntity,
+  EntityDestructured,
+  EntityFile,
   Category,
   CategoryFilter,
   Item,
@@ -19,17 +28,6 @@ import type {
   RecipeTagMetadata,
   RecipeTagMetadataFilter,
 } from "./index.js";
-import type {
-  UserInfo,
-  ObjectEntity,
-  ListEntity,
-  Entity,
-  AccessibleEntityProperty,
-  EntityShape,
-  AnyEntity,
-  EntityDestructured,
-  EntityFile,
-} from "@verdant-web/store";
 
 type HookConfig<F> = {
   index?: F;
@@ -60,22 +58,22 @@ export interface GeneratedHooks<Presence, Profile> {
   usePeer: (peerId: string | null) => UserInfo<Profile, Presence> | null;
   useFindPeer: (
     query: (peer: UserInfo<Profile, Presence>) => boolean,
-    options?: { includeSelf: boolean }
+    options?: { includeSelf: boolean },
   ) => UserInfo<Profile, Presence> | null;
   useFindPeers: (
     query: (peer: UserInfo<Profile, Presence>) => boolean,
-    options?: { includeSelf: boolean }
+    options?: { includeSelf: boolean },
   ) => UserInfo<Profile, Presence>[];
   useSyncStatus: () => boolean;
   useWatch<T extends AnyEntity<any, any, any> | null>(
-    entity: T
+    entity: T,
   ): EntityDestructured<T>;
   useWatch<
     T extends AnyEntity<any, any, any> | null,
-    P extends keyof EntityShape<T>
+    P extends keyof EntityShape<T>,
   >(
     entity: T,
-    prop: P
+    prop: P,
   ): EntityDestructured<T>[P];
   useWatch<T extends EntityFile | null>(file: T): string | null;
   useUndo(): () => void;
@@ -95,27 +93,27 @@ export interface GeneratedHooks<Presence, Profile> {
   useCategory(id: string, config?: { skip?: boolean }): Category | null;
   useCategoryUnsuspended(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): { data: Category | null; status: QueryStatus };
   useOneCategory: <Config extends HookConfig<CategoryFilter>>(
-    config?: Config
+    config?: Config,
   ) => Category | null;
   useOneCategoriesUnsuspended: <Config extends HookConfig<CategoryFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Category | null; status: QueryStatus };
   useAllCategories: <Config extends HookConfig<CategoryFilter>>(
-    config?: Config
+    config?: Config,
   ) => Category[];
   useAllCategoriesUnsuspended: <Config extends HookConfig<CategoryFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Category[]; status: QueryStatus };
   useAllCategoriesPaginated: <
     Config extends HookConfig<CategoryFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Category[],
     {
@@ -125,44 +123,44 @@ export interface GeneratedHooks<Presence, Profile> {
       hasNext: boolean;
       hasPrevious: boolean;
       status: QueryStatus;
-    }
+    },
   ];
   useAllCategoriesInfinite: <
     Config extends HookConfig<CategoryFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Category[],
-    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus },
   ];
 
   useItem(id: string, config?: { skip?: boolean }): Item | null;
   useItemUnsuspended(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): { data: Item | null; status: QueryStatus };
   useOneItem: <Config extends HookConfig<ItemFilter>>(
-    config?: Config
+    config?: Config,
   ) => Item | null;
   useOneItemsUnsuspended: <Config extends HookConfig<ItemFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Item | null; status: QueryStatus };
   useAllItems: <Config extends HookConfig<ItemFilter>>(
-    config?: Config
+    config?: Config,
   ) => Item[];
   useAllItemsUnsuspended: <Config extends HookConfig<ItemFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Item[]; status: QueryStatus };
   useAllItemsPaginated: <
     Config extends HookConfig<ItemFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Item[],
     {
@@ -172,44 +170,44 @@ export interface GeneratedHooks<Presence, Profile> {
       hasNext: boolean;
       hasPrevious: boolean;
       status: QueryStatus;
-    }
+    },
   ];
   useAllItemsInfinite: <
     Config extends HookConfig<ItemFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Item[],
-    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus },
   ];
 
   useFood(id: string, config?: { skip?: boolean }): Food | null;
   useFoodUnsuspended(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): { data: Food | null; status: QueryStatus };
   useOneFood: <Config extends HookConfig<FoodFilter>>(
-    config?: Config
+    config?: Config,
   ) => Food | null;
   useOneFoodsUnsuspended: <Config extends HookConfig<FoodFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Food | null; status: QueryStatus };
   useAllFoods: <Config extends HookConfig<FoodFilter>>(
-    config?: Config
+    config?: Config,
   ) => Food[];
   useAllFoodsUnsuspended: <Config extends HookConfig<FoodFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Food[]; status: QueryStatus };
   useAllFoodsPaginated: <
     Config extends HookConfig<FoodFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Food[],
     {
@@ -219,44 +217,44 @@ export interface GeneratedHooks<Presence, Profile> {
       hasNext: boolean;
       hasPrevious: boolean;
       status: QueryStatus;
-    }
+    },
   ];
   useAllFoodsInfinite: <
     Config extends HookConfig<FoodFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Food[],
-    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus },
   ];
 
   useList(id: string, config?: { skip?: boolean }): List | null;
   useListUnsuspended(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): { data: List | null; status: QueryStatus };
   useOneList: <Config extends HookConfig<ListFilter>>(
-    config?: Config
+    config?: Config,
   ) => List | null;
   useOneListsUnsuspended: <Config extends HookConfig<ListFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: List | null; status: QueryStatus };
   useAllLists: <Config extends HookConfig<ListFilter>>(
-    config?: Config
+    config?: Config,
   ) => List[];
   useAllListsUnsuspended: <Config extends HookConfig<ListFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: List[]; status: QueryStatus };
   useAllListsPaginated: <
     Config extends HookConfig<ListFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     List[],
     {
@@ -266,51 +264,51 @@ export interface GeneratedHooks<Presence, Profile> {
       hasNext: boolean;
       hasPrevious: boolean;
       status: QueryStatus;
-    }
+    },
   ];
   useAllListsInfinite: <
     Config extends HookConfig<ListFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     List[],
-    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus },
   ];
 
   useCollaborationInfo(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): CollaborationInfo | null;
   useCollaborationInfoUnsuspended(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): { data: CollaborationInfo | null; status: QueryStatus };
   useOneCollaborationInfo: <Config extends HookConfig<CollaborationInfoFilter>>(
-    config?: Config
+    config?: Config,
   ) => CollaborationInfo | null;
   useOneCollaborationInfoUnsuspended: <
-    Config extends HookConfig<CollaborationInfoFilter>
+    Config extends HookConfig<CollaborationInfoFilter>,
   >(
-    config?: Config
+    config?: Config,
   ) => { data: CollaborationInfo | null; status: QueryStatus };
   useAllCollaborationInfo: <Config extends HookConfig<CollaborationInfoFilter>>(
-    config?: Config
+    config?: Config,
   ) => CollaborationInfo[];
   useAllCollaborationInfoUnsuspended: <
-    Config extends HookConfig<CollaborationInfoFilter>
+    Config extends HookConfig<CollaborationInfoFilter>,
   >(
-    config?: Config
+    config?: Config,
   ) => { data: CollaborationInfo[]; status: QueryStatus };
   useAllCollaborationInfoPaginated: <
     Config extends HookConfig<CollaborationInfoFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     CollaborationInfo[],
     {
@@ -320,44 +318,44 @@ export interface GeneratedHooks<Presence, Profile> {
       hasNext: boolean;
       hasPrevious: boolean;
       status: QueryStatus;
-    }
+    },
   ];
   useAllCollaborationInfoInfinite: <
     Config extends HookConfig<CollaborationInfoFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     CollaborationInfo[],
-    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus },
   ];
 
   useRecipe(id: string, config?: { skip?: boolean }): Recipe | null;
   useRecipeUnsuspended(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): { data: Recipe | null; status: QueryStatus };
   useOneRecipe: <Config extends HookConfig<RecipeFilter>>(
-    config?: Config
+    config?: Config,
   ) => Recipe | null;
   useOneRecipesUnsuspended: <Config extends HookConfig<RecipeFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Recipe | null; status: QueryStatus };
   useAllRecipes: <Config extends HookConfig<RecipeFilter>>(
-    config?: Config
+    config?: Config,
   ) => Recipe[];
   useAllRecipesUnsuspended: <Config extends HookConfig<RecipeFilter>>(
-    config?: Config
+    config?: Config,
   ) => { data: Recipe[]; status: QueryStatus };
   useAllRecipesPaginated: <
     Config extends HookConfig<RecipeFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Recipe[],
     {
@@ -367,51 +365,51 @@ export interface GeneratedHooks<Presence, Profile> {
       hasNext: boolean;
       hasPrevious: boolean;
       status: QueryStatus;
-    }
+    },
   ];
   useAllRecipesInfinite: <
     Config extends HookConfig<RecipeFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     Recipe[],
-    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus },
   ];
 
   useRecipeTagMetadata(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): RecipeTagMetadata | null;
   useRecipeTagMetadataUnsuspended(
     id: string,
-    config?: { skip?: boolean }
+    config?: { skip?: boolean },
   ): { data: RecipeTagMetadata | null; status: QueryStatus };
   useOneRecipeTagMetadata: <Config extends HookConfig<RecipeTagMetadataFilter>>(
-    config?: Config
+    config?: Config,
   ) => RecipeTagMetadata | null;
   useOneRecipeTagMetadataUnsuspended: <
-    Config extends HookConfig<RecipeTagMetadataFilter>
+    Config extends HookConfig<RecipeTagMetadataFilter>,
   >(
-    config?: Config
+    config?: Config,
   ) => { data: RecipeTagMetadata | null; status: QueryStatus };
   useAllRecipeTagMetadata: <Config extends HookConfig<RecipeTagMetadataFilter>>(
-    config?: Config
+    config?: Config,
   ) => RecipeTagMetadata[];
   useAllRecipeTagMetadataUnsuspended: <
-    Config extends HookConfig<RecipeTagMetadataFilter>
+    Config extends HookConfig<RecipeTagMetadataFilter>,
   >(
-    config?: Config
+    config?: Config,
   ) => { data: RecipeTagMetadata[]; status: QueryStatus };
   useAllRecipeTagMetadataPaginated: <
     Config extends HookConfig<RecipeTagMetadataFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     RecipeTagMetadata[],
     {
@@ -421,18 +419,18 @@ export interface GeneratedHooks<Presence, Profile> {
       hasNext: boolean;
       hasPrevious: boolean;
       status: QueryStatus;
-    }
+    },
   ];
   useAllRecipeTagMetadataInfinite: <
     Config extends HookConfig<RecipeTagMetadataFilter> & {
       pageSize?: number;
       suspend?: false;
-    }
+    },
   >(
-    config?: Config
+    config?: Config,
   ) => [
     RecipeTagMetadata[],
-    { loadMore: () => void; hasMore: boolean; status: QueryStatus }
+    { loadMore: () => void; hasMore: boolean; status: QueryStatus },
   ];
 }
 
@@ -441,16 +439,16 @@ type HookWithoutClient<
   Hook extends <TArgs extends any[], TRet>(
     client: Client,
     ...args: Targs
-  ) => TRet
+  ) => TRet,
 > = (...args: TArgs) => TRet;
 export function createHooks<
   Presence = any,
   Profile = any,
   Mutations extends {
     [N: HookName]: (client: Client<Presence, Profile>, ...args: any[]) => any;
-  } = never
+  } = never,
 >(
-  mutations?: Mutations
+  mutations?: Mutations,
 ): GeneratedHooks<Presence, Profile> & {
   withMutations: <
     Mutations extends {
@@ -458,9 +456,9 @@ export function createHooks<
         client: Client<Presence, Profile>,
         ...args: any[]
       ) => unknown;
-    }
+    },
   >(
-    mutations: Mutations
+    mutations: Mutations,
   ) => GeneratedHooks<Presence, Profile> & {
     [MutHook in keyof Mutations]: HookWithoutClient<Mutations[MutHook]>;
   };
