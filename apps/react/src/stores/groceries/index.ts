@@ -488,6 +488,7 @@ export function createClientDescriptor(options: { namespace: string }) {
 			import.meta.env.DEV || DEBUG
 				? (...args: any[]) => console.debug('🎧', ...args)
 				: undefined,
+		EXPERIMENTAL_weakRefs: true,
 	});
 }
 

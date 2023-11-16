@@ -534,15 +534,15 @@ export interface FoodCategoryIdStartsWithFilter {
 }
 export interface FoodNameLookupMatchFilter {
   where: "nameLookup";
-  equals: string[];
+  equals: string;
   order?: "asc" | "desc";
 }
 export interface FoodNameLookupRangeFilter {
   where: "nameLookup";
-  gte?: string[];
-  gt?: string[];
-  lte?: string[];
-  lt?: string[];
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
   order?: "asc" | "desc";
 }
 export interface FoodNameLookupStartsWithFilter {
@@ -552,15 +552,15 @@ export interface FoodNameLookupStartsWithFilter {
 }
 export interface FoodAnyNameMatchFilter {
   where: "anyName";
-  equals: string[];
+  equals: string;
   order?: "asc" | "desc";
 }
 export interface FoodAnyNameRangeFilter {
   where: "anyName";
-  gte?: string[];
-  gt?: string[];
-  lte?: string[];
-  lt?: string[];
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
   order?: "asc" | "desc";
 }
 export interface FoodAnyNameStartsWithFilter {
@@ -1024,15 +1024,15 @@ export interface RecipePinnedAtRangeFilter {
 }
 export interface RecipeTagMatchFilter {
   where: "tag";
-  equals: string[];
+  equals: string;
   order?: "asc" | "desc";
 }
 export interface RecipeTagRangeFilter {
   where: "tag";
-  gte?: string[];
-  gt?: string[];
-  lte?: string[];
-  lt?: string[];
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
   order?: "asc" | "desc";
 }
 export interface RecipeTagStartsWithFilter {
@@ -1055,15 +1055,15 @@ export interface RecipeSuggestAfterRangeFilter {
 }
 export interface RecipeFoodMatchFilter {
   where: "food";
-  equals: string[];
+  equals: string;
   order?: "asc" | "desc";
 }
 export interface RecipeFoodRangeFilter {
   where: "food";
-  gte?: string[];
-  gt?: string[];
-  lte?: string[];
-  lt?: string[];
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
   order?: "asc" | "desc";
 }
 export interface RecipeFoodStartsWithFilter {
@@ -1073,15 +1073,15 @@ export interface RecipeFoodStartsWithFilter {
 }
 export interface RecipeTitleMatchMatchFilter {
   where: "titleMatch";
-  equals: string[];
+  equals: string;
   order?: "asc" | "desc";
 }
 export interface RecipeTitleMatchRangeFilter {
   where: "titleMatch";
-  gte?: string[];
-  gt?: string[];
-  lte?: string[];
-  lt?: string[];
+  gte?: string;
+  gt?: string;
+  lte?: string;
+  lt?: string;
   order?: "asc" | "desc";
 }
 export interface RecipeTitleMatchStartsWithFilter {

@@ -338,20 +338,20 @@ importers:
         specifier: ^0.1.6
         version: 0.1.6(react@18.2.0)
       '@verdant-web/cli':
-        specifier: ^4.0.3
-        version: 4.0.3
+        specifier: ^4.0.4
+        version: 4.0.4
       '@verdant-web/common':
         specifier: ^1.15.2
         version: 1.15.2
       '@verdant-web/react':
         specifier: ^23.0.2
-        version: 23.0.2(@verdant-web/store@2.7.4)(react@18.2.0)
+        version: 23.0.2(@verdant-web/store@2.7.5)(react@18.2.0)
       '@verdant-web/react-router':
         specifier: ^0.5.4
         version: 0.5.4(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.7.4
-        version: 2.7.4
+        specifier: ^2.7.5
+        version: 2.7.5
       '@zip.js/zip.js':
         specifier: ^2.7.6
         version: 2.7.6
@@ -609,17 +609,17 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0
       '@verdant-web/cli':
-        specifier: ^4.0.3
-        version: 4.0.3
+        specifier: ^4.0.4
+        version: 4.0.4
       '@verdant-web/common':
         specifier: ^1.15.2
         version: 1.15.2
       '@verdant-web/react':
         specifier: ^23.0.2
-        version: 23.0.2(@verdant-web/store@2.7.4)(react@18.2.0)
+        version: 23.0.2(@verdant-web/store@2.7.5)(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.7.4
-        version: 2.7.4
+        specifier: ^2.7.5
+        version: 2.7.5
       cuid:
         specifier: ^2.1.8
         version: 2.1.8
@@ -2336,7 +2336,6 @@ packages:
   /@babel/plugin-proposal-private-property-in-object@7.21.0-placeholder-for-preset-env.2(@babel/core@7.23.3):
     resolution: {integrity: sha512-SOSkfJDddaM7mak6cPEpswyTRnuRltl429hMraQEglW+OkovnCzsiszTmsrlY//qLFjCpQDFRvjdm2wA5pPm9w==}
     engines: {node: '>=6.9.0'}
-    deprecated: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
@@ -6801,8 +6800,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/cli@4.0.3:
-    resolution: {integrity: sha512-rrG8ZOwhjW0hPkx5MJyJBdI3j+cG1HLJu03K9Zea7oDN6Gez5K29aPz3DYrNTwR9HflvLoLGylazwfkzUx7H4g==}
+  /@verdant-web/cli@4.0.4:
+    resolution: {integrity: sha512-Yg6WGuZXYmBz5Z6r0QZGh4zcOLxjjMP0DWWNIE3ZWCdzwvzh1LDlIWTupd/zeoU/hK+K6ZGvn8MVkfNHBHpytw==}
     hasBin: true
     dependencies:
       '@clack/prompts': 0.5.1
@@ -6833,14 +6832,14 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/react@23.0.2(@verdant-web/store@2.7.4)(react@18.2.0):
+  /@verdant-web/react@23.0.2(@verdant-web/store@2.7.5)(react@18.2.0):
     resolution: {integrity: sha512-1ldWPxBXdScy8v9XmxPCPvZvprW2alp28oga+rqPDNQBekzHnqYOSq9e5ywDtTSPM4dHKLDUoIb50ycsG2IK0A==}
     peerDependencies:
       '@verdant-web/store': ^2.7.2
       react: ^18.2.0
     dependencies:
       '@verdant-web/common': 1.15.2
-      '@verdant-web/store': 2.7.4
+      '@verdant-web/store': 2.7.5
       react: 18.2.0
       suspend-react: 0.0.8(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
@@ -6860,8 +6859,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@verdant-web/store@2.7.4:
-    resolution: {integrity: sha512-6EgksLTQwcWq8WXHMd9m5H7xBIOTUYDcjihKP1TLcWGru+bGlMGng41GSaIZ57CLoAT7USwhLt1kg1ewz+UPxA==}
+  /@verdant-web/store@2.7.5:
+    resolution: {integrity: sha512-2S9f/v45Zpa8X/wIS3+DNLlnkkw9hygVj6wGCYlafOt0WaPZJAjqEob96z6IVxTpZkXC8TLkPsIfz/Y7XUEXWw==}
     dependencies:
       '@verdant-web/common': 1.15.2
       cuid: 2.1.8
@@ -7360,8 +7359,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001561
-      electron-to-chromium: 1.4.581
+      caniuse-lite: 1.0.30001562
+      electron-to-chromium: 1.4.585
       node-releases: 2.0.13
       update-browserslist-db: 1.0.13(browserslist@4.22.1)
 
@@ -7445,8 +7444,8 @@ packages:
   /caniuse-lite@1.0.30001517:
     resolution: {integrity: sha512-Vdhm5S11DaFVLlyiKu4hiUTkpZu+y1KA/rZZqVQfOD5YdDT/eQKlkt7NaE0WGOFgX32diqt9MiP9CAiFeRklaA==}
 
-  /caniuse-lite@1.0.30001561:
-    resolution: {integrity: sha512-NTt0DNoKe958Q0BE0j0c1V9jbUzhBxHIEJy7asmGrpE0yG63KTV7PLHPnK2E1O9RsQrQ081I3NLuXGS6zht3cw==}
+  /caniuse-lite@1.0.30001562:
+    resolution: {integrity: sha512-kfte3Hym//51EdX4239i+Rmp20EsLIYGdPkERegTgU19hQWCRhsRFGKHTliUlsry53tv17K7n077Kqa0WJU4ng==}
 
   /capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -8126,8 +8125,8 @@ packages:
     resolution: {integrity: sha512-ejwIKXTg1wqbmkcRJh9Ur3hFGHFDZDw1POzdsVrB2WZjgRuRMHIQQKNpe64N/qh3ZtH2otEoRoS+s6arAAuAAw==}
     dev: true
 
-  /electron-to-chromium@1.4.581:
-    resolution: {integrity: sha512-6uhqWBIapTJUxgPTCHH9sqdbxIMPt7oXl0VcAL1kOtlU6aECdcMncCrX5Z7sHQ/invtrC9jUQUef7+HhO8vVFw==}
+  /electron-to-chromium@1.4.585:
+    resolution: {integrity: sha512-B4yBlX0azdA3rVMxpYwLQfDpdwOgcnLCkpvSOd68iFmeedo+WYjaBJS3/W58LVD8CB2nf+o7C4K9xz1l09RkWg==}
 
   /emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
