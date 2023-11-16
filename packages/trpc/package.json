@@ -17,7 +17,7 @@
 		"@aglio/tools": "workspace:*",
 		"@trpc/server": "^10.10.0",
 		"@verdant-web/common": "^1.15.3",
-		"@verdant-web/server": "^1.8.14",
+		"@verdant-web/server": "^1.8.15",
 		"cuid": "^3.0.0",
 		"superjson": "^1.12.0",
 		"zod": "^3.19.0"

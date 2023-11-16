@@ -708,8 +708,8 @@ importers:
         specifier: ^1.15.3
         version: 1.15.3
       '@verdant-web/server':
-        specifier: ^1.8.14
-        version: 1.8.14
+        specifier: ^1.8.15
+        version: 1.8.15(utf-8-validate@5.0.9)
       cuid:
         specifier: ^3.0.0
         version: 3.0.0
@@ -3953,7 +3953,7 @@ packages:
     resolution: {integrity: sha512-4ySo4CjzStuprMwk35H5pPbkymjv1SF3jGLj6rAHp/xT/RF7TL7bd9CTm1xDY49K2qF7jmR/g7k+SkLETP6opA==}
     hasBin: true
     dependencies:
-      detect-libc: 2.0.1
+      detect-libc: 2.0.2
       https-proxy-agent: 5.0.1
       make-dir: 3.1.0
       node-fetch: 2.6.9
@@ -6845,20 +6845,6 @@ packages:
       react: 18.2.0
       suspend-react: 0.0.8(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
-
-  /@verdant-web/server@1.8.14:
-    resolution: {integrity: sha512-5mm6IqYe1EIGOC9dbZ8/jYmbGwVsd421gHr77eNXacQq7rYo/VCJ9CCWrR5cGuQZVNA1Fy4tYwBunyH+ffcheQ==}
-    dependencies:
-      '@verdant-web/common': 1.15.3
-      async-lock: 1.4.0
-      better-sqlite3: 7.6.2
-      busboy: 1.6.0
-      jsonwebtoken: 8.5.1
-      ws: 8.14.2(utf-8-validate@5.0.9)
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
     dev: false
 
   /@verdant-web/server@1.8.15(utf-8-validate@5.0.9):
