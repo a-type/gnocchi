@@ -26,7 +26,7 @@ declare const self: ServiceWorkerGlobalScope;
 // self.skipWaiting();
 // clientsClaim();
 
-navigationPreload.enable();
+// navigationPreload.enable();
 
 cleanupOutdatedCaches();
 
