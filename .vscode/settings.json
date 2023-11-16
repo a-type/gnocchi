@@ -1,3 +1,4 @@
 {
-	"unocss.root": ["apps/react", "apps/hub", "packages/ui"]
+	"unocss.root": ["apps/react", "apps/hub", "packages/ui"],
+	"vitest.enable": false
 }
