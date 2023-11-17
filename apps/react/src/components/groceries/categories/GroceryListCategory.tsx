@@ -86,7 +86,7 @@ export const CategoryRoot = withClassName(
 	'flex flex-col rounded-md bg-wash overflow-hidden ease-springy transition mb-2',
 	'[&[data-dragged-over=true]]:(bg-primary-wash shadow-[0_0_0_1px_var(--color-primary-dark)])',
 	'[&[data-is-item-dragging=true]]:(shadow-[0_0_0_1px_var(--color-gray-3)] mb-0)',
-	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 op-0 pointer-events-none mb-0 [animation-name:category-collapse] animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
+	'[&[data-is-empty=true]:not([data-is-item-dragging=true])]:(h-0 op-0 pointer-events-none mb-0 [animation-name:category-collapse] animate animate-duration-200 animate-ease-default animate-forwards [visibility:hidden])',
 	'important:[&[data-do-not-animate=true]]:(animate-none) important:motion-reduce:animate-none',
 	'[&[data-is-item-dragging=true][data-dragged-over=false]]:(scale-95)',
 	'[&[data-pop-in=true][data-dragged-over=false][data-is-item-dragging=false]]:(animate-keyframes-fade-in-up animate-duration-200 animate-ease-springy)',

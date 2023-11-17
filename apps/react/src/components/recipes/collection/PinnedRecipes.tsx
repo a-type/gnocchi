@@ -31,6 +31,7 @@ export function PinnedRecipes({ className }: PinnedRecipesProps) {
 		index: {
 			where: 'pinnedAt',
 			gt: THREE_WEEKS_AGO,
+			lt: Date.now(),
 		},
 		key: 'pinnedRecipes',
 	});
