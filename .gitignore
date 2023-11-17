@@ -102,5 +102,8 @@ dist
 
 *.sqlite
 *.sqlite-journal
+*.sqlite.bak
 
 .DS_Store
+
+backups/

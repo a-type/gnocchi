@@ -17,13 +17,16 @@
 		"stripe": "stripe listen --forward-to localhost:4445/api/stripe/webhook",
 		"icons": "pnpm --filter @aglio/react run icons",
 		"preflight": "pnpm --filter @aglio/groceries-client run preflight",
-		"prepare": "husky install"
+		"prepare": "husky install",
+		"backup-prod": "node ./scripts/backup-prod.mjs",
+		"mirror-prod": "node ./scripts/mirror-prod.mjs"
 	},
 	"repository": "https://github.com/a-type/aglio",
 	"author": "Grant Forrest <gaforres@gmail.com>",
 	"devDependencies": {
 		"husky": "^8.0.3",
 		"turbo": "^1.9.3",
-		"typescript": "^5.0.4"
+		"typescript": "^5.0.4",
+		"@clack/prompts": "0.7.0"
 	}
 }
