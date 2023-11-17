@@ -10,11 +10,11 @@ const backups = fs.readdirSync('./backups').filter((f) => f !== '.gitkeep');
 const backup = await prompt.select({
 	message: 'Which backup?',
 	options: [
-		{ value: 'restore', label: 'Restore before last backup' },
 		...backups.map((b) => ({
 			value: b,
 			label: b,
 		})),
+		{ value: 'restore', label: 'Restore before last backup' },
 	],
 	maxItems: 10,
 });
@@ -49,9 +49,12 @@ if (fs.existsSync('./packages/prisma/prisma/db.sqlite')) {
 		'./packages/prisma/prisma/db.sqlite.bak',
 	);
 }
-fs.copyFileSync(`./backups/${backup}/backup.db`, './apps/api/storage.sqlite');
 fs.copyFileSync(
 	`./backups/${backup}/backup-verdant.db`,
+	'./apps/api/storage.sqlite',
+);
+fs.copyFileSync(
+	`./backups/${backup}/backup.db`,
 	'./packages/prisma/prisma/db.sqlite',
 );
 prompt.outro('Done.');
