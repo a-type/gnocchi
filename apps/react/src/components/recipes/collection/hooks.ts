@@ -84,8 +84,6 @@ export function useIsFiltered() {
 }
 
 export function useFilteredRecipes() {
-	const hidePinned = useFeatureFlag('pinnedRecipes');
-
 	const [tagFilter] = useRecipeTagFilter();
 	const [foodFilter] = useRecipeFoodFilter();
 	const [titleFilter] = useRecipeTitleFilter();
@@ -159,8 +157,6 @@ export function useFilteredRecipes() {
 			)
 				return false;
 		}
-
-		if (hidePinned && recipe.get('pinnedAt')) return false;
 
 		return true;
 	});

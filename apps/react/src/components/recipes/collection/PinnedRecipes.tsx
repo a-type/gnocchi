@@ -19,6 +19,7 @@ import { DrawingPinFilledIcon } from '@radix-ui/react-icons';
 import { Link } from '@verdant-web/react-router';
 import classNames from 'classnames';
 import addWeeks from 'date-fns/addWeeks';
+import { useMemo } from 'react';
 
 export interface PinnedRecipesProps {
 	className?: string;
@@ -27,11 +28,17 @@ export interface PinnedRecipesProps {
 const THREE_WEEKS_AGO = addWeeks(Date.now(), -3).getTime();
 
 export function PinnedRecipes({ className }: PinnedRecipesProps) {
+	// prevent thrashing
+	const endOfDay = useMemo(() => {
+		const date = new Date();
+		date.setHours(23, 59, 59, 999);
+		return date.getTime();
+	}, []);
 	const pinnedRecipes = hooks.useAllRecipes({
 		index: {
 			where: 'pinnedAt',
 			gt: THREE_WEEKS_AGO,
-			lt: Date.now(),
+			lt: endOfDay,
 		},
 		key: 'pinnedRecipes',
 	});
