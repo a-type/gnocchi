@@ -36,6 +36,9 @@ import { RecipeMainImageViewer } from '../viewer/RecipeMainImageViewer.jsx';
 import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { Icon } from '@/components/icons/Icon.jsx';
+import addWeeks from 'date-fns/addWeeks';
+
+const THREE_WEEKS_AGO = addWeeks(Date.now(), -3).getTime();
 
 export function RecipeListItem({
 	recipe,
@@ -46,13 +49,15 @@ export function RecipeListItem({
 }) {
 	const { title, pinnedAt } = hooks.useWatch(recipe);
 
+	const isPinned = pinnedAt && pinnedAt > THREE_WEEKS_AGO;
+
 	const togglePinned = useCallback(() => {
-		if (recipe.get('pinnedAt')) {
+		if (isPinned) {
 			recipe.set('pinnedAt', null);
 		} else {
 			recipe.set('pinnedAt', Date.now());
 		}
-	}, [recipe]);
+	}, [recipe, isPinned]);
 
 	const showPin = useFeatureFlag('pinnedRecipes');
 
@@ -75,17 +80,17 @@ export function RecipeListItem({
 			</CardImage>
 			<CardFooter>
 				<CardActions>
-					{(showPin || pinnedAt) && (
+					{(showPin || isPinned) && (
 						<Button
 							size="icon"
-							color={pinnedAt ? 'primary' : 'default'}
+							color={isPinned ? 'primary' : 'default'}
 							onClick={togglePinned}
 							className="relative"
 						>
 							<DrawingPinIcon
-								className={pinnedAt ? 'relative top--2px left-0px' : undefined}
+								className={isPinned ? 'relative top--2px left-0px' : undefined}
 							/>
-							{pinnedAt && (
+							{isPinned && (
 								// slash through
 								// <svg
 								// 	className="absolute top-[50%] left-[50%] translate-[-50%] w-[15px] h-[15px] z-1"
@@ -128,6 +133,7 @@ export function RecipeListItemMenu({
 }) {
 	const deleteRecipe = hooks.useDeleteRecipe();
 	const { pinnedAt } = hooks.useWatch(recipe);
+	const isPinned = pinnedAt && pinnedAt > THREE_WEEKS_AGO;
 
 	const [menuOpen, setMenuOpen] = useState(false);
 
@@ -165,7 +171,7 @@ export function RecipeListItemMenu({
 						</DropdownMenuItemRightSlot>
 					</Link>
 				</DropdownMenuItem>
-				{pinnedAt && (
+				{isPinned && (
 					<DropdownMenuItem
 						onSelect={() => {
 							recipe.set('pinnedAt', null);

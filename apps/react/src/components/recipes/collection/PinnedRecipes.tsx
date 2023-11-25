@@ -90,15 +90,20 @@ function PinnedRecipeListItem({ recipe }: { recipe: Recipe }) {
 					title.length > 20 && 'text-sm',
 				)}
 			>
-				<div className="text-md overflow-hidden text-ellipsis whitespace-nowrap">
+				<div className="text-md overflow-hidden text-ellipsis whitespace-nowrap min-w-0">
 					{title}
 				</div>
 				<RecipeTagsViewer recipe={recipe} limit={1} className="text-xs" />
 			</Link>
-			<AddToListButton recipe={recipe} size="icon" color="ghost">
+			<AddToListButton
+				recipe={recipe}
+				size="icon"
+				color="ghost"
+				className="flex-shrink-0"
+			>
 				<Icon name="add_to_list" />
 			</AddToListButton>
-			<RecipeListItemMenu recipe={recipe} />
+			<RecipeListItemMenu recipe={recipe} className="flex-shrink-0" />
 		</div>
 	);
 }
