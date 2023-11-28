@@ -6,7 +6,6 @@ import type {
   CollectionQueries,
   StorageSchema,
   Migration,
-  EntityFile,
 } from "@verdant-web/store";
 export * from "@verdant-web/store";
 
@@ -35,13 +34,13 @@ export class Client<Presence = any, Profile = any> {
   undoHistory: BaseClient<Presence, Profile>["undoHistory"];
   namespace: BaseClient<Presence, Profile>["namespace"];
   entities: BaseClient<Presence, Profile>["entities"];
-  queryStore: BaseClient<Presence, Profile>["queryStore"];
+  // queryStore: BaseClient<Presence, Profile>['queryStore'];
   batch: BaseClient<Presence, Profile>["batch"];
-  files: BaseClient<Presence, Profile>["files"];
+  // files: BaseClient<Presence, Profile>['files'];
   close: BaseClient<Presence, Profile>["close"];
   export: BaseClient<Presence, Profile>["export"];
   import: BaseClient<Presence, Profile>["import"];
-  subscribe: BaseClient<Presence, Profile>["on"];
+  subscribe: BaseClient<Presence, Profile>["subscribe"];
   stats: BaseClient<Presence, Profile>["stats"];
   __dangerous__resetLocal: BaseClient<
     Presence,
@@ -61,7 +60,7 @@ export interface ClientDescriptorOptions<Presence = any, Profile = any>
 }
 
 export class ClientDescriptor<Presence = any, Profile = any> {
-  constructor(init: ClientInitOptions<Presence, Profile>);
+  constructor(init: ClientDescriptorOptions<Presence, Profile>);
   open: () => Promise<Client<Presence, Profile>>;
   close: () => Promise<void>;
   readonly current: Client<Presence, Profile> | null;
@@ -87,7 +86,7 @@ export type CategoryClaim = ObjectEntity<
   CategoryClaimInit,
   CategoryClaimDestructured,
   CategoryClaimSnapshot
->;
+> | null;
 export type CategoryClaimClaimedBy = string;
 export type CategoryClaimClaimedAt = number;
 export type CategoryInit = {
@@ -110,7 +109,7 @@ export type CategoryDestructured = {
 export type CategoryClaimDestructured = {
   claimedBy: string;
   claimedAt: number;
-} | null;
+};
 export type CategorySnapshot = {
   id: string;
   name: string;
@@ -692,7 +691,7 @@ export type CollaborationInfoMeetup = ObjectEntity<
   CollaborationInfoMeetupInit,
   CollaborationInfoMeetupDestructured,
   CollaborationInfoMeetupSnapshot
->;
+> | null;
 export type CollaborationInfoMeetupCreatedAt = number;
 export type CollaborationInfoMeetupLocation = string;
 export type CollaborationInfoInit = {
@@ -712,7 +711,7 @@ export type CollaborationInfoDestructured = {
 export type CollaborationInfoMeetupDestructured = {
   createdAt: number;
   location: string;
-} | null;
+};
 export type CollaborationInfoSnapshot = {
   id: string;
   meetup: CollaborationInfoMeetupSnapshot;
@@ -775,7 +774,7 @@ export type RecipeSession = ObjectEntity<
   RecipeSessionInit,
   RecipeSessionDestructured,
   RecipeSessionSnapshot
->;
+> | null;
 export type RecipeSessionStartedAt = number;
 export type RecipeSessionCompletedInstructions = ListEntity<
   RecipeSessionCompletedInstructionsInit,
@@ -807,7 +806,7 @@ export type RecipeTags = ListEntity<
   RecipeTagsSnapshot
 >;
 export type RecipeTagsItem = string;
-export type RecipeMainImage = string;
+export type RecipeMainImage = string | null;
 export type RecipeCookCount = number;
 export type RecipeLastCookedAt = number;
 export type RecipeLastAddedAt = number;
@@ -919,7 +918,7 @@ export type RecipeSessionDestructured = {
   completedIngredients: RecipeSessionCompletedIngredients;
   instructionAssignments: RecipeSessionInstructionAssignments;
   ingredientAssignments: RecipeSessionIngredientAssignments;
-} | null;
+};
 export type RecipeTagsDestructured = string[];
 export type RecipeSnapshot = {
   id: string;

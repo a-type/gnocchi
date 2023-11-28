@@ -114,7 +114,7 @@ function useSyncedEditor(
 			}
 
 			const newData = editor.getJSON();
-			const value = recipe.get(fieldName);
+			const value = recipe.get(fieldName) as ObjectEntity<any, any> | null;
 			if (!value) {
 				recipe.set(fieldName, newData);
 			} else {
