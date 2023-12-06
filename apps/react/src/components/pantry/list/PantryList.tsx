@@ -7,6 +7,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { CardGrid } from '@aglio/ui/components/card';
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { pantryOnboarding } from '@/onboarding/pantryOnboarding.js';
+import { PantryListSectionTabs } from './PantryListSectionTabs.jsx';
 
 export interface PantryListProps {
 	className?: string;
@@ -31,6 +32,7 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 				to expire. Tap any food to get started.
 			</OnboardingBanner>
 			<ExpiresSoonSection />
+			<PantryListSectionTabs />
 			<div className="flex flex-col gap-4">
 				{categories.map((category) => {
 					return (

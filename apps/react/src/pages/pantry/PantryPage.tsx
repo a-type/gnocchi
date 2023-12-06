@@ -1,5 +1,4 @@
 import { PantryActionBar } from '@/components/pantry/actions/PantryActionBar.jsx';
-import { PantryListSectionTabs } from '@/components/pantry/list/PantryListSectionTabs.jsx';
 import { PantrySearch } from '@/components/pantry/search/PantrySearch.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 import { PageContent, PageFixedArea } from '@aglio/ui/components/layouts';
@@ -17,7 +16,6 @@ export function PantryPage({}: PantryPageProps) {
 			<PageFixedArea>
 				<PantryActionBar />
 			</PageFixedArea>
-			<PantryListSectionTabs />
 			<Suspense>
 				<Outlet />
 			</Suspense>
