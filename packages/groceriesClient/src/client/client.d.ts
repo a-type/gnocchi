@@ -453,6 +453,7 @@ export type FoodExpiresAfterDays = number;
 export type FoodLastPurchasedAt = number;
 export type FoodInInventory = boolean;
 export type FoodExpiresAt = number;
+export type FoodFrozenAt = number;
 export type FoodPurchaseIntervalGuess = number;
 export type FoodLastAddedAt = number;
 export type FoodPurchaseCount = number;
@@ -467,6 +468,7 @@ export type FoodInit = {
   lastPurchasedAt?: number | null;
   inInventory?: boolean;
   expiresAt?: number | null;
+  frozenAt?: number | null;
   purchaseIntervalGuess?: number | null;
   lastAddedAt?: number | null;
   purchaseCount?: number;
@@ -484,6 +486,7 @@ export type FoodDestructured = {
   lastPurchasedAt: number | null;
   inInventory: boolean;
   expiresAt: number | null;
+  frozenAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
   purchaseCount: number;
@@ -501,6 +504,7 @@ export type FoodSnapshot = {
   lastPurchasedAt: number | null;
   inInventory: boolean;
   expiresAt: number | null;
+  frozenAt: number | null;
   purchaseIntervalGuess: number | null;
   lastAddedAt: number | null;
   purchaseCount: number;
@@ -606,6 +610,19 @@ export interface FoodLastPurchasedAtOrZeroRangeFilter {
   lt?: number;
   order?: "asc" | "desc";
 }
+export interface FoodFrozenMatchFilter {
+  where: "frozen";
+  equals: boolean;
+  order?: "asc" | "desc";
+}
+export interface FoodFrozenRangeFilter {
+  where: "frozen";
+  gte?: boolean;
+  gt?: boolean;
+  lte?: boolean;
+  lt?: boolean;
+  order?: "asc" | "desc";
+}
 export interface FoodCategoryIdMatchFilter {
   where: "categoryId";
   equals: string;
@@ -657,6 +674,8 @@ export type FoodFilter =
   | FoodPurchasedAndExpiresAtRangeFilter
   | FoodLastPurchasedAtOrZeroMatchFilter
   | FoodLastPurchasedAtOrZeroRangeFilter
+  | FoodFrozenMatchFilter
+  | FoodFrozenRangeFilter
   | FoodCategoryIdMatchFilter
   | FoodCategoryIdRangeFilter
   | FoodCategoryIdStartsWithFilter

@@ -10,7 +10,7 @@ export const TabsList = withClassName(
 
 export const TabsTrigger = withClassName(
 	Tabs.Trigger,
-	'flex flex-row items-center justify-center gap-2 color-black py-1 px-4 rounded-lg bg-wash text-md font-bold min-w-100px border border-solid border-gray2 hover:bg-gray2 focus-visible:(shadow-focus outline-off) [&[data-state=active]]:(bg-primary-light border-primary-light)',
+	'flex flex-row items-center justify-center gap-2 color-black py-1 px-4 rounded-lg bg-wash text-md font-bold min-w-100px border border-solid border-gray2 hover:bg-gray2 focus-visible:(shadow-focus outline-off) [&[data-state=active]]:(bg-primary-light border-primary-light hover:bg-primary)',
 );
 
 export const TabsContent = withClassName(Tabs.Content, '');

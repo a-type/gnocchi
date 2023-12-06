@@ -272,6 +272,76 @@ export const IconSpritesheet = (props: any) => (
 					strokeLinecap="round"
 				/>
 			</symbol>
+			<symbol id="icon-check" viewBox="0 0 15 15">
+				<path
+					d="M1.5 7.5L5.5 11.5L12.5 3.5"
+					stroke="currentColor"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+			</symbol>
+			<symbol id="icon-snowflake" viewBox="0 0 15 15">
+				<path
+					d="M7.5 3.5V11.5M7.5 3.5L5.5 2M7.5 3.5L9.5 2M7.5 3.5V1M7.5 11.5L5.5 13M7.5 11.5L9.5 13M7.5 11.5V14"
+					stroke="currentColor"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M4.03591 5.5L10.9641 9.5M4.03591 5.5L1.73687 6.48206M4.03591 5.5L3.73687 3.01795M4.03591 5.5L1.87085 4.25M10.9641 9.5L11.2632 11.9821M10.9641 9.5L13.2632 8.51795M10.9641 9.5L13.1292 10.75"
+					stroke="currentColor"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path
+					d="M4.03591 9.5L10.9641 5.5M4.03591 9.5L3.73687 11.9821M4.03591 9.5L1.73687 8.51795M4.03591 9.5L1.87085 10.75M10.9641 5.5L13.2632 6.48206M10.9641 5.5L11.2632 3.01795M10.9641 5.5L13.1292 4.25"
+					stroke="currentColor"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+			</symbol>
+			<symbol id="icon-clock" viewBox="0 0 15 15">
+				<g clipPath="url(#clip0_816_59)">
+					<path
+						d="M7.50004 3.5V7.49998L9.5 9M14.1667 7.49998C14.1667 11.1819 11.1819 14.1666 7.50004 14.1666C3.81814 14.1666 0.833374 11.1819 0.833374 7.49998C0.833374 3.81808 3.81814 0.833313 7.50004 0.833313C11.1819 0.833313 14.1667 3.81808 14.1667 7.49998Z"
+						stroke="currentColor"
+						strokeLinecap="round"
+					/>
+				</g>
+				<defs>
+					<clipPath id="clip0_816_59">
+						<rect width="15" height="15" fill="white" />
+					</clipPath>
+				</defs>
+			</symbol>
+			<symbol id="icon-plus" viewBox="0 0 15 15">
+				<g clipPath="url(#clip0_818_43)">
+					<path
+						d="M7.5 1V14M14 7.5H1"
+						stroke="currentColor"
+						strokeLinecap="round"
+					/>
+				</g>
+				<defs>
+					<clipPath id="clip0_818_43">
+						<rect width="15" height="15" fill="white" />
+					</clipPath>
+				</defs>
+			</symbol>
+			<symbol id="icon-x" viewBox="0 0 15 15">
+				<g clipPath="url(#clip0_818_46)">
+					<path
+						d="M2.90381 2.90381L12.0962 12.0962M12.0962 2.90381L2.90381 12.0962"
+						stroke="currentColor"
+						strokeLinecap="round"
+					/>
+				</g>
+				<defs>
+					<clipPath id="clip0_818_46">
+						<rect width="15" height="15" fill="white" />
+					</clipPath>
+				</defs>
+			</symbol>
 		</defs>
 	</svg>
 );

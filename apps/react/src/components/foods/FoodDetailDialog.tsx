@@ -109,7 +109,7 @@ function FoodDetailView({
 						<Row>
 							<ClockIcon />
 							<div className="text-xs italic">
-								Added <RelativeTime value={lastPurchasedAt} /> ago
+								Added <RelativeTime value={lastPurchasedAt} />
 							</div>
 						</Row>
 					)}

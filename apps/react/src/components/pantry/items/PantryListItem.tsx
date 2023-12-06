@@ -1,6 +1,7 @@
 import { FoodName } from '@/components/foods/FoodName.jsx';
 import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 import { groceriesState } from '@/components/groceries/state.js';
+import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Food } from '@aglio/groceries-client';
 import { shortenTimeUnits } from '@aglio/tools';
@@ -12,12 +13,13 @@ import {
 	CardRoot,
 	CardTitle,
 } from '@aglio/ui/components/card';
+import { Chip } from '@aglio/ui/components/chip';
 import { RelativeTime } from '@aglio/ui/components/relativeTime';
 import { TextSkeleton } from '@aglio/ui/components/skeletons';
 import { Tooltip } from '@aglio/ui/components/tooltip';
 import {
-	CheckIcon,
 	ClockIcon,
+	ExclamationTriangleIcon,
 	OpenInNewWindowIcon,
 	PlusIcon,
 	TrashIcon,
@@ -25,16 +27,25 @@ import {
 import classNames from 'classnames';
 import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import { Suspense, useCallback } from 'react';
+import { useExpiresText } from '../hooks.js';
 
 export interface PantryListItemProps {
 	item: Food;
+	showLabels?: boolean;
+	snoozable?: boolean;
 }
 
-export function PantryListItem({ item, ...rest }: PantryListItemProps) {
+export function PantryListItem({
+	item,
+	showLabels = false,
+	snoozable,
+	...rest
+}: PantryListItemProps) {
 	const {
 		lastPurchasedAt: purchasedAt,
 		canonicalName: food,
 		expiresAt,
+		frozenAt,
 	} = hooks.useWatch(item);
 
 	const clearItem = hooks.useClearPantryItem();
@@ -46,59 +57,88 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 	const isAlmostOrExpired =
 		expiresAt && expiresAt < Date.now() + 1000 * 60 * 60 * 24 * 3;
 
-	let expiresAtText = '';
-	if (expiresAt && purchasedAt) {
-		if (expiresAt && expiresAt < Date.now()) {
-			expiresAtText = 'Expired ';
-		} else {
-			expiresAtText = 'Expires ';
-		}
-		expiresAtText += shortenTimeUnits(
-			formatDistanceStrict(expiresAt, purchasedAt, {
-				addSuffix: true,
-			}),
-		);
-	}
+	const expiresAtText = useExpiresText(item);
+
+	const snooze = useCallback(() => {
+		item.set('expiresAt', Date.now() + 6 * 24 * 60 * 60 * 1000);
+	}, [item]);
 
 	return (
 		<Suspense>
-			<CardRoot {...rest}>
-				<CardMain compact asChild>
+			<CardRoot
+				{...rest}
+				className={classNames(frozenAt ? 'border-accent-dark' : '')}
+			>
+				<CardMain compact asChild className="bg-gray-1">
 					<OpenFoodDetailButton
 						foodName={food}
 						className="font-normal border-none rounded-none items-start text-sm"
 					>
-						{purchasedAt && (
-							<Tooltip disabled={!expiresAt} content={expiresAtText}>
-								<div
-									className={classNames(
-										'color-gray7 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-5 m-1 px-2 py-1',
-										{
+						<div className="flex flex-row gap-1 items-center flex-wrap p-1 text-xs italic">
+							{purchasedAt && (
+								<Tooltip disabled={!expiresAt} content={expiresAtText}>
+									<Chip
+										className={classNames({
 											'important:color-attentionDark': isAlmostOrExpired,
-										},
-									)}
-								>
+										})}
+									>
+										{isAlmostOrExpired ? (
+											<ExclamationTriangleIcon />
+										) : (
+											<Icon name="clock" />
+										)}
+										<RelativeTime value={purchasedAt} abbreviate />
+									</Chip>
+								</Tooltip>
+							)}
+							{purchasedAt && isAlmostOrExpired && !frozenAt && (
+								<Chip>
 									<ClockIcon />
-									<RelativeTime value={purchasedAt} abbreviate />
-									&nbsp;ago
-								</div>
-							</Tooltip>
-						)}
-						<CardTitle className="text-sm">
+									Added <RelativeTime value={purchasedAt} abbreviate />
+								</Chip>
+							)}
+							{frozenAt && (
+								<Tooltip content="You marked this item as frozen">
+									<Chip color="accent">
+										<Icon name="snowflake" />
+										<RelativeTime value={frozenAt} abbreviate />
+									</Chip>
+								</Tooltip>
+							)}
+						</div>
+						<CardTitle className={classNames('text-wrap', 'text-md')}>
 							<FoodName food={item} capitalize />
 						</CardTitle>
 						<OpenInNewWindowIcon className="absolute right-2 top-2 z-1 color-gray-9 opacity-50" />
 					</OpenFoodDetailButton>
 				</CardMain>
 				<CardFooter>
-					<CardActions>
+					<CardActions className="flex-wrap">
 						<Suspense fallback={<Button size="icon" color="default" />}>
-							<QuickAddButton food={item} />
+							<QuickAddButton food={item} showLabel={showLabels} />
 						</Suspense>
-						{!!purchasedAt && (
-							<Button size="icon" color="ghostDestructive" onClick={clear}>
-								<TrashIcon />
+						{snoozable && expiresAt && (
+							<Button
+								size={showLabels ? 'small' : 'icon'}
+								color="ghost"
+								onClick={snooze}
+							>
+								<Icon name="clock" />
+								{showLabels && <span className="font-normal">Snooze</span>}
 							</Button>
+						)}
+						{!!purchasedAt && (
+							<Button
+								size={showLabels ? 'small' : 'icon'}
+								color="ghostDestructive"
+								onClick={clear}
+							>
+								<TrashIcon />
+								{showLabels && <span className="font-normal">Used</span>}
+							</Button>
+						)}
+						{!!purchasedAt && (
+							<FreezeButton food={item} showLabel={showLabels} />
 						)}
 					</CardActions>
 				</CardFooter>
@@ -107,7 +147,11 @@ export function PantryListItem({ item, ...rest }: PantryListItemProps) {
 	);
 }
 
-export const PantryListItemSkeleton = () => {
+export const PantryListItemSkeleton = ({
+	showLabels,
+}: {
+	showLabels?: boolean;
+}) => {
 	return (
 		<CardRoot>
 			<CardMain compact>
@@ -117,8 +161,9 @@ export const PantryListItemSkeleton = () => {
 			</CardMain>
 			<CardFooter>
 				<CardActions>
-					<Button size="icon" color="default">
-						<PlusIcon />
+					<Button size={showLabels ? 'small' : 'icon'} color="default">
+						<Icon name="plus" />
+						{showLabels && <TextSkeleton maxLength={8} />}
 					</Button>
 				</CardActions>
 			</CardFooter>
@@ -126,7 +171,13 @@ export const PantryListItemSkeleton = () => {
 	);
 };
 
-const QuickAddButton = ({ food }: { food: Food }) => {
+const QuickAddButton = ({
+	food,
+	showLabel,
+}: {
+	food: Food;
+	showLabel: boolean;
+}) => {
 	const { canonicalName: foodName } = hooks.useWatch(food);
 
 	const addItems = hooks.useAddItems();
@@ -152,12 +203,45 @@ const QuickAddButton = ({ food }: { food: Food }) => {
 
 	return (
 		<Button
-			size="icon"
+			size={showLabel ? 'small' : 'icon'}
 			color="default"
 			onClick={repurchaseItem}
 			disabled={isOnList}
 		>
-			{isOnList ? <CheckIcon /> : <PlusIcon />}
+			{isOnList ? <Icon name="check" /> : <Icon name="plus" />}
+			{showLabel && <span className="font-normal">Buy again</span>}
 		</Button>
+	);
+};
+
+const FreezeButton = ({
+	food,
+	showLabel,
+}: {
+	food: Food;
+	showLabel: boolean;
+}) => {
+	const { frozenAt } = hooks.useWatch(food);
+
+	if (frozenAt) {
+		return null;
+	}
+
+	return (
+		<Tooltip content="Mark as frozen" disabled={showLabel}>
+			<Button
+				size={showLabel ? 'small' : 'icon'}
+				color={frozenAt ? 'accent' : 'ghost'}
+				onClick={() => {
+					food.update({
+						frozenAt: Date.now(),
+						expiresAt: null,
+					});
+				}}
+			>
+				<Icon name="snowflake" />
+				{showLabel && <span className="font-normal">Frozen</span>}
+			</Button>
+		</Tooltip>
 	);
 };

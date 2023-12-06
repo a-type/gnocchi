@@ -25,6 +25,7 @@ import {
 	CardTitle,
 } from '@aglio/ui/components/card';
 import { RelativeTime } from '@aglio/ui/components/relativeTime';
+import { PantryListItem } from '../items/PantryListItem.jsx';
 
 export interface ExpiresSoonSectionProps {
 	className?: string;
@@ -40,91 +41,14 @@ export function ExpiresSoonSection({ className }: ExpiresSoonSectionProps) {
 			<H2 className="important:text-md gutter-bottom ml-3">Expiring soon</H2>
 			<div className="flex flex-col gap-3">
 				{expiresSoonItems.map((item) => (
-					<ExpiresSoonItem item={item} key={item.get('canonicalName')} />
+					<PantryListItem
+						item={item}
+						key={item.get('canonicalName')}
+						showLabels
+						snoozable
+					/>
 				))}
 			</div>
 		</div>
-	);
-}
-
-function ExpiresSoonItem({ item }: { item: Food }) {
-	const { canonicalName: food, lastPurchasedAt: purchasedAt } =
-		hooks.useWatch(item);
-	const addItems = hooks.useAddItems();
-
-	const resetItem = hooks.useClearPantryItem();
-	const deleteThisItem = useCallback(() => {
-		return resetItem(item);
-	}, [resetItem, item]);
-
-	const repurchaseItem = useCallback(async () => {
-		await addItems([item.get('canonicalName')]);
-		deleteThisItem();
-		groceriesState.justAddedSomething = true;
-	}, [deleteThisItem, addItems, item]);
-
-	const snooze = useCallback(() => {
-		item.set('expiresAt', Date.now() + 6 * 24 * 60 * 60 * 1000);
-	}, [item]);
-
-	const expiresAtText = useExpiresText(item, true);
-
-	if (!expiresAtText) return null;
-
-	return (
-		<CardRoot>
-			<CardMain compact asChild>
-				<OpenFoodDetailButton
-					foodName={food}
-					className="font-normal border-none rounded-none items-start text-sm"
-				>
-					<div className="flex flex-row items-center gap-1 flex-wrap">
-						<div
-							className={classNames(
-								'color-attentionDark italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-5 m-1 px-2 py-1',
-							)}
-						>
-							<ExclamationTriangleIcon />
-							{expiresAtText}
-						</div>
-						{purchasedAt && (
-							<div
-								className={classNames(
-									'color-gray-7 italic text-xs flex flex-row items-center gap-2 whitespace-nowrap bg-white rounded-full border border-solid border-gray-5 m-1 px-2 py-1',
-								)}
-							>
-								<ClockIcon />
-								Added <RelativeTime value={purchasedAt} abbreviate />
-								&nbsp;ago
-							</div>
-						)}
-					</div>
-					<CardTitle>
-						<FoodName food={item} capitalize />
-					</CardTitle>
-					<OpenInNewWindowIcon className="absolute right-2 top-2 z-1 color-gray-5 bg-white" />
-				</OpenFoodDetailButton>
-			</CardMain>
-			<CardFooter>
-				<CardActions>
-					<Button size="small" color="default" onClick={repurchaseItem}>
-						<PlusIcon />
-						<span>Buy again</span>
-					</Button>
-					<Button
-						size="small"
-						color="ghostDestructive"
-						onClick={deleteThisItem}
-					>
-						<TrashIcon />
-						<span>Used</span>
-					</Button>
-					<Button size="small" color="ghost" onClick={snooze}>
-						<ClockIcon />
-						<span>Snooze</span>
-					</Button>
-				</CardActions>
-			</CardFooter>
-		</CardRoot>
 	);
 }

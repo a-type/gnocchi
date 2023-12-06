@@ -36,6 +36,11 @@ export function PantryListCategory({
 						},
 						order: 'desc',
 				  }
+				: filter === 'frozen'
+				? {
+						where: 'frozen',
+						equals: true,
+				  }
 				: {
 						where: 'inInventory_categoryId_lastPurchasedAt',
 						match: {
@@ -63,8 +68,8 @@ export function PantryListCategory({
 			data-do-not-animate
 			{...rest}
 		>
-			<CategoryTitleRow>
-				<CategoryTitle>
+			<CategoryTitleRow className="mb-1">
+				<CategoryTitle className="!text-sm">
 					{category?.get('name') ?? 'Uncategorized'}
 				</CategoryTitle>
 			</CategoryTitleRow>

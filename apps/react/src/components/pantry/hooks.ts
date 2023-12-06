@@ -78,9 +78,9 @@ export function usePurchasedText(food: Food | null, abbreviate = false) {
  */
 export function useFilter() {
 	const [params, setParams] = useSearchParams();
-	const filter: 'purchased' | 'all' =
+	const filter: 'purchased' | 'all' | 'frozen' =
 		(params.get('filter') as any) ?? 'purchased';
-	const setFilter = (filter: 'purchased' | 'all') => {
+	const setFilter = (filter: 'purchased' | 'all' | 'frozen') => {
 		setParams((old) => {
 			old.set('filter', filter);
 			return old;

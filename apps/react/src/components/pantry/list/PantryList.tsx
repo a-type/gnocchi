@@ -31,7 +31,7 @@ function PantryListInner({ className, ...rest }: PantryListProps) {
 				to expire. Tap any food to get started.
 			</OnboardingBanner>
 			<ExpiresSoonSection />
-			<div>
+			<div className="flex flex-col gap-4">
 				{categories.map((category) => {
 					return (
 						<PantryListCategory key={category.get('id')} category={category} />

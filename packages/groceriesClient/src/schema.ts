@@ -91,6 +91,10 @@ const foods = collection({
 			type: 'number',
 			nullable: true,
 		},
+		frozenAt: {
+			type: 'number',
+			nullable: true,
+		},
 		purchaseIntervalGuess: {
 			type: 'number',
 			nullable: true,
@@ -116,7 +120,7 @@ const foods = collection({
 			default: false,
 		},
 	},
-	synthetics: {
+	indexes: {
 		nameLookup: {
 			type: 'string[]',
 			compute: (food) =>
@@ -159,6 +163,10 @@ const foods = collection({
 			compute: (food) => {
 				return food.lastPurchasedAt || 0;
 			},
+		},
+		frozen: {
+			type: 'boolean',
+			compute: (food) => !!food.frozenAt,
 		},
 	},
 	compounds: {
@@ -263,7 +271,7 @@ const items = collection({
 			nullable: true,
 		},
 	},
-	synthetics: {
+	indexes: {
 		purchased: {
 			type: 'string',
 			compute: (doc) => (!!doc.purchasedAt ? 'yes' : 'no'),
@@ -536,7 +544,7 @@ const recipes = collection({
 			indexed: true,
 		},
 	},
-	synthetics: {
+	indexes: {
 		// makes tags indexable individually
 		tag: {
 			type: 'string[]',
@@ -604,7 +612,7 @@ const recipeTagMetadata = collection({
 });
 
 export default schema({
-	version: 39,
+	version: 40,
 	collections: {
 		categories,
 		items,
