@@ -14,7 +14,6 @@ import { CardGrid } from '@aglio/ui/components/card';
 import { useFilter } from '@/components/pantry/hooks.js';
 import { useEffect } from 'react';
 import { pantryOnboarding } from '@/onboarding/pantryOnboarding.js';
-import { useTransition, animated } from '@react-spring/web';
 
 export interface PantryListCategoryProps {
 	category: Category | null;
@@ -62,13 +61,6 @@ export function PantryListCategory({
 
 	const showShowMore = pagination.hasMore;
 
-	const transitions = useTransition(items, {
-		from: { opacity: 0, transform: 'translate3d(0, 20px, 0)' },
-		enter: { opacity: 1, transform: 'translate3d(0, 0px, 0)' },
-		leave: { opacity: 0, transform: 'translate3d(0, 20px, 0)' },
-		config: { tension: 500, friction: 30 },
-	});
-
 	return (
 		<CategoryRoot
 			className="pantryListCategory"
@@ -83,11 +75,9 @@ export function PantryListCategory({
 			</CategoryTitleRow>
 			<CategoryItems>
 				<CardGrid className="grid-cols-[repeat(2,1fr)]">
-					{transitions((style, item) => {
+					{items.map((item) => {
 						return (
-							<animated.div className="overflow-visible" style={style as any}>
-								<PantryListItem key={item.get('canonicalName')} item={item} />
-							</animated.div>
+							<PantryListItem key={item.get('canonicalName')} item={item} />
 						);
 					})}
 				</CardGrid>
