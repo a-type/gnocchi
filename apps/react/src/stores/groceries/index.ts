@@ -456,8 +456,11 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 	useClearPantryItem: (client) =>
 		useCallback(
 			async (food: Food) => {
-				food.set('inInventory', false);
-				food.set('expiresAt', null);
+				food.update({
+					inInventory: false,
+					expiresAt: null,
+					frozenAt: null,
+				});
 			},
 			[client],
 		),

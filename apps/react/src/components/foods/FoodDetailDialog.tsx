@@ -89,6 +89,7 @@ function FoodDetailView({
 		);
 
 	const lastPurchasedAt = food.get('lastPurchasedAt');
+	const frozenAt = food.get('frozenAt');
 	const purchaseIntervalDays = food.get('purchaseIntervalGuess')
 		? Math.round(
 				Math.max(
@@ -110,6 +111,14 @@ function FoodDetailView({
 							<ClockIcon />
 							<div className="text-xs italic">
 								Added <RelativeTime value={lastPurchasedAt} />
+							</div>
+						</Row>
+					)}
+					{!!frozenAt && (
+						<Row className="text-accent-dark">
+							<Icon name="snowflake" />
+							<div className="text-xs italic">
+								Frozen <RelativeTime value={frozenAt} />
 							</div>
 						</Row>
 					)}
