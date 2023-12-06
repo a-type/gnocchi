@@ -11,7 +11,7 @@ export function PantryPage({}: PantryPageProps) {
 	usePageTitle('Pantry');
 
 	return (
-		<PageContent fullHeight innerProps={{ className: 'gap-3' }}>
+		<PageContent fullHeight innerProps={{ className: 'gap-2' }}>
 			<PantrySearch />
 			<PageFixedArea>
 				<PantryActionBar />
