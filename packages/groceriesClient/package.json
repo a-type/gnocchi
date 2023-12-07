@@ -19,7 +19,7 @@
 		"@verdant-web/cli": "^4.1.0",
 		"@verdant-web/common": "^1.16.0",
 		"@verdant-web/react": "^24.0.0",
-		"@verdant-web/store": "^2.8.1",
+		"@verdant-web/store": "^2.8.2",
 		"cuid": "^2.1.8",
 		"stopword": "^2.0.8"
 	},
