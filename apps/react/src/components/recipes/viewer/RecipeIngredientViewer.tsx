@@ -22,6 +22,7 @@ import {
 } from '@aglio/ui/components/collapsible';
 import { useToggle } from '@aglio/ui/hooks';
 import { useUnitConversion } from '@/components/recipes/viewer/unitConversion.js';
+import pluralize from 'pluralize';
 
 (window as any).convertUnits = convertUnits;
 
@@ -86,13 +87,23 @@ export function RecipeIngredientViewer({
 
 	const add = hooks.useAddItems();
 	const addToList = useCallback(() => {
+		const totalQuantity = quantity * (multiplier || 1);
+		const food = ingredient.get('food');
+		const textOverride = food
+			? totalQuantity > 1
+				? pluralize(food)
+				: food
+			: undefined;
 		add(
 			[
 				{
 					original: ingredient.get('text'),
-					quantity: quantity * (multiplier || 1),
+					quantity: totalQuantity,
 					unit,
-					food: ingredient.get('food'),
+					food: ingredient.get('food') || 'Unknown',
+					// for items added from this view, we add the food
+					// name as the text, not the ingredient text
+					textOverride,
 				},
 			],
 			{

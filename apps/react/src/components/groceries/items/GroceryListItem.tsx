@@ -22,6 +22,7 @@ import {
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
+	CollapsibleSimple,
 	CollapsibleTrigger,
 } from '@aglio/ui/components/collapsible';
 import {
@@ -63,7 +64,7 @@ import { ListSelect } from '../lists/ListSelect.jsx';
 import { useListOrNull, useListThemeClass } from '../lists/hooks.js';
 import { groceriesState } from '../state.js';
 import { ItemDeleteButton } from './ItemDeleteButton.js';
-import { useItemDisplayText } from './hooks.js';
+import { useItemDisplayText, useItemSubline } from './hooks.js';
 import { ItemSources } from '@/components/groceries/items/ItemSources.jsx';
 import { useDraggable } from '@dnd-kit/core';
 import { preventDefault, stopPropagation } from '@aglio/tools';
@@ -84,7 +85,8 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 		{ item, isDragActive, menuProps, className, first, ...rest },
 		ref,
 	) {
-		const { purchasedAt, comment, id, food } = hooks.useWatch(item);
+		const { purchasedAt, comment, id, food, textOverride } =
+			hooks.useWatch(item);
 
 		const isPurchased = !!purchasedAt;
 		const { purchasedHidingItems } = useSnapshot(groceriesState);
@@ -126,6 +128,8 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 
 		const finalRef = useMergedRef(ref, sizeRef);
 
+		const subline = useItemSubline(item);
+
 		return (
 			<CollapsibleRoot
 				className={classNames(
@@ -161,18 +165,19 @@ export const GroceryListItem = forwardRef<HTMLDivElement, GroceryListItemProps>(
 				/>
 				<CollapsibleTrigger asChild>
 					<div className="flex flex-row items-start gap-2 [grid-area:main] pt-2 pr-3 pb-2 relative cursor-pointer focus:(shadow-focus)">
-						<div className="flex flex-col gap-2 items-start flex-1">
+						<div className="flex flex-col gap-1 items-start flex-1">
 							<div className="flex flex-row items-start gap-1 mt-1 max-w-full overflow-hidden text-ellipsis relative">
 								<span>{displayString}</span>
 							</div>
 							{isPurchased && (
 								<div className="absolute left-0 right-52px top-20px border-0 border-b border-b-gray5 border-solid h-1px transform-origin-left animate-expand-scale-x animate-duration-100 animate-ease-out" />
 							)}
-							{comment && !menuOpen && (
-								<div className="text-xs text-gray7 italic [grid-area:comment]">
-									{comment}
-								</div>
-							)}
+							<CollapsibleSimple
+								open={!!subline && !menuOpen && !isPurchased}
+								className="text-xs text-gray-6 italic pl-2 pr-1 self-stretch [grid-area:comment]"
+							>
+								{subline}
+							</CollapsibleSimple>
 						</div>
 						<RecentPeople item={item} />
 						<ListTag item={item} collapsed={menuOpen} />

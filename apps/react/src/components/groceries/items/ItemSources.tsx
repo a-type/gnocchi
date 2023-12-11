@@ -14,6 +14,7 @@ import {
 import { LinkButton, TextLink } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { H2, H3, P } from '@aglio/ui/components/typography';
+import classNames from 'classnames';
 
 export interface ItemSourcesProps {
 	item: Item;
@@ -47,11 +48,15 @@ function InputRenderer({ input }: { input: ItemInputsItem }) {
 		return (
 			<span>
 				{text}
-				{multiplier !== 1 ? ` (x${multiplier})` : ''} (from{' '}
+				{multiplier !== 1 && multiplier !== null
+					? ` (x${multiplier})`
+					: ''}{' '}
+				(from{' '}
 				<RecipePreview
 					recipeId={recipeId}
 					title={title}
 					multiplier={multiplier}
+					highlightIngredient={text}
 				/>
 				)
 			</span>
@@ -86,10 +91,12 @@ function RecipePreview({
 	recipeId,
 	title,
 	multiplier,
+	highlightIngredient,
 }: {
 	recipeId: string;
 	title?: string | null;
 	multiplier?: number | null;
+	highlightIngredient?: string;
 }) {
 	return (
 		<Dialog>
@@ -103,6 +110,7 @@ function RecipePreview({
 					<RecipePreviewContent
 						recipeId={recipeId}
 						multiplier={multiplier || undefined}
+						highlightIngredient={highlightIngredient}
 					/>
 				</Suspense>
 				<DialogActions>
@@ -118,9 +126,11 @@ function RecipePreview({
 function RecipePreviewContent({
 	recipeId,
 	multiplier = 1,
+	highlightIngredient,
 }: {
 	recipeId: string;
 	multiplier?: number;
+	highlightIngredient?: string;
 }) {
 	const recipe = hooks.useRecipe(recipeId);
 	const live = hooks.useWatch(recipe);
@@ -143,12 +153,17 @@ function RecipePreviewContent({
 				View recipe
 			</LinkButton>
 			<H3>Ingredients</H3>
-			{multiplier !== 1 && (
+			{multiplier !== 1 && multiplier !== null && (
 				<span>(with {fractionToText(multiplier)} multiplication applied)</span>
 			)}
 			<ul>
 				{ingredients.map((ingredient) => (
-					<li key={ingredient.get('id')}>
+					<li
+						key={ingredient.get('id')}
+						className={classNames({
+							'font-bold': ingredient.get('text') === highlightIngredient,
+						})}
+					>
 						<IngredientText ingredient={ingredient} multiplier={multiplier} />
 					</li>
 				))}

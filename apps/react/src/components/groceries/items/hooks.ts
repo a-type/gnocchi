@@ -1,3 +1,4 @@
+import { hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
 import { fractionToText } from '@aglio/tools';
 import pluralize from 'pluralize';
@@ -37,4 +38,25 @@ export function useItemDisplayText(item: Item) {
 		  }${pluralizedName}`;
 
 	return displayString;
+}
+export function useItemSubline(item: Item) {
+	const { comment, textOverride } = hooks.useWatch(item);
+	hooks.useWatch(item.get('inputs'));
+	if (comment) {
+		return comment;
+	}
+	// items with a text override show their original as subline
+	if (textOverride) {
+		const firstInput = item.get('inputs').get(0);
+		if (!firstInput) return undefined;
+		const firstInputText = firstInput.get('text');
+		if (
+			firstInputText.trim().toLowerCase() === textOverride.trim().toLowerCase()
+		) {
+			return undefined;
+		}
+		const numInputs = item.get('inputs').length;
+		return firstInputText + (numInputs > 1 ? `, ...` : '');
+	}
+	return undefined;
 }

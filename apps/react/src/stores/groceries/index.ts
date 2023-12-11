@@ -12,6 +12,7 @@ import {
 	Food,
 	Item,
 	ItemDestructured,
+	ItemInit,
 	ItemInputsItemInit,
 	Recipe,
 	RecipeIngredients,
@@ -276,6 +277,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 							quantity: number;
 							unit: string | null;
 							food: string;
+							textOverride?: string;
 					  }
 				)[],
 				data: {
@@ -517,6 +519,7 @@ export async function addItems(
 				quantity: number;
 				unit: string | null;
 				food: string;
+				textOverride?: string;
 		  }
 	)[],
 	{
@@ -582,9 +585,12 @@ export async function addItems(
 					categoryId = null;
 				}
 
+				const textOverride =
+					typeof line === 'string' ? undefined : line.textOverride;
+
 				let item: Item;
 
-				const baseItemData = {
+				const baseItemData: ItemInit = {
 					listId: listId || lookup?.get('defaultListId') || null,
 					createdAt: Date.now(),
 					totalQuantity: parsed.quantity,
@@ -598,6 +604,7 @@ export async function addItems(
 							quantity: parsed.quantity,
 						},
 					],
+					textOverride,
 				};
 
 				if (!categoryId && navigator.onLine) {

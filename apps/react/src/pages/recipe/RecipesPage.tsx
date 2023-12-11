@@ -20,9 +20,9 @@ export function RecipesPage({}: RecipesPageProps) {
 				<RecipeList />
 			</Suspense>
 			<Suspense>
-				<PageNowPlaying unstyled className="flex flex-col">
+				<PageNowPlaying unstyled className="flex flex-col pointer-events-none">
 					<Suspense>
-						<RecipeCreateButton className="w-48px h-48px md:w-auto md:h-auto mr-4 mb-1 shadow-lg">
+						<RecipeCreateButton className="pointer-events-auto w-48px h-48px md:w-auto md:h-auto mr-4 mb-1 shadow-lg">
 							<span className="hidden md:block">New Recipe</span>
 							<PlusIcon />
 						</RecipeCreateButton>

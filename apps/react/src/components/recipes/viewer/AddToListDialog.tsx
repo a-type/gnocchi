@@ -19,6 +19,7 @@ import { Checkbox } from '@aglio/ui/components/checkbox';
 import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 import { ActionBar, ActionButton } from '@aglio/ui/src/components/actions';
 import { CheckboxIcon, SquareIcon } from '@radix-ui/react-icons';
+import pluralize from 'pluralize';
 
 export interface AddToListDialogProps {
 	recipe: Recipe;
@@ -142,17 +143,25 @@ export function AddToListDialog({
 										(item, index) =>
 											checkedItems[index] && !item.get('isSectionHeader'),
 									)
-									.map((item) =>
-										multiplier
-											? {
-													original: item.get('text'),
-													food: item.get('food') || 'Unknown',
-													quantity: item.get('quantity') * multiplier,
-													unit: item.get('unit'),
-													comments: item.get('comments').getAll(),
-											  }
-											: item.get('text'),
-									),
+									.map((item) => {
+										const totalQuantity =
+											item.get('quantity') * (multiplier || 1);
+										const food = item.get('food');
+										const textOverride = food
+											? totalQuantity > 1
+												? pluralize(food)
+												: food
+											: undefined;
+										return {
+											original: item.get('text'),
+											quantity: totalQuantity,
+											unit: item.get('unit'),
+											food: item.get('food') || 'Unknown',
+											// for items added from recipes, we add
+											// the food name as the text, not the ingredient
+											textOverride,
+										};
+									}),
 								{
 									sourceInfo: {
 										title: recipe.get('title'),
