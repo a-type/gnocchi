@@ -23,6 +23,7 @@ import {
 import { useToggle } from '@aglio/ui/hooks';
 import { useUnitConversion } from '@/components/recipes/viewer/unitConversion.js';
 import pluralize from 'pluralize';
+import { useLookupFoodName } from '@/components/foods/FoodName.jsx';
 
 (window as any).convertUnits = convertUnits;
 
@@ -41,7 +42,8 @@ export function RecipeIngredientViewer({
 	disableAddNote,
 	recipeId,
 }: RecipeIngredientViewerProps) {
-	const { note, isSectionHeader, quantity, unit } = hooks.useWatch(ingredient);
+	const { note, isSectionHeader, quantity, unit, food } =
+		hooks.useWatch(ingredient);
 	const officialUnit = lookupUnit(unit);
 	const [conversion, setConversion] = useUnitConversion(officialUnit?.abbr);
 
@@ -86,14 +88,10 @@ export function RecipeIngredientViewer({
 	}, [setConversion]);
 
 	const add = hooks.useAddItems();
-	const addToList = useCallback(() => {
+	const foodName = useLookupFoodName(food);
+	const addToList = useCallback(async () => {
 		const totalQuantity = quantity * (multiplier || 1);
-		const food = ingredient.get('food');
-		const textOverride = food
-			? totalQuantity > 1
-				? pluralize(food)
-				: food
-			: undefined;
+		const textOverride = foodName || undefined;
 		add(
 			[
 				{
@@ -114,7 +112,7 @@ export function RecipeIngredientViewer({
 				showToast: true,
 			},
 		);
-	}, [ingredient, multiplier, add, recipeId]);
+	}, [ingredient, multiplier, add, recipeId, foodName]);
 
 	return (
 		<div

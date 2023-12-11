@@ -27,10 +27,10 @@ export function FoodName({ food, capitalize: doCapitalize }: FoodNameProps) {
 	return <>{doCapitalize ? capitalize(name) : name}</>;
 }
 
-export function useLookupFoodName(foodName: string) {
-	const food = useLookupFoodByName(foodName);
+export function useLookupFoodName(foodName?: string | null) {
+	const food = useLookupFoodByName(foodName ?? '', { skip: !foodName });
 
-	return useFoodName(food, foodName);
+	return useFoodName(food, foodName ?? undefined);
 }
 
 export function LookupFoodName({

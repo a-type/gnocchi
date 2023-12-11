@@ -60,6 +60,7 @@ export function AddToListDialog({
 	}, [isReallyOpen]);
 
 	const addItems = hooks.useAddItems();
+	const client = hooks.useClient();
 
 	return (
 		<Dialog open={isReallyOpen} onOpenChange={setIsReallyOpen} {...rest}>
@@ -136,32 +137,42 @@ export function AddToListDialog({
 					</DialogClose>
 					<Button
 						color="primary"
-						onClick={() => {
+						onClick={async () => {
 							addItems(
-								items
-									.filter(
-										(item, index) =>
-											checkedItems[index] && !item.get('isSectionHeader'),
-									)
-									.map((item) => {
-										const totalQuantity =
-											item.get('quantity') * (multiplier || 1);
-										const food = item.get('food');
-										const textOverride = food
-											? totalQuantity > 1
-												? pluralize(food)
-												: food
-											: undefined;
-										return {
-											original: item.get('text'),
-											quantity: totalQuantity,
-											unit: item.get('unit'),
-											food: item.get('food') || 'Unknown',
-											// for items added from recipes, we add
-											// the food name as the text, not the ingredient
-											textOverride,
-										};
-									}),
+								await Promise.all(
+									items
+										.filter(
+											(item, index) =>
+												checkedItems[index] && !item.get('isSectionHeader'),
+										)
+										.map(async (item) => {
+											const totalQuantity =
+												item.get('quantity') * (multiplier || 1);
+
+											// lookup the food name to use as the main
+											// item text
+											const foodName = item.get('food');
+											const food = foodName
+												? await client.foods.findOne({
+														index: { where: 'nameLookup', equals: foodName },
+												  }).resolved
+												: undefined;
+											const textOverride = food
+												? food.get('pluralizeName')
+													? pluralize(food.get('canonicalName'))
+													: food.get('canonicalName')
+												: undefined;
+											return {
+												original: item.get('text'),
+												quantity: totalQuantity,
+												unit: item.get('unit'),
+												food: item.get('food') || 'Unknown',
+												// for items added from recipes, we add
+												// the food name as the text, not the ingredient
+												textOverride,
+											};
+										}),
+								),
 								{
 									sourceInfo: {
 										title: recipe.get('title'),
