@@ -125,7 +125,6 @@ export const DialogSwipeHandle = forwardRef<
 			if (last) console.log(swipeY, dy, contentHeight);
 
 			if (last && (swipeY === 1 || dy > contentHeight / 2)) {
-				console.log('close');
 				close();
 			}
 			const gestureY = last ? 0 : -Math.max(0, dy);

@@ -11,7 +11,7 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@aglio/ui/components/dialog';
-import { LinkButton, TextLink } from '@/components/nav/Link.jsx';
+import { LinkButton } from '@/components/nav/Link.jsx';
 import { Button } from '@aglio/ui/components/button';
 import { H2, H3, P } from '@aglio/ui/components/typography';
 import classNames from 'classnames';
@@ -98,11 +98,13 @@ function RecipePreview({
 	multiplier?: number | null;
 	highlightIngredient?: string;
 }) {
+	const recipe = hooks.useRecipe(recipeId);
+	hooks.useWatch(recipe);
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
 				<span className="font-bold">
-					{title ? truncate(title) : 'a recipe'}
+					{recipe ? truncate(recipe.get('title')) : 'a recipe'}
 				</span>
 			</DialogTrigger>
 			<DialogContent>
