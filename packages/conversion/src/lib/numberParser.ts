@@ -44,8 +44,8 @@ function identifyLeadingNumberGroup(source: string): [number, string] | null {
 		return [num / denom, trimmedSource.slice(leadingFractionMatch[0].length)];
 	}
 
-	// lookahead for a range
-	const leadingRangeMatch = /^\d+\s?-\s?\d+/.exec(trimmedSource);
+	// lookahead for a range: 1-2, 1 or 2, 1 to 2
+	let leadingRangeMatch = /^\d+\s?-\s?\d+/.exec(trimmedSource);
 	if (leadingRangeMatch) {
 		const [start, end] = leadingRangeMatch[0].split('-').map(Number);
 		// always use the larger number
@@ -53,6 +53,16 @@ function identifyLeadingNumberGroup(source: string): [number, string] | null {
 			Math.max(start, end),
 			trimmedSource.slice(leadingRangeMatch[0].length),
 		];
+	} else {
+		leadingRangeMatch = /^\d+\s?(?:or|to)\s?\d+/.exec(trimmedSource);
+		if (leadingRangeMatch) {
+			const [start, end] = leadingRangeMatch[0].split(/(?:or|to)/).map(Number);
+			// always use the larger number
+			return [
+				Math.max(start, end),
+				trimmedSource.slice(leadingRangeMatch[0].length),
+			];
+		}
 	}
 
 	// lookahead for any number

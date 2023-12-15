@@ -59,6 +59,11 @@ describe('ingredient parsing', () => {
 			'fennel bulb',
 			['about 6 oz.', 'thinly sliced', 'plus frond'],
 		],
+		// apostrophe 's'
+		["bachan's", 1, '', "bachan's", []],
+		['1-2 tsp of salt', 2, 'teaspoon', 'salt', []],
+		['1 to 2 tsp of salt', 2, 'teaspoon', 'salt', []],
+		['1 or 2 tsps of salt', 2, 'teaspoon', 'salt', []],
 		// not ideal but good enough
 		['3 12oz cans of tomato paste', 36, 'oz can', 'tomato paste', []],
 		// tricky cases

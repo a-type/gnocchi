@@ -55,10 +55,10 @@ export function greedyMatchNumber(
 		return greedyMatchNumber(input.slice(leadingDotMatch[0].length), ctx);
 	}
 
-	const leadingDashMatch = /^-/.exec(input);
-	if (leadingDashMatch) {
-		ctx.runningText += leadingDashMatch[0];
-		return greedyMatchNumber(input.slice(leadingDashMatch[0].length), ctx);
+	const leadingRangeDelimiter = /^(-|or|to)/.exec(input);
+	if (leadingRangeDelimiter) {
+		ctx.runningText += leadingRangeDelimiter[0];
+		return greedyMatchNumber(input.slice(leadingRangeDelimiter[0].length), ctx);
 	}
 
 	return {
