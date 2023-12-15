@@ -5,7 +5,11 @@ import { useAuth } from '@/hooks/useAuth.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 import { trpc } from '@/trpc.js';
 import { Button } from '@a-type/ui/components/button';
-import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
+import {
+	PageContent,
+	PageFixedArea,
+	PageRoot,
+} from '@a-type/ui/components/layouts';
 import { H1, P } from '@a-type/ui/components/typography';
 import { useNavigate, useParams } from '@verdant-web/react-router';
 
@@ -89,21 +93,23 @@ export function ClaimInvitePage() {
 						<DemoFrame demo="multiplayer-groceries" />
 						<DemoFrame demo="multiplayer-cooking" />
 					</div>
-					<P>
-						Collaborate on shopping together in the store or during the week.
-					</P>
-					<P>
-						Collect recipes and cook as a team with live progress tracking and
-						step assignment.
-					</P>
-					<LoginButton
-						align="end"
-						color="primary"
-						returnTo={`/claim/${inviteId}`}
-						inviteId={inviteId}
-					>
-						Sign up
-					</LoginButton>
+					<PageFixedArea className="flex flex-col gap-2 bottom-0 p-3">
+						<P>
+							Collaborate on shopping together in the store or during the week.
+						</P>
+						<P>
+							Collect recipes and cook as a team with live progress tracking and
+							step assignment.
+						</P>
+						<LoginButton
+							align="end"
+							color="primary"
+							returnTo={`/claim/${inviteId}`}
+							inviteId={inviteId}
+						>
+							Sign up
+						</LoginButton>
+					</PageFixedArea>
 				</div>
 			</PageContent>
 		</PageRoot>

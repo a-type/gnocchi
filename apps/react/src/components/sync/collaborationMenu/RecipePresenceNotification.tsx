@@ -8,7 +8,7 @@ import { UserInfo } from '@verdant-web/common';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { Suspense, useState } from 'react';
 import { PersonAvatar } from '../people/PersonAvatar.jsx';
-import { LinkButton } from '@/components/nav/Link.jsx';
+import { Link, LinkButton } from '@/components/nav/Link.jsx';
 
 export interface RecipePresenceNotificationProps {}
 
@@ -74,23 +74,24 @@ function RecipePresenceLink({
 			>
 				<Cross2Icon />
 			</Button>
-			<PersonAvatar person={person} />
-			<div className="flex flex-col gap-2px flex-[1_1_0] min-w-0">
-				<div className="text-xxs ml--2px">
-					&nbsp;{person.profile.name} is viewing
-				</div>
-				<div className="text-xs font-bold overflow-hidden text-ellipsis whitespace-nowrap">
-					{recipe.get('title')}
-				</div>
-			</div>
-			<LinkButton
-				size="small"
+			<Link
 				to={makeRecipeLink(recipe)}
-				className="whitespace-nowrap"
 				onClick={onDismiss}
+				className="flex flex-row gap-2 items-center flex-1"
 			>
-				Join
-			</LinkButton>
+				<PersonAvatar person={person} />
+				<div className="flex flex-col gap-2px flex-[1_1_0] min-w-0">
+					<div className="text-xxs ml--2px">
+						&nbsp;{person.profile.name} is viewing
+					</div>
+					<div className="text-xs font-bold overflow-hidden text-ellipsis whitespace-nowrap">
+						{recipe.get('title')}
+					</div>
+				</div>
+				<Button size="small" className="whitespace-nowrap" asChild>
+					<div>Join</div>
+				</Button>
+			</Link>
 		</div>
 	);
 }

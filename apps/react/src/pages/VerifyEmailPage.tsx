@@ -28,7 +28,7 @@ export function VerifyEmailPage({}: VerifyEmailPageProps) {
 			<EmailCompleteSignUpForm
 				code={code}
 				onSuccess={() => {
-					navigate(params.get('returnTo') || '/');
+					navigate(params.get('returnTo') || '/', { skipTransition: true });
 				}}
 			/>
 		</PageContent>
