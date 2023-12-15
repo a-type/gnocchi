@@ -1,4 +1,4 @@
-import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
 

@@ -1,19 +1,19 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { preventDefault } from '@aglio/tools';
-import { ActionButton } from '@aglio/ui/src/components/actions';
-import { Button } from '@aglio/ui/src/components/button';
+import { ActionButton } from '@a-type/ui/components/actions';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/src/components/dialog';
+} from '@a-type/ui/components/dialog';
 import {
 	FormikForm,
 	SubmitButton,
 	TextField,
-} from '@aglio/ui/src/components/forms';
+} from '@a-type/ui/components/forms';
 import { PlusIcon } from '@radix-ui/react-icons';
 
 export function AddItemAction() {

@@ -1,17 +1,17 @@
 import { UndoAction } from '@/components/groceries/actions/UndoAction.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { ActionBar } from '@aglio/ui/components/actions';
-import { Button } from '@aglio/ui/components/button';
-import { ColorPicker, ThemeName } from '@aglio/ui/components/colorPicker';
+import { ActionBar } from '@a-type/ui/components/actions';
+import { Button } from '@a-type/ui/components/button';
+import { ColorPicker, ThemeName } from '@a-type/ui/components/colorPicker';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { Divider } from '@aglio/ui/components/divider';
-import { Form, TextField } from '@aglio/ui/components/forms';
+} from '@a-type/ui/components/dialog';
+import { Divider } from '@a-type/ui/components/divider';
+import { Form, TextField } from '@a-type/ui/components/forms';
 import { TrashIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import { Formik } from 'formik';

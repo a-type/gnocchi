@@ -2,14 +2,14 @@ import { SubscriptionError } from '@aglio/tools';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { LogoutButton } from '../auth/LogoutButton.js';
 import { SubscribeButton } from './SubscribeButton.js';
-import { H2, P } from '@aglio/ui/components/typography';
-import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
+import { H2, P } from '@a-type/ui/components/typography';
+import { Dialog, DialogContent } from '@a-type/ui/components/dialog';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
-} from '@aglio/ui/components/collapsible';
-import { Button } from '@aglio/ui/components/button';
+} from '@a-type/ui/components/collapsible';
+import { Button } from '@a-type/ui/components/button';
 import { TextLink } from '@/components/nav/Link.jsx';
 
 export interface CompleteSignupDialogProps {}

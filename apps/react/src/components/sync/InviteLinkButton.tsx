@@ -1,14 +1,14 @@
 import { ShareLink } from '@/components/settings/ShareLink.jsx';
 import { API_HOST_HTTP, UI_HOST_HTTP } from '@/config.js';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { P } from '@aglio/ui/components/typography';
+} from '@a-type/ui/components/dialog';
+import { P } from '@a-type/ui/components/typography';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 

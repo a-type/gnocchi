@@ -1,7 +1,7 @@
 import { trpc } from '@/trpc.js';
 import { Outlet } from '@verdant-web/react-router';
 import { NotFoundPage } from './NotFoundPage.jsx';
-import { PageContent } from '@aglio/ui/components/layouts';
+import { PageContent } from '@a-type/ui/components/layouts';
 import { Link } from '@/components/nav/Link.jsx';
 
 export function AdminPage() {

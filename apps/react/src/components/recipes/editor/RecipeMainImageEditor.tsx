@@ -1,7 +1,7 @@
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { ImageUploader } from '@aglio/ui/components/imageUploader';
+import { ImageUploader } from '@a-type/ui/components/imageUploader';
 
 export interface RecipeMainImageEditorProps {
 	recipe: Recipe;

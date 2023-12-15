@@ -10,7 +10,7 @@ import {
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from '@aglio/ui/src/components/select';
+} from '@a-type/ui/components/select';
 import { useEffect, useState } from 'react';
 
 export function ColorModeSelect() {

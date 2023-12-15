@@ -2,7 +2,7 @@ import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
 import { ReactNode, useCallback, useState } from 'react';
 import { NewCategoryForm } from '../NewCategoryForm.js';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
@@ -11,7 +11,7 @@ import {
 	DialogSelectItem,
 	DialogSelectList,
 	DialogSelectTrigger,
-} from '@aglio/ui/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { withSuspense } from '../../../hocs/withSuspense.jsx';
 
 export const CategorySelect = withSuspense(function CategorySelect({

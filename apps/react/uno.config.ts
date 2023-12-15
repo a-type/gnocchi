@@ -1,7 +1,7 @@
 // uno.config.ts
 import { defineConfig } from 'unocss';
 import variantGroup from '@unocss/transformer-variant-group';
-import presetAglio from '@aglio/ui/uno-preset';
+import presetAglio from '@a-type/ui/uno-preset';
 
 export default defineConfig({
 	presets: [presetAglio()],
@@ -20,4 +20,12 @@ export default defineConfig({
 		`,
 		},
 	],
+	content: {
+		pipeline: {
+			include: [
+				// include js/ts files as well as defaults.
+				/\.(vue|svelte|[jt]sx?|mdx?|astro|elm|php|phtml|html)($|\?)/,
+			],
+		},
+	},
 });

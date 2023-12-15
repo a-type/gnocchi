@@ -19,10 +19,10 @@ import { checkForUpdate } from '@/components/updatePrompt/updateState.js';
 import { API_HOST_HTTP, PRICE_MONTHLY_DOLLARS } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { useInterval } from '@/hooks/useInterval.js';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
-import { Divider } from '@aglio/ui/components/divider';
-import { PageContent } from '@aglio/ui/components/layouts';
-import { H1, H2 } from '@aglio/ui/components/typography';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
+import { Divider } from '@a-type/ui/components/divider';
+import { PageContent } from '@a-type/ui/components/layouts';
+import { H1, H2 } from '@a-type/ui/components/typography';
 import { ArrowRightIcon } from '@radix-ui/react-icons';
 import { ReactNode, useEffect } from 'react';
 

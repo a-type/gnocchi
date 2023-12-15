@@ -1,5 +1,5 @@
 import { LinkButton } from '@/components/nav/Link.jsx';
-import { H1, P } from '@aglio/ui/components/typography';
+import { H1, P } from '@a-type/ui/components/typography';
 
 export interface RecipeNotFoundProps {}
 

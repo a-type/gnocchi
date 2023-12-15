@@ -2,9 +2,9 @@ import { APP_NAME } from '@/config.js';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { PromoteSubscriptionButton } from './PromoteSubscriptionButton.jsx';
-import { div } from '@aglio/ui/components/box';
-import { P } from '@aglio/ui/components/typography';
-import { Button } from '@aglio/ui/components/button';
+import { div } from '@a-type/ui/components/box';
+import { P } from '@a-type/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
 
 export function InfrequentSubscriptionHint() {
 	const isSubscribed = useIsSubscribed();

@@ -12,10 +12,10 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { Button } from '@aglio/ui/components/button';
-import { H2, P } from '@aglio/ui/components/typography';
-import { Checkbox } from '@aglio/ui/components/checkbox';
+} from '@a-type/ui/components/dialog';
+import { Button } from '@a-type/ui/components/button';
+import { H2, P } from '@a-type/ui/components/typography';
+import { Checkbox } from '@a-type/ui/components/checkbox';
 
 export interface MemberManagerProps {}
 

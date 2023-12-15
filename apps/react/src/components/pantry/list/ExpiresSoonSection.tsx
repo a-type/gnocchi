@@ -2,8 +2,8 @@ import { FoodName, LookupFoodName } from '@/components/foods/FoodName.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Food, Item } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
-import { H2 } from '@aglio/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
+import { H2 } from '@a-type/ui/components/typography';
 import {
 	ClockIcon,
 	ExclamationTriangleIcon,
@@ -23,8 +23,8 @@ import {
 	CardMain,
 	CardRoot,
 	CardTitle,
-} from '@aglio/ui/components/card';
-import { RelativeTime } from '@aglio/ui/components/relativeTime';
+} from '@a-type/ui/components/card';
+import { RelativeTime } from '@a-type/ui/components/relativeTime';
 import { PantryListItem } from '../items/PantryListItem.jsx';
 
 export interface ExpiresSoonSectionProps {

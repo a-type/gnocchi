@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { PantryListItemSkeleton } from '@/components/pantry/items/PantryListItem.jsx';
 import { AutoRestoreScroll } from '@/components/nav/AutoRestoreScroll.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { CardGrid } from '@aglio/ui/components/card';
+import { CardGrid } from '@a-type/ui/components/card';
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { pantryOnboarding } from '@/onboarding/pantryOnboarding.js';
 import { PantryListSectionTabs } from './PantryListSectionTabs.jsx';

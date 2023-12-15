@@ -1,14 +1,14 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { FoodAlternateNames } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/src/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/src/components/dialog';
-import { Form, SubmitButton, TextField } from '@aglio/ui/src/components/forms';
+} from '@a-type/ui/components/dialog';
+import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
 import { Formik } from 'formik';
 import { useState } from 'react';

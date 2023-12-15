@@ -8,9 +8,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 	DialogActions,
-} from '@aglio/ui/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { menuState } from './state.js';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 
 export function ManageCategoriesDialog({ children }: { children: ReactNode }) {
 	const resetToDefaults = hooks.useResetCategoriesToDefault();

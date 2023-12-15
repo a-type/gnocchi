@@ -2,9 +2,9 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { NoteEditor } from '@/components/recipes/editor/NoteEditor.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { useToggle } from '@aglio/ui/hooks';
-import { Button } from '@aglio/ui/src/components/button';
-import { Note } from '@aglio/ui/src/components/note';
+import { useToggle } from '@a-type/ui/hooks';
+import { Button } from '@a-type/ui/components/button';
+import { Note } from '@a-type/ui/components/note';
 
 export interface RecipeNoteProps {
 	recipe: Recipe;

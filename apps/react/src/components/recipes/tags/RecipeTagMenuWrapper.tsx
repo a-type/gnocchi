@@ -4,7 +4,7 @@ import {
 	ContextMenuItem,
 	ContextMenuRoot,
 	ContextMenuTrigger,
-} from '@aglio/ui/src/components/contextMenu';
+} from '@a-type/ui/components/contextMenu';
 import { ReactNode } from 'react';
 
 export interface RecipeTagMenuWrapperProps {

@@ -1,7 +1,7 @@
-import { ActionButton } from '@aglio/ui/components/actions';
+import { ActionButton } from '@a-type/ui/components/actions';
 import { hooks } from '@/stores/groceries/index.js';
 import { ResetIcon } from '@radix-ui/react-icons';
-import { Tooltip } from '@aglio/ui/components/tooltip';
+import { Tooltip } from '@a-type/ui/components/tooltip';
 
 export function UndoAction({ showName }: { showName?: boolean }) {
 	const canUndo = hooks.useCanUndo();

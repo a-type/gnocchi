@@ -2,8 +2,8 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
-import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
+import { Button } from '@a-type/ui/components/button';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
 import { useState } from 'react';
 
 export interface RecipeUrlFieldProps {

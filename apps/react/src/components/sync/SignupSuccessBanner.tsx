@@ -3,13 +3,13 @@ import {
 	DialogActions,
 	DialogClose,
 	DialogContent,
-} from '@aglio/ui/components/dialog';
-import { H1, P } from '@aglio/ui/components/typography';
+} from '@a-type/ui/components/dialog';
+import { H1, P } from '@a-type/ui/components/typography';
 import { HamburgerMenuIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { useSearchParams } from '@verdant-web/react-router';
 import { InviteLinkButton } from './InviteLinkButton.jsx';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import { Link } from '@/components/nav/Link.jsx';
 
 export interface SignupSuccessBannerProps {}
@@ -35,7 +35,7 @@ export function SignupSuccessBanner({}: SignupSuccessBannerProps) {
 					As a paid subscriber you can invite any number of people to shop and
 					cook with you, for free.
 				</P>
-				<P size="sm">
+				<P className="text-sm">
 					(You can find this option in the <HamburgerMenuIcon /> menu at any
 					time. You can also manage or cancel your subscription there.)
 				</P>

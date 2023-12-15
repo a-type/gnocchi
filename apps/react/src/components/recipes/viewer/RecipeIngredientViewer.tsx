@@ -13,14 +13,14 @@ import {
 	DropdownMenuItem,
 	DropdownMenuLabel,
 	DropdownMenuTrigger,
-} from '@aglio/ui/components/dropdownMenu';
-import { Tooltip } from '@aglio/ui/components/tooltip';
-import { Button } from '@aglio/ui/components/button';
+} from '@a-type/ui/components/dropdownMenu';
+import { Tooltip } from '@a-type/ui/components/tooltip';
+import { Button } from '@a-type/ui/components/button';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
-} from '@aglio/ui/components/collapsible';
-import { useToggle } from '@aglio/ui/hooks';
+} from '@a-type/ui/components/collapsible';
+import { useToggle } from '@a-type/ui/hooks';
 import { useUnitConversion } from '@/components/recipes/viewer/unitConversion.js';
 import pluralize from 'pluralize';
 import { useLookupFoodName } from '@/components/foods/FoodName.jsx';

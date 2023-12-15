@@ -1,6 +1,6 @@
 import useMergedRef from '@/hooks/useMergedRef.js';
 import { Category, Item } from '@aglio/groceries-client';
-import { useSizeCssVars, withClassName } from '@aglio/ui/hooks';
+import { useSizeCssVars, withClassName } from '@a-type/ui/hooks';
 import { useDndMonitor, useDroppable } from '@dnd-kit/core';
 import classNames from 'classnames';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';

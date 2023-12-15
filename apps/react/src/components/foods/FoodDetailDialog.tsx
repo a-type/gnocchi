@@ -3,7 +3,7 @@ import { ReactNode, Suspense, useState } from 'react';
 import { CategorySelect } from '../groceries/categories/CategorySelect.jsx';
 import { Icon } from '../icons/Icon.jsx';
 import { ListSelect } from '@/components/groceries/lists/ListSelect.jsx';
-import { useToggle, withClassName } from '@aglio/ui/hooks';
+import { useToggle, withClassName } from '@a-type/ui/hooks';
 import {
 	Dialog,
 	DialogActions,
@@ -11,16 +11,16 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { Button } from '@aglio/ui/components/button';
-import { H3 } from '@aglio/ui/components/typography';
-import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
-import { Checkbox } from '@aglio/ui/src/components/checkbox';
+} from '@a-type/ui/components/dialog';
+import { Button } from '@a-type/ui/components/button';
+import { H3 } from '@a-type/ui/components/typography';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
+import { Checkbox } from '@a-type/ui/components/checkbox';
 import { FoodName } from '@/components/foods/FoodName.jsx';
 import { FoodNamesEditor } from '@/components/foods/FoodNamesEditor.jsx';
-import { Divider } from '@aglio/ui/src/components/divider';
+import { Divider } from '@a-type/ui/components/divider';
 import { useSearchParams } from '@verdant-web/react-router';
-import { RelativeTime } from '@aglio/ui/components/relativeTime';
+import { RelativeTime } from '@a-type/ui/components/relativeTime';
 import { useExpiresText } from '@/components/pantry/hooks.js';
 import {
 	ClockIcon,

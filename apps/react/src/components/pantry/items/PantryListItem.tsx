@@ -5,18 +5,18 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Food } from '@aglio/groceries-client';
 import { shortenTimeUnits } from '@aglio/tools';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	CardActions,
 	CardFooter,
 	CardMain,
 	CardRoot,
 	CardTitle,
-} from '@aglio/ui/components/card';
-import { Chip } from '@aglio/ui/components/chip';
-import { RelativeTime } from '@aglio/ui/components/relativeTime';
-import { TextSkeleton } from '@aglio/ui/components/skeletons';
-import { Tooltip } from '@aglio/ui/components/tooltip';
+} from '@a-type/ui/components/card';
+import { Chip } from '@a-type/ui/components/chip';
+import { RelativeTime } from '@a-type/ui/components/relativeTime';
+import { TextSkeleton } from '@a-type/ui/components/skeletons';
+import { Tooltip } from '@a-type/ui/components/tooltip';
 import {
 	ClockIcon,
 	ExclamationTriangleIcon,

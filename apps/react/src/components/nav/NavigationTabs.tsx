@@ -1,5 +1,5 @@
 import { ComponentPropsWithoutRef, useState } from 'react';
-import { TabsRoot, TabsTrigger } from '@aglio/ui/components/tabs';
+import { TabsRoot, TabsTrigger } from '@a-type/ui/components/tabs';
 import { Link, useOnLocationChange } from '@verdant-web/react-router';
 
 export const NavigationTabsRoot = (

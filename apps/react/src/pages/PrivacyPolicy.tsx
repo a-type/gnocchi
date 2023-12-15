@@ -1,4 +1,4 @@
-import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 

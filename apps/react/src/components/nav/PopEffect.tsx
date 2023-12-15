@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { debounce } from '@a-type/utils';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParticles } from '@aglio/ui/components/particles';
+import { useParticles } from '@a-type/ui/components/particles';
 
 export interface PopEffectProps {
 	active?: boolean;

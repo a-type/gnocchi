@@ -14,8 +14,8 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { Recipe } from '@aglio/groceries-client';
-import { ActionBar, ActionButton } from '@aglio/ui/components/actions';
-import { Button } from '@aglio/ui/components/button';
+import { ActionBar, ActionButton } from '@a-type/ui/components/actions';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
@@ -23,8 +23,8 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
+} from '@a-type/ui/components/dialog';
+import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 export interface CookingActionBarProps {

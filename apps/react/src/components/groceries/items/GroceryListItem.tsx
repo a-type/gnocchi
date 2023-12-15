@@ -1,7 +1,7 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { Link } from '@/components/nav/Link.jsx';
 import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx';
-import { useParticles } from '@aglio/ui/components/particles';
+import { useParticles } from '@a-type/ui/components/particles';
 import {
 	PeopleList,
 	PeopleListItem,
@@ -13,18 +13,17 @@ import { useIsFirstRender, usePrevious } from '@/hooks/usePrevious.js';
 import { categorizeOnboarding } from '@/onboarding/categorizeOnboarding.js';
 import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
-	Checkbox,
 	CheckboxIndicator,
 	CheckboxRoot,
-} from '@aglio/ui/components/checkbox';
+} from '@a-type/ui/components/checkbox';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleSimple,
 	CollapsibleTrigger,
-} from '@aglio/ui/components/collapsible';
+} from '@a-type/ui/components/collapsible';
 import {
 	Dialog,
 	DialogActions,
@@ -32,11 +31,11 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
-import { NumberStepper } from '@aglio/ui/components/numberStepper';
-import { Tooltip } from '@aglio/ui/components/tooltip';
-import { useSizeCssVars } from '@aglio/ui/hooks';
+} from '@a-type/ui/components/dialog';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
+import { NumberStepper } from '@a-type/ui/components/numberStepper';
+import { Tooltip } from '@a-type/ui/components/tooltip';
+import { useSizeCssVars } from '@a-type/ui/hooks';
 import { CSS } from '@dnd-kit/utilities';
 import { UserInfo } from '@verdant-web/store';
 import {

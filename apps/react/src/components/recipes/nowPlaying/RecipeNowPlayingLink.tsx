@@ -3,7 +3,7 @@ import { Recipe } from '@aglio/groceries-client';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { RecipeInstructionsDocument } from '@/lib/tiptap.js';
 import { Link } from '@verdant-web/react-router';
-import { ConfirmedButton } from '@aglio/ui/src/components/button';
+import { ConfirmedButton } from '@a-type/ui/components/button';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 export function RecipeNowPlayingLink({ recipe }: { recipe: Recipe }) {

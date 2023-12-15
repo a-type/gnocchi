@@ -3,8 +3,8 @@ import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
-import { Checkbox } from '@aglio/ui/components/checkbox';
+import { Button } from '@a-type/ui/components/button';
+import { Checkbox } from '@a-type/ui/components/checkbox';
 import {
 	Dialog,
 	DialogActions,
@@ -12,9 +12,9 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { P } from '@aglio/ui/components/typography';
+import { P } from '@a-type/ui/components/typography';
 import format from 'date-fns/format';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';

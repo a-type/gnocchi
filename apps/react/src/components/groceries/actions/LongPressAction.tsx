@@ -1,15 +1,12 @@
 import { useAnimationFrame } from '@/hooks/useAnimationFrame.js';
 import { preventDefault } from '@/lib/eventHandlers.js';
-import {
-	ActionButton,
-	ActionButtonProps,
-} from '@aglio/ui/src/components/actions';
+import { ActionButton, ActionButtonProps } from '@a-type/ui/components/actions';
 import {
 	Popover,
 	PopoverAnchor,
 	PopoverArrow,
 	PopoverContent,
-} from '@aglio/ui/src/components/popover';
+} from '@a-type/ui/components/popover';
 import { useDrag } from '@use-gesture/react';
 import classNames from 'classnames';
 import { useCallback, useEffect, useRef, useState } from 'react';

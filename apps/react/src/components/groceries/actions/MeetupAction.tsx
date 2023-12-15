@@ -1,8 +1,8 @@
 import { MeetupIcon } from '@/components/sync/meetup/MeetupIcon.jsx';
 import { MeetupSelect } from '@/components/sync/meetup/MeetupSelect.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { ActionButton } from '@aglio/ui/components/actions';
-import { SelectValue } from '@aglio/ui/components/select';
+import { ActionButton } from '@a-type/ui/components/actions';
+import { SelectValue } from '@a-type/ui/components/select';
 
 export interface MeetupActionProps {}
 

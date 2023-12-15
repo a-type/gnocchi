@@ -1,5 +1,5 @@
 import { LinkButton } from '@/components/nav/Link.jsx';
-import { PageFixedArea } from '@aglio/ui/src/components/layouts';
+import { PageFixedArea } from '@a-type/ui/components/layouts';
 import { ArrowLeftIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 import classNames from 'classnames';

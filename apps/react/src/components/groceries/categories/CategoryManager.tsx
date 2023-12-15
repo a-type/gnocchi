@@ -9,8 +9,8 @@ import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
 import { Formik } from 'formik';
 import { Category } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
-import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
+import { Button } from '@a-type/ui/components/button';
+import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
 
 export interface CategoryManagerProps {}
 

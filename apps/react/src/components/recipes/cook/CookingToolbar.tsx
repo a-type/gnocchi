@@ -1,6 +1,6 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { Recipe } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import { ArrowUpIcon, ListBulletIcon } from '@radix-ui/react-icons';
 import { animated, useSpring } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';

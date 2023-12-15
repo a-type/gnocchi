@@ -1,4 +1,4 @@
-import { P } from '@aglio/ui/components/typography';
+import { P } from '@a-type/ui/components/typography';
 import { Cart } from '../graphics/Cart.jsx';
 import { InfrequentSubscriptionHint } from '../promotional/InfrequentSubscriptionHint.jsx';
 import { InstallHint } from '../promotional/InstallHint.jsx';

@@ -1,7 +1,7 @@
 import { trpc } from '@/trpc.js';
-import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
-import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { H1, P } from '@aglio/ui/components/typography';
+import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
+import { H1, P } from '@a-type/ui/components/typography';
 import { Formik } from 'formik';
 import { useNavigate, useSearchParams } from '@verdant-web/react-router';
 

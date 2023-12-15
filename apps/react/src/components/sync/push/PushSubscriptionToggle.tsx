@@ -5,7 +5,7 @@ import {
 	subscribeToPush,
 	unsubscribeFromPush,
 } from '@/push.js';
-import { Switch } from '@aglio/ui/components/switch';
+import { Switch } from '@a-type/ui/components/switch';
 import { useEffect, useState } from 'react';
 
 export interface PushSubscriptionToggleProps {}

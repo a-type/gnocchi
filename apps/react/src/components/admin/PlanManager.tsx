@@ -1,13 +1,13 @@
 import { FeatureFlagName, featureFlags } from '@/featureFlags.js';
 import { RouterOutputs, trpc } from '@/trpc.js';
-import { H2, P } from '@aglio/ui/components/typography';
-import { Button } from '@aglio/ui/src/components/button';
+import { H2, P } from '@a-type/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/src/components/dialog';
-import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
+} from '@a-type/ui/components/dialog';
+import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
 import classNames from 'classnames';
 import { useState } from 'react';
 

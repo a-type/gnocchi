@@ -4,9 +4,9 @@ import { API_HOST_HTTP } from '@/config.js';
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 import { trpc } from '@/trpc.js';
-import { Button } from '@aglio/ui/components/button';
-import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { H1, P } from '@aglio/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
+import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
+import { H1, P } from '@a-type/ui/components/typography';
 import { useNavigate, useParams } from '@verdant-web/react-router';
 
 export function ClaimInvitePage() {

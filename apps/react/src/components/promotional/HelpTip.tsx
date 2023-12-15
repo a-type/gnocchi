@@ -1,9 +1,9 @@
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from '@aglio/ui/components/popover';
+} from '@a-type/ui/components/popover';
 import { QuestionMarkCircledIcon } from '@radix-ui/react-icons';
 import { ReactNode } from 'react';
 

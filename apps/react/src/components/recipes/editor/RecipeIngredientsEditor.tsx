@@ -29,7 +29,7 @@ import { NoteEditor } from './NoteEditor.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { useState } from 'react';
 import classNames from 'classnames';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	DropdownMenu,
 	DropdownMenuCheckboxItem,
@@ -38,19 +38,19 @@ import {
 	DropdownMenuItemIndicator,
 	DropdownMenuItemRightSlot,
 	DropdownMenuTrigger,
-} from '@aglio/ui/components/dropdownMenu';
+} from '@a-type/ui/components/dropdownMenu';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
-} from '@aglio/ui/components/dialog';
+} from '@a-type/ui/components/dialog';
 import {
 	Form,
 	SubmitButton,
 	TextAreaField,
 	TextField,
-} from '@aglio/ui/components/forms';
+} from '@a-type/ui/components/forms';
 import { OcrButton } from '@/components/recipes/ocr/OcrButton.jsx';
 import { FeatureFlag } from '@/components/auth/FeatureFlag.jsx';
 import { useSessionStorage } from '@/hooks/useLocalStorage.js';

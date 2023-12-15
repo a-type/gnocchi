@@ -11,10 +11,10 @@ import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx
 import { RecipeTagsViewer } from '@/components/recipes/viewer/RecipeTagsViewer.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
-import { CollapsibleSimple } from '@aglio/ui/components/collapsible';
-import { Divider } from '@aglio/ui/components/divider';
-import { H2 } from '@aglio/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
+import { CollapsibleSimple } from '@a-type/ui/components/collapsible';
+import { Divider } from '@a-type/ui/components/divider';
+import { H2 } from '@a-type/ui/components/typography';
 import { DrawingPinFilledIcon } from '@radix-ui/react-icons';
 import { Link } from '@verdant-web/react-router';
 import classNames from 'classnames';

@@ -1,4 +1,4 @@
-import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
+import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
 import {
 	Select,
 	SelectContent,
@@ -7,14 +7,14 @@ import {
 	SelectSeparator,
 	SelectTrigger,
 	SelectValue,
-} from '@aglio/ui/components/select';
+} from '@a-type/ui/components/select';
 import { hooks } from '@/stores/groceries/index.js';
-import { withClassName } from '@aglio/ui/hooks';
+import { withClassName } from '@a-type/ui/hooks';
 import { Formik } from 'formik';
 import { useState } from 'react';
 import { Icon } from '@/components/icons/Icon.jsx';
-import { ThemeName } from '@aglio/ui/components/colorPicker';
-import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
+import { ThemeName } from '@a-type/ui/components/colorPicker';
+import { Dialog, DialogContent } from '@a-type/ui/components/dialog';
 import { preventDefault } from '@aglio/tools';
 
 function getRandomColor(): ThemeName {

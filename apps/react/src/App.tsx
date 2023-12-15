@@ -8,11 +8,11 @@ import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';
 import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
 import { GlobalLoader } from '@/GlobalLoader.jsx';
-import { useVisualViewportOffset } from '@aglio/ui/hooks';
-import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
-import { TooltipProvider } from '@aglio/ui/components/tooltip';
-import { P, H1 } from '@aglio/ui/components/typography';
-import { ParticleLayer } from '@aglio/ui/components/particles';
+import { useVisualViewportOffset } from '@a-type/ui/hooks';
+import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
+import { TooltipProvider } from '@a-type/ui/components/tooltip';
+import { P, H1 } from '@a-type/ui/components/typography';
+import { ParticleLayer } from '@a-type/ui/components/particles';
 import { GlobalSyncingIndicator } from '@/components/sync/GlobalSyncingIndicator.jsx';
 
 export function App() {

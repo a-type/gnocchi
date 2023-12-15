@@ -2,9 +2,9 @@ import { EmailSignInForm } from '@/components/auth/EmailSignInForm.jsx';
 import { EmailSignUpForm } from '@/components/auth/EmailSignUpForm.jsx';
 import { useSearchParams } from '@verdant-web/react-router';
 import { OAuthSignInButton } from '../components/auth/OAuthSignInButton.jsx';
-import { PageContent, PageSection } from '@aglio/ui/components/layouts';
-import { H1, H2 } from '@aglio/ui/components/typography';
-import { Divider } from '@aglio/ui/components/divider';
+import { PageContent, PageSection } from '@a-type/ui/components/layouts';
+import { H1, H2 } from '@a-type/ui/components/typography';
+import { Divider } from '@a-type/ui/components/divider';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 

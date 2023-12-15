@@ -4,7 +4,7 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@aglio/ui/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from '@verdant-web/react-router';
 import { proxy, useSnapshot } from 'valtio';
@@ -13,9 +13,9 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { OnboardingBanner } from '@/components/onboarding/OnboardingBanner.jsx';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
-import { H2, P } from '@aglio/ui/components/typography';
+import { H2, P } from '@a-type/ui/components/typography';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import { hooks } from '@/stores/groceries/index.js';
 import { recipeSavePromptState } from '@/components/recipes/savePrompt/state.js';
 

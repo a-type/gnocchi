@@ -4,8 +4,8 @@ import { ReactNode } from 'react';
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
-} from '@aglio/ui/components/collapsible';
-import { Button } from '@aglio/ui/components/button';
+} from '@a-type/ui/components/collapsible';
+import { Button } from '@a-type/ui/components/button';
 
 export interface OnboardingBannerProps<O extends Onboarding<any>> {
 	onboarding: O;

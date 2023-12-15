@@ -11,11 +11,11 @@ import {
 import { createClientDescriptor, hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { LinkButton } from '@/components/nav/Link.jsx';
-import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
-import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { FullScreenSpinner } from '@aglio/ui/components/spinner';
+import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
+import { FullScreenSpinner } from '@a-type/ui/components/spinner';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { H1, P } from '@aglio/ui/components/typography';
+import { H1, P } from '@a-type/ui/components/typography';
 import { Formik } from 'formik';
 import { Suspense, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';

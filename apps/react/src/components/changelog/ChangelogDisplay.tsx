@@ -1,7 +1,7 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { trpc } from '@/trpc.js';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
@@ -9,7 +9,7 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
+} from '@a-type/ui/components/dialog';
 import classNames from 'classnames';
 import { useState } from 'react';
 

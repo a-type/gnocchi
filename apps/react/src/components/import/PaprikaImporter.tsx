@@ -1,4 +1,4 @@
-import { Button } from '@aglio/ui/src/components/button';
+import { Button } from '@a-type/ui/components/button';
 import { ReactNode, forwardRef, useCallback, useState } from 'react';
 import {
 	Dialog,
@@ -6,12 +6,12 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@aglio/ui/src/components/dialog';
-import { Checkbox } from '@aglio/ui/src/components/checkbox';
+} from '@a-type/ui/components/dialog';
+import { Checkbox } from '@a-type/ui/components/checkbox';
 import { hooks } from '@/stores/groceries/index.js';
 import { instructionsToDoc, stringToDoc } from '@/lib/tiptap.js';
 import { parseIngredient } from '@aglio/conversion';
-import { ActionBar, ActionButton } from '@aglio/ui/src/components/actions';
+import { ActionBar, ActionButton } from '@a-type/ui/components/actions';
 import cuid from 'cuid';
 
 type PaprikaRecipe = {

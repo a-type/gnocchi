@@ -1,6 +1,6 @@
-import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
+import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
 import { TextLink } from '@/components/nav/Link.jsx';
-import { H1, H2, P } from '@aglio/ui/components/typography';
+import { H1, H2, P } from '@a-type/ui/components/typography';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 
 export function TermsAndConditions() {

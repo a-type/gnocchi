@@ -9,11 +9,11 @@ import {
 } from '@/components/recipes/collection/RecipeListItem.jsx';
 import { RecipeSearchBar } from '@/components/recipes/collection/RecipeSearchBar.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
-import { Button } from '@aglio/ui/components/button';
-import { CardGrid } from '@aglio/ui/components/card';
-import { InfiniteLoadTrigger } from '@aglio/ui/components/infiniteLoadTrigger';
-import { PageFixedArea } from '@aglio/ui/components/layouts';
-import { Spinner } from '@aglio/ui/src/components/spinner';
+import { Button } from '@a-type/ui/components/button';
+import { CardGrid } from '@a-type/ui/components/card';
+import { InfiniteLoadTrigger } from '@a-type/ui/components/infiniteLoadTrigger';
+import { PageFixedArea } from '@a-type/ui/components/layouts';
+import { Spinner } from '@a-type/ui/components/spinner';
 import { Suspense } from 'react';
 import { RecipeListActions } from './RecipeListActions.jsx';
 import { useFilteredRecipes } from './hooks.js';

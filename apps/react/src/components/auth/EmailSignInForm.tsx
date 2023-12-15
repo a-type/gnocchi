@@ -2,13 +2,13 @@ import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
 import { Formik } from 'formik';
 import { useNavigate } from '@verdant-web/react-router';
-import { Form, SubmitButton, TextField } from '@aglio/ui/components/forms';
+import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
 import {
 	Dialog,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { P } from '@aglio/ui/components/typography';
+} from '@a-type/ui/components/dialog';
+import { P } from '@a-type/ui/components/typography';
 
 export interface EmailSignInFormProps {
 	returnTo?: string;

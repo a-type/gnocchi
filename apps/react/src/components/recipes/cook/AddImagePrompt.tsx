@@ -1,9 +1,9 @@
 import { AppearWithScroll } from '@/components/recipes/cook/AppearWithScroll.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { ImageUploader } from '@aglio/ui/components/imageUploader';
-import { P } from '@aglio/ui/components/typography';
-import { useToggle } from '@aglio/ui/hooks';
+import { ImageUploader } from '@a-type/ui/components/imageUploader';
+import { P } from '@a-type/ui/components/typography';
+import { useToggle } from '@a-type/ui/hooks';
 
 export interface AddImagePromptProps {
 	recipe: Recipe;

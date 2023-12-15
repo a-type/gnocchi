@@ -1,8 +1,8 @@
 import { LogoutButton } from '@/components/auth/LogoutButton.js';
 import { NavBar } from '@/components/nav/NavBar.jsx';
 import { APP_NAME } from '@/config.js';
-import { PageContent, PageRoot } from '@aglio/ui/components/layouts';
-import { H1, P } from '@aglio/ui/components/typography';
+import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
+import { H1, P } from '@a-type/ui/components/typography';
 
 export function NevermindPage() {
 	return (

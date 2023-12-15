@@ -2,8 +2,8 @@ import { Share1Icon } from '@radix-ui/react-icons';
 import copy from 'copy-to-clipboard';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Input } from '@aglio/ui/components/input';
-import { Button } from '@aglio/ui/components/button';
+import { Input } from '@a-type/ui/components/input';
+import { Button } from '@a-type/ui/components/button';
 
 export interface ShareLinkProps {
 	onGenerate: () => Promise<string>;

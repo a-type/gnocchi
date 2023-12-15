@@ -2,13 +2,13 @@ import { RecipeTagsList } from '@/components/recipes/collection/RecipeTagsList.j
 import { NewTagForm } from '@/components/recipes/editor/NewTagForm.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/src/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Popover,
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
-} from '@aglio/ui/src/components/popover';
+} from '@a-type/ui/components/popover';
 import { PlusIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import { ReactNode, Suspense, forwardRef, useState } from 'react';
@@ -60,7 +60,7 @@ export function RecipeAddTag({
 				<PopoverArrow />
 				<Suspense>
 					<NewTagForm onCreate={addTag} />
-					<div>
+					<div className="mt-4">
 						<RecipeTagsList onSelect={addTag} omit={tagsSnapshot} />
 					</div>
 				</Suspense>

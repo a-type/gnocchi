@@ -1,6 +1,6 @@
 import { useRecipeTitleFilter } from '@/components/recipes/collection/hooks.js';
-import { Button } from '@aglio/ui/src/components/button';
-import { LiveUpdateTextField } from '@aglio/ui/src/components/liveUpdateTextField';
+import { Button } from '@a-type/ui/components/button';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 

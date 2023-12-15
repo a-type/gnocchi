@@ -7,9 +7,9 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@aglio/ui/components/dialog';
-import { P } from '@aglio/ui/components/typography';
-import { Button } from '@aglio/ui/components/button';
+} from '@a-type/ui/components/dialog';
+import { P } from '@a-type/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
 
 export interface LogoutNoticeProps {}
 

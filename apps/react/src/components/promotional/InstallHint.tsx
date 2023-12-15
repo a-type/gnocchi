@@ -1,14 +1,14 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { H2, P } from '@aglio/ui/components/typography';
-import { Button } from '@aglio/ui/components/button';
+import { H2, P } from '@a-type/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { withClassName } from '@aglio/ui/hooks';
+} from '@a-type/ui/components/dialog';
+import { withClassName } from '@a-type/ui/hooks';
 import { useSnapshot } from 'valtio';
 import { installState, triggerInstall } from '@/install.js';
 import { DownloadIcon } from '@radix-ui/react-icons';

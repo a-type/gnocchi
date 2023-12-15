@@ -1,7 +1,7 @@
 import { FoodName } from '@/components/foods/FoodName.jsx';
 import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Button } from '@aglio/ui/src/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
@@ -9,7 +9,7 @@ import {
 	DialogContent,
 	DialogTitle,
 	DialogTrigger,
-} from '@aglio/ui/src/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { Suspense } from 'react';
 
 export function ManageFoodsButton() {

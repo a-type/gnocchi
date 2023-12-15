@@ -1,4 +1,4 @@
-import { withClassName } from '@aglio/ui/hooks';
+import { withClassName } from '@a-type/ui/hooks';
 
 export const CategoryTitleRow = withClassName(
 	'div',

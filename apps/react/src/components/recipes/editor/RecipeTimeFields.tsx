@@ -1,7 +1,7 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { withClassName } from '@aglio/ui/hooks';
-import { LiveUpdateTextField } from '@aglio/ui/src/components/liveUpdateTextField';
+import { withClassName } from '@a-type/ui/hooks';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
 import { useCallback } from 'react';
 
 export interface RecipeTimeFieldsProps {

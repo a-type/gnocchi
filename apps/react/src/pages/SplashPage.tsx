@@ -1,4 +1,4 @@
-import { withClassName } from '@aglio/ui/hooks';
+import { withClassName } from '@a-type/ui/hooks';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import classNames from 'classnames';
 import {
@@ -17,7 +17,7 @@ import { PromoteSubscriptionButton } from '@/components/promotional/PromoteSubsc
 import { useOnVisible } from '@/hooks/useOnVisible.js';
 import { useSearchParams } from '@verdant-web/react-router';
 import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
-import { H2, P } from '@aglio/ui/components/typography';
+import { H2, P } from '@a-type/ui/components/typography';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { LinkButton } from '@/components/nav/Link.jsx';
 import { SubscribeButton } from '@/components/sync/SubscribeButton.jsx';

@@ -1,4 +1,4 @@
-import { Checkbox } from '@aglio/ui/components/checkbox';
+import { Checkbox } from '@a-type/ui/components/checkbox';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe, RecipeIngredientsItem } from '@aglio/groceries-client';
 import { forwardRef } from 'react';
@@ -44,10 +44,10 @@ export const IngredientCheckoffView = forwardRef<
 					onCheckedChange={(checked) => {
 						sessionAction((session) => {
 							if (checked) {
-								session.get('completedIngredients').add(ingredient.get('id'));
+								session?.get('completedIngredients').add(ingredient.get('id'));
 							} else {
 								session
-									.get('completedIngredients')
+									?.get('completedIngredients')
 									.removeAll(ingredient.get('id'));
 							}
 						});

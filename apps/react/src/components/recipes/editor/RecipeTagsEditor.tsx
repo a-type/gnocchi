@@ -6,17 +6,17 @@ import { Suspense, useState } from 'react';
 import { RecipeTagsList } from '../collection/RecipeTagsList.jsx';
 import { NewTagForm } from './NewTagForm.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
-import { ThemeName } from '@aglio/ui/components/colorPicker';
+import { ThemeName } from '@a-type/ui/components/colorPicker';
 import {
 	Popover,
 	PopoverArrow,
 	PopoverContent,
 	PopoverTrigger,
-} from '@aglio/ui/components/popover';
-import { Button } from '@aglio/ui/components/button';
-import { H2 } from '@aglio/ui/components/typography';
+} from '@a-type/ui/components/popover';
+import { Button } from '@a-type/ui/components/button';
+import { H2 } from '@a-type/ui/components/typography';
 import { RecipeAddTag } from '@/components/recipes/editor/RecipeAddTag.jsx';
-import { Chip } from '@aglio/ui/components/chip';
+import { Chip } from '@a-type/ui/components/chip';
 
 export interface RecipeTagsEditorProps {
 	recipe: Recipe;

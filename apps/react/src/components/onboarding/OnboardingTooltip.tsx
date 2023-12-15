@@ -7,8 +7,8 @@ import {
 	PopoverAnchor,
 	PopoverArrow,
 	PopoverContent,
-} from '@aglio/ui/components/popover';
-import { Button } from '@aglio/ui/components/button';
+} from '@a-type/ui/components/popover';
+import { Button } from '@a-type/ui/components/button';
 
 export interface OnboardingTooltipProps<O extends Onboarding<any>> {
 	onboarding: O;

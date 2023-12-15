@@ -3,7 +3,7 @@ import { ProductHunt } from '@/components/promotional/ProductHunt.jsx';
 import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { PageNav } from '@aglio/ui/components/layouts';
+import { PageNav } from '@a-type/ui/components/layouts';
 import { useMatch, useOnLocationChange } from '@verdant-web/react-router';
 import classNames from 'classnames';
 import {
@@ -21,7 +21,7 @@ import { Icon } from '../icons/Icon.jsx';
 import { OnboardingTooltip } from '../onboarding/OnboardingTooltip.jsx';
 import { useHasNewExpirations } from '../pantry/hooks.js';
 import { PopEffect } from './PopEffect.jsx';
-import { withClassName } from '@aglio/ui/hooks';
+import { withClassName } from '@a-type/ui/hooks';
 import { ChangelogDisplay } from '@/components/changelog/ChangelogDisplay.jsx';
 
 export interface NavBarProps {}

@@ -10,7 +10,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 	UnstyledSelectTrigger,
-} from '@aglio/ui/components/select';
+} from '@a-type/ui/components/select';
 import classNames from 'classnames';
 import { ReactNode, useCallback, useEffect } from 'react';
 

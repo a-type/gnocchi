@@ -1,6 +1,6 @@
 import { StarIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	updateApp,
 	updateState,

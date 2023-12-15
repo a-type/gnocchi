@@ -1,7 +1,7 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { RecipeTagMenuWrapper } from '@/components/recipes/tags/RecipeTagMenuWrapper.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import classNames from 'classnames';
 import { forwardRef } from 'react';
 

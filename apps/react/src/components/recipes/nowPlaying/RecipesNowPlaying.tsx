@@ -4,8 +4,8 @@ import {
 	CollapsibleContent,
 	CollapsibleRoot,
 	CollapsibleTrigger,
-} from '@aglio/ui/src/components/collapsible';
-import { PageNowPlaying } from '@aglio/ui/src/components/layouts';
+} from '@a-type/ui/components/collapsible';
+import { PageNowPlaying } from '@a-type/ui/components/layouts';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 export interface RecipesNowPlayingProps {
@@ -27,7 +27,7 @@ export function RecipesNowPlaying({
 	}
 
 	return (
-		<div className="flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-default overflow-hidden">
+		<div className="pointer-events-auto flex flex-col items-start w-full bg-white rounded-lg shadow-lg border-default overflow-hidden">
 			<CollapsibleRoot defaultOpen={defaultOpen} className="w-full">
 				<CollapsibleTrigger asChild>
 					<div className="flex flex-row items-center justify-between w-full pr-5 py-1 px-1">

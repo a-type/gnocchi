@@ -1,5 +1,4 @@
 import { animated, useSpring } from '@react-spring/web';
-import { useScroll } from '@use-gesture/react';
 import { ReactNode, useEffect, useRef } from 'react';
 
 export interface AppearWithScrollProps {

@@ -1,13 +1,13 @@
 import { trpc } from '@/trpc.js';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { Form, TextAreaField, TextField } from '@aglio/ui/components/forms';
+} from '@a-type/ui/components/dialog';
+import { Form, TextAreaField, TextField } from '@a-type/ui/components/forms';
 import format from 'date-fns/format';
 import { Formik } from 'formik';
 

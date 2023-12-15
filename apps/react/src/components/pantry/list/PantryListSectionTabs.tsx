@@ -1,4 +1,4 @@
-import { TabsList, TabsRoot, TabsTrigger } from '@aglio/ui/components/tabs';
+import { TabsList, TabsRoot, TabsTrigger } from '@a-type/ui/components/tabs';
 import { useFilter } from '../hooks.js';
 
 export interface PantryListSectionTabsProps {}

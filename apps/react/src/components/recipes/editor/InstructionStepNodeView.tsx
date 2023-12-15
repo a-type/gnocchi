@@ -15,13 +15,13 @@ import {
 import {
 	CollapsibleContent,
 	CollapsibleRoot,
-} from '@aglio/ui/components/collapsible';
-import { TextArea } from '@aglio/ui/components/textArea';
-import { Note } from '@aglio/ui/components/note';
-import { Checkbox } from '@aglio/ui/components/checkbox';
-import { Tooltip } from '@aglio/ui/components/tooltip';
-import { Button } from '@aglio/ui/components/button';
-import { useToggle } from '@aglio/ui/hooks';
+} from '@a-type/ui/components/collapsible';
+import { TextArea } from '@a-type/ui/components/textArea';
+import { Note } from '@a-type/ui/components/note';
+import { Checkbox } from '@a-type/ui/components/checkbox';
+import { Tooltip } from '@a-type/ui/components/tooltip';
+import { Button } from '@a-type/ui/components/button';
+import { useToggle } from '@a-type/ui/hooks';
 import { InstructionsContext } from '@/components/recipes/editor/InstructionsContext.jsx';
 import {
 	isActiveCookingSession,
@@ -89,9 +89,9 @@ export function InstructionStepNodeView({
 
 			sessionAction((session) => {
 				if (personId) {
-					session.get('instructionAssignments').set(id, personId);
+					session?.get('instructionAssignments').set(id, personId);
 				} else {
-					session.get('instructionAssignments').delete(id);
+					session?.get('instructionAssignments').delete(id);
 				}
 			});
 		},
@@ -172,9 +172,9 @@ export function InstructionStepNodeView({
 
 								sessionAction((session) => {
 									if (checked) {
-										session.get('completedInstructions').add(id);
+										session?.get('completedInstructions').add(id);
 									} else {
-										session.get('completedInstructions').removeAll(id);
+										session?.get('completedInstructions').removeAll(id);
 									}
 								});
 							}}

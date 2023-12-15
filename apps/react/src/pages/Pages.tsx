@@ -13,9 +13,9 @@ import {
 import { GlobalLoader } from '@/GlobalLoader.jsx';
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
-import { Button } from '@aglio/ui/components/button';
-import { H1, P } from '@aglio/ui/components/typography';
-import { ErrorBoundary } from '@aglio/ui/src/components/errorBoundary';
+import { Button } from '@a-type/ui/components/button';
+import { H1, P } from '@a-type/ui/components/typography';
+import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
 import {
 	makeRoutes,
 	Outlet,
@@ -29,7 +29,7 @@ import { GroceriesPage } from './groceries/GroceriesPage.js';
 import { NotFoundPage } from './NotFoundPage.jsx';
 import { RecipeTagEditor } from '@/components/recipes/tags/RecipeTagEditor.jsx';
 import { SwipeOutlet } from '@/components/nav/SwipeOutlet.jsx';
-import { PageRoot } from '@aglio/ui/src/components/layouts';
+import { PageRoot } from '@a-type/ui/components/layouts';
 import { useMediaQuery } from '@/hooks/useMediaQuery.js';
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import AdminChangelogPage from '@/pages/admin/AdminChangelogPage.jsx';

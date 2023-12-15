@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '@aglio/ui/components/errorBoundary';
+import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
 import { Presence, Profile, hooks } from '@/stores/groceries/index.js';
 import { PersonAvatar } from './PersonAvatar.js';
 import { ReactNode, createContext, useContext } from 'react';

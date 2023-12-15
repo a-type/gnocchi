@@ -1,8 +1,8 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { SubscriptionError } from '@aglio/tools';
 import { LogoutButton } from '../auth/LogoutButton.js';
-import { Dialog, DialogContent } from '@aglio/ui/components/dialog';
-import { H2 } from '@aglio/ui/components/typography';
+import { Dialog, DialogContent } from '@a-type/ui/components/dialog';
+import { H2 } from '@a-type/ui/components/typography';
 import { ManageSubscriptionButton } from '@/components/sync/ManageSubscriptionButton.jsx';
 
 export interface SubscriptionExpiredDialogProps {}

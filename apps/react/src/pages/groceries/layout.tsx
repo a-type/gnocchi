@@ -3,7 +3,7 @@ import {
 	PageContent,
 	PageFixedArea,
 	PageRoot,
-} from '@aglio/ui/components/layouts';
+} from '@a-type/ui/components/layouts';
 import { GroceriesActionBar } from '@/components/groceries/actions/GroceriesActionBar.jsx';
 import { GroceryListAdd } from '@/components/groceries/addBar/GroceryListAdd.jsx';
 import GroceryList from '@/components/groceries/GroceryList.jsx';

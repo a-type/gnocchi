@@ -1,5 +1,5 @@
 import { Icon } from '@/components/icons/Icon.jsx';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import { useSearchParams } from '@verdant-web/react-router';
 import { forwardRef } from 'react';
 

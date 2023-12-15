@@ -1,14 +1,14 @@
 import { recipeTagEditorState } from '@/components/recipes/tags/recipeTagEditorState.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { Button } from '@aglio/ui/src/components/button';
-import { ColorPicker, ThemeName } from '@aglio/ui/src/components/colorPicker';
+import { Button } from '@a-type/ui/components/button';
+import { ColorPicker, ThemeName } from '@a-type/ui/components/colorPicker';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@aglio/ui/src/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { useSnapshot } from 'valtio';
 
 export interface RecipeTagEditorProps {}

@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import { API_ORIGIN, SECURE } from '@/config.js';
 import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 

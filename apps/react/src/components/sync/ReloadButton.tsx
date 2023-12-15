@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 

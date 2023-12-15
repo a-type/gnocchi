@@ -13,9 +13,9 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@aglio/ui/components/dialog';
-import { Button } from '@aglio/ui/components/button';
-import { H2, P } from '@aglio/ui/components/typography';
+} from '@a-type/ui/components/dialog';
+import { Button } from '@a-type/ui/components/button';
+import { H2, P } from '@a-type/ui/components/typography';
 import { signupDialogState } from '@/components/sync/state.js';
 
 export interface StartSignupDialogProps {}

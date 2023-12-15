@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import { API_HOST_HTTP } from '@/config.js';
 
 export interface ManageSubscriptionButtonProps extends ButtonProps {}

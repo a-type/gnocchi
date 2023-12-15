@@ -2,8 +2,8 @@ import { OnboardingTooltip } from '@/components/onboarding/OnboardingTooltip.jsx
 import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
-import { DialogTrigger } from '@aglio/ui/components/dialog';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
+import { DialogTrigger } from '@a-type/ui/components/dialog';
 
 export interface AddToListButtonProps extends ButtonProps {
 	recipe: Recipe;

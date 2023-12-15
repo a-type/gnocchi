@@ -1,20 +1,20 @@
 import { RouterOutputs, trpc } from '@/trpc.js';
-import { ActionBar, ActionButton } from '@aglio/ui/src/components/actions';
-import { Button } from '@aglio/ui/src/components/button';
-import { Checkbox } from '@aglio/ui/src/components/checkbox';
+import { ActionBar, ActionButton } from '@a-type/ui/components/actions';
+import { Button } from '@a-type/ui/components/button';
+import { Checkbox } from '@a-type/ui/components/checkbox';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/src/components/dialog';
+} from '@a-type/ui/components/dialog';
 import {
 	SubmitButton,
 	TextField,
 	FormikForm,
-} from '@aglio/ui/src/components/forms';
-import { Input } from '@aglio/ui/src/components/input';
+} from '@a-type/ui/components/forms';
+import { Input } from '@a-type/ui/components/input';
 import { CheckIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
 import { useField } from 'formik';
 import { useState } from 'react';

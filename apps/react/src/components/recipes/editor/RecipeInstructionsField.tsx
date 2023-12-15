@@ -2,9 +2,9 @@ import { Recipe } from '@aglio/groceries-client';
 import { FontBoldIcon, FontItalicIcon } from '@radix-ui/react-icons';
 import { Editor } from '@tiptap/core';
 import { useSyncedInstructionsEditor } from '../hooks.js';
-import { P } from '@aglio/ui/components/typography';
-import { Button } from '@aglio/ui/components/button';
-import { RichEditor } from '@aglio/ui/components/richEditor';
+import { P } from '@a-type/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
+import { RichEditor } from '@a-type/ui/components/richEditor';
 
 export interface RecipeInstructionsFieldProps {
 	recipe: Recipe;
@@ -36,7 +36,7 @@ export function RecipeInstructionsField({
 				editor={editor}
 				className="[&_.ProseMirror]:(bg-gray1 rounded-lg p-4 border-default)"
 			/>
-			<P size="xs">
+			<P className="text-xs">
 				Press <kbd>Enter</kbd> to create a new step. Each step line will have a
 				checkbox you can use to track completion. I recommend keeping steps
 				short and self-contained.

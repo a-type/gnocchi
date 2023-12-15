@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { useCaptureVideo } from '@/hooks/useCaptureVideo.js';
-import { Button } from '@aglio/ui/src/components/button';
+import { Button } from '@a-type/ui/components/button';
 import { ocr } from '@/lib/ocr.js';
 import { Component as ReactCrop, Crop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';

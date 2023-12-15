@@ -1,8 +1,8 @@
 import { useSearch } from '@/components/pantry/hooks.js';
 import { PantryListItem } from '@/components/pantry/items/PantryListItem.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Button } from '@aglio/ui/components/button';
-import { CardGrid } from '@aglio/ui/components/card';
+import { Button } from '@a-type/ui/components/button';
+import { CardGrid } from '@a-type/ui/components/card';
 
 export interface PantrySearchResultsProps {}
 

@@ -10,10 +10,10 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { LinkButton } from '@/components/nav/Link.jsx';
-import { Button } from '@aglio/ui/components/button';
-import { H2, H3, P } from '@aglio/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
+import { H2, H3, P } from '@a-type/ui/components/typography';
 import classNames from 'classnames';
 
 export interface ItemSourcesProps {

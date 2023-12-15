@@ -1,8 +1,8 @@
 import { trpc } from '@/trpc.js';
-import { Button } from '@aglio/ui/components/button';
-import { Form, TextField } from '@aglio/ui/components/forms';
-import { Input } from '@aglio/ui/components/input';
-import { H1, H2 } from '@aglio/ui/components/typography';
+import { Button } from '@a-type/ui/components/button';
+import { Form, TextField } from '@a-type/ui/components/forms';
+import { Input } from '@a-type/ui/components/input';
+import { H1, H2 } from '@a-type/ui/components/typography';
 import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
 import { Formik } from 'formik';
 import { generateKeyBetween } from 'fractional-indexing';

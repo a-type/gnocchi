@@ -3,7 +3,7 @@ import { firstTimeOnboarding } from '@/onboarding/firstTimeOnboarding.js';
 import { saveHubRecipeOnboarding } from '@/onboarding/saveHubRecipeOnboarding.js';
 import { hooks } from '@/stores/groceries/index.js';
 import { Item } from '@aglio/groceries-client';
-import { H3, P } from '@aglio/ui/components/typography';
+import { H3, P } from '@a-type/ui/components/typography';
 import {
 	DndContext,
 	DragCancelEvent,

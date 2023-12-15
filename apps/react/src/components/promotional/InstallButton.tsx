@@ -1,5 +1,5 @@
 import { installState, triggerInstall } from '@/install.js';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import { DownloadIcon } from '@radix-ui/react-icons';
 import { useSnapshot } from 'valtio';
 

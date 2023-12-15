@@ -2,7 +2,7 @@ import {
 	PageContent,
 	PageNowPlaying,
 	PageRoot,
-} from '@aglio/ui/components/layouts';
+} from '@a-type/ui/components/layouts';
 import { RecipeList } from '@/components/recipes/collection/RecipeList.jsx';
 import { Suspense } from 'react';
 import { RecipesNowPlaying } from '@/components/recipes/nowPlaying/RecipesNowPlaying.jsx';

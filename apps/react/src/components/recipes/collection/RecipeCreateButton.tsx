@@ -1,6 +1,6 @@
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { hooks } from '@/stores/groceries/index.js';
-import { Button, ButtonProps } from '@aglio/ui/src/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import { useNavigate } from '@verdant-web/react-router';
 
 export function RecipeCreateButton({ children, ...rest }: ButtonProps) {

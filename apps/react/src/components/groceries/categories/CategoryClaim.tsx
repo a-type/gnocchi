@@ -6,7 +6,7 @@ import {
 import { useIsSubscribed } from '@/hooks/useAuth.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import classNames from 'classnames';
 import { forwardRef, memo, useCallback, useEffect, useState } from 'react';
 

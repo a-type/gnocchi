@@ -16,11 +16,11 @@ import { RecipePreludeEditor } from './RecipePreludeEditor.jsx';
 import { RecipeTagsEditor } from './RecipeTagsEditor.jsx';
 import { RecipeTitleField } from './RecipeTitleField.jsx';
 import { RecipeUrlField } from './RecipeUrlField.jsx';
-import { H2 } from '@aglio/ui/components/typography';
+import { H2 } from '@a-type/ui/components/typography';
 import { HeaderBar } from '@/components/recipes/layout/HeaderBar.jsx';
 import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { RecipeTimeFields } from '@/components/recipes/editor/RecipeTimeFields.jsx';
-import { LiveUpdateTextField } from '@aglio/ui/src/components/liveUpdateTextField';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 
 export interface RecipeEditorProps {

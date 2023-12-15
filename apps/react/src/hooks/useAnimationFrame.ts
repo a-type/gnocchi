@@ -1,4 +1,4 @@
-import { useStableCallback } from '@aglio/ui/hooks';
+import { useStableCallback } from '@a-type/ui/hooks';
 import { useEffect, useRef } from 'react';
 
 export function useAnimationFrame<Context>(

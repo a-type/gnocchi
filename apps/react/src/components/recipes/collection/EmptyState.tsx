@@ -1,7 +1,7 @@
 import { Icon } from '@/components/icons/Icon.jsx';
 import { RecipeCreateButton } from '@/components/recipes/collection/RecipeCreateButton.jsx';
 import { useIsFiltered } from '@/components/recipes/collection/hooks.js';
-import { P } from '@aglio/ui/src/components/typography';
+import { P } from '@a-type/ui/components/typography';
 import { FilePlusIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import { Suspense } from 'react';

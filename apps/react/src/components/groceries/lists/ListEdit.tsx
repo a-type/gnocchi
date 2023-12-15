@@ -4,14 +4,14 @@ import {
 	DialogClose,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/components/dialog';
-import { LiveUpdateTextField } from '@aglio/ui/components/liveUpdateTextField';
+} from '@a-type/ui/components/dialog';
+import { LiveUpdateTextField } from '@a-type/ui/components/liveUpdateTextField';
 import { hooks } from '@/stores/groceries/index.js';
 import { GearIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
-import { Button } from '@aglio/ui/components/button';
-import { H2 } from '@aglio/ui/components/typography';
-import { ColorPicker, ThemeName } from '@aglio/ui/components/colorPicker';
+import { Button } from '@a-type/ui/components/button';
+import { H2 } from '@a-type/ui/components/typography';
+import { ColorPicker, ThemeName } from '@a-type/ui/components/colorPicker';
 
 export interface ListEditProps {
 	listId: string;

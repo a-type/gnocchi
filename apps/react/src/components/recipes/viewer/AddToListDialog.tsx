@@ -7,17 +7,17 @@ import classNames from 'classnames';
 import { ReactNode, useEffect, useState } from 'react';
 import { MultiplierStepper } from './MultiplierStepper.jsx';
 import { RecipeIngredientViewer } from './RecipeIngredientViewer.jsx';
-import { Button, ButtonProps } from '@aglio/ui/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogActions,
 	DialogClose,
 	DialogContent,
 	DialogTitle,
-} from '@aglio/ui/components/dialog';
-import { Checkbox } from '@aglio/ui/components/checkbox';
+} from '@a-type/ui/components/dialog';
+import { Checkbox } from '@a-type/ui/components/checkbox';
 import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
-import { ActionBar, ActionButton } from '@aglio/ui/src/components/actions';
+import { ActionBar, ActionButton } from '@a-type/ui/components/actions';
 import { CheckboxIcon, SquareIcon } from '@radix-ui/react-icons';
 import pluralize from 'pluralize';
 

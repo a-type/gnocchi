@@ -1,12 +1,12 @@
 import PaprikaImporter from '@/components/import/PaprikaImporter.jsx';
 import { TagManager } from '@/components/recipes/tags/TagManager.jsx';
-import { Button } from '@aglio/ui/src/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from '@aglio/ui/src/components/dropdownMenu';
+} from '@a-type/ui/components/dropdownMenu';
 import { DotsVerticalIcon } from '@radix-ui/react-icons';
 import { Suspense, lazy, useCallback, useState } from 'react';
 

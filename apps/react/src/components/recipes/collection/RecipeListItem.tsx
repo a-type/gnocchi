@@ -4,7 +4,7 @@ import { makeRecipeLink } from '@/components/recipes/makeRecipeLink.js';
 import { AddToListButton } from '@/components/recipes/viewer/AddToListButton.jsx';
 import { hooks } from '@/stores/groceries/index.js';
 import { Recipe } from '@aglio/groceries-client';
-import { Button } from '@aglio/ui/components/button';
+import { Button } from '@a-type/ui/components/button';
 import {
 	CardActions,
 	CardFooter,
@@ -13,14 +13,14 @@ import {
 	CardMenu,
 	CardRoot,
 	CardTitle,
-} from '@aglio/ui/components/card';
+} from '@a-type/ui/components/card';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuItemRightSlot,
 	DropdownMenuTrigger,
-} from '@aglio/ui/components/dropdownMenu';
+} from '@a-type/ui/components/dropdownMenu';
 import {
 	Cross2Icon,
 	DotsVerticalIcon,

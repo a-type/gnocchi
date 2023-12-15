@@ -1,10 +1,10 @@
 import { Capturer } from '@/components/recipes/ocr/Capturer.jsx';
-import { Button, ButtonProps } from '@aglio/ui/src/components/button';
+import { Button, ButtonProps } from '@a-type/ui/components/button';
 import {
 	Dialog,
 	DialogContent,
 	DialogTrigger,
-} from '@aglio/ui/src/components/dialog';
+} from '@a-type/ui/components/dialog';
 import { CameraIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 

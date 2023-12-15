@@ -10,7 +10,7 @@ import {
 	SelectProps,
 	SelectTrigger,
 	SelectValue,
-} from '@aglio/ui/components/select';
+} from '@a-type/ui/components/select';
 import { useCallback } from 'react';
 import { PersonAvatar } from './PersonAvatar.jsx';
 
