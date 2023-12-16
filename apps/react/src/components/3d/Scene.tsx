@@ -1,35 +1,33 @@
+import { animated } from '@react-spring/three';
 import {
 	Bounds,
 	Float,
 	PerformanceMonitor,
 	PerspectiveCamera,
 	Plane,
-	softShadows,
+	SoftShadows,
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useRef, useState } from 'react';
-import { FryingPan } from './foods/FryingPan.jsx';
-import { FryingPanLid } from './foods/FryingPanLid.jsx';
-import { OnionHalf } from './foods/OnionHalf.jsx';
-import { CookingSpoon } from './foods/CookingSpoon.jsx';
-import { Tomato } from './foods/Tomato.jsx';
-import { ShakerSalt } from './foods/ShakerSalt.jsx';
-import { PepperMill } from './foods/PepperMill.jsx';
-import { Leek } from './foods/Leek.jsx';
-import { Garlic } from './foods/Garlic.jsx';
-import { animated, useSpring, useTrail } from '@react-spring/three';
 import {
 	// @ts-ignore
 	EffectComposer,
 	// @ts-ignore
 	Outline,
 	// @ts-ignore
-	Selection,
-	// @ts-ignore
 	Select,
+	// @ts-ignore
+	Selection,
 } from '@react-three/postprocessing';
-
-softShadows();
+import { Suspense, useState } from 'react';
+import { CookingSpoon } from './foods/CookingSpoon.jsx';
+import { FryingPan } from './foods/FryingPan.jsx';
+import { FryingPanLid } from './foods/FryingPanLid.jsx';
+import { Garlic } from './foods/Garlic.jsx';
+import { Leek } from './foods/Leek.jsx';
+import { OnionHalf } from './foods/OnionHalf.jsx';
+import { PepperMill } from './foods/PepperMill.jsx';
+import { ShakerSalt } from './foods/ShakerSalt.jsx';
+import { Tomato } from './foods/Tomato.jsx';
 
 export function Scene(props: { className?: string }) {
 	const [dpr, setDpr] = useState(1.5);
@@ -164,6 +162,7 @@ export function Scene(props: { className?: string }) {
 						/>
 					</EffectComposer>
 				</Selection>
+				<SoftShadows />
 			</Suspense>
 		</Canvas>
 	);

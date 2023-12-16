@@ -20,12 +20,12 @@ export default defineConfig({
 		`,
 		},
 	],
-	content: {
-		pipeline: {
-			include: [
-				// include js/ts files as well as defaults.
-				/\.(vue|svelte|[jt]sx?|mdx?|astro|elm|php|phtml|html)($|\?)/,
-			],
-		},
-	},
+	// content: {
+	// 	pipeline: {
+	// 		include: [
+	// 			/\.(vue|svelte|[jt]sx|mdx?|astro|elm|php|phtml|html)($|\?)/,
+	// 			'**/@a-type/ui/**/*.js',
+	// 		],
+	// 	},
+	// },
 });

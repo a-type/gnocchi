@@ -160,8 +160,8 @@ importers:
   apps/hub:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.4.6
-        version: 0.4.6(@types/react-dom@18.0.10)(@types/react@18.0.26)
+        specifier: ^0.4.8
+        version: 0.4.8(@types/react-dom@18.0.10)(@types/react@18.0.26)
       '@aglio/tools':
         specifier: workspace:*
         version: link:../../packages/tools
@@ -254,8 +254,8 @@ importers:
   apps/react:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.4.6
-        version: 0.4.6(@types/react-dom@18.0.6)(@types/react@18.0.17)
+        specifier: ^0.4.8
+        version: 0.4.8(@types/react-dom@18.0.6)(@types/react@18.0.17)
       '@a-type/utils':
         specifier: ^1.0.5
         version: 1.0.5
@@ -521,6 +521,9 @@ importers:
       vite-plugin-checker:
         specifier: ^0.6.2
         version: 0.6.2(typescript@5.0.2)(vite@5.0.10)
+      vite-plugin-circular-dependency:
+        specifier: ^0.2.1
+        version: 0.2.1(rollup@2.79.1)
       vite-plugin-pwa:
         specifier: ^0.17.4
         version: 0.17.4(vite@5.0.10)(workbox-build@7.0.0)(workbox-window@6.5.4)
@@ -726,8 +729,8 @@ importers:
 
 packages:
 
-  /@a-type/ui@0.4.6(@types/react-dom@18.0.10)(@types/react@18.0.26):
-    resolution: {integrity: sha512-Qdai9sX5h+XgHS0OZWZjNKh/J8/nWAF4rSORFXWuY4TXzG6H6Z//hFlEc8rTUZD47GtNfmDedNpX3HoFwxnDDw==}
+  /@a-type/ui@0.4.8(@types/react-dom@18.0.10)(@types/react@18.0.26):
+    resolution: {integrity: sha512-laq57NaJCGv45c0qHxq7z9VresMErZMwD0FbpkffmZP7CIGSZ5IRUr1HrqbSqEnZZNQYMNTbxAwiebd440GPOg==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.10)(@types/react@18.0.26)(react-dom@18.2.0)(react@18.2.0)
@@ -772,8 +775,8 @@ packages:
       - '@types/react-dom'
     dev: false
 
-  /@a-type/ui@0.4.6(@types/react-dom@18.0.6)(@types/react@18.0.17):
-    resolution: {integrity: sha512-Qdai9sX5h+XgHS0OZWZjNKh/J8/nWAF4rSORFXWuY4TXzG6H6Z//hFlEc8rTUZD47GtNfmDedNpX3HoFwxnDDw==}
+  /@a-type/ui@0.4.8(@types/react-dom@18.0.6)(@types/react@18.0.17):
+    resolution: {integrity: sha512-laq57NaJCGv45c0qHxq7z9VresMErZMwD0FbpkffmZP7CIGSZ5IRUr1HrqbSqEnZZNQYMNTbxAwiebd440GPOg==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -6617,20 +6620,6 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@rollup/pluginutils@5.0.2:
-    resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      rollup: ^1.20.0||^2.0.0||^3.0.0
-    peerDependenciesMeta:
-      rollup:
-        optional: true
-    dependencies:
-      '@types/estree': 1.0.0
-      estree-walker: 2.0.2
-      picomatch: 2.3.1
-    dev: true
-
   /@rollup/pluginutils@5.1.0(rollup@2.79.1):
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
     engines: {node: '>=14.0.0'}
@@ -7592,7 +7581,7 @@ packages:
     hasBin: true
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
       '@unocss/config': 0.54.0
       '@unocss/core': 0.54.0
       '@unocss/preset-uno': 0.54.0
@@ -7928,7 +7917,7 @@ packages:
       vite: ^2.9.0 || ^3.0.0-0 || ^4.0.0
     dependencies:
       '@ampproject/remapping': 2.2.1
-      '@rollup/pluginutils': 5.0.2
+      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
       '@unocss/config': 0.54.0
       '@unocss/core': 0.54.0
       '@unocss/inspector': 0.54.0
@@ -14639,6 +14628,15 @@ packages:
       vscode-languageserver: 7.0.0
       vscode-languageserver-textdocument: 1.0.8
       vscode-uri: 3.0.7
+    dev: true
+
+  /vite-plugin-circular-dependency@0.2.1(rollup@2.79.1):
+    resolution: {integrity: sha512-NriKEoxJKn5CaAMw5JT1DYMm4KntsCfqcVeGF7ssOXRQVqoxmtUl6hS8AH+sellIKZf51G53v/CyDNt5LXj1NA==}
+    dependencies:
+      '@rollup/pluginutils': 5.1.0(rollup@2.79.1)
+      chalk: 4.1.2
+    transitivePeerDependencies:
+      - rollup
     dev: true
 
   /vite-plugin-pwa@0.17.4(vite@5.0.10)(workbox-build@7.0.0)(workbox-window@6.5.4):
