@@ -131,6 +131,10 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 						equals: item.get('food'),
 					},
 				}).resolved;
+				const categoryId = item.get('categoryId');
+				const category = categoryId
+					? await client.categories.get(categoryId).resolved
+					: null;
 
 				const now = Date.now();
 
@@ -167,6 +171,11 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 							}
 						}
 						food.set('purchaseCount', previousPurchaseCount + 1);
+					}
+
+					// auto freeze items from the frozen section
+					if (category?.get('name').toLowerCase().startsWith('frozen')) {
+						food?.set('frozenAt', now);
 					}
 				});
 
