@@ -7,15 +7,15 @@ import { MainImage } from '@/components/MainImage.jsx';
 import { Prelude } from '@/components/Prelude.jsx';
 import { TopLineRoot, TopLineTitle } from '@/components/layout.jsx';
 import { trpc } from '@/lib/tprc.js';
-import { Button } from '@aglio/ui/components/button';
-import { Divider } from '@aglio/ui/components/divider';
+import { Button } from '@a-type/ui/components/button';
+import { Divider } from '@a-type/ui/components/divider';
 import {
 	PageContent,
 	PageFixedArea,
 	PageRoot,
-} from '@aglio/ui/components/layouts';
-import { Note } from '@aglio/ui/components/note';
-import { H1, H2, P } from '@aglio/ui/components/typography';
+} from '@a-type/ui/components/layouts';
+import { Note } from '@a-type/ui/components/note';
+import { H1, H2, P } from '@a-type/ui/components/typography';
 
 export async function generateMetadata(props: {
 	params: { slug: string; publisherId: string };

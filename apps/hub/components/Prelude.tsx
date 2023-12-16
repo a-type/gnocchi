@@ -1,7 +1,7 @@
 'use client';
 
-import { Peek } from '@aglio/ui/components/peek';
-import { RichEditor } from '@aglio/ui/components/richEditor';
+import { Peek } from '@a-type/ui/components/peek';
+import { RichEditor } from '@a-type/ui/components/richEditor';
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
 // @ts-ignore
 import { useEditor } from '@tiptap/react';

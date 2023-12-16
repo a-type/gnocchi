@@ -1,8 +1,8 @@
 'use client';
 
 import { HubPublishedRecipeInfo } from '@aglio/trpc';
-import { Note } from '@aglio/ui/components/note';
-import { RichEditor } from '@aglio/ui/components/richEditor';
+import { Note } from '@a-type/ui/components/note';
+import { RichEditor } from '@a-type/ui/components/richEditor';
 // @ts-ignore
 import { Node, mergeAttributes } from '@tiptap/core';
 import {
