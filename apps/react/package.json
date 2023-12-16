@@ -106,10 +106,5 @@
 		"vite": "^4.2.1",
 		"vite-plugin-checker": "^0.5.6",
 		"vite-plugin-pwa": "^0.14.6"
-	},
-	"pnpm": {
-		"patchedDependencies": {
-			"@tiptap/react@2.0.2": "patches/@tiptap__react@2.0.2.patch"
-		}
 	}
 }

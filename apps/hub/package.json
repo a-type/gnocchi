@@ -39,11 +39,6 @@
 		"sharp": "^0.31.3",
 		"typescript": "5.0.2"
 	},
-	"pnpm": {
-		"patchedDependencies": {
-			"@tiptap/react@2.0.2": "patches/@tiptap__react@2.0.2.patch"
-		}
-	},
 	"devDependencies": {
 		"@unocss/postcss": "^0.54.0",
 		"@unocss/transformer-variant-group": "^0.54.0",

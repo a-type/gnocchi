@@ -29,5 +29,8 @@
 		"turbo": "^1.9.3",
 		"typescript": "^5.0.4",
 		"@clack/prompts": "0.7.0"
+	},
+	"volta": {
+		"node": "18.19.0"
 	}
 }
