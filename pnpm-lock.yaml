@@ -160,8 +160,8 @@ importers:
   apps/hub:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.3.3
-        version: 0.3.3(@types/react-dom@18.0.10)(@types/react@18.0.26)
+        specifier: ^0.4.2
+        version: 0.4.2(@types/react-dom@18.0.10)(@types/react@18.0.26)
       '@aglio/tools':
         specifier: workspace:*
         version: link:../../packages/tools
@@ -254,8 +254,8 @@ importers:
   apps/react:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.3.3
-        version: 0.3.3(@types/react-dom@18.0.6)(@types/react@18.0.17)
+        specifier: ^0.4.2
+        version: 0.4.2(@types/react-dom@18.0.6)(@types/react@18.0.17)
       '@a-type/utils':
         specifier: ^1.0.5
         version: 1.0.5
@@ -729,8 +729,8 @@ importers:
 
 packages:
 
-  /@a-type/ui@0.3.3(@types/react-dom@18.0.10)(@types/react@18.0.26):
-    resolution: {integrity: sha512-X1a81VjKaCAUR104+QtxCkDw8ro+eEURFlpUY9wQfI2gs3ireKcYY8dRgQ6a0BsUar0ogJ6D2qSVhUegWnrO7Q==}
+  /@a-type/ui@0.4.2(@types/react-dom@18.0.10)(@types/react@18.0.26):
+    resolution: {integrity: sha512-qwzygdJzYCC7+H4GwExybTL6A9ufk8rCxWK6kvgoX/CjazRm4xxNg6I4IpX2QoP37qIlLRs5XrhYxAy2Q6WrIw==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.10)(@types/react@18.0.26)(react-dom@18.2.0)(react@18.2.0)
@@ -759,6 +759,7 @@ packages:
       '@tiptap/starter-kit': 2.0.3(@tiptap/pm@2.0.3)
       '@use-gesture/react': 10.3.0(react@18.2.0)
       browser-image-resizer: 2.4.1
+      calendar-blocks: 0.3.0(react@18.2.0)
       classnames: 2.3.2
       color-interpolate: 1.0.5
       color-parse: 2.0.0
@@ -774,8 +775,8 @@ packages:
       - '@types/react-dom'
     dev: false
 
-  /@a-type/ui@0.3.3(@types/react-dom@18.0.6)(@types/react@18.0.17):
-    resolution: {integrity: sha512-X1a81VjKaCAUR104+QtxCkDw8ro+eEURFlpUY9wQfI2gs3ireKcYY8dRgQ6a0BsUar0ogJ6D2qSVhUegWnrO7Q==}
+  /@a-type/ui@0.4.2(@types/react-dom@18.0.6)(@types/react@18.0.17):
+    resolution: {integrity: sha512-qwzygdJzYCC7+H4GwExybTL6A9ufk8rCxWK6kvgoX/CjazRm4xxNg6I4IpX2QoP37qIlLRs5XrhYxAy2Q6WrIw==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -804,6 +805,7 @@ packages:
       '@tiptap/starter-kit': 2.0.3(@tiptap/pm@2.0.3)
       '@use-gesture/react': 10.3.0(react@18.2.0)
       browser-image-resizer: 2.4.1
+      calendar-blocks: 0.3.0(react@18.2.0)
       classnames: 2.3.2
       color-interpolate: 1.0.5
       color-parse: 2.0.0
@@ -3138,7 +3140,7 @@ packages:
     resolution: {integrity: sha512-zHd0eUrf5GZoOWVCXp6koAKQTfZV07eit6bGPmJgnZdnSAvvZee6zniW2XMF7Cmc4ISOOnPy3QaSiIJGJkVEDQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      regenerator-runtime: 0.14.0
+      regenerator-runtime: 0.14.1
 
   /@babel/template@7.20.7:
     resolution: {integrity: sha512-8SegXApWe6VoNw0r9JHpSteLKTpTiLZ4rMlGIm9JQ18KiCtyQiAMEazujAHrUS5flrcqYZa75ukev3P6QmUwUw==}
@@ -8890,6 +8892,14 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /calendar-blocks@0.3.0(react@18.2.0):
+    resolution: {integrity: sha512-p1wo0JP8B03rdnlSVFUudHkpbxJZ5Nb8rLawVCsnfDqn3Y0GfQkA7UR3E4fpDzJpHqHEdjJVjSTmcC5L9oExTg==}
+    peerDependencies:
+      react: '*'
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /call-bind@1.0.2:
     resolution: {integrity: sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==}
     dependencies:
@@ -13610,8 +13620,8 @@ packages:
     resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
     dev: false
 
-  /regenerator-runtime@0.14.0:
-    resolution: {integrity: sha512-srw17NI0TUWHuGa5CFGGmhfNIeja30WMBfbslPNhf6JrqQlLN5gcrvig1oqPxiVaXb0oW0XRKtH6Nngs5lKCIA==}
+  /regenerator-runtime@0.14.1:
+    resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
 
   /regenerator-transform@0.15.2:
     resolution: {integrity: sha512-hfMp2BoF0qOk3uc5V20ALGDS2ddjQaLrdl7xrGXvAIow7qeWRM2VA2HuCHkUKk9slq3VwEwLNK3DFBqDfPGYtg==}
@@ -14425,7 +14435,7 @@ packages:
     peerDependencies:
       three: '>=0.122.0'
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.18.9
       '@types/offscreencanvas': 2019.7.0
       '@webgpu/glslang': 0.0.15
       chevrotain: 10.4.1

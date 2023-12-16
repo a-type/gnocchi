@@ -3,8 +3,7 @@ import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.js
 import { groceriesState } from '@/components/groceries/state.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { hooks } from '@/stores/groceries/index.js';
-import { Food } from '@aglio/groceries-client';
-import { shortenTimeUnits } from '@aglio/tools';
+import { Food, Item } from '@aglio/groceries-client';
 import { Button } from '@a-type/ui/components/button';
 import {
 	CardActions,
@@ -21,13 +20,20 @@ import {
 	ClockIcon,
 	ExclamationTriangleIcon,
 	OpenInNewWindowIcon,
-	PlusIcon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import classNames from 'classnames';
-import formatDistanceStrict from 'date-fns/formatDistanceStrict';
 import { Suspense, useCallback } from 'react';
 import { useExpiresText } from '../hooks.js';
+import {
+	Dialog,
+	DialogActions,
+	DialogClose,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+} from '@a-type/ui/components/dialog';
+import { DatePicker } from '@a-type/ui/components/datePicker';
 
 export interface PantryListItemProps {
 	item: Food;
@@ -137,7 +143,7 @@ export function PantryListItem({
 								{showLabels && <span className="font-normal">Used</span>}
 							</Button>
 						)}
-						{!!purchasedAt && (
+						{(!!purchasedAt || !!frozenAt) && (
 							<FreezeButton food={item} showLabel={showLabels} />
 						)}
 					</CardActions>
@@ -224,7 +230,19 @@ const FreezeButton = ({
 	const { frozenAt } = hooks.useWatch(food);
 
 	if (frozenAt) {
-		return null;
+		return (
+			<Dialog>
+				<DialogTrigger asChild>
+					<Button size={showLabel ? 'small' : 'icon'} color="accent">
+						<Icon name="snowflake" />
+						{showLabel && <span className="font-normal">Frozen</span>}
+					</Button>
+				</DialogTrigger>
+				<DialogContent>
+					<FrozenTimeAdjuster food={food} />
+				</DialogContent>
+			</Dialog>
+		);
 	}
 
 	return (
@@ -245,3 +263,36 @@ const FreezeButton = ({
 		</Tooltip>
 	);
 };
+
+function FrozenTimeAdjuster({ food: item }: { food: Food }) {
+	const { frozenAt } = hooks.useWatch(item);
+	const frozenAtDate = frozenAt ? new Date(frozenAt) : null;
+
+	const unfreeze = useCallback(() => {
+		item.set('frozenAt', null);
+	}, [item]);
+
+	return (
+		<>
+			<DialogTitle>Change freeze time</DialogTitle>
+			<DatePicker
+				className="self-center"
+				value={frozenAtDate}
+				onChange={(date) => {
+					if (!date) return;
+					const now = new Date();
+					date.setHours(now.getHours(), now.getMinutes(), 0);
+					item.set('frozenAt', date?.getTime());
+				}}
+			/>
+			<DialogActions>
+				<Button color="destructive" onClick={unfreeze}>
+					Unfreeze
+				</Button>
+				<DialogClose asChild>
+					<Button>Close</Button>
+				</DialogClose>
+			</DialogActions>
+		</>
+	);
+}

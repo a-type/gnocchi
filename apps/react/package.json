@@ -13,7 +13,7 @@
 		"typecheck": "tsc --build tsconfig.json"
 	},
 	"dependencies": {
-		"@a-type/ui": "^0.3.3",
+		"@a-type/ui": "^0.4.2",
 		"@a-type/utils": "^1.0.5",
 		"@aglio/conversion": "workspace:*",
 		"@aglio/groceries-client": "workspace:*",
