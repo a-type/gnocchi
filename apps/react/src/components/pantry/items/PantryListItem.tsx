@@ -82,6 +82,12 @@ export function PantryListItem({
 					>
 						<div className="flex flex-row gap-1 items-center flex-wrap p-1 text-xs italic">
 							{purchasedAt && (
+								<Chip>
+									<Icon name="clock" />
+									<RelativeTime value={purchasedAt} abbreviate />
+								</Chip>
+							)}
+							{purchasedAt && isAlmostOrExpired && !frozenAt && (
 								<Tooltip disabled={!expiresAt} content={expiresAtText}>
 									<Chip
 										className={classNames({
@@ -93,15 +99,9 @@ export function PantryListItem({
 										) : (
 											<Icon name="clock" />
 										)}
-										<RelativeTime value={purchasedAt} abbreviate />
+										{expiresAtText}
 									</Chip>
 								</Tooltip>
-							)}
-							{purchasedAt && isAlmostOrExpired && !frozenAt && (
-								<Chip>
-									<ClockIcon />
-									Added <RelativeTime value={purchasedAt} abbreviate />
-								</Chip>
 							)}
 							{frozenAt && (
 								<Tooltip content="You marked this item as frozen">
