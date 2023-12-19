@@ -45,7 +45,7 @@ export function NavBar({}: NavBarProps) {
 			)}
 		>
 			<Suspense>
-				<div className="display-none sm:(flex flex-row gap-1 items-center justify-center px-2 py-4)">
+				<div className="hidden sm:(flex flex-row gap-1 items-center justify-center px-2 py-4)">
 					<img src="/android-chrome-192x192.png" className="w-40px h-40px" />
 					<h1 className="text-md font-title font-medium">Gnocchi</h1>
 				</div>
@@ -55,7 +55,7 @@ export function NavBar({}: NavBarProps) {
 				<SettingsNavBarLink active={matchSettings} />
 				<NavBarChangelog />
 			</Suspense>
-			<ProductHunt className="display-none md:(display-block w-160px)" />
+			<ProductHunt className="hidden md:(display-block w-160px)" />
 		</PageNav>
 	);
 }
@@ -226,7 +226,7 @@ function SettingsNavBarLink({ active }: { active: boolean }) {
 
 function NavBarChangelog() {
 	return (
-		<ChangelogDisplay hideOnSeen className="display-none md:display-flex">
+		<ChangelogDisplay hideOnSeen className="hidden md:display-flex">
 			<NavBarChangelogButton>
 				<NavBarLinkIcon>
 					<NavIcon name="gift" />

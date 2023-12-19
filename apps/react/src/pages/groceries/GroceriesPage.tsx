@@ -69,7 +69,7 @@ export function GroceriesPage() {
 					</ListSelectWrapper>
 
 					<div className="flex flex-row gap-2 items-center">
-						<ChangelogDisplay className="sm:display-none" hideOnSeen />
+						<ChangelogDisplay className="sm:hidden" hideOnSeen />
 						<InstallButton />
 						<UnsubscribedOnly>
 							<PromoteSubscriptionButton size="small" color="accent">

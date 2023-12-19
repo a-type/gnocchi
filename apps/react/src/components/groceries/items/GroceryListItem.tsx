@@ -413,10 +413,10 @@ function ListTag({ item, collapsed }: { item: Item; collapsed?: boolean }) {
 							)}
 						>
 							<Icon name="tag" className="inline" />
-							<span className="display-none whitespace-nowrap overflow-hidden text-ellipsis max-w-full lg:inline">
+							<span className="hidden whitespace-nowrap overflow-hidden text-ellipsis max-w-full lg:inline">
 								{name}
 							</span>
-							<span className="inline whitespace-nowrap overflow-hidden text-ellipsis max-w-full lg:display-none">
+							<span className="inline whitespace-nowrap overflow-hidden text-ellipsis max-w-full lg:hidden">
 								{getInitials(name)}
 							</span>
 						</div>
