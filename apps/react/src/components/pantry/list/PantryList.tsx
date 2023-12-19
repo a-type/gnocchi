@@ -58,7 +58,7 @@ function SkeletonList() {
 	return (
 		<div className="flex flex-col items-stretch">
 			<div style={{ height: 30 }} />
-			<CardGrid>
+			<CardGrid className="grid-cols-[repeat(2,1fr)]">
 				{new Array(8).fill(null).map((_, i) => (
 					<PantryListItemSkeleton key={i} />
 				))}
