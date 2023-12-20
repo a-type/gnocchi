@@ -160,8 +160,8 @@ importers:
   apps/hub:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.6.3
-        version: 0.6.3(@types/react-dom@18.0.10)(@types/react@18.0.26)
+        specifier: ^0.6.4
+        version: 0.6.4(@types/react-dom@18.0.10)(@types/react@18.0.26)
       '@aglio/tools':
         specifier: workspace:*
         version: link:../../packages/tools
@@ -254,8 +254,8 @@ importers:
   apps/react:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.6.3
-        version: 0.6.3(@types/react-dom@18.0.6)(@types/react@18.0.17)
+        specifier: ^0.6.4
+        version: 0.6.4(@types/react-dom@18.0.6)(@types/react@18.0.17)
       '@a-type/utils':
         specifier: ^1.0.5
         version: 1.0.5
@@ -729,8 +729,8 @@ importers:
 
 packages:
 
-  /@a-type/ui@0.6.3(@types/react-dom@18.0.10)(@types/react@18.0.26):
-    resolution: {integrity: sha512-K1Infx9HizfxCbfuArfS3B7uUE3M52K3HnOKu3BtMQYw+WS4P6wpQM3uQsFbq4Bx7vikU829yRbbbRD/z3qq8A==}
+  /@a-type/ui@0.6.4(@types/react-dom@18.0.10)(@types/react@18.0.26):
+    resolution: {integrity: sha512-ettCd6OktS8jJmKVujaoKs8RHenCE5fdrc0rhaKixr6I1XUJXi3Jr7OJedSILtCk2C8VMrONlX8L589YuGamBQ==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.10)(@types/react@18.0.26)(react-dom@18.2.0)(react@18.2.0)
@@ -775,8 +775,8 @@ packages:
       - '@types/react-dom'
     dev: false
 
-  /@a-type/ui@0.6.3(@types/react-dom@18.0.6)(@types/react@18.0.17):
-    resolution: {integrity: sha512-K1Infx9HizfxCbfuArfS3B7uUE3M52K3HnOKu3BtMQYw+WS4P6wpQM3uQsFbq4Bx7vikU829yRbbbRD/z3qq8A==}
+  /@a-type/ui@0.6.4(@types/react-dom@18.0.6)(@types/react@18.0.17):
+    resolution: {integrity: sha512-ettCd6OktS8jJmKVujaoKs8RHenCE5fdrc0rhaKixr6I1XUJXi3Jr7OJedSILtCk2C8VMrONlX8L589YuGamBQ==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
