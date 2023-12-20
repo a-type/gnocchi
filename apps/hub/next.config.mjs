@@ -11,7 +11,7 @@ const nextConfig = {
 
 		return config;
 	},
-	transpilePackages: ['@aglio/trpc'],
+	transpilePackages: ['@aglio/trpc', '@a-type/ui'],
 	images: {
 		domains: ['localhost', 's3.amazonaws.com'],
 	},
