@@ -160,8 +160,8 @@ importers:
   apps/hub:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.6.4
-        version: 0.6.4(@types/react-dom@18.0.10)(@types/react@18.0.26)
+        specifier: ^0.6.5
+        version: 0.6.5(@types/react-dom@18.0.10)(@types/react@18.0.26)
       '@aglio/tools':
         specifier: workspace:*
         version: link:../../packages/tools
@@ -254,8 +254,8 @@ importers:
   apps/react:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.6.4
-        version: 0.6.4(@types/react-dom@18.0.6)(@types/react@18.0.17)
+        specifier: ^0.6.5
+        version: 0.6.5(@types/react-dom@18.0.6)(@types/react@18.0.17)
       '@a-type/utils':
         specifier: ^1.0.5
         version: 1.0.5
@@ -729,8 +729,8 @@ importers:
 
 packages:
 
-  /@a-type/ui@0.6.4(@types/react-dom@18.0.10)(@types/react@18.0.26):
-    resolution: {integrity: sha512-ettCd6OktS8jJmKVujaoKs8RHenCE5fdrc0rhaKixr6I1XUJXi3Jr7OJedSILtCk2C8VMrONlX8L589YuGamBQ==}
+  /@a-type/ui@0.6.5(@types/react-dom@18.0.10)(@types/react@18.0.26):
+    resolution: {integrity: sha512-NVTWtko2BdMbnqQ5NcNbkTdqokxbEs4rs/znc1Nx/7m+zH1YIYLoN55gWusQ8LItoUh140J3jZBenUnhpEcNYA==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.10)(@types/react@18.0.26)(react-dom@18.2.0)(react@18.2.0)
@@ -775,8 +775,8 @@ packages:
       - '@types/react-dom'
     dev: false
 
-  /@a-type/ui@0.6.4(@types/react-dom@18.0.6)(@types/react@18.0.17):
-    resolution: {integrity: sha512-ettCd6OktS8jJmKVujaoKs8RHenCE5fdrc0rhaKixr6I1XUJXi3Jr7OJedSILtCk2C8VMrONlX8L589YuGamBQ==}
+  /@a-type/ui@0.6.5(@types/react-dom@18.0.6)(@types/react@18.0.17):
+    resolution: {integrity: sha512-NVTWtko2BdMbnqQ5NcNbkTdqokxbEs4rs/znc1Nx/7m+zH1YIYLoN55gWusQ8LItoUh140J3jZBenUnhpEcNYA==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -12907,7 +12907,7 @@ packages:
       react-remove-scroll-bar: 2.3.4(@types/react@18.0.17)(react@18.2.0)
       react-style-singleton: 2.2.1(@types/react@18.0.17)(react@18.2.0)
       tslib: 2.6.2
-      use-callback-ref: 1.3.0(@types/react@18.0.17)(react@18.2.0)
+      use-callback-ref: 1.3.1(@types/react@18.0.17)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.0.17)(react@18.2.0)
     dev: false
 
@@ -12926,7 +12926,7 @@ packages:
       react-remove-scroll-bar: 2.3.4(@types/react@18.0.26)(react@18.2.0)
       react-style-singleton: 2.2.1(@types/react@18.0.26)(react@18.2.0)
       tslib: 2.6.2
-      use-callback-ref: 1.3.0(@types/react@18.0.26)(react@18.2.0)
+      use-callback-ref: 1.3.1(@types/react@18.0.26)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.0.26)(react@18.2.0)
     dev: false
 
@@ -12945,7 +12945,7 @@ packages:
       react-remove-scroll-bar: 2.3.4(@types/react@18.0.17)(react@18.2.0)
       react-style-singleton: 2.2.1(@types/react@18.0.17)(react@18.2.0)
       tslib: 2.6.2
-      use-callback-ref: 1.3.0(@types/react@18.0.17)(react@18.2.0)
+      use-callback-ref: 1.3.1(@types/react@18.0.17)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.0.17)(react@18.2.0)
     dev: false
 
@@ -12964,7 +12964,7 @@ packages:
       react-remove-scroll-bar: 2.3.4(@types/react@18.0.26)(react@18.2.0)
       react-style-singleton: 2.2.1(@types/react@18.0.26)(react@18.2.0)
       tslib: 2.6.2
-      use-callback-ref: 1.3.0(@types/react@18.0.26)(react@18.2.0)
+      use-callback-ref: 1.3.1(@types/react@18.0.26)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.0.26)(react@18.2.0)
     dev: false
 
@@ -14413,8 +14413,8 @@ packages:
     resolution: {integrity: sha512-RtuPeMy7c1UrHwproMZN9gN6kiZ0SvJwRaEzwZY0j9MypEkFqyBaKv176jvlPtg58Zh36bOkS0NFABXMHvvGCA==}
     dev: false
 
-  /use-callback-ref@1.3.0(@types/react@18.0.17)(react@18.2.0):
-    resolution: {integrity: sha512-3FT9PRuRdbB9HfXhEq35u4oZkvpJ5kuYbpqhCfmiZyReuRgpnhDlbr2ZEnnuS0RrJAPn6l23xjFg9kpDM+Ms7w==}
+  /use-callback-ref@1.3.1(@types/react@18.0.17)(react@18.2.0):
+    resolution: {integrity: sha512-Lg4Vx1XZQauB42Hw3kK7JM6yjVjgFmFC5/Ab797s79aARomD2nEErc4mCgM8EZrARLmmbWpi5DGCadmK50DcAQ==}
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -14428,8 +14428,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /use-callback-ref@1.3.0(@types/react@18.0.26)(react@18.2.0):
-    resolution: {integrity: sha512-3FT9PRuRdbB9HfXhEq35u4oZkvpJ5kuYbpqhCfmiZyReuRgpnhDlbr2ZEnnuS0RrJAPn6l23xjFg9kpDM+Ms7w==}
+  /use-callback-ref@1.3.1(@types/react@18.0.26)(react@18.2.0):
+    resolution: {integrity: sha512-Lg4Vx1XZQauB42Hw3kK7JM6yjVjgFmFC5/Ab797s79aARomD2nEErc4mCgM8EZrARLmmbWpi5DGCadmK50DcAQ==}
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0

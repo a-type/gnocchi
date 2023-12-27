@@ -30,6 +30,7 @@ export function AddImagePrompt({ recipe }: AddImagePromptProps) {
 				}}
 				className="h-200px rounded-sm overflow-hidden"
 				maxDimension={1080}
+				facingMode="environment"
 			/>
 		</AppearWithScroll>
 	);
