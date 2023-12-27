@@ -800,7 +800,13 @@ async function getScannedRecipe(
 									equals: ingredient.food,
 								},
 							}).resolved;
-							if (lookup) {
+							// make this match a little more strict - avoids things like
+							// "sugar" matching "brown sugar"
+							if (
+								lookup &&
+								(lookup.get('canonicalName') === ingredient.food ||
+									lookup.get('alternateNames').includes(ingredient.food))
+							) {
 								ingredient.food = lookup.get('canonicalName');
 							}
 							return ingredient;
