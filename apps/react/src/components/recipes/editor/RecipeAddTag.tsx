@@ -12,6 +12,7 @@ import {
 import { PlusIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import { ReactNode, Suspense, forwardRef, useState } from 'react';
+import { stopPropagation } from '@a-type/utils';
 
 export function RecipeAddTag({
 	recipe,

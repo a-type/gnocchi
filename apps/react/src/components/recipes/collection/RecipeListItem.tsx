@@ -143,6 +143,7 @@ export function RecipeListItemMenu({
 			onOpenChange={(open) => {
 				if (open) setMenuOpen(true);
 			}}
+			modal={false}
 		>
 			<DropdownMenuTrigger asChild>
 				<Button size="icon" color="ghost" {...rest}>
