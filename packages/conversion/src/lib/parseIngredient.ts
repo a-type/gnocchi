@@ -1,5 +1,5 @@
 import { isAllAdjectives } from './adjectives.js';
-import { commentsParser } from './commentsParser.js';
+import { commentsParser, extractParentheticals } from './commentsParser.js';
 import { depluralize } from './depluralize.js';
 import {
 	greedyMatchNumber,
@@ -40,7 +40,9 @@ export function parseIngredient(source: string): {
 	isSectionHeader: boolean;
 } {
 	const sanitized = sanitize(source);
-	const numberResult = greedyMatchNumber(sanitized);
+	const { matched: extractedComments, remaining: withoutComments } =
+		extractParentheticals(sanitized);
+	const numberResult = greedyMatchNumber(withoutComments);
 	const unitResult = greedyMatchUnit(numberResult.remaining);
 	const ofResult = greedyMatchOf(unitResult.remaining);
 	const commentResult = reverseGreedyMatchComment(ofResult.remaining);
@@ -59,9 +61,9 @@ export function parseIngredient(source: string): {
 			? depluralize(unitParser(unitResult.matched.trim())).toLowerCase()
 			: DEFAULT_UNIT,
 		food: depluralize(food).toLowerCase(),
-		comments: commentResult.matched
-			? commentsParser(commentResult.matched.trim())
-			: [],
+		comments: extractedComments.concat(
+			commentResult.matched ? commentsParser(commentResult.matched.trim()) : [],
+		),
 		isSectionHeader,
 	};
 }

@@ -20,9 +20,9 @@ describe('ingredient parsing', () => {
 		[
 			'1 (12oz) can cream of mushroom soup',
 			1,
-			'',
-			'(12oz) can cream of mushroom soup',
-			[],
+			'can',
+			'cream of mushroom soup',
+			['12oz'],
 		],
 		['eggs', 1, '', 'egg', []],
 		['half a can of black beans', 0.5, 'can', 'black bean', []],
@@ -65,6 +65,13 @@ describe('ingredient parsing', () => {
 		['1 to 2 tsp of salt', 2, 'teaspoon', 'salt', []],
 		['1 or 2 tsps of salt', 2, 'teaspoon', 'salt', []],
 		['1.5 sticks of butter', 1.5, 'stick', 'butter', []],
+		[
+			'2 pounds (4 8-ounce boxes) cream cheese',
+			2,
+			'pound',
+			'cream cheese',
+			['4 8-ounce boxes'],
+		],
 		// not ideal but good enough
 		['3 12oz cans of tomato paste', 36, 'oz can', 'tomato paste', []],
 		// tricky cases
