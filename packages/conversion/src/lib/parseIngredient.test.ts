@@ -64,6 +64,7 @@ describe('ingredient parsing', () => {
 		['1-2 tsp of salt', 2, 'teaspoon', 'salt', []],
 		['1 to 2 tsp of salt', 2, 'teaspoon', 'salt', []],
 		['1 or 2 tsps of salt', 2, 'teaspoon', 'salt', []],
+		['1.5 sticks of butter', 1.5, 'stick', 'butter', []],
 		// not ideal but good enough
 		['3 12oz cans of tomato paste', 36, 'oz can', 'tomato paste', []],
 		// tricky cases

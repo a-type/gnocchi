@@ -66,7 +66,7 @@ function identifyLeadingNumberGroup(source: string): [number, string] | null {
 	}
 
 	// lookahead for any number
-	const leadingDigitsMatch = /\d+/.exec(trimmedSource);
+	const leadingDigitsMatch = /[\d\.]+/.exec(trimmedSource);
 	if (leadingDigitsMatch) {
 		return [
 			parseFloat(leadingDigitsMatch[0]),
