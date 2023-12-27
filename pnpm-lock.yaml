@@ -81,11 +81,11 @@ importers:
         specifier: ^8.5.3
         version: 8.5.3
       '@verdant-web/common':
-        specifier: ^1.16.1
-        version: 1.16.1
+        specifier: ^1.16.2
+        version: 1.16.2
       '@verdant-web/server':
-        specifier: ^1.9.3
-        version: 1.9.3(utf-8-validate@5.0.9)
+        specifier: ^1.9.4
+        version: 1.9.4(utf-8-validate@5.0.9)
       better-sqlite3:
         specifier: ^7.6.2
         version: 7.6.2
@@ -344,17 +344,17 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       '@verdant-web/common':
-        specifier: ^1.16.1
-        version: 1.16.1
+        specifier: ^1.16.2
+        version: 1.16.2
       '@verdant-web/react':
-        specifier: ^24.0.1
-        version: 24.0.1(@verdant-web/store@2.8.3)(react@18.2.0)
+        specifier: ^24.0.2
+        version: 24.0.2(@verdant-web/store@2.8.5)(react@18.2.0)
       '@verdant-web/react-router':
         specifier: ^0.5.4
         version: 0.5.4(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.8.3
-        version: 2.8.3
+        specifier: ^2.8.5
+        version: 2.8.5
       '@zip.js/zip.js':
         specifier: ^2.7.6
         version: 2.7.6
@@ -612,14 +612,14 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0
       '@verdant-web/common':
-        specifier: ^1.16.1
-        version: 1.16.1
+        specifier: ^1.16.2
+        version: 1.16.2
       '@verdant-web/react':
-        specifier: ^24.0.1
-        version: 24.0.1(@verdant-web/store@2.8.3)(react@18.2.0)
+        specifier: ^24.0.2
+        version: 24.0.2(@verdant-web/store@2.8.5)(react@18.2.0)
       '@verdant-web/store':
-        specifier: ^2.8.3
-        version: 2.8.3
+        specifier: ^2.8.5
+        version: 2.8.5
       cuid:
         specifier: ^2.1.8
         version: 2.1.8
@@ -705,11 +705,11 @@ importers:
         specifier: ^10.10.0
         version: 10.18.0
       '@verdant-web/common':
-        specifier: ^1.16.1
-        version: 1.16.1
+        specifier: ^1.16.2
+        version: 1.16.2
       '@verdant-web/server':
-        specifier: ^1.9.3
-        version: 1.9.3(utf-8-validate@5.0.9)
+        specifier: ^1.9.4
+        version: 1.9.4(utf-8-validate@5.0.9)
       cuid:
         specifier: ^3.0.0
         version: 3.0.0
@@ -785,7 +785,7 @@ packages:
       '@radix-ui/react-context-menu': 2.1.5(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-dropdown-menu': 1.0.0(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-icons': 1.1.1(react@18.2.0)
+      '@radix-ui/react-icons': 1.3.0(react@18.2.0)
       '@radix-ui/react-menu': 1.0.0(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-popover': 1.0.7(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-radio-group': 1.1.3(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -810,10 +810,10 @@ packages:
       color-interpolate: 1.0.5
       color-parse: 2.0.0
       color-space: 2.0.1
-      date-fns: 2.29.3
-      formik: 2.2.9(react@18.2.0)
+      date-fns: 2.30.0
+      formik: 2.4.5(react@18.2.0)
       pluralize: 8.0.0
-      prosemirror-model: 1.19.0
+      prosemirror-model: 1.19.4
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     transitivePeerDependencies:
@@ -8000,8 +8000,8 @@ packages:
       - '@swc/helpers'
     dev: false
 
-  /@verdant-web/common@1.16.1:
-    resolution: {integrity: sha512-Fx0Jp/pDxrmtM2+oRqrXjQCkCQ8KV+A1SQoIdql+YAMBICdjtIewiMjhjvCJqWZMIqWFvinSGHAMrRJWeaK4ew==}
+  /@verdant-web/common@1.16.2:
+    resolution: {integrity: sha512-F/jLUyLO2X0sLyb0Om2nuaKEpAd5CRBq3bKxu7zpGtLlOtP3x/oKz+pWKgc/jiLBmPmxdzeMTlOlP1AAdcSNPA==}
     dependencies:
       cuid: 2.1.8
       object-hash: 3.0.0
@@ -8017,23 +8017,23 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@verdant-web/react@24.0.1(@verdant-web/store@2.8.3)(react@18.2.0):
-    resolution: {integrity: sha512-O6E+hHggiNG05pb2XnKx3OR8rrwd1lDjLXwj7sItm66zd0cIMRTeOrs9wEnGFi15SIDT14zeiO/HGGF0x6UMwA==}
+  /@verdant-web/react@24.0.2(@verdant-web/store@2.8.5)(react@18.2.0):
+    resolution: {integrity: sha512-r6goMlkL1262w7H0dh7EBFxyk9uD8vp+5x1cyhFZqgxQhj1XiYDFZR1Ehz+4TUVydTO+9pFuF5FgMJpHyX7W3w==}
     peerDependencies:
-      '@verdant-web/store': ^2.8.3
+      '@verdant-web/store': ^2.8.5
       react: ^18.2.0
     dependencies:
-      '@verdant-web/common': 1.16.1
-      '@verdant-web/store': 2.8.3
+      '@verdant-web/common': 1.16.2
+      '@verdant-web/store': 2.8.5
       react: 18.2.0
       suspend-react: 0.0.8(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  /@verdant-web/server@1.9.3(utf-8-validate@5.0.9):
-    resolution: {integrity: sha512-ucIz7LAIysuGRCweq+6G8bvjSJINgi2gAVv1kFyq915JNNh8pfs5zfBZ6WUrGIIzVzOe+zFfO59Asv9+mcVHUA==}
+  /@verdant-web/server@1.9.4(utf-8-validate@5.0.9):
+    resolution: {integrity: sha512-AjmNmjzJdH48Q5JsPRR2M0e8WDrlzMY8uSaD2PJVNKkpHhnNuDyuIL/pgl87VRILu7D10XnPUsvIsidg6+TFLw==}
     dependencies:
-      '@verdant-web/common': 1.16.1
+      '@verdant-web/common': 1.16.2
       async-lock: 1.4.0
       better-sqlite3: 7.6.2
       busboy: 1.6.0
@@ -8044,10 +8044,10 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@verdant-web/store@2.8.3:
-    resolution: {integrity: sha512-7xD6uNzyXDxOGzZtr1lv0OvDOCLkyHTrhhmEsPr7a/KymhIhjfwifrQcnrsUDUpKTHbdiSW+A54lz4hpzM+qhQ==}
+  /@verdant-web/store@2.8.5:
+    resolution: {integrity: sha512-uw3fnJb2JQLEF2li+J69wV8sAfljDbLYVqXW/hhin/TTk8dZ+GcQ35heXYTGD2qX2LH8YqT8g+MnKUadKuOmVQ==}
     dependencies:
-      '@verdant-web/common': 1.16.1
+      '@verdant-web/common': 1.16.2
       cuid: 2.1.8
       jwt-decode: 3.1.2
     dev: false
@@ -8551,7 +8551,7 @@ packages:
     hasBin: true
     optionalDependencies:
       dtrace-provider: 0.8.8
-      moment: 2.29.4
+      moment: 2.30.1
       mv: 2.1.1
       safe-json-stringify: 1.2.0
     dev: false
@@ -9039,17 +9039,6 @@ packages:
         optional: true
     dependencies:
       ms: 2.0.0
-
-  /debug@3.2.7:
-    resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.3
-    dev: false
 
   /debug@3.2.7(supports-color@5.5.0):
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
@@ -10046,7 +10035,7 @@ packages:
   /eslint-import-resolver-node@0.3.7:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
     dependencies:
-      debug: 3.2.7
+      debug: 3.2.7(supports-color@5.5.0)
       is-core-module: 2.13.0
       resolve: 1.22.4
     transitivePeerDependencies:
@@ -10095,7 +10084,7 @@ packages:
         optional: true
     dependencies:
       '@typescript-eslint/parser': 5.51.0(eslint@8.33.0)(typescript@5.0.2)
-      debug: 3.2.7
+      debug: 3.2.7(supports-color@5.5.0)
       eslint: 8.33.0
       eslint-import-resolver-node: 0.3.7
       eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.27.5)(eslint@8.33.0)
@@ -10117,7 +10106,7 @@ packages:
       array-includes: 3.1.6
       array.prototype.flat: 1.3.1
       array.prototype.flatmap: 1.3.1
-      debug: 3.2.7
+      debug: 3.2.7(supports-color@5.5.0)
       doctrine: 2.1.0
       eslint: 8.33.0
       eslint-import-resolver-node: 0.3.7
@@ -11922,8 +11911,8 @@ packages:
       ufo: 1.3.2
     dev: true
 
-  /moment@2.29.4:
-    resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
+  /moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
     requiresBuild: true
     dev: false
     optional: true
