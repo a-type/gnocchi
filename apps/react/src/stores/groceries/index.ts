@@ -500,9 +500,9 @@ export function createClientDescriptor(options: { namespace: string }) {
 		namespace: options.namespace,
 		log:
 			import.meta.env.DEV || DEBUG
-				? (...args: any[]) => console.debug('🎧', ...args)
+				? (...args: any[]) => console.debug('🌿', ...args)
 				: undefined,
-		// EXPERIMENTAL_weakRefs: true,
+		EXPERIMENTAL_weakRefs: true,
 	});
 }
 
