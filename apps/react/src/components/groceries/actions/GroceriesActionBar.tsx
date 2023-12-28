@@ -1,6 +1,5 @@
 import { DeleteAllAction } from '@/components/groceries/actions/DeleteAllAction.jsx';
 import { PurchaseAllAction } from '@/components/groceries/actions/PurchaseAllAction.jsx';
-import { People } from '@/components/sync/people/People.jsx';
 import { ActionBar } from '@a-type/ui/components/actions';
 import { MeetupAction } from './MeetupAction.jsx';
 import { RedoAction } from './RedoAction.jsx';
@@ -11,7 +10,6 @@ export interface GroceriesActionBarProps {}
 export function GroceriesActionBar({}: GroceriesActionBarProps) {
 	return (
 		<ActionBar>
-			<People hideIfAlone />
 			<UndoAction />
 			<RedoAction />
 			<MeetupAction />

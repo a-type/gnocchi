@@ -32,6 +32,7 @@ import { Icon } from '@/components/icons/Icon.jsx';
 import { usePageTitle } from '@/hooks/usePageTitle.jsx';
 import { InstallButton } from '@/components/promotional/InstallButton.jsx';
 import { ChangelogDisplay } from '@/components/changelog/ChangelogDisplay.jsx';
+import { People } from '@/components/sync/people/People.jsx';
 
 export function GroceriesPage() {
 	const navigate = useNavigate();
@@ -77,6 +78,7 @@ export function GroceriesPage() {
 							</PromoteSubscriptionButton>
 						</UnsubscribedOnly>
 						<SubscribedOnly>
+							<People hideIfAlone />
 							<InviteLinkButton
 								size="icon"
 								color="ghost"
