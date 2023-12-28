@@ -33,6 +33,10 @@ import { PageRoot } from '@a-type/ui/components/layouts';
 import { useMediaQuery } from '@/hooks/useMediaQuery.js';
 import { FoodDetailDialog } from '@/components/foods/FoodDetailDialog.jsx';
 import AdminChangelogPage from '@/pages/admin/AdminChangelogPage.jsx';
+import {
+	ReloadButton,
+	useHadRecentError,
+} from '@/components/sync/ReloadButton.jsx';
 
 const PlanPage = lazyWithPreload(() => import('./PlanPage.jsx'));
 const ClaimInvitePage = lazy(() => import('./ClaimInvitePage.jsx'));
@@ -293,22 +297,7 @@ export function Pages() {
 
 function ErrorFallback({ clearError }: { clearError: () => void }) {
 	const isSubscribed = useIsSubscribed();
-	const [lastErrorReload, setLastErrorReload] = useLocalStorage(
-		'lastErrorReload',
-		0,
-	);
-
-	const hadRecentError =
-		lastErrorReload < Date.now() &&
-		lastErrorReload > Date.now() - 1000 * 60 * 60;
-
-	const { updateServiceWorker } = useRegisterSW();
-
-	const refresh = () => {
-		setLastErrorReload(Date.now() + 500);
-		updateServiceWorker();
-		window.location.reload();
-	};
+	const hadRecentError = useHadRecentError();
 
 	return (
 		<div className="flex flex-col items-center justify-center p-4">
@@ -324,7 +313,7 @@ function ErrorFallback({ clearError }: { clearError: () => void }) {
 				<LinkButton to="/" onClick={clearError}>
 					Go Home
 				</LinkButton>
-				<Button onClick={refresh}>Refresh</Button>
+				<ReloadButton />
 				<BugButton />
 				{hadRecentError && isSubscribed && (
 					<SubscribedOnly>

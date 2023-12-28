@@ -6,12 +6,15 @@ import { Toaster } from 'react-hot-toast';
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
 import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';
-import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
+import {
+	ReloadButton,
+	useHadRecentError,
+} from '@/components/sync/ReloadButton.jsx';
 import { GlobalLoader } from '@/GlobalLoader.jsx';
 import { useVisualViewportOffset } from '@a-type/ui/hooks';
 import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
 import { TooltipProvider } from '@a-type/ui/components/tooltip';
-import { P, H1 } from '@a-type/ui/components/typography';
+import { P, H1, H2 } from '@a-type/ui/components/typography';
 import { ParticleLayer } from '@a-type/ui/components/particles';
 import { GlobalSyncingIndicator } from '@/components/sync/GlobalSyncingIndicator.jsx';
 
@@ -67,7 +70,9 @@ function ErrorFallback() {
 				<P>
 					Sorry about this. The app has crashed. You can try refreshing, but if
 					that doesn't work,{' '}
-					<a href="mailto:hi@gnocchi.club">let me know about it.</a>
+					<a className="underline font-bold" href="mailto:hi@gnocchi.club">
+						let me know about it.
+					</a>
 				</P>
 				<ReloadButton />
 			</div>
