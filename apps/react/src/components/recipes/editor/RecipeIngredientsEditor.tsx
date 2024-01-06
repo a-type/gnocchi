@@ -196,7 +196,13 @@ function IngredientMenu({
 						</DropdownMenuItemIndicator>
 						Section header
 					</DropdownMenuCheckboxItem>
-					<DropdownMenuItem onSelect={() => setDetailsOpen(true)}>
+					<DropdownMenuItem
+						onSelect={(ev) => {
+							// don't close the menu
+							ev.preventDefault();
+							setDetailsOpen(true);
+						}}
+					>
 						Edit details
 					</DropdownMenuItem>
 					<DropdownMenuItem
@@ -208,13 +214,13 @@ function IngredientMenu({
 							<TrashIcon />
 						</DropdownMenuItemRightSlot>
 					</DropdownMenuItem>
+					<IngredientDetailsDialog
+						ingredient={ingredient}
+						open={detailsOpen}
+						onOpenChange={setDetailsOpen}
+					/>
 				</DropdownMenuContent>
 			</DropdownMenu>
-			<IngredientDetailsDialog
-				ingredient={ingredient}
-				open={detailsOpen}
-				onOpenChange={setDetailsOpen}
-			/>
 		</>
 	);
 }
