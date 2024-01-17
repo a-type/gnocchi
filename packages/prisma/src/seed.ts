@@ -1,4 +1,4 @@
-import { prisma } from '../index.js';
+import { prisma } from './index.js';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const DEFAULT_CATEGORIES = [

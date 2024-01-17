@@ -5,7 +5,7 @@ import { API_HOST_HTTP } from '@/config.js';
 import { detailedInstructionsToDoc, instructionsToDoc } from '@/lib/tiptap.js';
 import { trpcClient } from '@/trpc.js';
 import { lookupUnit, parseIngredient } from '@aglio/conversion';
-import { depluralize } from '@aglio/conversion/src/lib/depluralize.js';
+import { depluralize } from '@aglio/conversion';
 import {
 	Client,
 	ClientDescriptor,

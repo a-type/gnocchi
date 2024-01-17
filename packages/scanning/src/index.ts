@@ -1,4 +1,4 @@
-export type { ExtractorData } from './extractors/types.js';
+export type * from './extractors/types.js';
 import { load } from 'cheerio';
 import { extract } from './extractor.js';
 import { default as robotsParser } from 'robots-parser';

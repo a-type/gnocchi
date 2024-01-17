@@ -4,7 +4,7 @@ import * as z from 'zod';
 import { sendEmailVerification, sendPasswordReset } from '@aglio/email';
 import { join, login, setLoginSession } from '@aglio/auth';
 import { RequestError } from '@aglio/tools';
-import { resetPassword } from '@aglio/auth/src/password.js';
+import { resetPassword } from '@aglio/auth';
 
 export const authRouter = t.router({
 	isProductAdmin: t.procedure.query(async ({ ctx }) => {

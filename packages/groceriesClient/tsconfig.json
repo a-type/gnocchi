@@ -2,8 +2,9 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"composite": true,
-		"outDir": "./dist",
+		"outDir": "./dist/esm",
 		"rootDir": "./src",
+		"allowJs": true,
 		"lib": ["es2021", "dom"]
 	},
 	"include": ["**/*.ts", "**/*.mts"]

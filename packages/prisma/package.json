@@ -2,15 +2,23 @@
 	"name": "@aglio/prisma",
 	"version": "0.0.1",
 	"private": true,
-	"main": "index.ts",
+	"exports": {
+		".": {
+			"dev": "./src/index.ts",
+			"import": "./dist/esm/index.js",
+			"node": "./dist/esm/index.js",
+			"default": "./dist/esm/index.js"
+		}
+	},
 	"type": "module",
 	"scripts": {
 		"prisma": "prisma",
 		"postinstall": "prisma generate",
-		"create-migration": "prisma migrate dev"
+		"create-migration": "prisma migrate dev",
+		"build": "tsc"
 	},
 	"prisma": {
-		"seed": "ts-node-esm prisma/seed.ts"
+		"seed": "ts-node-esm src/seed.ts"
 	},
 	"dependencies": {
 		"@prisma/client": "^4.10.1",
@@ -19,6 +27,6 @@
 	"devDependencies": {
 		"@types/node": "^18.7.20",
 		"ts-node": "^10.9.1",
-		"typescript": "^5.0.2"
+		"typescript": "^5.3.3"
 	}
 }

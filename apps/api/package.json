@@ -7,7 +7,7 @@
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
 		"prestart": "cd ../../packages/prisma && prisma migrate deploy && prisma db seed",
-		"start": "pnpm prestart && tsx --tsconfig ./tsconfig.json ./src/server.ts",
+		"start": "pnpm prestart && node ./dist/server.js",
 		"start:local": "env-cmd pnpm start",
 		"build": "tsc --build tsconfig.json",
 		"link-verdant": "pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/server",
@@ -52,7 +52,7 @@
 		"prisma": "^4.0.0",
 		"stripe": "^10.7.0",
 		"tsx": "^3.8.2",
-		"typescript": "^5.0.2",
+		"typescript": "^5.3.3",
 		"utf-8-validate": "^5.0.9",
 		"web-push": "^3.5.0",
 		"ws": "^8.8.1",

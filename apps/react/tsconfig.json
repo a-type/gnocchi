@@ -11,13 +11,5 @@
 		},
 		"types": ["vite/client", "vite-plugin-pwa"]
 	},
-	"include": ["src"],
-	"references": [
-		{
-			"path": "../../packages/conversion/tsconfig.json"
-		},
-		{
-			"path": "../../packages/tools/tsconfig.json"
-		}
-	]
+	"include": ["src"]
 }

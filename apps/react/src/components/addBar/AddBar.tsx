@@ -37,10 +37,9 @@ import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
 import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue.js';
 import { Cross2Icon, FileTextIcon, PlusIcon } from '@radix-ui/react-icons';
-import { depluralize } from '@aglio/conversion/src/lib/depluralize.js';
-import { trpc } from '@/trpc.js';
 import { useAISuggestions } from '@/components/addBar/aiSuggestions.js';
 import { Icon } from '@/components/icons/Icon.jsx';
+import { depluralize } from '@aglio/conversion';
 
 export interface AddBarProps {
 	className?: string;

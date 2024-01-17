@@ -31,3 +31,5 @@ export type AppRouter = typeof appRouter;
 
 export { createContext } from './common.js';
 export type { HubPublishedRecipeInfo } from './hub.js';
+export type { Response, Request } from 'express';
+export type { ExtractorData, DetailedStep } from '@aglio/scanning';

@@ -1,10 +1,15 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"composite": true,
-		"outDir": "./dist",
-		"rootDir": ".",
-		"baseUrl": "."
+		"outDir": "./dist/esm",
+		"rootDir": "./src"
 	},
-	"include": ["*.ts", "*.mts", "prisma/*.ts", "./typings"]
+	"include": [
+		"*.ts",
+		"*.mts",
+		"prisma/*.ts",
+		"./typings",
+		"src/index.ts",
+		"src/seed.ts"
+	]
 }

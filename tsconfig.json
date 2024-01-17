@@ -16,36 +16,8 @@
 		"jsx": "react-jsx",
 		"downlevelIteration": true,
 		"experimentalDecorators": true,
-		"isolatedModules": true
+		"isolatedModules": true,
+		"customConditions": ["dev"]
 	},
-	"exclude": ["node_modules", "**/*/dist"],
-	"references": [
-		{
-			"path": "./packages/conversion"
-		},
-		{
-			"path": "./packages/tools"
-		},
-		{
-			"path": "./packages/auth"
-		},
-		{
-			"path": "./packages/trpc"
-		},
-		{
-			"path": "./packages/prisma"
-		},
-		{
-			"path": "./packages/scanning"
-		},
-		{
-			"path": "./packages/email"
-		},
-		{
-			"path": "./packages/groceriesClient"
-		},
-		{
-			"path": "./packages/ui"
-		}
-	]
+	"exclude": ["node_modules", "**/*/dist"]
 }

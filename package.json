@@ -27,7 +27,7 @@
 	"devDependencies": {
 		"husky": "^8.0.3",
 		"turbo": "^1.9.3",
-		"typescript": "^5.0.4",
+		"typescript": "^5.3.3",
 		"@clack/prompts": "0.7.0"
 	},
 	"volta": {

@@ -1,5 +1,5 @@
 import { hooks } from '@/stores/groceries/index.js';
-import { depluralize } from '@aglio/conversion/src/lib/depluralize.js';
+import { depluralize } from '@aglio/conversion';
 import { Food } from '@aglio/groceries-client';
 
 export function useLookupFoodByName(

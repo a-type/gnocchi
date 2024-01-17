@@ -2,10 +2,18 @@
 	"name": "@aglio/tools",
 	"version": "0.0.1",
 	"private": true,
-	"main": "src/index.ts",
-	"module": "src/index.ts",
+	"exports": {
+		".": {
+			"dev": "./src/index.ts",
+			"import": "./dist/esm/index.js",
+			"node": "./dist/esm/index.js",
+			"default": "./dist/esm/index.js"
+		}
+	},
 	"type": "module",
-	"scripts": {},
+	"scripts": {
+		"build": "tsc"
+	},
 	"devDependencies": {
 		"@types/express": "^4.17.17",
 		"@types/node": "^18.13.0"
