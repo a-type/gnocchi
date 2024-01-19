@@ -6,8 +6,8 @@
 	"type": "module",
 	"scripts": {
 		"dev": "env-cmd tsx watch ./src/server.ts",
-		"prestart": "cd ../../packages/prisma && prisma migrate deploy && prisma db seed",
-		"start": "pnpm prestart && node ./dist/server.js",
+		"prestart": "cd ../../packages/prisma && prisma migrate deploy && pnpm prisma db seed",
+		"start": "pnpm prestart && node --conditions=prod ./dist/server.js",
 		"start:local": "env-cmd pnpm start",
 		"build": "tsc --build tsconfig.json",
 		"link-verdant": "pnpm link --global @verdant-web/common && pnpm link --global @verdant-web/server",

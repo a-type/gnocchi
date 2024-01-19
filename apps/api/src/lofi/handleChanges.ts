@@ -4,7 +4,7 @@ import {
 	getPlanIdFromGroceryLibraryId,
 } from '@aglio/tools';
 import { DocumentBaseline, Operation, decomposeOid } from '@verdant-web/common';
-import { sendPush } from 'src/data/webPush.js';
+import { sendPush } from '../data/webPush.js';
 
 export async function handleLofiChanges({
 	libraryId,

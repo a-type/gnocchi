@@ -3,7 +3,7 @@ import { ReplicaType, TokenProvider } from '@verdant-web/server';
 import { assert, getGroceryLibraryName } from '@aglio/tools';
 import { getLoginSession, getTemporaryAccessSession } from '@aglio/auth';
 import { DEPLOYED_HOST } from '../../config/deployedContext.js';
-import { verifySubscription } from 'src/auth/verifySubscription.js';
+import { verifySubscription } from '../../auth/verifySubscription.js';
 
 assert(!!process.env.LOFI_SECRET, 'LOFI_SECRET must be set');
 const tokenProvider = new TokenProvider({

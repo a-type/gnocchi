@@ -1,7 +1,7 @@
 import { assert } from '@aglio/tools';
 import { Request, Response } from 'express';
-import { prisma } from 'src/data/prisma.js';
-import { stripe } from 'src/data/stripe.js';
+import { prisma } from '../../data/prisma.js';
+import { stripe } from '../../data/stripe.js';
 import Stripe from 'stripe';
 
 assert(process.env.STRIPE_WEBHOOK_SECRET, 'STRIPE_WEBHOOK_SECRET is required');

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getLoginSession } from '@aglio/auth';
-import { UI_ORIGIN } from 'src/config/deployedContext.js';
-import { stripe } from 'src/data/stripe.js';
+import { UI_ORIGIN } from '../../config/deployedContext.js';
+import { stripe } from '../../data/stripe.js';
 
 export async function createCheckoutHandler(req: Request, res: Response) {
 	const session = await getLoginSession(req);

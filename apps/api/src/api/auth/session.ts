@@ -1,6 +1,6 @@
 import { SubscriptionError } from '@aglio/tools';
 import { Request, Response } from 'express';
-import { getSubscriptionStatusError } from 'src/auth/verifySubscription.js';
+import { getSubscriptionStatusError } from '../../auth/verifySubscription.js';
 import {
 	getLoginSession,
 	removeTokenCookie,

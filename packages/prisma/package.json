@@ -4,8 +4,8 @@
 	"private": true,
 	"exports": {
 		".": {
-			"dev": "./src/index.ts",
-			"import": "./dist/esm/index.js",
+			"prod": "./dist/esm/index.js",
+			"import": "./src/index.ts",
 			"node": "./dist/esm/index.js",
 			"default": "./dist/esm/index.js"
 		}
@@ -15,10 +15,11 @@
 		"prisma": "prisma",
 		"postinstall": "prisma generate",
 		"create-migration": "prisma migrate dev",
-		"build": "tsc"
+		"build": "tsc",
+		"seed": "ts-node-esm ./src/seed.ts"
 	},
 	"prisma": {
-		"seed": "ts-node-esm src/seed.ts"
+		"seed": "ts-node-esm ./src/seed.ts"
 	},
 	"dependencies": {
 		"@prisma/client": "^4.10.1",

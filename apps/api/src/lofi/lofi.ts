@@ -15,8 +15,8 @@ import {
 	PutObjectCommand,
 } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
-import { handleLofiChanges } from 'src/lofi/handleChanges.js';
-import { DEPLOYED_HOST } from 'src/config/deployedContext.js';
+import { handleLofiChanges } from './handleChanges.js';
+import { DEPLOYED_HOST } from '../config/deployedContext.js';
 
 const storageDbFile = process.env.STORAGE_DATABASE_URL;
 assert(!!storageDbFile, 'STORAGE_DATABASE_URL is not set');

@@ -39,4 +39,6 @@ const DEFAULT_CATEGORIES = [
 			});
 		}
 	}
+
+	console.log('Seeded default categories');
 })();

@@ -1,4 +1,4 @@
-import { prisma } from 'src/data/prisma.js';
+import { prisma } from '../data/prisma.js';
 
 const productAdmins = (process.env.MAKE_PRODUCT_ADMIN || '').split(',');
 

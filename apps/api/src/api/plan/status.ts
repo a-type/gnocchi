@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getLoginSession } from '@aglio/auth';
-import { getSubscriptionStatusError } from 'src/auth/verifySubscription.js';
+import { getSubscriptionStatusError } from '../../auth/verifySubscription.js';
 
 export default async function planStatusHandler(req: Request, res: Response) {
 	const session = await getLoginSession(req);

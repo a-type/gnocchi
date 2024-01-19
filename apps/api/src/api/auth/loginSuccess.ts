@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { UI_ORIGIN } from 'src/config/deployedContext.js';
+import { UI_ORIGIN } from '../../config/deployedContext.js';
 import { URL } from 'url';
 import { getReturnToCookie, removeReturnToCookie } from '@aglio/auth';
 
