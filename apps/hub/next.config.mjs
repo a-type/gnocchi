@@ -8,6 +8,9 @@ const nextConfig = {
 			'.js': ['.ts', '.tsx', '.js', '.jsx'],
 			'.jsx': ['.ts', '.tsx', '.js', '.jsx'],
 		};
+		config.resolve.conditionNames = dev
+			? ['development', 'import', 'module', 'default']
+			: ['production', 'import', 'module', 'default'];
 
 		return config;
 	},

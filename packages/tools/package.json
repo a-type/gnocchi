@@ -4,8 +4,9 @@
 	"private": true,
 	"exports": {
 		".": {
-			"prod": "./dist/esm/index.js",
-			"import": "./src/index.ts",
+			"production": "./dist/esm/index.js",
+			"development": "./src/index.ts",
+			"import": "./dist/esm/index.js",
 			"node": "./dist/esm/index.js",
 			"default": "./dist/esm/index.js"
 		}
