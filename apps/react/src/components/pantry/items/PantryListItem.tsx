@@ -82,23 +82,15 @@ export function PantryListItem({
 					>
 						<div className="flex flex-row gap-1 items-center flex-wrap p-1 text-xs italic">
 							{purchasedAt && (
-								<Chip>
+								<Chip title={new Date(purchasedAt).toLocaleDateString()}>
 									<Icon name="clock" />
 									<RelativeTime value={purchasedAt} abbreviate />
 								</Chip>
 							)}
 							{purchasedAt && isAlmostOrExpired && !frozenAt && (
 								<Tooltip disabled={!expiresAt} content={expiresAtText}>
-									<Chip
-										className={classNames({
-											'important:color-attentionDark': isAlmostOrExpired,
-										})}
-									>
-										{isAlmostOrExpired ? (
-											<ExclamationTriangleIcon />
-										) : (
-											<Icon name="clock" />
-										)}
+									<Chip className="important:color-attentionDark">
+										<ExclamationTriangleIcon />
 										{expiresAtText}
 									</Chip>
 								</Tooltip>
