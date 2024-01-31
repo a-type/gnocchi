@@ -1,8 +1,11 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
-import { Formik } from 'formik';
 import { useNavigate } from '@verdant-web/react-router';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 import {
 	Dialog,
 	DialogContent,
@@ -20,7 +23,7 @@ export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
 	const { refetch } = useAuth();
 
 	return (
-		<Formik
+		<FormikForm
 			initialValues={{ password: '', email: '' }}
 			onSubmit={async (values) => {
 				await mutateAsync({
@@ -32,20 +35,18 @@ export function EmailSignInForm({ returnTo }: EmailSignInFormProps) {
 				navigate(returnTo || '/');
 			}}
 		>
-			<Form>
-				<TextField name="email" label="Email" autoComplete="email" required />
-				<TextField
-					autoComplete="current-password"
-					name="password"
-					label="Password"
-					type="password"
-					required
-				/>
-				<SubmitButton>Sign In</SubmitButton>
-				<ForgotPassword />
-				{error && <P className="color-attention">{error.message}</P>}
-			</Form>
-		</Formik>
+			<TextField name="email" label="Email" autoComplete="email" required />
+			<TextField
+				autoComplete="current-password"
+				name="password"
+				label="Password"
+				type="password"
+				required
+			/>
+			<SubmitButton>Sign In</SubmitButton>
+			<ForgotPassword />
+			{error && <P className="color-attention">{error.message}</P>}
+		</FormikForm>
 	);
 }
 
@@ -59,7 +60,7 @@ function ForgotPassword() {
 				</button>
 			</DialogTrigger>
 			<DialogContent>
-				<Formik
+				<FormikForm
 					initialValues={{
 						email: '',
 					}}
@@ -70,12 +71,10 @@ function ForgotPassword() {
 						} catch (err) {}
 					}}
 				>
-					<Form>
-						<TextField name="email" label="Email" />
-						<SubmitButton>Send reset email</SubmitButton>
-						{error && <P className="color-attention">{error.message}</P>}
-					</Form>
-				</Formik>
+					<TextField name="email" label="Email" />
+					<SubmitButton>Send reset email</SubmitButton>
+					{error && <P className="color-attention">{error.message}</P>}
+				</FormikForm>
 			</DialogContent>
 		</Dialog>
 	);

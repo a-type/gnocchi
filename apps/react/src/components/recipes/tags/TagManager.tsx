@@ -11,10 +11,9 @@ import {
 	DialogTrigger,
 } from '@a-type/ui/components/dialog';
 import { Divider } from '@a-type/ui/components/divider';
-import { Form, TextField } from '@a-type/ui/components/forms';
+import { Form, FormikForm, TextField } from '@a-type/ui/components/forms';
 import { TrashIcon } from '@radix-ui/react-icons';
 import classNames from 'classnames';
-import { Formik } from 'formik';
 import { ReactNode } from 'react';
 
 export function TagManager({
@@ -76,23 +75,22 @@ export function TagManager({
 					))}
 				</div>
 				<div className="mt-4">
-					<Formik
+					<FormikForm
 						initialValues={{ tagName: '' }}
 						onSubmit={(values) => {
 							createTag(values.tagName);
 						}}
+						className="flex flex-row gap-2 items-end"
 					>
-						<Form className="flex flex-row gap-2 items-end">
-							<TextField
-								className="flex-1 min-w-64px"
-								name="tagName"
-								label="New Tag Name"
-							/>
-							<Button type="submit" color="primary">
-								Create
-							</Button>
-						</Form>
-					</Formik>
+						<TextField
+							className="flex-1 min-w-64px"
+							name="tagName"
+							label="New Tag Name"
+						/>
+						<Button type="submit" color="primary">
+							Create
+						</Button>
+					</FormikForm>
 				</div>
 				<DialogActions>
 					<DialogClose asChild>

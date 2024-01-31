@@ -160,8 +160,8 @@ importers:
   apps/hub:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.6.6
-        version: 0.6.6(@types/react-dom@18.0.10)(@types/react@18.0.26)
+        specifier: ^0.6.13
+        version: 0.6.13(@types/react-dom@18.0.10)(@types/react@18.0.26)
       '@aglio/tools':
         specifier: workspace:*
         version: link:../../packages/tools
@@ -254,8 +254,8 @@ importers:
   apps/react:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.6.6
-        version: 0.6.6(@types/react-dom@18.0.6)(@types/react@18.0.17)
+        specifier: ^0.6.13
+        version: 0.6.13(@types/react-dom@18.0.6)(@types/react@18.0.17)
       '@a-type/utils':
         specifier: ^1.0.5
         version: 1.0.5
@@ -379,9 +379,6 @@ importers:
       downshift:
         specifier: ^7.0.1
         version: 7.0.1(react@18.2.0)
-      formik:
-        specifier: ^2.2.9
-        version: 2.2.9(react@18.2.0)
       fractional-indexing:
         specifier: ^3.0.1
         version: 3.0.1
@@ -461,6 +458,9 @@ importers:
         specifier: ^6.5.4
         version: 6.5.4
     devDependencies:
+      '@originjs/vite-plugin-commonjs':
+        specifier: ^1.0.3
+        version: 1.0.3
       '@types/convert-units':
         specifier: ^2.3.5
         version: 2.3.5
@@ -729,8 +729,8 @@ importers:
 
 packages:
 
-  /@a-type/ui@0.6.6(@types/react-dom@18.0.10)(@types/react@18.0.26):
-    resolution: {integrity: sha512-2tZFVxcosOL9sXtUVg53YE0F3zXQ+5QioVxuo+2podAgY19gw0HuZXm3Zpdd0u2hpJLTPuA7HxRhWJgn+tlIRQ==}
+  /@a-type/ui@0.6.13(@types/react-dom@18.0.10)(@types/react@18.0.26):
+    resolution: {integrity: sha512-5Jjw2xzAG8qVrbNKi5UwheQXNjJS5aVY+G8DDoXwbzxCptzlrolXStvuBursCX+eMOm29sdL9uLHjGg25gw9Hw==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.10)(@types/react@18.0.26)(react-dom@18.2.0)(react@18.2.0)
@@ -760,7 +760,7 @@ packages:
       '@use-gesture/react': 10.3.0(react@18.2.0)
       browser-image-resizer: 2.4.1
       calendar-blocks: 0.3.0(react@18.2.0)
-      classnames: 2.3.2
+      clsx: 2.1.0
       color-interpolate: 1.0.5
       color-parse: 2.0.0
       color-space: 2.0.1
@@ -775,8 +775,8 @@ packages:
       - '@types/react-dom'
     dev: false
 
-  /@a-type/ui@0.6.6(@types/react-dom@18.0.6)(@types/react@18.0.17):
-    resolution: {integrity: sha512-2tZFVxcosOL9sXtUVg53YE0F3zXQ+5QioVxuo+2podAgY19gw0HuZXm3Zpdd0u2hpJLTPuA7HxRhWJgn+tlIRQ==}
+  /@a-type/ui@0.6.13(@types/react-dom@18.0.6)(@types/react@18.0.17):
+    resolution: {integrity: sha512-5Jjw2xzAG8qVrbNKi5UwheQXNjJS5aVY+G8DDoXwbzxCptzlrolXStvuBursCX+eMOm29sdL9uLHjGg25gw9Hw==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -806,7 +806,7 @@ packages:
       '@use-gesture/react': 10.3.0(react@18.2.0)
       browser-image-resizer: 2.4.1
       calendar-blocks: 0.3.0(react@18.2.0)
-      classnames: 2.3.2
+      clsx: 2.1.0
       color-interpolate: 1.0.5
       color-parse: 2.0.0
       color-space: 2.0.1
@@ -3438,7 +3438,6 @@ packages:
     cpu: [loong64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /@esbuild/linux-loong64@0.15.18:
@@ -4067,6 +4066,12 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
+
+  /@originjs/vite-plugin-commonjs@1.0.3:
+    resolution: {integrity: sha512-KuEXeGPptM2lyxdIEJ4R11+5ztipHoE7hy8ClZt3PYaOVQ/pyngd2alaSrPnwyFeOW1UagRBaQ752aA1dTMdOQ==}
+    dependencies:
+      esbuild: 0.14.54
+    dev: true
 
   /@pkgr/utils@2.3.1:
     resolution: {integrity: sha512-wfzX8kc1PMyUILA+1Z/EqoE4UCXGy0iRGMhPwdfae1+f0OXlLqCk+By+aMzgJBzR9AzS4CDizioG6Ss1gvAFJw==}
@@ -9066,6 +9071,11 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
+  /clsx@2.1.0:
+    resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
+    engines: {node: '>=6'}
+    dev: false
+
   /color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -9847,7 +9857,6 @@ packages:
     cpu: [x64]
     os: [android]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-android-64@0.15.18:
@@ -9864,7 +9873,6 @@ packages:
     cpu: [arm64]
     os: [android]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-android-arm64@0.15.18:
@@ -9881,7 +9889,6 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-darwin-64@0.15.18:
@@ -9898,7 +9905,6 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-darwin-arm64@0.15.18:
@@ -9915,7 +9921,6 @@ packages:
     cpu: [x64]
     os: [freebsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-freebsd-64@0.15.18:
@@ -9932,7 +9937,6 @@ packages:
     cpu: [arm64]
     os: [freebsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-freebsd-arm64@0.15.18:
@@ -9949,7 +9953,6 @@ packages:
     cpu: [ia32]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-32@0.15.18:
@@ -9966,7 +9969,6 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-64@0.15.18:
@@ -9983,7 +9985,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-arm64@0.15.18:
@@ -10000,7 +10001,6 @@ packages:
     cpu: [arm]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-arm@0.15.18:
@@ -10017,7 +10017,6 @@ packages:
     cpu: [mips64el]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-mips64le@0.15.18:
@@ -10034,7 +10033,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-ppc64le@0.15.18:
@@ -10051,7 +10049,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-riscv64@0.15.18:
@@ -10068,7 +10065,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-linux-s390x@0.15.18:
@@ -10085,7 +10081,6 @@ packages:
     cpu: [x64]
     os: [netbsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-netbsd-64@0.15.18:
@@ -10102,7 +10097,6 @@ packages:
     cpu: [x64]
     os: [openbsd]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-openbsd-64@0.15.18:
@@ -10127,7 +10121,6 @@ packages:
     cpu: [x64]
     os: [sunos]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-sunos-64@0.15.18:
@@ -10144,7 +10137,6 @@ packages:
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-windows-32@0.15.18:
@@ -10161,7 +10153,6 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-windows-64@0.15.18:
@@ -10178,7 +10169,6 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: false
     optional: true
 
   /esbuild-windows-arm64@0.15.18:
@@ -10216,7 +10206,6 @@ packages:
       esbuild-windows-32: 0.14.54
       esbuild-windows-64: 0.14.54
       esbuild-windows-arm64: 0.14.54
-    dev: false
 
   /esbuild@0.15.18:
     resolution: {integrity: sha512-x/R72SmW3sSFRm5zrrIjAhCeQSAWoni3CmHEqfQrZIQTM3lVCdehdwuIqaOtfC2slvpdlLa62GYoN8SxT23m6Q==}
@@ -10860,21 +10849,6 @@ packages:
       asynckit: 0.4.0
       combined-stream: 1.0.8
       mime-types: 2.1.35
-
-  /formik@2.2.9(react@18.2.0):
-    resolution: {integrity: sha512-LQLcISMmf1r5at4/gyJigGn0gOwFbeEAlji+N9InZF6LIMXnFNkO42sCI8Jt84YZggpD4cPWObAZaxpEFtSzNA==}
-    peerDependencies:
-      react: '>=16.8.0'
-    dependencies:
-      deepmerge: 2.2.1
-      hoist-non-react-statics: 3.3.2
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      react: 18.2.0
-      react-fast-compare: 2.0.4
-      tiny-warning: 1.0.3
-      tslib: 1.14.1
-    dev: false
 
   /formik@2.4.5(react@18.2.0):
     resolution: {integrity: sha512-Gxlht0TD3vVdzMDHwkiNZqJ7Mvg77xQNfmBRrNtvzcHZs72TJppSTDKHpImCMJZwcWPBJ8jSQQ95GJzXFf1nAQ==}

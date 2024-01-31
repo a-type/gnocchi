@@ -8,9 +8,13 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@a-type/ui/components/dialog';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	Form,
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 import { Cross2Icon, PlusIcon } from '@radix-ui/react-icons';
-import { Formik } from 'formik';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 
@@ -75,7 +79,7 @@ function AddNameButton({ names }: { names: FoodAlternateNames }) {
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
-				<Formik
+				<FormikForm
 					initialValues={{ name: '' }}
 					onSubmit={async (values, bag) => {
 						bag.setSubmitting(true);
@@ -105,16 +109,14 @@ function AddNameButton({ names }: { names: FoodAlternateNames }) {
 						}
 					}}
 				>
-					<Form>
-						<TextField name="name" label="Name" required />
-						<DialogActions>
-							<DialogClose asChild>
-								<Button>Cancel</Button>
-							</DialogClose>
-							<SubmitButton>Add</SubmitButton>
-						</DialogActions>
-					</Form>
-				</Formik>
+					<TextField name="name" label="Name" required />
+					<DialogActions>
+						<DialogClose asChild>
+							<Button>Cancel</Button>
+						</DialogClose>
+						<SubmitButton>Add</SubmitButton>
+					</DialogActions>
+				</FormikForm>
 			</DialogContent>
 		</Dialog>
 	);

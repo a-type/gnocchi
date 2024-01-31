@@ -1,4 +1,9 @@
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	Form,
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 import {
 	Select,
 	SelectContent,
@@ -10,12 +15,10 @@ import {
 } from '@a-type/ui/components/select';
 import { hooks } from '@/stores/groceries/index.js';
 import { withClassName } from '@a-type/ui/hooks';
-import { Formik } from 'formik';
 import { useState } from 'react';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { ThemeName } from '@a-type/ui/components/colorPicker';
 import { Dialog, DialogContent } from '@a-type/ui/components/dialog';
-import { preventDefault } from '@aglio/tools';
 
 function getRandomColor(): ThemeName {
 	const colors: ThemeName[] = [
@@ -92,7 +95,7 @@ export function ListSelect({
 			</Select>
 			<Dialog open={isCreating} onOpenChange={() => setIsCreating(false)}>
 				<DialogContent>
-					<Formik
+					<FormikForm
 						initialValues={{ name: '' }}
 						onSubmit={async ({ name }, bag) => {
 							const list = await client.lists.put({
@@ -103,16 +106,14 @@ export function ListSelect({
 							setIsCreating(false);
 						}}
 					>
-						<Form>
-							<TextField
-								name="name"
-								label="Name"
-								placeholder="Custom list"
-								required
-							/>
-							<SubmitButton className="self-end">Create</SubmitButton>
-						</Form>
-					</Formik>
+						<TextField
+							name="name"
+							label="Name"
+							placeholder="Custom list"
+							required
+						/>
+						<SubmitButton className="self-end">Create</SubmitButton>
+					</FormikForm>
 				</DialogContent>
 			</Dialog>
 		</>

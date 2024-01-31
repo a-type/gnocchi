@@ -24,7 +24,6 @@ import {
 	DragHandleDots2Icon,
 	TrashIcon,
 } from '@radix-ui/react-icons';
-import { Formik } from 'formik';
 import { NoteEditor } from './NoteEditor.jsx';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { useState } from 'react';
@@ -47,6 +46,7 @@ import {
 } from '@a-type/ui/components/dialog';
 import {
 	Form,
+	FormikForm,
 	SubmitButton,
 	TextAreaField,
 	TextField,
@@ -237,7 +237,7 @@ function IngredientDetailsDialog({
 	return (
 		<Dialog {...rest}>
 			<DialogContent>
-				<Formik
+				<FormikForm
 					initialValues={{
 						text: ingredient.get('text'),
 						food: ingredient.get('food') || '',
@@ -259,21 +259,19 @@ function IngredientDetailsDialog({
 						rest.onOpenChange?.(false);
 					}}
 				>
-					<Form>
-						<TextField name="text" label="Text" />
-						{!isSectionHeader && <TextField name="food" label="Food" />}
-						{!isSectionHeader && (
-							<TextField name="quantity" label="Quantity" type="number" />
-						)}
-						{!isSectionHeader && <TextField name="unit" label="Unit" />}
-						<DialogActions>
-							<DialogClose asChild>
-								<Button>Cancel</Button>
-							</DialogClose>
-							<SubmitButton color="primary">Save</SubmitButton>
-						</DialogActions>
-					</Form>
-				</Formik>
+					<TextField name="text" label="Text" />
+					{!isSectionHeader && <TextField name="food" label="Food" />}
+					{!isSectionHeader && (
+						<TextField name="quantity" label="Quantity" type="number" />
+					)}
+					{!isSectionHeader && <TextField name="unit" label="Unit" />}
+					<DialogActions>
+						<DialogClose asChild>
+							<Button>Cancel</Button>
+						</DialogClose>
+						<SubmitButton color="primary">Save</SubmitButton>
+					</DialogActions>
+				</FormikForm>
 			</DialogContent>
 		</Dialog>
 	);
@@ -307,7 +305,7 @@ function AddIngredientsForm({
 
 	const addIngredients = hooks.useAddRecipeIngredients();
 	return (
-		<Formik
+		<FormikForm
 			initialValues={{ text: storedValue || '' }}
 			onSubmit={async ({ text }, bag) => {
 				await addIngredients(ingredients, text);
@@ -320,7 +318,7 @@ function AddIngredientsForm({
 			validateOnBlur
 		>
 			{({ setFieldValue }) => (
-				<Form>
+				<>
 					<TextAreaField
 						name="text"
 						required
@@ -334,8 +332,8 @@ function AddIngredientsForm({
 							<OcrButton onText={(text) => setFieldValue('text', text)} />
 						</FeatureFlag>
 					</div>
-				</Form>
+				</>
 			)}
-		</Formik>
+		</FormikForm>
 	);
 }

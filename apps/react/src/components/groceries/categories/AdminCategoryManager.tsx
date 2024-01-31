@@ -1,10 +1,9 @@
 import { trpc } from '@/trpc.js';
 import { Button } from '@a-type/ui/components/button';
-import { Form, TextField } from '@a-type/ui/components/forms';
+import { Form, FormikForm, TextField } from '@a-type/ui/components/forms';
 import { Input } from '@a-type/ui/components/input';
 import { H1, H2 } from '@a-type/ui/components/typography';
 import { ArrowDownIcon, ArrowUpIcon } from '@radix-ui/react-icons';
-import { Formik } from 'formik';
 import { generateKeyBetween } from 'fractional-indexing';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -68,7 +67,7 @@ export function AdminCategoryManager() {
 				})}
 			</div>
 			<div>
-				<Formik
+				<FormikForm
 					initialValues={{ name: '' }}
 					onSubmit={async (values) => {
 						await createCategory({
@@ -80,12 +79,10 @@ export function AdminCategoryManager() {
 						});
 					}}
 				>
-					<Form>
-						<H2>New Category</H2>
-						<TextField name="name" label="Name" />
-						<Button type="submit">Create</Button>
-					</Form>
-				</Formik>
+					<H2>New Category</H2>
+					<TextField name="name" label="Name" />
+					<Button type="submit">Create</Button>
+				</FormikForm>
 			</div>
 		</div>
 	);

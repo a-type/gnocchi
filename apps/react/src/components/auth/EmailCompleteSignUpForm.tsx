@@ -1,7 +1,10 @@
 import { useAuth } from '@/hooks/useAuth.jsx';
 import { trpc } from '@/trpc.js';
-import { Formik } from 'formik';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 import { TRPCClientError } from '@trpc/client';
 
 export interface EmailCompleteSignUpFormProps {
@@ -17,7 +20,7 @@ export function EmailCompleteSignUpForm({
 	const { refetch } = useAuth();
 
 	return (
-		<Formik
+		<FormikForm
 			initialValues={{ password: '' }}
 			onSubmit={async (values) => {
 				try {
@@ -43,16 +46,14 @@ export function EmailCompleteSignUpForm({
 				}
 			}}
 		>
-			<Form>
-				<TextField
-					name="password"
-					label="Password"
-					type="password"
-					autoComplete="new-password"
-					required
-				/>
-				<SubmitButton>Sign In</SubmitButton>
-			</Form>
-		</Formik>
+			<TextField
+				name="password"
+				label="Password"
+				type="password"
+				autoComplete="new-password"
+				required
+			/>
+			<SubmitButton>Sign In</SubmitButton>
+		</FormikForm>
 	);
 }

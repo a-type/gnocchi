@@ -7,10 +7,14 @@ import { CSS } from '@dnd-kit/utilities';
 import { generateKeyBetween } from 'fractional-indexing';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { createPortal } from 'react-dom';
-import { Formik } from 'formik';
 import { Category } from '@aglio/groceries-client';
 import { Button } from '@a-type/ui/components/button';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	Form,
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 
 export interface CategoryManagerProps {}
 
@@ -197,17 +201,15 @@ function CategoryDragOverlay() {
 function AddCategoryForm() {
 	const createCategory = hooks.useCreateCategory();
 	return (
-		<Formik
+		<FormikForm
 			initialValues={{ name: '' }}
 			onSubmit={(values, bag) => {
 				createCategory(values.name);
 				bag.resetForm();
 			}}
 		>
-			<Form>
-				<TextField name="name" label="Name" required />
-				<SubmitButton>Add</SubmitButton>
-			</Form>
-		</Formik>
+			<TextField name="name" label="Name" required />
+			<SubmitButton>Add</SubmitButton>
+		</FormikForm>
 	);
 }

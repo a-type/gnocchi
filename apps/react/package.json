@@ -13,7 +13,7 @@
 		"typecheck": "tsc --build tsconfig.json"
 	},
 	"dependencies": {
-		"@a-type/ui": "^0.6.6",
+		"@a-type/ui": "^0.6.13",
 		"@a-type/utils": "^1.0.5",
 		"@aglio/conversion": "workspace:*",
 		"@aglio/groceries-client": "workspace:*",
@@ -55,7 +55,6 @@
 		"cuid": "^2.1.8",
 		"date-fns": "^2.29.3",
 		"downshift": "^7.0.1",
-		"formik": "^2.2.9",
 		"fractional-indexing": "^3.0.1",
 		"jotai": "^1.13.0",
 		"just-mix": "^0.3.3",
@@ -84,6 +83,7 @@
 		"workbox-window": "^6.5.4"
 	},
 	"devDependencies": {
+		"@originjs/vite-plugin-commonjs": "^1.0.3",
 		"@types/convert-units": "^2.3.5",
 		"@types/dom-screen-wake-lock": "^1.0.0",
 		"@types/pako": "^2.0.0",

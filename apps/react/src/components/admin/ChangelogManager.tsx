@@ -7,9 +7,12 @@ import {
 	DialogContent,
 	DialogTrigger,
 } from '@a-type/ui/components/dialog';
-import { Form, TextAreaField, TextField } from '@a-type/ui/components/forms';
+import {
+	FormikForm,
+	TextAreaField,
+	TextField,
+} from '@a-type/ui/components/forms';
 import format from 'date-fns/format';
-import { Formik } from 'formik';
 
 export function ChangelogManager() {
 	const { data, refetch } = trpc.changelog.getChangelogs.useQuery({});
@@ -48,19 +51,17 @@ function ChangelogEditor({
 		trpc.changelog.deleteChangelog.useMutation();
 	return (
 		<>
-			<Formik
+			<FormikForm
 				initialValues={changelog}
 				onSubmit={async (values) => {
 					await mutateAsync(values);
 					onChange();
 				}}
 			>
-				<Form>
-					<TextField name="title" label="Title" />
-					<TextAreaField name="details" label="Details" />
-					<Button type="submit">Save</Button>
-				</Form>
-			</Formik>
+				<TextField name="title" label="Title" />
+				<TextAreaField name="details" label="Details" />
+				<Button type="submit">Save</Button>
+			</FormikForm>
 			<DialogActions>
 				<Button
 					color="destructive"
@@ -84,18 +85,16 @@ function ChangelogEditor({
 function ChangelogCreator({ onCreate }: { onCreate: () => void }) {
 	const { mutateAsync } = trpc.changelog.addChangelog.useMutation();
 	return (
-		<Formik
+		<FormikForm
 			initialValues={{ title: '', details: '' }}
 			onSubmit={async (values) => {
 				await mutateAsync(values);
 				onCreate();
 			}}
 		>
-			<Form>
-				<TextField name="title" label="Title" />
-				<TextAreaField name="details" label="Details" />
-				<Button type="submit">Add</Button>
-			</Form>
-		</Formik>
+			<TextField name="title" label="Title" />
+			<TextAreaField name="details" label="Details" />
+			<Button type="submit">Add</Button>
+		</FormikForm>
 	);
 }

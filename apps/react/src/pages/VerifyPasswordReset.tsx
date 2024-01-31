@@ -1,8 +1,12 @@
 import { trpc } from '@/trpc.js';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	Form,
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
 import { H1, P } from '@a-type/ui/components/typography';
-import { Formik } from 'formik';
 import { useNavigate, useSearchParams } from '@verdant-web/react-router';
 
 export interface VerifyPasswordResetProps {}
@@ -28,7 +32,7 @@ export function VerifyPasswordResetPage({}: VerifyPasswordResetProps) {
 	return (
 		<PageRoot>
 			<PageContent>
-				<Formik
+				<FormikForm
 					initialValues={{
 						password: '',
 					}}
@@ -40,17 +44,15 @@ export function VerifyPasswordResetPage({}: VerifyPasswordResetProps) {
 						navigate(returnTo || '/');
 					}}
 				>
-					<Form>
-						<TextField
-							name="password"
-							autoComplete="new-password"
-							label="New password"
-							type="password"
-						/>
-						<SubmitButton>Reset password</SubmitButton>
-						{error && <P className="color-attention">{error.message}</P>}
-					</Form>
-				</Formik>
+					<TextField
+						name="password"
+						autoComplete="new-password"
+						label="New password"
+						type="password"
+					/>
+					<SubmitButton>Reset password</SubmitButton>
+					{error && <P className="color-attention">{error.message}</P>}
+				</FormikForm>
 			</PageContent>
 		</PageRoot>
 	);

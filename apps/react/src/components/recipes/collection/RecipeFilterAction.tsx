@@ -11,8 +11,12 @@ import {
 	PopoverTrigger,
 } from '@a-type/ui/components/popover';
 import { ActionButton } from '@a-type/ui/components/actions';
-import { Formik } from 'formik';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	Form,
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 
 export interface RecipeFilterActionProps {}
 
@@ -93,7 +97,7 @@ export function RecipeFoodFilterAction() {
 					<SelectedFoodDisplay />
 				</PopoverTrigger>
 			</Suspense>
-			<PopoverContent containerClassName="w-full">
+			<PopoverContent>
 				<PopoverArrow />
 				<FoodFilterContent onSubmit={() => setOpen(false)} />
 			</PopoverContent>
@@ -130,7 +134,7 @@ function FoodFilterContent({ onSubmit }: { onSubmit?: () => void }) {
 	const client = hooks.useClient();
 
 	return (
-		<Formik
+		<FormikForm
 			initialValues={{ foodFilter: '' }}
 			onSubmit={async (values) => {
 				const foodName = values.foodFilter;
@@ -145,10 +149,8 @@ function FoodFilterContent({ onSubmit }: { onSubmit?: () => void }) {
 				onSubmit?.();
 			}}
 		>
-			<Form>
-				<TextField name="foodFilter" placeholder="Type a food name" />
-				<SubmitButton>Search</SubmitButton>
-			</Form>
-		</Formik>
+			<TextField name="foodFilter" placeholder="Type a food name" />
+			<SubmitButton>Search</SubmitButton>
+		</FormikForm>
 	);
 }

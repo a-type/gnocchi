@@ -1,7 +1,11 @@
 import { hooks } from '@/stores/groceries/index.js';
 import { Category } from '@aglio/groceries-client';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
-import { Formik } from 'formik';
+import {
+	Form,
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 
 export function NewCategoryForm({
 	onDone,
@@ -13,27 +17,26 @@ export function NewCategoryForm({
 	const createCategory = hooks.useCreateCategory();
 	return (
 		<div className="flex flex-col gap-2 items-stretch w-full">
-			<Formik
+			<FormikForm
 				initialValues={{ name: '' }}
 				onSubmit={async ({ name }) => {
 					// create the category
 					const category = await createCategory(name);
 					onDone(category);
 				}}
+				className="w-full"
 			>
-				<Form className="w-full">
-					<div className="flex flex-row items-end justify-stretch w-full gap-2">
-						<TextField
-							placeholder="Dairy & Eggs"
-							autoFocusDelay={autoFocus ? 100 : undefined}
-							name="name"
-							className="flex-1"
-							autoComplete="off"
-						/>
-						<SubmitButton>Add</SubmitButton>
-					</div>
-				</Form>
-			</Formik>
+				<div className="flex flex-row items-end justify-stretch w-full gap-2">
+					<TextField
+						placeholder="Dairy & Eggs"
+						autoFocusDelay={autoFocus ? 100 : undefined}
+						name="name"
+						className="flex-1"
+						autoComplete="off"
+					/>
+					<SubmitButton>Add</SubmitButton>
+				</div>
+			</FormikForm>
 		</div>
 	);
 }

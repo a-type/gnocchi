@@ -11,12 +11,16 @@ import {
 import { createClientDescriptor, hooks } from '@/stores/groceries/index.js';
 import { trpc } from '@/trpc.js';
 import { LinkButton } from '@/components/nav/Link.jsx';
-import { Form, SubmitButton, TextField } from '@a-type/ui/components/forms';
+import {
+	Form,
+	FormikForm,
+	SubmitButton,
+	TextField,
+} from '@a-type/ui/components/forms';
 import { PageContent, PageRoot } from '@a-type/ui/components/layouts';
 import { FullScreenSpinner } from '@a-type/ui/components/spinner';
 import { TextLink } from '@/components/nav/Link.jsx';
 import { H1, P } from '@a-type/ui/components/typography';
-import { Formik } from 'formik';
 import { Suspense, useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from '@verdant-web/react-router';
@@ -60,7 +64,7 @@ export function TempAccessGroceriesPage() {
 					. No signup necessary.
 				</P>
 				{/* TODO: more tutorial stuff here */}
-				<Formik
+				<FormikForm
 					initialValues={{ name: '' }}
 					onSubmit={async ({ name }, bag) => {
 						try {
@@ -76,17 +80,15 @@ export function TempAccessGroceriesPage() {
 						}
 					}}
 				>
-					<Form>
-						<TextField name="name" required placeholder="Your name" />
-						<SubmitButton>Join in</SubmitButton>
-						<div className="text-sm">
-							By continuing you agree to the{' '}
-							<TextLink to="/tos" newTab>
-								Terms of Service
-							</TextLink>
-						</div>
-					</Form>
-				</Formik>
+					<TextField name="name" required placeholder="Your name" />
+					<SubmitButton>Join in</SubmitButton>
+					<div className="text-sm">
+						By continuing you agree to the{' '}
+						<TextLink to="/tos" newTab>
+							Terms of Service
+						</TextLink>
+					</div>
+				</FormikForm>
 			</PageContent>
 		);
 	}

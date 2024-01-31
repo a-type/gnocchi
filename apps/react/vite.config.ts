@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { VitePWA } from 'vite-plugin-pwa';
 import UnoCSS from 'unocss/vite';
 import CircularDependency from 'vite-plugin-circular-dependency';
+import { viteCommonjs } from '@originjs/vite-plugin-commonjs';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => ({
@@ -101,10 +102,18 @@ export default defineConfig(({ command, mode }) => ({
 		CircularDependency({
 			circleImportThrowErr: true,
 		}),
+		viteCommonjs(),
 	],
 	optimizeDeps: {
 		exclude: ['@a-type/ui'],
-		include: ['react/jsx-runtime', 'react', 'react-dom', 'react-dom/client'],
+		include: [
+			'react/jsx-runtime',
+			'react',
+			'react-dom',
+			'react-dom/client',
+			'formik',
+			'hoist-non-react-statics',
+		],
 	},
 	resolve: {
 		conditions:
