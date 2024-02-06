@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
@@ -29,7 +31,7 @@ jobs:
           AWS_S3_BUCKET: prod-db-backups.gnocchi.club
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_REGION: us-east-1
           SOURCE_DIR: ./backup
           # date string
           DEST_DIR: ${{ steps.date.outputs.date }}
