@@ -23,6 +23,17 @@ export function greedyMatchNumber(
 		};
 	}
 
+	// comes before space so it can match leading space, which is important
+	// to not accidentally match "to" in something like "tomato"
+	const leadingRangeWordDelimiter = /^\s+(or|to)\s+/.exec(input);
+	if (leadingRangeWordDelimiter) {
+		ctx.runningText += leadingRangeWordDelimiter[0];
+		return greedyMatchNumber(
+			input.slice(leadingRangeWordDelimiter[0].length),
+			ctx,
+		);
+	}
+
 	const leadingSpaceMatch = /^\s+/.exec(input);
 	if (leadingSpaceMatch) {
 		ctx.runningText += leadingSpaceMatch[0];
@@ -55,7 +66,7 @@ export function greedyMatchNumber(
 		return greedyMatchNumber(input.slice(leadingDotMatch[0].length), ctx);
 	}
 
-	const leadingRangeDelimiter = /^(-|or|to)/.exec(input);
+	const leadingRangeDelimiter = /^-/.exec(input);
 	if (leadingRangeDelimiter) {
 		ctx.runningText += leadingRangeDelimiter[0];
 		return greedyMatchNumber(input.slice(leadingRangeDelimiter[0].length), ctx);

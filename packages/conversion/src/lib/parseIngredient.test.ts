@@ -72,6 +72,7 @@ describe('ingredient parsing', () => {
 			'cream cheese',
 			['4 8-ounce boxes'],
 		],
+		['tomatoes', 1, '', 'tomato', []],
 		// not ideal but good enough
 		['3 12oz cans of tomato paste', 36, 'oz can', 'tomato paste', []],
 		// tricky cases
