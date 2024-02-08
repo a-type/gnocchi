@@ -25,6 +25,7 @@ export function RecipeMainImageEditor({ recipe }: RecipeMainImageEditorProps) {
 				});
 			}}
 			maxDimension={1080}
+			facingMode="environment"
 		/>
 	);
 }
