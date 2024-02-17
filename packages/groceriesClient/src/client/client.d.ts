@@ -67,9 +67,21 @@ export class ClientDescriptor<Presence = any, Profile = any> {
   readonly readyPromise: Promise<Client<Presence, Profile>>;
   readonly schema: StorageSchema;
   readonly namespace: string;
+  /**
+   * Resets all local data for this client, including the schema and migrations.
+   * If the client is not connected to sync, this causes the irretrievable loss of all data.
+   * If the client is connected to sync, this will cause the client to re-sync all data from the server.
+   * Use this very carefully, and only as a last resort.
+   */
+  __dangerous__resetLocal: () => Promise<void>;
 }
 
-import { ObjectEntity, ListEntity, EntityFile } from "@verdant-web/store";
+import {
+  ObjectEntity,
+  ListEntity,
+  EntityFile,
+  EntityFileSnapshot,
+} from "@verdant-web/store";
 
 /** Generated types for Category */
 
@@ -125,23 +137,9 @@ export type CategoryClaimSnapshot = {
 
 /** Index filters for Category **/
 
-export interface CategorySortKeyMatchFilter {
+export interface CategorySortKeySortFilter {
   where: "sortKey";
-  equals: string;
-  order?: "asc" | "desc";
-}
-export interface CategorySortKeyRangeFilter {
-  where: "sortKey";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-export interface CategorySortKeyStartsWithFilter {
-  where: "sortKey";
-  startsWith: string;
-  order?: "asc" | "desc";
+  order: "asc" | "desc";
 }
 export interface CategorySortKeyMatchFilter {
   where: "sortKey";
@@ -162,9 +160,7 @@ export interface CategorySortKeyStartsWithFilter {
   order?: "asc" | "desc";
 }
 export type CategoryFilter =
-  | CategorySortKeyMatchFilter
-  | CategorySortKeyRangeFilter
-  | CategorySortKeyStartsWithFilter
+  | CategorySortKeySortFilter
   | CategorySortKeyMatchFilter
   | CategorySortKeyRangeFilter
   | CategorySortKeyStartsWithFilter;
@@ -270,6 +266,10 @@ export type ItemInputsSnapshot = ItemInputsItemSnapshot[];
 
 /** Index filters for Item **/
 
+export interface ItemCategoryIdSortFilter {
+  where: "categoryId";
+  order: "asc" | "desc";
+}
 export interface ItemCategoryIdMatchFilter {
   where: "categoryId";
   equals: string;
@@ -287,6 +287,10 @@ export interface ItemCategoryIdStartsWithFilter {
   where: "categoryId";
   startsWith: string;
   order?: "asc" | "desc";
+}
+export interface ItemFoodSortFilter {
+  where: "food";
+  order: "asc" | "desc";
 }
 export interface ItemFoodMatchFilter {
   where: "food";
@@ -306,6 +310,10 @@ export interface ItemFoodStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface ItemPurchasedAtSortFilter {
+  where: "purchasedAt";
+  order: "asc" | "desc";
+}
 export interface ItemPurchasedAtMatchFilter {
   where: "purchasedAt";
   equals: number;
@@ -318,6 +326,10 @@ export interface ItemPurchasedAtRangeFilter {
   lte?: number;
   lt?: number;
   order?: "asc" | "desc";
+}
+export interface ItemPurchasedSortFilter {
+  where: "purchased";
+  order: "asc" | "desc";
 }
 export interface ItemPurchasedMatchFilter {
   where: "purchased";
@@ -337,6 +349,10 @@ export interface ItemPurchasedStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface ItemListIdSortFilter {
+  where: "listId";
+  order: "asc" | "desc";
+}
 export interface ItemListIdMatchFilter {
   where: "listId";
   equals: string;
@@ -355,55 +371,6 @@ export interface ItemListIdStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
-export interface ItemCategoryIdMatchFilter {
-  where: "categoryId";
-  equals: string;
-  order?: "asc" | "desc";
-}
-export interface ItemCategoryIdRangeFilter {
-  where: "categoryId";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-export interface ItemCategoryIdStartsWithFilter {
-  where: "categoryId";
-  startsWith: string;
-  order?: "asc" | "desc";
-}
-export interface ItemFoodMatchFilter {
-  where: "food";
-  equals: string;
-  order?: "asc" | "desc";
-}
-export interface ItemFoodRangeFilter {
-  where: "food";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-export interface ItemFoodStartsWithFilter {
-  where: "food";
-  startsWith: string;
-  order?: "asc" | "desc";
-}
-export interface ItemPurchasedAtMatchFilter {
-  where: "purchasedAt";
-  equals: number;
-  order?: "asc" | "desc";
-}
-export interface ItemPurchasedAtRangeFilter {
-  where: "purchasedAt";
-  gte?: number;
-  gt?: number;
-  lte?: number;
-  lt?: number;
-  order?: "asc" | "desc";
-}
 export interface ItemPurchasedFoodListIdCompoundFilter {
   where: "purchased_food_listId";
   match: {
@@ -414,28 +381,25 @@ export interface ItemPurchasedFoodListIdCompoundFilter {
   order?: "asc" | "desc";
 }
 export type ItemFilter =
+  | ItemCategoryIdSortFilter
   | ItemCategoryIdMatchFilter
   | ItemCategoryIdRangeFilter
   | ItemCategoryIdStartsWithFilter
+  | ItemFoodSortFilter
   | ItemFoodMatchFilter
   | ItemFoodRangeFilter
   | ItemFoodStartsWithFilter
+  | ItemPurchasedAtSortFilter
   | ItemPurchasedAtMatchFilter
   | ItemPurchasedAtRangeFilter
+  | ItemPurchasedSortFilter
   | ItemPurchasedMatchFilter
   | ItemPurchasedRangeFilter
   | ItemPurchasedStartsWithFilter
+  | ItemListIdSortFilter
   | ItemListIdMatchFilter
   | ItemListIdRangeFilter
   | ItemListIdStartsWithFilter
-  | ItemCategoryIdMatchFilter
-  | ItemCategoryIdRangeFilter
-  | ItemCategoryIdStartsWithFilter
-  | ItemFoodMatchFilter
-  | ItemFoodRangeFilter
-  | ItemFoodStartsWithFilter
-  | ItemPurchasedAtMatchFilter
-  | ItemPurchasedAtRangeFilter
   | ItemPurchasedFoodListIdCompoundFilter;
 
 /** Generated types for Food */
@@ -517,6 +481,10 @@ export type FoodAlternateNamesSnapshot = string[];
 
 /** Index filters for Food **/
 
+export interface FoodCategoryIdSortFilter {
+  where: "categoryId";
+  order: "asc" | "desc";
+}
 export interface FoodCategoryIdMatchFilter {
   where: "categoryId";
   equals: string;
@@ -534,6 +502,10 @@ export interface FoodCategoryIdStartsWithFilter {
   where: "categoryId";
   startsWith: string;
   order?: "asc" | "desc";
+}
+export interface FoodNameLookupSortFilter {
+  where: "nameLookup";
+  order: "asc" | "desc";
 }
 export interface FoodNameLookupMatchFilter {
   where: "nameLookup";
@@ -553,6 +525,10 @@ export interface FoodNameLookupStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface FoodAnyNameSortFilter {
+  where: "anyName";
+  order: "asc" | "desc";
+}
 export interface FoodAnyNameMatchFilter {
   where: "anyName";
   equals: string;
@@ -571,6 +547,10 @@ export interface FoodAnyNameStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface FoodRepurchaseAfterSortFilter {
+  where: "repurchaseAfter";
+  order: "asc" | "desc";
+}
 export interface FoodRepurchaseAfterMatchFilter {
   where: "repurchaseAfter";
   equals: number;
@@ -583,6 +563,10 @@ export interface FoodRepurchaseAfterRangeFilter {
   lte?: number;
   lt?: number;
   order?: "asc" | "desc";
+}
+export interface FoodPurchasedAndExpiresAtSortFilter {
+  where: "purchasedAndExpiresAt";
+  order: "asc" | "desc";
 }
 export interface FoodPurchasedAndExpiresAtMatchFilter {
   where: "purchasedAndExpiresAt";
@@ -597,6 +581,10 @@ export interface FoodPurchasedAndExpiresAtRangeFilter {
   lt?: number;
   order?: "asc" | "desc";
 }
+export interface FoodLastPurchasedAtOrZeroSortFilter {
+  where: "lastPurchasedAtOrZero";
+  order: "asc" | "desc";
+}
 export interface FoodLastPurchasedAtOrZeroMatchFilter {
   where: "lastPurchasedAtOrZero";
   equals: number;
@@ -610,6 +598,10 @@ export interface FoodLastPurchasedAtOrZeroRangeFilter {
   lt?: number;
   order?: "asc" | "desc";
 }
+export interface FoodFrozenSortFilter {
+  where: "frozen";
+  order: "asc" | "desc";
+}
 export interface FoodFrozenMatchFilter {
   where: "frozen";
   equals: boolean;
@@ -621,24 +613,6 @@ export interface FoodFrozenRangeFilter {
   gt?: boolean;
   lte?: boolean;
   lt?: boolean;
-  order?: "asc" | "desc";
-}
-export interface FoodCategoryIdMatchFilter {
-  where: "categoryId";
-  equals: string;
-  order?: "asc" | "desc";
-}
-export interface FoodCategoryIdRangeFilter {
-  where: "categoryId";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-export interface FoodCategoryIdStartsWithFilter {
-  where: "categoryId";
-  startsWith: string;
   order?: "asc" | "desc";
 }
 export interface FoodCategoryIdLastPurchasedAtCompoundFilter {
@@ -659,26 +633,30 @@ export interface FoodInInventoryCategoryIdLastPurchasedAtCompoundFilter {
   order?: "asc" | "desc";
 }
 export type FoodFilter =
+  | FoodCategoryIdSortFilter
   | FoodCategoryIdMatchFilter
   | FoodCategoryIdRangeFilter
   | FoodCategoryIdStartsWithFilter
+  | FoodNameLookupSortFilter
   | FoodNameLookupMatchFilter
   | FoodNameLookupRangeFilter
   | FoodNameLookupStartsWithFilter
+  | FoodAnyNameSortFilter
   | FoodAnyNameMatchFilter
   | FoodAnyNameRangeFilter
   | FoodAnyNameStartsWithFilter
+  | FoodRepurchaseAfterSortFilter
   | FoodRepurchaseAfterMatchFilter
   | FoodRepurchaseAfterRangeFilter
+  | FoodPurchasedAndExpiresAtSortFilter
   | FoodPurchasedAndExpiresAtMatchFilter
   | FoodPurchasedAndExpiresAtRangeFilter
+  | FoodLastPurchasedAtOrZeroSortFilter
   | FoodLastPurchasedAtOrZeroMatchFilter
   | FoodLastPurchasedAtOrZeroRangeFilter
+  | FoodFrozenSortFilter
   | FoodFrozenMatchFilter
   | FoodFrozenRangeFilter
-  | FoodCategoryIdMatchFilter
-  | FoodCategoryIdRangeFilter
-  | FoodCategoryIdStartsWithFilter
   | FoodCategoryIdLastPurchasedAtCompoundFilter
   | FoodInInventoryCategoryIdLastPurchasedAtCompoundFilter;
 
@@ -957,7 +935,7 @@ export type RecipeSnapshot = {
   url: string | null;
   session: RecipeSessionSnapshot;
   tags: RecipeTagsSnapshot;
-  mainImage: string | null;
+  mainImage: EntityFileSnapshot | null;
   cookCount: number;
   lastCookedAt: number | null;
   lastAddedAt: number | null;
@@ -996,6 +974,10 @@ export type RecipeTagsSnapshot = string[];
 
 /** Index filters for Recipe **/
 
+export interface RecipeSlugSortFilter {
+  where: "slug";
+  order: "asc" | "desc";
+}
 export interface RecipeSlugMatchFilter {
   where: "slug";
   equals: string;
@@ -1014,6 +996,10 @@ export interface RecipeSlugStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface RecipeUpdatedAtSortFilter {
+  where: "updatedAt";
+  order: "asc" | "desc";
+}
 export interface RecipeUpdatedAtMatchFilter {
   where: "updatedAt";
   equals: number;
@@ -1027,6 +1013,10 @@ export interface RecipeUpdatedAtRangeFilter {
   lt?: number;
   order?: "asc" | "desc";
 }
+export interface RecipePinnedAtSortFilter {
+  where: "pinnedAt";
+  order: "asc" | "desc";
+}
 export interface RecipePinnedAtMatchFilter {
   where: "pinnedAt";
   equals: number;
@@ -1039,6 +1029,10 @@ export interface RecipePinnedAtRangeFilter {
   lte?: number;
   lt?: number;
   order?: "asc" | "desc";
+}
+export interface RecipeTagSortFilter {
+  where: "tag";
+  order: "asc" | "desc";
 }
 export interface RecipeTagMatchFilter {
   where: "tag";
@@ -1058,6 +1052,10 @@ export interface RecipeTagStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface RecipeSuggestAfterSortFilter {
+  where: "suggestAfter";
+  order: "asc" | "desc";
+}
 export interface RecipeSuggestAfterMatchFilter {
   where: "suggestAfter";
   equals: number;
@@ -1070,6 +1068,10 @@ export interface RecipeSuggestAfterRangeFilter {
   lte?: number;
   lt?: number;
   order?: "asc" | "desc";
+}
+export interface RecipeFoodSortFilter {
+  where: "food";
+  order: "asc" | "desc";
 }
 export interface RecipeFoodMatchFilter {
   where: "food";
@@ -1089,6 +1091,10 @@ export interface RecipeFoodStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface RecipeTitleMatchSortFilter {
+  where: "titleMatch";
+  order: "asc" | "desc";
+}
 export interface RecipeTitleMatchMatchFilter {
   where: "titleMatch";
   equals: string;
@@ -1107,6 +1113,10 @@ export interface RecipeTitleMatchStartsWithFilter {
   startsWith: string;
   order?: "asc" | "desc";
 }
+export interface RecipeSessionStartedAtSortFilter {
+  where: "sessionStartedAt";
+  order: "asc" | "desc";
+}
 export interface RecipeSessionStartedAtMatchFilter {
   where: "sessionStartedAt";
   equals: number;
@@ -1120,78 +1130,35 @@ export interface RecipeSessionStartedAtRangeFilter {
   lt?: number;
   order?: "asc" | "desc";
 }
-export interface RecipeSlugMatchFilter {
-  where: "slug";
-  equals: string;
-  order?: "asc" | "desc";
-}
-export interface RecipeSlugRangeFilter {
-  where: "slug";
-  gte?: string;
-  gt?: string;
-  lte?: string;
-  lt?: string;
-  order?: "asc" | "desc";
-}
-export interface RecipeSlugStartsWithFilter {
-  where: "slug";
-  startsWith: string;
-  order?: "asc" | "desc";
-}
-export interface RecipeUpdatedAtMatchFilter {
-  where: "updatedAt";
-  equals: number;
-  order?: "asc" | "desc";
-}
-export interface RecipeUpdatedAtRangeFilter {
-  where: "updatedAt";
-  gte?: number;
-  gt?: number;
-  lte?: number;
-  lt?: number;
-  order?: "asc" | "desc";
-}
-export interface RecipePinnedAtMatchFilter {
-  where: "pinnedAt";
-  equals: number;
-  order?: "asc" | "desc";
-}
-export interface RecipePinnedAtRangeFilter {
-  where: "pinnedAt";
-  gte?: number;
-  gt?: number;
-  lte?: number;
-  lt?: number;
-  order?: "asc" | "desc";
-}
 export type RecipeFilter =
+  | RecipeSlugSortFilter
   | RecipeSlugMatchFilter
   | RecipeSlugRangeFilter
   | RecipeSlugStartsWithFilter
+  | RecipeUpdatedAtSortFilter
   | RecipeUpdatedAtMatchFilter
   | RecipeUpdatedAtRangeFilter
+  | RecipePinnedAtSortFilter
   | RecipePinnedAtMatchFilter
   | RecipePinnedAtRangeFilter
+  | RecipeTagSortFilter
   | RecipeTagMatchFilter
   | RecipeTagRangeFilter
   | RecipeTagStartsWithFilter
+  | RecipeSuggestAfterSortFilter
   | RecipeSuggestAfterMatchFilter
   | RecipeSuggestAfterRangeFilter
+  | RecipeFoodSortFilter
   | RecipeFoodMatchFilter
   | RecipeFoodRangeFilter
   | RecipeFoodStartsWithFilter
+  | RecipeTitleMatchSortFilter
   | RecipeTitleMatchMatchFilter
   | RecipeTitleMatchRangeFilter
   | RecipeTitleMatchStartsWithFilter
+  | RecipeSessionStartedAtSortFilter
   | RecipeSessionStartedAtMatchFilter
-  | RecipeSessionStartedAtRangeFilter
-  | RecipeSlugMatchFilter
-  | RecipeSlugRangeFilter
-  | RecipeSlugStartsWithFilter
-  | RecipeUpdatedAtMatchFilter
-  | RecipeUpdatedAtRangeFilter
-  | RecipePinnedAtMatchFilter
-  | RecipePinnedAtRangeFilter;
+  | RecipeSessionStartedAtRangeFilter;
 
 /** Generated types for RecipeTagMetadata */
 

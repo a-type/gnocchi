@@ -23,7 +23,7 @@ import {
 	TrashIcon,
 } from '@radix-ui/react-icons';
 import classNames from 'classnames';
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { useExpiresText } from '../hooks.js';
 import {
 	Dialog,
@@ -47,16 +47,19 @@ export function PantryListItem({
 	snoozable,
 	...rest
 }: PantryListItemProps) {
+	const [leaving, setLeaving] = useState(false);
 	const {
 		lastPurchasedAt: purchasedAt,
 		canonicalName: food,
 		expiresAt,
 		frozenAt,
+		inInventory,
 	} = hooks.useWatch(item);
 
 	const clearItem = hooks.useClearPantryItem();
 	const clear = () => {
 		clearItem(item);
+		setLeaving(true);
 	};
 
 	// within 3 days
@@ -67,13 +70,17 @@ export function PantryListItem({
 
 	const snooze = useCallback(() => {
 		item.set('expiresAt', Date.now() + 6 * 24 * 60 * 60 * 1000);
+		setLeaving(true);
 	}, [item]);
 
 	return (
 		<Suspense>
 			<CardRoot
 				{...rest}
-				className={classNames(frozenAt ? 'border-accent-dark' : '')}
+				className={classNames(
+					frozenAt ? 'border-accent-dark' : '',
+					leaving && 'animate-fade-out-down animate-forwards',
+				)}
 			>
 				<CardMain compact asChild className="bg-gray-1">
 					<OpenFoodDetailButton
@@ -112,7 +119,15 @@ export function PantryListItem({
 				</CardMain>
 				<CardFooter>
 					<CardActions className="flex-wrap">
-						<Suspense fallback={<Button size="icon" color="default" />}>
+						<Suspense
+							fallback={
+								<Button
+									size="icon"
+									color="default"
+									className="w-[32px] h-[32px]"
+								/>
+							}
+						>
 							<QuickAddButton food={item} showLabel={showLabels} />
 						</Suspense>
 						{snoozable && expiresAt && (
@@ -125,7 +140,7 @@ export function PantryListItem({
 								{showLabels && <span className="font-normal">Snooze</span>}
 							</Button>
 						)}
-						{!!purchasedAt && (
+						{inInventory && (
 							<Button
 								size={showLabels ? 'small' : 'icon'}
 								color="ghostDestructive"
@@ -135,7 +150,7 @@ export function PantryListItem({
 								{showLabels && <span className="font-normal">Used</span>}
 							</Button>
 						)}
-						{(!!purchasedAt || !!frozenAt) && (
+						{(inInventory || !!frozenAt) && (
 							<FreezeButton food={item} showLabel={showLabels} />
 						)}
 					</CardActions>

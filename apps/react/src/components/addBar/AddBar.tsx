@@ -37,7 +37,6 @@ import { useExpiresSoonItems } from '@/components/pantry/hooks.js';
 import { AddToListDialog } from '@/components/recipes/viewer/AddToListDialog.jsx';
 import { useDebouncedValue } from '@/hooks/useDebouncedValue.js';
 import { Cross2Icon, FileTextIcon, PlusIcon } from '@radix-ui/react-icons';
-import { useAISuggestions } from '@/components/addBar/aiSuggestions.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import { depluralize } from '@aglio/conversion';
 
@@ -292,20 +291,6 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			return mapRecipesToSuggestions(searchRecipes);
 		}, [searchRecipes, mapRecipesToSuggestions]);
 
-		const aiItems = useAISuggestions();
-		const aiSuggestions = useMemo<SuggestionData[]>(
-			() =>
-				aiItems
-					.filter((name) => !existingFoods.has(name))
-					.map((item) => ({
-						type: 'food',
-						name: item,
-						id: item,
-						ai: true,
-					})),
-			[aiItems],
-		);
-
 		const showSuggested =
 			!suggestionPrompt &&
 			showRichSuggestions &&
@@ -321,7 +306,6 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			let allSuggestions: SuggestionData[] = [];
 			if (showSuggested) {
 				allSuggestions.push(...frequencyFoodsSuggestions);
-				allSuggestions.push(...aiSuggestions);
 				allSuggestions.push(...recipeSuggestions);
 			}
 			if (showExpiring) {
@@ -341,7 +325,6 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 			showSuggested,
 			showExpiring,
 			showRecipeMatches,
-			aiSuggestions,
 		]);
 
 		const contentRef = useRef<HTMLDivElement>(null);
@@ -514,17 +497,6 @@ export const AddBarImpl = forwardRef<HTMLDivElement, AddBarProps>(
 						{showSuggested && (
 							<SuggestionGroup title="Suggested">
 								{frequencyFoodsSuggestions.map((suggestion) => (
-									<SuggestionItem
-										key={suggestion.id}
-										value={suggestion}
-										highlighted={highlightedIndex === itemIndex}
-										{...getItemProps({
-											item: suggestion,
-											index: itemIndex++,
-										})}
-									/>
-								))}
-								{aiSuggestions.map((suggestion) => (
 									<SuggestionItem
 										key={suggestion.id}
 										value={suggestion}

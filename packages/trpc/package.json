@@ -24,8 +24,8 @@
 		"@aglio/scanning": "workspace:*",
 		"@aglio/tools": "workspace:*",
 		"@trpc/server": "^10.10.0",
-		"@verdant-web/common": "2.0.2",
-		"@verdant-web/server": "2.0.4",
+		"@verdant-web/common": "2.2.0",
+		"@verdant-web/server": "2.1.2",
 		"cuid": "^3.0.0",
 		"superjson": "^1.12.0",
 		"zod": "^3.19.0"

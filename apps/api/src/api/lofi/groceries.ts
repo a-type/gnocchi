@@ -3,7 +3,10 @@ import { ReplicaType, TokenProvider } from '@verdant-web/server';
 import { assert, getGroceryLibraryName } from '@aglio/tools';
 import { getLoginSession, getTemporaryAccessSession } from '@aglio/auth';
 import { DEPLOYED_HOST } from '../../config/deployedContext.js';
-import { verifySubscription } from '../../auth/verifySubscription.js';
+import {
+	SubscriptionError,
+	verifySubscription,
+} from '../../auth/verifySubscription.js';
 
 assert(!!process.env.LOFI_SECRET, 'LOFI_SECRET must be set');
 const tokenProvider = new TokenProvider({
@@ -27,7 +30,15 @@ export default async function groceriesHandler(req: Request, res: Response) {
 			});
 		}
 	} else {
-		await verifySubscription(session);
+		try {
+			await verifySubscription(session);
+		} catch (err) {
+			if (err instanceof SubscriptionError) {
+				return res.status(402).send(err.message);
+			}
+			console.error(err);
+			return res.status(500).send('Internal Server Error');
+		}
 		token = tokenProvider.getToken({
 			userId: session.userId,
 			libraryId: getGroceryLibraryName(session.planId),

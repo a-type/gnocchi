@@ -19,7 +19,7 @@ import {
 	TopControls,
 	UnknownListRedirect,
 } from '@/pages/groceries/layout.jsx';
-import { useCallback, useEffect } from 'react';
+import { Suspense, useCallback, useEffect } from 'react';
 import {
 	useNavigate,
 	useParams,
@@ -78,7 +78,9 @@ export function GroceriesPage() {
 							</PromoteSubscriptionButton>
 						</UnsubscribedOnly>
 						<SubscribedOnly>
-							<People hideIfAlone />
+							<Suspense>
+								<People hideIfAlone />
+							</Suspense>
 							<InviteLinkButton
 								size="icon"
 								color="ghost"
