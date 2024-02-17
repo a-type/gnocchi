@@ -16,12 +16,7 @@ import { useLocalStorage } from '@/hooks/useLocalStorage.js';
 import { Button } from '@a-type/ui/components/button';
 import { H1, P } from '@a-type/ui/components/typography';
 import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
-import {
-	makeRoutes,
-	Outlet,
-	Router,
-	useNextMatchingRoute,
-} from '@verdant-web/react-router';
+import { makeRoutes, Outlet, Router } from '@verdant-web/react-router';
 import { lazy, Suspense, useCallback } from 'react';
 import { lazyWithPreload } from 'react-lazy-with-preload';
 import { useRegisterSW } from 'virtual:pwa-register/react';
@@ -270,8 +265,17 @@ function LayoutWithNavBar() {
 
 export function Pages() {
 	const handleNavigate = useCallback(
-		(_path: string, ev: { state?: any; skipTransition?: boolean }) => {
-			if (updateState.updateAvailable) {
+		(
+			location: Location,
+			ev: { state?: any; skipTransition?: boolean },
+			prev: { pathname: string },
+		) => {
+			// only update on path changes
+			if (
+				updateState.updateAvailable &&
+				location.pathname !== prev.pathname &&
+				!ev.state?.noUpdate
+			) {
 				console.info('Update ready to install, intercepting navigation...');
 				updateApp(ev?.state?.isSwipeNavigation);
 				return false;

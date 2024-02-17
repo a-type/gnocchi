@@ -35,10 +35,13 @@ export function FoodDetailDialog({}: FoodDetailDialogProps) {
 	const foodName = params.get('showFood');
 	const open = !!foodName;
 	const onClose = () => {
-		setParams((old) => {
-			old.delete('showFood');
-			return old;
-		});
+		setParams(
+			(old) => {
+				old.delete('showFood');
+				return old;
+			},
+			{ state: { noUpdate: true } },
+		);
 	};
 	return (
 		<Dialog open={open} onOpenChange={onClose}>

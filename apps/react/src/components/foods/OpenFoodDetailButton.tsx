@@ -16,10 +16,13 @@ export const OpenFoodDetailButton = forwardRef<
 ) {
 	const [_, setParams] = useSearchParams();
 	const openDialog = () => {
-		setParams((old) => {
-			old.set('showFood', foodName);
-			return old;
-		});
+		setParams(
+			(old) => {
+				old.set('showFood', foodName);
+				return old;
+			},
+			{ state: { noUpdate: true } },
+		);
 	};
 
 	return (

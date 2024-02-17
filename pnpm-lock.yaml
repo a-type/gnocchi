@@ -350,8 +350,8 @@ importers:
         specifier: 27.0.0
         version: 27.0.0(@verdant-web/store@3.2.1)(react@18.2.0)
       '@verdant-web/react-router':
-        specifier: ^0.5.5
-        version: 0.5.5(react@18.2.0)
+        specifier: ^0.6.0
+        version: 0.6.0(react@18.2.0)
       '@verdant-web/store':
         specifier: 3.2.1
         version: 3.2.1
@@ -8486,8 +8486,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@verdant-web/react-router@0.5.5(react@18.2.0):
-    resolution: {integrity: sha512-r9DPjpF0ix0hzVd4vNLXf29x5nKA3qWkIg3zGZTMqLviayoJl4wQgNhMg5Em/wCH+lPv7e/VNp+TRHA3STA2+g==}
+  /@verdant-web/react-router@0.6.0(react@18.2.0):
+    resolution: {integrity: sha512-BwyW3ip5QV0uBgwpVZm+qbdoc32ItWJCzckKaLOQ+E5cJv2wHwZcpUWsmnunMpy4XBpob3jQY0kILCx313L/PQ==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
