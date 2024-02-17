@@ -45,9 +45,9 @@ export function NavBar({}: NavBarProps) {
 			)}
 		>
 			<Suspense>
-				<div className="hidden sm:(flex flex-row gap-1 items-center justify-center px-2 py-4)">
-					<img src="/android-chrome-192x192.png" className="w-40px h-40px" />
-					<h1 className="text-md font-title font-medium">Gnocchi</h1>
+				<div className="hidden sm:(flex flex-row gap-2 items-center justify-center px-2 py-2 mt-3)">
+					<img src="/android-chrome-192x192.png" className="w-30px h-30px" />
+					<h1 className="text-sm font-title font-medium">Gnocchi</h1>
 				</div>
 				<GroceriesNavBarLink active={matchGroceries} />
 				<PantryNavBarLink active={matchPurchased} />
