@@ -4,11 +4,11 @@
 	"private": true,
 	"exports": {
 		".": {
-			"production": "./dist/esm/index.js",
+			"production": "./dist/index.js",
 			"development": "./src/index.ts",
-			"import": "./dist/esm/index.js",
-			"node": "./dist/esm/index.js",
-			"default": "./dist/esm/index.js"
+			"import": "./dist/index.js",
+			"node": "./dist/index.js",
+			"default": "./dist/index.js"
 		}
 	},
 	"type": "module",
