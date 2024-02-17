@@ -1,30 +1,6 @@
-import { FoodName, LookupFoodName } from '@/components/foods/FoodName.jsx';
-import { Icon } from '@/components/icons/Icon.jsx';
-import { hooks } from '@/stores/groceries/index.js';
-import { Food, Item } from '@aglio/groceries-client';
-import { Button } from '@a-type/ui/components/button';
 import { H2 } from '@a-type/ui/components/typography';
-import {
-	ClockIcon,
-	ExclamationTriangleIcon,
-	OpenInNewWindowIcon,
-	PlusIcon,
-	TrashIcon,
-} from '@radix-ui/react-icons';
 import classNames from 'classnames';
-import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
-import { useCallback } from 'react';
-import { useExpiresSoonItems, useExpiresText } from '../hooks.js';
-import { groceriesState } from '@/components/groceries/state.js';
-import { OpenFoodDetailButton } from '@/components/foods/OpenFoodDetailButton.jsx';
-import {
-	CardActions,
-	CardFooter,
-	CardMain,
-	CardRoot,
-	CardTitle,
-} from '@a-type/ui/components/card';
-import { RelativeTime } from '@a-type/ui/components/relativeTime';
+import { useExpiresSoonItems } from '../hooks.js';
 import { PantryListItem } from '../items/PantryListItem.jsx';
 
 export interface ExpiresSoonSectionProps {

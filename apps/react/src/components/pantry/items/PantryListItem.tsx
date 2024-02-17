@@ -24,7 +24,7 @@ import {
 } from '@radix-ui/react-icons';
 import classNames from 'classnames';
 import { Suspense, useCallback, useState } from 'react';
-import { useExpiresText } from '../hooks.js';
+import { THREE_DAYS_FROM_NOW, useExpiresText } from '../hooks.js';
 import {
 	Dialog,
 	DialogActions,
@@ -63,8 +63,7 @@ export function PantryListItem({
 	};
 
 	// within 3 days
-	const isAlmostOrExpired =
-		expiresAt && expiresAt < Date.now() + 1000 * 60 * 60 * 24 * 3;
+	const isAlmostOrExpired = expiresAt && expiresAt < THREE_DAYS_FROM_NOW;
 
 	const expiresAtText = useExpiresText(item);
 
@@ -222,7 +221,11 @@ const QuickAddButton = ({
 			disabled={isOnList}
 		>
 			{isOnList ? <Icon name="check" /> : <Icon name="plus" />}
-			{showLabel && <span className="font-normal">Buy again</span>}
+			{showLabel && (
+				<span className="font-normal">
+					{isOnList ? 'In list' : 'Buy again'}
+				</span>
+			)}
 		</Button>
 	);
 };

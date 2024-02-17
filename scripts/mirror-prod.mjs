@@ -10,10 +10,12 @@ const backups = fs.readdirSync('./backups').filter((f) => f !== '.gitkeep');
 const backup = await prompt.select({
 	message: 'Which backup?',
 	options: [
-		...backups.map((b) => ({
-			value: b,
-			label: b,
-		})),
+		...backups
+			.sort((a, b) => -a.localeCompare(b))
+			.map((b) => ({
+				value: b,
+				label: b,
+			})),
 		{ value: 'restore', label: 'Restore before last backup' },
 	],
 	maxItems: 10,

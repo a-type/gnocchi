@@ -13,7 +13,7 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import { useCallback, useMemo } from 'react';
 
 // keeping this static to make the query reusable
-const THREE_DAYS_FROM_NOW = addDays(endOfDay(new Date()), 3).getTime();
+export const THREE_DAYS_FROM_NOW = addDays(endOfDay(new Date()), 3).getTime();
 export function useExpiresSoonItems({
 	skip,
 	key,
