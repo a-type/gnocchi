@@ -125,6 +125,7 @@ export function AddToListDialog({
 											multiplier={multiplier}
 											className="w-full"
 											disableAddNote
+											disableAddToList
 											recipeId={recipe.get('id')}
 										/>
 									</label>

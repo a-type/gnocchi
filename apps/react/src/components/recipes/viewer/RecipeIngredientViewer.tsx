@@ -32,6 +32,7 @@ export interface RecipeIngredientViewerProps {
 	multiplier?: number;
 	className?: string;
 	disableAddNote?: boolean;
+	disableAddToList?: boolean;
 	recipeId: string;
 }
 
@@ -40,6 +41,7 @@ export function RecipeIngredientViewer({
 	multiplier = 1,
 	className,
 	disableAddNote,
+	disableAddToList,
 	recipeId,
 }: RecipeIngredientViewerProps) {
 	const { note, isSectionHeader, quantity, unit, food } =
@@ -157,7 +159,7 @@ export function RecipeIngredientViewer({
 							</DropdownMenu>
 						</>
 					)}
-					{!isSectionHeader && (
+					{!isSectionHeader && !disableAddToList && (
 						<Button size="icon" color="ghost" onClick={addToList}>
 							<Icon name="add_to_list" className="color-gray7" />
 						</Button>
