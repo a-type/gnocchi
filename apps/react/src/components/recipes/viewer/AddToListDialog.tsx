@@ -20,6 +20,7 @@ import { RecipeNote } from '@/components/recipes/viewer/RecipeNote.jsx';
 import { ActionBar, ActionButton } from '@a-type/ui/components/actions';
 import { CheckboxIcon, SquareIcon } from '@radix-ui/react-icons';
 import pluralize from 'pluralize';
+import { pickBestNameMatch } from '@/components/foods/lookup.jsx';
 
 export interface AddToListDialogProps {
 	recipe: Recipe;
@@ -41,6 +42,7 @@ export function AddToListDialog({
 	const { ingredients, multiplier: defaultMultiplier } = hooks.useWatch(recipe);
 	const [multiplier, setMultiplier] = useState(defaultMultiplier);
 	const [adding, setAdding] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const [checkedItems, setCheckedItems] = useState<boolean[]>(() => {
 		return new Array(ingredients.length).fill(false).map((_, i) => {
@@ -137,55 +139,69 @@ export function AddToListDialog({
 					</DialogClose>
 					<Button
 						color="primary"
+						loading={loading}
 						onClick={async () => {
-							addItems(
-								await Promise.all(
-									items
-										.filter(
-											(item, index) =>
-												checkedItems[index] && !item.get('isSectionHeader'),
-										)
-										.map(async (item) => {
-											const totalQuantity =
-												item.get('quantity') * (multiplier || 1);
+							setLoading(true);
+							try {
+								addItems(
+									await Promise.all(
+										items
+											.filter(
+												(item, index) =>
+													checkedItems[index] && !item.get('isSectionHeader'),
+											)
+											.map(async (item) => {
+												const totalQuantity =
+													item.get('quantity') * (multiplier || 1);
 
-											// lookup the food name to use as the main
-											// item text
-											const foodName = item.get('food');
-											const food = foodName
-												? await client.foods.findOne({
-														index: { where: 'nameLookup', equals: foodName },
-												  }).resolved
-												: undefined;
-											const textOverride = food
-												? food.get('pluralizeName')
-													? pluralize(food.get('canonicalName'))
-													: food.get('canonicalName')
-												: undefined;
-											return {
-												original: item.get('text'),
-												quantity: totalQuantity,
-												unit: item.get('unit'),
-												food: item.get('food') || 'Unknown',
-												// for items added from recipes, we add
-												// the food name as the text, not the ingredient
-												textOverride,
-											};
-										}),
-								),
-								{
-									sourceInfo: {
-										title: recipe.get('title'),
-										multiplier,
-										recipeId: recipe.get('id'),
+												// lookup the food name to use as the main
+												// item text
+												const foodName = item.get('food');
+												const food = foodName
+													? pickBestNameMatch(
+															await client.foods.findAll({
+																index: {
+																	where: 'nameLookup',
+																	equals: foodName,
+																},
+															}).resolved,
+															foodName,
+													  )
+													: undefined;
+												const textOverride = food
+													? food.get('pluralizeName')
+														? pluralize(food.get('canonicalName'))
+														: food.get('canonicalName')
+													: foodName ?? undefined;
+												return {
+													original: item.get('text'),
+													quantity: totalQuantity,
+													unit: item.get('unit'),
+													food: item.get('food') || 'Unknown',
+													// for items added from recipes, we add
+													// the food name as the text, not the ingredient
+													textOverride,
+												};
+											}),
+									),
+									{
+										sourceInfo: {
+											title: recipe.get('title'),
+											multiplier,
+											recipeId: recipe.get('id'),
+										},
+										listId,
+										showToast: true,
 									},
-									listId,
-									showToast: true,
-								},
-							);
-							setAdding(false);
-							onOpenChange?.(false);
-							next();
+								);
+								setAdding(false);
+							} catch (e) {
+								console.error(e);
+								onOpenChange?.(false);
+								next();
+							} finally {
+								setLoading(false);
+							}
 						}}
 					>
 						Add

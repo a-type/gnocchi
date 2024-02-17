@@ -158,7 +158,7 @@ function RecipeOverviewContent({ recipe }: { recipe: Recipe }) {
 					{/* Seems redundant now? */}
 					<AddToListButton color="primary" recipe={recipe}>
 						<PlusIcon />
-						<span>Add all to list</span>
+						<span>Add to list</span>
 					</AddToListButton>
 					<IngredientCheckoffView recipe={recipe} />
 				</div>

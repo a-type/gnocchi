@@ -26,6 +26,14 @@ import {
 } from '@a-type/ui/components/dialog';
 import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';
 import { Cross2Icon } from '@radix-ui/react-icons';
+import {
+	Popover,
+	PopoverAnchor,
+	PopoverContent,
+	PopoverTrigger,
+} from '@a-type/ui/components/popover';
+import { NoteEditor } from '../editor/NoteEditor.jsx';
+import { Note } from '@a-type/ui/components/note';
 
 export interface CookingActionBarProps {
 	recipe: Recipe;
@@ -37,6 +45,7 @@ export function CookingActionBar({ recipe }: CookingActionBarProps) {
 			<CookingPeople recipeId={recipe.get('id')} />
 			<AddChefsAction />
 			<StopCookingAction recipe={recipe} />
+			<NoteToggleAction recipe={recipe} />
 		</ActionBar>
 	);
 }
@@ -151,5 +160,28 @@ function StopCookingAction({ recipe }: { recipe: Recipe }) {
 		>
 			Stop cooking
 		</ActionButton>
+	);
+}
+
+function NoteToggleAction({ recipe }: { recipe: Recipe }) {
+	const { note } = hooks.useWatch(recipe);
+
+	if (!note) return null;
+
+	return (
+		<Popover>
+			<PopoverTrigger asChild>
+				<ActionButton icon={<Icon name="note" />} color="primary">
+					<span className="hidden sm:display-inline">Add note</span>
+				</ActionButton>
+			</PopoverTrigger>
+			<PopoverContent
+				sideOffset={8}
+				align="start"
+				className="p-0 bg-transparent border-none rounded-0 max-w-2/3"
+			>
+				<Note className="w-full h-full">{note}</Note>
+			</PopoverContent>
+		</Popover>
 	);
 }
