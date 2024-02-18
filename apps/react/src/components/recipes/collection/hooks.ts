@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { useSearchParams } from '@verdant-web/react-router';
 import { hooks } from '@/stores/groceries/index.js';
-import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 
 export function useRecipeTagFilter() {
 	const [params, setParams] = useSearchParams();
@@ -10,15 +9,21 @@ export function useRecipeTagFilter() {
 	const setTag = useCallback(
 		(tag: string | null) => {
 			if (tag) {
-				setParams((params) => {
-					params.set('tag', tag);
-					return params;
-				});
+				setParams(
+					(params) => {
+						params.set('tag', tag);
+						return params;
+					},
+					{ state: { noUpdate: true } },
+				);
 			} else {
-				setParams((params) => {
-					params.delete('tag');
-					return params;
-				});
+				setParams(
+					(params) => {
+						params.delete('tag');
+						return params;
+					},
+					{ state: { noUpdate: true } },
+				);
 			}
 		},
 		[setParams],
@@ -34,15 +39,21 @@ export function useRecipeFoodFilter() {
 	const setFood = useCallback(
 		(food: string | null) => {
 			if (food) {
-				setParams((params) => {
-					params.set('food', food);
-					return params;
-				});
+				setParams(
+					(params) => {
+						params.set('food', food);
+						return params;
+					},
+					{ state: { noUpdate: true } },
+				);
 			} else {
-				setParams((params) => {
-					params.delete('food');
-					return params;
-				});
+				setParams(
+					(params) => {
+						params.delete('food');
+						return params;
+					},
+					{ state: { noUpdate: true } },
+				);
 			}
 		},
 		[setParams],
@@ -58,15 +69,21 @@ export function useRecipeTitleFilter() {
 	const setValue = useCallback(
 		(value: string | null) => {
 			if (value) {
-				setParams((params) => {
-					params.set('search', value);
-					return params;
-				});
+				setParams(
+					(params) => {
+						params.set('search', value);
+						return params;
+					},
+					{ state: { noUpdate: true } },
+				);
 			} else {
-				setParams((params) => {
-					params.delete('search');
-					return params;
-				});
+				setParams(
+					(params) => {
+						params.delete('search');
+						return params;
+					},
+					{ state: { noUpdate: true } },
+				);
 			}
 		},
 		[setParams],
@@ -91,14 +108,15 @@ export function useFilteredRecipes() {
 	// just in... 'case'
 	const normalizedTagFilter = tagFilter?.toLowerCase().trim();
 	const normalizedFoodFilter = foodFilter?.toLowerCase().trim();
-	const normalizedTitleFilter = titleFilter?.toLowerCase().trim();
+	// only the first word
+	const normalizedTitleWords = titleFilter?.toLowerCase().trim()?.split(/\s+/);
 
 	const [rawRecipes, meta] = hooks.useAllRecipesInfinite(
-		normalizedTitleFilter
+		normalizedTitleWords?.length
 			? {
 					index: {
 						where: 'titleMatch',
-						startsWith: normalizedTitleFilter,
+						startsWith: normalizedTitleWords[0],
 					},
 					key: 'recipesByTitleMatch',
 			  }
@@ -129,10 +147,19 @@ export function useFilteredRecipes() {
 
 	// filter for the un-indexed filters
 	const recipes = rawRecipes.filter((recipe) => {
+		// if more than one word was searched
+		if (normalizedTitleWords?.length > 1) {
+			if (
+				!normalizedTitleWords.every((word) =>
+					recipe.get('title').toLowerCase().includes(word),
+				)
+			)
+				return false;
+		}
 		// a tag filter exists, but another filter took precedence
 		if (
 			normalizedTagFilter &&
-			(normalizedFoodFilter || normalizedTitleFilter)
+			(normalizedFoodFilter || normalizedTitleWords?.length)
 		) {
 			if (
 				!recipe
@@ -144,7 +171,7 @@ export function useFilteredRecipes() {
 		}
 
 		// a food filter exists, but another filter took precedence
-		if (normalizedFoodFilter && normalizedTitleFilter) {
+		if (normalizedFoodFilter && normalizedTitleWords?.length) {
 			if (
 				!recipe
 					.get('ingredients')

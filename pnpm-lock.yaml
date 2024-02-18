@@ -350,8 +350,8 @@ importers:
         specifier: 27.0.0
         version: 27.0.0(@verdant-web/store@3.2.1)(react@18.2.0)
       '@verdant-web/react-router':
-        specifier: ^0.6.0
-        version: 0.6.0(react@18.2.0)
+        specifier: ^0.6.1
+        version: 0.6.1(react@18.2.0)
       '@verdant-web/store':
         specifier: 3.2.1
         version: 3.2.1
@@ -8486,8 +8486,8 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /@verdant-web/react-router@0.6.0(react@18.2.0):
-    resolution: {integrity: sha512-BwyW3ip5QV0uBgwpVZm+qbdoc32ItWJCzckKaLOQ+E5cJv2wHwZcpUWsmnunMpy4XBpob3jQY0kILCx313L/PQ==}
+  /@verdant-web/react-router@0.6.1(react@18.2.0):
+    resolution: {integrity: sha512-eZ97ZSQ+f9ENq/HQhgkdxlJtS/ov7R7gehV5Xjt3KouzB8gfdyhTGgkMANaUQwJW9rQg6wgDUG2nZn6plo8mZw==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
@@ -9018,7 +9018,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001587
+      caniuse-lite: 1.0.30001588
       electron-to-chromium: 1.4.673
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
@@ -9142,8 +9142,8 @@ packages:
   /caniuse-lite@1.0.30001570:
     resolution: {integrity: sha512-+3e0ASu4sw1SWaoCtvPeyXp+5PsjigkSt8OXZbF9StH5pQWbxEjLAZE3n8Aup5udop1uRiKA7a4utUk/uoSpUw==}
 
-  /caniuse-lite@1.0.30001587:
-    resolution: {integrity: sha512-HMFNotUmLXn71BQxg8cijvqxnIAofforZOwGsxyXJ0qugTdspUF4sPSJ2vhgprHCB996tIDzEq1ubumPDV8ULA==}
+  /caniuse-lite@1.0.30001588:
+    resolution: {integrity: sha512-+hVY9jE44uKLkH0SrUTqxjxqNTOWHsbnQDIKjwkZ3lNTzUUVdBLBGXtj/q5Mp5u98r3droaZAewQuEDzjQdZlQ==}
     dev: true
 
   /capital-case@1.0.4:
@@ -10023,7 +10023,7 @@ packages:
       string.prototype.trimstart: 1.0.7
       typed-array-buffer: 1.0.1
       typed-array-byte-length: 1.0.0
-      typed-array-byte-offset: 1.0.0
+      typed-array-byte-offset: 1.0.1
       typed-array-length: 1.0.4
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.14
@@ -14860,6 +14860,18 @@ packages:
       available-typed-arrays: 1.0.6
       call-bind: 1.0.7
       for-each: 0.3.3
+      has-proto: 1.0.1
+      is-typed-array: 1.1.13
+    dev: false
+
+  /typed-array-byte-offset@1.0.1:
+    resolution: {integrity: sha512-tcqKMrTRXjqvHN9S3553NPCaGL0VPgFI92lXszmrE8DMhiDPLBYLlvo8Uu4WZAAX/aGqp/T1sbA4ph8EWjDF9Q==}
+    engines: {node: '>= 0.4'}
+    dependencies:
+      available-typed-arrays: 1.0.6
+      call-bind: 1.0.7
+      for-each: 0.3.3
+      gopd: 1.0.1
       has-proto: 1.0.1
       is-typed-array: 1.1.13
 
