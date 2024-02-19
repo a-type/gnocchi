@@ -552,8 +552,9 @@ function RecentPurchaseHint({
 	hooks.useWatch(food);
 
 	const lastPurchasedAt = food?.get('lastPurchasedAt');
-	// default to 1 week for non-perishables
-	const expiresAfterDays = food?.get('expiresAfterDays') ?? 7;
+	const expiresAt = food?.get('expiresAt');
+	const hasExpiration = !!food?.get('expiresAfterDays');
+	const inInventory = food?.get('inInventory');
 
 	const purchasedText = usePurchasedText(food, true);
 
@@ -561,12 +562,24 @@ function RecentPurchaseHint({
 		return null;
 	}
 
-	// only show small version if the food was purchased less than expiresAfterDays ago
-	if (
-		compact &&
-		(!lastPurchasedAt ||
-			Date.now() - lastPurchasedAt > expiresAfterDays * 24 * 60 * 60 * 1000)
-	) {
+	// no need to warn if the item was used; might as well rebuy if needed
+	if (!inInventory) {
+		return null;
+	}
+
+	const isExpired =
+		// items without expirations are not expired
+		!!expiresAt &&
+		// items whose purchase date is within the expiration window are not expired
+		expiresAt < Date.now();
+
+	// also show warning for non-perishable (no expiration) that were
+	// bought in the last week
+	const wasBoughtThisWeek =
+		lastPurchasedAt && lastPurchasedAt > Date.now() - 1000 * 60 * 60 * 24 * 7;
+
+	// only show small version if the food isn't yet expired
+	if (compact && (isExpired || (!hasExpiration && !wasBoughtThisWeek))) {
 		return null;
 	}
 
