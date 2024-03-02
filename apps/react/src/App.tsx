@@ -5,11 +5,8 @@ import { Suspense, useLayoutEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { Pages } from './pages/Pages.jsx';
 import { Provider as GroceriesProvider } from './stores/groceries/Provider.jsx';
-import { IconSpritesheet } from './components/icons/generated/IconSpritesheet.jsx';
-import {
-	ReloadButton,
-	useHadRecentError,
-} from '@/components/sync/ReloadButton.jsx';
+import { IconSpritesheet } from '@a-type/ui/components/icon';
+import { ReloadButton } from '@/components/sync/ReloadButton.jsx';
 import { GlobalLoader } from '@/GlobalLoader.jsx';
 import { useVisualViewportOffset } from '@a-type/ui/hooks';
 import { ErrorBoundary } from '@a-type/ui/components/errorBoundary';

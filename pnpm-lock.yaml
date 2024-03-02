@@ -240,7 +240,7 @@ importers:
     devDependencies:
       '@unocss/postcss':
         specifier: ^0.54.0
-        version: 0.54.0(postcss@8.4.32)
+        version: 0.54.0(postcss@8.4.35)
       '@unocss/transformer-variant-group':
         specifier: ^0.54.0
         version: 0.54.0
@@ -249,13 +249,13 @@ importers:
         version: 7.5.0
       unocss:
         specifier: ^0.54.0
-        version: 0.54.0(postcss@8.4.32)(vite@4.5.1)
+        version: 0.54.0(postcss@8.4.35)(vite@4.5.1)
 
   apps/react:
     dependencies:
       '@a-type/ui':
-        specifier: ^0.6.13
-        version: 0.6.13(@types/react-dom@18.0.6)(@types/react@18.0.17)
+        specifier: ^0.6.17
+        version: 0.6.17(@types/react-dom@18.0.6)(@types/react@18.0.17)
       '@a-type/utils':
         specifier: ^1.0.5
         version: 1.0.5
@@ -775,8 +775,8 @@ packages:
       - '@types/react-dom'
     dev: false
 
-  /@a-type/ui@0.6.13(@types/react-dom@18.0.6)(@types/react@18.0.17):
-    resolution: {integrity: sha512-5Jjw2xzAG8qVrbNKi5UwheQXNjJS5aVY+G8DDoXwbzxCptzlrolXStvuBursCX+eMOm29sdL9uLHjGg25gw9Hw==}
+  /@a-type/ui@0.6.17(@types/react-dom@18.0.6)(@types/react@18.0.17):
+    resolution: {integrity: sha512-bCo3eo/NURhGKtuLhYhdtYdv6eZPE2aps9qXoA30idTHCOsOi8aYs7+MzznwdzbcaHITnrXaOCUo3BtlL3PBRg==}
     dependencies:
       '@a-type/utils': 1.0.5
       '@radix-ui/react-accordion': 1.1.2(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -3108,7 +3108,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.1
-    dev: true
 
   /@babel/template@7.22.15:
     resolution: {integrity: sha512-QPErUVm4uyJa60rkI73qneDacvdvzxshT3kksGqlGWYdOTIUOwJ7RDUL8sGqslY1uXWSL6xMFKEXDS3ox2uF0w==}
@@ -4352,7 +4351,7 @@ packages:
       '@types/react-dom':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.23.9
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-collapsible': 1.0.3(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-collection': 1.0.3(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -4673,7 +4672,7 @@ packages:
       '@types/react-dom':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.23.9
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-context': 1.0.1(@types/react@18.0.17)(react@18.2.0)
       '@radix-ui/react-menu': 2.0.6(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
@@ -6117,7 +6116,7 @@ packages:
       '@types/react-dom':
         optional: true
     dependencies:
-      '@babel/runtime': 7.23.6
+      '@babel/runtime': 7.23.9
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-context': 1.0.1(@types/react@18.0.17)(react@18.2.0)
       '@radix-ui/react-direction': 1.0.1(@types/react@18.0.17)(react@18.2.0)
@@ -7826,12 +7825,6 @@ packages:
     resolution: {integrity: sha512-adzY4vLLr5Uivmx8+zfSJ5fbdgKxX8UMtjtl+17n0B1q1Nz8JEmE151vefMdpD+1gyh+77weN4qEhej/O7budQ==}
     dev: true
 
-  /@types/node@20.11.19:
-    resolution: {integrity: sha512-7xMnVEcZFu0DikYjWOlRq7NTPETrm7teqUT2WkQjrTIkEgUyyGdWsj/Zg8bEJt5TNklzbPD1X3fqfsHw3SpapQ==}
-    dependencies:
-      undici-types: 5.26.5
-    dev: true
-
   /@types/nodemailer@6.4.6:
     resolution: {integrity: sha512-pD6fL5GQtUKvD2WnPmg5bC2e8kWCAPDwMPmHe/ohQbW+Dy0EcHgZ2oCSuPlWNqk74LS5BVMig1SymQbFMPPK3w==}
     dependencies:
@@ -7907,7 +7900,7 @@ packages:
   /@types/resolve@1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 20.11.19
+      '@types/node': 18.13.0
     dev: true
 
   /@types/scheduler@0.16.2:
@@ -8149,7 +8142,7 @@ packages:
       sirv: 2.0.3
     dev: true
 
-  /@unocss/postcss@0.54.0(postcss@8.4.32):
+  /@unocss/postcss@0.54.0(postcss@8.4.35):
     resolution: {integrity: sha512-t1PmIkp2Qa9F/9swfCVCXMuheQxd1ddrcvf0+d4fOckpFF8YhvOi+WfMoZW4YFwoCmG5pvDg4VYgKbDunGHhRg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -8160,7 +8153,7 @@ packages:
       css-tree: 2.3.1
       fast-glob: 3.3.0
       magic-string: 0.30.1
-      postcss: 8.4.32
+      postcss: 8.4.35
     dev: true
 
   /@unocss/postcss@0.58.0(postcss@8.4.35):
@@ -11990,7 +11983,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 20.11.19
+      '@types/node': 18.13.0
       merge-stream: 2.0.0
       supports-color: 7.2.0
     dev: true
@@ -12116,7 +12109,7 @@ packages:
     dependencies:
       universalify: 2.0.0
     optionalDependencies:
-      graceful-fs: 4.2.10
+      graceful-fs: 4.2.11
     dev: true
 
   /jsonpointer@5.0.1:
@@ -14934,10 +14927,6 @@ packages:
     resolution: {integrity: sha512-WxONCrssBM8TSPRqN5EmsjVrsv4A8X12J4ArBiiayv3DyyG3ZlIg6yysuuSYdZsVz3TKcTg2fd//Ujd4CHV1iA==}
     dev: false
 
-  /undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
-    dev: true
-
   /unicode-canonical-property-names-ecmascript@2.0.0:
     resolution: {integrity: sha512-yY5PpDlfVIU5+y/BSCxAJRBIS1Zc2dDG3Ujq+sR0U+JjUevW2JhocOF+soROYDSaAezOzOKuyyixhD6mBknSmQ==}
     engines: {node: '>=4'}
@@ -14978,7 +14967,7 @@ packages:
     engines: {node: '>= 10.0.0'}
     dev: true
 
-  /unocss@0.54.0(postcss@8.4.32)(vite@4.5.1):
+  /unocss@0.54.0(postcss@8.4.35)(vite@4.5.1):
     resolution: {integrity: sha512-SXjyQqt/MP1uW8mjEmQaSa0zd+QB3FwaGD/ityNlu+zNRx1D03BPP9ACbJDB1zZKx4aodMVSsHZ3TV5wsu+VRQ==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -14991,7 +14980,7 @@ packages:
       '@unocss/cli': 0.54.0
       '@unocss/core': 0.54.0
       '@unocss/extractor-arbitrary-variants': 0.54.0
-      '@unocss/postcss': 0.54.0(postcss@8.4.32)
+      '@unocss/postcss': 0.54.0(postcss@8.4.35)
       '@unocss/preset-attributify': 0.54.0
       '@unocss/preset-icons': 0.54.0
       '@unocss/preset-mini': 0.54.0
@@ -15407,7 +15396,7 @@ packages:
     dependencies:
       '@types/node': 18.11.19
       esbuild: 0.18.20
-      postcss: 8.4.32
+      postcss: 8.4.35
       rollup: 3.29.4
     optionalDependencies:
       fsevents: 2.3.3

@@ -2,6 +2,8 @@ import { hooks } from '@/stores/groceries/index.js';
 import { RecipeIngredientsItem } from '@aglio/groceries-client';
 import { fractionToText } from '@aglio/tools';
 import pluralize from 'pluralize';
+import { TextWithMultipliedNumbers } from './TextWithMultipliedNumbers.jsx';
+import { Tooltip } from '@a-type/ui/components/tooltip';
 
 export interface IngredientTextProps {
 	ingredient: RecipeIngredientsItem;
@@ -21,13 +23,33 @@ export function IngredientText({
 		const showPlural = finalQuantity !== 1;
 		return (
 			<span className={className}>
-				{fractionToText(finalQuantity)}{' '}
-				{unit ? (showPlural ? pluralize(unit) : unit) : ''}{' '}
-				{showPlural && !unit ? pluralize(food || '') : food}
-				{comments.length > 0
-					? `,
+				<Tooltip
+					content={
+						<span className="text-wrap max-w-80vw">
+							Multiplier {multiplier}x applied. Original value: {quantity}
+						</span>
+					}
+				>
+					<span className="text-accent-dark font-bold">
+						{fractionToText(finalQuantity)}
+					</span>
+				</Tooltip>{' '}
+				<span className="unit">
+					{unit ? (showPlural ? pluralize(unit) : unit) : ''}
+				</span>{' '}
+				<TextWithMultipliedNumbers
+					text={showPlural && !unit ? pluralize(food || '') : food}
+					multiplier={multiplier}
+				/>
+				<TextWithMultipliedNumbers
+					text={
+						comments.length > 0
+							? `,
 				${comments.map((comment) => comment).join(', ')}`
-					: ''}
+							: ''
+					}
+					multiplier={multiplier}
+				/>
 			</span>
 		);
 	}
