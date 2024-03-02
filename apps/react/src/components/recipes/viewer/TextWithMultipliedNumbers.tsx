@@ -1,6 +1,7 @@
 import { Tooltip } from '@a-type/ui/components/tooltip';
 import { Icon } from '@a-type/ui/components/icon';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
+import { fractionToText } from '@aglio/tools';
 
 export interface TextWithMultipliedNumbersProps {
 	text: string | null;
@@ -37,12 +38,13 @@ export function TextWithMultipliedNumbers({
 							<Tooltip
 								content={
 									<span className="text-wrap max-w-80vw">
-										Multiplier {multiplier}x applied. Original value: {fragment}
+										Multiplier {fractionToText(multiplier)}x applied. Original
+										value: {fragment}
 									</span>
 								}
 							>
 								<span className="multiplied-number text-accent-dark font-bold flex-row inline-flex items-center gap-0.5">
-									{parseFloat(fragment.trim()) * multiplier}
+									{fractionToText(parseFloat(fragment.trim()) * multiplier)}
 								</span>
 							</Tooltip>
 						)}
