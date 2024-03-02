@@ -5,14 +5,15 @@ import pluralize from 'pluralize';
 
 export function useItemDisplayText(item: Item) {
 	const override = item.get('textOverride');
+	const quantity = item.get('totalQuantity');
 
 	if (override) {
-		return override;
+		if (quantity === 1) return override;
+		return `${fractionToText(quantity)} ${pluralize(override)}`;
 	}
 
 	const inputs = item.get('inputs');
 
-	const quantity = item.get('totalQuantity');
 	const pluralizedUnit = item.get('unit')
 		? item.get('totalQuantity') === 1
 			? item.get('unit')
