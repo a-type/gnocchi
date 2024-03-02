@@ -110,9 +110,10 @@ export function useFilteredRecipes() {
 	const normalizedFoodFilter = foodFilter?.toLowerCase().trim();
 	// only the first word
 	const normalizedTitleWords = titleFilter?.toLowerCase().trim()?.split(/\s+/);
+	const hasTitleFilter = !!titleFilter;
 
 	const [rawRecipes, meta] = hooks.useAllRecipesInfinite(
-		normalizedTitleWords?.length
+		hasTitleFilter
 			? {
 					index: {
 						where: 'titleMatch',
@@ -157,10 +158,7 @@ export function useFilteredRecipes() {
 				return false;
 		}
 		// a tag filter exists, but another filter took precedence
-		if (
-			normalizedTagFilter &&
-			(normalizedFoodFilter || normalizedTitleWords?.length)
-		) {
+		if (normalizedTagFilter && (normalizedFoodFilter || hasTitleFilter)) {
 			if (
 				!recipe
 					.get('tags')
@@ -171,7 +169,7 @@ export function useFilteredRecipes() {
 		}
 
 		// a food filter exists, but another filter took precedence
-		if (normalizedFoodFilter && normalizedTitleWords?.length) {
+		if (normalizedFoodFilter && hasTitleFilter) {
 			if (
 				!recipe
 					.get('ingredients')
