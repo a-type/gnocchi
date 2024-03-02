@@ -8,8 +8,8 @@ export const featureFlags = {
 	temporaryAccess: false,
 	ocr: false,
 	paprikaImport: true,
-	aiGroceries: false,
 	pinnedRecipes: false,
+	multipliedIngredients: false,
 };
 
 export type FeatureFlagName = keyof typeof featureFlags;
