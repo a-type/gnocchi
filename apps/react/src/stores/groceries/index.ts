@@ -293,6 +293,7 @@ export const hooks = createHooks<Presence, Profile>().withMutations({
 					listId?: string | null;
 					sourceInfo?: Omit<ItemInputsItemInit, 'text' | 'quantity'>;
 					purchased?: boolean;
+					showToast?: boolean;
 				} = {},
 			) => {
 				return addItems(client, lines, data);

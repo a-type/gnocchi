@@ -71,12 +71,12 @@ export function RecipeIngredientViewer({
 	const convertOptions: string[] = useMemo(() => {
 		if (!officialUnit) return [];
 		try {
-			const possibilities = convertUnits()
+			const possibilities: string[] = convertUnits()
 				.from(officialUnit.abbr)
 				.possibilities();
 			return possibilities
-				.filter((opt: string) => usefulUnits.includes(opt))
-				.filter((opt: string) => opt !== officialUnit.abbr);
+				.filter((opt) => usefulUnits.includes(opt))
+				.filter((opt) => opt !== officialUnit.abbr);
 		} catch {
 			return [];
 		}
@@ -226,7 +226,9 @@ const usefulUnits = [
 	'pt',
 	'qt',
 	'gal',
-	'fl oz',
+	'fl-oz',
+	'pnt',
+	'quart',
 	'cm',
 	'm',
 	'in',
