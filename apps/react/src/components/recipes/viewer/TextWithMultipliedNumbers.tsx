@@ -16,29 +16,30 @@ export function TextWithMultipliedNumbers({
 	const numberRegex = /(\d+\.\d+|\d+\/\d+|\d+)/g;
 	const matches = text.match(numberRegex);
 	if (!matches) return <>{text}</>;
-	const fragments = text.split(numberRegex);
-	console.log(fragments);
+	const fragments = text.trim().split(numberRegex);
 	return (
 		<>
-			{fragments.map((fragment, index) => (
-				<span key={index}>
-					{index % 2 === 0 && fragment}
-					{matches[index] && (
-						<Tooltip
-							content={
-								<span className="text-wrap max-w-80vw">
-									Multiplier {multiplier}x applied. Original value:{' '}
-									{matches[index]}
+			{fragments.map((fragment, index) => {
+				const isNumber = /(\d+\.\d+|\d+\/\d+|\d+)/.test(fragment);
+				return (
+					<span key={index}>
+						{!isNumber && fragment}
+						{isNumber && (
+							<Tooltip
+								content={
+									<span className="text-wrap max-w-80vw">
+										Multiplier {multiplier}x applied. Original value: {fragment}
+									</span>
+								}
+							>
+								<span className="multiplied-number text-accent-dark font-bold flex-row inline-flex items-center gap-0.5">
+									{parseFloat(fragment) * multiplier}
 								</span>
-							}
-						>
-							<span className="multiplied-number text-accent-dark font-bold flex-row inline-flex items-center gap-0.5">
-								{parseFloat(matches[index]) * multiplier}
-							</span>
-						</Tooltip>
-					)}
-				</span>
-			))}
+							</Tooltip>
+						)}
+					</span>
+				);
+			})}
 		</>
 	);
 }
