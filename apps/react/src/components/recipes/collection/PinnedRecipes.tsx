@@ -15,11 +15,12 @@ import { Button } from '@a-type/ui/components/button';
 import { CollapsibleSimple } from '@a-type/ui/components/collapsible';
 import { Divider } from '@a-type/ui/components/divider';
 import { H2 } from '@a-type/ui/components/typography';
-import { DrawingPinFilledIcon } from '@radix-ui/react-icons';
+import { Cross2Icon, DrawingPinFilledIcon } from '@radix-ui/react-icons';
 import { Link } from '@verdant-web/react-router';
 import classNames from 'classnames';
 import addWeeks from 'date-fns/addWeeks';
 import { useMemo } from 'react';
+import { PinIcon } from './PinIcon.jsx';
 
 export interface PinnedRecipesProps {
 	className?: string;
@@ -75,18 +76,18 @@ function PinnedRecipeListItem({ recipe }: { recipe: Recipe }) {
 	const { title } = hooks.useWatch(recipe);
 
 	return (
-		<div className="flex flex-row items-center gap-1 border border-solid border-gray-5 rounded-lg px-1 py-2">
+		<div className="flex flex-row items-center gap-1 border border-solid border-gray-5 rounded-lg px-3 py-2">
 			<Button
 				size="icon"
-				color="ghostDestructive"
+				color="primary"
 				onClick={() => recipe.set('pinnedAt', null)}
 			>
-				<DrawingPinFilledIcon />
+				<PinIcon isPinned />
 			</Button>
 			<Link
 				to={makeRecipeLink(recipe, '')}
 				className={classNames(
-					'flex-1 flex flex-col gap-2px',
+					'flex-1 flex flex-col gap-2px min-w-0',
 					title.length > 20 && 'text-sm',
 				)}
 			>

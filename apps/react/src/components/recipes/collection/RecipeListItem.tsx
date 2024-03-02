@@ -37,6 +37,7 @@ import { RecipeTagsViewer } from '../viewer/RecipeTagsViewer.jsx';
 import { useFeatureFlag } from '@/hooks/useFeatureFlag.js';
 import { Icon } from '@/components/icons/Icon.jsx';
 import addWeeks from 'date-fns/addWeeks';
+import { PinIcon } from './PinIcon.jsx';
 
 const THREE_WEEKS_AGO = addWeeks(Date.now(), -3).getTime();
 
@@ -49,7 +50,7 @@ export function RecipeListItem({
 }) {
 	const { title, pinnedAt } = hooks.useWatch(recipe);
 
-	const isPinned = pinnedAt && pinnedAt > THREE_WEEKS_AGO;
+	const isPinned = !!pinnedAt && pinnedAt > THREE_WEEKS_AGO;
 
 	const togglePinned = useCallback(() => {
 		if (isPinned) {
@@ -87,25 +88,7 @@ export function RecipeListItem({
 							onClick={togglePinned}
 							className="relative"
 						>
-							<DrawingPinIcon
-								className={isPinned ? 'relative top--2px left-0px' : undefined}
-							/>
-							{isPinned && (
-								// slash through
-								// <svg
-								// 	className="absolute top-[50%] left-[50%] translate-[-50%] w-[15px] h-[15px] z-1"
-								// 	viewBox="0 0 10 10"
-								// >
-								// 	<path
-								// 		d="M 0 0 L 10 10"
-								// 		stroke="currentColor"
-								// 		strokeWidth="1"
-								// 		strokeLinecap="round"
-								// 		vectorEffect="non-scaling-stroke"
-								// 	/>
-								// </svg>
-								<Cross2Icon className="absolute w-10px h-10px bottom-5px right-8px" />
-							)}
+							<PinIcon isPinned={isPinned} />
 						</Button>
 					)}
 					<AddToListButton recipe={recipe} color="ghost" size="small">

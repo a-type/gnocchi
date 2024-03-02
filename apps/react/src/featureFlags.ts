@@ -8,7 +8,7 @@ export const featureFlags = {
 	temporaryAccess: false,
 	ocr: false,
 	paprikaImport: true,
-	pinnedRecipes: false,
+	pinnedRecipes: true,
 	multipliedIngredients: false,
 };
 
