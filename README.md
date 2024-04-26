@@ -1,3 +1,7 @@
+# MOVED!
+
+Gnocchi code is now part of my monorepo for Biscuits apps: https://github.com/a-type/biscuits
+
 # Gnocchi
 
 ![Gnocchi title card](./apps/react/public/og-image.png)
